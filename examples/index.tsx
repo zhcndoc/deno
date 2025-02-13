@@ -8,7 +8,7 @@ export default function* (
 ) {
   yield {
     url: `/examples/`,
-    title: `Deno examples and tutorials`,
+    title: `Deno 示例和教程`,
     content: <data.comp.LandingPage />,
   };
 }

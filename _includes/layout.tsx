@@ -1,17 +1,17 @@
 export default function Layout(data: Lume.Data) {
   const reference = data.url.startsWith("/api");
   const description = data.description ||
-    "In-depth documentation, guides, and reference materials for building secure, high-performance JavaScript and TypeScript applications with Deno";
+    "深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。";
 
   return (
     <html
-      lang="en"
+      lang="zh-CN"
       class={`light ${reference ? "" : "h-dvh"}`}
     >
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{data.title}</title>
+        <title>{data.title ? `${data.title} - Deno 中文文档`: 'Deno 中文文档 - 适用于现代网络的开源 JavaScript 运行时'}</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link
@@ -42,17 +42,17 @@ export default function Layout(data: Lume.Data) {
         <meta name="twitter:image" content="/img/og.webp" />
         <meta
           name="twitter:image:alt"
-          content="Deno docs: Deno documentation, guides, and reference materials. docs.deno.com"
+          content="Deno 中文文档 - 适用于现代网络的开源 JavaScript 运行时"
         />
         <meta property="og:image" content="/img/og.webp" />
         <meta
           property="og:image:alt"
-          content="Deno docs: Deno documentation, guides, and reference materials. docs.deno.com"
+          content="Deno 中文文档 - 适用于现代网络的开源 JavaScript 运行时"
         />
 
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="Deno" />
-        <meta property="og:locale" content="en_US" />
+        <meta property="og:site_name" content="Deno 中文文档" />
+        <meta property="og:locale" content="zh_CN" />
 
         <meta
           name="keywords"
@@ -74,7 +74,7 @@ export default function Layout(data: Lume.Data) {
         <script type="module" src="/components.js"></script>
         <script
           async
-          src="https://www.googletagmanager.com/gtm.js?id=GTM-5B5TH8ZJ"
+          src="https://www.zhcndoc.com/js/common.js"
         >
         </script>
         <link rel="preconnect" href="https://www.googletagmanager.com"></link>

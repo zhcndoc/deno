@@ -4,7 +4,7 @@ import { parse as yamlParse } from "jsr:@std/yaml";
 
 export const sidebar = [
   {
-    title: "Getting started",
+    title: "入门",
     href: "/runtime/",
     items: [
       "/runtime/getting_started/installation/",
@@ -14,14 +14,14 @@ export const sidebar = [
     ],
   },
   {
-    title: "Fundamentals",
+    title: "基础知识",
     href: "/runtime/fundamentals/",
     items: [
       "/runtime/fundamentals/typescript/",
       "/runtime/fundamentals/node/",
       "/runtime/fundamentals/security/",
       {
-        label: "Modules and dependencies",
+        label: "模块和依赖",
         id: "/runtime/fundamentals/modules/",
       },
       "/runtime/fundamentals/configuration/",
@@ -32,7 +32,7 @@ export const sidebar = [
       "/runtime/fundamentals/workspaces/",
       "/runtime/fundamentals/linting_and_formatting/",
       {
-        label: "HTTP Server",
+        label: "HTTP 服务器",
         id: "/runtime/fundamentals/http_server/",
       },
       {
@@ -43,7 +43,7 @@ export const sidebar = [
     ],
   },
   {
-    title: "Reference guides",
+    title: "参考指南",
     href: "/runtime/reference/",
     items: [
       {
@@ -158,21 +158,21 @@ export const sidebar = [
         ],
       },
       {
-        label: "Deno APIs",
+        label: "Deno API",
         id: "/runtime/reference/deno_namespace_apis/",
       },
       {
-        label: "Web APIs",
+        label: "Web API",
         id: "/runtime/reference/web_platform_apis/",
       },
       {
-        label: "Node APIs",
+        label: "Node API",
         id: "/runtime/reference/node_apis/",
       },
       "/runtime/reference/ts_config_migration/",
       "/runtime/reference/continuous_integration/",
       {
-        label: "Environment variables",
+        label: "环境变量",
         id: "/runtime/reference/env_variables/",
       },
       {
@@ -180,27 +180,27 @@ export const sidebar = [
         id: "/runtime/reference/vscode/",
       },
       {
-        label: "Using JSX and React",
+        label: "使用 JSX 和 React",
         id: "/runtime/reference/jsx/",
       },
       {
-        label: "Testing code in docs",
+        label: "在文档中测试代码",
         id: "/runtime/reference/documentation/",
       },
       "/runtime/reference/wasm/",
       "/runtime/reference/migration_guide/",
       {
-        label: "LSP integration",
+        label: "语言服务器集成",
         id: "/runtime/reference/lsp_integration/",
       },
     ],
   },
   {
-    title: "Contributing and support",
+    title: "贡献和支持",
     href: "/runtime/contributing/",
     items: [
       {
-        label: "Contributing to Deno",
+        label: "为 Deno 做出贡献",
         items: [
           "/runtime/contributing/architecture/",
           "/runtime/contributing/building_from_source/",
@@ -217,7 +217,7 @@ export const sidebar = [
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Runtime";
+export const sectionTitle = "运行时";
 export const sectionHref = "/runtime/";
 
 export interface Description {

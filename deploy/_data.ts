@@ -2,14 +2,14 @@ import { Sidebar } from "../types.ts";
 
 export const sidebar = [
   {
-    title: "Getting started",
+    title: "入门",
     items: [
       {
-        label: "Quick start",
+        label: "快速开始",
         id: "/deploy/manual/",
       },
       {
-        label: "Deploy basics",
+        label: "Deploy 基础知识",
         items: [
           "/deploy/manual/use-cases/",
           "/deploy/manual/playgrounds/",
@@ -23,26 +23,26 @@ export const sidebar = [
     ],
   },
   {
-    title: "Deploy platform",
+    title: "Deploy 平台",
     items: [
       {
-        label: "Deployments",
+        label: "部署",
         id: "/deploy/manual/deployments/",
       },
       {
-        label: "Custom domains",
+        label: "绑定域名",
         id: "/deploy/manual/custom-domains/",
       },
       {
-        label: "Environment variables",
+        label: "环境变量",
         id: "/deploy/manual/environment-variables/",
       },
       {
-        label: "Organizations",
+        label: "组织",
         id: "/deploy/manual/organizations/",
       },
       {
-        label: "Logs",
+        label: "日志",
         id: "/deploy/manual/logs/",
       },
       {
@@ -60,28 +60,28 @@ export const sidebar = [
         ],
       },
       {
-        label: "Queues",
+        label: "队列",
         id: "/deploy/kv/manual/queue_overview/",
       },
       {
-        label: "Cron",
+        label: "定时任务",
         id: "/deploy/kv/manual/cron/",
       },
       {
-        label: "Edge cache",
+        label: "边缘缓存",
         id: "/deploy/manual/edge-cache/",
       },
     ],
   },
   {
-    title: "Connecting to databases",
+    title: "连接到数据库",
     items: [
       {
         label: "Deno KV",
         id: "/deploy/kv/manual/on_deploy/",
       },
       {
-        label: "Third-Party Databases",
+        label: "第三方数据库",
         items: [
           "/deploy/manual/dynamodb/",
           "/deploy/manual/faunadb/",
@@ -93,7 +93,7 @@ export const sidebar = [
     ],
   },
   {
-    title: "Policies and Limits",
+    title: "政策和限制",
     items: [
       "/deploy/manual/acceptable-use-policy/",
       "/deploy/manual/fulfillment-policy/",
@@ -103,10 +103,10 @@ export const sidebar = [
     ],
   },
   {
-    title: "Tutorials & Examples",
+    title: "教程与示例",
     items: [
       {
-        label: "Deploy Tutorials",
+        label: "部署教程",
         items: [
           "/deploy/tutorials/",
           "/deploy/tutorials/discord-slash/",
@@ -127,20 +127,20 @@ export const sidebar = [
         ],
       },
       {
-        label: "KV Tutorials",
+        label: "KV 教程",
         id: "/deploy/kv/tutorials/",
       },
       {
-        label: "More on Deno by Example",
+        label: "更多关于 Deno 的示例",
         href: "/examples/",
       },
     ],
   },
   {
-    title: "Reference",
+    title: "参考",
     items: [
       {
-        label: "Runtime API",
+        label: "运行时 API",
         href: "/deploy/api",
       },
       "/deploy/api/runtime-fs/",
@@ -157,5 +157,5 @@ export const sidebar = [
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Deploy";
+export const sectionTitle = "Deno Deploy";
 export const sectionHref = "/deploy/manual/";

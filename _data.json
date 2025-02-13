@@ -1,23 +1,23 @@
 {
   "navigation": [
     {
-      "name": "Manual",
+      "name": "手册",
       "url": "/runtime/"
     },
     {
-      "name": "API reference",
+      "name": "API 参考",
       "url": "/api/"
     },
     {
-      "name": "Examples",
+      "name": "示例",
       "url": "/examples/"
     },
     {
-      "name": "Deploy",
+      "name": "Deno Deploy",
       "url": "/deploy/manual/"
     },
     {
-      "name": "Subhosting",
+      "name": "子托管",
       "url": "/subhosting/manual/"
     }
   ]
