@@ -1,5 +1,5 @@
 ---
-title: "deno 完成"
+title: "deno completions"
 oldUrl: /runtime/manual/tools/completions/
 command: completions
 ---

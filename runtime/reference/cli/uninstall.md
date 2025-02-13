@@ -1,5 +1,5 @@
 ---
-title: "deno 卸载"
+title: "deno uninstall"
 oldUrl: /runtime/manual/tools/uninstall/
 command: uninstall
 ---

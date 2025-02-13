@@ -1,4 +1,4 @@
 ---
-title: "deno 添加"
-command: 添加
+title: "deno add"
+command: add
 ---

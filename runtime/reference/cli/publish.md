@@ -1,5 +1,5 @@
 ---
-title: "deno 发布"
+title: "deno publish"
 oldUrl: /runtime/manual/tools/publish/
 command: publish
 ---

@@ -1,4 +1,4 @@
 ---
-title: "deno 移除"
+title: "deno remove"
 command: remove
 ---

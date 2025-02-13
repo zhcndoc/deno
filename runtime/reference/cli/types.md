@@ -1,5 +1,5 @@
 ---
-title: "deno 类型"
+title: "deno types"
 oldUrl: /runtime/manual/tools/types/
 command: types
 ---

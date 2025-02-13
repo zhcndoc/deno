@@ -1,5 +1,5 @@
 ---
-title: "deno 过期"
+title: "deno outdated"
 command: outdated
 ---
 

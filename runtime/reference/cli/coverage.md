@@ -1,5 +1,5 @@
 ---
-title: "deno 覆盖率"
+title: "deno coverage"
 oldUrl: /runtime/manual/tools/coverage/
 command: coverage
 ---

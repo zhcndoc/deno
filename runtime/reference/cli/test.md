@@ -1,5 +1,5 @@
 ---
-title: "deno 测试"
+title: "deno test"
 oldUrl: /runtime/manual/tools/test/
 command: test
 ---
