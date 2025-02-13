@@ -2,22 +2,22 @@ import { Sidebar } from "../types.ts";
 
 export const sidebar = [
   {
-    title: "Getting started",
+    title: "入门",
     items: [
       {
-        label: "About Subhosting",
+        label: "关于子托管",
         id: "/subhosting/manual/",
       },
       {
-        label: "Quick start",
+        label: "快速入门",
         id: "/subhosting/manual/quick_start/",
       },
       {
-        label: "Planning your implementation",
+        label: "规划您的实施",
         id: "/subhosting/manual/planning_your_implementation/",
       },
       {
-        label: "Pricing and Limits",
+        label: "定价与限制",
         id: "/subhosting/manual/pricing_and_limits/",
       },
     ],
@@ -26,24 +26,24 @@ export const sidebar = [
     title: "REST API",
     items: [
       {
-        label: "Resources",
+        label: "资源",
         id: "/subhosting/api/",
       },
       {
-        label: "Authentication",
+        label: "身份验证",
         id: "/subhosting/api/authentication/",
       },
       {
-        label: "Events",
+        label: "事件",
         id: "/subhosting/manual/events/",
       },
       {
-        label: "API Reference Docs",
+        label: "API 参考文档",
         href: "https://apidocs.deno.com",
       },
     ],
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Subhosting";
+export const sectionTitle = "子托管";
 export const sectionHref = "/subhosting/manual/";

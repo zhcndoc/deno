@@ -232,7 +232,7 @@ export default function () {
               </div>
               <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-16">
                 <LinkList
-                  title="Deno APIs"
+                  title="Deno API"
                   product="runtime"
                   links={[
                     {
@@ -262,7 +262,7 @@ export default function () {
                   ]}
                 />
                 <LinkList
-                  title="Web APIs"
+                  title="Web API"
                   product="runtime"
                   links={[
                     {
@@ -292,7 +292,7 @@ export default function () {
                   ]}
                 />
                 <LinkList
-                  title="Node APIs"
+                  title="Node API"
                   product="runtime"
                   links={[
                     {
@@ -316,7 +316,7 @@ export default function () {
                       href: "/api/node/process",
                     },
                     {
-                      text: "查看所有节点 API",
+                      text: "查看所有 Node API",
                       href: "/api/node",
                     },
                   ]}

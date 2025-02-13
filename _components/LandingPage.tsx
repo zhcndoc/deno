@@ -25,27 +25,25 @@ export default function LandingPage() {
         <div className="flex flex-col md:flex-row w-full mb-8 max-w-screen-xl justify-between">
           <div className="max-w-prose mb-8">
             <h1 className="text-2xl font-semibold sm:text-3xl md:text-4xl mb-3">
-              Examples
+              示例
             </h1>
             <p>
-              A collection of walkthrough tutorials, examples, videos and guides
-              to teach you about the Deno runtime and how to use it with your
-              favorite tools.
+              一系列的教程、示例、视频和指南，教你关于 Deno 运行时及如何与你喜欢的工具一起使用。
             </p>
           </div>
           <img
             className="w-full max-w-32 mx-auto h-auto mb-4 hidden md:block"
-            alt="Deno Examples"
+            alt="Deno 示例"
             src="/examples.png"
           />
         </div>
         <div className="flex flex-col gap-4 w-full mb-4 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded md:flex-wrap md:justify-start md:items-center md:flex-row">
           <h2 className="font-semibold">
-            Filter by type:
+            按类型筛选：
           </h2>
           <label for="example" className="flex gap-2 items-center mr-4">
             <ExampleIcon />
-            <span>Examples:</span>
+            <span>示例</span>
             <span className="switch">
               <input
                 type="checkbox"
@@ -60,7 +58,7 @@ export default function LandingPage() {
 
           <label for="tutorial" className="flex gap-2 items-center mr-4">
             <TutorialIcon />
-            <span>Tutorials:</span>
+            <span>教程</span>
             <span className="switch">
               <input
                 type="checkbox"
@@ -75,7 +73,7 @@ export default function LandingPage() {
 
           <label for="video" className="flex gap-2 items-center mr-4">
             <VideoIcon />
-            <span>Videos:</span>
+            <span>视频</span>
             <span className="switch">
               <input
                 type="checkbox"

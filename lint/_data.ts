@@ -40,7 +40,7 @@ async function generateSidebarItems() {
 
 export const lintRulePages = await generateSidebarItems();
 
-export const sectionTitle = "Lint rules";
+export const sectionTitle = "Lint 规则";
 
 export const sectionHref = "/lint/";
 
