@@ -46,21 +46,21 @@ export default function Header({
             url={url}
             activeOn="/runtime"
             href="/runtime/"
-            name="Manual"
+            name="手册"
             hideOnMobile
           />
           <HeaderItem
             url={url}
             activeOn="/api"
             href="/api/deno"
-            name="API reference"
+            name="API 参考"
             hideOnMobile
           />
           <HeaderItem
             url={url}
             activeOn="/examples"
             href="/examples"
-            name="Examples"
+            name="示例"
             hideOnMobile
           />
           <span class="hidden xl:inline-block text-foreground-secondary mx-2">
@@ -70,14 +70,14 @@ export default function Header({
             url={url}
             activeOn="/deploy"
             href="/deploy/manual"
-            name="Deploy"
+            name="Deno Deploy"
             hideOnMobile
           />
           <HeaderItem
             url={url}
             activeOn="/subhosting"
             href="/subhosting/manual"
-            name="Subhosting"
+            name="子托管"
             hideOnMobile
           />
         </div>
@@ -85,8 +85,8 @@ export default function Header({
         <div class="flex items-center gap-2">
           <HeaderItem
             url={url}
-            href="https://deno.com"
-            name="deno.com"
+            href="https://www.zhcndoc.com"
+            name="简中文档"
             external
             hideOnMobile
           />
