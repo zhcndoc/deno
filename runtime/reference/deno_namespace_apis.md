@@ -1,5 +1,5 @@
 ---
-title: "Deno Namespace APIs"
+title: "Deno 命名空间 API"
 oldUrl:
 - /runtime/manual/runtime/
 - /runtime/manual/runtime/builtin_apis/
@@ -9,144 +9,129 @@ oldUrl:
 - /runtime/manual/runtime/program_lifecycle/
 ---
 
-The global `Deno` namespace contains APIs that are not web standard, including
-APIs for reading from files, opening TCP sockets, serving HTTP, and executing
-subprocesses, etc.
+全局 `Deno` 命名空间包含不符合网络标准的 API，包括用于从文件读取、打开 TCP 套接字、提供 HTTP 服务和执行子进程等的 API。
 
-<a href="/api/deno/" class="docs-cta runtime-cta">Explore all Deno APIs</a>
+<a href="/api/deno/" class="docs-cta runtime-cta">探索所有 Deno API</a>
 
-Below we highlight some of the most important Deno APIs to know.
+以下是一些重要的 Deno API 的高亮介绍。
 
-## File System
+## 文件系统
 
-The Deno runtime comes with
-[various functions for working with files and directories](/api/deno/file-system).
-You will need to use --allow-read and --allow-write permissions to gain access
-to the file system.
+Deno 运行时提供
+[处理文件和目录的各种函数](/api/deno/file-system)。
+您需要使用 --allow-read 和 --allow-write 权限才能访问文件系统。
 
-Refer to the links below for code examples of how to use the file system
-functions.
+请参考以下链接获取如何使用文件系统函数的代码示例。
 
-- [Reading files in streams](/examples/file_server_tutorial/)
-- [Reading a text file (`Deno.readTextFile`)](/examples/reading_files/)
-- [Writing a text file (`Deno.writeTextFile`)](/examples/writing_files/)
+- [以流方式读取文件](/examples/file_server_tutorial/)
+- [读取文本文件 (`Deno.readTextFile`)](/examples/reading_files/)
+- [写入文本文件 (`Deno.writeTextFile`)](/examples/writing_files/)
 
-## Network
+## 网络
 
-The Deno runtime comes with
-[built-in functions for dealing with connections to network ports](/api/deno/network).
+Deno 运行时提供
+[用于处理网络端口连接的内置函数](/api/deno/network)。
 
-Refer to the links below for code examples for common functions.
+请参考以下链接获取常用功能的代码示例。
 
-- [Connect to the hostname and port (`Deno.connect`)](/api/deno/~/Deno.connect)
-- [Announcing on the local transport address (`Deno.listen`)](/api/deno/~/Deno.listen)
+- [连接到主机名和端口 (`Deno.connect`)](/api/deno/~/Deno.connect)
+- [在本地传输地址上宣布 (`Deno.listen`)](/api/deno/~/Deno.listen)
 
-## Subprocesses
+## 子进程
 
-The Deno runtime comes with
-[built-in functions for spinning up subprocesses](/api/deno/sub-process).
+Deno 运行时提供
+[启动子进程的内置函数](/api/deno/sub-process)。
 
-Refer to the links below for code samples of how to create a subprocess.
+请参考以下链接获取如何创建子进程的代码示例。
 
-- [Creating a subprocess (`Deno.Command`)](/runtime/tutorials/subprocess/)
+- [创建子进程 (`Deno.Command`)](/runtime/tutorials/subprocess/)
 
-## Errors
+## 错误
 
-The Deno runtime comes with [20 error classes](/api/deno/errors) that can be
-raised in response to a number of conditions.
+Deno 运行时提供 [20 种错误类](/api/deno/errors)，可根据多种条件引发。
 
-Some examples are:
+一些示例为：
 
 ```sh
 Deno.errors.NotFound;
 Deno.errors.WriteZero;
 ```
 
-They can be used as below:
+它们可以如下使用：
 
 ```ts
 try {
   const file = await Deno.open("./some/file.txt");
 } catch (error) {
   if (error instanceof Deno.errors.NotFound) {
-    console.error("the file was not found");
+    console.error("未找到文件");
   } else {
-    // otherwise re-throw
+    // 否则重新抛出
     throw error;
   }
 }
 ```
 
-## HTTP Server
+## HTTP 服务器
 
-Deno has two HTTP Server APIs:
+Deno 有两个 HTTP 服务器 API：
 
-- [`Deno.serve`](/api/deno/~/Deno.serve): native, _higher-level_, supports
-  HTTP/1.1 and HTTP2, this is the preferred API to write HTTP servers in Deno.
-- [`Deno.serveHttp`](/api/deno/~/Deno.serveHttp): native, _low-level_, supports
-  HTTP/1.1 and HTTP2.
+- [`Deno.serve`](/api/deno/~/Deno.serve)：原生的、高级的，支持
+  HTTP/1.1 和 HTTP2，这是在 Deno 中编写 HTTP 服务器的首选 API。
+- [`Deno.serveHttp`](/api/deno/~/Deno.serveHttp)：原生的、底层的，支持
+  HTTP/1.1 和 HTTP2。
 
-To start an HTTP server on a given port, use the `Deno.serve` function. This
-function takes a handler function that will be called for each incoming request,
-and is expected to return a response (or a promise resolving to a response). For
-example:
+要在给定端口上启动 HTTP 服务器，请使用 `Deno.serve` 函数。该函数接受一个处理函数，该函数将在每个传入请求时被调用，预计返回响应（或解析为响应的 Promise）。例如：
 
 ```ts
 Deno.serve((_req) => {
-  return new Response("Hello, World!");
+  return new Response("你好，世界！");
 });
 ```
 
-By default `Deno.serve` will listen on port `8000`, but this can be changed by
-passing in a port number in options bag as the first or second argument.
+默认情况下 `Deno.serve` 将监听端口 `8000`，但可以通过在选项包中传入一个端口号码作为第一个或第二个参数来更改。
 
-You can
-[read more about how to use the HTTP server APIs](/runtime/fundamentals/http_server/).
+您可以
+[阅读有关如何使用 HTTP 服务器 API 的更多信息](/runtime/fundamentals/http_server/)。
 
-## Permissions
+## 权限
 
-Permissions are granted from the CLI when running the `deno` command. User code
-will often assume its own set of required permissions, but there is no guarantee
-during execution that the set of **granted** permissions will align with this.
+权限是在运行 `deno` 命令时从 CLI 授予的。用户代码通常会假定自己所需的权限集，但在执行期间，并不能保证**授予的**权限集与其一致。
 
-In some cases, ensuring a fault-tolerant program requires a way to interact with
-the permission system at runtime.
+在某些情况下，确保程序具备容错性需要与运行时的权限系统交互的方式。
 
-### Permission descriptors
+### 权限描述符
 
-On the CLI, read permission for `/foo/bar` is represented as
-`--allow-read=/foo/bar`. In runtime JS, it is represented as the following:
+在 CLI 中，`/foo/bar` 的读取权限表示为 `--allow-read=/foo/bar`。在运行时 JS 中，它表示为以下内容：
 
 ```ts
 const desc = { name: "read", path: "/foo/bar" } as const;
 ```
 
-Other examples:
+其他示例：
 
 ```ts
-// Global write permission.
+// 全局写入权限。
 const desc1 = { name: "write" } as const;
 
-// Write permission to `$PWD/foo/bar`.
+// 对 `$PWD/foo/bar` 的写入权限。
 const desc2 = { name: "write", path: "foo/bar" } as const;
 
-// Global net permission.
+// 全局网络权限。
 const desc3 = { name: "net" } as const;
 
-// Net permission to 127.0.0.1:8000.
+// 对 127.0.0.1:8000 的网络权限。
 const desc4 = { name: "net", host: "127.0.0.1:8000" } as const;
 
-// High-resolution time permission.
+// 高分辨率时间权限。
 const desc5 = { name: "hrtime" } as const;
 ```
 
-See [`PermissionDescriptor`](/api/deno/~/Deno.PermissionDescriptor) in API
-reference for more details. Synchronous API counterparts (ex.
-`Deno.permissions.querySync`) exist for all the APIs described below.
+有关更多详细信息，请参见 API 参考中的 [`PermissionDescriptor`](/api/deno/~/Deno.PermissionDescriptor)。对于以下描述的所有 API，均存在同步 API 对应版本（例如 `Deno.permissions.querySync`）。
 
-### Query permissions
+### 查询权限
 
-Check, by descriptor, if a permission is granted or not.
+通过描述符检查某个权限是否被授予。
 
 ```ts
 // deno run --allow-read=/foo main.ts
@@ -164,9 +149,7 @@ console.log(await Deno.permissions.query(desc3));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-If `--deny-read` flag was used to restrict some of the filepaths, the result
-will contain `partial: true` describing that not all subpaths have permissions
-granted:
+如果使用 `--deny-read` 标志来限制某些文件路径，结果将包含 `partial: true`，表示并未授予所有子路径的权限：
 
 ```ts
 // deno run --allow-read=/foo --deny-read=/foo/bar main.ts
@@ -184,77 +167,58 @@ console.log(await Deno.permissions.query(desc3));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-### Permission states
+### 权限状态
 
-A permission state can be either "granted", "prompt" or "denied". Permissions
-which have been granted from the CLI will query to `{ state: "granted" }`. Those
-which have not been granted query to `{ state: "prompt" }` by default, while
-`{ state: "denied" }` reserved for those which have been explicitly refused.
-This will come up in [Request permissions](#request-permissions).
+权限状态可以是 “granted”、“prompt” 或 “denied”。从 CLI 授予的权限查询将返回 `{ state: "granted" }`。那些未被授予的权限查询将默认返回 `{ state: "prompt" }`，而 `{ state: "denied" }` 则保留给那些被明确拒绝的权限。在 [请求权限](#request-permissions) 中将会遇到这一点。
 
-### Permission strength
+### 权限强度
 
-The intuitive understanding behind the result of the second query in
-[Query permissions](#query-permissions) is that read access was granted to
-`/foo` and `/foo/bar` is within `/foo` so `/foo/bar` is allowed to be read. This
-hold true, unless the CLI-granted permission is _partial_ to the queried
-permissions (as an effect of using a `--deny-*` flag).
+在 [查询权限](#query-permissions) 中第二次查询的结果的直观理解是，读取权限被授予给 `/foo` 且 `/foo/bar` 在 `/foo` 之内，所以允许读取 `/foo/bar`。这适用于，除非 CLI 授予的权限对查询的权限是 _partial_（是使用 `--deny-*` 标志的效果）。
 
-We can also say that `desc1` is
-_[stronger than](https://www.w3.org/TR/permissions/#ref-for-permissiondescriptor-stronger-than)_
-`desc2`. This means that for any set of CLI-granted permissions:
+我们还可以说 `desc1` 是 _比_ `desc2` 更 _强的_。这意味着对于任何一组 CLI 授予的权限：
 
-1. If `desc1` queries to `{ state: "granted", partial: false }` then so must
-   `desc2`.
-2. If `desc2` queries to `{ state: "denied", partial: false }` then so must
-   `desc1`.
+1. 如果 `desc1` 查询返回 `{ state: "granted", partial: false }`，则 `desc2` 也必须如此。
+2. 如果 `desc2` 查询返回 `{ state: "denied", partial: false }`，则 `desc1` 也必须如此。
 
-More examples:
+更多示例：
 
 ```ts
 const desc1 = { name: "write" } as const;
-// is stronger than
+// 比较强
 const desc2 = { name: "write", path: "/foo" } as const;
 
 const desc3 = { name: "net", host: "127.0.0.1" } as const;
-// is stronger than
+// 比较强
 const desc4 = { name: "net", host: "127.0.0.1:8000" } as const;
 ```
 
-### Request permissions
+### 请求权限
 
-Request an ungranted permission from the user via CLI prompt.
+通过 CLI 提示请求未授予的权限。
 
 ```ts
 // deno run main.ts
 
 const desc1 = { name: "read", path: "/foo" } as const;
 const status1 = await Deno.permissions.request(desc1);
-// ⚠️ Deno requests read access to "/foo". Grant? [y/n (y = yes allow, n = no deny)] y
+// ⚠️ Deno 请求对 "/foo" 的读取权限。允许吗？[y/n (y = 是，允许，n = 否，拒绝)] y
 console.log(status1);
 // PermissionStatus { state: "granted", partial: false }
 
 const desc2 = { name: "read", path: "/bar" } as const;
 const status2 = await Deno.permissions.request(desc2);
-// ⚠️ Deno requests read access to "/bar". Grant? [y/n (y = yes allow, n = no deny)] n
+// ⚠️ Deno 请求对 "/bar" 的读取权限。允许吗？[y/n (y = 是，允许，n = 否，拒绝)] n
 console.log(status2);
 // PermissionStatus { state: "denied", partial: false }
 ```
 
-If the current permission state is "prompt", a prompt will appear on the user's
-terminal asking them if they would like to grant the request. The request for
-`desc1` was granted so its new status is returned and execution will continue as
-if `--allow-read=/foo` was specified on the CLI. The request for `desc2` was
-denied so its permission state is downgraded from "prompt" to "denied".
+如果当前权限状态为 "prompt"，将会在用户的终端中出现一个提示，询问他们是否希望授予请求。`desc1` 的请求被授予，因此其新状态返回并且执行将继续，就像在 CLI 中指定了 `--allow-read=/foo` 一样。`desc2` 的请求被拒绝，因此其权限状态从 "prompt" 降级为 "denied"。
 
-If the current permission state is already either "granted" or "denied", the
-request will behave like a query and just return the current status. This
-prevents prompts both for already granted permissions and previously denied
-requests.
+如果当前权限状态已经是 "granted" 或 "denied"，则请求将表现得像查询一样，仅返回当前状态。这可以防止对于已经授予的权限和之前被拒绝的请求出现提示。
 
-### Revoke permissions
+### 撤销权限
 
-Downgrade a permission from "granted" to "prompt".
+将权限从 "granted" 降级为 "prompt"。
 
 ```ts
 // deno run --allow-read=/foo main.ts
@@ -264,8 +228,7 @@ console.log(await Deno.permissions.revoke(desc));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-What happens when you try to revoke a permission which is _partial_ to one
-granted on the CLI?
+当您尝试撤销一个 _部分_ 授予的权限时，会发生什么？
 
 ```ts
 // deno run --allow-read=/foo main.ts
@@ -278,12 +241,9 @@ console.log(await Deno.permissions.revoke(cliDesc));
 // PermissionStatus { state: "prompt", partial: false }
 ```
 
-The CLI-granted permission, which implies the revoked permission, was also
-revoked.
+CLI 授予的权限，这隐含了被撤销的权限，也被撤销。
 
-To understand this behavior, imagine that Deno stores an internal set of
-_explicitly granted permission descriptors_. Specifying `--allow-read=/foo,/bar`
-on the CLI initializes this set to:
+要理解这种行为，想象 Deno 存储了一组 _显式授予的权限描述符_。在 CLI 上指定 `--allow-read=/foo,/bar` 时，初始化这一组为：
 
 ```ts
 [
@@ -292,8 +252,7 @@ on the CLI initializes this set to:
 ];
 ```
 
-Granting a runtime request for `{ name: "write", path: "/foo" }` updates the set
-to:
+为 `{ name: "write", path: "/foo" }` 的运行时请求授予将更新这一组为：
 
 ```ts
 [
@@ -303,25 +262,17 @@ to:
 ];
 ```
 
-Deno's permission revocation algorithm works by removing every element from this
-set which is _stronger than_ the argument permission descriptor.
+Deno 的权限撤销算法通过删除该组中每个 _比_ 参数权限描述符更 _强的_ 元素来工作。
 
-Deno does not allow "fragmented" permission states, where some strong permission
-is granted with exclusions of weak permissions implied by it. Such a system
-would prove increasingly complex and unpredictable as you factor in a wider
-variety of use cases and the `"denied"` state. This is a calculated trade-off of
-granularity for security.
+Deno 不允许存在 “分片” 权限状态，其中某个强权限被授予而其隐含的弱权限被排除。这样的系统在考虑更广泛的用例和 “denied” 状态时将变得越来越复杂且不可预测。这是对安全性的一个经过计算的粒度权衡。
 
 ## import.meta
 
-Deno supports a number of properties and methods on the
-[`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta)
-API. It can be used to get information about the module, such as the module's
-URL.
+Deno 支持 [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta) API 上的一系列属性和方法。它可用于获取有关模块的信息，例如模块的 URL。
 
 ### import.meta.url
 
-Returns the URL of the current module.
+返回当前模块的 URL。
 
 ```ts title="main.ts"
 console.log(import.meta.url);
@@ -337,7 +288,7 @@ https://example.com/main.ts
 
 ### import.meta.main
 
-Returns whether the current module is the entry point to your program.
+返回当前模块是否是程序的入口点。
 
 ```ts title="main.ts"
 import "./other.ts";
@@ -357,17 +308,15 @@ Is file:///dev/main.ts the main module? true
 
 ### import.meta.filename
 
-_This property is only available for local modules (module that have
-`file:///...` specifier) and returns `undefined` for remote modules._
+_此属性仅适用于本地模块（具有 `file:///...` 说明的模块），并且对远程模块返回 `undefined`。_
 
-Returns the fully resolved path to the current module. The value contains OS
-specific path separators.
+返回当前模块的完全解析路径。该值包含操作系统特定的路径分隔符。
 
 ```ts title="main.ts"
 console.log(import.meta.filename);
 ```
 
-On Unix:
+在 Unix 上：
 
 ```sh
 $ deno run main.ts
@@ -377,7 +326,7 @@ $ deno run https://example.com/main.ts
 undefined
 ```
 
-On Windows:
+在 Windows 上：
 
 ```sh
 $ deno run main.ts
@@ -389,17 +338,15 @@ undefined
 
 ### import.meta.dirname
 
-_This property is only available for local modules (module that have
-`file:///...` specifier) and returns `undefined` for remote modules._
+_此属性仅适用于本地模块（具有 `file:///...` 说明的模块），并且对远程模块返回 `undefined`。_
 
-Returns the fully resolved path to the directory containing the current module.
-The value contains OS specific path separators.
+返回当前模块所在目录的完全解析路径。该值包含操作系统特定的路径分隔符。
 
 ```ts title="main.ts"
 console.log(import.meta.dirname);
 ```
 
-On Unix:
+在 Unix 上：
 
 ```sh
 $ deno run main.ts
@@ -409,7 +356,7 @@ $ deno run https://example.com/main.ts
 undefined
 ```
 
-On Windows:
+在 Windows 上：
 
 ```sh
 $ deno run main.ts
@@ -421,16 +368,15 @@ undefined
 
 ### import.meta.resolve
 
-Resolve specifiers relative to the current module.
+解析相对于当前模块的说明符。
 
 ```ts
 const worker = new Worker(import.meta.resolve("./worker.ts"));
 ```
 
-The `import.meta.resolve` API takes into account the currently applied import
-map, which gives you the ability to resolve "bare" specifiers as well.
+`import.meta.resolve` API 考虑当前应用的导入映射，这使您能够解析 “裸” 说明符。
 
-With such import map loaded...
+加载这样的导入映射后……
 
 ```json
 {
@@ -440,7 +386,7 @@ With such import map loaded...
 }
 ```
 
-...you can now resolve:
+……您现在可以解析：
 
 ```js title="resolve.js"
 console.log(import.meta.resolve("fresh"));
@@ -453,11 +399,9 @@ https://deno.land/x/fresh@1.0.1/dev.ts
 
 ## FFI
 
-The FFI (foreign function interface) API allows users to call libraries written
-in native languages that support the C ABIs (C/C++, Rust, Zig, V, etc.) using
-`Deno.dlopen`.
+FFI（外国函数接口）API 允许用户调用以支持 C ABI（C/C++、Rust、Zig、V 等）编写的库，使用 `Deno.dlopen`。
 
-Here's an example showing how to call a Rust function from Deno:
+以下是一个展示如何从 Deno 调用 Rust 函数的示例：
 
 ```rust
 // add.rs
@@ -467,13 +411,13 @@ pub extern "C" fn add(a: isize, b: isize) -> isize {
 }
 ```
 
-Compile it to a C dynamic library (`libadd.so` on Linux):
+将其编译为一个 C 动态库（在 Linux 上为 `libadd.so`）：
 
 ```sh
 rustc --crate-type cdylib add.rs
 ```
 
-In C you can write it as:
+在 C 中，您可以写成：
 
 ```c
 // add.c
@@ -482,7 +426,7 @@ int add(int a, int b) {
 }
 ```
 
-And compile it:
+并编译它：
 
 ```sh
 // unix
@@ -492,13 +436,12 @@ cc -shared -W -o libadd.so add.o
 cl /LD add.c /link /EXPORT:add
 ```
 
-Calling the library from Deno:
+从 Deno 调用该库：
 
 ```typescript
 // ffi.ts
 
-// Determine library extension based on
-// your OS.
+// 根据您的操作系统确定库后缀。
 let libSuffix = "";
 switch (Deno.build.os) {
   case "windows":
@@ -513,7 +456,7 @@ switch (Deno.build.os) {
 }
 
 const libName = `./libadd.${libSuffix}`;
-// Open library and define exported symbols
+// 打开库并定义导出符号
 const dylib = Deno.dlopen(
   libName,
   {
@@ -521,28 +464,25 @@ const dylib = Deno.dlopen(
   } as const,
 );
 
-// Call the symbol `add`
+// 调用符号 `add`
 const result = dylib.symbols.add(35, 34); // 69
 
-console.log(`Result from external addition of 35 and 34: ${result}`);
+console.log(`外部加法 35 和 34 的结果：${result}`);
 ```
 
-Run with `--allow-ffi` and `--unstable` flag:
+运行时使用 `--allow-ffi` 和 `--unstable` 标志：
 
 ```sh
 deno run --allow-ffi --unstable ffi.ts
 ```
 
-### Non-blocking FFI
+### 非阻塞 FFI
 
-There are many use cases where users might want to run CPU-bound FFI functions
-in the background without blocking other tasks on the main thread.
+在许多用例中，用户可能希望在后台运行 CPU 密集型的 FFI 函数而不阻塞主线程上的其他任务。
 
-As of Deno 1.15, symbols can be marked `nonblocking` in `Deno.dlopen`. These
-function calls will run on a dedicated blocking thread and will return a
-`Promise` resolving to the desired `result`.
+自 Deno 1.15 起，符号可以在 `Deno.dlopen` 中标记为 `nonblocking`。这些函数调用将在专用的阻塞线程上运行，并返回一个 Promise，解析为所需的结果。
 
-Example of executing expensive FFI calls with Deno:
+以下是使用 Deno 执行耗时 FFI 调用的示例：
 
 ```c
 // sleep.c
@@ -564,7 +504,7 @@ int sleep(unsigned int ms) {
 }
 ```
 
-Calling it from Deno:
+从 Deno 调用它：
 
 ```typescript
 // nonblocking_ffi.ts
@@ -579,23 +519,21 @@ const library = Deno.dlopen(
   } as const,
 );
 
-library.symbols.sleep(500).then(() => console.log("After"));
-console.log("Before");
+library.symbols.sleep(500).then(() => console.log("完成之后"));
+console.log("完成之前");
 ```
 
-Result:
+结果：
 
 ```sh
-$ deno run --allow-ffi --unstable unblocking_ffi.ts
-Before
-After
+$ deno run --allow-ffi --unstable nonblocking_ffi.ts
+完成之前
+完成之后
 ```
 
-### Callbacks
+### 回调
 
-Deno FFI API supports creating C callbacks from JavaScript functions for calling
-back into Deno from dynamic libraries. An example of how callbacks are created
-and used is as follows:
+Deno FFI API 支持从 JavaScript 函数创建 C 回调，以便从动态库回调到 Deno。以下是创建和使用回调的示例：
 
 ```typescript
 // callback_ffi.ts
@@ -625,25 +563,19 @@ const callback = new Deno.UnsafeCallback(
   (success: number) => {},
 );
 
-// Pass the callback pointer to dynamic library
+// 将回调指针传递给动态库
 library.symbols.set_status_callback(callback.pointer);
-// Start some long operation that does not block the thread
+// 开始一些不阻塞线程的长操作
 library.symbols.start_long_operation();
 
-// Later, trigger the library to check if the operation is done.
-// If it is, this call will trigger the callback.
+// 过后，触发库检查操作是否完成。
+// 如果完成了，这次调用将触发回调。
 library.symbols.check_status();
 ```
 
-If an `UnsafeCallback`'s callback function throws an error, the error will get
-propagated up to the function that triggered the callback to be called (above,
-that would be `check_status()`) and can be caught there. If a callback returning
-a value throws then Deno will return 0 (null pointer for pointers) as the
-result.
+如果 `UnsafeCallback` 的回调函数抛出错误，该错误将被传播到触发回调的函数（在上面是 `check_status()`），并可以在那里捕获。如果一个返回值的回调抛出错误，Deno 将返回 0（对于指针为 null 指针）。
 
-`UnsafeCallback` is not deallocated by default as it can cause use-after-free
-bugs. To properly dispose of an `UnsafeCallback` its `close()` method must be
-called.
+`UnsafeCallback` 默认不被释放，因为这可能导致使用后释放错误。要正确处置 `UnsafeCallback`，必须调用其 `close()` 方法。
 
 ```typescript
 const callback = new Deno.UnsafeCallback(
@@ -651,66 +583,51 @@ const callback = new Deno.UnsafeCallback(
   () => {},
 );
 
-// After callback is no longer needed
+// 在回调不再需要后
 callback.close();
-// It is no longer safe to pass the callback as a parameter.
+// 现在再传递回调作为参数是不安全的。
 ```
 
-It is also possible for native libraries to setup interrupt handlers and to have
-those directly trigger the callback. However, this is not recommended and may
-cause unexpected side-effects and undefined behaviour. Preferably any interrupt
-handlers would only set a flag that can later be polled similarly to how
-`check_status()` is used above.
+原生库也可以设置中断处理程序，并直接触发回调。但这不建议使用，可能导致意外的副作用和未定义的行为。优先考虑任何中断处理程序仅设置一个标志，稍后可以通过类似于上面 `check_status()` 的方式进行轮询。
 
-### Supported types
+### 支持的类型
 
-Here's a list of types supported currently by the Deno FFI API.
+以下是 Deno FFI API 当前支持的类型列表。
 
-| FFI Type               | Deno                 | C                        | Rust                      |
-| ---------------------- | -------------------- | ------------------------ | ------------------------- |
-| `i8`                   | `number`             | `char` / `signed char`   | `i8`                      |
-| `u8`                   | `number`             | `unsigned char`          | `u8`                      |
-| `i16`                  | `number`             | `short int`              | `i16`                     |
-| `u16`                  | `number`             | `unsigned short int`     | `u16`                     |
-| `i32`                  | `number`             | `int` / `signed int`     | `i32`                     |
-| `u32`                  | `number`             | `unsigned int`           | `u32`                     |
-| `i64`                  | `bigint`             | `long long int`          | `i64`                     |
-| `u64`                  | `bigint`             | `unsigned long long int` | `u64`                     |
-| `usize`                | `bigint`             | `size_t`                 | `usize`                   |
-| `isize`                | `bigint`             | `size_t`                 | `isize`                   |
-| `f32`                  | `number`             | `float`                  | `f32`                     |
-| `f64`                  | `number`             | `double`                 | `f64`                     |
-| `void`[1]              | `undefined`          | `void`                   | `()`                      |
-| `pointer`              | `{} \| null`         | `void *`                 | `*mut c_void`             |
-| `buffer`[2]            | `TypedArray \| null` | `uint8_t *`              | `*mut u8`                 |
-| `function`[3]          | `{} \| null`         | `void (*fun)()`          | `Option<extern "C" fn()>` |
-| `{ struct: [...] }`[4] | `TypedArray`         | `struct MyStruct`        | `MyStruct`                |
+| FFI 类型               | Deno                 | C                        | Rust                      |
+| ---------------------- | ------------------- | ------------------------ | ------------------------- |
+| `i8`                   | `number`            | `char` / `signed char`   | `i8`                      |
+| `u8`                   | `number`            | `unsigned char`          | `u8`                      |
+| `i16`                  | `number`            | `short int`              | `i16`                     |
+| `u16`                  | `number`            | `unsigned short int`     | `u16`                     |
+| `i32`                  | `number`            | `int` / `signed int`     | `i32`                     |
+| `u32`                  | `number`            | `unsigned int`           | `u32`                     |
+| `i64`                  | `bigint`            | `long long int`          | `i64`                     |
+| `u64`                  | `bigint`            | `unsigned long long int` | `u64`                     |
+| `usize`                | `bigint`            | `size_t`                 | `usize`                   |
+| `isize`                | `bigint`            | `size_t`                 | `isize`                   |
+| `f32`                  | `number`            | `float`                  | `f32`                     |
+| `f64`                  | `number`            | `double`                 | `f64`                     |
+| `void`[1]              | `undefined`         | `void`                   | `()`                      |
+| `pointer`              | `{} \| null`        | `void *`                 | `*mut c_void`             |
+| `buffer`[2]            | `TypedArray \| null`| `uint8_t *`              | `*mut u8`                 |
+| `function`[3]          | `{} \| null`        | `void (*fun)()`          | `Option<extern "C" fn()>` |
+| `{ struct: [...] }`[4] | `TypedArray`        | `struct MyStruct`        | `MyStruct`                |
 
-As of Deno 1.25, the `pointer` type has been split into a `pointer` and a
-`buffer` type to ensure users take advantage of optimizations for Typed Arrays,
-and as of Deno 1.31 the JavaScript representation of `pointer` has become an
-opaque pointer object or `null` for null pointers.
+自 Deno 1.25 起，`pointer` 类型已分为 `pointer` 和 `buffer` 类型，以确保用户利用 Typed Arrays 的优化，自 Deno 1.31 起，`pointer` 的 JavaScript 表示已变为不透明指针对象或空指针的 `null`。
 
-- [1] `void` type can only be used as a result type.
-- [2] `buffer` type accepts TypedArrays as parameter, but it always returns a
-  pointer object or `null` when used as result type like the `pointer` type.
-- [3] `function` type works exactly the same as the `pointer` type as a
-  parameter and result type.
-- [4] `struct` type is for passing and returning C structs by value (copy). The
-  `struct` array must enumerate each of the struct's fields' type in order. The
-  structs are padded automatically: Packed structs can be defined by using an
-  appropriate amount of `u8` fields to avoid padding. Only TypedArrays are
-  supported as structs, and structs are always returned as `Uint8Array`s.
+- [1] `void` 类型仅可以用作结果类型。
+- [2] `buffer` 类型接受 TypedArrays 作为参数，但当用作结果类型时通常返回指针对象或 `null`，类似于 `pointer` 类型。
+- [3] `function` 类型在参数和结果类型上与 `pointer` 类型完全相同。
+- [4] `struct` 类型用于按值（复制）传递和返回 C 结构体。`struct` 数组必须按顺序列出每个结构体字段的类型。结构体会自动填充：可以通过使用适当数量的 `u8` 字段来避免填充定义紧凑的结构体。仅支持 TypedArrays 用作结构体，并且结构体始终返回为 `Uint8Array`。
 
 ### deno_bindgen
 
-[`deno_bindgen`](https://github.com/denoland/deno_bindgen) is the official tool
-to simplify glue code generation of Deno FFI libraries written in Rust.
+[`deno_bindgen`](https://github.com/denoland/deno_bindgen) 是官方工具，用于简化用 Rust 编写的 Deno FFI 库的粘合代码生成。
 
-It is similar to [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) in
-the Rust Wasm ecosystem.
+它类似于 Rust Wasm 生态系统中的 [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen)。
 
-Here's an example showing its usage:
+以下是一个展示其用法的示例：
 
 ```rust
 // mul.rs
@@ -728,8 +645,7 @@ fn mul(input: Input) -> i32 {
 }
 ```
 
-Run `deno_bindgen` to generate bindings. You can now directly import them into
-Deno:
+运行 `deno_bindgen` 生成绑定。您现在可以直接将它们导入到 Deno 中：
 
 ```ts
 // mul.ts
@@ -737,37 +653,26 @@ import { mul } from "./bindings/bindings.ts";
 mul({ a: 10, b: 2 }); // 20
 ```
 
-Any issues related to `deno_bindgen` should be reported at
-https://github.com/denoland/deno_bindgen/issues
+与 `deno_bindgen` 相关的任何问题应报告至 https://github.com/denoland/deno_bindgen/issues
 
-## Program Lifecycle
+## 程序生命周期
 
-Deno supports browser compatible lifecycle events:
+Deno 支持与浏览器兼容的生命周期事件：
 
-- [`load`](https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event#:~:text=The%20load%20event%20is%20fired,for%20resources%20to%20finish%20loading.):
-  fired when the whole page has loaded, including all dependent resources such
-  as stylesheets and images.
-- [`beforeunload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#:~:text=The%20beforeunload%20event%20is%20fired,want%20to%20leave%20the%20page.):
-  fired when the event loop has no more work to do and is about to exit.
-  Scheduling more asynchronous work (like timers or network requests) will cause
-  the program to continue.
-- [`unload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event):
-  fired when the document or a child resource is being unloaded.
-- [`unhandledrejection`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event):
-  fired when a promise that has no rejection handler is rejected, ie. a promise
-  that has no `.catch()` handler or a second argument to `.then()`.
-- [`rejectionhandled`](https://developer.mozilla.org/en-US/docs/Web/API/Window/rejectionhandled_event):
-  fired when a `.catch()` handler is added to a a promise that has already
-  rejected. This event is fired only if there's `unhandledrejection` listener
-  installed that prevents propagation of the event (which would result in the
-  program terminating with an error).
+- [`load`](https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event#:~:text=The%20load%20event%20is%20fired,for%20resources%20to%20finish%20loading.)：
+  在整个页面加载完成时触发，包括所有依赖资源，例如样式表和图像。
+- [`beforeunload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#:~:text=The%20beforeunload%20event%20is%20fired,want%20to%20leave%20the%20page.)：
+  当事件循环没有更多工作要做并即将退出时触发。调度更多异步工作（如定时器或网络请求）将导致程序继续。
+- [`unload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event)：
+  当文档或子资源正在卸载时触发。
+- [`unhandledrejection`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event)：
+  当未处理的 promise 被拒绝时触发，即一个没有 `.catch()` 处理程序或 `.then()` 的第二个参数的 promise。
+- [`rejectionhandled`](https://developer.mozilla.org/en-US/docs/Web/API/Window/rejectionhandled_event)：
+  当 `.catch()` 处理程序被添加到一个已经被拒绝的 promise 时触发。仅当安装了 `unhandledrejection` 监听器以防止事件传播时（这会导致程序以错误终止）才触发此事件。
 
-You can use these events to provide setup and cleanup code in your program.
+您可以使用这些事件为程序提供设置和清理代码。
 
-Listeners for `load` events can be asynchronous and will be awaited, this event
-cannot be canceled. Listeners for `beforeunload` need to be synchronous and can
-be cancelled to keep the program running. Listeners for `unload` events need to
-be synchronous and cannot be cancelled.
+`load` 事件的监听器可以是异步的并将被等待，这个事件无法被取消。`beforeunload` 监听器需要是同步的，可以被取消以保持程序运行。`unload` 事件的监听器需要是同步的且不能被取消。
 
 **main.ts**
 
@@ -775,7 +680,7 @@ be synchronous and cannot be cancelled.
 import "./imported.ts";
 
 const handler = (e: Event): void => {
-  console.log(`got ${e.type} event in event handler (main)`);
+  console.log(`在事件处理程序 (main) 中获得了 ${e.type} 事件`);
 };
 
 globalThis.addEventListener("load", handler);
@@ -785,23 +690,23 @@ globalThis.addEventListener("beforeunload", handler);
 globalThis.addEventListener("unload", handler);
 
 globalThis.onload = (e: Event): void => {
-  console.log(`got ${e.type} event in onload function (main)`);
+  console.log(`在 onload 函数 (main) 中获得了 ${e.type} 事件`);
 };
 
 globalThis.onbeforeunload = (e: Event): void => {
-  console.log(`got ${e.type} event in onbeforeunload function (main)`);
+  console.log(`在 onbeforeunload 函数 (main) 中获得了 ${e.type} 事件`);
 };
 
 globalThis.onunload = (e: Event): void => {
-  console.log(`got ${e.type} event in onunload function (main)`);
+  console.log(`在 onunload 函数 (main) 中获得了 ${e.type} 事件`);
 };
 
-console.log("log from main script");
+console.log("来自主脚本的日志");
 ```
 
 ```ts title="imported.ts"
 const handler = (e: Event): void => {
-  console.log(`got ${e.type} event in event handler (imported)`);
+  console.log(`在事件处理程序 (imported) 中获得了 ${e.type} 事件`);
 };
 
 globalThis.addEventListener("load", handler);
@@ -809,51 +714,44 @@ globalThis.addEventListener("beforeunload", handler);
 globalThis.addEventListener("unload", handler);
 
 globalThis.onload = (e: Event): void => {
-  console.log(`got ${e.type} event in onload function (imported)`);
+  console.log(`在 onload 函数 (imported) 中获得了 ${e.type} 事件`);
 };
 
 globalThis.onbeforeunload = (e: Event): void => {
-  console.log(`got ${e.type} event in onbeforeunload function (imported)`);
+  console.log(`在 onbeforeunload 函数 (imported) 中获得了 ${e.type} 事件`);
 };
 
 globalThis.onunload = (e: Event): void => {
-  console.log(`got ${e.type} event in onunload function (imported)`);
+  console.log(`在 onunload 函数 (imported) 中获得了 ${e.type} 事件`);
 };
 
-console.log("log from imported script");
+console.log("来自导入脚本的日志");
 ```
 
-A couple notes on this example:
+此示例的一些说明：
 
-- `addEventListener` and `onload`/`onunload` are prefixed with `globalThis`, but
-  you could also use `self` or no prefix at all.
-  [It is not recommended to use `window` as a prefix](https://docs.deno.com/lint/rules/no-window-prefix).
-- You can use `addEventListener` and/or `onload`/`onunload` to define handlers
-  for events. There is a major difference between them, let's run the example:
+- `addEventListener` 和 `onload`/`onunload` 使用 `globalThis` 前缀，但您也可以使用 `self` 或者根本不使用前缀。 
+  [不建议使用 `window` 作为前缀](https://docs.deno.com/lint/rules/no-window-prefix)。
+- 您可以使用 `addEventListener` 和/或 `onload`/`onunload` 为事件定义处理程序。它们之间存在重大差异，让我们运行示例：
 
 ```shell
 $ deno run main.ts
-log from imported script
-log from main script
-got load event in event handler (imported)
-got load event in event handler (main)
-got load event in onload function (main)
-got onbeforeunload event in event handler (imported)
-got onbeforeunload event in event handler (main)
-got onbeforeunload event in onbeforeunload function (main)
-got unload event in event handler (imported)
-got unload event in event handler (main)
-got unload event in onunload function (main)
+来自导入脚本的日志
+来自主脚本的日志
+在事件处理程序 (imported) 中获得了 load 事件
+在事件处理程序 (main) 中获得了 load 事件
+在 onload 函数 (main) 中获得了 load 事件
+在事件处理程序 (imported) 中获得了 onbeforeunload 事件
+在事件处理程序 (main) 中获得了 onbeforeunload 事件
+在 onbeforeunload 函数 (main) 中获得了 onbeforeunload 事件
+在事件处理程序 (imported) 中获得了 unload 事件
+在事件处理程序 (main) 中获得了 unload 事件
+在 onunload 函数 (main) 中获得了 unload 事件
 ```
 
-All listeners added using `addEventListener` were run, but `onload`,
-`onbeforeunload` and `onunload` defined in `main.ts` overrode handlers defined
-in `imported.ts`.
+所有通过 `addEventListener` 注册的监听器都会被调用，但在 `main.ts` 中定义的 `onload`、`onbeforeunload` 和 `onunload` 处理程序会覆盖在 `imported.ts` 中定义的处理程序。
 
-In other words, you can use `addEventListener` to register multiple `"load"` or
-`"unload"` event handlers, but only the last defined `onload`, `onbeforeunload`,
-`onunload` event handlers will be executed. It is preferable to use
-`addEventListener` when possible for this reason.
+换句话说，您可以使用 `addEventListener` 注册多个 `"load"` 或 `"unload"` 事件处理程序，但只有最后定义的 `onload`、`onbeforeunload`、`onunload` 事件处理程序会被执行。由于这个原因，建议尽可能使用 `addEventListener`。
 
 ### beforeunload
 
@@ -864,10 +762,10 @@ let count = 0;
 console.log(count);
 
 globalThis.addEventListener("beforeunload", (e) => {
-  console.log("About to exit...");
+  console.log("即将退出...");
   if (count < 4) {
     e.preventDefault();
-    console.log("Scheduling more work...");
+    console.log("调度更多工作...");
     setTimeout(() => {
       console.log(count);
     }, 100);
@@ -877,7 +775,7 @@ globalThis.addEventListener("beforeunload", (e) => {
 });
 
 globalThis.addEventListener("unload", (e) => {
-  console.log("Exiting");
+  console.log("退出中");
 });
 
 count++;
@@ -889,53 +787,48 @@ setTimeout(() => {
 }, 100);
 ```
 
-Running this program will print:
+运行此程序将输出：
 
 ```sh
 $ deno run beforeunload.js
 0
 1
 2
-About to exit...
-Scheduling more work...
+即将退出...
+调度更多工作...
 3
-About to exit...
-Scheduling more work...
+即将退出...
+调度更多工作...
 4
-About to exit...
-Exiting
+即将退出...
+退出中
 ```
 
-### unhandledrejection event
+### 未处理的拒绝事件
 
-This event is fired when a promise that has no rejection handler is rejected,
-ie. a promise that has no .catch() handler or a second argument to .then().
+当未处理的 promise 被拒绝时触发此事件，即没有拒绝处理程序的 promise，例如没有 `.catch()` 处理程序或 `.then()` 的第二个参数的 promise。
 
 ```js
 // unhandledrejection.js
 globalThis.addEventListener("unhandledrejection", (e) => {
-  console.log("unhandled rejection at:", e.promise, "reason:", e.reason);
+  console.log("未处理的拒绝发生在:", e.promise, "原因:", e.reason);
   e.preventDefault();
 });
 
 function Foo() {
-  this.bar = Promise.reject(new Error("bar not available"));
+  this.bar = Promise.reject(new Error("条目不可用"));
 }
 
 new Foo();
 Promise.reject();
 ```
 
-Running this program will print:
+运行此程序将输出：
 
 ```sh
 $ deno run unhandledrejection.js
-unhandled rejection at: Promise {
-  <rejected> Error: bar not available
+未处理的拒绝发生在: Promise { <rejected> Error: 条目不可用 } 原因: Error: 条目不可用
     at new Foo (file:///dev/unhandled_rejection.js:7:29)
     at file:///dev/unhandled_rejection.js:10:1
-} reason: Error: bar not available
-    at new Foo (file:///dev/unhandled_rejection.js:7:29)
-    at file:///dev/unhandled_rejection.js:10:1
-unhandled rejection at: Promise { <rejected> undefined } reason: undefined
+未处理的拒绝发生在: Promise { <rejected> undefined } 原因: undefined
 ```

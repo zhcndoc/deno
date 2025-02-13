@@ -1,34 +1,27 @@
 ---
-title: "Unstable feature flags"
+title: "不稳定功能标志"
 oldUrl:
  - /runtime/tools/unstable_flags/
  - /runtime/manual/tools/unstable_flags/
 ---
 
-New features of the Deno runtime are often released behind feature flags, so
-users can try out new APIs and features before they are finalized. Current
-unstable feature flags are listed on this page, and can also be found in the CLI
-help text by running:
+Deno 运行时的新功能通常会在功能标志后发布，因此用户可以在功能最终确定之前尝试新的 API 和功能。当前的不稳定功能标志列在此页面上，也可以通过运行以下命令在 CLI 帮助文本中找到：
 
 ```sh
 deno --help
 ```
 
-## Using flags at the command line
+## 在命令行中使用标志
 
-You can enable a feature flag when you run a Deno program from the command line
-by passing in the flag as an option to the CLI. Here's an example of running a
-program with the `--unstable-node-globals` flag enabled:
+您可以通过将标志作为选项传递给 CLI 来在从命令行运行 Deno 程序时启用功能标志。以下是启用 `--unstable-node-globals` 标志运行程序的示例：
 
 ```sh
 deno run --unstable-node-globals main.ts
 ```
 
-## Configuring flags in `deno.json`
+## 在 `deno.json` 中配置标志
 
-You can specify which unstable features you'd like to enable for your project
-using a
-[configuration option in `deno.json`](/runtime/fundamentals/configuration/).
+您可以使用 [`deno.json`](/runtime/fundamentals/configuration/) 中的配置选项指定要为项目启用的哪些不稳定功能。
 
 ```json title="deno.json"
 {
@@ -36,18 +29,13 @@ using a
 }
 ```
 
-The possible values in the `unstable` array are the flag names with the
-`--unstable-` prefix removed.
+`unstable` 数组中的可能值是标志名称，去掉了 `--unstable-` 前缀。
 
-## Configuration via environment variables
+## 通过环境变量配置
 
-Some flags can be enabled by setting a value (any value) for an environment
-variable of a given name, rather than being passed as a flag or `deno.json`
-configuration option. Flags that are settable via environment variables will be
-noted below.
+有些标志可以通过为特定名称的环境变量设置一个值（任何值）来启用，而不是作为标志或 `deno.json` 配置选项传递。可以通过环境变量设置的标志将在下面进行说明。
 
-Here's an example of setting the `--unstable-bare-node-builtins` flag via
-environment variable:
+以下是通过环境变量设置 `--unstable-bare-node-builtins` 标志的示例：
 
 ```sh
 export DENO_UNSTABLE_BARE_NODE_BUILTINS=true
@@ -55,13 +43,11 @@ export DENO_UNSTABLE_BARE_NODE_BUILTINS=true
 
 ## `--unstable-bare-node-builtins`
 
-**Environment variable:** `DENO_UNSTABLE_BARE_NODE_BUILTINS`
+**环境变量：** `DENO_UNSTABLE_BARE_NODE_BUILTINS`
 
-This flag enables you to
-[import Node.js built-in modules](/runtime/fundamentals/node/#node-built-in-modules)
-without a `node:` specifier, as in the example below. You can also use this flag
-to enable npm packages without an `npm:` specifier if you are manually managing
-your Node.js dependencies ([see `byonm` flag](#--unstable-byonm)).
+此标志允许您
+[导入 Node.js 内置模块](/runtime/fundamentals/node/#node-built-in-modules)
+而不使用 `node:` 说明符，如下面的示例所示。您还可以使用此标志在手动管理 Node.js 依赖项时启用 npm 包，而不使用 `npm:` 说明符（[参见 `byonm` 标志](#--unstable-byonm)）。
 
 ```ts title="example.ts"
 import { readFileSync } from "fs";
@@ -71,40 +57,35 @@ console.log(readFileSync("deno.json", { encoding: "utf8" }));
 
 ## `--unstable-detect-cjs`
 
-**Environment variable:** `DENO_UNSTABLE_DETECT_CJS`
+**环境变量：** `DENO_UNSTABLE_DETECT_CJS`
 
-Loads `.js`, `.jsx`, `.ts`, and `.tsx` modules as possibly being CommonJS in the
-following additional scenarios:
+在以下附加场景中，将 `.js`、`.jsx`、`.ts` 和 `.tsx` 模块加载为可能的 CommonJS：
 
-1. The _package.json_ has no `"type"` field.
-1. No _package.json_ exists.
+1. _package.json_ 没有 `"type"` 字段。
+2. 不存在 _package.json_。
 
-By default, Deno only loads these modules as being possibly CommonJS when you're
-in a project with a _package.json_ and the closest _package.json_ has
-`{ "type": "commonjs" }`.
+默认情况下，Deno 仅在您处于具有 _package.json_ 且最近的 _package.json_ 拥有 `{ "type": "commonjs" }` 时，将这些模块加载为可能的 CommonJS。
 
-Requires Deno >= 2.1.2
+需要 Deno >= 2.1.2
 
 ## `--unstable-node-globals`
 
-This flags injects Node specific globals into the global scope. The injected
-globals are:
+此标志将 Node 特定的全局变量注入到全局作用域中。注入的全局变量包括：
 
 - `Buffer`
 - `global`
 - `setImmediate`
 - `clearImmediate`
 
-Note, that `process` is already available as a global startin with Deno 2.0.
+请注意，从 Deno 2.0 开始，`process` 已作为全局变量可用。
 
-Requires Deno >= 2.1.0
+需要 Deno >= 2.1.0
 
 ## `--unstable-sloppy-imports`
 
-**Environment variable:** `DENO_UNSTABLE_SLOPPY_IMPORTS`
+**环境变量：** `DENO_UNSTABLE_SLOPPY_IMPORTS`
 
-This flag enables behavior which will infer file extensions from imports that do
-not include them. Normally, the import statement below would produce an error:
+此标志启用一种行为，推断导入中缺少的文件扩展名。通常，下面的导入语句将产生错误：
 
 ```ts title="foo.ts"
 import { Example } from "./bar";
@@ -115,70 +96,53 @@ console.log(Example);
 export const Example = "Example";
 ```
 
-Executing the script with sloppy imports enabled will remove the error, but
-provide guidance that a more performant syntax should be used.
+在启用不严格导入的情况下执行脚本将消除错误，但会提供指导，建议使用更高效的语法。
 
-Sloppy imports will allow (but print warnings for) the following:
+不严格导入将允许（但会打印警告）以下内容：
 
-- Omit file extensions from imports
-- Use incorrect file extensions (e.g. importing with a `.js` extension when the
-  actual file is `.ts`)
-- Import a directory path, and automatically use `index.js` or `index.ts` as the
-  import for that directory
+- 从导入中省略文件扩展名
+- 使用不正确的文件扩展名（例如，当实际文件为 `.ts` 时，使用 `.js` 扩展名导入）
+- 导入目录路径，并自动使用 `index.js` 或 `index.ts` 作为该目录的导入
 
-[`deno compile`](/runtime/reference/cli/compile/) does not support sloppy
-imports.
+[`deno compile`](/runtime/reference/cli/compile/) 不支持不严格导入。
 
 ## `--unstable-unsafe-proto`
 
-Deno made a conscious decision to not support `Object.prototype.__proto__` for
-security reasons. However there are still many npm packages that rely on this
-property to work correctly.
+Deno 出于安全原因做出了不支持 `Object.prototype.__proto__` 的明确决定。然而，仍然有许多依赖于此属性正常工作的 npm 包。
 
-This flag enables this property. Note that it is not recommended to use this,
-but if you really need to use a package that relies on it, the escape hatch is
-now available to you.
+此标志启用此属性。请注意，不建议使用此选项，但如果您确实需要使用依赖于它的包，现在可以使用解除限制的功能。
 
 ## `--unstable-webgpu`
 
-Enable the
-[`WebGPU` API](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API) in
-the global scope, as in the browser. Below is a simple example to get basic
-information about the GPU using this API:
+在全局作用域中启用 [`WebGPU` API](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API)，类似于浏览器。以下是使用此 API 获取 GPU 基本信息的简单示例：
 
 ```ts
-// Try to get an adapter from the user agent.
+// 尝试从用户代理获取适配器。
 const adapter = await navigator.gpu.requestAdapter();
 if (adapter) {
-  // Print out some basic details about the adapter.
+  // 打印适配器的一些基本信息。
   const adapterInfo = await adapter.requestAdapterInfo();
 
-  // On some systems this will be blank...
-  console.log(`Found adapter: ${adapterInfo.device}`);
+  // 在某些系统上，这将是空白...
+  console.log(`找到适配器: ${adapterInfo.device}`);
 
-  // Print GPU feature list
+  // 打印 GPU 功能列表
   const features = [...adapter.features.values()];
-  console.log(`Supported features: ${features.join(", ")}`);
+  console.log(`支持的功能: ${features.join(", ")}`);
 } else {
-  console.error("No adapter found");
+  console.error("未找到适配器");
 }
 ```
 
-Check out [this repository](https://github.com/denoland/webgpu-examples) for
-more examples using WebGPU.
+查看 [这个仓库](https://github.com/denoland/webgpu-examples) 获取更多使用 WebGPU 的示例。
 
 ## `--unstable-broadcast-channel`
 
-Enabling this flag makes the
-[`BroadcastChannel`](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel)
-web API available for use in the global scope, as in the browser.
+启用此标志将使 [`BroadcastChannel`](https://developer.mozilla.org/en-US/docs/Web/API/BroadcastChannel) Web API 可在全局作用域中使用，类似于浏览器。
 
 ## `--unstable-worker-options`
 
-Enable unstable
-[Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
-API options. Specifically, it enables you to specify permissions available to
-workers:
+启用不稳定的 [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) API 选项。具体而言，它允许您指定可用的权限给工作者：
 
 ```ts
 new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
@@ -195,48 +159,39 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 
 ## `--unstable-cron`
 
-Enabling this flag makes the [`Deno.cron`](/deploy/kv/manual/cron) API available
-on the `Deno` namespace.
+启用此标志将使 [`Deno.cron`](/deploy/kv/manual/cron) API 可用于 `Deno` 命名空间。
 
 ## `--unstable-kv`
 
-Enabling this flag makes [Deno KV](/deploy/kv/manual) APIs available in the
-`Deno` namespace.
+启用此标志将使 [Deno KV](/deploy/kv/manual) API 可用于 `Deno` 命名空间。
 
 ## `--unstable-net`
 
-Enable unstable net APIs in the `Deno` namespace. These APIs include:
+在 `Deno` 命名空间中启用不稳定网络 API。这些 API 包括：
 
 - [`Deno.DatagramConn`](https://docs.deno.com/api/deno/~/Deno.DatagramConn)
 
 ## `--unstable-otel`
 
-Enable the
-[OpenTelemetry integration for Deno](/runtime/fundamentals/open_telemetry).
+启用 [Deno 的 OpenTelemetry 集成](/runtime/fundamentals/open_telemetry)。
 
 ## `--unstable`
 
-:::caution --unstable is deprecated - use granular flags instead
+:::caution --unstable 已被弃用 - 请改用更细粒度的标志
 
-The `--unstable` flag is no longer being used for new features, and will be
-removed in a future release. All unstable features that were available using
-this flag are now available as granular unstable flags, notably:
+`--unstable` 标志不再用于新功能，并将在未来的版本中移除。通过此标志可以使用的所有不稳定功能现在都作为独立的不稳定标志可用，特别是：
 
 - `--unstable-kv`
 - `--unstable-cron`
 
-Please use these feature flags instead moving forward.
+请在今后使用这些功能标志。
 
 :::
 
-Before more recent Deno versions (1.38+), unstable APIs were made available all
-at once using the `--unstable` flag. Notably, [Deno KV](/deploy/kv/manual) and
-other cloud primitive APIs are available behind this flag. To run a program with
-access to these unstable features, you would run your script with:
+在较早的 Deno 版本（1.38+）之前，不稳定 API 是通过 `--unstable` 标志一次性提供的。值得注意的是，[Deno KV](/deploy/kv/manual) 和其他云原语 API 是通过此标志提供的。要运行一个具有访问这些不稳定功能的程序，您可以运行你的脚本：
 
 ```sh
 deno run --unstable your_script.ts
 ```
 
-It is recommended that you use the granular unstable flags instead of this, the
-`--unstable` flag is now deprecated and will be removed in Deno 2.
+建议您使用更细粒度的不稳定标志，而不是使用此标志，`--unstable` 标志现在已被弃用，并将在 Deno 2 中移除。

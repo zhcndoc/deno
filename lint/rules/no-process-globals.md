@@ -1,21 +1,19 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of NodeJS `process` global.
+禁止使用 NodeJS 的 `process` 全局变量。
 
-NodeJS and Deno expose `process` global but they are hard to statically analyze
-by tools, so code should not assume they are available. Instead,
-`import process from "node:process"`.
+NodeJS 和 Deno 暴露了 `process` 全局变量，但它们很难被工具进行静态分析，因此代码不应假设它们是可用的。相反，请使用 `import process from "node:process"`。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 // foo.ts
 const foo = process.env.FOO;
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 // foo.ts

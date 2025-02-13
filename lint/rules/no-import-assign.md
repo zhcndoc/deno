@@ -1,14 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows reassignment of imported module bindings.
+禁止重新分配导入模块绑定。
 
-ES module import bindings should be treated as read-only since modifying them
-during code execution will likely result in runtime errors. It also makes for
-poor code readability and difficult maintenance.
+ES 模块导入绑定应被视为只读，因为在代码执行期间修改它们可能会导致运行时错误。这也会导致代码可读性差和维护困难。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 import defaultMod, { namedMod } from "./mod.js";
@@ -20,13 +18,13 @@ modNameSpace.someExportedMember = "hello";
 modNameSpace = {};
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 import defaultMod, { namedMod } from "./mod.js";
 import * as modNameSpace from "./mod2.js";
 
-// properties of bound imports may be set
+// 绑定导入的属性可以被设置
 defaultMod.prop = 1;
 namedMod.prop = true;
 modNameSpace.someExportedMember.prop = "hello";

@@ -1,28 +1,25 @@
 ---
-title: "How to deploy Deno to Digital Ocean"
+title: "如何将 Deno 部署到 Digital Ocean"
 url: /examples/digital_ocean_tutorial/
 oldUrl:
 - /runtime/manual/advanced/deploying_deno/digital_ocean/
 - /runtime/tutorials/digital_ocean/
 ---
 
-Digital Ocean is a popular cloud infrastructure provider offering a variety of
-hosting services ranging from networking, to compute, to storage.
+Digital Ocean 是一个受欢迎的云基础设施提供商，提供多种托管服务，从网络到计算再到存储。
 
-Here's a step by step guide to deploying a Deno app to Digital Ocean using
-Docker and GitHub Actions.
+以下是将 Deno 应用程序通过 Docker 和 GitHub Actions 部署到 Digital Ocean 的逐步指南。
 
-The pre-requisites for this are:
+此过程的先决条件包括：
 
 - [`docker` CLI](https://docs.docker.com/engine/reference/commandline/cli/)
-- a [GitHub account](https://github.com)
-- a [Digital Ocean account](https://digitalocean.com)
+- 一个 [GitHub 帐户](https://github.com)
+- 一个 [Digital Ocean 帐户](https://digitalocean.com)
 - [`doctl` CLI](https://docs.digitalocean.com/reference/doctl/how-to/install/)
 
-## Create Dockerfile and docker-compose.yml
+## 创建 Dockerfile 和 docker-compose.yml
 
-To focus on the deployment, our app will simply be a `main.ts` file that returns
-a string as an HTTP response:
+为了专注于部署，我们的应用程序仅为一个返回 HTTP 响应字符串的 `main.ts` 文件：
 
 ```ts title="main.ts"
 import { Application } from "https://deno.land/x/oak/mod.ts";
@@ -36,10 +33,9 @@ app.use((ctx) => {
 await app.listen({ port: 8000 });
 ```
 
-Then, we'll create two files -- `Dockerfile` and `docker-compose.yml` -- to
-build the Docker image.
+接下来，我们将创建两个文件 -- `Dockerfile` 和 `docker-compose.yml` -- 来构建 Docker 镜像。
 
-In our `Dockerfile`, let's add:
+在我们的 `Dockerfile` 中，添加如下内容：
 
 ```Dockerfile title="Dockerfile"
 FROM denoland/deno
@@ -55,7 +51,7 @@ RUN deno install --entrypoint main.ts
 CMD ["run", "--allow-net", "main.ts"]
 ```
 
-Then, in our `docker-compose.yml`:
+然后，在我们的 `docker-compose.yml` 中：
 
 ```yml
 version: "3"
@@ -69,102 +65,88 @@ services:
       - "8000:8000"
 ```
 
-Let's test this locally by running `docker compose -f docker-compose.yml build`,
-then `docker compose up`, and going to `localhost:8000`.
+让我们通过运行 `docker compose -f docker-compose.yml build`，然后 `docker compose up`，并访问 `localhost:8000` 来测试这个应用程序。
 
 ![Hello from localhost](./images/how-to/digital-ocean/hello-world-from-localhost.png)
 
-It works!
+它工作正常！
 
-## Build, Tag, and Push your Docker image to Digital Ocean Container Registry
+## 构建、标记并将 Docker 镜像推送到 Digital Ocean 容器注册表
 
-Digital Ocean has its own private Container Registry, with which we can push and
-pull Docker images. In order to use this registry, let's
-[install and authenticate `doctl` on the command line](https://docs.digitalocean.com/reference/doctl/how-to/install/).
+Digital Ocean 有自己的私有容器注册表，我们可以在其中推送和拉取 Docker 镜像。为了使用该注册表，让我们
+[在命令行中安装并认证 `doctl`](https://docs.digitalocean.com/reference/doctl/how-to/install/)。
 
-After that, we'll create a new private registry named `deno-on-digital-ocean`:
+之后，我们将创建一个名为 `deno-on-digital-ocean` 的新私有注册表：
 
 ```shell
 doctl registry create deno-on-digital-ocean
 ```
 
-Using our Dockerfile and docker-compose.yml, we'll build a new image, tag it,
-and push it to the registry. Note that `docker-compose.yml` will name the build
-locally as `deno-image`.
+使用我们的 Dockerfile 和 docker-compose.yml，我们将构建一个新镜像，标记它，并将其推送到注册表。请注意，`docker-compose.yml` 将在本地将构建命名为 `deno-image`。
 
 ```shell
 docker compose -f docker-compose.yml build
 ```
 
-Let's [tag](https://docs.docker.com/engine/reference/commandline/tag/) it with
-`new`:
+让我们 [标记](https://docs.docker.com/engine/reference/commandline/tag/) 它为 `new`：
 
 ```shell
 docker tag deno-image registry.digitalocean.com/deno-on-digital-ocean/deno-image:new
 ```
 
-Now we can push it to the registry.
+现在我们可以将其推送到注册表。
 
 ```shell
 docker push registry.digitalocean.com/deno-on-digital-ocean/deno-image:new
 ```
 
-You should see your new `deno-image` with the `new` tag in your
-[Digital Ocean container registry](https://cloud.digitalocean.com/registry):
+你应该在你的 [Digital Ocean 容器注册表](https://cloud.digitalocean.com/registry) 中看到新的带有 `new` 标签的 `deno-image`：
 
 ![New deno image on Digital Ocean container registry](./images/how-to/digital-ocean/new-deno-image-on-digital-ocean-container-registry.png)
 
-Perfect!
+完美！
 
-## Deploy to Digital Ocean via SSH
+## 通过 SSH 部署到 Digital Ocean
 
-Once our `deno-image` is in the registry, we can run it anywhere using
-`docker run`. In this case, we'll run it while in our
-[Digital Ocean Droplet](https://www.digitalocean.com/products/droplets), their
-hosted virtual machine.
+一旦我们的 `deno-image` 在注册表中，我们可以使用 `docker run` 在任何地方运行它。在这种情况下，我们将在我们的
+[Digital Ocean Droplet](https://www.digitalocean.com/products/droplets) 上运行，那里是他们托管的虚拟机。
 
-While on your [Droplet page](https://cloud.digitalocean.com/droplets), click on
-your Droplet and then `console` to SSH into the virtual machine. (Or you can
-[ssh directly from your command line](https://docs.digitalocean.com/products/droplets/how-to/connect-with-ssh/).)
+在你的 [Droplet 页面](https://cloud.digitalocean.com/droplets) 上，点击你的 Droplet，然后点击 `console` 通过 SSH 进入虚拟机。（或者你可以从你的命令行 [直接 ssh](https://docs.digitalocean.com/products/droplets/how-to/connect-with-ssh/)）。
 
-To pull down the `deno-image` image and run it, let's run:
+要拉取 `deno-image` 镜像并运行它，我们可以运行：
 
 ```shell
 docker run -d --restart always -it -p 8000:8000 --name deno-image registry.digitalocean.com/deno-on-digital-ocean/deno-image:new
 ```
 
-Using our browser to go to the Digital Ocean address, we now see:
+使用我们的浏览器访问 Digital Ocean 地址，我们现在看到：
 
 ![Hello from Deno and Digital Ocean](./images/how-to/digital-ocean/hello-from-deno-and-digital-ocean.png)
 
-Boom!
+太棒了！
 
-## Automate the Deployment via GitHub Actions
+## 通过 GitHub Actions 自动化部署
 
-Let's automate that entire process with GitHub actions.
+让我们通过 GitHub Actions 自动化整个过程。
 
-First, let's get all of our environmental variables needed for logging into
-`doctl` and SSHing into the Droplet:
+首先，让我们获取所有需要的环境变量，以便登录到 `doctl` 和 SSH 进入 Droplet：
 
 - [DIGITALOCEAN_ACCESS_TOKEN](https://docs.digitalocean.com/reference/api/create-personal-access-token/)
-- DIGITALOCEAN_HOST (the IP address of your Droplet)
-- DIGITALOCEAN_USERNAME (the default is `root`)
-- DIGITALOCEAN_SSHKEY (more on this below)
+- DIGITALOCEAN_HOST（你的 Droplet 的 IP 地址）
+- DIGITALOCEAN_USERNAME（默认是 `root`）
+- DIGITALOCEAN_SSHKEY（关于这一点，稍后会详细说明）
 
-### Generate `DIGITALOCEAN_SSHKEY`
+### 生成 `DIGITALOCEAN_SSHKEY`
 
-The `DIGITALOCEAN_SSHKEY` is a private key where its public counterpart exists
-on the virtual machine in its `~/.ssh/authorized_keys` file.
+`DIGITALOCEAN_SSHKEY` 是一个私钥，其公钥位于虚拟机的 `~/.ssh/authorized_keys` 文件中。
 
-To do this, first let's run `ssh-keygen` on your local machine:
+为此，首先在你的本地机器上运行 `ssh-keygen`：
 
 ```shell
 ssh-keygen
 ```
 
-When prompted for an email, **be sure to use your GitHub email** for the GitHub
-Action to authenticate properly. Your final output should look something like
-this:
+当出现提醒输入电子邮件时，**确保使用你的 GitHub 电子邮件** 以便 GitHub Action 正确验证。最终输出应该类似于：
 
 ```console
 Output
@@ -186,39 +168,31 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 
-Next, we'll have to upload the newly generated public key to your Droplet. You
-can either use [`ssh-copy-id`](https://www.ssh.com/academy/ssh/copy-id) or
-manually copy it, ssh into your Droplet, and pasting it to
-`~/.ssh/authorized_keys`.
+接下来，我们需要将新生成的公钥上传到你的 Droplet。你可以使用 [`ssh-copy-id`](https://www.ssh.com/academy/ssh/copy-id) 或手动复制它，SSH 进入你的 Droplet，并将其粘贴到 `~/.ssh/authorized_keys`。
 
-Using `ssh-copy-id`:
+使用 `ssh-copy-id`：
 
 ```shell
 ssh-copy-id {{ username }}@{{ host }}
 ```
 
-This command will prompt you for the password. Note that this will automatically
-copy `id_rsa.pub` key from your local machine and paste it to your Droplet's
-`~/.ssh/authorized_keys` file. If you've named your key something other than
-`id_rsa`, you can pass it with the `-i` flag to the command:
+这个命令会提示你输入密码。请注意，这将自动从你的本地机器复制 `id_rsa.pub` 密钥并粘贴到你的 Droplet 的 `~/.ssh/authorized_keys` 文件中。如果你将密钥命名为其他名称，可以通过 `-i` 标志将其传递给命令：
 
 ```shell
 ssh-copy-id -i ~/.ssh/mykey {{ username }}@{{ host }}
 ```
 
-To test whether this is done successfully:
+要测试是否成功执行：
 
 ```shell
 ssh -i ~/.ssh/mykey {{ username }}@{{ host }}
 ```
 
-Awesome!
+太好了！
 
-### Define the yml File
+### 定义 yml 文件
 
-The final step is to put this all together. We're basically taking each step
-during the manual deployment and adding them to a GitHub Actions workflow yml
-file:
+最后一步是将这一切结合在一起。我们基本上是在手动部署的每一步中，将其添加到一个 GitHub Actions 工作流的 yml 文件中：
 
 ```yml
 name: Deploy to Digital Ocean
@@ -267,14 +241,13 @@ jobs:
           username: ${{ secrets.DIGITALOCEAN_USERNAME }}
           key: ${{ secrets.DIGITALOCEAN_SSHKEY }}
           script: |
-            # Login to Digital Ocean Container Registry
+            # 登录到 Digital Ocean 容器注册表
             docker login -u ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} -p ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} registry.digitalocean.com
-            # Stop and remove a running image.
+            # 停止并删除正在运行的镜像
             docker stop ${{ env.IMAGE_NAME }}
             docker rm ${{ env.IMAGE_NAME }}
-            # Run a new container from a new image
+            # 从新镜像运行一个新容器
             docker run -d --restart always -it -p 8000:8000 --name ${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 ```
 
-When you push to GitHub, this yml file is automatically detected, triggering the
-Deploy action.
+当你推送到 GitHub 时，这个 yml 文件会被自动检测，从而触发部署动作。

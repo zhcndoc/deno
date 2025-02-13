@@ -4,10 +4,9 @@ oldUrl: /runtime/manual/tools/serve/
 command: serve
 ---
 
-## Example
+## 示例
 
-Here's an example of how you can create a simple HTTP server with declarative
-fetch:
+这是一个如何使用声明式 fetch 创建简单 HTTP 服务器的示例：
 
 ```typescript title="server.ts"
 export default {
@@ -17,14 +16,13 @@ export default {
 };
 ```
 
-You can then run the server using the `deno serve` command:
+然后您可以使用 `deno serve` 命令运行服务器：
 
 ```bash
 deno serve server.ts
 ```
 
-The logic inside the `fetch` function can be customized to handle different
-types of requests and serve content accordingly:
+`fetch` 函数中的逻辑可以根据不同类型的请求进行自定义，并相应地提供内容：
 
 ```typescript title="server.ts"
 export default {

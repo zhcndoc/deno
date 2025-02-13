@@ -1,39 +1,38 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the unreachable code after the control flow statements.
+禁止在控制流语句之后写无法到达的代码。
 
-Because the control flow statements (`return`, `throw`, `break` and `continue`)
-unconditionally exit a block of code, any statements after them cannot be
-executed.
+因为控制流语句（`return`、`throw`、`break` 和 `continue`）
+会无条件地退出代码块，所以它们后面的任何语句都无法执行。
 
-**Invalid:**
+**无效示例:**
 
 ```typescript
 function foo() {
   return true;
-  console.log("done");
+  console.log("完成");
 }
 ```
 
 ```typescript
 function bar() {
-  throw new Error("Oops!");
-  console.log("done");
+  throw new Error("哎呀！");
+  console.log("完成");
 }
 ```
 
 ```typescript
 while (value) {
   break;
-  console.log("done");
+  console.log("完成");
 }
 ```
 
 ```typescript
-throw new Error("Oops!");
-console.log("done");
+throw new Error("哎呀！");
+console.log("完成");
 ```
 
 ```typescript
@@ -43,16 +42,16 @@ function baz() {
   } else {
     throw new Error();
   }
-  console.log("done");
+  console.log("完成");
 }
 ```
 
 ```typescript
 for (;;) {}
-console.log("done");
+console.log("完成");
 ```
 
-**Valid:**
+**有效示例:**
 
 ```typescript
 function foo() {

@@ -1,21 +1,17 @@
 ---
-title: "Reverse proxy middleware"
+title: "反向代理中间件"
 ---
 
-This quickstart will cover how to deploy a small piece of middleware that
-reverse proxies another server (in this case example.com). For additional
-examples of common middleware functions, see the
-[example gallery](../tutorials/index.md).
+本快速入门将介绍如何部署一个小型的中间件，它反向代理另一个服务器（在这个例子中是 example.com）。有关常见中间件功能的其他示例，请参见
+[示例画廊](../tutorials/index.md)。
 
-## **Step 1:** Create a new playground project on Deno Deploy
+## **步骤 1：** 在 Deno Deploy 上创建一个新的 Playground 项目
 
-Navigate to https://dash.deno.com/projects and click on the "New Playground"
-button.
+导航到 https://dash.deno.com/projects 并点击 "新建 Playground" 按钮。
 
-## **Step 2:** Deploy middleware code via playground
+## **步骤 2：** 通过 Playground 部署中间件代码
 
-On the next page, copy and paste the code below into the editor. It is an HTTP
-server that proxies all requests to https://example.com.
+在下一个页面，将以下代码复制并粘贴到编辑器中。这是一个将所有请求代理到 https://example.com 的 HTTP 服务器。
 
 ```ts
 async function reqHandler(req: Request) {
@@ -26,8 +22,8 @@ async function reqHandler(req: Request) {
 Deno.serve(reqHandler);
 ```
 
-Click **Save and Deploy**.
+点击 **保存并部署**。
 
-You should see something like this:
+您应该看到类似以下内容的界面：
 
 ![image](../docs-images/proxy_to_example.png)

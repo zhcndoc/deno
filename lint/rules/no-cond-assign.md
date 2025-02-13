@@ -1,15 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of the assignment operator, `=`, in conditional statements.
+禁止在条件语句中使用赋值操作符 `=`。
 
-Use of the assignment operator within a conditional statement is often the
-result of mistyping the equality operator, `==`. If an assignment within a
-conditional statement is required then this rule allows it by wrapping the
-assignment in parentheses.
+在条件语句中使用赋值操作符通常是因为误打了相等运算符 `==`。如果在条件语句中确实需要赋值，则此规则允许通过将赋值放入括号中来实现。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 let x;
@@ -26,7 +23,7 @@ function setHeight(someNode) {
 }
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 let x;

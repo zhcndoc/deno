@@ -1,42 +1,36 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Enforces all variables are used at least once.
+强制所有变量至少被使用一次。
 
-If there are variables that are declared but not used anywhere, it's most likely
-because of incomplete refactoring. This lint rule detects and warns such unused
-variables.
+如果有声明但在任何地方未使用的变量，很可能是因为重构不完整。此 lint 规则会检测并警告这些未使用的变量。
 
-Variable `a` is considered to be "used" if any of the following conditions are
-satisfied:
+变量 `a` 被认为是“使用过的”，如果满足以下任何条件：
 
-- its value is read out, like `console.log(a)` or `let otherVariable = a;`
-- it's called or constructed, like `a()` or `new a()`
-- it's exported, like `export const a = 42;`
+- 它的值被读取，例如 `console.log(a)` 或 `let otherVariable = a;`
+- 它被调用或构造，例如 `a()` 或 `new a()`
+- 它被导出，例如 `export const a = 42;`
 
-If a variable is just assigned to a value but never read out, then it's
-considered to be _"not used"_.
+如果一个变量只是被赋值但从未被读取，那么它被视为 _“未使用”_。
 
 ```typescript
 let a;
 a = 42;
 
-// `a` is never read out
+// `a` 从未被读取
 ```
 
-If you want to declare unused variables intentionally, prefix them with the
-underscore character `_`, like `_a`. This rule ignores variables that are
-prefixed with `_`.
+如果你想故意声明未使用的变量，可以在前面加上下划线字符 `_`，比如 `_a`。此规则会忽略以 `_` 开头的变量。
 
-**Invalid:**
+**无效的：**
 
 ```typescript
 const a = 0;
 
-const b = 0; // this `b` is never used
+const b = 0; // 这个 `b` 从未被使用
 function foo() {
-  const b = 1; // this `b` is used
+  const b = 1; // 这个 `b` 被使用
   console.log(b);
 }
 foo();
@@ -44,22 +38,22 @@ foo();
 let c = 2;
 c = 3;
 
-// recursive function calls are not considered to be used, because only when `d`
-// is called from outside the function body can we say that `d` is actually
-// called after all.
+// 递归函数调用不被视为已使用，因为只有在 `d`
+// 从函数体外被调用时，我们才能说 `d` 实际上
+// 被调用了。
 function d() {
   d();
 }
 
-// `x` is never used
+// `x` 从未被使用
 export function e(x: number): number {
   return 42;
 }
 
-const f = "unused variable";
+const f = "未使用的变量";
 ```
 
-**Valid:**
+**有效的：**
 
 ```typescript
 const a = 0;
@@ -86,5 +80,5 @@ export function e(x: number): number {
   return x + 42;
 }
 
-export const f = "exported variable";
+export const f = "被导出的变量";
 ```

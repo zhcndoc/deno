@@ -1,33 +1,28 @@
 ---
-title: "How to deploy to Google Cloud Run"
+title: "如何部署到 Google Cloud Run"
 url: /examples/google_cloud_run_tutorial/
 oldUrl:
 - /runtime/manual/advanced/deploying_deno/google_cloud_run/
 - /runtime/tutorials/google_cloud_run
 ---
 
-[Google Cloud Run](https://cloud.google.com/run) is a managed compute platform
-that lets you run containers on Google's scalable infrastructure.
+[Google Cloud Run](https://cloud.google.com/run) 是一个托管计算平台，允许您在 Google 可扩展的基础设施上运行容器。
 
-This How To guide will show you how to use Docker to deploy your Deno app to
-Google Cloud Run.
+本如何做指南将向您展示如何使用 Docker 将您的 Deno 应用程序部署到 Google Cloud Run。
 
-First, we'll show you how to deploy manually, then we'll show you how to
-automate it with GitHub Actions.
+首先，我们将向您展示如何手动部署，然后我们将展示如何使用 GitHub Actions 自动化部署。
 
-Pre-requisites:
+先决条件：
 
-- [Google Cloud Platform account](https://cloud.google.com/gcp)
-- [`docker` CLI](https://docs.docker.com/engine/reference/commandline/cli/)
-  installed
-- [`gcloud`](https://cloud.google.com/sdk/gcloud) installed
+- [Google Cloud Platform 账户](https://cloud.google.com/gcp)
+- 已安装 [`docker` CLI](https://docs.docker.com/engine/reference/commandline/cli/)
+- 已安装 [`gcloud`](https://cloud.google.com/sdk/gcloud)
 
-## Manual Deployment
+## 手动部署
 
-### Create `Dockerfile` and `docker-compose.yml`
+### 创建 `Dockerfile` 和 `docker-compose.yml`
 
-To focus on the deployment, our app will simply be a `main.ts` file that returns
-a string as an HTTP response:
+为了集中关注部署，我们的应用程序将简单地为一个返回字符串的 `main.ts` 文件作为 HTTP 响应：
 
 ```ts title="main.ts"
 import { Application } from "https://deno.land/x/oak/mod.ts";
@@ -41,10 +36,9 @@ app.use((ctx) => {
 await app.listen({ port: 8000 });
 ```
 
-Then, we'll create two files -- `Dockerfile` and `docker-compose.yml` -- to
-build the Docker image.
+然后，我们将创建两个文件——`Dockerfile` 和 `docker-compose.yml`——用于构建 Docker 镜像。
 
-In our `Dockerfile`, let's add:
+在我们的 `Dockerfile` 中，添加：
 
 ```Dockerfile
 FROM denoland/deno
@@ -60,7 +54,7 @@ RUN deno install --entrypoint main.ts
 CMD ["run", "--allow-net", "main.ts"]
 ```
 
-Then, in our `docker-compose.yml`:
+然后，在我们的 `docker-compose.yml` 中：
 
 ```yml
 version: "3"
@@ -74,92 +68,80 @@ services:
       - "8000:8000"
 ```
 
-Let's test this locally by running `docker compose -f docker-compose.yml build`,
-then `docker compose up`, and going to `localhost:8000`.
+我们通过运行 `docker compose -f docker-compose.yml build` 接着 `docker compose up`，并访问 `localhost:8000` 来进行本地测试。
 
 ![Hello from localhost](./images/how-to/google-cloud-run/hello-world-from-localhost.png)
 
-It works!
+它成功了！
 
-### Set up Artifact Registry
+### 设置 Artifact Registry
 
-Artifact Registry is GCP's private registry of Docker images.
+Artifact Registry 是 GCP 的 Docker 镜像私有注册中心。
 
-Before we can use it, go to GCP's
-[Artifact Registry](https://console.cloud.google.com/artifacts) and click
-"Create repository". You'll be asked for a name (`deno-repository`) and a region
-(`us-central1`). Then click "Create".
+在我们可以使用它之前，请访问 GCP 的 [Artifact Registry](https://console.cloud.google.com/artifacts) 并点击 "创建存储库"。您将被要求输入一个名称（`deno-repository`）和区域（`us-central1`）。然后点击 "创建"。
 
 ![New repository in Google Artifact Repository](./images/how-to/google-cloud-run/new-repository-in-google-artifact-repository.png)
 
-### Build, Tag, and Push to Artifact Registry
+### 构建、标记并推送到 Artifact Registry
 
-Once we've created a repository, we can start pushing images to it.
+一旦我们创建了一个存储库，我们就可以开始向其推送镜像。
 
-First, let's add the registry's address to `gcloud`:
+首先，让我们将注册表地址添加到 `gcloud`：
 
 ```shell
 gcloud auth configure-docker us-central1-docker.pkg.dev
 ```
 
-Then, let's build your Docker image. (Note that the image name is defined in our
-`docker-compose.yml` file.)
+然后，让我们构建您的 Docker 镜像。（请注意，镜像名称在我们的 `docker-compose.yml` 文件中定义。）
 
 ```shell
 docker compose -f docker-compose.yml build
 ```
 
-Then, [tag](https://docs.docker.com/engine/reference/commandline/tag/) it with
-the new Google Artifact Registry address, repository, and name. The image name
-should follow this structure:
-`{{ location }}-docker.pkg.dev/{{ google_cloudrun_project_name }}/{{ repository }}/{{ image }}`.
+然后，用新的 Google Artifact Registry 地址、存储库和名称标记它。镜像名称应遵循以下结构：
+`{{ location }}-docker.pkg.dev/{{ google_cloudrun_project_name }}/{{ repository }}/{{ image }}`。
 
 ```shell
 docker tag deno-image us-central1-docker.pkg.dev/deno-app-368305/deno-repository/deno-cloudrun-image
 ```
 
-If you don't specify a tag, it'll use `:latest` by default.
+如果不指定标签，它将默认使用 `:latest`。
 
-Next, push the image:
+接下来，推送镜像：
 
 ```shell
 docker push us-central1-docker.pkg.dev/deno-app-368305/deno-repository/deno-cloudrun-image
 ```
 
-_[More info on how to push and pull images to Google Artifact Registry](https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling)._
+_[有关如何推送和拉取镜像到 Google Artifact Registry 的更多信息](https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling)。_
 
-Your image should now appear in your Google Artifact Registry!
+您的镜像现在应该出现在您的 Google Artifact Registry 中！
 
 ![Image in Google Artifact Registry](./images/how-to/google-cloud-run/image-in-google-artifact-registry.png)
 
-### Create a Google Cloud Run Service
+### 创建 Google Cloud Run 服务
 
-We need an instance where we can build these images, so let's go to
-[Google Cloud Run](https://console.cloud.google.com/run) and click "Create
-Service".
+我们需要一个实例来构建这些镜像，因此让我们访问 [Google Cloud Run](https://console.cloud.google.com/run) 并点击 "创建服务"。
 
-Let's name it "hello-from-deno".
+让我们将其命名为 "hello-from-deno"。
 
-Select "Deploy one revision from an existing container image". Use the drop down
-to select the image from the `deno-repository` Artifact Registry.
+选择 "从现有容器镜像部署一个修订版本"。使用下拉菜单选择来自 `deno-repository` Artifact Registry 的镜像。
 
-Select "allow unauthenticated requests" and then click "Create service". Make
-sure the port is `8000`.
+选择 "允许未经身份验证的请求"，然后点击 "创建服务"。确保端口为 `8000`。
 
-When it's done, your app should now be live:
+完成后，您的应用程序现在应该是在线的：
 
 ![Hello from Google Cloud Run](./images/how-to/google-cloud-run/hello-from-google-cloud-run.png)
 
-Awesome!
+太棒了！
 
-### Deploy with `gcloud`
+### 使用 `gcloud` 部署
 
-Now that it's created, we'll be able to deploy to this service from the `gcloud`
-CLI. The command follows this structure:
-`gcloud run deploy {{ service_name }} --image={{ image }} --region={{ region }} --allow-unauthenticated`.
-Note that the `image` name follows the structure from above.
+现在它已经创建，我们将能够从 `gcloud` CLI 部署到此服务。命令的结构如下：
+`gcloud run deploy {{ service_name }} --image={{ image }} --region={{ region }} --allow-unauthenticated`。
+请注意，`image` 名称遵循上面的结构。
 
-For this example, the command is:
+在本示例中，命令为：
 
 ```shell
 gcloud run deploy hello-from-deno --image=us-central1-docker.pkg.dev/deno-app-368305/deno-repository/deno-cloudrun-image --region=us-central1 --allow-unauthenticated
@@ -167,20 +149,18 @@ gcloud run deploy hello-from-deno --image=us-central1-docker.pkg.dev/deno-app-36
 
 ![Hello from Google Cloud Run](./images/how-to/google-cloud-run/hello-from-google-cloud-run.png)
 
-Success!
+成功！
 
-## Automate Deployment with GitHub Actions
+## 使用 GitHub Actions 自动化部署
 
-In order for automation to work, we first need to make sure that these both have
-been created:
+为了使自动化工作，我们首先需要确保这两个已经创建：
 
-- the Google Artifact Registry
-- the Google Cloud Run service instance
+- Google Artifact Registry
+- Google Cloud Run 服务实例
 
-(If you haven't done that, please see the section before.)
+（如果您还没有做到这一点，请参见之前的部分。）
 
-Now that we have done that, we can automate it with a GitHub workflow. Here's
-the yaml file:
+现在我们完成了，可以通过 GitHub 工作流自动化部署。以下是 yaml 文件：
 
 ```yml
 name: Build and Deploy to Cloud Run
@@ -239,26 +219,19 @@ jobs:
         run: echo ${{ steps.deploy.outputs.url }}
 ```
 
-The environment variables that we need to set are (the examples in parenthesis
-are the ones for this repository)
+我们需要设置的环境变量是（括号中的示例是本存储库的）：
 
-- `PROJECT_ID`: your project id (`deno-app-368305`)
-- `GAR_LOCATION`: the location your Google Artifact Registry is set
-  (`us-central1`)
-- `GAR_REPOSITORY`: the name you gave your Google Artifact Registry
-  (`deno-repository`)
-- `SERVICE`: the name of the Google Cloud Run service (`hello-from-deno`)
-- `REGION`: the region of your Google Cloud Run service (`us-central1`)
+- `PROJECT_ID`: 您的项目 ID（`deno-app-368305`）
+- `GAR_LOCATION`: 您的 Google Artifact Registry 的位置（`us-central1`）
+- `GAR_REPOSITORY`: 您为 Google Artifact Registry 指定的名称（`deno-repository`）
+- `SERVICE`: Google Cloud Run 服务的名称（`hello-from-deno`）
+- `REGION`: 您的 Google Cloud Run 服务的区域（`us-central1`）
 
-The secret variables that we need to set are:
+我们需要设置的秘密变量是：
 
-- `GCP_CREDENTIALS`: this is the
-  [service account](https://cloud.google.com/iam/docs/service-accounts) json
-  key. When you create the service account, be sure to
-  [include the roles and permissions necessary](https://cloud.google.com/iam/docs/granting-changing-revoking-access#granting_access_to_a_user_for_a_service_account)
-  for Artifact Registry and Google Cloud Run.
+- `GCP_CREDENTIALS`: 这是 [服务账户](https://cloud.google.com/iam/docs/service-accounts) 的 json 密钥。创建服务账户时，请确保 [包括必要的角色和权限](https://cloud.google.com/iam/docs/granting-changing-revoking-access#granting_access_to_a_user_for_a_service_account) 以便用于 Artifact Registry 和 Google Cloud Run。
 
-[Check out more details and examples of deploying to Cloud Run from GitHub Actions.](https://github.com/google-github-actions/deploy-cloudrun)
+[查看有关从 GitHub Actions 部署到 Cloud Run 的更多详细信息和示例。](https://github.com/google-github-actions/deploy-cloudrun)
 
-For reference:
+供参考：
 https://github.com/google-github-actions/example-workflows/blob/main/workflows/deploy-cloudrun/cloudrun-docker.yml

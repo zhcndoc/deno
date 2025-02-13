@@ -2,14 +2,11 @@
 tags: []
 ---
 
-Disallow throwing literals as exceptions.
+禁止将文字量作为异常抛出。
 
-It is considered good practice to only `throw` the `Error` object itself or an
-object using the `Error` object as base objects for user-defined exceptions. The
-fundamental benefit of `Error` objects is that they automatically keep track of
-where they were built and originated.
+仅`throw` `Error`对象本身或使用`Error`对象作为基类的自定义异常对象被认为是一种良好的实践。`Error`对象的根本好处在于它们自动跟踪它们的构建和来源位置。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 throw "error";
@@ -18,7 +15,7 @@ throw undefined;
 throw null;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 throw new Error("error");

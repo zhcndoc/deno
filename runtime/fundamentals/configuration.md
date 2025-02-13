@@ -1,5 +1,5 @@
 ---
-title: "deno.json and package.json"
+title: "deno.json 和 package.json"
 oldUrl:
 - /runtime/manual/getting_started/configuration_file/
 - /runtime/manual/basics/modules/import_maps/
@@ -8,39 +8,23 @@ oldUrl:
 - /manual/linking_to_external_code/proxies
 ---
 
-You can configure Deno using a `deno.json` file. This file can be used to
-configure the TypeScript compiler, linter, formatter, and other Deno tools.
+您可以使用 `deno.json` 文件来配置 Deno。该文件可用于配置 TypeScript 编译器、代码检查器、格式化工具以及其他 Deno 工具。
 
-The configuration file supports `.json` and
-[`.jsonc`](https://code.visualstudio.com/docs/languages/json#_json-with-comments)
-extensions.
+该配置文件支持 `.json` 和 [`.jsonc`](https://code.visualstudio.com/docs/languages/json#_json-with-comments) 扩展名。
 
-Deno will automatically detect a `deno.json` or `deno.jsonc` configuration file
-if it's in your current working directory or parent directories. The `--config`
-flag can be used to specify a different configuration file.
+如果在当前工作目录或父目录中检测到 `deno.json` 或 `deno.jsonc` 配置文件，Deno 将自动识别。可以使用 `--config` 标志指定不同的配置文件。
 
-## package.json support
+## package.json 支持
 
-Deno also supports a `package.json` file for compatibility with Node.js
-projects. If you have a Node.js project, it is not necessary to create a
-`deno.json` file. Deno will use the `package.json` file to configure the
-project.
+Deno 还支持 `package.json` 文件，以兼容 Node.js 项目。如果您有一个 Node.js 项目，则不必创建 `deno.json` 文件。Deno 将使用 `package.json` 文件来配置项目。
 
-If both a `deno.json` and `package.json` file are present in the same directory,
-Deno will understand dependencies specified in both `deno.json` and
-`package.json`; and use the `deno.json` file for Deno-specific configurations.
-Read more about
-[Node compatibility in Deno](/runtime/fundamentals/node/#node-compatibility).
+如果在同一目录中同时存在 `deno.json` 和 `package.json` 文件，Deno 将理解两个文件中指定的依赖项；并使用 `deno.json` 文件进行 Deno 特定配置。有关更多信息，请阅读 [Deno 中的 Node 兼容性](/runtime/fundamentals/node/#node-compatibility)。
 
-## Dependencies
+## 依赖项
 
-The `"imports"` field in your `deno.json` allows you to specify dependencies
-used in your project. You can use it to map bare specifiers to URLs or file
-paths making it easier to manage dependencies and module resolution in your
-applications.
+在您的 `deno.json` 文件中，`"imports"` 字段允许您指定项目中使用的依赖项。您可以使用它将简单的指定符映射到 URL 或文件路径，从而更轻松地管理依赖关系和模块解析。
 
-For example, if you want to use the `assert` module from the standard library in
-your project, you could use this import map:
+例如，如果您想在项目中使用标准库中的 `assert` 模块，可以使用以下导入映射：
 
 ```json title="deno.json"
 {
@@ -51,7 +35,7 @@ your project, you could use this import map:
 }
 ```
 
-Then your script can use the bare specifier `std/assert`:
+然后，您的脚本可以使用简单的指定符 `std/assert`：
 
 ```js title="script.ts"
 import { assertEquals } from "@std/assert";
@@ -61,7 +45,7 @@ assertEquals(1, 2);
 console.log(chalk.yellow("Hello world"));
 ```
 
-You can also use a `"dependencies"` field in `package.json`:
+您还可以在 `package.json` 中使用 `"dependencies"` 字段：
 
 ```json title="package.json"
 {
@@ -77,39 +61,35 @@ import express from "express";
 const app = express();
 ```
 
-Note that this will require you to run `deno install`.
+请注意，这将要求您运行 `deno install`。
 
-Read more about
-[module imports and dependencies](/runtime/fundamentals/modules/)
+有关更多信息，请阅读 [模块导入和依赖项](/runtime/fundamentals/modules/)。
 
-### Custom path mappings
+### 自定义路径映射
 
-The import map in `deno.json` can be used for more general path mapping of
-specifiers. You can map an exact specifiers to a third party module or a file
-directly, or you can map a part of an import specifier to a directory.
+`deno.json` 中的导入映射可用于更一般的指定符路径映射。您可以将确切的指定符映射到第三方模块或文件，或将导入指定符的一部分映射到一个目录。
 
 ```jsonc title="deno.jsonc"
 {
   "imports": {
-    // Map to an exact file
+    // 映射到一个确切的文件
     "foo": "./some/long/path/foo.ts",
-    // Map to a directory, usage: "bar/file.ts"
+    // 映射到一个目录，使用方法: "bar/file.ts"
     "bar/": "./some/folder/bar/"
   }
 }
 ```
 
-Usage:
+用法：
 
 ```ts
 import * as foo from "foo";
 import * as bar from "bar/file.ts";
 ```
 
-Path mapping of import specifies is commonly used in larger code bases for
-brevity.
+导入路径映射在较大的代码库中通常用于简化代码。
 
-To use your project root for absolute imports:
+要使用项目根目录进行绝对导入：
 
 ```json title="deno.json"
 {
@@ -124,17 +104,13 @@ To use your project root for absolute imports:
 import { MyUtil } from "/util.ts";
 ```
 
-This causes import specifiers starting with `/` to be resolved relative to the
-import map's URL or file path.
+这会导致以 `/` 开头的导入指定符相对于导入映射的 URL 或文件路径解析。
 
-## Tasks
+## 任务
 
-The `tasks` field in your `deno.json` file is used to define custom commands
-that can be executed with the `deno task` command and allows you to tailor
-commands and permissions to the specific needs of your project.
+您在 `deno.json` 文件中的 `tasks` 字段用于定义可以使用 `deno task` 命令执行的自定义命令，并允许您根据项目的具体需求调整命令和权限。
 
-It is similar to the `scripts` field in a `package.json` file, which is also
-supported.
+这与 `package.json` 文件中的 `scripts` 字段类似，也受支持。
 
 ```json title="deno.json"
 {
@@ -155,8 +131,7 @@ supported.
 }
 ```
 
-To execute a task, use the `deno task` command followed by the task name. For
-example:
+要执行任务，请使用 `deno task` 命令后跟任务名称。例如：
 
 ```sh
 deno task start
@@ -166,16 +141,13 @@ deno task dev
 deno task build
 ```
 
-Read more about [`deno task`](/runtime/reference/cli/task_runner/).
+有关更多信息，请阅读 [`deno task`](/runtime/reference/cli/task_runner/)。
 
-## Linting
+## 代码检查
 
-The `lint` field in the `deno.json` file is used to configure the behavior of
-Deno’s built-in linter. This allows you to specify which files to include or
-exclude from linting, as well as customize the linting rules to suit your
-project’s needs.
+`deno.json` 文件中的 `lint` 字段用于配置 Deno 内置代码检查器的行为。这允许您指定要包含或排除在哪些文件中进行代码检查，以及自定义代码检查规则以满足项目的需求。
 
-For example:
+例如：
 
 ```json title="deno.json"
 {
@@ -191,26 +163,21 @@ For example:
 }
 ```
 
-This configuration will:
+此配置将：
 
-- only lint files in the `src/` directory,
-- will not lint files in the `src/testdata/` directory or any TypeScript files
-  in the `src/fixtures/` directory.
-- specifies that the recommended linting rules should be applied,
-- adds the `ban-untagged-todo`
-- removes the `no-unused-vars` rule excluded.
+- 仅检查 `src/` 目录中的文件，
+- 不检查 `src/testdata/` 目录中的文件或 `src/fixtures/` 目录中的任何 TypeScript 文件。
+- 指定应应用推荐的代码检查规则，
+- 添加 `ban-untagged-todo`
+- 移除排除的 `no-unused-vars` 规则。
 
-You can find a full list of available linting rules in the
-[List of rules](/lint/) documentation page.
+您可以在 [规则列表](/lint/) 文档页面中找到所有可用的代码检查规则的完整列表。
 
-Read more about [linting with Deno](/runtime/reference/cli/linter/).
+有关更多信息，请阅读 [使用 Deno 进行代码检查](/runtime/reference/cli/linter/)。
 
-## Formatting
+## 格式化
 
-The `fmt` field in the `deno.json` file is used to configure the behavior of
-Deno’s built-in code formatter. This allows you to customize how your code is
-formatted, ensuring consistency across your project, making it easier to read
-and collaborate on. Here are the key options you can configure:
+`deno.json` 文件中的 `fmt` 字段用于配置 Deno 内置代码格式化程序的行为。这允许您自定义代码的格式，以确保项目的一致性，使其更易于阅读和协作。以下是您可以配置的关键选项：
 
 ```json title="deno.json"
 {
@@ -227,29 +194,22 @@ and collaborate on. Here are the key options you can configure:
 }
 ```
 
-This configuration will:
+此配置将：
 
-- use tabs instead of spaces for indentation,
-- limit lines to 80 characters,
-- use an indentation width of 4 spaces,
-- add semicolons to the end of statements,
-- use single quotes for strings,
-- preserve prose wrapping,
-- format files in the `src/` directory,
-- exclude files in the `src/testdata/` directory and any TypeScript files in the
-  `src/fixtures/` directory.
+- 使用制表符而不是空格进行缩进，
+- 将行限制为 80 个字符，
+- 使用 4 个空格的缩进宽度，
+- 在语句结束时添加分号，
+- 对字符串使用单引号，
+- 保留文本换行，
+- 格式化 `src/` 目录中的文件，
+- 排除 `src/testdata/` 目录中的文件和任何 TypeScript 文件。
 
-Read more about
-[formatting your code with Deno](/runtime/fundamentals/linting_and_formatting/).
+有关更多信息，请阅读 [使用 Deno 格式化代码](/runtime/fundamentals/linting_and_formatting/)。
 
-## Lockfile
+## 锁定文件
 
-The `lock` field in the `deno.json` file is used to specify configuration of the
-lock file that Deno uses to
-[ensure the integrity of your dependencies](/runtime/fundamentals/modules/#integrity-checking-and-lock-files).
-A lock file records the exact versions and integrity hashes of the modules your
-project depends on, ensuring that the same versions are used every time the
-project is run, even if the dependencies are updated or changed remotely.
+`deno.json` 文件中的 `lock` 字段用于指定 Deno 使用的锁定文件的配置，以 [确保依赖项的完整性](/runtime/fundamentals/modules/#integrity-checking-and-lock-files)。锁定文件记录了您的项目所依赖模块的确切版本和完整性哈希，确保在每次运行项目时使用相同的版本，即使依赖项被更新或远程更改。
 
 ```json title="deno.json"
 {
@@ -260,13 +220,12 @@ project is run, even if the dependencies are updated or changed remotely.
 }
 ```
 
-This configuration will:
+此配置将：
 
-- specify lockfile location at `./deno.lock` (this is the default and can be
-  omitted)
-- tell Deno that you want to error out if any dependency changes
+- 指定锁定文件位置为 `./deno.lock`（这是默认值，可以省略）
+- 告诉 Deno 如果有任何依赖项更改则返回错误
 
-Deno uses lockfile by default, you can disable it with following configuration:
+Deno 默认使用锁定文件，您可以使用以下配置禁用它：
 
 ```json title="deno.json"
 {
@@ -274,13 +233,11 @@ Deno uses lockfile by default, you can disable it with following configuration:
 }
 ```
 
-## Node modules directory
+## Node 模块目录
 
-By default Deno uses a local `node_modules` directory if you have a
-`package.json` file in your project directory.
+默认情况下，如果您的项目目录中有 `package.json` 文件，Deno 将使用本地 `node_modules` 目录。
 
-You can control this behavior using the `nodeModulesDir` field in the
-`deno.json` file.
+您可以使用 `deno.json` 文件中的 `nodeModulesDir` 字段来控制此行为。
 
 ```json title="deno.json"
 {
@@ -288,49 +245,38 @@ You can control this behavior using the `nodeModulesDir` field in the
 }
 ```
 
-You can set this field to following values:
+您可以将此字段设置为以下值：
 
-| Value      | Behavior                                                                                                                            |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `"none"`   | Don't use a local `node_modules` directory. Instead use global cache in `$DENO_DIR` that is automatically kept up to date by Deno.  |
-| `"auto"`   | Use a local `node_modules` directory. The directory is automatically created and kept up to date by Deno.                           |
-| `"manual"` | Use a local `node_modules` directory. User must keep this directory up to date manually, eg. using `deno install` or `npm install`. |
+| 值         | 行为                                                                                                                               |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `"none"`   | 不使用本地 `node_modules` 目录。改为使用 `$DENO_DIR` 中的全局缓存，Deno 会自动保持其最新。                                        |
+| `"auto"`   | 使用本地 `node_modules` 目录。Deno 会自动创建并保持此目录的最新状态。                                                             |
+| `"manual"` | 使用本地 `node_modules` 目录。用户必须手动保持此目录的最新状态，例如使用 `deno install` 或 `npm install`。                       |
 
-It is not required to specify this setting, the following defaults are applied:
+不需要指定此设置，以下默认值会被应用：
 
-- `"none"` if there is no `package.json` file in your project directory
-- `"manual"` if there is a `package.json` file in your project directory
+- 如果您的项目目录中没有 `package.json` 文件，则为 `"none"`
+- 如果您的项目目录中有 `package.json` 文件，则为 `"manual"`
 
-When using workspaces, this setting can only be used in the workspace root.
-Specifying it in any of the members will result in warnings. The `"manual"`
-setting will only be applied automatically if there's a `package.json` file in
-the workspace root.
+使用工作区时，此设置只能在工作区根目录中使用。在任何成员中指定此设置都会导致警告。只有在工作区根目录中有 `package.json` 文件时，`"manual"` 设置才会被自动应用。
 
-## TypeScript compiler options
+## TypeScript 编译器选项
 
-The `compilerOptions` field in the `deno.json` file is used to configure
-[TypeScript compiler settings](https://www.typescriptlang.org/tsconfig) for your
-Deno project. This allows you to customize how TypeScript code is compiled,
-ensuring it aligns with your project’s requirements and coding standards.
+`deno.json` 文件中的 `compilerOptions` 字段用于配置 [TypeScript 编译器设置](https://www.typescriptlang.org/tsconfig) 以符合您的 Deno 项目。这允许您自定义 TypeScript 代码的编译方式，确保与项目的要求和编码标准一致。
 
 :::info
 
-Deno recommends the default TypeScript configuration. This will help when
-sharing code.
+Deno 推荐使用默认的 TypeScript 配置。这将有助于分享代码。
 
 :::
 
-See also
-[Configuring TypeScript in Deno](/runtime/reference/ts_config_migration/).
+另请参见 [在 Deno 中配置 TypeScript](/runtime/reference/ts_config_migration/)。
 
-## Unstable features
+## 不稳定特性
 
-The `unstable` field in a `deno.json` file is used to enable specific unstable
-features for your Deno project.
+`deno.json` 文件中的 `unstable` 字段用于启用 Deno 项目的特定不稳定特性。
 
-These features are still in development and not yet part of the stable API. By
-listing features in the `unstable` array, you can experiment with and use these
-new capabilities before they are officially released.
+这些特性仍在开发中，尚未成为稳定 API 的一部分。通过在 `unstable` 数组中列出特性，您可以在它们正式发布之前进行实验和使用这些新功能。
 
 ```json title="deno.json"
 {
@@ -338,21 +284,20 @@ new capabilities before they are officially released.
 }
 ```
 
-[Learn more](/runtime/reference/cli/unstable_flags/).
+[了解更多](/runtime/reference/cli/unstable_flags/)。
 
-## include and exclude
+## include 和 exclude
 
-Many configurations (ex. `lint`, `fmt`) have an `include` and `exclude` property
-for specifying the files to include.
+许多配置（例如 `lint`, `fmt`）都有 `include` 和 `exclude` 属性来指定要包含的文件。
 
 ### include
 
-Only the paths or patterns specified here will be included.
+这里指定的路径或模式仅会被包含。
 
 ```jsonc
 {
   "lint": {
-    // only format the src/ directory
+    // 仅格式化 src/ 目录
     "include": ["src/"]
   }
 }
@@ -360,29 +305,26 @@ Only the paths or patterns specified here will be included.
 
 ### exclude
 
-The paths or patterns specified here will be excluded.
+这里指定的路径或模式将被排除。
 
 ```jsonc
 {
   "lint": {
-    // don't lint the dist/ folder
+    // 不检查 dist/ 文件夹
     "exclude": ["dist/"]
   }
 }
 ```
 
-This has HIGHER precedence than `include` and will win over `include` if a path
-is matched in both `include` and `exclude`.
+此项优先级高于 `include`，如果在 `include` 和 `exclude` 中都匹配路径，则以 `exclude` 为准。
 
-You may wish to exclude a directory, but include a sub directory. In Deno
-1.41.2+, you may un-exclude a more specific path by specifying a negated glob
-below the more general exclude:
+您可能希望排除一个目录，但包含一个子目录。在 Deno 1.41.2 及更高版本中，可以通过在更一般的排除下指定否定通配符来取消排除更具体的路径：
 
 ```jsonc
 {
   "fmt": {
-    // don't format the "fixtures" directory,
-    // but do format "fixtures/scripts"
+    // 不格式化 "fixtures" 目录，
+    // 但格式化 "fixtures/scripts"
     "exclude": [
       "fixtures",
       "!fixtures/scripts"
@@ -391,30 +333,26 @@ below the more general exclude:
 }
 ```
 
-### Top level exclude
+### 顶级排除
 
-If there's a directory you never want Deno to fmt, lint, type check, analyze in
-the LSP, etc., then specify it in the top level exclude array:
+如果有一个目录您永远不希望 Deno 格式化、检查、类型检查、分析等，则在顶级排除数组中指定它：
 
 ```jsonc
 {
   "exclude": [
-    // exclude the dist folder from all sub-commands and the LSP
+    // 从所有子命令和 LSP 中排除 dist 文件夹
     "dist/"
   ]
 }
 ```
 
-Sometimes you may find that you want to un-exclude a path or pattern that's
-excluded in the top level-exclude. In Deno 1.41.2+, you may un-exclude a path by
-specifying a negated glob in a more specific config:
+有时您可能会发现希望取消排除顶级排除中已排除的路径或模式。在 Deno 1.41.2 及更高版本中，可以在更具体的配置中通过指定否定通配符取消排除路径：
 
 ```jsonc
 {
   "fmt": {
     "exclude": [
-      // format the dist folder even though it's
-      // excluded at the top level
+      // 格式化 dist 文件夹，即使在顶级被排除
       "!dist"
     ]
   },
@@ -424,11 +362,9 @@ specifying a negated glob in a more specific config:
 }
 ```
 
-### Publish - Override .gitignore
+### 发布 - 覆盖 .gitignore
 
-The `.gitignore` is taken into account for the `deno publish` command. In Deno
-1.41.2+, you can opt-out of excluded files ignored in the _.gitignore_ by using
-a negated exclude glob:
+`.gitignore` 会被考虑在 `deno publish` 命令中。在 Deno 1.41.2 及更高版本中，您可以使用否定的排除通配符来选择不包含在 _.gitignore_ 中的排除文件：
 
 ```title=".gitignore"
 dist/
@@ -439,15 +375,14 @@ dist/
 {
   "publish": {
     "exclude": [
-      // include the .gitignored dist folder
+      // 包含被 git 忽略的 dist 文件夹
       "!dist/"
     ]
   }
 }
 ```
 
-Alternatively, explicitly specifying the gitignored paths in an `"include"`
-works as well:
+另一种方法是将 git 忽略的路径明确指定在 `"include"` 中：
 
 ```json
 {
@@ -461,7 +396,7 @@ works as well:
 }
 ```
 
-## Full example
+## 完整示例
 
 ```json
 {
@@ -508,18 +443,12 @@ works as well:
 }
 ```
 
-## JSON schema
+## JSON Schema
 
-A JSON schema file is available for editors to provide autocompletion. The file
-is versioned and available at:
-https://deno.land/x/deno/cli/schemas/config-file.v1.json
+可用于编辑器提供自动完成的 JSON Schema 文件可在以下位置获得： https://deno.land/x/deno/cli/schemas/config-file.v1.json
 
-## Proxies
+## 代理
 
-Deno supports proxies for module downloads and the fetch API. Proxy
-configuration is read from
-[environment variables](https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables):
-HTTP_PROXY, HTTPS_PROXY and NO_PROXY.
+Deno 支持用于模块下载和 fetch API 的代理。代理配置从 [环境变量](https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables) 中读取：HTTP_PROXY，HTTPS_PROXY 和 NO_PROXY。
 
-If you are using Windows - if environment variables are not found Deno falls
-back to reading proxies from the registry.
+如果您使用的是 Windows - 如果未找到环境变量，Deno 将退回到从注册表读取代理。

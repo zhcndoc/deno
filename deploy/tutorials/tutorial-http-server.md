@@ -1,61 +1,46 @@
 ---
-title: "Simple HTTP server"
+title: "简单的 HTTP 服务器"
 oldUrl:
   - /deploy/docs/tutorial-http-server/
 ---
 
-In this tutorial, let's build a HTTP server that responds to all incoming HTTP
-requests with `Hello, world!` and a `200 OK` HTTP status. We will be using the
-Deno Deploy playground to deploy and edit this script.
+在本教程中，我们将构建一个 HTTP 服务器，响应所有传入的 HTTP 请求，返回 `Hello, world!` 和 `200 OK` HTTP 状态。我们将使用 Deno Deploy 实验室来部署和编辑这个脚本。
 
-## Step 1: Write the HTTP server script
+## 步骤 1：编写 HTTP 服务器脚本
 
-A simple HTTP server can be written with a single line of code in Deno using
-[`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve):
+一个简单的 HTTP 服务器可以通过以下一行代码在 Deno 中编写，使用 [`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve):
 
-```js title="One-line HTTP server"
+```js title="一行代码的 HTTP 服务器"
 Deno.serve(() => new Response("Hello, world!"));
 ```
 
-While this type of server is useful for getting started, `Deno.serve` is capable
-of supporting more advanced usage as well
-([API reference docs](https://docs.deno.com/api/deno/~/Deno.serve)). Below is an
-example of a more complex server that takes advantage of other API features.
+虽然这种类型的服务器在入门时非常有用，但 `Deno.serve` 也支持更高级的用法
+([API 参考文档](https://docs.deno.com/api/deno/~/Deno.serve))。下面是一个更复杂的服务器示例，利用了其他 API 特性。
 
-```ts title="More complex Hello World server"
+```ts title="更复杂的 Hello World 服务器"
 Deno.serve({
   onListen: ({ port }) => {
-    console.log("Deno server listening on *:", port);
+    console.log("Deno 服务器正在 *: ", port 监听);
   },
 }, (req: Request, conn: Deno.ServeHandlerInfo) => {
-  // Get information about the incoming request
+  // 获取有关传入请求的信息
   const method = req.method;
   const ip = conn.remoteAddr.hostname;
-  console.log(`${ip} just made an HTTP ${method} request.`);
+  console.log(`${ip} 刚刚进行了 HTTP ${method} 请求.`);
 
-  // Return a web standard Response object
+  // 返回一个 web 标准的 Response 对象
   return new Response("Hello, world!");
 });
 ```
 
-## Step 2: Deploy script to Deno Deploy
+## 步骤 2：将脚本部署到 Deno Deploy
 
-1. Create a new playground project by visiting
-   [your Deno dashboard](https://dash.deno.com/account/overview), and clicking
-   the **New Playground** button.
-2. On the next screen, copy the code above (either the short or the longer
-   example) into the editor on the left side of the screen.
-3. Press the **Save & Deploy** button on the right side of the top toolbar (or
-   press <kbd>Ctrl</kbd>+<kbd>S</kbd>).
+1. 通过访问 [你的 Deno 仪表板](https://dash.deno.com/account/overview)，并点击 **新建实验室** 按钮来创建一个新的实验室项目。
+2. 在下一屏幕上，将上面的代码（短示例或长示例）复制到屏幕左侧的编辑器中。
+3. 点击顶部工具栏右侧的 **保存并部署** 按钮（或按 <kbd>Ctrl</kbd>+<kbd>S</kbd>）。
 
-You can preview the result on the right side of the playground editor, in the
-preview pane.
+你可以在实验室编辑器右侧的预览窗格中预览结果。
 
-You will see that if you change the script (for example `Hello, World!` ->
-`Hello, Galaxy!`) and then re-deploy, the preview will automatically update. The
-URL shown at the top of the preview pane can be used to visit the deployed page
-from anywhere.
+你会看到，如果你更改脚本（例如 `Hello, World!` -> `Hello, Galaxy!`）然后重新部署，预览将自动更新。预览窗格顶部显示的 URL 可用于从任何地方访问已部署的页面。
 
-Even in the playground editor, scripts are deployed worldwide across our entire
-global network. This guarantees fast and reliable performance, no matter the
-location of your users.
+即使在实验室编辑器中，脚本也会在我们的全球网络中部署。这样可以确保快速和可靠的性能，无论用户位于何处。

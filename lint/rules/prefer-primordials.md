@@ -2,31 +2,26 @@
 tags: []
 ---
 
-Suggests using frozen intrinsics from `primordials` rather than the default
-globals.
+建议使用来自 `primordials` 的冻结原语，而不是默认的全局对象。
 
-This lint rule is designed to be dedicated to Deno's internal code. Normal users
-don't have to run this rule for their code.
+这个 lint 规则旨在专门用于 Deno 的内部代码。普通用户无需对他们的代码运行此规则。
 
-Primordials are a frozen set of all intrinsic objects in the runtime, which we
-should use in the Deno's internal to avoid the risk of prototype pollution. This
-rule detects the direct use of global intrinsics and suggests replacing it with
-the corresponding one from the `primordials` object.
+原语是运行时中所有内置对象的冻结集合，我们应该在 Deno 的内部使用它们，以避免原型污染的风险。此规则检测对全局原语的直接使用，并建议用 `primordials` 对象中的相应原语进行替换。
 
-One such example is:
+一个这样的例子是：
 
 ```javascript
 const arr = getSomeArrayOfNumbers();
 const evens = arr.filter((val) => val % 2 === 0);
 ```
 
-The second line of this example should be:
+该示例的第二行应该是：
 
 ```javascript
 const evens = primordials.ArrayPrototypeFilter(arr, (val) => val % 2 === 0);
 ```
 
-**Invalid:**
+**无效：**
 
 ```javascript
 const arr = new Array();
@@ -38,7 +33,7 @@ const i = parseInt("42");
 const { ownKeys } = Reflect;
 ```
 
-**Valid:**
+**有效：**
 
 ```javascript
 const { Array } = primordials;

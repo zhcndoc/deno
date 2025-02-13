@@ -1,27 +1,18 @@
 ---
-title: "Data Modeling in TypeScript"
+title: "在 TypeScript 中的数据建模"
 oldUrl:
   - /kv/manual/data_modeling_typescript/
 ---
 
 <deno-admonition></deno-admonition>
 
-In TypeScript applications, it is usually desirable to create strongly-typed,
-well-documented objects to contain the data that your application operates on.
-Using [interfaces](https://www.typescriptlang.org/docs/handbook/2/objects.html)
-or [classes](https://www.typescriptlang.org/docs/handbook/2/classes.html), you
-can describe both the shape and behavior of objects in your programs.
+在 TypeScript 应用程序中，通常希望创建强类型、良好文档化的对象，以包含应用程序操作的数据。使用 [接口](https://www.typescriptlang.org/docs/handbook/2/objects.html) 或 [类](https://www.typescriptlang.org/docs/handbook/2/classes.html)，您可以描述程序中对象的形状和行为。
 
-If you are using Deno KV, however, there is a bit of extra work required to
-persist and retrieve objects that are strongly typed. In this guide, we'll cover
-strategies for working with strongly typed objects going into and back out from
-Deno KV.
+然而，如果您使用的是 Deno KV，则需要进行一些额外的工作来持久化和检索强类型对象。在本指南中，我们将讨论在 Deno KV 中处理强类型对象的策略。
 
-## Using interfaces and type assertions
+## 使用接口和类型断言
 
-When storing and retrieving application data in Deno KV, you might want to begin
-by describing the shape of your data using TypeScript interfaces. Below is an
-object model which describes some key components of a blogging system:
+在 Deno KV 中存储和检索应用数据时，您可能想要首先使用 TypeScript 接口描述数据的形状。以下是一个对象模型，它描述了博客系统的一些关键组件：
 
 ```ts title="model.ts"
 export interface Author {
@@ -39,15 +30,11 @@ export interface Post {
 }
 ```
 
-This object model describes a blog post and an associated author.
+这个对象模型描述了一篇博客帖子及其相关的作者。
 
-With Deno KV, you can use these TypeScript interfaces like
-[data transfer objects (DTOs)](https://martinfowler.com/bliki/LocalDTO.html) - a
-strongly typed wrapper around the otherwise untyped objects you might send to or
-receive from Deno KV.
+使用 Deno KV，您可以将这些 TypeScript 接口用作 [数据传输对象 (DTO)](https://martinfowler.com/bliki/LocalDTO.html)——对您可能发送到 Deno KV 或从中接收的非类型对象的强类型封装。
 
-Without any additional work, you can happily store the contents of one of these
-DTOs in Deno KV.
+无需任何额外工作，您可以愉快地将这些 DTO 的内容存储在 Deno KV 中。
 
 ```ts
 import { Author } from "./model.ts";
@@ -62,11 +49,7 @@ const a: Author = {
 await kv.set(["authors", a.username], a);
 ```
 
-When retrieving this same object from Deno KV, however, it won't by default have
-type information associated with it. If you know the shape of the object that
-was stored for the key, however, you can use
-[type assertion](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions)
-to inform the TypeScript compiler about the shape of an object.
+然而，从 Deno KV 检索这个对象时，它默认不会具有与之关联的类型信息。如果您知道存储了哪个键的对象形状，您可以使用 [类型断言](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions) 通知 TypeScript 编译器对象的形状。
 
 ```ts
 import { Author } from "./model.ts";
@@ -79,9 +62,7 @@ const ac = r.value as Author;
 console.log(ac.fullName);
 ```
 
-You can also specify an optional
-[type parameter](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.get) for
-`get`:
+您还可以为 `get` 指定一个可选的 [类型参数](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.get)：
 
 ```ts
 import { Author } from "./model.ts";
@@ -93,26 +74,15 @@ const r = await kv.get<Author>(["authors", "acdoyle"]);
 console.log(r.value.fullName);
 ```
 
-For simpler data structures, this technique may be sufficient. But often, you
-will want or need to apply some business logic when creating or accessing your
-domain objects. When this need arises, you can develop a set of pure functions
-that can operate on your DTOs.
+对于更简单的数据结构，这个技术可能足够了。但通常，您希望或需要在创建或访问您的领域对象时应用一些业务逻辑。当这种需要出现时，您可以开发一组纯函数来操作您的 DTO。
 
-## Encapsulating business logic with a service layer
+## 使用服务层封装业务逻辑
 
-When your application's persistence needs become more complex - such as when you
-need to create [secondary indexes](./secondary_indexes) to query your data by
-different keys, or maintain relationships between objects - you will want to
-create a set of functions to sit on top of your DTOs to ensure that the data
-being passed around is valid (and not merely typed correctly).
+当您应用程序的持久化需求变得更加复杂时——例如，当您需要创建 [二级索引](./secondary_indexes) 以通过不同的键查询数据，或维护对象之间的关系——您将希望创建一组函数来位于 DTO 之上，以确保传递的数据是有效的（而不仅仅是正确类型的）。
 
-From our business objects above, the `Post` object is complex enough where it is
-likely to need a small layer of code to save and retrieve an instance of the
-object. Below is an example of two functions that wrap the underlying Deno KV
-APIs, and return strongly typed object instances for the `Post` interface.
+从我们上述的业务对象来看，`Post` 对象足够复杂，因此可能需要一小层代码来保存和检索对象的实例。以下是两个包裹底层 Deno KV API 的函数示例，同时返回强类型的 `Post` 接口实例。
 
-Notably, we need to store an identifier for an `Author` object, so we can
-retrieve author information from KV later.
+值得注意的是，我们需要存储一个 `Author` 对象的标识符，以便稍后从 KV 检索作者信息。
 
 ```ts
 import { Author, Post } from "./model.ts";
@@ -146,10 +116,6 @@ export async function getPost(slug: string): Promise<Post> {
 }
 ```
 
-This thin layer uses a `RawPost` interface, which extends the actual `Post`
-interface, to include some additional data that is used to reference data at
-another index (the associated `Author` object).
+这个薄层使用 `RawPost` 接口，扩展了实际的 `Post` 接口，以包括一些用于引用另一索引（相关的 `Author` 对象）的附加数据。
 
-The `savePost` and `getPost` functions take the place of a direct Deno KV `get`
-or `set` operation, so that they can properly serialize and "hydrate" model
-objects for us with appropriate types and associations.
+`savePost` 和 `getPost` 函数取代了直接的 Deno KV `get` 或 `set` 操作，从而可以正确地序列化和“注入”带有适当类型和关联的模型对象。

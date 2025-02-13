@@ -1,5 +1,5 @@
 ---
-title: "`deno compile`, standalone executables"
+title: "`deno compile`，独立可执行文件"
 oldUrl:
  - /runtime/manual/tools/compile/
  - /runtime/manual/tools/compiler/
@@ -7,18 +7,15 @@ oldUrl:
 command: compile
 ---
 
-## Flags
+## 标志
 
-As with [`deno install`](/runtime/reference/cli/install/), the runtime flags
-used to execute the script must be specified at compilation time. This includes
-permission flags.
+与 [`deno install`](/runtime/reference/cli/install/) 一样，执行脚本时使用的运行时标志必须在编译时指定。这包括权限标志。
 
 ```sh
 deno compile --allow-read --allow-net jsr:@std/http/file-server
 ```
 
-[Script arguments](/runtime/getting_started/command_line_interface/#passing-script-arguments)
-can be partially embedded.
+[脚本参数](/runtime/getting_started/command_line_interface/#passing-script-arguments) 可以部分嵌入。
 
 ```console
 deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
@@ -26,103 +23,94 @@ deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
 ./file_server --help
 ```
 
-## Cross Compilation
+## 交叉编译
 
-You can cross-compile binaries for other platforms by using the `--target` flag.
+您可以使用 `--target` 标志为其他平台进行交叉编译二进制文件。
 
 ```
-# Cross compile for Apple Silicon
+# 为 Apple Silicon 进行交叉编译
 deno compile --target aarch64-apple-darwin main.ts
 
-# Cross compile for Windows with an icon
+# 为 Windows 进行交叉编译并添加图标
 deno compile --target x86_64-pc-windows-msvc --icon ./icon.ico main.ts
 ```
 
-### Supported Targets
+### 支持的目标
 
-Deno supports cross compiling to all targets regardless of the host platform.
+Deno 支持针对所有目标的交叉编译，而不管主机平台。
 
-| OS      | Architecture | Target                      |
-| ------- | ------------ | --------------------------- |
-| Windows | x86_64       | `x86_64-pc-windows-msvc`    |
-| macOS   | x86_64       | `x86_64-apple-darwin`       |
-| macOS   | ARM64        | `aarch64-apple-darwin`      |
-| Linux   | x86_64       | `x86_64-unknown-linux-gnu`  |
-| Linux   | ARM64        | `aarch64-unknown-linux-gnu` |
+| 操作系统 | 架构      | 目标                          |
+| -------- | --------- | ----------------------------- |
+| Windows  | x86_64    | `x86_64-pc-windows-msvc`      |
+| macOS    | x86_64    | `x86_64-apple-darwin`         |
+| macOS    | ARM64     | `aarch64-apple-darwin`        |
+| Linux    | x86_64    | `x86_64-unknown-linux-gnu`    |
+| Linux    | ARM64     | `aarch64-unknown-linux-gnu`   |
 
-## Icons
+## 图标
 
-It is possible to add an icon to the executable by using the `--icon` flag when
-targeting Windows. The icon must be in the `.ico` format.
+可以通过在目标为 Windows 时使用 `--icon` 标志来为可执行文件添加图标。图标必须为 `.ico` 格式。
 
 ```
 deno compile --icon icon.ico main.ts
 
-# Cross compilation with icon
+# 带有图标的交叉编译
 deno compile --target x86_64-pc-windows-msvc --icon ./icon.ico main.ts
 ```
 
-## Dynamic Imports
+## 动态导入
 
-By default, statically analyzable dynamic imports (imports that have the string
-literal within the `import("...")` call expression) will be included in the
-output.
+默认情况下，可静态分析的动态导入（在 `import("...")` 调用表达式中包含字符串字面量的导入）会被包含在输出中。
 
 ```ts
-// calculator.ts and its dependencies will be included in the binary
+// calculator.ts 及其依赖将包含在二进制文件中
 const calculator = await import("./calculator.ts");
 ```
 
-But non-statically analyzable dynamic imports won't:
+但不可静态分析的动态导入则不会：
 
 ```ts
 const specifier = condition ? "./calc.ts" : "./better_calc.ts";
 const calculator = await import(specifier);
 ```
 
-To include non-statically analyzable dynamic imports, specify an
-`--include <path>` flag.
+要包含不可静态分析的动态导入，请指定 `--include <path>` 标志。
 
 ```shell
 deno compile --include calc.ts --include better_calc.ts main.ts
 ```
 
-## Including Data Files or Directories
+## 包含数据文件或目录
 
-Starting in Deno 2.1, you can include files or directories in the executable by
-specifying them via the `--include <path>` flag.
+从 Deno 2.1 开始，您可以通过 `--include <path>` 标志在可执行文件中包含文件或目录。
 
 ```shell
 deno compile --include names.csv --include data main.ts
 ```
 
-Then read the file relative to the directory path of the current module via
-`import.meta.dirname`:
+然后通过 `import.meta.dirname` 相对于当前模块的目录路径读取文件：
 
 ```ts
 // main.ts
 const names = Deno.readTextFileSync(import.meta.dirname + "/names.csv");
 const dataFiles = Deno.readDirSync(import.meta.dirname + "/data");
 
-// use names and dataFiles here
+// 在这里使用 names 和 dataFiles
 ```
 
-Note this currently only works for files on the file system and not remote
-files.
+请注意，这目前仅适用于文件系统上的文件，不适用于远程文件。
 
-## Workers
+## Worker
 
-Similarly to non-statically analyzable dynamic imports, code for
-[workers](../web_platform_apis/#web-workers) is not included in the compiled
-executable by default. There are two ways to include workers:
+与不可静态分析的动态导入类似，默认情况下，`[workers](../web_platform_apis/#web-workers)` 的代码不会包含在编译后的可执行文件中。有两种方法可以包含 workers：
 
-1. Use the `--include <path>` flag to include the worker code.
+1. 使用 `--include <path>` 标志包含工作代码。
 
 ```shell
 deno compile --include worker.ts main.ts
 ```
 
-2. Import worker module using a statically analyzable import.
+2. 使用可静态分析的导入导入工作模块。
 
 ```ts
 // main.ts
@@ -133,42 +121,37 @@ import "./worker.ts";
 deno compile main.ts
 ```
 
-## Code Signing
+## 代码签名
 
 ### macOS
 
-By default, on macOS, the compiled executable will be signed using an ad-hoc
-signature which is the equivalent of running `codesign -s -`:
+默认情况下，在 macOS 上，编译后的可执行文件将使用临时签名签名，等同于运行 `codesign -s -`：
 
 ```shell
 $ deno compile -o main main.ts
 $ codesign --verify -vv ./main
 
-./main: valid on disk
-./main: satisfies its Designated Requirement
+./main: 磁盘上的有效
+./main: 满足其指定要求
 ```
 
-You can specify a signing identity when code signing the executable just like
-you would do with any other macOS executable:
+您可以在对可执行文件进行代码签名时指定签名身份，就像您对任何其他 macOS 可执行文件所做的那样：
 
 ```shell
 codesign -s "Developer ID Application: Your Name" ./main
 ```
 
-Refer to the
-[official documentation](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)
-for more information on codesigning and notarization on macOS.
+有关 macOS 上代码签名和公证的更多信息，请参考 [官方文档](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)。
 
 ### Windows
 
-On Windows, the compiled executable can be signed using the `SignTool.exe`
-utility.
+在 Windows 上，可以使用 `SignTool.exe` 工具对编译后的可执行文件进行签名。
 
 ```shell
 $ deno compile -o main.exe main.ts
 $ signtool sign /fd SHA256 main.exe
 ```
 
-## Unavailable in executables
+## 在可执行文件中不可用
 
-- [Web Storage API](/runtime/reference/web_platform_apis/#web-storage)
+- [Web 存储 API](/runtime/reference/web_platform_apis/#web-storage)

@@ -2,19 +2,17 @@
 tags: [recommended]
 ---
 
-Disallows assigning variables to `this`.
+不允许将变量赋值给 `this`。
 
-In most cases, storing a reference to `this` in a variable could be avoided by
-using arrow functions properly, since they establish `this` based on the scope
-where the arrow function is defined.
+在大多数情况下，通过正确使用箭头函数，可以避免将 `this` 存储在变量中，因为它们根据定义箭头函数的作用域确定 `this`。
 
-Let's take a look at a concrete example:
+让我们看一个具体的例子：
 
 ```typescript
 const obj = {
   count: 0,
   doSomethingLater() {
-    setTimeout(function () { // this function executes on the global scope; `this` evalutes to `globalThis`
+    setTimeout(function () { // 这个函数在全局作用域中执行；`this` 评估为 `globalThis`
       this.count++;
       console.log(this.count);
     }, 300);
@@ -22,22 +20,20 @@ const obj = {
 };
 
 obj.doSomethingLater();
-// `NaN` is printed, because the property `count` is not in the global scope.
+// 打印 `NaN`，因为属性 `count` 不在全局作用域中。
 ```
 
-In the above example, `this` in the function passed to `setTimeout` evaluates to
-`globalThis`, which results in the expected value `1` not being printed.
+在上面的例子中，传递给 `setTimeout` 的函数中的 `this` 评估为 `globalThis`，这导致预期的值 `1` 没有被打印。
 
-If you wanted to work around it without arrow functions, you would store a
-reference to `this` in another variable:
+如果您想在不使用箭头函数的情况下解决这个问题，可以将 `this` 的引用存储在另一个变量中：
 
 ```typescript
 const obj = {
   count: 0,
   doSomethingLater() {
-    const self = this; // store a reference to `this` in `self`
+    const self = this; // 将 `this` 存储在 `self` 中
     setTimeout(function () {
-      // use `self` instead of `this`
+      // 使用 `self` 代替 `this`
       self.count++;
       console.log(self.count);
     }, 300);
@@ -45,18 +41,17 @@ const obj = {
 };
 
 obj.doSomethingLater();
-// `1` is printed as expected
+// 打印 `1`，如预期
 ```
 
-But in this case arrow functions come in handy. With arrow functions, the code
-becomes way clearer and easier to understand:
+但在这种情况下，箭头函数非常有用。使用箭头函数，代码变得更加清晰和易于理解：
 
 ```typescript
 const obj = {
   count: 0,
   doSomethingLater() {
-    setTimeout(() => { // pass an arrow function
-      // `this` evaluates to `obj` here
+    setTimeout(() => { // 使用箭头函数
+      // 此处 `this` 评估为 `obj`
       this.count++;
       console.log(this.count);
     }, 300);
@@ -64,13 +59,13 @@ const obj = {
 };
 
 obj.doSomethingLater();
-// `1` is printed as expected
+// 打印 `1`，如预期
 ```
 
-This example is taken from
-[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions).
+这个例子来自
+[MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)。
 
-**Invalid:**
+**无效的：**
 
 ```typescript
 const self = this;
@@ -84,7 +79,7 @@ const bar = () => {
 };
 ```
 
-**Valid:**
+**有效的：**
 
 ```typescript
 const self = "this";

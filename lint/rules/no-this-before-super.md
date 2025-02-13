@@ -1,17 +1,14 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows use of `this` or `super` before calling `super()` in constructors.
+不允许在构造函数中调用 `super()` 前使用 `this` 或 `super`。
 
-The access to `this` or `super` before calling `super()` in the constructor of
-derived classes leads to [`ReferenceError`]. To prevent it, this lint rule
-checks if there are accesses to `this` or `super` before calling `super()` in
-constructors.
+在派生类的构造函数中，调用 `super()` 前访问 `this` 或 `super` 会导致 [`ReferenceError`]。为了防止这种情况，这个 lint 规则检查构造函数中在调用 `super()` 之前是否访问了 `this` 或 `super`。
 
-[`ReferenceError`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError
+[`ReferenceError`]: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError
 
-**Invalid:**
+**无效:**
 
 ```typescript
 class A extends B {
@@ -29,7 +26,7 @@ class C extends D {
 }
 ```
 
-**Valid:**
+**有效:**
 
 ```typescript
 class A extends B {

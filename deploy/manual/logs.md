@@ -1,37 +1,25 @@
 ---
-title: "Application logging"
+title: "应用程序日志"
 ---
 
-Applications can generate logs at runtime using the console API, with methods
-such as `console.log`, `console.error`, etc. These logs can be viewed in real
-time by either:
+应用程序可以在运行时使用控制台 API 生成日志，方法包括 `console.log`、`console.error` 等。这些日志可以通过以下方式实时查看：
 
-- Navigating to the `Logs` panel of a project or deployment.
-- Using the `logs` subcommand in
-  [deployctl](https://docs.deno.com/deploy/manual/deployctl).
+- 导航到项目或部署的 `日志` 面板。
+- 使用 [deployctl](https://docs.deno.com/deploy/manual/deployctl) 中的 `logs` 子命令。
 
-Logs will be streamed directly from the application to the log panel or
-displayed in `deployctl logs`.
+日志会直接从应用程序流式传输到日志面板，或显示在 `deployctl logs` 中。
 
-In addition to real-time logs, logs are also retained for a certain duration,
-which depends on the subscription plan you are on. To view persisted logs, you
-can:
+除了实时日志，日志还会保留一段时间，具体取决于您所订阅的计划。要查看持久化日志，您可以：
 
-- If you are using the log panel in your browser, switch from `Live` to either
-  `Recent` or `Custom` in the dropdown menu next to the search box.
-- If you prefer the command line, add `--since=<DATETIME>` and/or
-  `--until=<DATETIME>` to your `deployctl logs` command. For more details,
-  consult `deployctl logs --help`.
+- 如果您在浏览器中使用日志面板，请在搜索框旁的下拉菜单中，将其从 `实时` 切换到 `最近` 或 `自定义`。
+- 如果您更喜欢命令行，可以在 `deployctl logs` 命令中添加 `--since=<DATETIME>` 和/或 `--until=<DATETIME>`。有关更多详细信息，请查阅 `deployctl logs --help`。
 
-Logs older than the retention period are automatically deleted from the system.
+超出保留期限的日志会自动从系统中删除。
 
-## Limits
+## 限制
 
-There are limits on both the size of a log message and the volume of logs
-produced in a certain amount of time.
+日志消息的大小和在特定时间内生成的日志量都有所限制。
 
-Log messages have a maximum size of 2KB. Messages larger than this limit are
-trimmed to 2KB.
+日志消息的最大大小为 2KB。超过此限制的消息会被裁剪为 2KB。
 
-A deployment is allowed to produce up to 1000 log entries per second. If it is
-exceeded, we may terminate the deployment.
+一个部署每秒最多允许生成 1000 条日志。如果超过此限度，我们可能会终止该部署。

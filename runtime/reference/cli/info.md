@@ -1,20 +1,20 @@
 ---
-title: "`deno info`, dependency inspector"
+title: "`deno info`, 依赖检查器"
 oldUrl:
  - /runtime/manual/tools/dependency_inspector/
  - /runtime/reference/cli/dependency_inspector/
 command: info
 ---
 
-## Example
+## 示例
 
 ```shell
 $ deno info jsr:@std/http@1.0.0-rc.5/file-server
-local: /home/lucacasonato/.cache/deno/deps/https/jsr.io/3a0e5ef03d2090c75c81daf771ed9a73009518adfe688c333dc11d8006dc3598
-emit: /home/lucacasonato/.cache/deno/gen/https/jsr.io/3a0e5ef03d2090c75c81daf771ed9a73009518adfe688c333dc11d8006dc3598.js
-type: TypeScript
-dependencies: 40 unique
-size: 326.42KB
+本地: /home/lucacasonato/.cache/deno/deps/https/jsr.io/3a0e5ef03d2090c75c81daf771ed9a73009518adfe688c333dc11d8006dc3598
+输出: /home/lucacasonato/.cache/deno/gen/https/jsr.io/3a0e5ef03d2090c75c81daf771ed9a73009518adfe688c333dc11d8006dc3598.js
+类型: TypeScript
+依赖项: 40 个唯一
+大小: 326.42KB
 
 https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 ├─┬ https://jsr.io/@std/path/1.0.1/posix/join.ts (862B)
@@ -98,15 +98,15 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 └── https://jsr.io/@std/net/1.0.0-rc.2/get_network_address.ts (1.68KB)
 ```
 
-Dependency inspector works with any local or remote ES modules.
+依赖检查器支持任何本地或远程的 ES 模块。
 
-## Cache location
+## 缓存位置
 
-`deno info` can be used to display information about cache location:
+`deno info` 可以用来显示缓存位置的信息：
 
 ```shell
 deno info
-DENO_DIR location: "/Users/deno/Library/Caches/deno"
-Remote modules cache: "/Users/deno/Library/Caches/deno/deps"
-TypeScript compiler cache: "/Users/deno/Library/Caches/deno/gen"
+DENO_DIR 位置: "/Users/deno/Library/Caches/deno"
+远程模块缓存: "/Users/deno/Library/Caches/deno/deps"
+TypeScript 编译器缓存: "/Users/deno/Library/Caches/deno/gen"
 ```

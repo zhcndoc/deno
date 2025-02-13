@@ -1,22 +1,19 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Requires `for` loop control variables to increment in the correct direction.
+需要 `for` 循环控制变量以正确的方向递增。
 
-Incrementing `for` loop control variables in the wrong direction leads to
-infinite loops. This can occur through incorrect initialization, bad
-continuation step logic or wrong direction incrementing of the loop control
-variable.
+以错误的方向递增 `for` 循环控制变量会导致无限循环。这可以通过不正确的初始化、错误的继续步骤逻辑或错误方向的循环控制变量递增造成。
 
-**Invalid:**
+**无效：**
 
 ```typescript
-// Infinite loop
+// 无限循环
 for (let i = 0; i < 2; i--) {}
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 for (let i = 0; i < 2; i++) {}

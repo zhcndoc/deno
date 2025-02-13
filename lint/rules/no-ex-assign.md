@@ -1,24 +1,23 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the reassignment of exception parameters.
+不允许重新赋值异常参数。
 
-There is generally no good reason to reassign an exception parameter. Once
-reassigned the code from that point on has no reference to the error anymore.
+一般来说，没有好的理由去重新赋值异常参数。一旦重新赋值，从那时起代码就无法再访问错误。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 try {
   someFunc();
 } catch (e) {
   e = true;
-  // can no longer access the thrown error
+  // 无法再访问抛出的错误
 }
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 try {

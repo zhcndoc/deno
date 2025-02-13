@@ -1,39 +1,35 @@
 ---
-title: "Initialize a project"
+title: "初始化一个项目"
 url: /examples/initialize_project_tutorial/
 oldUrl:
 ---
 
-While it is possible to run scripts directly with `deno run`, for larger
-projects it is recommended to create a sensible directory structure. This way
-you can organize your code, manage dependencies, script tasks and run tests more
-easily.
+虽然可以直接使用 `deno run` 运行脚本，但对于较大的项目，建议创建一个合理的目录结构。这样你可以更轻松地组织代码、管理依赖、编写脚本任务和运行测试。
 
-Initialize a new project by running the following command:
+通过运行以下命令初始化一个新项目：
 
 ```sh
 deno init my_project
 ```
 
-Where `my_project` is the name of your project. You can
-[read more about the project structure](/runtime/getting_started/first_project/).
+其中 `my_project` 是你的项目名称。你可以
+[阅读更多关于项目结构的信息](/runtime/getting_started/first_project/)。
 
-### Run your project
+### 运行你的项目
 
-Navigate to the project directory:
+导航到项目目录：
 
 ```sh
 cd my_project
 ```
 
-Then you can run the project directly using the `deno task` command:
+然后你可以直接使用 `deno task` 命令运行项目：
 
 ```sh
 deno run dev
 ```
 
-Take a look in the `deno.json` file in your new project. You should see a `dev`
-task in the "tasks" field.
+查看你新项目中的 `deno.json` 文件。你应该在 "tasks" 字段看到一个 `dev` 任务。
 
 ```json title="deno.json"
 "tasks": {
@@ -41,38 +37,26 @@ task in the "tasks" field.
 },
 ```
 
-The `dev` task is a common task that runs the project in development mode. As
-you can see, it runs the `main.ts` file with the `--watch` flag, which will
-automatically reload the script when changes are made. You can see this in
-action if you open the `main.ts` file and make a change.
+`dev` 任务是一个常见任务，用于在开发模式下运行项目。正如你所看到的，它使用 `--watch` 标志运行 `main.ts` 文件，当有更改时会自动重新加载脚本。如果你打开 `main.ts` 文件并进行更改，就可以看到这一点的实际效果。
 
-### Run the tests
+### 运行测试
 
-In the project directory run:
+在项目目录中运行：
 
 ```sh
 deno test
 ```
 
-This will execute all the tests in the project. You can read more about
-[testing in Deno](/runtime/fundamentals/testing/) and we'll cover tests in a
-little more depth in a later tutorial. At the moment you have one test file,
-`main_test.ts`, which tests the `add` function in `main.ts`.
+这将执行项目中的所有测试。你可以阅读更多关于
+[在 Deno 中测试的信息](/runtime/fundamentals/testing/)，我们将在稍后的教程中更深入地讨论测试。此时你有一个测试文件 `main_test.ts`，它测试 `main.ts` 中的 `add` 函数。
 
-### Adding to your project
+### 向你的项目添加内容
 
-The `main.ts` file serves as the entry point for your application. It’s where
-you’ll write your main program logic. When developing your project you will
-start by removing the default addition program and replace it with your own
-code. For example, if you’re building a web server, this is where you’d set up
-your routes and handle requests.
+`main.ts` 文件作为应用程序的入口点。这里是你编写主要程序逻辑的地方。在开发项目时，你将从删除默认的加法程序开始，并将其替换为自己的代码。例如，如果你正在构建一个网络服务器，这里是你设置路由和处理请求的地方。
 
-Beyond the initial files, you’ll likely create additional modules (files) to
-organize your code. Consider grouping related functionality into separate files.
-Remember that Deno [supports ES modules](/runtime/fundamentals/modules/), so you
-can use import and export statements to structure your code.
+除了初始文件外，你可能还会创建其他模块（文件）来组织代码。考虑将相关功能分组成单独的文件。请记住，Deno [支持 ES 模块](/runtime/fundamentals/modules/)，因此你可以使用导入和导出语句来组织代码。
 
-Example folder structure for a deno project:
+Deno 项目的示例文件夹结构：
 
 ```sh
 my_project/
@@ -85,18 +69,13 @@ my_project/
 ├── services/
 │   ├── user.ts
 │   ├── post.ts
-└──utils/
+└── utils/
     ├── logger.ts
     ├── logger_test.ts
     ├── validator_test.ts
     └── validator.ts
 ```
 
-This kind of structure keeps your project clean and makes it easier to find and
-manage files.
+这种结构可以保持你的项目整洁，并更容易找到和管理文件。
 
-🦕 Congratulations! Now you know how to create a brand new project with
-`deno init`. Remember that Deno encourages simplicity and avoids complex build
-tools. Keep your project modular, testable, and organized. As your project
-grows, adapt the structure to fit your needs. And most importantly, have fun
-exploring Deno’s capabilities!
+🦕 恭喜你！现在你知道如何用 `deno init` 创建一个全新的项目。请记住，Deno 鼓励简洁，避免复杂的构建工具。保持你的项目模块化、可测试且有条理。随着项目的发展，调整结构以适应你的需求。最重要的是，享受探索 Deno 功能的乐趣！

@@ -1,159 +1,138 @@
 ---
-title: "deno coverage"
+title: "deno 覆盖率"
 oldUrl: /runtime/manual/tools/coverage/
 command: coverage
 ---
 
-## Inclusions and Exclusions
+## 包含和排除
 
-By default coverage includes any of your code that exists on the local file
-system, and it's imports.
+默认情况下，覆盖率包括您本地文件系统中存在的任何代码及其导入。
 
-You can customize the inclusions and exclusions by using the `--include` and
-`--exclude` options.
+您可以通过使用 `--include` 和 `--exclude` 选项来自定义包含和排除。
 
-You can expand the coverage to include files that are not on the local file
-system by using the `--include` option and customizing the regex pattern.
+您可以通过使用 `--include` 选项并自定义正则表达式模式来扩展覆盖率，以包括不在本地文件系统上的文件。
 
 ```bash
 deno coverage --include="^file:|https:"
 ```
 
-The default inclusion pattern should be sufficient for most use cases, but you
-can customize it to be more specific about which files are included in your
-coverage report.
+默认的包含模式应足以满足大多数用例，但您可以自定义它以更具体地指定哪些文件包含在您的覆盖率报告中。
 
-Files that contain `test.js`, `test.ts`, `test.jsx`, or `test.tsx` in their name
-are excluded by default.
+文件名中包含 `test.js`、`test.ts`、`test.jsx` 或 `test.tsx` 的文件默认被排除。
 
-This is equivalent to:
+这相当于：
 
 ```bash
 deno coverage --exclude="test\.(js|mjs|ts|jsx|tsx)$"
 ```
 
-This default setting prevents your test code from contributing to your coverage
-report. For a URL to match it must match the include pattern and not match the
-exclude pattern.
+此默认设置防止您的测试代码为您的覆盖率报告做出贡献。URL 要匹配，它必须与包含模式匹配，且不与排除模式匹配。
 
-## Ignoring Code
+## 忽略代码
 
-Code can be ignored in generated coverage reports by adding coverage ignore
-comments. Branches and lines in ignored code will be excluded from the report.
-Ignored branches and lines do not count as covered lines. Instead, ignored lines
-of code are treated as empty lines.
+通过添加覆盖忽略注释，可以在生成的覆盖率报告中忽略代码。被忽略代码中的分支和行将被排除在报告之外。被忽略的分支和行不计算为覆盖行。相反，被忽略的代码行被视为空行。
 
-To ignore an entire file, add a `// deno-coverage-ignore-file` comment at the
-top of the file.
+要忽略整个文件，请在文件顶部添加 `// deno-coverage-ignore-file` 注释。
 
 ```ts
 // deno-coverage-ignore-file
 
-// all code in this file is ignored
+// 此文件中的所有代码被忽略
 ```
 
-Ignored files will not appear in the coverage report.
+被忽略的文件将不会出现在覆盖率报告中。
 
-To ignore a single line, add a `// deno-coverage-ignore-next` comment on the
-line above the code you want to ignore.
+要忽略单个行，请在要忽略的代码上方的行添加 `// deno-coverage-ignore-next` 注释。
 
 ```ts
 // deno-coverage-ignore-next
-console.log("this line is ignored");
+console.log("这一行被忽略");
 ```
 
-To ignore multiple lines, add a `// deno-coverage-ignore-start` comment above
-the code you want to ignore and a `// deno-coverage-ignore-stop` comment below.
+要忽略多行，请在要忽略的代码上方添加 `// deno-coverage-ignore-start` 注释，并在下方添加 `// deno-coverage-ignore-stop` 注释。
 
 ```ts
 // deno-coverage-ignore-start
 if (condition) {
-  console.log("both the branch and lines are ignored");
+  console.log("分支和行都被忽略");
 }
 // deno-coverage-ignore-stop
 ```
 
-All code after a `// deno-coverage-ignore-start` comment is ignored until a
-`// deno-coverage-ignore-stop` is reached. However, if there are multiple
-consecutive start comments, each of these must be terminated by a corresponding
-stop comment.
+在 `// deno-coverage-ignore-start` 注释后面的所有代码都将被忽略，直到达到 `// deno-coverage-ignore-stop`。但是，如果有多个连续的开始注释，则每个这样的注释必须由相应的停止注释终止。
 
 ```ts
 // deno-coverage-ignore-start
 if (condition) {
   // deno-coverage-ignore-start
-  console.log("this line is ignored");
+  console.log("这一行被忽略");
   // deno-coverage-ignore-stop
-  console.log("this line is also ignored");
+  console.log("这一行也被忽略");
 }
 // deno-coverage-ignore-stop
 
-console.log("this line is not ignored");
+console.log("这一行没有被忽略");
 ```
 
-Only white space may precede the coverage directive in a coverage comment.
-However, any text may trail the directive.
+在覆盖注释中，只有空格可以位于覆盖指令之前。然而，任何文本可以跟随该指令。
 
 ```ts
-// deno-coverage-ignore-next Trailing text is allowed.
-console.log("This line is ignored");
+// deno-coverage-ignore-next 尾随文本是允许的。
+console.log("这一行被忽略");
 
-// But leading text isn't. deno-coverage-ignore-next
-console.log("This line is not ignored");
+// 但前导文本是不允许的。 deno-coverage-ignore-next
+console.log("这一行没有被忽略");
 ```
 
-Coverage comments must start with `//`. Comments starting with `/*` are not
-valid coverage comments.
+覆盖注释必须以 `//` 开头。以 `/*` 开头的注释不是有效的覆盖注释。
 
 ```ts
 // deno-coverage-ignore-next
-console.log("This line is ignored");
+console.log("这一行被忽略");
 
 /* deno-coverage-ignore-next */
-console.log("This line is not ignored");
+console.log("这一行没有被忽略");
 ```
 
-## Output Formats
+## 输出格式
 
-By default we support Deno's own coverage format - but you can also output
-coverage reports in the lcov format, or in html.
+默认情况下，我们支持 Deno 自己的覆盖格式 - 但您也可以以 lcov 格式或 html 格式输出覆盖率报告。
 
 ```bash
 deno coverage --lcov --output=cov.lcov
 ```
 
-This lcov file can be used with other tools that support the lcov format.
+此 lcov 文件可与支持 lcov 格式的其他工具一起使用。
 
 ```bash
 deno coverage --html
 ```
 
-This will output a coverage report as a html file
+这将输出一个覆盖率报告作为 html 文件。
 
-## Examples
+## 示例
 
-Generate a coverage report from the default coverage profile in your workspace
+从工作区的默认覆盖配置生成覆盖率报告。
 
 ```bash
 deno test --coverage
 deno coverage
 ```
 
-Generate a coverage report from a coverage profile with a custom name
+从具有自定义名称的覆盖配置生成覆盖率报告。
 
 ```bash
 deno test --coverage=custom_profile_name
 deno coverage custom_profile_name
 ```
 
-Only include coverage that matches a specific pattern - in this case, only
-include tests from main.ts
+仅包括匹配特定模式的覆盖率 - 在这种情况下，仅包括 main.ts 的测试。
 
 ```bash
 deno coverage --include="main.ts"
 ```
 
-Export test coverage from the default coverage profile to an lcov file
+将默认覆盖配置中的测试覆盖率导出到 lcov 文件。
 
 ```bash
 deno test --coverage

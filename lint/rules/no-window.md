@@ -1,14 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of the `window` object.
+不允许使用 `window` 对象。
 
-The `window` global is no longer available in Deno. Deno does not have a window
-and `typeof window === "undefined"` is often used to tell if the code is running
-in the browser.
+`window` 全局在 Deno 中不再可用。Deno 没有窗口，`typeof window === "undefined"` 通常用于判断代码是否在浏览器中运行。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const a = await window.fetch("https://deno.land");
@@ -21,7 +19,7 @@ window.addEventListener("load", () => {
 });
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const a1 = await fetch("https://deno.land");

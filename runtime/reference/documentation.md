@@ -1,18 +1,17 @@
 ---
-title: "Documentation Tests"
+title: "文档测试"
 oldUrl: /runtime/manual/testing/documentation/
 ---
 
-Deno supports both type-checking evaluating your documentation examples.
+Deno 支持对文档示例进行类型检查和评估。
 
-This makes sure that examples within your documentation are up to date and
-working.
+这确保了文档中的示例是最新的并且可以正常工作。
 
-The basic idea is this:
+基本思想是这样的：
 
 ````ts
 /**
- * # Examples
+ * # 示例
  *
  * ```ts
  * const x = 42;
@@ -20,9 +19,7 @@ The basic idea is this:
  */
 ````
 
-The triple backticks mark the start and end of code blocks, the language is
-determined by the language identifier attribute which may be any of the
-following:
+三重反引号标记代码块的开始和结束，语言由语言标识符属性决定，该属性可以是以下任一项：
 
 - `js`
 - `javascript`
@@ -35,15 +32,13 @@ following:
 - `cts`
 - `tsx`
 
-If no language identifier is specified then the language is inferred from media
-type of the source document that the code block is extracted from.
+如果未指定语言标识符，则语言从提取代码块的源文档的媒体类型推断。
 
-Another attribute supported is `ignore`, which tells the test runner to skip
-type-checking the code block.
+另一个支持的属性是 `ignore`，它告诉测试运行器跳过对代码块的类型检查。
 
 ````ts
 /**
- * # Does not pass type check
+ * # 不通过类型检查
  *
  * ```typescript ignore
  * const x: string = 42;
@@ -51,15 +46,13 @@ type-checking the code block.
  */
 ````
 
-If this example was in a file named foo.ts, running `deno test --doc foo.ts`
-will extract this example, and then both type-check and evaluate it as a
-standalone module living in the same directory as the module being documented.
+如果这个示例在一个名为 foo.ts 的文件中，运行 `deno test --doc foo.ts` 将提取这个示例，然后对其进行类型检查和评估，作为一个独立的模块，位于与正在文档化的模块相同的目录中。
 
-To document your exports, import the module using a relative path specifier:
+要文档化你的导出，请使用相对路径说明符导入模块：
 
 ````ts
 /**
- * # Examples
+ * # 示例
  *
  * ```ts
  * import { foo } from "./foo.ts";

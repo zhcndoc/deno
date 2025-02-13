@@ -2,15 +2,15 @@
 tags: []
 ---
 
-Disallows multiple variable definitions in the same declaration statement.
+不允许在同一声明语句中定义多个变量。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const foo = 1, bar = "2";
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const foo = 1;

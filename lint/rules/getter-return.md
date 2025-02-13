@@ -1,13 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Requires all property getter functions to return a value.
+要求所有属性获取器函数返回一个值。
 
-Getter functions return the value of a property. If the function returns no
-value then this contract is broken.
+获取器函数返回属性的值。如果函数不返回值，则违反了此合同。
 
-**Invalid:**
+**无效:**
 
 ```typescript
 let foo = {
@@ -19,7 +18,7 @@ class Person {
 }
 ```
 
-**Valid:**
+**有效:**
 
 ```typescript
 let foo = {

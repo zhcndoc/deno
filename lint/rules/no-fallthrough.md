@@ -1,18 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the implicit fallthrough of case statements.
+不允许隐式穿透 case 语句。
 
-Case statements without a `break` will execute their body and then fallthrough
-to the next case or default block and execute this block as well. While this is
-sometimes intentional, many times the developer has forgotten to add a break
-statement, intending only for a single case statement to be executed. This rule
-enforces that you either end each case statement with a break statement or an
-explicit comment that fallthrough was intentional. The fallthrough comment must
-contain one of `fallthrough`, `falls through` or `fall through`.
+没有 `break` 的 case 语句将执行其主体，然后继续执行下一个 case 或 default 块的代码。虽然这有时是出于故意，但很多时候开发者忘记添加 break 语句，原本只打算执行单个 case 语句。此规则强制要求你要么在每个 case 语句末尾加上 break 语句，要么添加一个明确的注释表明穿透是故意的。穿透注释必须包含 `fallthrough`、`falls through` 或 `fall through` 之一。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 switch (myVar) {
@@ -22,10 +16,10 @@ switch (myVar) {
   case 2:
     console.log("2");
 }
-// If myVar = 1, outputs both `1` and `2`.  Was this intentional?
+// 如果 myVar = 1，则输出 `1` 和 `2`。这是故意的吗？
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 switch (myVar) {
@@ -37,7 +31,7 @@ switch (myVar) {
     console.log("2");
     break;
 }
-// If myVar = 1, outputs only `1`
+// 如果 myVar = 1，则仅输出 `1`
 
 switch (myVar) {
   case 1:
@@ -46,5 +40,5 @@ switch (myVar) {
   case 2:
     console.log("2");
 }
-// If myVar = 1, intentionally outputs both `1` and `2`
+// 如果 myVar = 1，故意输出 `1` 和 `2`
 ```

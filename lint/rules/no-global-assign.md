@@ -1,14 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows assignment to native Javascript objects.
+禁止对原生 Javascript 对象进行赋值。
 
-In Javascript, `String` and `Object` for example are native objects. Like any
-object, they can be reassigned, but it is almost never wise to do so as this can
-lead to unexpected results and difficult to track down bugs.
+在 Javascript 中，`String` 和 `Object` 例如是原生对象。像任何对象一样，它们可以被重新赋值，但几乎永远不明智，因为这可能导致意想不到的结果和难以追踪的错误。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 Object = null;

@@ -1,32 +1,27 @@
 ---
-title: Acceptable use policy
+title: 可接受使用政策
 ---
 
-The Deno Subhosting service includes resources (CPU time, request counts) that
-are subject to this Acceptable Use policy. This document can give a rough
-estimate to what we consider as "Acceptable Use", and what we do not.
+Deno 子托管服务包括受此可接受使用政策约束的资源（CPU 时间，请求计数）。本文件可以大致估计我们认为的“可接受使用”，以及我们不认可的内容。
 
-### Examples of Acceptable Use
+### 可接受使用示例
 
-- ✅ Server-side rendered websites
-- ✅ Jamstack sites and apps
-- ✅ Single page applications
-- ✅ APIs that query a DB or external API
-- ✅ A personal blog
-- ✅ A company website
-- ✅ An e-commerce site
+- ✅ 服务器端渲染的网站
+- ✅ Jamstack 网站和应用
+- ✅ 单页应用
+- ✅ 查询数据库或外部 API 的 API
+- ✅ 个人博客
+- ✅ 公司网站
+- ✅ 电子商务网站
 
-### Not Acceptable Use
+### 不可接受使用
 
-- ❌ Crypto mining
-- ❌ Highly CPU-intensive load (e.g. machine learning)
-- ❌ Media hosting for external sites
-- ❌ Scrapers
-- ❌ Proxy or VPN
+- ❌ 加密货币挖矿
+- ❌ 高 CPU 强度负载（例如：机器学习）
+- ❌ 外部网站的媒体托管
+- ❌ 爬虫
+- ❌ 代理或 VPN
 
-## Guidelines
+## 指导方针
 
-We expect most projects to fall well within the usage limits. We will notify you
-if your projects usage significantly deviates from the norm. We will reach out
-to you where possible before taking any action to address unreasonable burdens
-on our infrastructure.
+我们期望大多数项目的使用量都在合理范围内。若您的项目使用情况显著偏离正常范围，我们会通知您。在采取任何措施以解决我们基础设施上不合理负担的情况下，我们会尽可能提前与您联系。

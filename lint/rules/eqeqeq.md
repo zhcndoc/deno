@@ -2,22 +2,18 @@
 tags: []
 ---
 
-Enforces the use of type-safe equality operators `===` and `!==` instead of the
-more error prone `==` and `!=` operators.
+强制使用类型安全的相等运算符 `===` 和 `!==` 代替更容易出错的 `==` 和 `!=` 运算符。
 
-`===` and `!==` ensure the comparators are of the same type as well as the same
-value. On the other hand `==` and `!=` do type coercion before value checking
-which can lead to unexpected results. For example `5 == "5"` is `true`, while
-`5 === "5"` is `false`.
+`===` 和 `!==` 确保比较的值不仅相同且类型相同。另一方面，`==` 和 `!=` 在值比较之前会进行类型转换，这可能导致意外的结果。例如 `5 == "5"` 是 `true`，而 `5 === "5"` 是 `false`。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 if (a == 5) {}
 if ("hello world" != input) {}
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 if (a === 5) {}

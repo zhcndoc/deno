@@ -1,511 +1,160 @@
 ---
-title: "Terms and Conditions"
+title: "条款和条件"
 ---
 
-**DENO TERMS AND CONDITIONS** 09 September 2024
-
-These Terms and Conditions (these “Terms”) are a legal agreement between you and
-Deno Land Inc. (“Deno,” “we,” “us,” or “our”). They specify the terms under
-which you may access and use (i) our website at
-[https://deno.com](https://deno.com) (the “Site”); (ii) any websites,
-applications or other digital properties that link to these Terms; and (iii) the
-products and services (the “Deno Offerings”) we offer to you on our proprietary
-platform (the “Platform”) via the following websites:
-
-- Deno Deploy ([https://deno.com/deploy](https://deno.com/deploy)); and
-- Deno Subhosting ([https://deno.com/subhosting](https://deno.com/subhosting)).
-
-By accessing or using the Site or any other digital property that links to these
-Terms, you may learn about Deno and our technology platform, and registered
-customers may also access the Deno Offerings (collectively, the “Services”).
-
-PLEASE READ THESE TERMS CAREFULLY. BY ACCESSING AND/OR USING THE SERVICES, YOU
-ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE LEGALLY BOUND BY
-THESE TERMS, THE DATA PROCESSING ADDENDUM (THE “DPA”), AND THE TERMS AND
-CONDITIONS OF OUR PRIVACY POLICY (THE “PRIVACY POLICY”), WHICH ARE HEREBY
-INCORPORATED INTO THESE TERMS AND MADE A PART HEREOF BY REFERENCE (COLLECTIVELY,
-THE “AGREEMENT”). IF YOU DO NOT AGREE TO ANY OF THE TERMS IN THIS AGREEMENT,
-THEN PLEASE DO NOT USE THE SERVICES.
-
-If you accept or agree to the Agreement on behalf of a company or other legal
-entity, you represent and warrant that you have the authority to bind that
-company or other legal entity to the Agreement and, in such event, “you” and
-“your” will refer and apply to that company or other legal entity.
-
-We reserve the right, at our sole discretion, to modify, discontinue, or
-terminate the availability of any Services, or modify this Agreement, at any
-time and without prior notice. We encourage you to check these Terms and the
-“Last Update” date above whenever you access or use the Services. By continuing
-to access or use the Services after we have posted a modification to these
-Terms, you are indicating that you agree to be bound by the modified Agreement.
-If the modified Agreement is not acceptable to you, your only recourse is to
-cease accessing or using the Services.
-
-Deno also offers fee-based products and services (including, from time to time,
-as free trials), which may offer access to certain data products and/or services
-(“Paid Products”). We provide access to and use of our Paid Products pursuant to
-commercial agreements, associated with the applicable Paid Products made
-available to you at the time of purchase (each, a “Commercial Agreement”). If
-there is a conflict between these Terms and terms and conditions of the
-applicable Commercial Agreement associated with the Paid Products you are
-purchasing, the terms and conditions of the Commercial Agreement will take
-precedence with respect to the use of or access to such Paid Products.
-
-Capitalized terms not defined in these Terms shall have the meaning set forth in
-our Privacy Policy.
-
-**THE SECTIONS BELOW TITLED “BINDING ARBITRATION” AND “CLASS ACTION WAIVER”
-CONTAIN A BINDING ARBITRATION AGREEMENT AND CLASS ACTION WAIVER. THEY AFFECT
-YOUR LEGAL RIGHTS. PLEASE READ THEM CAREFULLY.**
-
-1. **DESCRIPTION OF THE SERVICES; RIGHT TO ACCESS AND USE THE SERVICES**
-
-**Deno Deploy** and **Deno Subhosting** are globally distributed platforms for
-serverless JavaScript applications. Your JavaScript, TypeScript, and WebAssembly
-code runs on managed servers geographically close to your users, enabling low
-latency and faster response times. Deploy and Subhosting applications run on
-fast, light-weight V8 isolates rather than virtual machines, powered by the Deno
-runtime.
-
-Subject to the terms and conditions of this Agreement, Deno hereby grants you
-during the term of this Agreement a limited, non-exclusive, non-transferable,
-non-sublicensable, revocable right, to access and use the Services solely for
-your internal business purposes.
-
-Deno reserves the right to, at any time, and without notice or liability to you:
-
-1. Block and disable any deployments that, for any reason, make the Platform
-   unstable;
-2. Change the regions in which the Services run,
-3. Change which features are supported by the Services; and
-4. Modify or discontinue the availability of any other feature, function, or
-   content relating to the Services.
-
-You agree that we will not be liable to you or to any third party for any
-modification, suspension, or discontinuance of the Services or any part thereof.
-You are free to stop using the Services at any time.
-
-2. **ACCOUNT CREDENTIALS**
-
-   In order to use the Deno Offerings, you must be an “Authorized User”. To
-   become an Authorized User, you need to create an account on the Platform, and
-   authenticate via GitHub (collectively, the “Account Credentials”). When
-   creating the account, each Authorized User must provide true, accurate,
-   current, and complete information. Each Account Credential can be used by
-   only one Authorized User. Each Authorized User is responsible for the
-   confidentiality and use of his/her Account Credentials, including all
-   activities that are associated with his/her Account Credentials. Authorized
-   Users must promptly inform us of any need to deactivate any Account
-   Credentials. Deno is under no obligation to accept any individual as
-   Authorized User, and may accept or reject any registration in its sole and
-   complete discretion. We have the right to disable any Account Credentials at
-   any time for any reason, including if in our sole discretion if we believe
-   that you have failed to comply with these Terms.
-
-3. **USE OF PERSONAL INFORMATION**
-
-Your use of the Services may involve the transmission to us of certain personal
-information. Our policies with respect to the collection and use of such
-personal information are governed according to our Privacy Policy, which is
-hereby incorporated by reference in its entirety.
-
-4. **INTELLECTUAL PROPERTY**
-
-The Services may contain material, such as software, text, graphics, images,
-sound recordings, audiovisual works, and other material provided by or on behalf
-of Deno (collectively referred to as the “Content”). The Content may be owned by
-us or by third parties. The Content is protected under both United States and
-foreign laws. Unauthorized use of the Content may violate copyright, trademark,
-and other laws. You have no rights in or to the Content, and you will not use
-the Content except as permitted under this Agreement. No other use is permitted
-without prior written consent from us. You must retain all copyright and other
-proprietary notices contained in the original Content on any copy you make of
-the Content. You may not sell, transfer, assign, license, sublicense, or modify
-the Content or reproduce, display, publicly perform, make a derivative version
-of, distribute, or otherwise use the Content in any way for any public or
-commercial purpose. The use or posting of the Content on any other website or in
-a networked computer environment for any purpose is expressly prohibited.
-
-If you violate any part of this Agreement, your permission to access and/or use
-the Content, and the Services automatically terminates and you must immediately
-destroy any copies you have made of the Content.
-
-The trademarks, service marks, and logos of Deno (the “Deno Trademarks”) used
-and displayed on the Services are registered and unregistered trademarks or
-service marks of Deno. Other company, product, and service names located on the
-Services may be trademarks or service marks owned by others (the “Third-Party
-Trademarks,” and, collectively with Deno Trademarks, the “Trademarks”). Nothing
-on the Services should be construed as granting, by implication, estoppel, or
-otherwise, any license or right to use the Trademarks, without our prior written
-permission specific for each such use. Use of the Trademarks as part of a link
-to or from any website is prohibited unless establishment of such a link is
-approved in advance by us in writing. All goodwill generated from the use of
-Deno Trademarks inures to our benefit.
-
-Elements of the Services are protected by trade dress, trademark, unfair
-competition, and other state and federal laws and may not be copied or imitated
-in whole or in part, by any means, including, but not limited to, the use of
-framing or mirrors. None of the Content may be retransmitted without our
-express, written consent for each and every instance.
-
-5. **USER DATA; USAGE DATA; AGGREGATE DATA**
-
-For purposes of this Agreement, “User Data” means (i) any data and information
-that we ingest by connecting to Authorized Users’ business systems, including
-but not limited to event logs; and (ii) any data and information that Authorized
-Users submit through the Services; and “Usage Data” means anonymous, analytical
-data that Deno collects concerning the performance and your use of the Services,
-including, without limitation, date and time that you access the Services, the
-portions of the Services visited, the frequency and number of times such pages
-are accessed, the number of times the Services is used in a given time period
-and other usage and performance data.
-
-As between the parties, Authorized Users own all right, title, and interest in
-and to User Data, including all modifications, improvements, adaptations,
-enhancements, or translations made thereto, and all intellectual rights therein.
-Authorized Users hereby grant Deno a non-exclusive, worldwide, fully paid-up,
-royalty-free right and license, with the right to grant sublicenses, to
-reproduce, execute, use, store, archive, modify, perform, display and distribute
-User Data: (i) during the term of this Agreement, in furtherance of Deno’
-obligations hereunder; and (ii) for Deno’s internal business purposes, including
-using such data to analyze, update, and improve the Services and Deno’s
-analytics capabilities and for benchmarking purposes.
-
-Notwithstanding anything to the contrary herein, we may use, and may permit our
-third-party service providers to access and use, User Data, as well as any Usage
-Data that we may collect, in an anonymous and aggregated form (“Aggregate Data”)
-for the purposes of operating, maintaining, managing, and improving our products
-and services including the Services. Aggregate Data does not identify Authorized
-Users or any individual. You hereby agree that we may collect, use, publish,
-disseminate, transfer, and otherwise exploit such Aggregate Data.
-
-6. **FEES**
-
-Deno offers and Authorized Users can purchase a monthly or annual subscription
-for the Services (“Subscription”) for a fee set forth on our website (the
-“Subscription Fee”). Deno may add new fees and charges, or amend fees and
-charges, at any time in its sole discretion. Payment for a Subscription is due
-immediately upon making a purchase for a subscription. By making a purchase, you
-agree to pay Deno, through our third-party payment processor (“Third-Party
-Payment Processor”), all charges at the fees then in effect for Subscriptions.
-Any information you provide to the Third-Party Payment Processor will be
-processed by such Third-Party Payment Processor in accordance with its privacy
-policy and terms of use. YOU MUST PROVIDE CURRENT, COMPLETE, AND ACCURATE
-INFORMATION FOR YOUR ACCOUNT, AND PROMPTLY UPDATE ALL INFORMATION TO KEEP SUCH
-ACCOUNT INFORMATION CURRENT, COMPLETE, AND ACCURATE (SUCH AS A CHANGE IN BILLING
-ADDRESS, CREDIT CARD NUMBER, OR CREDIT CARD EXPIRATION DATE). FURTHER, YOU MUST
-PROMPTLY NOTIFY US IF A PAYMENT METHOD IS CANCELED (E.G., FOR LOSS OR THEFT) OR
-IF YOU BECOME AWARE OF A POTENTIAL BREACH OF SECURITY, SUCH AS THE UNAUTHORIZED
-DISCLOSURE OR USE OF YOUR USERNAME OR PASSWORD. CHANGES TO SUCH INFORMATION CAN
-BE MADE THROUGH YOUR ACCOUNT.
-
-By purchasing a Subscription, you acknowledge that your Subscription has an
-initial and recurring payment charge at the then-current Subscription rate, and
-you agree that Deno may submit monthly charges, in advance to your chosen
-payment method without further authorization from you, until you provide notice
-that you wish to cancel your Subscription or to change your payment method. You
-further accept responsibility for all recurring charges prior to cancellation,
-including, where applicable, any charges processed by Deno after the expiration
-date of your payment card.
-
-You may change or terminate your Subscription by emailing us at
-[support@deno.com](mailto:support@deno.com). If you terminate your Subscription,
-you may use your Subscription until the end of the then-current billing cycle,
-and the Subscription will not be renewed after that period expires. Deno does
-not refund any pre-paid portion of the Subscription fee. Deno may immediately
-terminate or suspend your Subscription for any reason or no reason in accordance
-with these Terms, including for failure to pay the applicable fees when due. If
-we terminate or suspend your Subscription, your right to use any software or
-content provided in connection with the Subscription is also terminated or
-suspended (as applicable).
-
-From time to time, Deno may offer free trial of the Services. Deno reserves the
-right in its sole discretion to stop offering free trial of the Services at any
-time without any liability to you.
-
-7. **COMMUNITY GUIDELINES**
-
-By accessing and/or using the Services, you hereby agree to comply with the
-following guidelines:
-
-- You will not use the Services for any unlawful purpose;
-
-- You will not access or use the Services to collect any market research for a
-  competing businesses;
-
-- You will not upload, post, e-mail, transmit, or otherwise make available any
-  content that infringes any copyright, trademark, right of publicity, or other
-  proprietary rights of any person or entity;
-
-- You will not impersonate any person or entity or falsely state or otherwise
-  misrepresent your affiliation with a person or entity;
-
-- You will not decompile, reverse engineer, disassemble, or otherwise attempt to
-  discern the source code or interface protocols of any software or other
-  products or processes accessible through the Services;
-
-- You will not remove or modify any proprietary markings or restrictive legends
-  placed on the Services;
-
-- You will not use the Services, or any portion or component thereof in
-  violation of any applicable law, in order to build a competitive product or
-  service, or for any purpose not specifically permitted in these Terms;
-
-- You will not cover, obscure, block, or in any way interfere with any
-  advertisements and/or safety features on the Services;
-
-- You will not circumvent, remove, alter, deactivate, degrade, or thwart any of
-  the protections in the Services;
-
-- You will not introduce, post, or upload to the Services any Harmful Code. As
-  used herein, “Harmful Code” means computer code, programs, or programming
-  devices that are intentionally designed to disrupt, modify, access, delete,
-  damage, deactivate, disable, harm, or otherwise impede in any manner,
-  including aesthetic disruptions or distortions, the operation of the Services,
-  or any other associated software, firmware, hardware, computer system, or
-  network (including, without limitation, “Trojan horses,” “viruses,” “worms,”
-  “time bombs,” “time locks,” “devices,” “traps,” “access codes,” or “drop dead”
-  or “trap door” devices) or any other harmful, malicious, or hidden procedures,
-  routines or mechanisms that would cause the Services to cease functioning or
-  to damage or corrupt data, storage media, programs, equipment, or
-  communications, or otherwise interfere with the operations of the Services;
-
-- You will not take any action that imposes or may impose (in our sole
-  discretion) an unreasonable or disproportionately large load on our technical
-  infrastructure; and
-
-- You will not interfere with or attempt to interrupt the proper operation of
-  the Services through the use of any virus, device, information collection or
-  transmission mechanism, software or routine, or access or attempt to gain
-  access to any data, files, or passwords related to the Services through
-  hacking, password or data mining, or any other means.
-
-Although we are not obligated to monitor access to or use of the Services, we
-have the right to do so for the purpose of operating them, to ensure compliance
-with these Terms, and to comply with applicable law or other legal requirements.
-We have the right to investigate violations of these Terms or conduct that
-affects the Services. We may also consult and cooperate with law enforcement
-authorities to prosecute Users who violate the law.
-
-If you find something that violates our User Guidelines, please let us know, and
-we will review it.
-
-8. **LINKING AND CITATION OF CONTENT**
-
-Deno does not object to links on third-party Services to our homepage in an
-appropriate context. However, “framing” or “mirroring” the Services or the
-Content is prohibited without the prior express written consent of Deno.
-
-9. **RESTRICTIONS**
-
-The Services are available only for individuals aged 18 years or older. If you
-are under 18 years of age, then please do not access and/or use the Services. By
-entering into this Agreement, you represent and warrant that you are 18 years or
-older.
-
-10. **FEEDBACK**
-
-We welcome and encourage you to provide feedback, comments, and suggestions for
-improvements to the Services and our services (“Feedback”). Although we
-encourage you to e-mail us, we do not want you to, and you should not, e-mail us
-any content that contains confidential information. With respect to any Feedback
-you provide, we shall be free to use and disclose any ideas, concepts, know-how,
-techniques, or other materials contained in your Feedback for any purpose
-whatsoever, including, but not limited to, the development, production and
-marketing of products and services that incorporate such information, without
-compensation or attribution to you.
-
-11. **NO WARRANTIES; LIMITATION OF LIABILITY**
-
-THE SERVICES AND THE CONTENT ARE PROVIDED ON AN “AS IS” AND “AS AVAILABLE”
-BASIS, AND NEITHER DENO NOR DENO’S SUPPLIERS MAKE ANY WARRANTIES WITH RESPECT TO
-THE SAME OR OTHERWISE IN CONNECTION WITH THIS AGREEMENT, AND DENO HEREBY
-DISCLAIMS ANY AND ALL EXPRESS, IMPLIED, OR STATUTORY WARRANTIES, INCLUDING,
-WITHOUT LIMITATION, ANY WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE, AVAILABILITY, ERROR-FREE OR UNINTERRUPTED OPERATION,
-AND ANY WARRANTIES ARISING FROM A COURSE OF DEALING, COURSE OF PERFORMANCE, OR
-USAGE OF TRADE. TO THE EXTENT THAT DENO AND DENO’S SUPPLIERS MAY NOT AS A MATTER
-OF APPLICABLE LAW DISCLAIM ANY IMPLIED WARRANTY, THE SCOPE AND DURATION OF SUCH
-WARRANTY WILL BE THE MINIMUM PERMITTED UNDER SUCH LAW.
-
-WITHOUT LIMITING THE FOREGOING, WE DO NOT WARRANT, GUARANTEE OR MAKE ANY
-REPRESENTATION, NOR SHALL WE BE RESPONSIBLE FOR (A) THE CORRECTNESS, ACCURACY,
-RELIABILITY, COMPLETENESS OR CURRENCY OF THE SERVICES; OR (B) ANY RESULTS
-ACHIEVED OR ACTION TAKEN BY YOU IN RELIANCE ON THE SERVICES OR THE CONTENT OR
-ALERTS PROVIDED THROUGH THE SERVICES. ANY DECISION, ACT OR OMISSION OF YOURS
-THAT IS BASED ON THE SERVICES OR THE CONTENT OR ALERTS PROVIDED THROUGH THE
-SERVICES IS AT YOUR OWN AND SOLE RISK. THE SERVICES AND THE CONTENT AND ALERTS
-PROVIDED THROUGH THE SERVICES IS PROVIDED AS A CONVENIENCE ONLY AND DOES NOT
-REPLACE THE NEED TO REVIEW ITS ACCURACY, COMPLETENESS AND CORRECTNESS.
-
-IN CONNECTION WITH ANY WARRANTY, CONTRACT, OR COMMON LAW TORT CLAIMS: (I) WE
-SHALL NOT BE LIABLE FOR ANY INCIDENTAL OR CONSEQUENTIAL DAMAGES, LOST PROFITS,
-OR DAMAGES RESULTING FROM LOST DATA OR BUSINESS INTERRUPTION RESULTING FROM THE
-USE OR INABILITY TO ACCESS AND USE THE SERVICES, EVEN IF WE HAVE BEEN ADVISED OF
-THE POSSIBILITY OF SUCH DAMAGES; AND (II) ANY DIRECT DAMAGES THAT YOU MAY SUFFER
-AS A RESULT OF YOUR USE OF THE SERVICES, SHALL BE LIMITED TO THE GREATER OF (I)
-MONIES YOU HAVE PAID US IN CONNECTION WITH YOUR USE OF THE SERVICES DURING THE
-TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE DATE THAT GAVE RISE TO THE CLAIM OR
-(II) ONE HUNDRED DOLLARS ($100).
-
-12. **EXTERNAL SITES**
-
-The Services may contain links to third-party websites (“External Sites”). These
-links are provided solely as a convenience to you and not as an endorsement by
-us of the content on such External Sites. The content of such External Sites is
-developed and provided by others. You should contact the website administrator
-or webmaster for those External Sites if you have any concerns regarding such
-links or any content located on such External Sites. We are not responsible for
-the content of any linked External Sites and do not make any representations
-regarding the content or accuracy of materials on such External Sites. You
-should take precautions when downloading files from all websites to protect your
-computer from viruses and other destructive programs. If you decide to access
-linked External Sites, you do so at your own risk.
-
-13. **REPRESENTATIONS AND WARRANTIES**
-
-You represent and warrant that you have: (i) all rights and permissions
-necessary to provide us with or grant us access to and use of User Data, and
-(ii) obtained all necessary and appropriate consents, permissions, and
-authorizations in accordance with all applicable laws and regulations with
-respect to User Data provided hereunder.
-
-14. **INDEMNIFICATION**
-
-You will indemnify, defend, and hold Deno, its affiliates, and our and their
-respective shareholders, members, officers, directors, employees, agents, and
-representatives (collectively, “Deno Indemnitees”) harmless from and against any
-and all damages, liabilities, losses, costs, and expenses, including reasonable
-attorney’s fees (collectively, “Losses”) incurred by any Deno Indemnitee in
-connection with a third-party claim, action, or proceeding (each, a “Claim”)
-arising from your (i) breach of this Agreement, including but not limited to,
-any breach of your representations and warranties; (ii) misuse of the Services,
-and/or the Content; (iii) negligence, gross negligence, willful misconduct,
-fraud, misrepresentation or violation of law; or (iv) violation of any
-third-party right, including without limitation any copyright, trademark,
-property, or privacy right; _provided_, _however_, that the foregoing
-obligations shall be subject to our: (i) promptly notifying you of the Claim;
-(ii) providing you, at your expense, with reasonable cooperation in the defense
-of the Claim; and (iii) providing you with sole control over the defense and
-negotiations for a settlement or compromise.
-
-15. **COMPLIANCE WITH APPLICABLE LAWS**
-
-The Services are based in the United States. We make no claims concerning
-whether the Services may be viewed or be appropriate for use outside of the
-United States. If you access the Services from outside of the United States, you
-do so at your own risk. Whether inside or outside of the United States, you are
-solely responsible for ensuring compliance with the laws of your specific
-jurisdiction.
-
-16. **TERM; TERMINATION**
-
-These Terms, and your right to access and use the Services, will commence upon
-your acceptance of these Terms and will continue for the period of your
-Subscription and/or use of the Services.
-
-We reserve the right, in our sole discretion, to restrict, suspend, or terminate
-these Terms and your access to all or any part of the Services, at any time and
-for any reason without prior notice or liability. We reserve the right to
-change, suspend, or discontinue all or any part of the Services at any time
-without prior notice or liability. The Sections “Description of the Services;
-Right to Use and Access the Service;” “Use of Personal Information,”
-“Intellectual Property,” “Feedback,” “No Warranties; Limitation of Liability,”
-“Indemnification,” “Compliance with Applicable Laws,” “Term; Termination,”
-“Binding Arbitration,” “Class Action Waiver,” “Equitable Relief,” “Controlling
-Law; Exclusive Forum,” and “Miscellaneous” shall survive the termination of
-these Terms.
-
-17. **BINDING ARBITRATION**
-
-In the event of a dispute arising under or relating to this Agreement, and/or
-the Services (each, a “Dispute”), such dispute will be finally and exclusively
-resolved by binding arbitration governed by the Federal Arbitration Act (“FAA”).
-NEITHER PARTY SHALL HAVE THE RIGHT TO LITIGATE SUCH CLAIM IN COURT OR TO HAVE A
-JURY TRIAL, EXCEPT EITHER PARTY MAY BRING ITS CLAIM IN ITS LOCAL SMALL CLAIMS
-COURT, IF PERMITTED BY THAT SMALL CLAIMS COURT RULES AND IF WITHIN SUCH COURT’S
-JURISDICTION. ARBITRATION IS DIFFERENT FROM COURT, AND DISCOVERY AND APPEAL
-RIGHTS MAY ALSO BE LIMITED IN ARBITRATION. All disputes will be resolved before
-a neutral arbitrator selected jointly by the parties, whose decision will be
-final, except for a limited right of appeal under the FAA. The arbitration shall
-be commenced and conducted by JAMS pursuant to its then current Comprehensive
-Arbitration Rules and Procedures and in accordance with the Expedited Procedures
-in those rules, or, where appropriate, pursuant to JAMS’ Streamlined Arbitration
-Rules and Procedures. All applicable JAMS’ rules and procedures are available at
-the JAMS website [www.jamsadr.com](http://www.jamsadr.com). Each party will be
-responsible for paying any JAMS filing, administrative, and arbitrator fees in
-accordance with JAMS rules. Judgment on the arbitrator’s award may be entered in
-any court having jurisdiction. This clause shall not preclude parties from
-seeking provisional remedies in aid of arbitration from a court of appropriate
-jurisdiction. The arbitration may be conducted in person, through the submission
-of documents, by phone, or online. If conducted in person, the arbitration shall
-take place in the United States county where you reside. The parties may
-litigate in court to compel arbitration, to stay a proceeding pending
-arbitration, or to confirm, modify, vacate, or enter judgment on the award
-entered by the arbitrator. The parties shall cooperate in good faith in the
-voluntary and informal exchange of all non-privileged documents and other
-information (including electronically stored information) relevant to the
-Dispute immediately after commencement of the arbitration. As set forth in
-Section 18 below, nothing in this Agreement will prevent us from seeking
-injunctive relief in any court of competent jurisdiction as necessary to protect
-our proprietary interests.
-
-18. **CLASS ACTION WAIVER**
-
-You agree that any arbitration or proceeding shall be limited to the Dispute
-between us and you individually. To the full extent permitted by law, (i) no
-arbitration or proceeding shall be joined with any other; (ii) there is no right
-or authority for any Dispute to be arbitrated or resolved on a class
-action-basis or to utilize class action procedures; and (iii) there is no right
-or authority for any Dispute to be brought in a purported representative
-capacity on behalf of the general public or any other persons. YOU AGREE THAT
-YOU MAY BRING CLAIMS AGAINST US ONLY IN YOUR INDIVIDUAL CAPACITY AND NOT AS A
-PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING.
-
-19. **EQUITABLE RELIEF**
-
-You acknowledge and agree that in the event of a breach or threatened violation
-of our intellectual property rights and confidential and proprietary information
-by you, we will suffer irreparable harm and will therefore be entitled to
-injunctive relief to enforce this Agreement. We may, without waiving any other
-remedies under this Agreement, seek from any court having jurisdiction any
-interim, equitable, provisional, or injunctive relief that is necessary to
-protect our rights and property pending the outcome of the arbitration
-referenced above. You hereby irrevocably and unconditionally consent to the
-personal and subject matter jurisdiction of the federal and state courts in the
-State of New York for purposes of any such action by us.
-
-20. **CONTROLLING LAW; EXCLUSIVE FORUM**
-
-The Agreement and any action related thereto will be governed by the laws of the
-State of New York without regard to its conflict of laws provisions. The parties
-hereby consent and agree to the exclusive jurisdiction of the state and federal
-courts located in the State of New York for all suits, actions, or proceedings
-directly or indirectly arising out of or relating to this Agreement, and waive
-any and all objections to such courts, including but not limited to, objections
-based on improper venue or inconvenient forum, and each party hereby irrevocably
-submits to the exclusive jurisdiction of such courts in any suits, actions, or
-proceedings arising out of or relating to this Agreement
-
-21. **MISCELLANEOUS**
-
-    Notwithstanding anything to the contrary set forth in these Terms, each
-    party may during the term of this Agreement, use the other party’s name
-    and/or logo for marketing and promotional purposes, including, without
-    limitation, identifying Authorized Users as a customer of Deno on Deno’s
-    website or elsewhere. You may not assign any of your rights, duties, or
-    obligations under these Terms to any person or entity, in whole or in part,
-    without written consent from Deno. Our failure to act on or enforce any
-    provision of the Agreement shall not be construed as a waiver of that
-    provision or any other provision in this Agreement. No waiver shall be
-    effective against us unless made in writing, and no such waiver shall be
-    construed as a waiver in any other or subsequent instance. Except as
-    expressly agreed by us and you in writing, the Agreement constitutes the
-    entire agreement between you and us with respect to the subject matter, and
-    supersedes all previous or contemporaneous agreements, whether written or
-    oral, between the parties with respect to the subject matter. The section
-    headings are provided merely for convenience and shall not be given any
-    legal import. This Agreement will inure to the benefit of our successors,
-    assigns, licensees, and sublicensees.
-
-**Copyright 2024 Deno Land Inc. All rights reserved.**
+**DENO 条款和条件** 2024年9月9日
+
+本条款和条件（“条款”）是您与 Deno Land Inc.（“Deno”，“我们”，“我们公司”或“我们的”）之间的法律协议。它们规定了您可以访问和使用（i）我们的网站 [https://deno.com](https://deno.com) （“网站”）；（ii）任何链接到这些条款的网站、应用程序或其他数字属性；以及（iii）我们通过以下网站在我们的专有平台（“平台”）上向您提供的产品和服务（“Deno 产品”）：
+
+- Deno Deploy ([https://deno.com/deploy](https://deno.com/deploy))；以及
+- Deno Subhosting ([https://deno.com/subhosting](https://deno.com/subhosting))。
+
+通过访问或使用网站或任何链接到这些条款的其他数字属性，您可以了解 Deno 及其技术平台，注册客户还可以访问 Deno 产品（统称为“服务”）。
+
+请仔细阅读这些条款。通过访问和/或使用服务，您确认您已阅读、理解并同意受到这些条款、数据处理附录（“DPA”）和我们的隐私政策（“隐私政策”）的法律约束，这些政策通过引用并入本条款并构成协议的一部分（统称为“协议”）。如果您不同意本协议中的任何条款，请不要使用服务。
+
+如果您代表公司或其他法律实体接受或同意本协议，您声明并保证您有权利使该公司或其他法律实体受本协议的约束，在这种情况下，“您”和“您的”将指代并适用于该公司或其他法律实体。
+
+我们保留在自行决定的情况下，随时修改、停止或终止任何服务的可用性，或修改本协议，且不需提前通知。我们鼓励您在每次访问或使用服务时检查这些条款及上面的“最后更新”日期。在我们发布对这些条款的修改后，继续访问或使用服务，即表示您同意受修改后协议的约束。如果修改后的协议您无法接受，您唯有停止访问或使用服务。
+
+Deno 还提供收费的产品和服务（包括不时的免费试用），这些产品和服务可能提供对某些数据产品和/或服务的访问（“付费产品”）。我们根据您在购买时做出的适用付费产品的商业协议（每个“商业协议”）提供对我们的付费产品的访问和使用。如果本条款与您购买的付费产品的适用商业协议的条款和条件之间存在冲突，以商业协议的条款和条件为准。
+
+未在这些条款中定义的专有名词应具有我们隐私政策中规定的含义。
+
+**以下标题为“具有约束力的仲裁”和“集体诉讼豁免”的部分包含具有约束力的仲裁协议和集体诉讼豁免。它们会影响您的法律权利。请仔细阅读。**
+
+1. **服务的描述；访问和使用服务的权利**
+
+**Deno Deploy** 和 **Deno Subhosting** 是全球分布的无服务器 JavaScript 应用程序平台。您的 JavaScript、TypeScript 和 WebAssembly 代码在地理位置接近用户的管理服务器上运行，提供低延迟和更快的响应时间。部署和子托管应用程序在快速、轻便的 V8 隔离环境中运行，而不是在虚拟机上，由 Deno 运行时提供支持。
+
+在本协议的条款和条件的限制下，Deno 在本协议期间授予您有限的、非独占的、不可转让的、不可再许可的、可撤回的权利，仅为您的内部商业目的访问和使用服务。
+
+Deno 保留在任何时候，且无须通知或对您承担责任的权利：
+
+1. 阻止和禁用任何因某种原因使平台不稳定的部署；
+2. 更改服务运行的区域；
+3. 更改服务支持的功能；以及
+4. 修改或停止其他与服务相关的任何功能、功能或内容的可用性。
+
+您同意，我们不对您或任何第三方因服务或其任何部分的修改、暂停或中止而承担责任。您可以随时停止使用服务。
+
+2. **账户凭证**
+
+   为了使用 Deno 产品，您必须是“授权用户”。要成为授权用户，您需要在平台上创建一个账户，并通过 GitHub 进行身份验证（统称为“账户凭证”）。在创建账户时，每个授权用户必须提供真实、准确、当前和完整的信息。每个账户凭证只能由一个授权用户使用。每个授权用户对其账户凭证的保密性和使用负责，包括与其账户凭证相关联的所有活动。授权用户必须及时通知我们需要停用任何账户凭证。Deno 没有义务接受任何人作为授权用户，并可全权接受或拒绝任何注册。我们有权在任何时候出于任何原因禁用任何账户凭证，包括在我们自行决定的情况下认为您未能遵守这些条款的情况下。
+
+3. **个人信息的使用**
+
+您使用服务可能涉及将某些个人信息传输给我们。我们关于个人信息收集和使用的政策根据我们的隐私政策进行，这里通过引用予以完全纳入。
+
+4. **知识产权**
+
+服务可能包含材料，例如软件、文本、图形、图像、声音录音、视听作品以及由 Deno 或代表 Deno 提供的其他材料（统称为“内容”）。内容可能属于我们或第三方。内容受美国和外国法律的保护。未经授权使用内容可能违反版权、商标和其他法律。您对内容没有任何权利，且除非本协议许可，您不得使用内容。未经我们事先书面同意，您不得以任何其他方式使用内容。您必须在您制作的任何内容副本上保留原始内容中包含的所有版权和其他专有声明。您不得销售、转让、分配、许可、再许可或修改内容，或以任何方式复制、展示、公开执行、制作衍生版本、分发或以其他方式使用内容，用于任何公共或商业目的。将内容用于任何其他网站或在网络计算机环境中发布的任何目的都是明确禁止的。
+
+如果您违反本协议的任何部分，您访问和/或使用内容及服务的权限将自动终止，并且您必须立即销毁您制作的所有内容副本。
+
+Deno 的商标、服务标志和徽标（“Deno 商标”）在服务中使用和展示，属于 Deno 的注册或未注册商标或服务标志。其他公司、产品和服务名称可能属于其他人的商标或服务标志（“第三方商标”，与 Deno 商标统称为“商标”）。服务中的任何内容不应被解读为隐含、禁止或以其他方式授予任何使用商标的许可或权利，除非我们为每种使用事先明确书面许可。除非我们事先书面批准建立链接的目的，否则使用商标作为从任何网站的链接的一部分是被禁止的。由 Deno 商标的使用所产生的所有商誉均为我们的利益。
+
+服务的元素受到商业外观、商标、不正当竞争和其他州和联邦法律的保护，任何人不得以任何方式（包括但不限于使用框架或镜像的方式）全部或部分复制或模仿。内容的任何部分不得在没有我们的明确书面同意下进行转播。
+
+5. **用户数据；使用数据；汇总数据**
+
+就本协议而言，“用户数据”是指（i）我们通过连接到授权用户的业务系统所获取的任何数据和信息，包括但不限于事件日志；以及（ii）授权用户通过服务提交的任何数据和信息；而“使用数据”是指 Deno 收集的关于服务性能和您使用服务的匿名分析数据，包括但不限于您访问服务的日期和时间、访问的服务部分、访问这些页面的频率和次数、在特定时间段内使用服务的次数以及其他使用和性能数据。
+
+在双方之间，授权用户拥有对用户数据的所有权、所有权利、标题和利益，包括对其所做的所有修改、改进、适应、增强或翻译以及其中的所有知识产权。授权用户特此授予 Deno 一项非独占的、全球性的、完全支付的、免版税的权利和许可，并有权授予再许可，以便在本协议的有效期内，复制、执行、使用、存储、归档、修改、执行、展示和分发用户数据；（i）在本协议的有效期内，为 Deno 在本协议下的义务服务；以及（ii）为 Deno 的内部商业目的，包括使用这些数据分析、更新和改进服务及 Deno 的分析能力以及进行基准测试。
+
+尽管本协议另有规定，我们可能以匿名和汇总的形式（“汇总数据”）使用，并可能允许我们的第三方服务提供商访问和使用用户数据以及我们可能收集的任何使用数据，用于操作、维护、管理和改进我们的产品和服务，包括服务。汇总数据不会识别授权用户或任何个人。您特此同意，我们可以收集、使用、发布、传播、转让和以其他方式利用此类汇总数据。
+
+6. **费用**
+
+Deno 提供并且授权用户可以为服务购买月度或年度订阅（“订阅”），费用在我们网站上规定（“订阅费”）。Deno 可以自行决定在任何时候增加新费用和收费或修订费用和收费。订阅的付款应在购买时立即支付。通过购买，您同意通过我们的第三方支付处理器（“第三方支付处理器”）向 Deno 支付所有当时适用的订阅费用。您向第三方支付处理器提供的任何信息将根据该第三方支付处理器的隐私政策和使用条款进行处理。您必须为您的账户提供最新、完整和准确的信息，并及时更新所有信息以保持该账户信息的最新、完整和准确（例如，账单地址、信用卡号码或信用卡到期日期的变化）。此外，如果付款方式被取消（例如，因丢失或失窃）或您意识到可能的安全漏洞（例如，未经授权披露或使用您的用户名或密码），您必须尽快通知我们。有关此类信息的更改可以通过您的账户进行。
+
+通过购买订阅，您承认您的订阅有初始和重复的付款费用，按当时的订阅费率收取，您同意 Deno 可以在未再征得您进一步授权的情况下，向您选择的付款方式提起每月收费，直到您通知我们希望取消订阅或更改付款方式。您还接受在取消之前的所有定期费用的责任，包括在您的付款卡过期后，Deno 根据适用情况处理的任何费用。
+
+您可以通过向我们发送电子邮件至 [support@deno.com](mailto:support@deno.com) 更改或终止您的订阅。如果您终止您的订阅，您可以在当前计费周期结束之前使用您的订阅，并且订阅将在该期限到期后不再续订。Deno 不会退还任何预付款项。Deno 可以根据这些条款立即终止或暂停您的订阅，无论有无理由，包括未按时付款的情况下。如果我们终止或暂停您的订阅，您使用任何与订阅相关的软件或内容的权利也将终止或暂停（如适用）。
+
+Deno 有时可能会提供服务的免费试用。Deno 保留自行决定随时停止提供服务的免费试用的权利，且不对您承担任何责任。
+
+7. **社区规范**
+
+通过访问和/或使用服务，您特此同意遵守以下指南：
+
+- 您不会将服务用于任何非法目的；
+- 您不会访问或使用服务收集任何市场研究以支持竞争业务；
+- 您不会上传、发布、电子邮件、传输或以其他方式提供任何侵犯任何人或实体的版权、商标、公开权或其他专有权利的内容；
+- 您不会冒充任何人或实体或虚假陈述或以其他方式歪曲与任何人或实体的关系；
+- 您不会反编译、逆向工程、拆卸或以其他方式试图识别服务中任何软件或其他产品或过程的源代码或接口协议；
+- 您不会删除或修改任何放置在服务上的专有标记或限制性说明；
+- 您不会以任何可适用的法律违反情况下使用服务或其任何部分，以构建竞争产品或服务，或用于本条款中未明确允许的任何目的；
+- 您不会遮盖、遮挡、屏蔽或以任何方式干扰服务中的任何广告和/或安全功能；
+- 您不会规避、删除、修改、禁用、降级或阻碍服务中的任何保护措施；
+- 您不会引入、发布或上传任何有害代码。这里所称的“有害代码”是指故意设计用来干扰、修改、访问、删除、损坏、禁用、伤害或以任何方式阻碍服务，或任何其他相关软件、固件、硬件、计算机系统或网络的计算机代码、程序或编程设备（包括但不限于“特洛伊木马”、“病毒”、“蠕虫”、“定时炸弹”、“定时锁”、“设备”、“陷阱”、“访问代码”或“死掉”或“陷阱门”设备）或任何其他有害、恶意或隐藏的程序、例程或机制，导致服务停止运行或损坏或破坏数据、存储介质、程序、设备或通信，或以其他方式干扰服务的操作；
+- 您不会采取任何行动，施加或可能施加（由我们自行决定）不合理或不成比例的负担在我们的技术基础设施上；
+- 您不会干扰或尝试中断服务的正常运行，使用任何病毒、设备、信息收集或传输机制、软件或例程，或通过黑客、密码或数据挖掘或其他方式访问或尝试获取与服务有关的任何数据、文件或密码。
+
+虽然我们没有义务监控对服务的访问或使用，但我们有权这样做以便安全运行，确保遵守这些条款，并遵守适用法律或其他法律要求。我们有权调查这些条款的违规情况或影响服务的行为。我们还可能咨询和配合执法机构，对违反法律的用户进行起诉。
+
+如果您发现任何违反我们用户指南的内容，请告知我们，我们将进行审查。
+
+8. **链接和引用内容**
+
+Deno 不反对第三方服务上指向我们主页的链接，只要它们处于适当的背景中。不过，“框架”或“镜像”服务或内容在没有 Deno 的事先书面同意的情况下是被禁止的。
+
+9. **限制**
+
+服务仅适用于年龄在18岁或以上的个人。如果您未满18岁，请不要访问和/或使用服务。通过签订本协议，您声明并保证您已满18岁。
+
+10. **反馈**
+
+我们欢迎并鼓励您提供对服务和我们服务的反馈、评论和改进建议（“反馈”）。尽管我们鼓励您通过电子邮件与我们联系，但我们不希望您向我们发送包含机密信息的任何内容。关于您提供的任何反馈，我们将可以自由使用和披露其中包含的任何想法、概念、知识、技术或其他材料，出于任何目的，包括但不限于处理、开发、生产和市场营销包含该信息的产品和服务，而无须向您支付补偿或给予署名。
+
+11. **无保证；责任限制**
+
+服务和内容是在“按现状”和“按可用性”基础上提供的，Deno 和 Deno 的供应商对其或与本协议相关的内容不作任何保证，并且 Deno 在此明确放弃所有明示、暗示或法定的保证，包括但不限于任何不侵权、适销性、特定用途适用性、可用性、无错误或无中断操作的保证，以及任何基于交易过程、执行过程或商业使用的保证。在适用法律不允许 Deno 和 Deno 的供应商放弃任何暗示保证的情况下，该保证的范围和持续时间将为适用法律允许的最低限度。
+
+在不限制前述内容的情况下，我们不保证、也不作任何声明，亦不对以下事项负责：(A) 服务的正确性、准确性、可靠性、完整性或最新性；或(B) 您依赖服务或通过服务提供的内容或提示所取得的任何结果、采取的任何行动。您基于服务或通过服务提供的内容或提示所做的任何决定、行动或遗漏均由您自行承担风险。服务及通过服务提供的内容和提示仅作为方便，并不取代对其准确性、完整性和正确性的审查。
+
+就任何保证、合同或普通法侵权索赔而言：(I) 我们不对因使用或无法访问和使用服务而造成的任何偶然或后果性损害、利润损失或因数据丢失或业务中断而造成的损失负责，即使我们已被告知可能会发生此类损害；以及(II) 您因使用服务所遭受的任何直接损害，应限于您在造成索赔时立即之前的十二（12）个月内支付给我们的费用或一百美元（$100）。
+
+12. **外部网站**
+
+服务可能包含指向第三方网站（“外部网站”）的链接。这些链接仅为您的方便提供，并不表示我们认可该外部网站的内容。此类外部网站的内容由其他人开发和提供。如果您对这些链接或该等外部网站上的任何内容有任何疑虑，应联系该外部网站的管理员或网站负责人。我们对任何链接的外部网站的内容不承担责任，也不就该等外部网站上的内容或材料的准确性作出任何声明。您在从所有网站下载文件时应采取预防措施，以保护您的计算机免受病毒和其他破坏性程序的侵害。如果您决定访问链接的外部网站，风险由您自行承担。
+
+13. **声明和保证**
+
+您声明并保证您拥有：（i）提供给我们或授予我们访问和使用用户数据所需的所有权利和权限；以及（ii）根据所有适用法律和法规，已获得关于所提供用户数据的所有必要和适当的同意、权限和授权。
+
+14. **赔偿**
+
+您将赔偿、辩护并使 Deno、其关联公司及我们的及其各自的股东、成员、官员、董事、员工、代理人和代表（统称为“Deno 赔偿方”）免受与您（i）违反本协议，包括但不限于您声明和保证的任何违反；（ii）滥用服务和/或内容；（iii）疏忽、重大疏忽、故意不当行为、欺诈、虚假陈述或违法行为；或（iv）违反任何第三方权利（包括但不限于任何版权、商标、财产权或隐私权）相关的任何损害、责任、损失、费用和开支，包括合理的律师费（统称为“损失”）。一旦发生索赔，您应及时通知我们；在此过程中，为您承担合理的合作费用，并在您赔偿的控制下，进行辩护和和解谈判。
+
+15. **遵守适用法律**
+
+服务的基础是在美国。我们不对根据国家法律的冲突条款主张服务可以在美国以外的地方查看或适用。如果您从美国以外访问服务，风险由您自行承担。无论是在美国境内还是境外，您均需自行负责确保遵守特定管辖区的法律法规。
+
+16. **期限；终止**
+
+本条款以及您访问和使用服务的权利将在您接受这些条款时开始，并持续至您订阅和/或使用服务的期限。
+
+我们保留在自行决定的情况下，随时限制、暂停或终止这些条款以及您对服务的部分或全部访问的权利，无需提前通知或承担责任。我们保留在任何时候无须提前通知或承担责任，变更、暂停或终止服务的全部或任何部分的权利。“服务的描述；访问和使用服务的权利”，“个人信息使用”，“知识产权”，“反馈”，“无保证；责任限制”，“赔偿”，“遵守适用法律”，“期限；终止”，“具有约束力的仲裁”，“集体诉讼豁免”，“平等救济”，“适用法律；专属论坛”和“其他条款”部分应在这些条款终止后继续有效。
+
+17. **具有约束力的仲裁**
+
+如果因本协议和/或服务所引起的任何争议（“争议”）应通过由《联邦仲裁法》（“FAA”）管辖的具有约束力的仲裁最终、独家解决。任何一方均无权在法庭上诉讼该索赔或要求陪审团审判，除非任何一方可根据当地小额索赔法庭规则在小额索赔法庭提起索赔。仲裁与法庭不同，发现和上诉权利也可能在仲裁中受到限制。所有争议将由双方共同选择的中立仲裁人解决，其决定为最后决定，除非根据FAA的有限上诉权。仲裁应由 JAMS 根据当时适用的综合仲裁规则和程序进行，并根据这些规则中的加快程序进行，或在适用情况下，根据 JAMS 精简仲裁规则和程序进行。所有适用的 JAMS 规则和程序可在 JAMS 网站 [www.jamsadr.com](http://www.jamsadr.com) 上获得。每一方负责根据 JAMS 规则支付任何 JAMS 费用、管理费和仲裁人费用。仲裁人裁定的判决可在任何有管辖权的法院进行登记。此条款不妨碍双方在适当管辖权的法院寻求临时救济以支持仲裁。仲裁可以亲自进行，也可以通过提交文件、电话或在线方式进行。如果现场进行仲裁，仲裁应在您居住的美国县进行。双方可以在法院仲裁请求、暂停仲裁程序或确认、修改、撤销或对仲裁人做出的裁决进行判决。在仲裁开始后，双方应善意合作，自愿和非正式地交换与争议相关的所有非特权文件和其他信息（包括电子存储信息）。如下面第18节所述，本协议中的任何内容均不得妨碍我们向任何有管辖权的法院寻求禁令救济，以保护我们的专有权益。
+
+18. **集体诉讼豁免**
+
+您同意任何仲裁或程序应限于您与我们之间的争议。在法律允许的最大范围内，（i）不应将任何仲裁或程序与任何其他诉讼联合；（ii）没有权利或权限以集体诉讼的方式仲裁或解决任何争议或利用集体诉讼程序；（iii）没有权利或权限代表公众或任何其他人提起的所谓代理诉讼。您同意仅以个人身份对我们提起索赔，而不是作为任何假定的集体或代表性诉讼中的原告或集体成员。
+
+19. **平等救济**
+
+您承认并同意，如果您违反或威胁违反我们的知识产权和机密及专有信息，我们将遭受无法弥补的损害，因此有权寻求禁令救济以执行本协议。我们可不放弃其他在本协议下的救济，向任何有管辖权的法院请求任何临时、平等、临时或禁令救济，以保护我们的权利和财产，等待上述仲裁结果。您特此不可撤销地、自愿地同意纽约州联邦和州法院的个人和主题管辖权，以便我们提起任何行动。
+
+20. **适用法律；专属论坛**
+
+本协议及与之相关的任何行为应受纽约州法律管辖，而不考虑其法律冲突条款。各方特此同意将纽约州的州和联邦法院作为所有直接或间接因本协议引起或与之相关的诉讼、行动或程序的专属管辖法院，并放弃对此类法院的任何和所有异议，包括但不限于基于不当地点或不便论坛的异议，并各方特此不可撤销地向以上法院的专属管辖权提交任何因本协议引起或与之相关的诉讼、行动或程序。
+
+21. **其他条款**
+
+    尽管这些条款中有相反的规定，每一方可以在本协议有效期内出于市场营销和推广目的使用对方名称和/或标志，包括但不限于在 Deno 网站或其他地方将授权用户识别为 Deno 的客户。未经 Deno 书面同意，您不得将本条款下的任何权利、义务或责任转让给任何人或实体，无论是全部还是部分。我们未采取行动或执行本协议的任何条款不应被解释为对该条款或本协议中任何其他条款的放弃。任何放弃对我们无效，除非以书面形式作出，并且不应被解释为在其他或后续实例中放弃。除非我们和您以书面形式明示同意，该协议构成您和我们在主题方面的全部协议，并取代双方在主题方面的所有先前或同时存在的协议，无论是书面还是口头。各章节标题仅为方便而提供，不应被赋予任何法律意义。本协议将惠及我们的继承者、受让人、许可人和再许可人。
+
+**版权所有 2024 Deno Land Inc. 保留所有权利。**

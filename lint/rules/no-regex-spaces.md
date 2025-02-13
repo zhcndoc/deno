@@ -1,24 +1,20 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows multiple spaces in regular expression literals.
+禁止在正则表达式字面量中使用多个空格。
 
-Multiple spaces in regular expression literals are generally hard to read when
-the regex gets complicated. Instead, it's better to use only one space character
-and specify how many times spaces should appear with the `{n}` syntax, for
-example:
+当正则表达式变得复杂时，正则表达式字面量中的多个空格通常难以阅读。相反，最好只使用一个空格字符，并通过 `{n}` 语法指定空格应该出现的次数，例如：
 
 ```typescript
-// Multiple spaces in the regex literal are harder to understand how many
-// spaces are expected to be matched
+// 正则表达式字面量中的多个空格使得预期匹配的空格数量更难理解
 const re = /foo   bar/;
 
-// Instead use `{n}` syntax for readability
+// 使用 `{n}` 语法提高可读性
 const re = /foo {3}var/;
 ```
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const re1 = /  /;
@@ -32,7 +28,7 @@ const re7 = new RegExp(" a b  c d ");
 const re8 = new RegExp("foo  {3}bar");
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const re1 = /foo/;

@@ -5,19 +5,14 @@ oldUrl: /runtime/manual/tools/lsp/
 
 :::info
 
-Usually humans do not use this subcommand directly. The 'deno lsp' can provide
-IDEs with go-to-definition support and automatic code formatting.
+通常情况下，用户不会直接使用此子命令。`deno lsp` 可以为IDE提供跳转到定义的支持以及自动代码格式化。
 
 :::
 
-Starts the Deno language server. The language server is used by editors to
-provide features like intellisense, code formatting, and more. Read more about
-[integrating with the Deno LSP](/runtime/reference/lsp_integration/).
+启动 Deno 语言服务器。语言服务器被编辑器用来提供诸如智能提示、代码格式化等功能。阅读更多关于 [与 Deno LSP 集成](/runtime/reference/lsp_integration/)的信息。
 
-## Description
+## 描述
 
-The 'deno lsp' subcommand provides a way for code editors and IDEs to interact
-with Deno using the Language Server Protocol.
+`deno lsp` 子命令为代码编辑器和IDE提供了一种与 Deno 互动的方式，使用语言服务器协议。
 
-Read more about
-[how to connect editors and IDEs to `deno lsp`](https://deno.land/manual@v1.42.4/getting_started/setup_your_environment#editors-and-ides).
+阅读更多关于 [如何将编辑器和IDE连接到 `deno lsp`](https://deno.land/manual@v1.42.4/getting_started/setup_your_environment#editors-and-ides)。

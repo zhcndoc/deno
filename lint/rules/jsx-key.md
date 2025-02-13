@@ -2,10 +2,9 @@
 tags: []
 ---
 
-Ensure the `key` attribute is present when passing iterables into JSX. It allows
-frameworks to optimize checking the order of elements.
+确保在将可迭代对象传递给 JSX 时存在 `key` 属性。这允许框架优化元素顺序的检查。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 const foo = [<div>foo</div>];
@@ -14,7 +13,7 @@ const foo = [<>foo</>];
 Array.from([1, 2, 3], () => <div />);
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 const foo = [<div key="a">foo</div>];

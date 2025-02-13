@@ -7,16 +7,15 @@ oldUrl:
 command: task
 ---
 
-## Description
+## 描述
 
-`deno task` provides a cross-platform way to define and execute custom commands
-specific to a codebase.
+`deno task` 提供了一种跨平台的方式来定义和执行特定于代码库的自定义命令。
 
-To get started, define your commands in your codebase's
-[Deno configuration file](/runtime/fundamentals/configuration/) under a
-`"tasks"` key.
+要开始使用，请在代码库的
+[Deno 配置文件](/runtime/fundamentals/configuration/) 中定义您的命令，位于一个
+`"tasks"` 键下。
 
-For example:
+例如：
 
 ```jsonc
 {
@@ -24,29 +23,20 @@ For example:
     "data": "deno task collect && deno task analyze",
     "collect": "deno run --allow-read=. --allow-write=. scripts/collect.js",
     "analyze": {
-      "description": "Run analysis script",
+      "description": "运行分析脚本",
       "command": "deno run --allow-read=. scripts/analyze.js"
     }
   }
 }
 ```
 
-## Specifying the current working directory
+## 指定当前工作目录
 
-By default, `deno task` executes commands with the directory of the Deno
-configuration file (ex. _deno.json_) as the current working directory. This
-allows tasks to use relative paths and continue to work regardless of where in
-the directory tree you happen to execute the deno task from. In some scenarios,
-this may not be desired and this behavior can be overridden with the `INIT_CWD`
-environment variable.
+默认情况下，`deno task` 使用 Deno 配置文件（例如 _deno.json_）的目录作为当前工作目录来执行命令。这允许任务使用相对路径，并继续工作，无论您从目录树的何处执行 deno task。在某些情况下，这可能不是所期望的，这种行为可以使用 `INIT_CWD` 环境变量覆盖。
 
-`INIT_CWD` will be set with the full path to the directory the task was run in,
-if not already set. This aligns with the same behavior as `npm run`.
+如果没有设置，`INIT_CWD` 将被设为任务运行所在目录的完整路径。这与 `npm run` 的行为一致。
 
-For example, the following task will change the current working directory of the
-task to be in the same directory the user ran the task from and then output the
-current working directory which is now that directory (remember, this works on
-Windows too because `deno task` is cross-platform).
+例如，以下任务将更改任务的当前工作目录，使之位于用户运行任务的相同目录，然后输出当前工作目录，现在就是该目录（请记住，这在 Windows 上也有效，因为 `deno task` 是跨平台的）。
 
 ```json
 {
@@ -56,17 +46,11 @@ Windows too because `deno task` is cross-platform).
 }
 ```
 
-## Getting directory `deno task` was run from
+## 获取 `deno task` 运行的目录
 
-Since tasks are run using the directory of the Deno configuration file as the
-current working directory, it may be useful to know the directory the
-`deno task` was executed from instead. This is possible by using the `INIT_CWD`
-environment variable in a task or script launched from `deno task` (works the
-same way as in `npm run`, but in a cross-platform way).
+由于任务使用 Deno 配置文件的目录作为当前工作目录，因此了解 `deno task` 是从哪个目录执行的可能会很有用。这可以通过在任务中或从 `deno task` 启动的脚本中使用 `INIT_CWD` 环境变量来实现（此方式与 `npm run` 的方式相同，但以跨平台方式实现）。
 
-For example, to provide this directory to a script in a task, do the following
-(note the directory is surrounded in double quotes to keep it as a single
-argument in case it contains spaces):
+例如，要将该目录提供给任务中的脚本，请执行以下操作（注意，目录用双引号括起来，以便在包含空格的情况下将其作为单个参数保持）：
 
 ```json
 {
@@ -76,10 +60,9 @@ argument in case it contains spaces):
 }
 ```
 
-## Wildcard matching of tasks
+## 通配符匹配任务
 
-The `deno task` command can run multiple tasks in parallel by passing a wildcard
-pattern. A wildcard pattern is specified with the `*` character.
+`deno task` 命令可以通过传递通配符模式并行运行多个任务。通配符模式用 `*` 字符指定。
 
 ```json title="deno.json"
 {
@@ -90,20 +73,17 @@ pattern. A wildcard pattern is specified with the `*` character.
 }
 ```
 
-Running `deno task "build-*"` will run both `build-client` and `build-server`
-tasks.
+运行 `deno task "build-*"` 将同时运行 `build-client` 和 `build-server` 任务。
 
 :::note
 
-**When using a wildcard** make sure to quote the task name (eg. `"build-*"`),
-otherwise your shell might try to expand the wildcard character, leading to
-suprising errors.
+**使用通配符时** 确保引用任务名称（例如 `"build-*"`），否则您的 shell 可能会尝试扩展通配符字符，从而导致意外错误。
 
 :::
 
-## Task dependencies
+## 任务依赖
 
-You can specify dependencies for a task:
+您可以为任务指定依赖项：
 
 ```json title="deno.json"
 {
@@ -118,9 +98,7 @@ You can specify dependencies for a task:
 }
 ```
 
-In the above example, running `deno task serve` will first execute `build` and
-`generate` tasks in parallel, and once both of them finish successfully the
-`serve` task will be executed:
+在上面的示例中，运行 `deno task serve` 将首先并行执行 `build` 和 `generate` 任务，一旦它们都成功完成，`serve` 任务将被执行：
 
 ```bash
 $ deno task serve
@@ -134,12 +112,9 @@ Task serve deno run -RN server.ts
 Listening on http://localhost:8000/
 ```
 
-Dependency tasks are executed in parallel, with the default parallel limit being
-equal to number of cores on your machine. To change this limit, use the
-`DENO_JOBS` environmental variable.
+依赖任务是并行执行的，默认的并行限制等于您机器上的核心数量。要更改此限制，请使用 `DENO_JOBS` 环境变量。
 
-Dependencies are tracked and if multiple tasks depend on the same task, that
-task will only be run once:
+依赖项会被跟踪，如果多个任务依赖同一任务，该任务只会运行一次：
 
 ```jsonc title="deno.json"
 {
@@ -178,7 +153,7 @@ Task a deno run a.js
 Running a
 ```
 
-If a cycle between dependencies is discovered, an error will be returned:
+如果发现依赖之间存在循环，将返回错误：
 
 ```jsonc title="deno.json"
 {
@@ -200,8 +175,7 @@ $ deno task a
 Task cycle detected: a -> b -> a
 ```
 
-You can also specify a task that has `dependencies` but no `command`. This is
-useful to logically group several tasks together:
+您还可以指定没有 `command` 的依赖任务。这对于逻辑上将几个任务分组在一起很有用：
 
 ```json title="deno.json"
 {
@@ -215,13 +189,11 @@ useful to logically group several tasks together:
 }
 ```
 
-Running `deno task dev` will run both `dev-client` and `dev-server` in parallel.
+运行 `deno task dev` 将并行运行 `dev-client` 和 `dev-server`。
 
-## Workspace support
+## 工作空间支持
 
-`deno task` can be used in workspaces, to run tasks from multiple member
-directories in parallel. To execute `dev` tasks from all workspace members use
-`--recursive` flag:
+`deno task` 可用于工作空间，从多个成员目录并行运行任务。要执行所有工作空间成员的 `dev` 任务，请使用 `--recursive` 标志：
 
 ```jsonc title="deno.json"
 {
@@ -259,7 +231,7 @@ Listening on http://localhost:8000/
 Project bundled
 ```
 
-Tasks to run can be filtered based on the workspace members:
+要运行的任务可以根据工作空间成员进行过滤：
 
 ```bash
 $ deno task --filter "client" dev
@@ -268,247 +240,217 @@ Bundling project...
 Project bundled
 ```
 
-Note that the filter matches against the workspace member names as specified in
-the `name` field of each member's `deno.json` file.
+请注意，过滤器是根据每个成员的 `deno.json` 文件中的 `name` 字段指定的工作空间成员名称进行匹配的。
 
-## Syntax
+## 语法
 
-`deno task` uses a cross-platform shell that's a subset of sh/bash to execute
-defined tasks.
+`deno task` 使用一个跨平台的 shell，这是一个 sh/bash 的子集，用于执行定义的任务。
 
-### Boolean lists
+### 布尔列表
 
-Boolean lists provide a way to execute additional commands based on the exit
-code of the initial command. They separate commands using the `&&` and `||`
-operators.
+布尔列表提供了一种根据初始命令的退出代码执行额外命令的方法。它们使用 `&&` 和 `||` 运算符分隔命令。
 
-The `&&` operator provides a way to execute a command and if it _succeeds_ (has
-an exit code of `0`) it will execute the next command:
+`&&` 运算符提供了一种执行命令的方法，如果它 _成功_（退出码为 `0`），则执行下一个命令：
 
 ```sh
 deno run --allow-read=. --allow-write=. collect.ts && deno run --allow-read=. analyze.ts
 ```
 
-The `||` operator is the opposite. It provides a way to execute a command and
-only if it _fails_ (has a non-zero exit code) it will execute the next command:
+`||` 运算符正好相反。它提供了一种执行命令的方法，仅在 _失败_（退出码非零）时执行下一个命令：
 
 ```sh
 deno run --allow-read=. --allow-write=. collect.ts || deno run play_sad_music.ts
 ```
 
-### Sequential lists
+### 顺序列表
 
-Sequential lists are similar to boolean lists, but execute regardless of whether
-the previous command in the list passed or failed. Commands are separated with a
-semi-colon (`;`).
+顺序列表类似于布尔列表，但无论列表中前一个命令是否通过，都将执行。命令用分号 (`;`) 分隔。
 
 ```sh
 deno run output_data.ts ; deno run --allow-net server.ts
 ```
 
-### Async commands
+### 异步命令
 
-Async commands provide a way to make a command execute asynchronously. This can
-be useful when starting multiple processes. To make a command asynchronous, add
-an `&` to the end of it. For example the following would execute
-`sleep 1 && deno run --allow-net client.ts` and `deno run --allow-net server.ts`
-at the same time:
+异步命令提供了一种使命令异步执行的方法。这在启动多个进程时可能很有用。要使命令异步，请在命令末尾添加 `&`。例如，以下命令将在同一时间执行
+`sleep 1 && deno run --allow-net client.ts` 和 `deno run --allow-net server.ts`：
 
 ```sh
 sleep 1 && deno run --allow-net client.ts & deno run --allow-net server.ts
 ```
 
-Unlike in most shells, the first async command to fail will cause all the other
-commands to fail immediately. In the example above, this would mean that if the
-client command fails then the server command will also fail and exit. You can
-opt out of this behavior by adding `|| true` to the end of a command, which will
-force a `0` exit code. For example:
+与大多数 shell 中的行为不同，第一个失败的异步命令将导致所有其他命令立即失败。在上面的示例中，这意味着如果客户端命令失败，则服务器命令也将失败并退出。您可以通过在命令末尾添加 `|| true` 来选择退出此行为，这将强制退出码为 `0`。例如：
 
 ```sh
 deno run --allow-net client.ts || true & deno run --allow-net server.ts || true
 ```
 
-### Environment variables
+### 环境变量
 
-Environment variables are defined like the following:
+环境变量的定义方式如下：
 
 ```sh
 export VAR_NAME=value
 ```
 
-Here's an example of using one in a task with shell variable substitution and
-then with it being exported as part of the environment of the spawned Deno
-process (note that in the JSON configuration file the double quotes would need
-to be escaped with backslashes):
+以下是如何在任务中使用一个环境变量的示例，使用 shell 变量替换，然后将其作为启动 Deno 进程的环境的一部分导出（注意，在 JSON 配置文件中，双引号需要用反斜杠转义）：
 
 ```sh
 export VAR=hello && echo $VAR && deno eval "console.log('Deno: ' + Deno.env.get('VAR'))"
 ```
 
-Would output:
+将输出：
 
 ```console
 hello
 Deno: hello
 ```
 
-#### Setting environment variables for a command
+#### 为命令设置环境变量
 
-To specify environment variable(s) before a command, list them like so:
+要在命令之前指定环境变量，请像下面这样列出：
 
 ```console
 VAR=hello VAR2=bye deno run main.ts
 ```
 
-This will use those environment variables specifically for the following
-command.
+这将仅为以下命令使用这些环境变量。
 
-### Shell variables
+### Shell 变量
 
-Shell variables are similar to environment variables, but won't be exported to
-spawned commands. They are defined with the following syntax:
+Shell 变量与环境变量类似，但不会导出到已生成的命令中。它们使用以下语法定义：
 
 ```sh
 VAR_NAME=value
 ```
 
-If we use a shell variable instead of an environment variable in a similar
-example to what's shown in the previous "Environment variables" section:
+如果我们在之前的 "环境变量" 部分的类似示例中使用 shell 变量而不是环境变量：
 
 ```sh
 VAR=hello && echo $VAR && deno eval "console.log('Deno: ' + Deno.env.get('VAR'))"
 ```
 
-We will get the following output:
+我们将得到以下输出：
 
 ```console
 hello
 Deno: undefined
 ```
 
-Shell variables can be useful when we want to re-use a value, but don't want it
-available in any spawned processes.
+Shell 变量在我们想重用某个值但又不希望在任何生成的进程中可用时非常有用。
 
-### Exit status variable
+### 退出状态变量
 
-The exit code of the previously run command is available in the `$?` variable.
+以前运行命令的退出码在 `$?` 变量中可用。
 
 ```sh
-# outputs 10
+# 输出 10
 deno eval 'Deno.exit(10)' || echo $?
 ```
 
-### Pipelines
+### 管道
 
-Pipelines provide a way to pipe the output of one command to another.
+管道提供了一种将一个命令的输出管道到另一个命令的方法。
 
-The following command pipes the stdout output "Hello" to the stdin of the
-spawned Deno process:
+以下命令将标准输出 "Hello" 管道到启动的 Deno 进程的标准输入：
 
 ```sh
 echo Hello | deno run main.ts
 ```
 
-To pipe stdout and stderr, use `|&` instead:
+要管道标准输出和标准错误，请使用 `|&`：
 
 ```sh
 deno eval 'console.log(1); console.error(2);' |& deno run main.ts
 ```
 
-### Command substitution
+### 命令替换
 
-The `$(command)` syntax provides a way to use the output of a command in other
-commands that get executed.
+`$(command)` 语法提供了一种在执行的其他命令中使用命令输出的方法。
 
-For example, to provide the output of getting the latest git revision to another
-command you could do the following:
+例如，要将获取最新 git 修订版的输出提供给另一个命令，您可以这样做：
 
 ```sh
 deno run main.ts $(git rev-parse HEAD)
 ```
 
-Another example using a shell variable:
+另一个示例使用 shell 变量：
 
 ```sh
 REV=$(git rev-parse HEAD) && deno run main.ts $REV && echo $REV
 ```
 
-### Negate exit code
+### 取反退出码
 
-To negate the exit code, add an exclamation point and space before a command:
+要取反退出码，请在命令前添加感叹号和空格：
 
 ```sh
-# change the exit code from 1 to 0
+# 将退出码从 1 改为 0
 ! deno eval 'Deno.exit(1);'
 ```
 
-### Redirects
+### 重定向
 
-Redirects provide a way to pipe stdout and/or stderr to a file.
+重定向提供了一种将标准输出和/或标准错误管道到文件的方法。
 
-For example, the following redirects _stdout_ of `deno run main.ts` to a file
-called `file.txt` on the file system:
+例如，以下命令将 `deno run main.ts` 的 _标准输出_ 重定向到文件系统中的 `file.txt`：
 
 ```sh
 deno run main.ts > file.txt
 ```
 
-To instead redirect _stderr_, use `2>`:
+要重定向 _标准错误_，请使用 `2>`：
 
 ```sh
 deno run main.ts 2> file.txt
 ```
 
-To redirect both stdout _and_ stderr, use `&>`:
+要同时重定向标准输出 _和_ 标准错误，请使用 `&>`：
 
 ```sh
 deno run main.ts &> file.txt
 ```
 
-To append to a file, instead of overwriting an existing one, use two right angle
-brackets instead of one:
+要追加到文件，而不是覆盖现有文件，请使用两个右尖括号而不是一个：
 
 ```sh
 deno run main.ts >> file.txt
 ```
 
-Suppressing either stdout, stderr, or both of a command is possible by
-redirecting to `/dev/null`. This works in a cross-platform way including on
-Windows.
+抑制命令的标准输出、标准错误或两者的可能性，通过重定向到 `/dev/null`。这在包含 Windows 的跨平台方式下有效。
 
 ```sh
-# suppress stdout
+# 抑制标准输出
 deno run main.ts > /dev/null
-# suppress stderr
+# 抑制标准错误
 deno run main.ts 2> /dev/null
-# suppress both stdout and stderr
+# 同时抑制标准输出和标准错误
 deno run main.ts &> /dev/null
 ```
 
-Or redirecting stdout to stderr and vice-versa:
+或者将标准输出重定向到标准错误，反之亦然：
 
 ```sh
-# redirect stdout to stderr
+# 将标准输出重定向到标准错误
 deno run main.ts >&2
-# redirect stderr to stdout
+# 将标准错误重定向到标准输出
 deno run main.ts 2>&1
 ```
 
-Input redirects are also supported:
+输入重定向也被支持：
 
 ```sh
-# redirect file.txt to the stdin of gzip
+# 将 file.txt 重定向到 gzip 的标准输入
 gzip < file.txt
 ```
 
-Note that redirecting multiple redirects is currently not supported.
+请注意，当前不支持多重重定向。
 
-### Cross-platform shebang
+### 跨平台 Shebang
 
-Starting in Deno 1.42, `deno task` will execute scripts that start with
-`#!/usr/bin/env -S` the same way on all platforms.
+从 Deno 1.42 开始，`deno task` 将以相同的方式执行以 `#!/usr/bin/env -S` 开头的脚本，适用于所有平台。
 
-For example:
+例如：
 
 ```ts title="script.ts"
 #!/usr/bin/env -S deno run
@@ -523,7 +465,7 @@ console.log("Hello there!");
 }
 ```
 
-Then on a Windows machine:
+然后在 Windows 机器上：
 
 ```sh
 > pwd
@@ -532,70 +474,48 @@ C:\Users\david\dev\my_project
 Hello there!
 ```
 
-### Glob expansion
+### Glob 扩展
 
-Glob expansion is supported in Deno 1.34 and above. This allows for specifying
-globs to match files in a cross-platform way.
+在 Deno 1.34 及以上版本中支持 glob 扩展。这允许以跨平台方式指定 glob 来匹配文件。
 
 ```console
-# match .ts files in the current and descendant directories
+# 匹配当前及其子目录中的 .ts 文件
 echo **/*.ts
-# match .ts files in the current directory
+# 匹配当前目录中的 .ts 文件
 echo *.ts
-# match files that start with "data", have a single number, then end with .csv
+# 匹配以 "data" 开头，后跟一个数字，然后以 .csv 结尾的文件
 echo data[0-9].csv
 ```
 
-The supported glob characters are `*`, `?`, and `[`/`]`.
+支持的 glob 字符包括 `*`、`?` 和 `[`/`]`。
 
-## Built-in commands
+## 内置命令
 
-`deno task` ships with several built-in commands that work the same out of the
-box on Windows, Mac, and Linux.
+`deno task` 附带多个内置命令，在 Windows、Mac 和 Linux 上默认工作相同。
 
-- [`cp`](https://man7.org/linux/man-pages/man1/cp.1.html) - Copies files.
-- [`mv`](https://man7.org/linux/man-pages/man1/mv.1.html) - Moves files.
-- [`rm`](https://man7.org/linux/man-pages/man1/rm.1.html) - Remove files or
-  directories.
-  - Ex: `rm -rf [FILE]...` - Commonly used to recursively delete files or
-    directories.
-- [`mkdir`](https://man7.org/linux/man-pages/man1/mkdir.1.html) - Makes
-  directories.
-  - Ex. `mkdir -p DIRECTORY...` - Commonly used to make a directory and all its
-    parents with no error if it exists.
-- [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) - Prints the name of
-  the current/working directory.
-- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - Delays for a
-  specified amount of time.
-  - Ex. `sleep 1` to sleep for 1 second, `sleep 0.5` to sleep for half a second,
-    or `sleep 1m` to sleep a minute
-- [`echo`](https://man7.org/linux/man-pages/man1/echo.1.html) - Displays a line
-  of text.
-- [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) - Concatenates files
-  and outputs them on stdout. When no arguments are provided it reads and
-  outputs stdin.
-- [`exit`](https://man7.org/linux/man-pages/man1/exit.1p.html) - Causes the
-  shell to exit.
-- [`head`](https://man7.org/linux/man-pages/man1/head.1.html) - Output the first
-  part of a file.
-- [`unset`](https://man7.org/linux/man-pages/man1/unset.1p.html) - Unsets
-  environment variables.
-- [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) - Builds
-  arguments from stdin and executes a command.
+- [`cp`](https://man7.org/linux/man-pages/man1/cp.1.html) - 复制文件。
+- [`mv`](https://man7.org/linux/man-pages/man1/mv.1.html) - 移动文件。
+- [`rm`](https://man7.org/linux/man-pages/man1/rm.1.html) - 删除文件或目录。
+  - 例如: `rm -rf [FILE]...` - 通常用于递归删除文件或目录。
+- [`mkdir`](https://man7.org/linux/man-pages/man1/mkdir.1.html) - 创建目录。
+  - 例如. `mkdir -p DIRECTORY...` - 通常用于创建目录及其所有父级，且如果已存在则不报错。
+- [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) - 打印当前/工作目录的名称。
+- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - 延迟指定时间。
+  - 例如. `sleep 1` 以暂停 1 秒，`sleep 0.5` 以暂停半秒，或者 `sleep 1m` 以暂停一分钟。
+- [`echo`](https://man7.org/linux/man-pages/man1/echo.1.html) - 显示一行文本。
+- [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) - 连接文件并将其输出到标准输出。没有提供参数时读取和输出标准输入。
+- [`exit`](https://man7.org/linux/man-pages/man1/exit.1p.html) - 导致 shell 退出。
+- [`head`](https://man7.org/linux/man-pages/man1/head.1.html) - 输出文件的第一部分。
+- [`unset`](https://man7.org/linux/man-pages/man1/unset.1p.html) - 取消设置环境变量。
+- [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) - 从标准输入构建参数并执行命令。
 
-If you find a useful flag missing on a command or have any suggestions for
-additional commands that should be supported out of the box, then please
-[open an issue](https://github.com/denoland/deno_task_shell/issues) on the
-[deno_task_shell](https://github.com/denoland/deno_task_shell/) repo.
+如果您发现缺少某个命令的有用标志或有任何应该支持的其他命令的建议，请
+[报告问题](https://github.com/denoland/deno_task_shell/issues) 到
+[deno_task_shell](https://github.com/denoland/deno_task_shell/) 仓库。
 
-Note that if you wish to execute any of these commands in a non-cross-platform
-way on Mac or Linux, then you may do so by running it through `sh`:
-`sh -c <command>` (ex. `sh -c cp source destination`).
+请注意，如果您希望通过非跨平台方式在 Mac 或 Linux 上执行任何这些命令，则可以通过 `sh` 运行它：`sh -c <command>`（例如 `sh -c cp source destination`）。
 
-## package.json support
+## package.json 支持
 
-`deno task` falls back to reading from the `"scripts"` entries in a package.json
-file if it is discovered. Note that Deno does not respect or support any npm
-life cycle events like `preinstall` or `postinstall`—you must explicitly run the
-script entries you want to run (ex.
-`deno install --entrypoint main.ts && deno task postinstall`).
+如果发现 `deno task` 将回退到读取 package.json 文件中的 `"scripts"` 条目。请注意，Deno 不尊重或支持任何 npm 生命周期事件，如 `preinstall` 或 `postinstall`——您必须显式运行您想要执行的脚本条目（例如：
+`deno install --entrypoint main.ts && deno task postinstall`）。

@@ -1,14 +1,11 @@
 ---
-title: "Workspaces and monorepos"
+title: "工作区和单体仓库"
 oldUrl: /runtime/manual/basics/workspaces
 ---
 
-Deno supports workspaces, also known as "monorepos", which allow you to manage
-multiple related and interdependent packages simultaneously.
+Deno 支持工作区，也称为“单体仓库”，允许您同时管理多个相关且相互依赖的包。
 
-A "workspace" is a collection of folders containing `deno.json` or
-`package.json` configuration files. The root `deno.json` file defines the
-workspace:
+“工作区”是一个包含 `deno.json` 或 `package.json` 配置文件的文件夹集合。根目录的 `deno.json` 文件定义了工作区：
 
 ```json title="deno.json"
 {
@@ -16,20 +13,17 @@ workspace:
 }
 ```
 
-This configures a workspace with `add` and `subtract` members, which are
-directories expected to have `deno.json(c)` and/or `package.json` files.
+这配置了一个包含 `add` 和 `subtract` 成员的工作区，这些成员是预计会有 `deno.json(c)` 和/或 `package.json` 文件的目录。
 
-:::info Naming
+:::info 命名
 
-Deno uses `workspace` rather than npm's `workspaces` to represent a singular
-workspace with multiple members.
+Deno 使用 `workspace` 而不是 npm 的 `workspaces` 来表示具有多个成员的单个工作区。
 
 :::
 
-## Example
+## 示例
 
-Let's expand on the `deno.json` workspace example and see its functionality. The
-file hierarchy looks like this:
+让我们扩展一下 `deno.json` 工作区示例，看看它的功能。文件层次结构如下所示：
 
 ```sh
 /
@@ -43,11 +37,9 @@ file hierarchy looks like this:
       └── mod.ts
 ```
 
-There are two workspace members (add and subtract), each with `mod.ts` files.
-There is also a root `deno.json` and a `main.ts`.
+有两个工作区成员（add 和 subtract），每个成员都有 `mod.ts` 文件。还有一个根 `deno.json` 和一个 `main.ts`。
 
-The top-level `deno.json` configuration file defines the workspace and a
-top-level import map applied to all members:
+顶级的 `deno.json` 配置文件定义了工作区和应用于所有成员的顶级导入映射：
 
 ```json title="deno.json"
 {
@@ -58,10 +50,7 @@ top-level import map applied to all members:
 }
 ```
 
-The root `main.ts` file uses the `chalk` bare specifier from the import map and
-imports the `add` and `subtract` functions from the workspace members. Note that
-it imports them using `@scope/add` and `@scope/subtract`, even though these are
-not proper URLs and aren't in the import map. How are they resolved?
+根目录的 `main.ts` 文件使用导入映射中的 `chalk` 无符号说明符，并从工作区成员中导入 `add` 和 `subtract` 函数。请注意，它使用 `@scope/add` 和 `@scope/subtract` 导入它们，尽管这些不是有效的 URL，并且不在导入映射中。它们是如何解析的？
 
 ```ts title="main.ts"
 import chalk from "chalk";
@@ -72,10 +61,7 @@ console.log("1 + 2 =", chalk.green(add(1, 2)));
 console.log("2 - 4 =", chalk.red(subtract(2, 4)));
 ```
 
-In the `add/` subdirectory, we define a `deno.json` with a `"name"` field, which
-is important for referencing the workspace member. The `deno.json` file also
-contains example configurations, like turning off semicolons when using
-`deno fmt`.
+在 `add/` 子目录中，我们定义了一个具有 `"name"` 字段的 `deno.json`，这个字段对引用工作区成员至关重要。`deno.json` 文件还包含示例配置，例如在使用 `deno fmt` 时关闭分号。
 
 ```json title="add/deno.json"
 {
@@ -94,8 +80,7 @@ export function add(a: number, b: number): number {
 }
 ```
 
-The `subtract/` subdirectory is similar but does not have the same `deno fmt`
-configuration.
+`subtract/` 子目录类似，但没有相同的 `deno fmt` 配置。
 
 ```json title="subtract/deno.json"
 {
@@ -113,7 +98,7 @@ export function subtract(a: number, b: number): number {
 }
 ```
 
-Let's run it:
+让我们运行它：
 
 ```sh
 > deno run main.ts
@@ -121,38 +106,23 @@ Let's run it:
 2 - 4 = -2
 ```
 
-There's a lot to unpack here, showcasing some of the Deno workspace features:
+这里有很多内容需要解析，展示了一些 Deno 工作区的特性：
 
-1. This monorepo consists of two packages, placed in `./add` and `./subtract`
-   directories.
+1. 这个单体仓库由两个包组成，分别放置在 `./add` 和 `./subtract` 目录下。
 
-1. By using `name` and `version` options in members' `deno.json` files, it's
-   possible to refer to them using "bare specifiers" across the whole workspace.
-   In this case, the packages are named `@scope/add` and `@scope/subtract`,
-   where `scope` is the "scope" name you can choose. With these two options,
-   it's not necessary to use long and relative file paths in import statements.
+1. 通过在成员的 `deno.json` 文件中使用 `name` 和 `version` 选项，可以在整个工作区中使用“无符号说明符”引用它们。在此情况下，包的名称为 `@scope/add` 和 `@scope/subtract`，其中 `scope` 是您可以选择的“作用域”名称。通过这两个选项，您无需在导入声明中使用长而相对的文件路径。
 
-1. `npm:chalk@5` package is a shared dependency in the entire workspace.
-   Workspace members "inherit" `imports` of the workspace root, allowing to
-   easily manage a single version of a dependency across the codebase.
+1. `npm:chalk@5` 包是整个工作区的共享依赖项。工作区成员“继承”工作区根的 `imports` 允许轻松管理代码库中依赖项的单一版本。
 
-1. `add` subdirectory specifies in its `deno.json` that `deno fmt` should not
-   apply semicolons when formatting the code. This makes for a much smoother
-   transition for existing projects, without a need to change tens or hundreds
-   of files in one go.
+1. `add` 子目录在其 `deno.json` 中指定 `deno fmt` 在格式化代码时不应应用分号。这使得现有项目的过渡更加顺畅，无需一次性更改几十或几百个文件。
 
 ---
 
-Deno workspaces are flexible and can work with Node packages. To make migration
-for existing Node.js projects easier you can have both Deno-first and Node-first
-packages in a single workspace.
+Deno 工作区灵活，并且可以与 Node 包一起使用。为了使现有 Node.js 项目的迁移更容易，您可以在单个工作区中同时拥有 Deno 优先和 Node 优先的包。
 
-### Multiple package entries
+### 多个包条目
 
-So far, our package only has a single entry. This is fine for simple packages,
-but often you'll want to have multiple entries that group relevant aspects of
-your package. This can be done by passing an `object` instead of a `string` to
-`exports`:
+到目前为止，我们的包只有一个条目。这对于简单的包来说可以，但通常您会希望有多个条目以分组包的相关方面。这可以通过将 `object` 而不是 `string` 传递给 `exports` 实现：
 
 ```json title="my-package/deno.json"
 {
@@ -166,21 +136,17 @@ your package. This can be done by passing an `object` instead of a `string` to
 }
 ```
 
-The `"."` entry is the default entry that's picked when importing
-`@scope/my-package`. Therefore, the above `deno.json` example provides the
-folowing entries:
+`"."` 条目是在导入 `@scope/my-package` 时选择的默认条目。因此，上述的 `deno.json` 示例提供了以下条目：
 
 - `@scope/my-package`
 - `@scope/my-package/foo`
 - `@scope/my-package/other`
 
-### Migrating from `npm` workspaces
+### 从 `npm` 工作区迁移
 
-Deno workspaces support using a Deno-first package from an existing npm package.
-In this example, we mix and match a Deno library called `@deno/hi`, with a
-Node.js library called `@deno/log` that we developed a couple years back.
+Deno 工作区支持从现有 npm 包使用 Deno 优先包。在这个示例中，我们将一个名为 `@deno/hi` 的 Deno 库与几年前开发的 Node.js 库 `@deno/log` 混合使用。
 
-We'll need to include a `deno.json` configuration file in the root:
+我们需要在根目录中包含一个 `deno.json` 配置文件：
 
 ```json title="deno.json"
 {
@@ -190,7 +156,7 @@ We'll need to include a `deno.json` configuration file in the root:
 }
 ```
 
-Alongside our existing package.json workspace:
+在我们现有的 `package.json` 工作区旁边：
 
 ```json title="package.json"
 {
@@ -198,7 +164,7 @@ Alongside our existing package.json workspace:
 }
 ```
 
-The workspace currently has a log npm package:
+该工作区当前有一个日志 npm 包：
 
 ```json title="log/package.json"
 {
@@ -215,7 +181,7 @@ export function log(output) {
 }
 ```
 
-Let's create an `@deno/hi` Deno-first package that imports `@deno/log`:
+让我们创建一个导入 `@deno/log` 的 Deno 优先包 `@deno/hi`：
 
 ```json title="hi/deno.json"
 {
@@ -236,7 +202,7 @@ export function sayHiTo(name: string) {
 }
 ```
 
-Now, we can write a `main.ts` file that imports and calls `hi`:
+现在，我们可以编写一个导入并调用 `hi` 的 `main.ts` 文件：
 
 ```ts title="main.ts"
 import { sayHiTo } from "@deno/hi";
@@ -249,13 +215,9 @@ $ deno run main.ts
 Hi, friend!
 ```
 
-You can even have both `deno.json` and `package.json` in your existing Node.js
-package. Additionally, you could remove the package.json in the root and specify
-the npm package in the deno.json workspace members. That allows you to gradually
-migrate to Deno, without putting a lot of upfront work.
+您甚至可以在现有的 Node.js 包中同时拥有 `deno.json` 和 `package.json`。此外，您可以删除根目录中的 `package.json`，并在 `deno.json` 工作区成员中指定 npm 包。这使您能够逐步迁移到 Deno，而无需进行大量的前期工作。
 
-For example, you can add `log/deno.json` like to to configure Deno's linter and
-formatter:
+例如，您可以添加 `log/deno.json` 来配置 Deno 的 linter 和格式化工具：
 
 ```jsonc
 {
@@ -270,56 +232,51 @@ formatter:
 }
 ```
 
-Running `deno fmt` in the workspace, will format the `log` package to not have
-any semicolons, and `deno lint` won't complain if you leave an unused var in one
-of the source files.
+在工作区中运行 `deno fmt`，将会格式化 `log` 包以不含分号，而 `deno lint` 如果您在某个源文件中留下未使用的变量也不会抱怨。
 
-## Configuring built-in Deno tools
+## 配置内置 Deno 工具
 
-Some configuration options only make sense at the root of the workspace, eg.
-specifying `nodeModulesDir` option in one of the members is not available and
-Deno will warn if an option needs to be applied at the workspace root.
+一些配置选项仅在工作区根部才有意义，例如，在其中一个成员中指定 `nodeModulesDir` 选项是不可用的，如果选项需要在工作区根部应用，Deno 将发出警告。
 
-Here's a full matrix of various `deno.json` options available at the workspace
-root and its members:
+以下是可用的各种 `deno.json` 选项在工作区根和其成员的完整矩阵：
 
-| Option             | Workspace | Package | Notes                                                                                                                                                                                                                                                                                                  |
+| 选项               | 工作区 | 包     | 备注                                                                                                                                                                                                                                                                                                  |
 | ------------------ | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| compilerOptions    | ✅        | ❌      | For now we only allow one set of compilerOptions per workspace. This is because multiple changes to both deno_graph and the TSC integration are required to allow more than one set. Also we’d have to determine what compilerOptions apply to remote dependencies. We can revisit this in the future. |
-| importMap          | ✅        | ❌      | Exclusive with imports and scopes per config file. It is allowed to have importMap in the workspace config, and imports in the package config.                                                                                                                                                         |
-| imports            | ✅        | ✅      | Exclusive with importMap per config file.                                                                                                                                                                                                                                                              |
-| scopes             | ✅        | ❌      | Exclusive with importMap per config file.                                                                                                                                                                                                                                                              |
+| compilerOptions    | ✅        | ❌      | 目前我们只允许每个工作区一组 compilerOptions。这是因为允许多组需要对 deno_graph 和 TSC 集成进行多项更改。此外，我们还需要确定哪些 compilerOptions 适用于远程依赖。我们可以在未来重新考虑这一点。 |
+| importMap          | ✅        | ❌      | 在每个配置文件中与 imports 和 scopes 排他性使用。可以在工作区配置中有 importMap，并且在包配置中有 imports。                                                                                                                                                         |
+| imports            | ✅        | ✅      | 在每个配置文件中与 importMap 排他性使用。                                                                                                                                                                                                                                                              |
+| scopes             | ✅        | ❌      | 在每个配置文件中与 importMap 排他性使用。                                                                                                                                                                                                                                                              |
 | exclude            | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | lint.include       | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | lint.exclude       | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
-| lint.files         | ⚠️        | ❌      | Deprecated                                                                                                                                                                                                                                                                                             |
-| lint.rules.tags    | ✅        | ✅      | Tags are merged by appending package to workspace list. Duplicates are ignored.                                                                                                                                                                                                                        |
+| lint.files         | ⚠️        | ❌      | 已废弃                                                                                                                                                                                                                                                                                             |
+| lint.rules.tags    | ✅        | ✅      | 标签通过将包附加到工作区列表进行合并。重复项会被忽略。                                                                                                                                                                                                                        |
 | lint.rules.include |           |         |                                                                                                                                                                                                                                                                                                        |
-| lint.rules.exclude | ✅        | ✅      | Rules are merged per package, with package taking priority over workspace (package include is stronger than workspace exclude).                                                                                                                                                                        |
-| lint.report        | ✅        | ❌      | Only one reporter can be active at a time, so allowing different reporters per workspace would not work in the case where you lint files spanning multiple packages.                                                                                                                                   |
+| lint.rules.exclude | ✅        | ✅      | 规则按包合并，包的优先级高于工作区（包的包含强于工作区的排除）。                                                                                                                                                                        |
+| lint.report        | ✅        | ❌      | 一次只允许一个报告者处于活动状态，因此在需要 lint 文件跨多个包的情况下允许不同的报告者将不起作用。                                                                                                                                   |
 | fmt.include        | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | fmt.exclude        | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
-| fmt.files          | ⚠️        | ❌      | Deprecated                                                                                                                                                                                                                                                                                             |
-| fmt.useTabs        | ✅        | ✅      | Package takes priority over workspace.                                                                                                                                                                                                                                                                 |
-| fmt.indentWidth    | ✅        | ✅      | Package takes priority over workspace.                                                                                                                                                                                                                                                                 |
-| fmt.singleQuote    | ✅        | ✅      | Package takes priority over workspace.                                                                                                                                                                                                                                                                 |
-| fmt.proseWrap      | ✅        | ✅      | Package takes priority over workspace.                                                                                                                                                                                                                                                                 |
-| fmt.semiColons     | ✅        | ✅      | Package takes priority over workspace.                                                                                                                                                                                                                                                                 |
-| fmt.options.\*     | ⚠️        | ❌      | Deprecated                                                                                                                                                                                                                                                                                             |
-| nodeModulesDir     | ✅        | ❌      | Resolution behaviour must be the same in the entire workspace.                                                                                                                                                                                                                                         |
-| vendor             | ✅        | ❌      | Resolution behaviour must be the same in the entire workspace.                                                                                                                                                                                                                                         |
-| tasks              | ✅        | ✅      | Package tasks take priority over workspace. cwd used is the cwd of the config file that the task was inside of.                                                                                                                                                                                        |
+| fmt.files          | ⚠️        | ❌      | 已废弃                                                                                                                                                                                                                                                                                             |
+| fmt.useTabs        | ✅        | ✅      | 包的优先级高于工作区。                                                                                                                                                                                                                                                                 |
+| fmt.indentWidth    | ✅        | ✅      | 包的优先级高于工作区。                                                                                                                                                                                                                                                                 |
+| fmt.singleQuote    | ✅        | ✅      | 包的优先级高于工作区。                                                                                                                                                                                                                                                                 |
+| fmt.proseWrap      | ✅        | ✅      | 包的优先级高于工作区。                                                                                                                                                                                                                                                                 |
+| fmt.semiColons     | ✅        | ✅      | 包的优先级高于工作区。                                                                                                                                                                                                                                                                 |
+| fmt.options.\*     | ⚠️        | ❌      | 已废弃                                                                                                                                                                                                                                                                                             |
+| nodeModulesDir     | ✅        | ❌      | 整个工作区的解析行为必须保持一致。                                                                                                                                                                                                                                         |
+| vendor             | ✅        | ❌      | 整个工作区的解析行为必须保持一致。                                                                                                                                                                                                                                         |
+| tasks              | ✅        | ✅      | 包任务的优先级高于工作区。使用的 cwd 是任务所在配置文件的 cwd。                                                                                                                                                                                        |
 | test.include       | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | test.exclude       | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
-| test.files         | ⚠️        | ❌      | Deprecated                                                                                                                                                                                                                                                                                             |
+| test.files         | ⚠️        | ❌      | 已废弃                                                                                                                                                                                                                                                                                             |
 | publish.include    | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | publish.exclude    | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | bench.include      | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | bench.exclude      | ✅        | ✅      |                                                                                                                                                                                                                                                                                                        |
-| bench.files        | ⚠️        | ❌      | Deprecated                                                                                                                                                                                                                                                                                             |
-| lock               | ✅        | ❌      | Only a single lock file may exist per resolver, and only resolver may exist per workspace, so conditional enablement of the lockfile per package does not make sense.                                                                                                                                  |
-| unstable           | ✅        | ❌      | For simplicities sake, we do not allow unstable flags, because a lot of the CLI assumes that unstable flags are immutable and global to the entire process. Also weird interaction with DENO_UNSTABLE_\* flags.                                                                                        |
+| bench.files        | ⚠️        | ❌      | 已废弃                                                                                                                                                                                                                                                                                             |
+| lock               | ✅        | ❌      | 每个解析器只能存在一个锁定文件，并且每个工作区只能存在一个解析器，因此每个包的锁定文件条件启用没有意义。                                                                                                                                  |
+| unstable           | ✅        | ❌      | 为了简单起见，我们不允许不稳定标志，因为 CLI 的许多假设不稳定标志是不可变的，并且是整个进程全局的。此外，还与 DENO_UNSTABLE_\* 标志存在奇怪的相互作用。                                                                                        |
 | name               | ❌        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | version            | ❌        | ✅      |                                                                                                                                                                                                                                                                                                        |
 | exports            | ❌        | ✅      |                                                                                                                                                                                                                                                                                                        |
-| workspace          | ✅        | ❌      | Nested workspaces are not supported.                                                                                                                                                                                                                                                                   |
+| workspace          | ✅        | ❌      | 不支持嵌套工作区。                                                                                                                                                                                                                                                                   |

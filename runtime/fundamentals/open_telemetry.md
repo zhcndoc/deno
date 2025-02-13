@@ -4,52 +4,42 @@ title: OpenTelemetry
 
 :::caution
 
-The OpenTelemetry integration for Deno is still in development and may change.
-To use it, you must pass the `--unstable-otel` flag to Deno.
+Deno 的 OpenTelemetry 集成仍在开发中，可能会发生变化。
+使用它时，您必须将 `--unstable-otel` 标志传递给 Deno。
 
 :::
 
-Deno has built in support for [OpenTelemetry](https://opentelemetry.io/).
+Deno 内置支持 [OpenTelemetry](https://opentelemetry.io/)。
 
-> OpenTelemetry is a collection of APIs, SDKs, and tools. Use it to instrument,
-> generate, collect, and export telemetry data (metrics, logs, and traces) to
-> help you analyze your software’s performance and behavior.
+> OpenTelemetry 是一组 API、SDK 和工具。使用它来进行仪器化，
+> 生成、收集和导出遥测数据（指标、日志和跟踪），以帮助您分析软件的性能和行为。
 >
 > <i>- https://opentelemetry.io/</i>
 
-This integration enables you to monitor your Deno applications using
-OpenTelemetry observability tooling with instruments like logs, metrics, and
-traces.
+此集成使您能够使用 OpenTelemetry 可观察性工具监控 Deno 应用程序，
+使用日志、指标和跟踪等工具。
 
-Deno provides the following features:
+Deno 提供以下功能：
 
-- Exporting of collected metrics, traces, and logs to a server using the
-  OpenTelemetry protocol.
-- [Automatic instrumentation](#auto-instrumentation) of the Deno runtime with
-  OpenTelemetry metrics, traces, and logs.
-- [Collection of user defined metrics, traces, and logs](#user-metrics) created
-  with the `npm:@opentelemetry/api` package.
+- 使用 OpenTelemetry 协议将收集到的指标、跟踪和日志导出到服务器。
+- [Deno 运行时的自动仪器化](#auto-instrumentation)，提供 OpenTelemetry 指标、跟踪和日志。
+- [收集用户定义的指标、跟踪和日志](#user-metrics)，通过 `npm:@opentelemetry/api` 包创建。
 
-## Quick start
+## 快速开始
 
-To enable the OpenTelemetry integration, run your Deno script with the
-`--unstable-otel` flag and set the environment variable `OTEL_DENO=true`:
+要启用 OpenTelemetry 集成，请使用 `--unstable-otel` 标志运行 Deno 脚本，并设置环境变量 `OTEL_DENO=true`：
 
 ```sh
 OTEL_DENO=true deno run --unstable-otel my_script.ts
 ```
 
-This will automatically collect and export runtime observability data to an
-OpenTelemetry endpoint at `localhost:4318` using Protobuf over HTTP
-(`http/protobuf`).
+这将自动收集并导出运行时可观察性数据到 `localhost:4318` 的 OpenTelemetry 端点，使用 Protobuf 通过 HTTP (`http/protobuf`)。
 
 :::tip
 
-If you do not have an OpenTelemetry collector set up yet, you can get started
-with a
-[local LGTM stack in Docker](https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file)
-(Loki (logs), Grafana (dashboard), Tempo (traces), and Mimir (metrics)) by
-running the following command:
+如果您还没有设置 OpenTelemetry 收集器，可以通过运行以下命令开始使用
+[本地 LGTM 堆栈的 Docker](https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file)
+（Loki（日志）、Grafana（仪表板）、Tempo（跟踪）和 Mimir（指标））：
 
 ```sh
 docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
@@ -60,61 +50,49 @@ docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
 	docker.io/grafana/otel-lgtm:0.8.1
 ```
 
-You can then access the Grafana dashboard at `http://localhost:3000` with the
-username `admin` and password `admin`.
+然后，您可以通过用户名 `admin` 和密码 `admin` 在 `http://localhost:3000` 访问 Grafana 仪表板。
 
 :::
 
-This will automatically collect and export runtime observability data like
-`console.log`, traces for HTTP requests, and metrics for the Deno runtime.
-[Learn more about auto instrumentation](#auto-instrumentation).
+这将自动收集并导出运行时可观察性数据，如 `console.log`、HTTP 请求的跟踪和 Deno 运行时的指标。
+[了解更多关于自动仪器化的信息](#auto-instrumentation)。
 
-You can also create your own metrics, traces, and logs using the
-`npm:@opentelemetry/api` package.
-[Learn more about user defined metrics](#user-metrics).
+您还可以使用 `npm:@opentelemetry/api` 包创建自己的指标、跟踪和日志。
+[了解更多关于用户定义的指标](#user-metrics)。
 
-## Auto instrumentation
+## 自动仪器化
 
-Deno automatically collects and exports some observability data to the OTLP
-endpoint.
+Deno 自动收集并将一些可观察性数据导出到 OTLP 端点。
 
-This data is exported in the built-in instrumentation scope of the Deno runtime.
-This scope has the name `deno`. The version of the Deno runtime is the version
-of the `deno` instrumentation scope. (e.g. `deno:2.1.4`).
+这些数据以 Deno 运行时的内置仪器化范围导出。
+该范围名称为 `deno`。Deno 运行时的版本是 `deno` 仪器化范围的版本（例如 `deno:2.1.4`）。
 
-### Traces
+### 跟踪
 
-Deno automatically creates spans for various operations, such as:
+Deno 自动为各种操作创建跨度，例如：
 
-- Incoming HTTP requests served with `Deno.serve`.
-- Outgoing HTTP requests made with `fetch`.
+- 通过 `Deno.serve` 提供的传入 HTTP 请求。
+- 使用 `fetch` 发出的传出 HTTP 请求。
 
 #### `Deno.serve`
 
-When you use `Deno.serve` to create an HTTP server, a span is created for each
-incoming request. The span automatically ends when response headers are sent
-(not when the response body is done sending).
+当您使用 `Deno.serve` 创建 HTTP 服务器时，将为每个传入请求创建一个跨度。该跨度在响应头发送时自动结束（而不是响应体发送完成时结束）。
 
-The name of the created span is `${method}`. The span kind is `server`.
+创建的跨度名称为 `${method}`。跨度类型为 `server`。
 
-The following attributes are automatically added to the span on creation:
+创建时会自动添加以下属性到跨度：
 
-- `http.request.method`: The HTTP method of the request.
-- `url.full`: The full URL of the request (as would be reported by `req.url`).
-- `url.scheme`: The scheme of the request URL (e.g. `http` or `https`).
-- `url.path`: The path of the request URL.
-- `url.query`: The query string of the request URL.
+- `http.request.method`: 请求的 HTTP 方法。
+- `url.full`: 请求的完整 URL（如 `req.url` 所报告）。
+- `url.scheme`: 请求 URL 的协议（例如 `http` 或 `https`）。
+- `url.path`: 请求 URL 的路径。
+- `url.query`: 请求 URL 的查询字符串。
 
-After the request is handled, the following attributes are added:
+在请求处理后，会添加以下属性：
 
-- `http.status_code`: The status code of the response.
+- `http.status_code`: 响应的状态码。
 
-Deno does not automatically add a `http.route` attribute to the span as the
-route is not known by the runtime, and instead is determined by the routing
-logic in a user's handler function. If you want to add a `http.route` attribute
-to the span, you can do so in your handler function using
-`npm:@opentelemetry/api`. In this case you should also update the span name to
-include the route.
+Deno 不会自动将 `http.route` 属性添加到跨度，因为路由在运行时并不为所知，而是根据用户的处理函数中的路由逻辑确定。如果您想将 `http.route` 属性添加到跨度，可以在处理函数中使用 `npm:@opentelemetry/api` 来实现。在这种情况下，您还应该更新跨度名称以包括路由。
 
 ```ts
 import { trace } from "npm:@opentelemetry/api@1";
@@ -128,98 +106,76 @@ Deno.serve(async (req) => {
     span.setAttribute("http.route", "/");
     span.updateName(`${req.method} /`);
 
-    // handle index route
+    // 处理索引路由
   } else if (BOOK_ROUTE.test(req.url)) {
     span.setAttribute("http.route", "/book/:id");
     span.updateName(`${req.method} /book/:id`);
 
-    // handle book route
+    // 处理书本路由
   } else {
-    return new Response("Not found", { status: 404 });
+    return new Response("未找到", { status: 404 });
   }
 });
 ```
 
 #### `fetch`
 
-When you use `fetch` to make an HTTP request, a span is created for the request.
-The span automatically ends when the response headers are received.
+当您使用 `fetch` 发出 HTTP 请求时，将为该请求创建一个跨度。
+该跨度在收到响应头时自动结束。
 
-The name of the created span is `${method}`. The span kind is `client`.
+创建的跨度名称为 `${method}`。跨度类型为 `client`。
 
-The following attributes are automatically added to the span on creation:
+创建时会自动添加以下属性到跨度：
 
-- `http.request.method`: The HTTP method of the request.
-- `url.full`: The full URL of the request.
-- `url.scheme`: The scheme of the request URL.
-- `url.path`: The path of the request URL.
-- `url.query`: The query string of the request URL.
+- `http.request.method`: 请求的 HTTP 方法。
+- `url.full`: 请求的完整 URL。
+- `url.scheme`: 请求 URL 的协议。
+- `url.path`: 请求 URL 的路径。
+- `url.query`: 请求 URL 的查询字符串。
 
-After the response is received, the following attributes are added:
+在收到响应后，会添加以下属性：
 
-- `http.status_code`: The status code of the response.
+- `http.status_code`: 响应的状态码。
 
-### Metrics
+### 指标
 
-The following metrics are automatically collected and exported:
+以下指标会自动收集和导出：
 
-_None yet_
+_尚未定义_
 
-### Logs
+### 日志
 
-The following logs are automatically collected and exported:
+以下日志会自动收集和导出：
 
-- Any logs created with `console.*` methods such as `console.log` and
-  `console.error`.
-- Any logs created by the Deno runtime, such as debug logs, `Downloading` logs,
-  and similar.
-- Any errors that cause the Deno runtime to exit (both from user code, and from
-  the runtime itself).
+- 使用 `console.*` 方法（如 `console.log` 和 `console.error`）创建的任何日志。
+- Deno 运行时生成的任何日志，例如调试日志、`Downloading` 日志等。
+- 导致 Deno 运行时退出的任何错误（包括用户代码和运行时本身的错误）。
 
-Logs raised from JavaScript code will be exported with the relevant span
-context, if the log occurred inside of an active span.
+如果日志发生在活动跨度内，来自 JavaScript 代码的日志将与相关的跨度上下文一起导出。
 
-`console` auto instrumentation can be configured using the `OTEL_DENO_CONSOLE`
-environment variable:
+`console` 的自动仪器化可以通过 `OTEL_DENO_CONSOLE` 环境变量进行配置：
 
-- `capture`: Logs are emitted to stdout/stderr and are also exported with
-  OpenTelemetry. (default)
-- `replace`: Logs are only exported with OpenTelemetry, and not emitted to
-  stdout/stderr.
-- `ignore`: Logs are emitted only to stdout/stderr, and will not be exported
-  with OpenTelemetry.
+- `capture`: 日志被发送到 stdout/stderr，并且也与 OpenTelemetry 一起导出。（默认值）
+- `replace`: 日志仅与 OpenTelemetry 一起导出，而不会发送到 stdout/stderr。
+- `ignore`: 日志仅发送到 stdout/stderr，并且不会与 OpenTelemetry 一起导出。
 
-## User metrics
+## 用户指标
 
-In addition to the automatically collected telemetry data, you can also create
-your own metrics and traces using the `npm:@opentelemetry/api` package.
+除了自动收集的遥测数据外，您还可以使用 `npm:@opentelemetry/api` 包创建自己的指标和跟踪。
 
-You do not need to configure the `npm:@opentelemetry/api` package to use it with
-Deno. Deno sets up the `npm:@opentelemetry/api` package automatically when the
-`--unstable-otel` flag is passed. There is no need to call
-`metrics.setGlobalMeterProvider()`, `trace.setGlobalTracerProvider()`, or
-`context.setGlobalContextManager()`. All configuration of resources, exporter
-settings, etc. is done via environment variables.
+您不需要配置 `npm:@opentelemetry/api` 包以便与 Deno 一起使用。当传递 `--unstable-otel` 标志时，Deno 会自动设置 `npm:@opentelemetry/api` 包。无需调用 `metrics.setGlobalMeterProvider()`、`trace.setGlobalTracerProvider()` 或 `context.setGlobalContextManager()`。所有资源、导出器设置等的配置通过环境变量完成。
 
-Deno works with version `1.x` of the `npm:@opentelemetry/api` package. You can
-either import directly from `npm:@opentelemetry/api@1`, or you can install the
-package locally with `deno add` and import from `@opentelemetry/api`.
+Deno 适配 `npm:@opentelemetry/api` 包的 `1.x` 版本。您可以直接从 `npm:@opentelemetry/api@1` 导入，也可以使用 `deno add` 本地安装该包并从 `@opentelemetry/api` 导入。
 
 ```sh
 deno add npm:@opentelemetry/api@1
 ```
 
-For both traces and metrics, you need to define names for the tracer and meter
-respectively. If you are instrumenting a library, you should name the tracer or
-meter after the library (such as `my-awesome-lib`). If you are instrumenting an
-application, you should name the tracer or meter after the application (such as
-`my-app`). The version of the tracer or meter should be set to the version of
-the library or application.
+对于跟踪和指标，您需要分别为追踪器和计量器定义名称。如果您正在对库进行仪器化，您应该将追踪器或计量器命名为该库的名称（例如 `my-awesome-lib`）。如果您正在对应用程序进行仪器化，您应该将追踪器或计量器命名为该应用程序的名称（例如 `my-app`）。追踪器或计量器的版本应设置为库或应用程序的版本。
 
-### Traces
+### 跟踪
 
-To create a new span, first import the `trace` object from
-`npm:@opentelemetry/api` and create a new tracer:
+要创建新的跨度，首先从 `npm:@opentelemetry/api` 导入 `trace` 对象，并创建一个新的追踪器：
 
 ```ts
 import { trace } from "npm:@opentelemetry/api@1";
@@ -227,15 +183,13 @@ import { trace } from "npm:@opentelemetry/api@1";
 const tracer = trace.getTracer("my-app", "1.0.0");
 ```
 
-Then, create a new span using the `tracer.startActiveSpan` method and pass a
-callback function to it. You have to manually end the span by calling the `end`
-method on the span object returned by `startActiveSpan`.
+然后，使用 `tracer.startActiveSpan` 方法创建新的跨度，并传递一个回调函数。您必须通过调用由 `startActiveSpan` 返回的跨度对象上的 `end` 方法手动结束跨度。
 
 ```ts
 function myFunction() {
   return tracer.startActiveSpan("myFunction", (span) => {
     try {
-      // do myFunction's work
+      // 执行 myFunction 的工作
     } catch (error) {
       span.recordException(error);
       span.setStatus({
@@ -250,101 +204,69 @@ function myFunction() {
 }
 ```
 
-`span.end()` should be called in a `finally` block to ensure that the span is
-ended even if an error occurs. `span.recordException` and `span.setStatus`
-should also be called in a `catch` block, to record any errors that occur.
+`span.end()` 应该在 `finally` 块中调用，以确保即使发生错误也能结束跨度。`span.recordException` 和 `span.setStatus` 也应该在 `catch` 块中被调用，以记录发生的错误。
 
-Inside of the callback function, the created span is the "active span". You can
-get the active span using `trace.getActiveSpan()`. The "active span" will be
-used as the parent span for any spans created (manually, or automatically by the
-runtime) inside of the callback function (or any functions that are called from
-the callback function).
-[Learn more about context propagation](#context-propagation).
+在回调函数内部，创建的跨度是“活动跨度”。您可以使用 `trace.getActiveSpan()` 获取活动跨度。这个“活动跨度”将被用作在回调函数内创建的任何跨度（无论是手动创建的，还是由运行时自动创建的）的父跨度。
+[了解更多关于上下文传播的信息](#context-propagation)。
 
-The `startActiveSpan` method returns the return value of the callback function.
+`startActiveSpan` 方法返回回调函数的返回值。
 
-Spans can have attributes added to them during their lifetime. Attributes are
-key value pairs that represent structured metadata about the span. Attributes
-can be added using the `setAttribute` and `setAttributes` methods on the span
-object.
+在跨度的生命周期内，可以向其添加属性。属性是表示跨度结构化元数据的键值对。可以使用跨度对象上的 `setAttribute` 和 `setAttributes` 方法添加属性。
 
 ```ts
 span.setAttribute("key", "value");
 span.setAttributes({ success: true, "bar.count": 42n, "foo.duration": 123.45 });
 ```
 
-Values for attributes can be strings, numbers (floats), bigints (clamped to
-u64), booleans, or arrays of any of these types. If an attribute value is not
-one of these types, it will be ignored.
+属性的值可以是字符串、数字（浮点数）、大整型（限制为 u64）、布尔值或这些类型的数组。如果属性值不属于这些类型，它将被忽略。
 
-The name of a span can be updated using the `updateName` method on the span
-object.
+可以使用跨度对象上的 `updateName` 方法更新跨度的名称。
 
 ```ts
-span.updateName("new name");
+span.updateName("新名称");
 ```
 
-The status of a span can be set using the `setStatus` method on the span object.
-The `recordException` method can be used to record an exception that occurred
-during the span's lifetime. `recordException` creates an event with the
-exception stack trace and name and attaches it to the span. **`recordException`
-does not set the span status to `ERROR`, you must do that manually.**
+可以使用跨度对象上的 `setStatus` 方法设置跨度的状态。`recordException` 方法可用于记录在跨度的生命周期内发生的异常。`recordException` 创建一个包含异常堆栈跟踪和名称的事件，并将其附加到跨度上。**`recordException` 不会将跨度状态设置为 `ERROR`，您必须手动执行此操作。**
 
 ```ts
 import { SpanStatusCode } from "npm:@opentelemetry/api@1";
 
 span.setStatus({
   code: SpanStatusCode.ERROR,
-  message: "An error occurred",
+  message: "发生错误",
 });
-span.recordException(new Error("An error occurred"));
+span.recordException(new Error("发生错误"));
 
-// or
+// 或者
 
 span.setStatus({
   code: SpanStatusCode.OK,
 });
 ```
 
-Spans can also have
-[events](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addEvent)
-and
-[links](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addLink)
-added to them. Events are points in time that are associated with the span.
-Links are references to other spans.
+跨度还可以添加
+[事件](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addEvent)
+和
+[链接](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addLink) 。事件是在与跨度相关的时间点。链接是对其他跨度的引用。
 
-Spans can also be created manually with `tracer.startSpan` which returns a span
-object. This method does not set the created span as the active span, so it will
-not automatically be used as the parent span for any spans created later, or any
-`console.log` calls. A span can manually be set as the active span for a
-callback, by using the [context propagation API](#context-propagation).
+还可以使用 `tracer.startSpan` 手动创建跨度，该方法返回一个跨度对象。此方法不会将创建的跨度设置为活动跨度，因此它不会自动作为任何后续创建的跨度或任何 `console.log` 调用的父跨度。可以通过使用 [上下文传播 API](#context-propagation) 手动将跨度设置为活动跨度。
 
-Both `tracer.startActiveSpan` and `tracer.startSpan` can take an optional
-options bag containing any of the following properties:
+`tracer.startActiveSpan` 和 `tracer.startSpan` 都可以使用一个可选的选项包，包含以下任意属性：
 
-- `kind`: The kind of the span. Can be `SpanKind.CLIENT`, `SpanKind.SERVER`,
-  `SpanKind.PRODUCER`, `SpanKind.CONSUMER`, or `SpanKind.INTERNAL`. Defaults to
-  `SpanKind.INTERNAL`.
-- `startTime` A `Date` object representing the start time of the span, or a
-  number representing the start time in milliseconds since the Unix epoch. If
-  not provided, the current time will be used.
-- `attributes`: An object containing attributes to add to the span.
-- `links`: An array of links to add to the span.
-- `root`: A boolean indicating whether the span should be a root span. If
-  `true`, the span will not have a parent span (even if there is an active
-  span).
+- `kind`：跨度的类型。可以是 `SpanKind.CLIENT`、`SpanKind.SERVER`、`SpanKind.PRODUCER`、`SpanKind.CONSUMER` 或 `SpanKind.INTERNAL`。默认为 `SpanKind.INTERNAL`。
+- `startTime`：表示跨度开始时间的 `Date` 对象，或表示 Unix 纪元以来的毫秒数的数字。如果未提供，将使用当前时间。
+- `attributes`: 包含要添加到跨度的属性的对象。
+- `links`: 要添加到跨度的链接数组。
+- `root`: 一个布尔值，指示跨度是否应该是根跨度。如果为 `true`，则该跨度将没有父跨度（即使存在活动跨度）。
 
-After the options bag, both `tracer.startActiveSpan` and `tracer.startSpan` can
-also take a `context` object from the
-[context propagation API](#context-propagation).
+在选项包之后，`tracer.startActiveSpan` 和 `tracer.startSpan` 还可以接受来自 [上下文传播 API](#context-propagation) 的 `context` 对象。
 
-Learn more about the full tracing API in the
-[OpenTelemetry JS API docs](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html).
+在
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html) 中了解有关完整追踪 API 的更多信息。
 
-### Metrics
+### 指标
 
-To create a metric, first import the `metrics` object from
-`npm:@opentelemetry/api` and create a new meter:
+要创建一个指标，首先从 `npm:@opentelemetry/api` 导入 `metrics` 对象，并创建一个新的计量器：
 
 ```ts
 import { metrics } from "npm:@opentelemetry/api@1";
@@ -352,11 +274,11 @@ import { metrics } from "npm:@opentelemetry/api@1";
 const meter = metrics.getMeter("my-app", "1.0.0");
 ```
 
-Then, an instrument can be created from the meter, and used to record values:
+然后，可以从计量器创建一个仪器，并用其记录值：
 
 ```ts
 const counter = meter.createCounter("my_counter", {
-  description: "A simple counter",
+  description: "一个简单的计数器",
   unit: "1",
 });
 
@@ -364,7 +286,7 @@ counter.add(1);
 counter.add(2);
 ```
 
-Each recording can also have associated attributes:
+每次记录也可以具有相关属性：
 
 ```ts
 counter.add(1, { color: "red" });
@@ -373,134 +295,93 @@ counter.add(2, { color: "blue" });
 
 :::tip
 
-In OpenTelemetry, metric attributes should generally have low cardinality. This
-means that there should not be too many unique combinations of attribute values.
-For example, it is probably fine to have an attribute for which continent a user
-is on, but it would be too high cardinality to have an attribute for the exact
-latitude and longitude of the user. High cardinality attributes can cause
-problems with metric storage and exporting, and should be avoided. Use spans and
-logs for high cardinality data.
+在 OpenTelemetry 中，指标属性通常应具有低基数。这意味着不应有太多唯一的属性值组合。例如，用户所在的大陆的属性可能是可以接受的，但用户的确切纬度和经度属性则基数过高。高基数的属性可能会造成指标存储和导出的困难，应该避免。使用跨度和日志处理高基数数据。
 
 :::
 
-There are several types of instruments that can be created with a meter:
+可以使用计量器创建几种类型的仪器：
 
-- **Counter**: A counter is a monotonically increasing value. Counters can only
-  be positive. They can be used for values that are always increasing, such as
-  the number of requests handled.
+- **计数器**：计数器是一个单调递增的值。计数器只能是正值。它们可用于始终递增的值，例如处理的请求数。
 
-- **UpDownCounter**: An up-down counter is a value that can both increase and
-  decrease. Up-down counters can be used for values that can increase and
-  decrease, such as the number of active connections or requests in progress.
+- **UpDownCounter**：上下计数器是一个可以增加和减少的值。上下计数器可用于可以增加和减少的值，例如活动连接数或正在进行的请求数。
 
-- **Gauge**: A gauge is a value that can be set to any value. They are used for
-  values that do not "accumulate" over time, but rather have a specific value at
-  any given time, such as the current temperature.
+- **仪表**：仪表是可以设置为任意值的值。它们用于在任意给定时间具有特定值的值，例如当前温度。
 
-- **Histogram**: A histogram is a value that is recorded as a distribution of
-  values. Histograms can be used for values that are not just a single number,
-  but a distribution of numbers, such as the response time of a request in
-  milliseconds. Histograms can be used to calculate percentiles, averages, and
-  other statistics. They have a predefined set of boundaries that define the
-  buckets that the values are placed into. By default, the boundaries are
-  `[0.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0, 250.0, 500.0, 750.0, 1000.0, 2500.0, 5000.0, 7500.0, 10000.0]`.
+- **直方图**：直方图是以值的分布形式记录的值。直方图可用于不仅是单个数字的值，而是数字的分布，例如以毫秒为单位的请求响应时间。直方图可用于计算百分位数、平均值和其他统计数据。它们具有定义要放入的桶的预定义边界。默认情况下，边界为 `[0.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0, 250.0, 500.0, 750.0, 1000.0, 2500.0, 5000.0, 7500.0, 10000.0]`。
 
-There are also several types of observable instruments. These instruments do not
-have a synchronous recording method, but instead return a callback that can be
-called to record a value. The callback will be called when the OpenTelemetry SDK
-is ready to record a value, for example just before exporting.
+还有几种类型的可观察仪器。这些仪器没有同步记录方法，而是返回一个可以调用以记录值的回调。当 OpenTelemetry SDK 准备好记录一个值时，例如在导出之前，将调用该回调。
 
 ```ts
 const counter = meter.createObservableCounter("my_counter", {
-  description: "A simple counter",
+  description: "一个简单的计数器",
   unit: "1",
 });
 counter.addCallback((res) => {
   res.observe(1);
-  // or
+  // 或
   res.observe(1, { color: "red" });
 });
 ```
 
-There are three types of observable instruments:
+有三种类型的可观察仪器：
 
-- **ObservableCounter**: An observable counter is a counter that can be observed
-  asynchronously. It can be used for values that are always increasing, such as
-  the number of requests handled.
-- **ObservableUpDownCounter**: An observable up-down counter is a value that can
-  both increase and decrease, and can be observed asynchronously. Up-down
-  counters can be used for values that can increase and decrease, such as the
-  number of active connections or requests in progress.
-- **ObservableGauge**: An observable gauge is a value that can be set to any
-  value, and can be observed asynchronously. They are used for values that do
-  not "accumulate" over time, but rather have a specific value at any given
-  time, such as the current temperature.
+- **ObservableCounter**：可观察计数器是可以异步观察的计数器。它可用于始终递增的值，例如处理的请求数。
+- **ObservableUpDownCounter**：可观察上下计数器是一个值，可以同时增加和减少，并且可以被异步观察。上下计数器可用于可以增加和减少的值，例如活动连接数或正在进行的请求数。
+- **ObservableGauge**：可观察仪表是可以设置为任何值的值，并且可以被异步观察。它们用于在任意给定时间具有特定值的值，例如当前温度。
 
-Learn more about the full metrics API in the
-[OpenTelemetry JS API docs](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.MetricsAPI.html).
+了解有关完整指标 API 的更多信息，请参考
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.MetricsAPI.html)。
 
-## Context propagation
+## 上下文传播
 
-In OpenTelemetry, context propagation is the process of passing some context
-information (such as the current span) from one part of an application to
-another, without having to pass it explicitly as an argument to every function.
+在 OpenTelemetry 中，上下文传播是将某些上下文信息（例如当前跨度）从应用程序的一部分传递到另一部分的过程，而不必将其明确地作为参数传递给每个函数。
 
-In Deno, context propagation is done using the rules of `AsyncContext`, the TC39
-proposal for async context propagation. The `AsyncContext` API is not yet
-exposed to users in Deno, but it is used internally to propagate the active span
-and other context information across asynchronous boundaries.
+在 Deno 中，上下文传播使用 `AsyncContext` 的规则进行，`AsyncContext` 是 TC39 提案，用于异步上下文传播。`AsyncContext` API 尚未在 Deno 中向用户公开，但它在内部用于在异步边界之间传播活动跨度和其他上下文信息。
 
-A quick overview how AsyncContext propagation works:
+以下是 AsyncContext 传播工作的快速概述：
 
-- When a new asynchronous task is started (such as a promise, or a timer), the
-  current context is saved.
-- Then some other code can execute concurrently with the asynchronous task, in a
-  different context.
-- When the asynchronous task completes, the saved context is restored.
+- 当启动新的异步任务时（例如 promise 或定时器），当前上下文会被保存。
+- 然后可以与异步任务并发执行一些其他代码，使用不同的上下文。
+- 当异步任务完成时，将恢复保存的上下文。
 
-This means that async context propagation essentially behaves like a global
-variable that is scoped to the current asynchronous task, and is automatically
-copied to any new asynchronous tasks that are started from this current task.
+这意味着异步上下文传播本质上表现得像一个作用于当前异步任务的全局变量，并且会自动复制到从该当前任务启动的任何新异步任务。
 
-The `context` API from `npm:@opentelemetry/api@1` exposes this functionality to
-users. It works as follows:
+`npm:@opentelemetry/api@1` 中的 `context` API 将此功能公开给用户。工作方式如下：
 
 ```ts
 import { context } from "npm:@opentelemetry/api@1";
 
-// Get the currently active context
+// 获取当前活动上下文
 const currentContext = context.active();
 
-// You can add create a new context with a value added to it
+// 您可以创建一个新上下文，并添加一个值
 const newContext = currentContext.setValue("id", 1);
 
-// The current context is not changed by calling setValue
+// 调用 setValue 不会改变当前上下文
 console.log(currentContext.getValue("id")); // undefined
 
-// You can run a function inside a new context
+// 您可以在新上下文中运行一个函数
 context.with(newContext, () => {
-  // Any code in this block will run with the new context
+  // 此代码块中的任何代码将以新上下文运行
   console.log(context.active().getValue("id")); // 1
 
-  // The context is also available in any functions called from this block
+  // 此上下文在从此块调用的任何函数中也可用
   function myFunction() {
     return context.active().getValue("id");
   }
   console.log(myFunction()); // 1
 
-  // And it is also available in any asynchronous callbacks scheduled from here
+  // 也可在此处安排的任何异步回调中使用
   setTimeout(() => {
     console.log(context.active().getValue("id")); // 1
   }, 10);
 });
 
-// Outside, the context is still the same
+// 在外部，上下文仍然是相同的
 console.log(context.active().getValue("id")); // undefined
 ```
 
-The context API integrates with spans too. For example, to run a function in the
-context of a specific span, the span can be added to a context, and then the
-function can be run in that context:
+上下文 API 也与跨度集成。例如，要在特定跨度的上下文中运行一个函数，可以将跨度添加到上下文中，然后在该上下文中运行该函数：
 
 ```ts
 import { context, trace } from "npm:@opentelemetry/api@1";
@@ -515,91 +396,60 @@ context.with(contextWithSpan, () => {
   console.log(activeSpan === span); // true
 });
 
-// Don't forget to end the span!
+// 别忘了结束跨度！
 span.end();
 ```
 
-Learn more about the full context API in the
-[OpenTelemetry JS API docs](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.ContextAPI.html).
+了解有关完整上下文 API 的更多信息，请参考
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.ContextAPI.html)。
 
-## Configuration
+## 配置
 
-The OpenTelemetry integration can be enabled by setting the `OTEL_DENO=true`
-environment variable.
+通过设置 `OTEL_DENO=true` 环境变量，可以启用 OpenTelemetry 集成。
 
-The endpoint and protocol for the OTLP exporter can be configured using the
-`OTEL_EXPORTER_OTLP_ENDPOINT` and `OTEL_EXPORTER_OTLP_PROTOCOL` environment
-variables.
+OTLP 导出器的端点和协议可以使用 `OTEL_EXPORTER_OTLP_ENDPOINT` 和 `OTEL_EXPORTER_OTLP_PROTOCOL` 环境变量进行配置。
 
-If the endpoint requires authentication, headers can be configured using the
-`OTEL_EXPORTER_OTLP_HEADERS` environment variable.
+如果端点需要身份验证，可以使用 `OTEL_EXPORTER_OTLP_HEADERS` 环境变量配置头。
 
-Endpoint can all be overridden individually for metrics, traces, and logs by
-using specific environment variables, such as:
+还可以通过使用特定的环境变量独立覆盖指标、跟踪和日志的端点，例如：
 
 - `OTEL_EXPORTER_OTLP_METRICS_ENDPOINT`
 - `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`
 - `OTEL_EXPORTER_OTLP_LOGS_ENDPOINT`
 
-For more information on headers that can be used to configure the OTLP exporter,
-[see the OpenTelemetry website](https://opentelemetry.io/docs/specs/otel/protocol/exporter/#configuration-options).
+有关可以用来配置 OTLP 导出器的头部的更多信息，请[参见 OpenTelemetry 网站](https://opentelemetry.io/docs/specs/otel/protocol/exporter/#configuration-options)。
 
-The resource that is associated with the telemetry data can be configured using
-the `OTEL_SERVICE_NAME` and `OTEL_RESOURCE_ATTRIBUTES` environment variables. In
-addition to attributes set via the `OTEL_RESOURCE_ATTRIBUTES` environment
-variable, the following attributes are automatically set:
+与遥测数据关联的资源可以通过 `OTEL_SERVICE_NAME` 和 `OTEL_RESOURCE_ATTRIBUTES` 环境变量进行配置。除了通过 `OTEL_RESOURCE_ATTRIBUTES` 环境变量设置的属性外，以下属性会自动设置：
 
-- `service.name`: If `OTEL_SERVICE_NAME` is not set, the value is set to
-  `<unknown_service>`.
+- `service.name`: 如果 `OTEL_SERVICE_NAME` 未设置，则该值设置为 `<unknown_service>`。
 - `process.runtime.name`: `deno`
-- `process.runtime.version`: The version of the Deno runtime.
+- `process.runtime.version`: Deno 运行时的版本。
 - `telemetry.sdk.name`: `deno-opentelemetry`
 - `telemetry.sdk.language`: `deno-rust`
-- `telemetry.sdk.version`: The version of the Deno runtime, plus the version of
-  the `opentelemetry` Rust crate being used by Deno, separated by a `-`.
+- `telemetry.sdk.version`: Deno 运行时的版本，加上 Deno 正在使用的 `opentelemetry` Rust crate 的版本，以 `-` 分隔。
 
-Metric collection frequency can be configured using the
-`OTEL_METRIC_EXPORT_INTERVAL` environment variable. The default value is `60000`
-milliseconds (60 seconds).
+可以使用 `OTEL_METRIC_EXPORT_INTERVAL` 环境变量配置指标收集频率。默认值为 `60000` 毫秒（60 秒）。
 
-Span exporter batching can be configured using the batch span processor
-environment variables described in the
-[OpenTelemetry specification](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-span-processor).
+可以使用批量跨度处理器环境变量配置跨度导出器的批处理，这些变量在
+[OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-span-processor) 中描述。
 
-Log exporter batching can be configured using the batch log record processor
-environment variables described in the
-[OpenTelemetry specification](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-log-record-processor).
+可以使用批量日志记录处理器环境变量配置日志导出器的批处理，这些变量在
+[OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-log-record-processor) 中描述。
 
-## Limitations
+## 限制
 
-While the OpenTelemetry integration for Deno is in development, there are some
-limitations to be aware of:
+虽然 Deno 的 OpenTelemetry 集成正在开发中，但需要注意一些限制：
 
-- Traces are always sampled (i.e. `OTEL_TRACE_SAMPLER=parentbased_always_on`).
-- Traces do not support events and links.
-- Automatic propagation of the trace context in `Deno.serve` and `fetch` is not
-  supported.
-- Metric exemplars are not supported.
-- Custom log streams (e.g. logs other than `console.log` and `console.error`)
-  are not supported.
-- The only supported exporter is OTLP - other exporters are not supported.
-- Only `http/protobuf` and `http/json` protocols are supported for OTLP. Other
-  protocols such as `grpc` are not supported.
-- Metrics from observable (asynchronous) meters are not collected on process
-  exit/crash, so the last value of metrics may not be exported. Synchronous
-  metrics are exported on process exit/crash.
-- The limits specified in the `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`,
-  `OTEL_ATTRIBUTE_COUNT_LIMIT`, `OTEL_SPAN_EVENT_COUNT_LIMIT`,
-  `OTEL_SPAN_LINK_COUNT_LIMIT`, `OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT`, and
-  `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` environment variable are not respected for
-  trace spans.
-- The `OTEL_METRIC_EXPORT_TIMEOUT` environment variable is not respected.
-- HTTP methods are that are not known are not normalized to `_OTHER` in the
-  `http.request.method` span attribute as per the OpenTelemetry semantic
-  conventions.
-- The HTTP server span for `Deno.serve` does not have an OpenTelemtry status
-  set, and if the handler throws (ie `onError` is invoked), the span will not
-  have an error status set and the error will not be attached to the span via
-  event.
-- There is no mechanism to add a `http.route` attribute to the HTTP client span
-  for `fetch`, or to update the span name to include the route.
+- 跟踪总是会被采样（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
+- 跟踪不支持事件和链接。
+- 在 `Deno.serve` 和 `fetch` 中上下文的自动传播不受支持。
+- 不支持指标示例。
+- 不支持自定义日志流（例如，非 `console.log` 和 `console.error` 的日志）。
+- 只支持 OTLP 导出器 - 不支持其他导出器。
+- 仅支持 `http/protobuf` 和 `http/json` 协议用于 OTLP。不支持其他协议，例如 `grpc`。
+- 观察（异步）仪表的指标在进程退出/崩溃时不会被收集，因此最后的指标值可能不会被导出。同步指标在进程退出/崩溃时会导出。
+- `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、 `OTEL_ATTRIBUTE_COUNT_LIMIT`、 `OTEL_SPAN_EVENT_COUNT_LIMIT`、 `OTEL_SPAN_LINK_COUNT_LIMIT`、 `OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和 `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 环境变量中指定的限制不适用于跟踪跨度。
+- `OTEL_METRIC_EXPORT_TIMEOUT` 环境变量不被尊重。
+- 不认识的 HTTP 方法在 `http.request.method` 跨度属性中不会被标准化为 `_OTHER`，这与 OpenTelemetry 的语义约定相符。
+- `Deno.serve` 的 HTTP 服务器跨度没有设置 OpenTelemetry 状态，如果处理程序抛出错误（即调用 `onError`），则该跨度不会设置错误状态，且错误不会通过事件附加到跨度。
+- 没有机制将 `http.route` 属性添加到 `fetch` 的 HTTP 客户端跨度，或更新跨度名称以包含路由。

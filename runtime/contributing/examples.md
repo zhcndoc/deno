@@ -1,25 +1,18 @@
 ---
-title: Contributing an example
+title: 贡献一个示例
 ---
 
-[Deno by Example](/examples/) is a collection of examples that demonstrate how
-to use Deno and its APIs. If you contribute an example, we'll send you a free
-pack of stickers!
+[Deno 示例](/examples/) 是一个展示如何使用 Deno 及其 API 的示例集合。如果您贡献一个示例，我们将送您一包免费的贴纸！
 
-![Deno stickers laid out on a table](./images/stickers.jpg)
+![Deno 贴纸铺在桌子上](./images/stickers.jpg)
 
-## Contributing an example
+## 贡献一个示例
 
-If you have a Deno example that you would like to share with the community, you
-can contribute it to the
-[Deno docs repository](https://github.com/denoland/docs?tab=readme-ov-file#examples)
-or make an issue if there's an example you'd like to see. If your example is
-merged, we'll credit you as the author and send you some awesome special edition
-Deno stickers so that you can show off your contributor status as a token of our
-appreciation.
+如果您有一个 Deno 示例想要与社区分享，您可以将其贡献到
+[Deno 文档库](https://github.com/denoland/docs?tab=readme-ov-file#examples)
+或者提出一个问题，告诉我们您希望看到的示例。如果您的示例被合并，我们将以作者的名义给您致谢，并送您一些很棒的特别版 Deno 贴纸，以展示您作为贡献者的身份，作为我们感谢的象征。
 
-## Getting your stickers
+## 获取您的贴纸
 
-If you've contributed an example, drop us an email at
-[docs@deno.com](mailto:docs@deno.com) and let us know so we can get your
-stickers out to you!
+如果您贡献了一个示例，请通过电子邮件与我们联系，发至
+[docs@deno.com](mailto:docs@deno.com)，告诉我们您以便我们能够将贴纸寄给您！

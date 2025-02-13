@@ -1,39 +1,26 @@
 ---
-title: "How to use Planetscale with Deno"
+title: "如何使用 Planetscale 与 Deno"
 url: /examples/planetscale_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/planetscale/
   - /runtime/tutorials/how_to_with_npm/planetscale/
 ---
 
-Planetscale is a MySQL-compatible serverless database that is designed with a
-developer workflow where developers can create, branch, and deploy databases
-from the command line.
+Planetscale 是一个与 MySQL 兼容的无服务器数据库，旨在为开发者提供工作流程，使开发者可以通过命令行创建、分支和部署数据库。
 
-[View source here.](https://github.com/denoland/examples/tree/main/with-planetscale)
+[在此处查看源码。](https://github.com/denoland/examples/tree/main/with-planetscale)
 
-We'll use the Planetscale serverless driver, `@planetscale/database`, to work
-with Deno. First we want to create `main.ts` and import the connect method from
-this package:
+我们将使用 Planetscale 无服务器驱动程序 `@planetscale/database` 来与 Deno 配合使用。首先我们想要创建 `main.ts` 并从该包中导入连接方法：
 
 ```tsx
 import { connect } from "npm:@planetscale/database@^1.4";
 ```
 
-## Configuring our connection
+## 配置我们的连接
 
-The connection requires three credentials: host, username, and password. These
-are database-specific, so we first need to create a database in Planetscale. You
-can do that by following the initial instructions
-[here](https://planetscale.com/docs/tutorials/planetscale-quick-start-guide).
-Don't worry about adding the schema—we can do that through
-`@planetscale/database`.
+连接需要三种凭据：主机、用户名和密码。这些都是特定于数据库的，因此我们首先需要在 Planetscale 中创建一个数据库。您可以按照最初的说明[在这里](https://planetscale.com/docs/tutorials/planetscale-quick-start-guide)进行操作。别担心添加模式—我们可以通过 `@planetscale/database` 来完成这一点。
 
-Once you have created the database, head to Overview, click "Connect", and
-choose "Connect with `@planetscale/database`" to get the host and username. Then
-click through to Passwords to create a new password for your database. Once you
-have all three you can plug them in directly, or better, store them as
-environment variables:
+一旦您创建了数据库，前往概览，点击“连接”，选择“使用 `@planetscale/database` 连接”以获取主机和用户名。然后点击“密码”创建一个新的数据库密码。一旦您拥有这三项，您可以直接输入它们，或者更好的是，将它们存储为环境变量：
 
 ```bash
 export HOST=<host>
@@ -41,7 +28,7 @@ export USERNAME=<username>
 export PASSWORD=<password>
 ```
 
-Then call them using `Deno.env`:
+然后使用 `Deno.env` 调用它们：
 
 ```tsx
 const config = {
@@ -53,19 +40,17 @@ const config = {
 const conn = connect(config);
 ```
 
-This will also work on Deno Deploy if you set the environment variables in the
-dashboard. Run with:
+如果您在仪表板中设置了环境变量，这在 Deno Deploy 上也可以工作。运行命令：
 
 ```shell
 deno run --allow-net --allow-env main.ts
 ```
 
-The `conn` object is now an open connection to our Planetscale database.
+现在 `conn` 对象是一个与我们的 Planetscale 数据库的开放连接。
 
-## Creating and populating our database table
+## 创建和填充我们的数据库表
 
-Now that you have the connection running, you can `conn.execute()` with SQL
-commands to create tables and insert the initial data:
+现在您已成功建立连接，可以使用 SQL 命令通过 `conn.execute()` 创建表并插入初始数据：
 
 ```tsx
 await conn.execute(
@@ -76,17 +61,16 @@ await conn.execute(
 );
 ```
 
-## Querying Planetscale
+## 查询 Planetscale
 
-We can use same `conn.execute()` to also write our queries. Let's get a list of
-all our dinosaurs:
+我们也可以使用同样的 `conn.execute()` 来编写查询。让我们获取所有恐龙的列表：
 
 ```tsx
 const results = await conn.execute("SELECT * FROM `dinosaurs`");
 console.log(results.rows);
 ```
 
-The result:
+结果为：
 
 ```tsx
 [
@@ -104,8 +88,7 @@ The result:
 ];
 ```
 
-We can also get just a single row from the database by specifying a dinosaur
-name:
+我们也可以通过指定恐龙名称来仅获取数据库中的一行：
 
 ```tsx
 const result = await conn.execute(
@@ -114,11 +97,10 @@ const result = await conn.execute(
 console.log(result.rows);
 ```
 
-Which gives us a single row result:
+这将给我们一个单行结果：
 
 ```tsx
 [{ id: 3, name: "Deno", description: "The fastest dinosaur that ever lived." }];
 ```
 
-You can find out more about working with Planetscale in their
-[docs](https://planetscale.com/docs).
+您可以在他们的[文档](https://planetscale.com/docs)中了解更多关于使用 Planetscale 的信息。

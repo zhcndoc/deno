@@ -1,22 +1,21 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Enforces specifying explicit references to paths in module specifiers.
+强制在模块说明符中指定显式路径引用。
 
-Non-explicit specifiers are ambiguous and require probing for the correct file
-path on every run, which has a performance overhead.
+非显式说明符是模糊的，需要在每次运行时查找正确的文件路径，这会带来性能开销。
 
-Note: This lint rule is only active when using `--unstable-sloppy-imports`.
+注意：此 lint 规则仅在使用 `--unstable-sloppy-imports` 时激活。
 
-### Invalid:
+### 无效示例：
 
 ```typescript
 import { add } from "./math/add";
 import { ConsoleLogger } from "./loggers";
 ```
 
-### Valid:
+### 有效示例：
 
 ```typescript
 import { add } from "./math/add.ts";

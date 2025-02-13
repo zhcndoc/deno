@@ -1,27 +1,18 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Bans the use of primitive wrapper objects (e.g. `String` the object is a wrapper
-of `string` the primitive) in addition to the non-explicit `Function` type and
-the misunderstood `Object` type.
+禁止使用原始包装对象（例如 `String` 这个对象是 `string` 原始类型的包装），以及不明确的 `Function` 类型和误解的 `Object` 类型。
 
-There are very few situations where primitive wrapper objects are desired and
-far more often a mistake was made with the case of the primitive type. You also
-cannot assign a primitive wrapper object to a primitive leading to type issues
-down the line. For reference, [the TypeScript handbook] also says we shouldn't
-ever use these wrapper objects.
+原始包装对象的使用情况非常少见，更多的情况是使用原始类型时出现错误。你也不能将原始包装对象赋值给原始类型，这会导致后续的类型问题。作为参考，[TypeScript 手册] 也表示我们不应使用这些包装对象。
 
-[the TypeScript handbook]: https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html#number-string-boolean-symbol-and-object
+[TypeScript 手册]: https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html#number-string-boolean-symbol-and-object
 
-With `Function`, it is better to explicitly define the entire function signature
-rather than use the non-specific `Function` type which won't give you type
-safety with the function.
+对于 `Function`，最好明确指定整个函数签名，而不是使用模糊的 `Function` 类型，这样不会给你提供函数的类型安全。
 
-Finally, `Object` and `{}` means "any non-nullish value" rather than "any object
-type". `object` is a good choice for a meaning of "any object type".
+最后，`Object` 和 `{}` 意味着“任何非空值”，而不是“任何对象类型”。`object` 是表示“任何对象类型”的不错选择。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 let a: Boolean;
@@ -33,7 +24,7 @@ let f: Object;
 let g: {};
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 let a: boolean;

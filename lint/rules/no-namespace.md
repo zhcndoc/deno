@@ -1,23 +1,19 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of `namespace` and `module` keywords in TypeScript code.
+不允许在 TypeScript 代码中使用 `namespace` 和 `module` 关键字。
 
-`namespace` and `module` are both thought of as outdated keywords to organize
-the code. Instead, it is generally preferable to use ES2015 module syntax (e.g.
-`import`/`export`).
+`namespace` 和 `module` 都被认为是过时的关键字，用于组织代码。相反，通常更倾向于使用 ES2015 模块语法（例如 `import`/`export`）。
 
-However, this rule still allows the use of these keywords in the following two
-cases:
+然而，此规则仍然允许在以下两种情况下使用这些关键字：
 
-- they are used for defining ["ambient" namespaces] along with `declare`
-  keywords
-- they are written in TypeScript's type definition files: `.d.ts`
+- 它们用于定义 ["ambient" 命名空间] 并与 `declare` 关键字一起使用
+- 它们写在 TypeScript 的类型定义文件中：`.d.ts`
 
-["ambient" namespaces]: https://www.typescriptlang.org/docs/handbook/namespaces.html#ambient-namespaces
+["ambient" 命名空间]: https://www.typescriptlang.org/docs/handbook/namespaces.html#ambient-namespaces
 
-**Invalid:**
+**无效：**
 
 ```typescript
 // foo.ts
@@ -27,10 +23,10 @@ namespace ns {}
 
 ```dts
 // bar.d.ts
-// all usage of `module` and `namespace` keywords are allowed in `.d.ts`
+// 在 `.d.ts` 中允许使用 `module` 和 `namespace` 关键字的所有情况
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 // foo.ts

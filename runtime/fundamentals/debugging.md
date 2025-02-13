@@ -1,15 +1,13 @@
 ---
-title: "Debugging your code"
+title: "调试你的代码"
 oldUrl:
 - /runtime/manual/getting_started/debugging_your_code/
 - /runtime/manual/basics/debugging_your_code/
 ---
 
-Deno supports the [V8 Inspector Protocol](https://v8.dev/docs/inspector) used by
-Chrome, Edge and Node.js. This makes it possible to debug Deno programs using
-Chrome DevTools or other clients that support the protocol (for example VSCode).
+Deno 支持 [V8 Inspector Protocol](https://v8.dev/docs/inspector)，这是 Chrome、Edge 和 Node.js 使用的协议。这使得可以使用 Chrome DevTools 或其他支持该协议的客户端（例如 VSCode）调试 Deno 程序。
 
-To activate debugging capabilities run Deno with one of the following flags:
+要激活调试功能，请使用以下标志之一运行 Deno：
 
 - `--inspect`
 - `--inspect-wait`
@@ -17,13 +15,9 @@ To activate debugging capabilities run Deno with one of the following flags:
 
 ## --inspect
 
-Using the `--inspect` flag will start your program with an inspector server
-which allows client connections from tools that support the V8 Inspector
-Protocol, for example Chrome DevTools.
+使用 `--inspect` 标志将启动一个带有 inspector 服务器的程序，这样就可以从支持 V8 Inspector 协议的工具（例如 Chrome DevTools）连接客户端。
 
-Visit `chrome://inspect` in a Chromium derived browser to connect Deno to the
-inspector server. This allows you to inspect your code, add breakpoints, and
-step through your code.
+在 Chromium 兼容的浏览器中访问 `chrome://inspect` 以将 Deno 连接到 inspector 服务器。这允许您检查代码、添加断点并逐步执行代码。
 
 ```sh
 deno run --inspect your_script.ts
@@ -31,19 +25,15 @@ deno run --inspect your_script.ts
 
 :::note
 
-If you use the `--inspect` flag, the code will start executing immediately. If
-your program is short, you might not have enough time to connect the debugger
-before the program finishes execution.
+如果您使用 `--inspect` 标志，代码将立即开始执行。如果您的程序较短，您可能没有足够的时间在程序完成执行之前连接调试器。
 
-In such cases, try running with `--inspect-wait` or `--inspect-brk` flag
-instead, or add a timeout at the end of your code.
+在这种情况下，请尝试使用 `--inspect-wait` 或 `--inspect-brk` 标志，或者在代码的结尾添加一个超时。
 
 :::
 
 ## --inspect-wait
 
-The `--inspect-wait` flag will wait for a debugger to connect before executing
-your code.
+`--inspect-wait` 标志将在执行代码之前等待调试器连接。
 
 ```sh
 deno run --inspect-wait your_script.ts
@@ -51,25 +41,19 @@ deno run --inspect-wait your_script.ts
 
 ## --inspect-brk
 
-The `--inspect-brk` flag will wait for a debugger to connect before executing
-your code and then put a breakpoint in your program as soon as you connect,
-allowing you to add additional breakpoints or evaluate expressions before
-resuming execution.
+`--inspect-brk` 标志将在执行代码之前等待调试器连接，然后在您连接后立即在您的程序中设置一个断点，允许您在继续执行之前添加额外的断点或评估表达式。
 
-**This is the most commonly used inspect flag**. JetBrains and VSCode IDEs use
-this flag by default.
+**这是最常用的 inspect 标志**。JetBrains 和 VSCode IDE 默认使用此标志。
 
 ```sh
 deno run --inspect-brk your_script.ts
 ```
 
-## Example with Chrome DevTools
+## 使用 Chrome DevTools 的示例
 
-Let's try debugging a program using Chrome Devtools. For this, we'll use
-[@std/http/file-server](https://jsr.io/@std/http#file-server), a static file
-server.
+我们来尝试使用 Chrome DevTools 调试一个程序。为此，我们将使用 [@std/http/file-server](https://jsr.io/@std/http#file-server)，这是一个静态文件服务器。
 
-Use the `--inspect-brk` flag to break execution on the first line:
+使用 `--inspect-brk` 标志在第一行中暂停执行：
 
 ```sh
 $ deno run --inspect-brk -RN jsr:@std/http/file-server
@@ -77,82 +61,57 @@ Debugger listening on ws://127.0.0.1:9229/ws/1e82c406-85a9-44ab-86b6-7341583480b
 ...
 ```
 
-In a Chromium derived browser such as Google Chrome or Microsoft Edge, open
-`chrome://inspect` and click `Inspect` next to target:
+在像 Google Chrome 或 Microsoft Edge 这样的 Chromium 兼容浏览器中，打开 `chrome://inspect` 并点击目标旁边的 `Inspect`：
 
 ![chrome://inspect](./images/debugger1.png)
 
-It might take a few seconds after opening the DevTools to load all modules.
+打开 DevTools 后可能需要几秒钟才能加载所有模块。
 
-![DevTools opened](./images/debugger2.jpg)
+![DevTools 已打开](./images/debugger2.jpg)
 
-You might notice that DevTools pauses execution on the first line of
-`_constants.ts` instead of `file_server.ts`. This is expected behavior caused by
-the way ES modules are evaluated in JavaScript (`_constants.ts` is left-most,
-bottom-most dependency of `file_server.ts` so it is evaluated first).
+您可能会注意到 DevTools 在 `_constants.ts` 的第一行暂停执行，而不是在 `file_server.ts`。这是由于 JavaScript 中 ES 模块的评估方式造成的预期行为（`_constants.ts` 是 `file_server.ts` 的最左侧、最底部依赖项，因此它首先被评估）。
 
-At this point all source code is available in the DevTools, so let's open up
-`file_server.ts` and add a breakpoint there; go to "Sources" pane and expand the
-tree:
+此时，所有源代码在 DevTools 中均可用，所以让我们打开 `file_server.ts` 并在此添加断点；转到 "Sources" 面板并展开树形结构：
 
-![Open file_server.ts](./images/debugger3.jpg)
+![打开 file_server.ts](./images/debugger3.jpg)
 
-_Looking closely you'll find duplicate entries for each file; one written
-regularly and one in italics. The former is compiled source file (so in the case
-of `.ts` files it will be emitted JavaScript source), while the latter is a
-source map for the file._
+_仔细查看您会发现每个文件都有重复条目；一个是常规写法，一个是斜体。前者是编译的源文件（因此在 `.ts` 文件的情况下，它将发出 JavaScript 源），而后者是该文件的源映射。_
 
-Next, add a breakpoint in the `listenAndServe` method:
+接下来，在 `listenAndServe` 方法中添加一个断点：
 
-![Break in file_server.ts](./images/debugger4.jpg)
+![在 file_server.ts 中设置断点](./images/debugger4.jpg)
 
-As soon as we've added the breakpoint, DevTools automatically opens up the
-source map file, which allows us step through the actual source code that
-includes types.
+一旦添加了断点，DevTools 将自动打开源映射文件，这让我们可以逐步查看包含类型的实际源代码。
 
-Now that we have our breakpoints set, we can resume the execution of our script
-so that we can inspect an incoming request. Hit the "Resume script execution"
-button to do so. You might even need to hit it twice!
+现在我们已经设置了断点，可以继续执行脚本，以便检查传入的请求。点击 "Resume script execution" 按钮来完成。您可能需要点击两次！
 
-Once our script is running, try send a request and inspect it in Devtools:
+一旦我们的脚本在运行，尝试发送请求并在 DevTools 中检查它：
 
 ```sh
 curl http://0.0.0.0:4507/
 ```
 
-![Break in request handling](./images/debugger5.jpg)
+![在请求处理中设置断点](./images/debugger5.jpg)
 
-At this point we can introspect the contents of the request and go step-by-step
-to debug the code.
+此时我们可以检查请求的内容，并逐步调试代码。
 
 ## VSCode
 
-Deno can be debugged using VSCode. This is best done with help from the official
-`vscode_deno` extension. Documentation for this can be found
-[here](/runtime/reference/vscode#using-the-debugger).
+可以使用 VSCode 调试 Deno。最好的方法是借助官方的 `vscode_deno` 扩展。有关此扩展的文档可以在 [这里](/runtime/reference/vscode#using-the-debugger) 找到。
 
 ## JetBrains IDEs
 
-_**Note**: make sure you have
-[this Deno plugin](https://plugins.jetbrains.com/plugin/14382-deno) installed
-and enabled in Preferences / Settings | Plugins. For more information, see
-[this blog post](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)._
+_**注意**：确保您已安装并在首选项/设置 | 插件中启用 [此 Deno 插件](https://plugins.jetbrains.com/plugin/14382-deno)。有关更多信息，请参见 [此博客文章](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)。_
 
-You can debug Deno using your JetBrains IDE by right-clicking the file you want
-to debug and selecting the `Debug 'Deno: <file name>'` option.
+您可以通过右键单击要调试的文件并选择 `Debug 'Deno: <file name>'` 选项来使用 JetBrains IDE 调试 Deno。
 
-![Debug file](./images/jb-ide-debug.png)
+![调试文件](./images/jb-ide-debug.png)
 
-This will create a run/debug configuration with no permission flags set. If you
-want to configure them, open your run/debug configuration and add the required
-flags to the `Command` field.
+这将创建一个没有权限标志的运行/调试配置。如果您想配置它们，请打开您的运行/调试配置并将所需标志添加到 `Command` 字段。
 
 ## --log-level=debug
 
-If you're having trouble connecting to the inspector, you can use the
-`--log-level=debug` flag to get more information about what's happening. This
-will show you information like module resolution, network requests, and other
-permission checks.
+如果您在连接 inspector 时遇到问题，可以使用 `--log-level=debug` 标志以获取有关发生情况的更多信息。这将显示例如模块解析、网络请求和其他权限检查等信息。
 
 ```sh
 deno run --inspect-brk --log-level=debug your_script.ts
@@ -160,17 +119,10 @@ deno run --inspect-brk --log-level=debug your_script.ts
 
 ## --strace-ops
 
-Deno ops are an [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call)
-mechanism between JavaScript and Rust. They provide functionality like file I/O,
-networking, and timers to JavaScript. The `--strace-ops` flag will print out all
-ops that are being executed by Deno when a program is run along with their
-timings.
+Deno ops 是一个 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 机制，用于在 JavaScript 和 Rust 之间提供功能，例如文件 I/O、网络和定时器。`--strace-ops` 标志将在程序运行时打印所有正在执行的 Deno ops 及其时序。
 
 ```sh
 deno run --strace-ops your_script.ts
 ```
 
-Each op should have a `Dispatch` and a `Complete` event. The time between these
-two events is the time taken to execute the op. This flag can be useful for
-performance profiling, debugging hanging programs, or understanding how Deno
-works under the hood.
+每个 op 应该具有一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间是执行 op 所需的时间。此标志对于性能分析、调试挂起的程序或理解 Deno 背后的工作原理可能非常有用。

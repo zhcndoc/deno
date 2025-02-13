@@ -1,30 +1,27 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the deletion of variables.
+不允许删除变量。
 
-`delete` is used to remove a property from an object. Variables declared via
-`var`, `let` and `const` cannot be deleted (`delete` will return `false`).
-Setting `strict` mode on will raise a syntax error when attempting to delete a
-variable.
+`delete` 用于从对象中移除一个属性。通过 `var`、`let` 和 `const` 声明的变量无法被删除（`delete` 将返回 `false`）。在严格模式下，当试图删除一个变量时会抛出语法错误。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const a = 1;
 let b = 2;
 let c = 3;
-delete a; // would return false
-delete b; // would return false
-delete c; // would return false
+delete a; // 将返回 false
+delete b; // 将返回 false
+delete c; // 将返回 false
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 let obj = {
   a: 1,
 };
-delete obj.a; // return true
+delete obj.a; // 返回 true
 ```

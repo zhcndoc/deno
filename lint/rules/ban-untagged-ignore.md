@@ -1,20 +1,19 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Requires `deno-lint-ignore` to be annotated with one or more rule names.
+需要将 `deno-lint-ignore` 注解与一个或多个规则名称。
 
-Ignoring all rules can mask unexpected or future problems. Therefore you need to
-explicitly specify which rule(s) are to be ignored.
+忽略所有规则可能会掩盖意外或未来的问题。因此，您需要明确指定要忽略的规则。
 
-**Invalid:**
+**无效:**
 
 ```typescript
 // deno-lint-ignore
 export function duplicateArgumentsFn(a, b, a) {}
 ```
 
-**Valid:**
+**有效:**
 
 ```typescript
 // deno-lint-ignore no-dupe-args

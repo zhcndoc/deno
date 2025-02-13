@@ -1,5 +1,5 @@
 ---
-title: "How to use Express with Deno"
+title: "如何在 Deno 中使用 Express"
 url: /examples/express_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/express/
@@ -7,23 +7,21 @@ oldUrl:
   - /runtime/tutorials/how_to_with_npm/express/
 ---
 
-[Express](https://expressjs.com/) is a popular web framework known for being
-simple and unopinionated with a large ecosystem of middleware.
+[Express](https://expressjs.com/) 是一个流行的 web 框架，以简单和无特定意见著称，拥有庞大的中间件生态系统。
 
-This How To guide will show you how to create a simple API using Express and
-Deno.
+本指南将展示如何使用 Express 和 Deno 创建一个简单的 API。
 
-[View source here.](https://github.com/denoland/examples/tree/main/with-express)
+[在这里查看源代码。](https://github.com/denoland/examples/tree/main/with-express)
 
-## Create `main.ts`
+## 创建 `main.ts`
 
-Let's create `main.ts`:
+让我们创建 `main.ts`：
 
 ```console
 touch main.ts
 ```
 
-In `main.ts`, let's create a simple server:
+在 `main.ts` 中，创建一个简单的服务器：
 
 ```ts
 // @ts-types="npm:@types/express@4.17.15"
@@ -32,51 +30,46 @@ import express from "npm:express@4.18.2";
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Dinosaur API!");
+  res.send("欢迎来到恐龙 API！");
 });
 
 app.listen(8000);
 ```
 
-Let's run this server:
+让我们运行这个服务器：
 
 ```console
 deno run -A main.ts
 ```
 
-And point our browser to `localhost:8000`. You should see:
+然后在浏览器中访问 `localhost:8000`。你应该看到：
 
-**Welcome to the Dinosaur API!**
+**欢迎来到恐龙 API！**
 
-## Add data and routes
+## 添加数据和路由
 
-The next step here is to add some data. We'll use this Dinosaur data that we
-found from [this article](https://www.thoughtco.com/dinosaurs-a-to-z-1093748).
-Feel free to
-[copy it from here](https://github.com/denoland/examples/blob/main/with-express/data.json).
+接下来的步骤是添加一些数据。我们将使用从 [这篇文章](https://www.thoughtco.com/dinosaurs-a-to-z-1093748) 中找到的恐龙数据。随意
+[从这里复制数据](https://github.com/denoland/examples/blob/main/with-express/data.json)。
 
-Let's create `data.json`:
+我们来创建 `data.json`：
 
 ```console
 touch data.json
 ```
 
-And paste in the dinosaur data.
+并粘贴恐龙数据。
 
-Next, let's import that data into `main.ts`. Let's add this line at the top of
-the file:
+接下来，我们将这些数据导入 `main.ts`。在文件顶部添加这一行：
 
 ```ts
 import data from "./data.json" assert { type: "json" };
 ```
 
-Then, we can create the routes to access that data. To keep it simple, let's
-just define `GET` handlers for `/api/` and `/api/:dinosaur`. Add the below after
-the `const app = express();` line:
+然后，我们可以创建访问这些数据的路由。为了保持简单，我们只为 `/api/` 和 `/api/:dinosaur` 定义 `GET` 处理程序。在 `const app = express();` 行后添加以下内容：
 
 ```ts
 app.get("/", (req, res) => {
-  res.send("Welcome to the Dinosaur API!");
+  res.send("欢迎来到恐龙 API！");
 });
 
 app.get("/api", (req, res) => {
@@ -91,7 +84,7 @@ app.get("/api/:dinosaur", (req, res) => {
     if (found) {
       res.send(found);
     } else {
-      res.send("No dinosaurs found.");
+      res.send("未找到恐龙。");
     }
   }
 });
@@ -99,33 +92,32 @@ app.get("/api/:dinosaur", (req, res) => {
 app.listen(8000);
 ```
 
-Let's run the server with `deno run -A main.ts` and check out
-`localhost:8000/api`. You should see a list of dinosaurs:
+让我们使用 `deno run -A main.ts` 运行服务器，并查看 `localhost:8000/api`。你应该看到恐龙的列表：
 
 ```json
 [
   {
     "name": "Aardonyx",
-    "description": "An early stage in the evolution of sauropods."
+    "description": "长颈龙演化早期阶段。"
   },
   {
     "name": "Abelisaurus",
-    "description": "\"Abel's lizard\" has been reconstructed from a single skull."
+    "description": "\"阿贝尔的蜥蜴\" 是由单个头骨重建的。"
   },
   {
     "name": "Abrictosaurus",
-    "description": "An early relative of Heterodontosaurus."
+    "description": "异齿龙的早期亲属。"
   },
 ...
 ```
 
-And when we go to `localhost:8000/api/aardonyx`:
+当我们访问 `localhost:8000/api/aardonyx` 时：
 
 ```json
 {
   "name": "Aardonyx",
-  "description": "An early stage in the evolution of sauropods."
+  "description": "长颈龙演化早期阶段。"
 }
 ```
 
-Great!
+太棒了！

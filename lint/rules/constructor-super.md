@@ -1,14 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Verifies the correct usage of constructors and calls to `super()`.
+验证构造函数和 `super()` 调用的正确使用。
 
-Defined constructors of derived classes (e.g. `class A extends B`) must always
-call `super()`. Classes which extend non-constructors (e.g.
-`class A extends null`) must not have a constructor.
+派生类（例如 `class A extends B`）的定义构造函数必须始终调用 `super()`。扩展非构造函数的类（例如 `class A extends null`）不得有构造函数。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 class A {}
@@ -17,24 +15,24 @@ class Z {
 }
 
 class B extends Z {
-  constructor() {} // missing super() call
+  constructor() {} // 缺少 super() 调用
 }
 class C {
   constructor() {
-    super(); // Syntax error
+    super(); // 语法错误
   }
 }
 class D extends null {
-  constructor() {} // illegal constructor
+  constructor() {} // 非法构造函数
 }
 class E extends null {
-  constructor() { // illegal constructor
+  constructor() { // 非法构造函数
     super();
   }
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 class A {}

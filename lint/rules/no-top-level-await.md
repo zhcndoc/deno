@@ -2,24 +2,24 @@
 tags: []
 ---
 
-Disallows the use of top level await expressions.
+不允许使用顶级 await 表达式。
 
-Top level await cannot be used when distributing CommonJS/UMD via dnt.
+在通过 dnt 分发 CommonJS/UMD 时，无法使用顶级 await。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 await foo();
 for await (item of items) {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 async function foo() {
   await task();
 }
-async function foo() {
+async function bar() {
   for await (item of items) {}
 }
 ```

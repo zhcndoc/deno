@@ -2,18 +2,17 @@
 tags: []
 ---
 
-Using JSX children together with `dangerouslySetInnerHTML` is invalid as they
-will be ignored.
+使用 JSX 子元素与 `dangerouslySetInnerHTML` 一起是无效的，因为它们将被忽略。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <div dangerouslySetInnerHTML={{ __html: "<h1>hello</h1>" }}>
-  <h1>this will never be rendered</h1>
+  <h1>这将永远不会被渲染</h1>
 </div>;
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <div dangerouslySetInnerHTML={{ __html: "<h1>hello</h1>" }} />;

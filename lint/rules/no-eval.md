@@ -2,23 +2,21 @@
 tags: []
 ---
 
-Disallows the use of `eval`.
+不允许使用 `eval`。
 
-`eval` is a potentially dangerous function which can open your code to a number
-of security vulnerabilities. In addition to being slow, `eval` is also often
-unnecessary with better solutions available.
+`eval` 是一个潜在危险的函数，它可能会使你的代码面临多种安全漏洞。除了速度慢之外，`eval` 通常还可以通过更好的解决方案来避免使用。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const obj = { x: "foo" };
-const key = "x",
+const key = "x";
 const value = eval("obj." + key);
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const obj = { x: "foo" };
-const value = obj[x];
+const value = obj[key];
 ```

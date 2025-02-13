@@ -1,28 +1,23 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Warns unused ignore directives.
+警告未使用的忽略指令。
 
-We sometimes have to suppress and ignore lint errors for some reasons and we can
-do so using [ignore directives](/go/lint-ignore/).
+我们有时出于某些原因不得不抑制和忽略 lint 错误，我们可以使用 [忽略指令](/go/lint-ignore/) 来实现。
 
-In some cases, however, like after refactoring, we may end up having ignore
-directives that are no longer necessary. Such superfluous ignore directives are
-likely to confuse future code readers, and to make matters worse, might hide
-future lint errors unintentionally. To prevent such situations, this rule
-detects unused, superfluous ignore directives.
+然而，在某些情况下，比如重构之后，我们可能会拥有不再必要的忽略指令。这些多余的忽略指令可能会让未来的代码阅读者困惑，更糟糕的是，可能无意中掩盖未来的 lint 错误。为了防止这种情况，此规则检测未使用的多余忽略指令。
 
-**Invalid:**
+**无效:**
 
 ```typescript
-// Actually this line is valid since `export` means "used",
-// so this directive is superfluous
+// 实际上这行是有效的，因为 `export` 意味着“已使用”，
+// 所以这个指令是多余的
 // deno-lint-ignore no-unused-vars
 export const foo = 42;
 ```
 
-**Valid:**
+**有效:**
 
 ```typescript
 export const foo = 42;

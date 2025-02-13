@@ -1,14 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallow `await` keyword inside a non-async function.
+禁止在非异步函数中使用 `await` 关键字。
 
-Using the `await` keyword inside a non-async function is a syntax error. To be
-able to use `await` inside a function, the function needs to be marked as async
-via the `async` keyword.
+在非异步函数中使用 `await` 关键字是语法错误。要在函数内部使用 `await`，必须通过 `async` 关键字将该函数标记为异步。
 
-**Invalid:**
+**无效：**
 
 ```javascript
 function foo() {
@@ -24,7 +22,7 @@ const fooFn = () => {
 };
 ```
 
-**Valid:**
+**有效：**
 
 ```javascript
 async function foo() {

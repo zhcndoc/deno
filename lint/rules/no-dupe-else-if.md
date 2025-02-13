@@ -1,26 +1,24 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows using the same condition twice in an `if`/`else if` statement.
+不允许在 `if`/`else if` 语句中重复使用相同的条件。
 
-When you reuse a condition in an `if`/`else if` statement, the duplicate
-condition will never be reached (without unusual side-effects) meaning this is
-almost always a bug.
+当您在 `if`/`else if` 语句中重复使用一个条件时，重复的条件将永远不会被达到（除非出现不寻常的副作用），这意味着这几乎总是一个错误。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 if (a) {}
 else if (b) {}
-else if (a) {} // duplicate of condition above
+else if (a) {} // 上述条件的重复
 
 if (a === 5) {}
 else if (a === 6) {}
-else if (a === 5) {} // duplicate of condition above
+else if (a === 5) {} // 上述条件的重复
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 if (a) {}

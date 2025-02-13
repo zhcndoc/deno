@@ -1,39 +1,21 @@
 ---
-title: "Security and responsible disclosure"
+title: "安全与负责任的披露"
 ---
 
-We consider the security of our systems, and all data controlled by those
-systems a top priority. No matter how much effort we put into system security,
-it is still possible that security vulnerabilities are present. We appreciate
-investigative work into system security carried out by well-intentioned, ethical
-security researchers. If you discover a vulnerability, however small, we would
-like to know about it so we can address it with appropriate measures, as quickly
-as possible. This page outlines the method we use to work with the security
-research community to address our system security.
+我们将系统的安全性以及这些系统控制的所有数据视为重中之重。无论我们在系统安全上投入多大精力，仍然有可能存在安全漏洞。我们非常感谢那些出于善意、伦理的安全研究人员对系统安全进行的调查工作。如果您发现了一个漏洞，无论多小，我们都希望您能告知我们，以便我们能够尽快采取适当措施来解决此问题。此页面概述了我们与安全研究社区合作以解决系统安全问题的方法。
 
-## Reporting a vulnerability
+## 报告漏洞
 
-Please email you findings to security@deno.com. We strive to resolve all
-problems as quickly as possible, and are more than happy to play an active role
-in publication of writeups after the problem is resolved.
+请将您的发现通过电子邮件发送至 security@deno.com。我们努力尽快解决所有问题，并非常乐意在问题解决后积极参与撰写报告的发布。
 
-## Please do the following:
+## 请遵循以下事项：
 
-- Do not take advantage of the vulnerability or problem you have discovered. For
-  example only download data that is necessary to demonstrate the
-  vulnerability - do not download any more. Also do not delete, modify, or view
-  other people's data.
-- Do not publish or reveal the problem until it has been resolved.
-- Do not use attacks on physical security, social engineering, distributed
-  denial of service, spam or applications of third parties.
-- Do provide sufficient information to reproduce the problem, so we will be able
-  to resolve it as quickly as possible. Usually, the IP address or the URL of
-  the affected system and a description of the vulnerability will be sufficient,
-  but complex vulnerabilities may require further explanation.
+- 不要利用您发现的漏洞或问题。例如，仅下载必要的数据以演示漏洞 - 不要下载更多。也不要删除、修改或查看他人的数据。
+- 在问题解决之前，请不要发布或透露该问题。
+- 不要进行物理安全攻击、社会工程、分布式拒绝服务、垃圾邮件或第三方应用程序的攻击。
+- 请提供足够的信息以重现问题，以便我们能尽快解决。通常，受影响系统的IP地址或URL以及漏洞的描述就足够了，但复杂的漏洞可能需要进一步解释。
 
-## Our commitment
+## 我们的承诺
 
-- If you act in accordance with this policy, we will not take legal action
-  against you in regard to your report.
-- We will handle your report with strict confidentiality, and not pass on your
-  personal details to third parties without your permission.
+- 如果您按照此政策行事，我们将不会对您的报告采取法律行动。
+- 我们将对您的报告严格保密，并且在没有您许可的情况下不会将您的个人信息传递给第三方。

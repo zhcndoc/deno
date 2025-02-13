@@ -2,38 +2,36 @@
 tags: []
 ---
 
-Requires TODOs to be annotated with either a user tag (`@user`) or an issue
-reference (`#issue`).
+要求 TODO 注释必须带有用户标签（`@user`）或问题引用（`#issue`）。
 
-TODOs without reference to a user or an issue become stale with no easy way to
-get more information.
+没有用户或问题引用的 TODO 注释会变得陈旧，并且没有简单的方法来获取更多信息。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
-// TODO Improve calc engine
+// TODO 改进计算引擎
 export function calcValue(): number {}
 ```
 
 ```typescript
-// TODO Improve calc engine (@djones)
+// TODO 改进计算引擎 (@djones)
 export function calcValue(): number {}
 ```
 
 ```typescript
-// TODO Improve calc engine (#332)
+// TODO 改进计算引擎 (#332)
 export function calcValue(): number {}
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
-// TODO(djones) Improve calc engine
+// TODO(djones) 改进计算引擎
 export function calcValue(): number {}
 ```
 
 ```typescript
-// TODO(@djones) Improve calc engine
+// TODO(@djones) 改进计算引擎
 export function calcValue(): number {}
 ```
 
@@ -43,6 +41,6 @@ export function calcValue(): number {}
 ```
 
 ```typescript
-// TODO(#332) Improve calc engine
+// TODO(#332) 改进计算引擎
 export function calcValue(): number {}
 ```

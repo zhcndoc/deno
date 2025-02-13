@@ -2,21 +2,19 @@
 tags: [recommended]
 ---
 
-Disallows the use of a constant expression in conditional test.
+不允许在条件测试中使用常量表达式。
 
-Using a constant expression in a conditional test is often either a mistake or a
-temporary situation introduced during development and is not ready for
-production.
+在条件测试中使用常量表达式通常是错误的，或者是在开发过程中引入的临时情况，并不适合用于生产环境。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 if (true) {}
 if (2) {}
-do {} while (x = 2); // infinite loop
+do {} while (x = 2); // 无限循环
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 if (x) {}

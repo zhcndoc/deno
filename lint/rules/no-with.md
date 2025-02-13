@@ -1,15 +1,14 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the usage of `with` statements.
+不允许使用 `with` 语句。
 
-The `with` statement is discouraged as it may be the source of confusing bugs
-and compatibility issues. For more details, see [with - JavaScript | MDN].
+`with` 语句不被推荐，因为它可能是导致困惑的错误和兼容性问题的源头。有关更多详情，请参阅 [with - JavaScript | MDN]。
 
 [with - JavaScript | MDN]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 with (someVar) {

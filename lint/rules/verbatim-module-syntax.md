@@ -2,13 +2,11 @@
 tags: [jsr]
 ---
 
-Enforces type imports to be declared as type imports.
+强制类型导入声明为类型导入。
 
-This rule ensures that the code works when the `verbatimModuleSyntax` TypeScript
-compiler option is enabled. This is useful in libraries distributing TypeScript
-code in order to work in more scenarios.
+此规则确保当启用 `verbatimModuleSyntax` TypeScript 编译器选项时，代码能够正常工作。这在分发 TypeScript 代码的库中非常有用，以便在更多场景中工作。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 import { Person } from "./person.ts";
@@ -28,7 +26,7 @@ const person: Person = {
 output(person);
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 import type { Person } from "./person.ts";

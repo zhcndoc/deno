@@ -1,5 +1,5 @@
 ---
-title: "Web Platform APIs"
+title: "Web 平台 API"
 oldUrl:
   - /runtime/manual/runtime/navigator_api/
   - /runtime/manual/runtime/web_platform_apis/
@@ -8,128 +8,90 @@ oldUrl:
   - /runtime/manual/runtime/workers/
 ---
 
-One way Deno simplifies web and cloud development is by using standard Web
-Platform APIs (like `fetch`, WebSockets and more) over proprietary APIs. This
-means if you've ever built for the browser, you're likely already familiar with
-Deno, and if you're learning Deno, you're also investing in your knowledge of
-the web.
+Deno 简化网络和云开发的一种方式是使用标准的 Web 平台 API（如 `fetch`、WebSockets 等）而不是专有 API。这意味着如果你曾经为浏览器开发过，你可能已经对 Deno 有了一定的熟悉；而如果你正在学习 Deno，你也在投资于对网络的了解。
 
-<a href="/api/web/" class="docs-cta runtime-cta">Explore supported Web APIs</a>
+<a href="/api/web/" class="docs-cta runtime-cta">探索支持的 Web API</a>
 
-Below we'll highlight some of the standard Web APIs that Deno supports.
+下面我们将重点介绍一些 Deno 支持的标准 Web API。
 
-To check if a Web Platform API is available in Deno, you can click on
-[the interface on MDN](https://developer.mozilla.org/en-US/docs/Web/API#interfaces)
-and refer to
-[its Browser Compatibility table](https://developer.mozilla.org/en-US/docs/Web/API/AbortController#browser_compatibility).
+要检查某个 Web 平台 API 是否在 Deno 中可用，你可以点击
+[MDN 上的接口](https://developer.mozilla.org/en-US/docs/Web/API#interfaces)
+并参考
+[其浏览器兼容性表](https://developer.mozilla.org/en-US/docs/Web/API/AbortController#browser_compatibility)。
 
 ## fetch
 
-The [`fetch`](/api/web/~/fetch) API can be used to make HTTP requests. It is
-implemented as specified in the
-[WHATWG `fetch` spec](https://fetch.spec.whatwg.org/).
+[`fetch`](/api/web/~/fetch) API 可用于发起 HTTP 请求。它的实现符合
+[WHATWG `fetch` 规范](https://fetch.spec.whatwg.org/)。
 
-### Spec deviations
+### 规范偏差
 
-- The Deno user agent does not have a cookie jar. As such, the `set-cookie`
-  header on a response is not processed, or filtered from the visible response
-  headers.
-- Deno does not follow the same-origin policy, because the Deno user agent
-  currently does not have the concept of origins, and it does not have a cookie
-  jar. This means Deno does not need to protect against leaking authenticated
-  data cross origin. Because of this Deno does not implement the following
-  sections of the WHATWG `fetch` specification:
-  - Section `3.1. 'Origin' header`.
-  - Section `3.2. CORS protocol`.
-  - Section `3.5. CORB`.
-  - Section `3.6. 'Cross-Origin-Resource-Policy' header`.
-  - `Atomic HTTP redirect handling`.
-  - The `opaqueredirect` response type.
-- A `fetch` with a `redirect` mode of `manual` will return a `basic` response
-  rather than an `opaqueredirect` response.
-- The specification is vague on how
-  [`file:` URLs are to be handled](https://fetch.spec.whatwg.org/#scheme-fetch).
-  Firefox is the only mainstream browser that implements fetching `file:` URLs,
-  and even then it doesn't work by default. As of Deno 1.16, Deno supports
-  fetching local files. See the next section for details.
-- The `request` and `response` header guards are implemented, but unlike
-  browsers do not have any constraints on which header names are allowed.
-- The `referrer`, `referrerPolicy`, `mode`, `credentials`, `cache`, `integrity`,
-  `keepalive`, and `window` properties and their relevant behaviours in
-  `RequestInit` are not implemented. The relevant fields are not present on the
-  `Request` object.
-- Request body upload streaming is supported (on HTTP/1.1 and HTTP/2). Unlike
-  the current fetch proposal, the implementation supports duplex streaming.
-- The `set-cookie` header is not concatenated when iterated over in the
-  `headers` iterator. This behaviour is in the
-  [process of being specified](https://github.com/whatwg/fetch/pull/1346).
+- Deno 用户代理没有 cookie 存储。因此，响应中的 `set-cookie` 头不会被处理，也不会从可见的响应头中过滤。
+- Deno 不遵循同源策略，因为 Deno 用户代理当前没有原始的概念，也没有 cookie 存储。这意味着 Deno 不需要保护防止跨源泄露身份验证数据。因此 Deno 不实现 WHATWG `fetch` 规范的以下部分：
+  - 第 `3.1.` 节：`'Origin'` 头。
+  - 第 `3.2.` 节：CORS 协议。
+  - 第 `3.5.` 节：CORB。
+  - 第 `3.6.` 节：`'Cross-Origin-Resource-Policy'` 头。
+  - `原子 HTTP 重定向处理`。
+  - `opaqueredirect` 响应类型。
+- 使用 `redirect` 模式为 `manual` 的 `fetch` 会返回 `basic` 响应，而不是 `opaqueredirect` 响应。
+- 规范对于如何处理 [`file:` URLs](https://fetch.spec.whatwg.org/#scheme-fetch) 上并不明确。Firefox 是唯一实施 `file:` URLs 获取的主流浏览器，即使如此，默认情况下它不工作。从 Deno 1.16 开始，Deno 支持获取本地文件。请参阅下一节以获取详情。
+- `request` 和 `response` 头保护已实现，但与浏览器不同，没有任何对允许哪些头名称的限制。
+- `referrer`、`referrerPolicy`、`mode`、`credentials`、`cache`、`integrity`、`keepalive` 和 `window` 属性及其在 `RequestInit` 中的相关行为未实现。相关字段不存在于 `Request` 对象上。
+- 支持请求体上传流（在 HTTP/1.1 和 HTTP/2 上）。与当前的 fetch 提案不同，实施方案支持双向流。
+- 在迭代 `headers` 时，`set-cookie` 头不会被连接。此行为正在
+  [进行规范](https://github.com/whatwg/fetch/pull/1346)。
 
-### Fetching local files
+### 获取本地文件
 
-Deno supports fetching `file:` URLs. This makes it easier to write code that
-uses the same code path on a server as local, as well as easier to author code
-that works both with the Deno CLI and Deno Deploy.
+Deno 支持获取 `file:` URLs。这使得编写在服务器上和本地使用相同代码路径的代码变得更容易，同时也更容易编写可以在 Deno CLI 和 Deno Deploy 中工作的代码。
 
-Deno only supports absolute file URLs, this means that `fetch("./some.json")`
-will not work. It should be noted though that if [`--location`](#location) is
-specified, relative URLs use the `--location` as the base, but a `file:` URL
-cannot be passed as the `--location`.
+Deno 只支持绝对的文件 URL，这意味着 `fetch("./some.json")` 将不工作。然而需要注意的是，如果指定了 [`--location`](#location)，相对 URL 将使用 `--location` 作为基础，但 `file:` URL 不能作为 `--location` 传递。
 
-To be able to fetch a resource, relative to the current module, which would work
-if the module is local or remote, you should to use `import.meta.url` as the
-base. For example:
+要能够获取一个相对于当前模块的资源，该资源在本地或远程都能工作，应该使用 `import.meta.url` 作为基础。例如：
 
 ```js
 const response = await fetch(new URL("./config.json", import.meta.url));
 const config = await response.json();
 ```
 
-Notes on fetching local files:
+关于获取本地文件的注意事项：
 
-- Permissions are applied to reading resources, so an appropriate `--allow-read`
-  permission is needed to be able to read a local file.
-- Fetching locally only supports the `GET` method, and will reject the promise
-  with any other method.
-- A file that does not exist simply rejects the promise with a vague
-  `TypeError`. This is to avoid the potential of fingerprinting attacks.
-- No headers are set on the response. Therefore it is up to the consumer to
-  determine things like the content type or content length.
-- Response bodies are streamed from the Rust side, so large files are available
-  in chunks, and can be cancelled.
+- 对读取资源施加权限，因此需要适当的 `--allow-read` 权限才能读取本地文件。
+- 本地获取仅支持 `GET` 方法，对于其他任何方法都会拒绝 promise。
+- 不存在的文件会简单地拒绝 promise，并抛出模糊的 `TypeError`。这是为了避免指纹识别攻击的潜在风险。
+- 响应中没有设置任何头。因此由消费者决定内容类型或内容长度等。
+- 响应体从 Rust 端流式传输，因此大文件是分块可用的，并且可以被取消。
 
-## CustomEvent and EventTarget
+## CustomEvent 和 EventTarget
 
-The [DOM Event API](/api/web/~/Event) can be used to dispatch and listen to
-events happening in an application. It is implemented as specified in the
-[WHATWG DOM spec](https://dom.spec.whatwg.org/#events).
+[DOM 事件 API](/api/web/~/Event) 可用于在应用程序中分发和监听事件。它的实现符合
+[WHATWG DOM 规范](https://dom.spec.whatwg.org/#events)。
 
-### Spec deviations
+### 规范偏差
 
-- Events do not bubble, because Deno does not have a DOM hierarchy, so there is
-  no tree for Events to bubble/capture through.
-- `timeStamp` property is always set to `0`.
+- 事件不会冒泡，因为 Deno 没有 DOM 层次结构，因此没有事件可以冒泡/捕获的树。
+- `timeStamp` 属性始终设置为 `0`。
 
-## Typings
+## 类型定义
 
-The TypeScript definitions for the implemented web APIs can be found in the
+实现的 Web API 的 TypeScript 定义可以在
 [`lib.deno.shared_globals.d.ts`](https://github.com/denoland/deno/blob/$CLI_VERSION/cli/tsc/dts/lib.deno.shared_globals.d.ts)
-and
+和
 [`lib.deno.window.d.ts`](https://github.com/denoland/deno/blob/$CLI_VERSION/cli/tsc/dts/lib.deno.window.d.ts)
-files.
+文件中找到。
 
-Definitions that are specific to workers can be found in the
+特定于 worker 的定义可以在
 [`lib.deno.worker.d.ts`](https://github.com/denoland/deno/blob/$CLI_VERSION/cli/tsc/dts/lib.deno.worker.d.ts)
-file.
+文件中找到。
 
 ## Location
 
-Deno supports the [`location`](/api/web/~/Location) global from the web.
+Deno 支持来自 Web 的 [`location`](/api/web/~/Location) 全局。
 
-### Location flag
+### Location 标志
 
-There is no "web page" whose URL we can use for a location in a Deno process. We
-instead allow users to emulate a document location by specifying one on the CLI
-using the `--location` flag. It can be a `http` or `https` URL.
+在 Deno 进程中没有可以用于位置的“网页” URL。因此，我们允许用户通过 CLI 指定一个来模拟文档位置，使用 `--location` 标志。它可以是一个 `http` 或 `https` URL。
 
 ```ts
 // deno run --location https://example.com/path main.ts
@@ -138,8 +100,7 @@ console.log(location.href);
 // "https://example.com/path"
 ```
 
-You must pass `--location <href>` for this to work. If you don't, any access to
-the `location` global will throw an error.
+你必须传递 `--location <href>` 才能让这项工作正常。如果不这样做，任何对 `location` 全局的访问都将抛出错误。
 
 ```ts
 // deno run main.ts
@@ -148,8 +109,7 @@ console.log(location.href);
 // error: Uncaught ReferenceError: Access to "location", run again with --location <href>.
 ```
 
-Setting `location` or any of its fields will normally cause navigation in
-browsers. This is not applicable in Deno, so it will throw in this situation.
+设置 `location` 或其任何字段通常会导致浏览器中的导航。在 Deno 中不适用，因此在这种情况下将抛出错误。
 
 ```ts
 // deno run --location https://example.com/path main.ts
@@ -158,11 +118,9 @@ location.pathname = "./foo";
 // error: Uncaught NotSupportedError: Cannot set "location.pathname".
 ```
 
-### Extended usage
+### 扩展用法
 
-On the web, resource resolution (excluding modules) typically uses the value of
-`location.href` as the root on which to base any relative URLs. This affects
-some web APIs adopted by Deno.
+在 Web 上，资源解析（不包括模块）通常使用 `location.href` 的值作为基础来处理任何相对 URL。这会影响一些被 Deno 采用的 Web API。
 
 #### Fetch API
 
@@ -173,10 +131,9 @@ const response = await fetch("./orgs/denoland");
 // Fetches "https://api.github.com/orgs/denoland".
 ```
 
-The `fetch()` call above would throw if the `--location` flag was not passed,
-since there is no web-analogous location to base it onto.
+如果没有传递 `--location` 标志，上面的 `fetch()` 调用将抛出错误，因为没有可以基于的 Web 类似位置。
 
-#### Worker modules
+#### Worker 模块
 
 ```ts
 // deno run --location https://example.com/index.html --allow-net main.ts
@@ -187,112 +144,77 @@ const worker = new Worker("./workers/hello.ts", { type: "module" });
 
 :::note
 
-For the above use cases, it is preferable to pass URLs in full rather than
-relying on `--location`. You can manually base a relative URL using the `URL`
-constructor if needed.
+对于上述用例，最好完整传递 URL 而不是依赖 `--location`。如有需要，你可以使用 `URL` 构造函数手动构建相对 URL。
 
 :::
 
-The `--location` flag is intended for those who have a specific purpose in mind
-for emulating a document location and are aware that this will only work at
-application-level. However, you may also use it to silence errors from a
-dependency which is frivolously accessing the `location` global.
+`--location` 标志适用于那些想要模拟文档位置并意识到这仅在应用层级有效的人。不过，你也可以使用它来消除依赖项中不必要访问 `location` 全局造成的错误。
 
 ## Web Storage
 
-The [Web Storage API](/api/web/storage) provides an API for storing string keys
-and values. Persisting data works similar to a browser, and has a 10MB storage
-limit. The global `sessionStorage` object only persists data for the current
-execution context, while `localStorage` persists data from execution to
-execution.
+[Web Storage API](/api/web/storage) 提供了一个用于存储字符串键和值的 API。数据持久化的方式与浏览器相似，并且有 10MB 的存储限制。全局 `sessionStorage` 对象只对当前执行上下文持久化数据，而 `localStorage` 则从一次执行到下一次执行持久化数据。
 
-In a browser, `localStorage` persists data uniquely per origin (effectively the
-protocol plus hostname plus port). As of Deno 1.16, Deno has a set of rules to
-determine what is a unique storage location:
+在浏览器中，`localStorage` 每个 origin 唯一持久化数据（有效的协议加主机名加端口）。从 Deno 1.16 开始，Deno 有一套规则来确定什么是唯一的存储位置：
 
-- When using the `--location` flag, the origin for the location is used to
-  uniquely store the data. That means a location of `http://example.com/a.ts`
-  and `http://example.com/b.ts` and `http://example.com:80/` would all share the
-  same storage, but `https://example.com/` would be different.
-- If there is no location specifier, but there is a `--config` configuration
-  file specified, the absolute path to that configuration file is used. That
-  means `deno run --config deno.jsonc a.ts` and
-  `deno run --config deno.jsonc b.ts` would share the same storage, but
-  `deno run --config tsconfig.json a.ts` would be different.
-- If there is no configuration or location specifier, Deno uses the absolute
-  path to the main module to determine what storage is shared. The Deno REPL
-  generates a "synthetic" main module that is based off the current working
-  directory where `deno` is started from. This means that multiple invocations
-  of the REPL from the same path will share the persisted `localStorage` data.
+- 当使用 `--location` 标志时，位置的 origin 用于唯一存储数据。这意味着 `http://example.com/a.ts` 和 `http://example.com/b.ts` 以及 `http://example.com:80/` 将共享相同的存储，但 `https://example.com/` 将是不同的。
+- 如果没有位置说明符，但指定了 `--config` 配置文件，则使用该配置文件的绝对路径。这意味着 `deno run --config deno.jsonc a.ts` 和 `deno run --config deno.jsonc b.ts` 将共享相同的存储，但 `deno run --config tsconfig.json a.ts` 将是不同的。
+- 如果没有配置或位置说明符，Deno 使用主模块的绝对路径来确定共享的存储。Deno REPL 会生成一个基于 `deno` 启动的当前工作目录的“合成”主模块。这意味着从同一路径多次调用 REPL 将共享持久化的 `localStorage` 数据。
 
-To set, get and remove items from `localStorage`, you can use the following:
+要设置、获取和移除 `localStorage` 中的项，可以使用以下方法：
 
 ```ts
-// Set an item in localStorage
+// 在 localStorage 中设置一个项
 localStorage.setItem("myDemo", "Deno App");
 
-// Read an item from localStorage
+// 从 localStorage 中读取一个项
 const cat = localStorage.getItem("myDemo");
 
-// Remove an item from localStorage
+// 从 localStorage 中移除一个项
 localStorage.removeItem("myDemo");
 
-// Remove all items from localStorage
+// 从 localStorage 中移除所有项
 localStorage.clear();
 ```
 
 ## Web Workers
 
-Deno supports the [`Web Worker API`](/api/web/workers).
+Deno 支持 [`Web Worker API`](/api/web/workers)。
 
-Workers can be used to run code on multiple threads. Each instance of `Worker`
-is run on a separate thread, dedicated only to that worker.
+Worker 可用于在多个线程上运行代码。每个 `Worker` 实例在单独的线程上运行，仅用于该 worker。
 
-Currently Deno supports only `module` type workers; thus it's essential to pass
-the `type: "module"` option when creating a new worker.
+当前 Deno 仅支持 `module` 类型的 workers；因此在创建新 worker 时务必传递 `type: "module"` 选项。
 
-Use of relative module specifiers in the main worker are only supported with
-`--location <href>` passed on the CLI. This is not recommended for portability.
-You can instead use the `URL` constructor and `import.meta.url` to easily create
-a specifier for some nearby script. Dedicated workers, however, have a location
-and this capability by default.
+在主 worker 中使用相对模块说明符仅在 CLI 传递 `--location <href>` 时受支持。这不推荐用于可移植性。你可以使用 `URL` 构造函数和 `import.meta.url` 来轻松创建某个附近脚本的说明符。然而，专用 worker 默认具有位置及此能力。
 
 ```ts
-// Good
+// 好
 new Worker(import.meta.resolve("./worker.js"), { type: "module" });
 
-// Bad
+// 坏
 new Worker(import.meta.resolve("./worker.js"));
 new Worker(import.meta.resolve("./worker.js"), { type: "classic" });
 new Worker("./worker.js", { type: "module" });
 ```
 
-As with regular modules, you can use top-level `await` in worker modules.
-However, you should be careful to always register the message handler before the
-first `await`, since messages can be lost otherwise. This is not a bug in Deno,
-it's just an unfortunate interaction of features, and it also happens in all
-browsers that support module workers.
+与常规模块一样，你可以在 worker 模块中使用顶层 `await`。然而，你应该小心始终在第一个 `await` 之前注册消息处理程序，因为否则消息可能会丢失。这不是 Deno 的错误，而是一种特性的遗憾交互，并且在所有支持模块 worker 的浏览器中也会发生。
 
 ```ts
 import { delay } from "jsr:@std/async@1/delay";
 
-// First await: waits for a second, then continues running the module.
+// 第一个 await：等待一秒，然后继续运行模块。
 await delay(1000);
 
-// The message handler is only set after that 1s delay, so some of the messages
-// that reached the worker during that second might have been fired when no
-// handler was registered.
+// 消息处理程序仅在那 1 秒延迟后设置，因此在那一秒内到达 worker 的一些消息可能在没有注册处理程序时被触发。
 self.onmessage = (evt) => {
   console.log(evt.data);
 };
 ```
 
-### Instantiation permissions
+### 实例权限
 
-Creating a new `Worker` instance is similar to a dynamic import; therefore Deno
-requires appropriate permission for this action.
+创建新的 `Worker` 实例类似于动态导入；因此 Deno 对此操作要求适当的权限。
 
-For workers using local modules; `--allow-read` permission is required:
+对于使用本地模块的 worker；需要 `--allow-read` 权限：
 
 ```ts title="main.ts"
 new Worker(import.meta.resolve("./worker.ts"), { type: "module" });
@@ -311,14 +233,14 @@ $ deno run --allow-read main.ts
 hello world
 ```
 
-For workers using remote modules; `--allow-net` permission is required:
+对于使用远程模块的 worker；需要 `--allow-net` 权限：
 
 ```ts title="main.ts"
 new Worker("https://example.com/worker.ts", { type: "module" });
 ```
 
 ```ts title="worker.ts"
-// This file is hosted at https://example.com/worker.ts
+// 此文件托管在 https://example.com/worker.ts
 console.log("hello world");
 self.close();
 ```
@@ -331,7 +253,7 @@ $ deno run --allow-net main.ts
 hello world
 ```
 
-### Using Deno in a worker
+### 在 worker 中使用 Deno
 
 ```js title="main.js"
 const worker = new Worker(import.meta.resolve("./worker.js"), {
@@ -359,27 +281,20 @@ $ deno run --allow-read main.js
 hello world
 ```
 
-### Specifying worker permissions
+### 指定 worker 权限
 
 :::caution
 
-This is an unstable Deno feature. Learn more about
-[unstable features](/runtime/fundamentals/stability_and_releases/#unstable-apis).
+这是一个不稳定的 Deno 特性。了解更多关于
+[不稳定特性](/runtime/fundamentals/stability_and_releases/#unstable-apis)。
 
 :::
 
-The permissions available for the worker are analogous to the CLI permission
-flags, meaning every permission enabled there can be disabled at the level of
-the Worker API. You can find a more detailed description of each of the
-permission options [here](/runtime/fundamentals/security/).
+worker 的权限与 CLI 权限标志类似，这意味着在那里启用的每个权限都可以在 Worker API 级别禁用。你可以在这里找到每个权限选项的更详细描述 [here](/runtime/fundamentals/security/)。
 
-By default a worker will inherit permissions from the thread it was created in,
-however in order to allow users to limit the access of this worker we provide
-the `deno.permissions` option in the worker API.
+默认情况下，worker 将继承其创建所在线程的权限，但是为了允许用户限制此 worker 的访问，我们在 worker API 中提供了 `deno.permissions` 选项。
 
-For permissions that support granular access you can pass in a list of the
-desired resources the worker will have access to, and for those who only have
-the on/off option you can pass true/false respectively:
+对于支持细粒度访问的权限，你可以传入 worker 将访问的所需资源的列表，而对于仅具有开/关选项的权限，你可以分别传递 true/false：
 
 ```ts
 const worker = new Worker(import.meta.resolve("./worker.js"), {
@@ -399,10 +314,7 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 });
 ```
 
-Granular access permissions receive both absolute and relative routes as
-arguments, however take into account that relative routes will be resolved
-relative to the file the worker is instantiated in, not the path the worker file
-is currently in:
+细粒度访问权限同时支持绝对路径和相对路径作为参数，但请注意相对路径将相对于实例化 worker 的文件进行解析，而不是 worker 文件当前所在的路径：
 
 ```ts
 const worker = new Worker(
@@ -421,11 +333,10 @@ const worker = new Worker(
 );
 ```
 
-Both `deno.permissions` and its children support the option `"inherit"`, which
-implies it will borrow its parent permissions:
+`deno.permissions` 及其子项都支持选项 `"inherit"`，这意味着它将借用其父权限：
 
 ```ts
-// This worker will inherit its parent permissions
+// 此 worker 将继承其父权限
 const worker = new Worker(import.meta.resolve("./worker.js"), {
   type: "module",
   deno: {
@@ -435,7 +346,7 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 ```
 
 ```ts
-// This worker will inherit only the net permissions of its parent
+// 此 worker 将仅继承其父的网络权限
 const worker = new Worker(import.meta.resolve("./worker.js"), {
   type: "module",
   deno: {
@@ -452,18 +363,17 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 });
 ```
 
-Not specifying the `deno.permissions` option or one of its children will cause
-the worker to inherit by default:
+不指定 `deno.permissions` 选项或其子项将导致 worker 默认继承：
 
 ```ts
-// This worker will inherit its parent permissions
+// 此 worker 将继承其父权限
 const worker = new Worker(import.meta.resolve("./worker.js"), {
   type: "module",
 });
 ```
 
 ```ts
-// This worker will inherit all the permissions of its parent BUT net
+// 此 worker 将继承其父的所有权限，但不包括网络
 const worker = new Worker(import.meta.resolve("./worker.js"), {
   type: "module",
   deno: {
@@ -474,11 +384,10 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 });
 ```
 
-You can disable the permissions of the worker all together by passing `"none"`
-to the `deno.permissions` option:
+通过将 `"none"` 传递给 `deno.permissions` 选项，可以完全禁用 worker 的权限：
 
 ```ts
-// This worker will not have any permissions enabled
+// 此 worker 将不启用任何权限
 const worker = new Worker(import.meta.resolve("./worker.js"), {
   type: "module",
   deno: {
@@ -487,11 +396,11 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 });
 ```
 
-## Deviations of other APIs from spec
+## 其他 API 从规范的偏差
 
-### Cache API
+### 缓存 API
 
-Only the following APIs are implemented:
+仅实现以下 API：
 
 - [CacheStorage::open()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open)
 - [CacheStorage::has()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/has)
@@ -500,8 +409,7 @@ Only the following APIs are implemented:
 - [Cache::put()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put)
 - [Cache::delete()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/delete)
 
-A few things that are different compared to browsers:
+与浏览器相比，几个地方有所不同：
 
-1. You cannot pass relative paths to the APIs. The request can be an instance of
-   Request or URL or a url string.
-2. `match()` & `delete()` don't support query options yet.
+1. 你不能将相对路径传递给 API。请求可以是 Request、URL 的实例或 URL 字符串。
+2. `match()` 和 `delete()` 尚不支持查询选项。

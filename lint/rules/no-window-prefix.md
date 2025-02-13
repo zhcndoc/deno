@@ -1,23 +1,14 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of Web APIs via the `window` object.
+禁止通过 `window` 对象使用 Web APIs。
 
-In most situations, the global variable `window` works like `globalThis`. For
-example, you could call the `fetch` API like `window.fetch(..)` instead of
-`fetch(..)` or `globalThis.fetch(..)`. In Web Workers, however, `window` is not
-available, but instead `self`, `globalThis`, or no prefix work fine. Therefore,
-for compatibility between Web Workers and other contexts, it's highly
-recommended to not access global properties via `window`.
+在大多数情况下，全局变量 `window` 如同 `globalThis`。例如，你可以像 `window.fetch(..)` 这样调用 `fetch` API，而不是使用 `fetch(..)` 或 `globalThis.fetch(..)`。然而，在 Web Workers 中，`window` 是不可用的，而是可以使用 `self`、`globalThis`，或者不使用任何前缀。因此，为了在 Web Workers 和其他上下文之间实现兼容，强烈建议不要通过 `window` 访问全局属性。
 
-Some APIs, including `window.alert`, `window.location` and `window.history`, are
-allowed to call with `window` because these APIs are not supported or have
-different meanings in Workers. In other words, this lint rule complains about
-the use of `window` only if it's completely replaceable with `self`,
-`globalThis`, or no prefix.
+一些 API，包括 `window.alert`、`window.location` 和 `window.history`，可以用 `window` 来调用，因为这些 API 在 Workers 中不被支持或有不同的含义。换句话说，这个 lint 规则只会对完全可以用 `self`、`globalThis` 或不使用前缀来替代的 `window` 使用进行投诉。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const a = await window.fetch("https://deno.land");
@@ -25,7 +16,7 @@ const a = await window.fetch("https://deno.land");
 const b = window.Deno.metrics();
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const a1 = await fetch("https://deno.land");
@@ -36,9 +27,9 @@ const b1 = Deno.metrics();
 const b2 = globalThis.Deno.metrics();
 const b3 = self.Deno.metrics();
 
-// `alert` is allowed to call with `window` because it's not supported in Workers
+// `alert` 允许使用 `window` 调用，因为它在 Workers 中不被支持
 window.alert("🍣");
 
-// `location` is also allowed
+// `location` 也被允许
 window.location.host;
 ```

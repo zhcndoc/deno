@@ -4,9 +4,9 @@ oldUrl: /runtime/manual/tools/check/
 command: check
 ---
 
-## Example
+## 示例
 
-Type-check without execution.
+进行类型检查而不执行。
 
 ```ts title="example.ts"
 const x: string = 1 + 1n;

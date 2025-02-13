@@ -1,21 +1,18 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of `Object.prototype` builtins directly.
+不允许直接使用 `Object.prototype` 的内置方法。
 
-If objects are created via `Object.create(null)` they have no prototype
-specified. This can lead to runtime errors when you assume objects have
-properties from `Object.prototype` and attempt to call the following methods:
+如果通过 `Object.create(null)` 创建对象，则这些对象没有指定原型。这可能会导致运行时错误，因为你假设对象具有来自 `Object.prototype` 的属性，并尝试调用以下方法：
 
 - `hasOwnProperty`
 - `isPrototypeOf`
 - `propertyIsEnumerable`
 
-Instead, it's always encouraged to call these methods from `Object.prototype`
-explicitly.
+因此，始终建议显式地从 `Object.prototype` 调用这些方法。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const a = foo.hasOwnProperty("bar");
@@ -23,7 +20,7 @@ const b = foo.isPrototypeOf("bar");
 const c = foo.propertyIsEnumerable("bar");
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 const a = Object.prototype.hasOwnProperty.call(foo, "bar");

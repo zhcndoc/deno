@@ -2,10 +2,9 @@
 tags: []
 ---
 
-Disallow duplicated JSX props. Later props will always overwrite earlier props
-often leading to unexpected results.
+不允许重复的 JSX 属性。后面的属性将始终覆盖前面的属性，这常常会导致意想不到的结果。
 
-**Invalid:**
+**无效：**
 
 ```tsx
 <div id="1" id="2" />;
@@ -13,7 +12,7 @@ often leading to unexpected results.
 <App a {...b} a />;
 ```
 
-**Valid:**
+**有效：**
 
 ```tsx
 <div id="1" />

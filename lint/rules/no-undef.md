@@ -2,9 +2,9 @@
 tags: []
 ---
 
-Disallow the use of undeclared variables.
+不允许使用未声明的变量。
 
-**Invalid:**
+**无效:**
 
 ```typescript
 const foo = someFunction();

@@ -2,10 +2,9 @@
 tags: []
 ---
 
-Fragments are only necessary at the top of a JSX "block" and only when there are
-multiple children. Fragments are not needed in other scenarios.
+片段仅在 JSX "块" 的顶部是必要的，并且仅在有多个子元素时需要。在其他情况下不需要片段。
 
-**Invalid:**
+**无效:**
 
 ```tsx
 <></>
@@ -14,7 +13,7 @@ multiple children. Fragments are not needed in other scenarios.
 <p>foo <>bar</></p>
 ```
 
-**Valid:**
+**有效:**
 
 ```tsx
 <>{foo}</>

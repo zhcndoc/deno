@@ -1,5 +1,5 @@
 ---
-title: "Security and permissions"
+title: "安全与权限"
 oldUrl:
   - /runtime/manual/basics/permissionsDeno/
   - /manual/basics/permissions
@@ -7,222 +7,149 @@ oldUrl:
   - /runtime/manual/getting_started/permissions
 ---
 
-Deno is secure by default. Unless you specifically enable it, a program run with
-Deno has no access to sensitive APIs, such as file system access, network
-connectivity, or environment access. You must explicitly grant access to these
-resources with command line flags or with a runtime permission prompt. This is a
-major difference from Node, where dependencies are automatically granted full
-access to all system I/O, potentially introducing hidden vulnerabilities into
-your project.
+Deno 默认是安全的。除非你特意启用，否则在 Deno 中运行的程序没有访问敏感 API 的权限，例如文件系统访问、网络连接或环境访问。你必须通过命令行标志或运行时权限提示明确授予对这些资源的访问。这与 Node 的一个主要区别是，Node 中的依赖项会自动获得对所有系统 I/O 的完全访问权限，这可能会将隐藏的漏洞引入你的项目。
 
-Before using Deno to run completely untrusted code, read the
-[section on executing untrusted code](#executing-untrusted-code) below.
+在使用 Deno 运行完全不可信的代码之前，请阅读下面的 [执行不可信代码](#executing-untrusted-code) 部分。
 
-## Key Principles
+## 关键原则
 
-Before diving into the specifics of permissions, it's important to understand
-the key principles of Deno's security model:
+在深入了解权限的具体细节之前，了解 Deno 安全模型的关键原则是很重要的：
 
-- **No access to I/O by default**: Code executing in a Deno runtime has no
-  access to read or write arbitrary files on the file system, to make network
-  requests or open network listeners, to access environment variables, or to
-  spawn subprocesses.
-- **No limits on the execution of code at the same privilege level**: Deno
-  allows the execution of any code (JS/TS/Wasm) via multiple means, including
-  `eval`, `new Function`, dynamic imports and web workers at the same privilege
-  level with little restriction as to where the code originates (network, npm,
-  JSR, etc).
-- **Multiple invocations of the same application can share data**: Deno provides
-  a mechanism for multiple invocations of the same application to share data,
-  through built in caching and KV storage APIs. Different applications can not
-  see each other's data.
-- **All code executing on the same thread shares the same privilege level**: All
-  code executing on the same thread shares the same privilege level. It is not
-  possible for different modules to have different privilege levels within the
-  same thread.
-- **Code can not escalate its privileges without user consent**: Code executing
-  in a Deno runtime can not escalate its privileges without the user agreeing
-  explicitly to an escalation via interactive prompt or a invocation time flag.
-- **The initial static module graph can import local files without
-  restrictions**: All files that are imported in the initial static module graph
-  can be imported without restrictions, so even if an explicit read permission
-  is not granted for that file. This does not apply to any dynamic module
-  imports.
+- **默认情况下没有 I/O 访问**：在 Deno 运行时中执行的代码没有权限读取或写入任意文件，在文件系统上进行网络请求或打开网络监听器，访问环境变量，或生成子进程。
+- **同一特权级别下代码的执行没有限制**：Deno 允许通过多种方式执行任何代码（JS/TS/Wasm），包括 `eval`、`new Function`、动态导入和网页工作者，几乎不限制代码来源（网络、npm、JSR 等）。
+- **同一应用程序的多次调用可以共享数据**：Deno 提供了一种机制，使同一应用程序的多次调用可以通过内置缓存和 KV 存储 API 共享数据。不同的应用程序不能看到彼此的数据。
+- **所有在同一线程上执行的代码共享相同的特权级别**：所有在同一线程上执行的代码共享相同的特权级别。在同一线程内，不同模块不可能拥有不同的特权级别。
+- **代码不能在未获得用户同意的情况下提升其特权**：在 Deno 运行时中执行的代码不能在未获得用户的明确同意（通过交互式提示或调用时间标志）提升其特权。
+- **初始静态模块图可以不受限制地导入本地文件**：所有在初始静态模块图中导入的文件可以不受限制地导入，即使该文件未明确授予读取权限。这不适用于任何动态模块导入。
 
-These key principles are designed to provide an environment where a user can
-execute code with minimal risk of harm to the host machine or network. The
-security model is designed to be simple to understand and to provide a clear
-separation of concerns between the runtime and the code executing within it. The
-security model is enforced by the Deno runtime, and is not dependent on the
-underlying operating system.
+这些关键原则旨在提供一个用户可以以最低风险执行代码的环境，以免对主机计算机或网络造成伤害。安全模型旨在易于理解，并在运行时与执行其中的代码之间提供清晰的关注点分离。安全模型由 Deno 运行时强制执行，并不依赖于底层操作系统。
 
-## Permissions
+## 权限
 
-By default, access to most system I/O is denied. There are some I/O operations
-that are allowed in a limited capacity, even by default. These are described
-below.
+默认情况下，对大多数系统 I/O 的访问是被拒绝的。即便如此，仍然有一些 I/O 操作在有限的范围内允许，这些将在下面描述。
 
-To enable these operations, the user must explicitly grant permission to the
-Deno runtime. This is done by passing the `--allow-read`, `--allow-write`,
-`--allow-net`, `--allow-env`, and `--allow-run` flags to the `deno` command.
+为了启用这些操作，用户必须明确授予 Deno 运行时权限。这是通过将 `--allow-read`、`--allow-write`、`--allow-net`、`--allow-env` 和 `--allow-run` 标志传递给 `deno` 命令来完成的。
 
-During execution of a script, a user can also explicitly grant permission to
-specific files, directories, network addresses, environment variables, and
-subprocesses when prompted by the runtime. Prompts are not shown if
-stdout/stderr are not a TTY, or when the `--no-prompt` flag is passed to the
-`deno` command.
+在执行脚本时，用户也可以在运行时提示时明确授予对特定文件、目录、网络地址、环境变量和子进程的访问权限。如果 stdout/stderr 不是 TTY，或者在 `deno` 命令中传递了 `--no-prompt` 标志，则不会显示提示。
 
-Users can also explicitly disallow access to specific resources by using the
-`--deny-read`, `--deny-write`, `--deny-net`, `--deny-env`, and `--deny-run`
-flags. These flags take precedence over the allow flags. For example, if you
-allow network access but deny access to a specific domain, the deny flag will
-take precedence.
+用户还可以通过使用 `--deny-read`、`--deny-write`、`--deny-net`、`--deny-env` 和 `--deny-run` 标志明确拒绝对特定资源的访问。这些标志优先于许可标志。例如，如果你允许网络访问但拒绝访问特定域，则拒绝标志将优先。
 
-Deno also provides a `--allow-all` flag that grants all permissions to the
-script. This **disables** the security sandbox entirely, and should be used with
-caution. The `--allow-all` has the same security properties as running a script
-in Node.js (ie none).
+Deno 还提供了 `--allow-all` 标志，该标志授予脚本所有权限。这将 **完全禁用** 安全沙箱，应该谨慎使用。`--allow-all` 具有与在 Node.js 中运行脚本相同的安全属性（即无安全性）。
 
-Definition: `-A, --allow-all`
+定义：`-A, --allow-all`
 
 ```sh
 deno run -A script.ts
 deno run --allow-all script.ts
 ```
 
-### File system access
+### 文件系统访问
 
-By default, executing code can not read or write arbitrary files on the file
-system. This includes listing the contents of directories, checking for the
-existence of a given file, and opening or connecting to Unix sockets.
+默认情况下，执行的代码不能读取或写入任意文件。这包括列出目录内容、检查文件是否存在，以及打开或连接 Unix 套接字。
 
-Access to read files is granted using the `--allow-read` (or `-R`) flag, and
-access to write files is granted using the `--allow-write` (or `-W`) flag. These
-flags can be specified with a list of paths to allow access to specific files or
-directories.
+访问文件的读取权限是通过 `--allow-read`（或 `-R`）标志授予的，访问文件的写入权限是通过 `--allow-write`（或 `-W`）标志授予的。这些标志可以通过指定允许访问的特定文件或目录的路径列表来使用。
 
-Definition: `--allow-read[=<PATH>...]` or `-R[=<PATH>...]`
+定义：`--allow-read[=<PATH>...]` 或 `-R[=<PATH>...]`
 
 ```sh
-# Allow all reads from file system
+# 允许从文件系统读取所有文件
 deno run -R script.ts
-# or 
+# 或 
 deno run --allow-read script.ts
 
-# Allow reads from file foo.txt and bar.txt only
+# 仅允许读取文件 foo.txt 和 bar.txt
 deno run --allow-read=foo.txt,bar.txt script.ts
 ```
 
-Definition: `--deny-read[=<PATH>...]`
+定义：`--deny-read[=<PATH>...]`
 
 ```sh
-# Allow reading files in /etc but disallow reading /etc/hosts
+# 允许读取 /etc 中的文件，但不允许读取 /etc/hosts
 deno run --allow-read=/etc --deny-read=/etc/hosts script.ts
 
-# Deny all read access to disk, disabling permission prompts for reads.
+# 拒绝所有对磁盘的读取访问，禁用读取的权限提示。
 deno run --deny-read script.ts
 ```
 
-Definition: `--allow-write[=<PATH>...]` or `-W[=<PATH>...]`
+定义：`--allow-write[=<PATH>...]` 或 `-W[=<PATH>...]`
 
 ```sh
-# Allow all writes to file system
+# 允许对文件系统的所有写入
 deno run -W script.ts
-# or 
+# 或 
 deno run --allow-write script.ts
 
-# Allow writes to file foo.txt and bar.txt only
+# 仅允许写入文件 foo.txt 和 bar.txt
 deno run --allow-write=foo.txt,bar.txt script.ts
 ```
 
-Definition: `--deny-write[=<PATH>...]`
+定义：`--deny-write[=<PATH>...]`
 
 ```sh
-# Allow reading files in current working directory 
-# but disallow writing to ./secrets directory.
+# 允许读取当前工作目录中的文件 
+# 但不允许写入 ./secrets 目录。
 deno run --allow-write=./ --deny-write=./secrets script.ts
 
-# Deny all write access to disk, disabling permission prompts.
+# 拒绝所有对磁盘的写入访问，禁用写入的权限提示。
 deno run --deny-write script.ts
 ```
 
-Some APIs in Deno are implemented using file system operations under the hood,
-even though they do not provide direct read/write access to specific files.
-These APIs read and write to disk but do not require any explicit read/write
-permissions. Some examples of these APIs are:
+一些 Deno 中的 API 是在后台使用文件系统操作实现的，即使它们并不直接提供对特定文件的读/写访问。这些 API 会读取和写入磁盘，但不需要任何明确的读/写权限。这些 API 的一些例子包括：
 
 - `localStorage`
 - Deno KV
 - `caches`
 - `Blob`
 
-Because these APIs are implemented using file system operations, users can use
-them to consume file system resources like storage space, even if they do not
-have direct access to the file system.
+由于这些 API 使用文件系统操作实现，用户可以使用它们来消耗存储空间等文件系统资源，即使他们没有对文件系统的直接访问权限。
 
-During module loading, Deno can load files from disk. This sometimes requires
-explicit permissions, and sometimes is allowed by default:
+在加载模块时，Deno 可以从磁盘加载文件。这有时需要明确的权限，有时则默认允许：
 
-- All files that are imported from the entrypoint module in a way that they can
-  be statically analyzed are allowed to be read by default. This includes static
-  `import` statements and dynamic `import()` calls where the argument is a
-  string literal that points to a specific file or a directory of files. The
-  full list of files that are in this list can be printed using
-  `deno info <entrypoint>`.
-- Files that are dynamically imported in a way that can not be statically
-  analyzed require runtime read permissions.
-- Files inside of a `node_modules/` directory are allowed to be read by default.
+- 以可以静态分析的方式从入口模块导入的所有文件默认被允许读取。这包括静态 `import` 语句和动态 `import()` 调用，其中参数是指向特定文件或文件目录的字符串字面量。可以使用 `deno info <entrypoint>` 打印出这个列表中的文件的完整列表。
+- 以不可以静态分析的方式动态导入的文件要求运行时读取权限。
+- `node_modules/` 目录中的文件默认允许读取。
 
-When fetching modules from the network, or when transpiling code from TypeScript
-to JavaScript, Deno uses the file system as a cache. This means that file system
-resources like storage space can be consumed by Deno even if the user has not
-explicitly granted read/write permissions.
+当从网络中获取模块或将 TypeScript 代码转译为 JavaScript 时，Deno 使用文件系统作为缓存。这意味着即使用户未明确授予读/写权限，Deno 仍然可以消耗像存储空间这样的文件系统资源。
 
-### Network access
+### 网络访问
 
-By default, executing code can not make network requests, open network listeners
-or perform DNS resolution. This includes making HTTP requests, opening TCP/UDP
-sockets, and listening for incoming connections on TCP or UDP.
+默认情况下，执行的代码不能进行网络请求、打开网络监听器或执行 DNS 解析。这包括发起 HTTP 请求、打开 TCP/UDP 套接字和监听 TCP 或 UDP 上的传入连接。
 
-Network access is granted using the `--allow-net` flag. This flag can be
-specified with a list of IP addresses or hostnames to allow access to specific
-network addresses.
+网络访问是通过 `--allow-net` 标志授予的。该标志可以通过指定 IP 地址或主机名的列表来允许访问特定的网络地址。
 
-Definition: `--allow-net[=<IP_OR_HOSTNAME>...]` or `-N[=<IP_OR_HOSTNAME>...]`
+定义：`--allow-net[=<IP_OR_HOSTNAME>...]` 或 `-N[=<IP_OR_HOSTNAME>...]`
 
 ```sh
-# Allow network access
+# 允许网络访问
 deno run -N script.ts
-# or
+# 或
 deno run --allow-net script.ts
 
-# Allow network access to github.com and jsr.io
+# 允许访问 github.com 和 jsr.io 的网络
 deno run --allow-net=github.com,jsr.io script.ts
 
-# A hostname at port 80:
+# 主机名在 80 端口：
 deno run --allow-net=example.com:80 script.ts
 
-# An IPv4 address on port 443
+# IPv4 地址在 443 端口
 deno run --allow-net=1.1.1.1:443 script.ts
 
-# An IPv6 address, all ports allowed
+# 一个 IPv6 地址，所有端口都允许
 deno run --allow-net=[2606:4700:4700::1111] script.ts
 ```
 
-Definition: `--deny-net[=<IP_OR_HOSTNAME>...]`
+定义：`--deny-net[=<IP_OR_HOSTNAME>...]`
 
 ```sh
-# Allow access to network, but deny access 
-# to github.com and jsr.io
+# 允许访问网络，但拒绝访问 
+# github.com 和 jsr.io
 deno run --allow-net --deny-net=github.com,jsr.io script.ts
 
-# Deny all network access, disabling permission prompts.
+# 拒绝所有网络访问，禁用权限提示。
 deno run --deny-net script.ts
 ```
 
-During module loading, Deno can load modules from the network. By default Deno
-allows loading modules from the following locations using both static and
-dynamic imports, without requiring explicit network access:
+在加载模块时，Deno 可以从网络加载模块。默认情况下，Deno 允许使用静态和动态导入从以下位置加载模块，而不需要明确的网络访问：
 
 - `https://deno.land/`
 - `https://jsr.io/`
@@ -230,212 +157,164 @@ dynamic imports, without requiring explicit network access:
 - `https://raw.githubusercontent.com`
 - `https://gist.githubusercontent.com`
 
-These locations are trusted "public good" registries that are not expected to
-enable data exfiltration through URL paths. You can add more trusted registries
-using the `--allow-imports` flag.
+这些位置是受信任的“公共良好”注册表，不被期望通过 URL 路径启用数据外泄。你可以使用 `--allow-imports` 标志添加更多受信任的注册表。
 
-In addition Deno allows importing any NPM package through `npm:` specifiers.
+此外，Deno 允许通过 `npm:` 说明符导入任何 NPM 包。
 
-Deno also sends requests to `https://dl.deno.land/` at most once a day to check
-for updates to the Deno CLI. This can be disabled using `DENO_NO_UPDATE_CHECK=1`
-environment var.
+Deno 还每天最多向 `https://dl.deno.land/` 发送一次请求，以检查 Deno CLI 的更新。这可以通过设置环境变量 `DENO_NO_UPDATE_CHECK=1` 来禁用。
 
-### Environment variables
+### 环境变量
 
-By default, executing code can not read or write environment variables. This
-includes reading environment variables, and setting new values.
+默认情况下，执行的代码不能读取或写入环境变量。这包括读取环境变量和设置新值。
 
-Access to environment variables is granted using the `--allow-env` flag. This
-flag can be specified with a list of environment variables to allow access to
-specific environment variables. Starting with Deno v2.1, you can now specify
-suffix wildcards to allow “scoped” access to environmental variables.
+访问环境变量的权限是通过 `--allow-env` 标志授予的。该标志可以通过指定允许访问特定环境变量的环境变量列表来使用。从 Deno v2.1 开始，你现在可以指定后缀通配符以允许对环境变量的“作用域”访问。
 
-Definition: `--allow-env[=<VARIABLE_NAME>...]` or `-E[=<VARIABLE_NAME>...]`
+定义：`--allow-env[=<VARIABLE_NAME>...]` 或 `-E[=<VARIABLE_NAME>...]`
 
 ```sh
-# Allow access to all environment variables
+# 允许访问所有环境变量
 deno run -E script.ts
-# or
+# 或
 deno run --allow-env script.ts
 
-# Allow HOME and FOO environment variables
+# 允许访问 HOME 和 FOO 环境变量
 deno run --allow-env=HOME,FOO script.ts
 
-# Allow access to all environment variables starting with AWS_
+# 允许访问所有以 AWS_ 开头的环境变量
 deno run --allow-env="AWS_*" script.ts
 ```
 
-Definition: `--deny-env[=<VARIABLE_NAME>...]`
+定义：`--deny-env[=<VARIABLE_NAME>...]`
 
 ```sh
-# Allow all environment variables except 
-# AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.
+# 允许所有环境变量，但拒绝 
+# AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY。
 deno run \
   --allow-env \
   --deny-env=AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY \
   script.ts
 
-# Deny all access to env variables, disabling permission prompts.
+# 拒绝所有对环境变量的访问，禁用权限提示。
 deno run --deny-env script.ts
 ```
 
-> Note for Windows users: environment variables are case insensitive on Windows,
-> so Deno also matches them case insensitively (on Windows only).
+> Windows 用户注意：环境变量在 Windows 上不区分大小写，Deno 也会在 Windows 上不区分大小写地匹配它们。
 
-Deno reads certain environment variables on startup, such as `DENO_DIR` and
-`NO_COLOR` ([see the full list](/runtime/reference/cli/env_variables/)).
+Deno 在启动时读取某些环境变量，例如 `DENO_DIR` 和 `NO_COLOR`（[查看完整列表](/runtime/reference/cli/env_variables/)）。
 
-The value of the `NO_COLOR` environment variable is visible to all code running
-in the Deno runtime, regardless of whether the code has been granted permission
-to read environment variables.
+`NO_COLOR` 环境变量的值对在 Deno 运行时中运行的所有代码都是可见的，无论该代码是否已被授予读取环境变量的权限。
 
-### System Information
+### 系统信息
 
-By default, executing code can not access system information, such as the
-operating system release, system uptime, load average, network interfaces, and
-system memory information.
+默认情况下，执行的代码不能访问系统信息，例如操作系统版本、系统正常运行时间、负载平均值、网络接口和系统内存信息。
 
-Access to system information is granted using the `--allow-sys` flag. This flag
-can be specified with a list of allowed interfaces from the following list:
-`hostname`, `osRelease`, `osUptime`, `loadavg`, `networkInterfaces`,
-`systemMemoryInfo`, `uid`, and `gid`. These strings map to functions in the
-`Deno` namespace that provide OS info, like
-[Deno.systemMemoryInfo](https://docs.deno.com/api/deno/~/Deno.SystemMemoryInfo).
+访问系统信息的权限是通过 `--allow-sys` 标志授予的。该标志可以通过指定允许访问的接口列表来使用，接口可以包括：`hostname`、`osRelease`、`osUptime`、`loadavg`、`networkInterfaces`、`systemMemoryInfo`、`uid` 和 `gid`。这些字符串映射到 `Deno` 命名空间中的提供 OS 信息的函数，比如
+[Deno.systemMemoryInfo](https://docs.deno.com/api/deno/~/Deno.SystemMemoryInfo)。
 
-Definition: `--allow-sys[=<API_NAME>...]` or `-S[=<API_NAME>...]`
+定义：`--allow-sys[=<API_NAME>...]` 或 `-S[=<API_NAME>...]`
 
 ```sh
-# Allow all system information APIs
+# 允许所有系统信息 API
 deno run -S script.ts
-# or
+# 或
 deno run --allow-sys script.ts
 
-# Allow systemMemoryInfo and osRelease APIs
+# 允许 systemMemoryInfo 和 osRelease APIs
 deno run --allow-sys="systemMemoryInfo,osRelease" script.ts
 ```
 
-Definition: `--deny-sys[=<API_NAME>...]`
+定义：`--deny-sys[=<API_NAME>...]`
 
 ```sh
-# Allow accessing all system information but "networkInterfaces"
+# 允许访问所有系统信息，但限制 "networkInterfaces"
 deno run --allow-sys --deny-sys="networkInterfaces" script.ts
 
-# Deny all access to system information, disabling permission prompts.
+# 拒绝对系统信息的所有访问，禁用权限提示。
 deno run --deny-sys script.ts
 ```
 
-### Subprocesses
+### 子进程
 
-Code executing inside of a Deno runtime can not spawn subprocesses by default,
-as this would constitute a violation of the principle that code can not escalate
-its privileges without user consent.
+默认情况下，在 Deno 运行时中执行的代码不能生成子进程，因为这将构成违反不可以在未获得用户同意的情况下提升其特权的原则。
 
-Deno provides a mechanism for executing subprocesses, but this requires explicit
-permission from the user. This is done using the `--allow-run` flag.
+Deno 提供了一种执行子进程的机制，但这需要用户的明确权限。这是通过使用 `--allow-run` 标志来完成的。
 
-Any subprocesses you spawn from your program run independently from the
-permissions granted to the parent process. This means the child processes can
-access system resources regardless of the permissions you granted to the Deno
-process that spawned it. This is often referred to as privilege escalation.
+从程序生成的任何子进程独立于父进程所授予的权限运行。这意味着子进程可以访问系统资源，而不考虑已授予生成它的 Deno 进程的权限。这通常被称为特权提升。
 
-Because of this, make sure you carefully consider if you want to grant a program
-`--allow-run` access: it essentially invalidates the Deno security sandbox. If
-you really need to spawn a specific executable, you can reduce the risk by
-limiting which programs a Deno process can start by passing specific executable
-names to the `--allow-run` flag.
+因此，请确保仔细考虑是否想要授予程序 `--allow-run` 访问权限：这本质上无效化了 Deno 的安全沙箱。如果你确实需要生成特定的可执行文件，可以通过将特定的可执行文件名称传递给 `--allow-run` 标志来降低风险。
 
-Definition: `--allow-run[=<PROGRAM_NAME>...]`
+定义：`--allow-run[=<PROGRAM_NAME>...]`
 
 ```sh
-# Allow running all subprocesses
+# 允许运行所有子进程
 deno run --allow-run script.ts
 
-# Allow running "curl" and "whoami" subprocesses
+# 允许运行 "curl" 和 "whoami" 子进程
 deno run --allow-run="curl,whoami" script.ts
 ```
 
 :::caution
 
-You probably don't ever want to use `--allow-run=deno` unless the parent process
-has `--allow-all`, as being able to spawn a `deno` process means the script can
-spawn another `deno` process with full permissions.
+除非父进程具有 `--allow-all`，否则你可能永远不想使用 `--allow-run=deno`，因为能够生成一个 `deno` 进程意味着该脚本可以生成另一个具有完全权限的 `deno` 进程。
 
 :::
 
-Definition: `--deny-run[=<PROGRAM_NAME>...]`
+定义：`--deny-run[=<PROGRAM_NAME>...]`
 
 ```sh
-# Allow running running all programs, but "whoami" and "ps".
+# 允许运行所有程序，但 "whoami" 和 "ps"。
 deno run --allow-run --deny-run="whoami,ps" script.ts
 
-# Deny all access for spawning subprocessing, disabling
-# permission prompts.
+# 拒绝所有生成子进程的访问，禁用权限提示。
 deno run --deny-run script.ts
 ```
 
-By default `npm` packages will not have their post-install scripts executed
-during installation (like with `deno install`), as this would allow arbitrary
-code execution. When running with the `--allow-scripts` flag, post-install
-scripts for npm packages will be executed as a subprocess.
+默认情况下，`npm` 包的后安装脚本不会在安装期间执行（例如通过 `deno install`），因为这会允许任意代码执行。当使用 `--allow-scripts` 标志运行时，npm 包的后安装脚本将作为子进程执行。
 
-### FFI (Foreign Function Interface)
+### FFI（外部函数接口）
 
-Deno provides a mechanism for executing code written in other languages, such as
-Rust, C, or C++, from within a Deno runtime. This is done using the
-`Deno.dlopen` API, which can load shared libraries and call functions from them.
+Deno 提供了一种机制，用于从 Deno 运行时执行用其他语言（如 Rust、C 或 C++）编写的代码。这是通过 `Deno.dlopen` API 来完成的，它可以加载共享库并从中调用函数。
 
-By default, executing code can not use the `Deno.dlopen` API, as this would
-constitute a violation of the principle that code can not escalate it's
-privileges without user consent.
+默认情况下，执行的代码不能使用 `Deno.dlopen` API，因为这违反了代码不能在未获得用户同意的情况下提升其特权的原则。
 
-In addition to `Deno.dlopen`, FFI can also be used via Node-API (NAPI) native
-addons. These are also not allowed by default.
+除了 `Deno.dlopen`，FFI 也可以通过 Node-API (NAPI) 原生添加模块使用。这些默认情况下也不被允许。
 
-Both `Deno.dlopen` and NAPI native addons require explicit permission using the
-`--allow-ffi` flag. This flag can be specified with a list of files or
-directories to allow access to specific dynamic libraries.
+`Deno.dlopen` 和 NAPI 原生添加模块都需要使用 `--allow-ffi` 标志明确授权。该标志可以通过指定允许访问特定动态库的文件或目录列表来使用。
 
-_Like subprocesses, dynamic libraries are not run in a sandbox and therefore do
-not have the same security restrictions as the Deno process they are being
-loaded into. Therefore, use with extreme caution._
+_同子进程一样，动态库不会在沙箱中运行，因此没有与它们被加载到的 Deno 进程相同的安全限制。因此，请极其小心地使用。_
 
-Definition: `--allow-ffi[=<PATH>...]`
+定义：`--allow-ffi[=<PATH>...]`
 
 ```sh
-# Allow loading dynamic all libraries
+# 允许加载所有动态库
 deno run --allow-ffi script.ts
 
-# Allow loading dynamic libraries from a specific path
+# 允许从特定路径加载动态库
 deno run --allow-ffi=./libfoo.so script.ts
 ```
 
-Definition: `--deny-ffi[=<PATH>...]`
+定义：`--deny-ffi[=<PATH>...]`
 
 ```sh
-# Allow loading all dynamic libraries, but ./libfoo.so
+# 允许加载所有动态库，但 ./libfoo.so
 deno run --allow-ffi --deny-ffi=./libfoo.so script.ts
 
-# Deny loading all dynamic libraries, disabling permission prompts.
+# 拒绝加载所有动态库，禁用权限提示。
 deno run --deny-ffi script.ts
 ```
 
-### Importing from the Web
+### 从 Web 导入
 
-Allow importing code from the Web. By default Deno limits hosts you can import
-code from. This is true for both static and dynamic imports.
+允许从 Web 导入代码。默认情况下，Deno 限制可以从中导入代码的主机。这对于静态和动态导入都是如此。
 
-If you want to dynamically import code, either using the `import()` or the
-`new Worker()` APIs, additional permissions need to be granted. Importing from
-the local file system [requires `--allow-read`](#file-system-read-access), but
-Deno also allows to import from `http:` and `https:` URLs. In such case you will
-need to specify an explicit `--allow-import` flag:
+如果你想动态导入代码，无论是使用 `import()` 还是 `new Worker()` API，都需要授予额外的权限。从本地文件系统导入 [需要 `--allow-read`](#file-system-read-access)，但 Deno 也允许从 `http:` 和 `https:` URL 导入。在这种情况下，你需要指定一个明确的 `--allow-import` 标志：
 
 ```
-# allow importing code from `https://example.com`
+# 允许从 `https://example.com` 导入代码
 $ deno run --allow-import=example.com main.ts
 ```
 
-By default Deno allows importing sources from following hosts:
+默认情况下，Deno 允许从以下主机导入源：
 
 - `deno.land`
 - `esm.sh`
@@ -444,42 +323,27 @@ By default Deno allows importing sources from following hosts:
 - `raw.githubusercontent.com`
 - `gist.githubusercontent.com`
 
-**Imports are only allowed using HTTPS**
+**仅允许使用 HTTPS 进行导入**
 
-This allow list is applied by default for static imports, and by default to
-dynamic imports if the `--allow-import` flag is specified.
+此允许列表默认适用于静态导入，并在指定 `--allow-import` 标志时默认适用于动态导入。
 
 ```
-# allow dynamically importing code from `https://deno.land`
+# 允许从 `https://deno.land` 动态导入代码
 $ deno run --allow-import main.ts
 ```
 
-Note that specifying an allow list for `--allow-import` will override the list
-of default hosts.
+请注意，为 `--allow-import` 指定允许列表将覆盖默认主机列表。
 
-## Evaluation of code
+## 代码评估
 
-Deno sets no limits on the execution of code at the same privilege level. This
-means that code executing in a Deno runtime can use `eval`, `new Function`, or
-even dynamic import or web workers to execute **arbitrary** code with the same
-privilege level as the code that called `eval`, `new Function`, or the dynamic
-import or web worker.
+Deno 对同一特权级别下的代码执行没有限制。这意味着在 Deno 运行时中执行的代码可以使用 `eval`、`new Function`，甚至动态导入或 web 工作者，以相同的特权级别执行**任意**代码，与调用 `eval`、`new Function` 或动态导入或 web 工作者的代码相同。
 
-This code can be hosted on the network, be in a local file (if read permissions
-are granted), or be stored as plain text in a string inside of the code that
-called `eval`, `new Function`, or the dynamic import or web worker.
+这些代码可以托管在网络上，可以是本地文件（如果已授予读取权限），或以字符串形式在调用 `eval`、`new Function` 或动态导入或 web 工作者的代码中存储的纯文本。
 
-## Executing untrusted code
+## 执行不可信代码
 
-While Deno provides security features that are designed to protect the host
-machine and network from harm, untrusted code is still scary. When executing
-untrusted code, it is important to have more than one layer of defense. Some
-suggestions for executing untrusted code are outlined below, and we recommend
-using using all of these when executing arbitrary untrusted code:
+虽然 Deno 提供了一些旨在保护主机计算机和网络免受伤害的安全功能，但不可信代码仍然令人害怕。在执行不可信代码时，确保拥有多层防御是很重要的。以下是一些执行不可信代码的建议，我们建议在执行任意不可信代码时使用以下所有建议：
 
-- Run `deno` with limited permissions and determine upfront what code actually
-  needs to run (and prevent more code being loaded using `--frozen` lockfile and
-  `--cached-only`).
-- Use OS provided sandboxing mechanisms like `chroot`, `cgroups`, `seccomp`,
-  etc.
-- Use a sandboxed environment like a VM or MicroVM (gVisor, Firecracker, etc).
+- 限制权限运行 `deno`，并预先确定实际需要运行的代码（并通过使用 `--frozen` 锁定文件和 `--cached-only` 防止更多代码被加载）。
+- 使用操作系统提供的沙箱机制，如 `chroot`、`cgroups`、`seccomp` 等。
+- 使用虚拟机或 MicroVM（gVisor、Firecracker 等）等沙箱环境。

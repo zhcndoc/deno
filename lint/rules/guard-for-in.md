@@ -2,13 +2,11 @@
 tags: []
 ---
 
-Require `for-in` loops to include an `if` statement.
+要求 `for-in` 循环包含 `if` 语句。
 
-Looping over objects with a `for-in` loop will include properties that are
-inherited through the prototype chain. This behavior can lead to unexpected
-items in your for loop.
+使用 `for-in` 循环遍历对象时，会包含通过原型链继承的属性。这种行为可能导致你的循环中出现意外的项。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 for (const key in obj) {
@@ -16,7 +14,7 @@ for (const key in obj) {
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
 for (const key in obj) {

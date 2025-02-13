@@ -2,40 +2,35 @@
 tags: []
 ---
 
-Requires `await` is not used in a for loop body.
+在 for 循环体中未使用 `await`。
 
-Async and await are used in Javascript to provide parallel execution. If each
-element in the for loop is waited upon using `await`, then this negates the
-benefits of using async/await as no more elements in the loop can be processed
-until the current element finishes.
+Async 和 await 在 Javascript 中用于提供并行执行。如果在 for 循环中的每个元素都使用 `await` 进行等待，那么这就 negates 了使用 async/await 的好处，因为在当前元素完成之前，循环中的其他元素无法被处理。
 
-A common solution is to refactor the code to run the loop body asynchronously
-and capture the promises generated. After the loop finishes you can then await
-all the promises at once.
+一种常见的解决方案是重构代码，使循环体异步运行并捕获生成的 promises。循环结束后，可以一次性 await 所有的 promises。
 
-**Invalid:**
+**无效示例：**
 
 ```javascript
 async function doSomething(items) {
   const results = [];
   for (const item of items) {
-    // Each item in the array blocks on the previous one finishing
+    // 数组中的每个项都在等待前一个项完成
     results.push(await someAsyncProcessing(item));
   }
   return processResults(results);
 }
 ```
 
-**Valid:**
+**有效示例：**
 
 ```javascript
 async function doSomething(items) {
   const results = [];
   for (const item of items) {
-    // Kick off all item processing asynchronously...
+    // 异步启动所有项的处理...
     results.push(someAsyncProcessing(item));
   }
-  // ...and then await their completion after the loop
+  // ...然后在循环后等待它们完成
   return processResults(await Promise.all(results));
 }
 ```

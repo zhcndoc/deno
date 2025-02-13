@@ -1,63 +1,46 @@
 ---
-title: "Connect to Neon Postgres"
+title: "连接到 Neon Postgres"
 ---
 
-This tutorial covers how to connect to a Neon Postgres database from an
-application deployed on Deno Deploy.
+本教程涵盖了如何从部署在 Deno Deploy 上的应用程序连接到 Neon Postgres 数据库。
 
-You can find a more comprehensive tutorial that builds a sample application on
-top of Postgres [here](../tutorials/tutorial-postgres).
+你可以找到一个更全面的教程，该教程在 Postgres 之上构建了一个示例应用程序，[点击这里](../tutorials/tutorial-postgres)。
 
-## Setup Postgres
+## 设置 Postgres
 
-To get started, we need to create a new Postgres instance for us to connect to.
-For this tutorial, we will be using [Neon Postgres](https://neon.tech/) as they
-provide free, managed Postgres instances. If you like to host your database
-somewhere else, you can do that too.
+要开始，我们需要创建一个新的 Postgres 实例供我们连接。为了本教程，我们将使用 [Neon Postgres](https://neon.tech/)，因为他们提供免费的托管 Postgres 实例。如果你希望将数据库托管在其他地方，也可以这么做。
 
-1. Visit https://neon.tech/ and click **Sign up** to sign up with an email,
-   Github, Google, or partner account. After signing up, you are directed to the
-   Neon Console to create your first project.
-2. Enter a name for your project, select a Postgres version, provide a database
-   name, and select a region. Generally, you'll want to select the region
-   closest to your application. When you're finished, click **Create project**.
-3. You are presented with the connection string for your new project, which you
-   can use to connect to your database. Save the connection string, which looks
-   something like this:
+1. 访问 https://neon.tech/ 并点击 **注册**，通过电子邮件、Github、Google 或合作伙伴帐户进行注册。注册后，系统将引导你进入 Neon 控制台以创建你的第一个项目。
+2. 输入项目的名称，选择 Postgres 版本，提供数据库名称，并选择区域。通常，你会选择离你的应用程序最近的区域。当你完成后，点击 **创建项目**。
+3. 系统会向你展示新项目的连接字符串，你可以用来连接到数据库。保存连接字符串，通常看起来像这样：
 
    ```sh
    postgres://alex:AbC123dEf@ep-cool-darkness-123456.us-east-2.aws.neon.tech/dbname?sslmode=require
    ```
 
-   You will need the connection string in the next step.
+   你需要在下一步中使用连接字符串。
 
-## Create a project in Deno Deploy
+## 在 Deno Deploy 中创建项目
 
-Next, let's create a project in Deno Deploy and set it up with the requisite
-environment variables:
+接下来，让我们在 Deno Deploy 中创建一个项目，并设置所需的环境变量：
 
-1. Go to [https://dash.deno.com/new](https://dash.deno.com/new) (Sign in with
-   GitHub if you didn't already) and click on **Create an empty project** under
-   **Deploy your own code**.
-2. Now click on the **Settings** button available on the project page.
-3. Navigate to **Environment Variables** Section and add the following secret.
+1. 访问 [https://dash.deno.com/new](https://dash.deno.com/new)（如果你还没有登录，使用 GitHub 登录）并点击 **创建一个空项目**，在 **部署你自己的代码** 下。
+2. 现在点击项目页面上的 **设置** 按钮。
+3. 导航到 **环境变量** 部分并添加以下秘密。
 
-- `DATABASE_URL` - The value should be set to the connection string you saved in
-  the last step.
+- `DATABASE_URL` - 值应设置为你在上一步中保存的连接字符串。
 
 ![postgres_env_variable](../docs-images/neon_postgres_env_variable.png)
 
-## Write code that connects to Postgres
+## 编写连接到 Postgres 的代码
 
-To read/write to Postgres using the
-[Neon serverless driver](https://deno.com/blog/neon-on-jsr), first install it
-using the `deno add` command:
+要使用 [Neon 无服务器驱动程序](https://deno.com/blog/neon-on-jsr) 来读写 Postgres，首先使用 `deno add` 命令安装它：
 
 ```sh
 deno add jsr:@neon/serverless
 ```
 
-This will create or update your `deno.json` file with the dependency:
+这将创建或更新你的 `deno.json` 文件，并添加依赖项：
 
 ```json
 {
@@ -67,19 +50,19 @@ This will create or update your `deno.json` file with the dependency:
 }
 ```
 
-Now you can use the driver in your code:
+现在你可以在代码中使用该驱动程序：
 
 ```ts
 import { neon } from "@neon/serverless";
 
-// Get the connection string from the environment variable "DATABASE_URL"
+// 从环境变量 "DATABASE_URL" 获取连接字符串
 const databaseUrl = Deno.env.get("DATABASE_URL")!;
 
-// Create a SQL query executor
+// 创建 SQL 查询执行器
 const sql = neon(databaseUrl);
 
 try {
-  // Create the table
+  // 创建表
   await sql`
     CREATE TABLE IF NOT EXISTS todos (
       id SERIAL PRIMARY KEY,
@@ -91,24 +74,20 @@ try {
 }
 ```
 
-## Deploy application to Deno Deploy
+## 将应用程序部署到 Deno Deploy
 
-Once you have finished writing your application, you can deploy it on Deno
-Deploy.
+一旦你完成了应用程序的编写，就可以在 Deno Deploy 上部署它。
 
-To do this, go back to your project page at
-`https://dash.deno.com/projects/<project-name>`.
+为此，回到你的项目页面 `https://dash.deno.com/projects/<project-name>`。
 
-You should see a couple of options to deploy:
+你应该会看到几个部署选项：
 
-- [Github integration](ci_github)
+- [Github 集成](ci_github)
 - [`deployctl`](./deployctl.md)
   ```sh
   deployctl deploy --project=<project-name> <application-file-name>
   ```
 
-Unless you want to add a build step, we recommend that you select the GitHub
-integration.
+除非你想添加构建步骤，否则我们建议你选择 GitHub 集成。
 
-For more details on the different ways to deploy on Deno Deploy and the
-different configuration options, read [here](how-to-deploy).
+有关在 Deno Deploy 上以不同方式部署和不同配置选项的详细信息，请阅读 [这里](how-to-deploy)。

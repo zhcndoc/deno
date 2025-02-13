@@ -9,20 +9,17 @@ oldUrl:
 command: install
 ---
 
-## Examples
+## 示例
 
 ### deno install
 
-Use this command to install all dependencies defined in `deno.json` and/or
-`package.json`.
+使用此命令安装 `deno.json` 和/或 `package.json` 中定义的所有依赖项。
 
-The dependencies will be installed in the global cache, but if your project has
-a `package.json` file, a local `node_modules` directory will be set up as well.
+依赖项将被安装在全局缓存中，但如果您的项目有 `package.json` 文件，本地的 `node_modules` 目录也会被创建。
 
 ### deno install [PACKAGES]
 
-Use this command to install particular packages and add them to `deno.json` or
-`package.json`.
+使用此命令安装特定的软件包，并将其添加到 `deno.json` 或 `package.json` 中。
 
 ```shell
 $ deno install jsr:@std/testing npm:express
@@ -30,22 +27,17 @@ $ deno install jsr:@std/testing npm:express
 
 :::tip
 
-You can also use `deno add` which is an alias to `deno install [PACKAGES]`
+您也可以使用 `deno add`，它是 `deno install [PACKAGES]` 的别名。
 
 :::
 
-If your project has a `package.json` file, the packages coming from npm will be
-added to `dependencies` in `package.json`. Otherwise all packages will be added
-to `deno.json`.
+如果您的项目有 `package.json` 文件，来自 npm 的软件包将被添加到 `package.json` 的 `dependencies` 中。否则，所有软件包将被添加到 `deno.json` 中。
 
 ### deno install --entrypoint [FILES]
 
-Use this command to install all depenedencies that are used in the provided
-files and their dependencies.
+使用此命令安装提供文件及其依赖项中使用的所有依赖项。
 
-This is particularly useful if you use `jsr:`, `npm:`, `http:` or `https:`
-specifiers in your code and want to cache all the dependencies before deploying
-your project.
+如果您在代码中使用 `jsr:`、`npm:`、`http:` 或 `https:` 指定符，并希望在部署项目之前缓存所有依赖项，这尤其有用。
 
 ```js title="main.js"
 import * as colors from "jsr:@std/fmt/colors";
@@ -54,91 +46,81 @@ import express from "npm:express";
 
 ```shell
 $ deno install -e main.js
-Download jsr:@std/fmt
-Download npm:express
+下载 jsr:@std/fmt
+下载 npm:express
 ```
 
 :::tip
 
-If you want to set up local `node_modules` directory, you can pass
-`--node-modules-dir=auto` flag.
+如果您想设置本地的 `node_modules` 目录，可以传递 `--node-modules-dir=auto` 选项。
 
-Some dependencies might not work correctly without a local `node_modules`
-directory.
+某些依赖项可能在没有本地 `node_modules` 目录的情况下无法正确工作。
 
 :::
 
 ### deno install --global [PACKAGE_OR_URL]
 
-Use this command to install provide package or script as a globally available
-binary on your system.
+使用此命令安装提供的软件包或脚本，使其作为系统中的全局可用二进制文件。
 
-This command creates a thin, executable shell script which invokes `deno` using
-the specified CLI flags and main module. It is placed in the installation root.
+此命令创建一个瘦的可执行 shell 脚本，该脚本使用指定的 CLI 标志和主模块调用 `deno`。它被放置在安装根目录中。
 
-Example:
+示例：
 
 ```shell
 $ deno install --global --allow-net --allow-read jsr:@std/http/file-server
-Download jsr:@std/http/file-server...
+下载 jsr:@std/http/file-server...
 
-✅ Successfully installed file-server.
+✅ 成功安装 file-server.
 /Users/deno/.deno/bin/file-server
 ```
 
-To change the executable name, use `-n`/`--name`:
+要更改可执行文件的名称，使用 `-n`/`--name`：
 
 ```shell
 deno install -g -N -R -n serve jsr:@std/http/file-server
 ```
 
-The executable name is inferred by default:
+可执行文件名称默认推断：
 
-- Attempt to take the file stem of the URL path. The above example would become
-  'file-server'.
-- If the file stem is something generic like 'main', 'mod', 'index' or 'cli',
-  and the path has no parent, take the file name of the parent path. Otherwise
-  settle with the generic name.
-- If the resulting name has an '@...' suffix, strip it.
+- 尝试获取 URL 路径的文件名根。这上面的示例将变为 'file-server'。
+- 如果文件名根是 'main'、'mod'、'index' 或 'cli' 这样的通用名称，并且路径没有父级，则采用父路径的文件名。否则，采用通用名称。
+- 如果结果名称有 '@...' 后缀，则去掉它。
 
-To change the installation root, use `--root`:
+要更改安装根目录，请使用 `--root`：
 
 ```shell
 deno install -g -N -R --root /usr/local/bin jsr:@std/http/file-server
 ```
 
-The installation root is determined, in order of precedence:
+安装根目录的确定顺序如下：
 
-- `--root` option
-- `DENO_INSTALL_ROOT` environment variable
+- `--root` 选项
+- `DENO_INSTALL_ROOT` 环境变量
 - `$HOME/.deno/bin`
 
-These must be added to the path manually if required.
+如果需要，必须手动将这些添加到路径中。
 
 ```shell
 echo 'export PATH="$HOME/.deno/bin:$PATH"' >> ~/.bashrc
 ```
 
-You must specify permissions that will be used to run the script at installation
-time.
+您必须在安装时指定运行脚本所需的权限。
 
 ```shell
 deno install -g -N -R jsr:@std/http/file-server -- -p 8080
 ```
 
-The above command creates an executable called `file_server` that runs with
-network and read permissions and binds to port 8080.
+上述命令创建一个名为 `file_server` 的可执行文件，该文件在网络和读取权限下运行，并绑定到端口 8080。
 
-For good practice, use the
-[`import.meta.main`](/runtime/tutorials/module_metadata/) idiom to specify the
-entry point in an executable script.
+出于良好实践，请使用
+[`import.meta.main`](/runtime/tutorials/module_metadata/) 习语在可执行脚本中指定入口点。
 
-Example:
+示例：
 
 ```ts
 // https://example.com/awesome/cli.ts
 async function myAwesomeCli(): Promise<void> {
-  // -- snip --
+  // -- 省略 --
 }
 
 if (import.meta.main) {
@@ -146,50 +128,41 @@ if (import.meta.main) {
 }
 ```
 
-When you create an executable script make sure to let users know by adding an
-example installation command to your repository:
+当您创建可执行脚本时，请确保通过向您的存储库添加示例安装命令来通知用户：
 
 ```shell
-# Install using deno install
+# 使用 deno install 安装
 
 $ deno install -n awesome_cli https://example.com/awesome/cli.ts
 ```
 
-## Native Node.js addons
+## 原生 Node.js 附加模块
 
-A lot of popular packages npm packages like
-[`npm:sqlite3`](https://www.npmjs.com/package/sqlite3) or
-[`npm:duckdb`](https://www.npmjs.com/package/duckdb) depend on
-["lifecycle scripts"](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts),
-eg. `preinstall` or `postinstall` scripts. Most often running these scripts is
-required for a package to work correctly.
+许多流行的 npm 软件包，如 [`npm:sqlite3`](https://www.npmjs.com/package/sqlite3) 或 [`npm:duckdb`](https://www.npmjs.com/package/duckdb)，依赖于 ["生命周期脚本"](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts)，例如 `preinstall` 或 `postinstall` 脚本。通常，运行这些脚本是软件包正常工作的必要条件。
 
-Unlike npm, Deno does not run these scripts by default as they pose a potential
-security vulnerability.
+与 npm 不同，Deno 默认不运行这些脚本，因为它们可能会带来安全漏洞。
 
-You can still run these scripts by passing the `--allow-scripts=<packages>` flag
-when running `deno install`:
+您仍然可以通过在运行 `deno install` 时传递 `--allow-scripts=<packages>` 选项来运行这些脚本：
 
 ```shell
 deno install --allow-scripts=npm:sqlite3
 ```
 
-_Install all dependencies and allow `npm:sqlite3` package to run its lifecycle
-scripts_.
+_安装所有依赖项，并允许 `npm:sqlite3` 软件包运行其生命周期脚本_。
 
-## Uninstall
+## 卸载
 
-You can uninstall dependencies or binary script with `deno uninstall` command:
+您可以使用 `deno uninstall` 命令卸载依赖项或二进制脚本：
 
 ```shell
 $ deno uninstall express
-Removed express
+删除 express
 ```
 
 ```shell
 $ deno uninstall -g file-server
-deleted /Users/deno/.deno/bin/file-server
-✅ Successfully uninstalled file-server
+删除 /Users/deno/.deno/bin/file-server
+✅ 成功卸载 file-server
 ```
 
-See [`deno uninstall` page for more details](/runtime/reference/cli/uninstall/).
+有关更多详细信息，请参见 [`deno uninstall` 页面](/runtime/reference/cli/uninstall/)。

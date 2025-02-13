@@ -2,13 +2,11 @@
 tags: []
 ---
 
-Disallows comparisons where both sides are exactly the same.
+禁止比较两个完全相同的值或变量。
 
-Comparing a variable or value against itself is usually an error, either a typo
-or refactoring error. It is confusing to the reader and may potentially
-introduce a runtime error.
+将一个变量或值与其自身进行比较通常是一个错误，可能是拼写错误或重构错误。这对读者来说可能会造成困惑，并可能引入运行时错误。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 if (x === x) {
@@ -21,7 +19,7 @@ if (a["b"] === a["b"]) {
 }
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 if (x === y) {

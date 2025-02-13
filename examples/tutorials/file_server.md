@@ -1,21 +1,18 @@
 ---
-title: "Write a file server"
+title: "编写一个文件服务器"
 url: /examples/file_server_tutorial/
 oldUrl:
   - /runtime/manual/examples/file_server/
   - /runtime/tutorials/file_server/
 ---
 
-A file server listens for incoming HTTP requests and serves files from the local
-file system. This tutorial demonstrates how to create a simple file server using
-Deno's built-in [file system APIs](/api/deno/file-system).
+一个文件服务器监听传入的HTTP请求，并从本地文件系统提供文件。这个教程演示了如何使用Deno内置的 [文件系统API](/api/deno/file-system) 创建一个简单的文件服务器。
 
-## Write a simple File Server
+## 编写一个简单的文件服务器
 
-To start, create a new file called `file-server.ts`.
+首先，创建一个新的文件，命名为 `file-server.ts`。
 
-We'll use Deno's built in [HTTP server](/api/deno/~/Deno.serve) to listen for
-incoming requests. In your new `file-server.ts` file, add the following code:
+我们将使用Deno内置的 [HTTP服务器](/api/deno/~/Deno.serve) 来监听传入的请求。在你的新 `file-server.ts` 文件中，添加以下代码：
 
 ```ts title="file-server.ts"
 Deno.serve(
@@ -27,29 +24,18 @@ Deno.serve(
 );
 ```
 
-> If you're not familiar with the `URL` object, you can learn more about it in
-> the [URL API](https://developer.mozilla.org/en-US/docs/Web/API/URL)
-> documentation. The
-> [decodeURIComponent function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent)
-> is used to decode the URL-encoded path, in the case that characters have been
-> percent-encoded.)
+> 如果你不熟悉 `URL` 对象，可以在 [URL API](https://developer.mozilla.org/en-US/docs/Web/API/URL) 文档中了解更多。 
+> [decodeURIComponent函数](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/decodeURIComponent) 用于解码URL编码的路径，以防字符被百分号编码。
 
-### Open a file and stream its contents
+### 打开文件并流式传输其内容
 
-When a request is received, we'll attempt to open the file specified in the
-request URL with [`Deno.open`](/api/deno/~/Deno.open).
+当接收到请求时，我们将尝试使用 [`Deno.open`](/api/deno/~/Deno.open) 打开请求URL中指定的文件。
 
-If the requested file exists, we'll convert it into a readable stream of data
-with the
-[ReadableStream API](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream),
-and stream its contents to the response. We don't know how large the requested
-file might be, so streaming it will prevent memory issues when serving large
-files or multiple requests concurrently.
+如果请求的文件存在，我们将其转换为可读的数据流，使用 [ReadableStream API](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream)，并将其内容流式传输到响应中。我们不知道请求的文件有多大，因此流式传输可以在服务大型文件或同时处理多个请求时防止内存问题。
 
-If the file does not exist, we'll return a "404 Not Found" response.
+如果文件不存在，我们将返回 "404 Not Found" 响应。
 
-In the body of the request handler, below the two variables, add the following
-code:
+在请求处理程序的主体中，在这两个变量的下面，添加以下代码：
 
 ```ts
 try {
@@ -60,27 +46,21 @@ try {
 }
 ```
 
-### Run the file server
+### 运行文件服务器
 
-Run your new file server with the `deno run` command, allowing read access and
-network access:
+使用 `deno run` 命令运行你的新文件服务器，允许读取访问和网络访问：
 
 ```shell
 deno run --allow-read=. --allow-net file-server.ts
 ```
 
-## Using the file server provided by the Deno Standard Library
+## 使用Deno标准库提供的文件服务器
 
-Writing a file server from scratch is a good exercise to understand how Deno's
-HTTP server works. However, writing production ready file server from scratch
-can be complex and error-prone. It's better to use a tested and reliable
-solution.
+从头编写文件服务器是理解Deno的HTTP服务器如何工作的一个很好的练习。然而，从零开始编写生产级文件服务器可能会很复杂且容易出错。使用经过测试和可靠的解决方案更好。
 
-The Deno Standard Library provides you with a
-[file server](https://jsr.io/@std/http/doc/file-server/~) so that you don't have
-to write your own.
+Deno标准库为你提供了一个 [文件服务器](https://jsr.io/@std/http/doc/file-server/~)，这样你就不必自己编写。
 
-To use it, first install the remote script to your local file system:
+要使用它，首先将远程脚本安装到本地文件系统：
 
 ```shell
 # Deno 1.x
@@ -89,10 +69,9 @@ deno install --allow-net --allow-read jsr:@std/http/file-server
 deno install --global --allow-net --allow-read jsr:@std/http/file-server
 ```
 
-> This will install the script to the Deno installation root, e.g.
-> `/home/user/.deno/bin/file-server`.
+> 这将把脚本安装到Deno安装根目录中，例如 `/home/user/.deno/bin/file-server`。
 
-You can now run the script with the simplified script name:
+你现在可以使用简化的脚本名称运行该脚本：
 
 ```shell
 $ file-server .
@@ -100,23 +79,19 @@ Listening on:
 - Local: http://0.0.0.0:8000
 ```
 
-To see the complete list of options available with the file server, run
-`file-server --help`.
+要查看文件服务器可用的完整选项列表，请运行 `file-server --help`。
 
-If you visit [http://0.0.0.0:8000/](http://0.0.0.0:8000/) in your web browser
-you will see the contents of your local directory.
+如果你在网页浏览器中访问 [http://0.0.0.0:8000/](http://0.0.0.0:8000/)，你将看到本地目录的内容。
 
-### Using the @std/http file server in a Deno project
+### 在Deno项目中使用 @std/http 文件服务器
 
-To use the file-server in a
-[Deno project](/runtime/getting_started/first_project), you can add it to your
-`deno.json` file with:
+要在 [Deno项目](/runtime/getting_started/first_project) 中使用文件服务器，你可以在 `deno.json` 文件中添加它：
 
 ```sh
 deno add jsr:@std/http
 ```
 
-And then import it in your project:
+然后在你的项目中导入它：
 
 ```ts title="file-server.ts"
 import { serveDir } from "@std/http/file-server";
@@ -132,12 +107,6 @@ Deno.serve((req) => {
 });
 ```
 
-This code will set up an HTTP server with `Deno.serve`. When a request comes in,
-it checks if the requested path starts with “/static”. If so, it serves files
-from the specified directory. Otherwise, it responds with an empty response.
+这段代码将使用 `Deno.serve` 设置一个HTTP服务器。当请求到来时，它会检查请求的路径是否以 “/static” 开头。如果是，则从指定目录服务文件。否则，它会返回一个空响应。
 
-🦕 Now you know how to write your own simple file server, and how to use the
-file-server utility provided by the Deno Standard Library. You're equipped to
-tackle a whole variety of tasks - whether it’s serving static files, handling
-uploads, transforming data, or managing access control - you're ready to serve
-files with Deno.
+🦕 现在你知道如何编写自己的简单文件服务器，以及如何使用Deno标准库提供的文件服务器工具。你可以处理各种任务 - 无论是服务静态文件、处理上传、转换数据还是管理访问控制 - 你都准备好使用Deno服务文件了。

@@ -1,13 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows duplicate keys in object literals.
+不允许在对象字面量中使用重复的键。
 
-Setting the same key multiple times in an object literal will override other
-assignments to that key and can cause unexpected behaviour.
+在对象字面量中多次设置相同的键会覆盖该键的其他赋值，并可能导致意外的行为。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 const foo = {
@@ -30,7 +29,7 @@ const foo = {
 };
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 const foo = {

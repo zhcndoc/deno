@@ -1,23 +1,15 @@
 ---
-title: "Continuous integration"
+title: "持续集成"
 oldUrl: /runtime/manual/advanced/continuous_integration
 ---
 
-Deno's built-in tools make it easy to set up Continuous Integration (CI)
-pipelines for your projects. [Testing](/runtime/fundamentals/testing),
-[linting and formatting](/runtime/fundamentals/linting_and_formatting/) your
-code can all be done with the corresponding commands `deno test`, `deno lint`
-and `deno fmt`. In addition, you can generate code coverage reports from test
-results with `deno coverage` in pipelines.
+Deno 的内置工具使得为您的项目设置持续集成（CI）管道变得简单。您可以使用相应的命令 `deno test`、`deno lint` 和 `deno fmt` 对您的代码进行 [测试](/runtime/fundamentals/testing)、[代码检查和格式化](/runtime/fundamentals/linting_and_formatting/)。此外，您还可以在管道中使用 `deno coverage` 从测试结果中生成代码覆盖率报告。
 
-## Setting up a basic pipeline
+## 设置基本管道
 
-You can set up basic pipelines for Deno projects in GitHub Actions. The concepts
-explained on this page largely apply to other CI providers as well, such as
-Azure Pipelines, CircleCI or GitLab.
+您可以在 GitHub Actions 中为 Deno 项目设置基本管道。本页面上解释的概念在其他 CI 提供商中也适用，例如 Azure Pipelines、CircleCI 或 GitLab。
 
-Building a pipeline for Deno generally starts with checking out the repository
-and installing Deno:
+为 Deno 构建管道通常从签出代码库和安装 Deno 开始：
 
 ```yaml
 name: Build
@@ -31,35 +23,31 @@ jobs:
       - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.x # Run with latest stable Deno.
+          deno-version: v2.x # 使用最新的稳定版 Deno 运行。
 ```
 
-To expand the workflow, add any of the `deno` subcommands that you might need:
+要扩展工作流程，添加您可能需要的任何 `deno` 子命令：
 
 ```yaml
-# Check if the code is formatted according to Deno's default
-# formatting conventions.
+# 检查代码是否按照 Deno 的默认格式化约定进行格式化。
 - run: deno fmt --check
 
-# Scan the code for syntax errors and style issues. If
-# you want to use a custom linter configuration you can add a configuration file with --config <myconfig>
+# 扫描代码中的语法错误和风格问题。如果
+# 您想使用自定义的 linter 配置，可以使用 --config <myconfig> 添加配置文件。
 - run: deno lint
 
-# Run all test files in the repository and collect code coverage. The example
-# runs with all permissions, but it is recommended to run with the minimal permissions your program needs (for example --allow-read).
+# 运行代码库中的所有测试文件并收集代码覆盖率。示例
+# 使用所有权限运行，但建议使用您的程序所需的最小权限运行（例如 --allow-read）。
 - run: deno test --allow-all --coverage=cov/
 
-# This generates a report from the collected coverage in `deno test --coverage`. It is
-# stored as a .lcov file which integrates well with services such as Codecov, Coveralls and Travis CI.
+# 这会从 `deno test --coverage` 中收集的覆盖率生成报告。它会
+# 存储为 .lcov 文件，可以很好地与像 Codecov、Coveralls 和 Travis CI 这样的服务集成。
 - run: deno coverage --lcov cov/ > cov.lcov
 ```
 
-## Cross-platform workflows
+## 跨平台工作流程
 
-As a Deno module maintainer, you probably want to know that your code works on
-all of the major operating systems in use today: Linux, MacOS and Windows. A
-cross-platform workflow can be achieved by running a matrix of parallel jobs,
-each one running the build on a different OS:
+作为 Deno 模块的维护者，您可能希望知道您的代码是否在今天使用的所有主要操作系统上运行正常：Linux、MacOS 和 Windows。通过运行一个并行作业的矩阵，可以实现跨平台工作流程，每个作业在不同的操作系统上运行构建：
 
 ```yaml
 jobs:
@@ -74,12 +62,9 @@ jobs:
 
 :::caution
 
-Note: GitHub Actions has a known
-[issue](https://github.com/actions/checkout/issues/135) with handling
-Windows-style line endings (CRLF). This may cause issues when running `deno fmt`
-in a pipeline with jobs that run on `windows`. To prevent this, configure the
-Actions runner to use Linux-style line endings before running the
-`actions/checkout@v3` step:
+注意：GitHub Actions 有一个已知的
+[问题](https://github.com/actions/checkout/issues/135)，与处理
+Windows 风格的行尾（CRLF）有关。这可能会导致在 `windows` 上运行的作业中运行 `deno fmt` 时出现问题。为防止这种情况，请在运行 `actions/checkout@v3` 步骤之前，配置 Actions 运行器以使用 Linux 风格的行尾：
 
 ```sh
 git config --system core.autocrlf false
@@ -88,15 +73,13 @@ git config --system core.eol lf
 
 :::
 
-If you are working with experimental or unstable Deno APIs, you can include a
-matrix job running the canary version of Deno. This can help to spot breaking
-changes early on:
+如果您正在使用实验性或不稳定的 Deno API，可以添加一个矩阵作业来运行 Deno 的金丝雀版本。这可以帮助及早发现重大更改：
 
 ```yaml
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.canary }} # Continue in case the canary run does not succeed
+    continue-on-error: ${{ matrix.canary }} # 如果金丝雀运行不成功，则继续
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
@@ -108,15 +91,11 @@ jobs:
             canary: true
 ```
 
-## Speeding up Deno pipelines
+## 加速 Deno 管道
 
-### Reducing repetition
+### 减少重复
 
-In cross-platform runs, certain steps of a pipeline do not need to run for each
-OS necessarily. For example, generating the same test coverage report on Linux,
-MacOS and Windows is a bit redundant. You can use the `if` conditional keyword
-of GitHub Actions in these cases. The example below shows how to run code
-coverage generation and upload steps only on the `ubuntu` (Linux) runner:
+在跨平台运行中，管道的某些步骤并不一定需要针对每个操作系统运行。例如，在 Linux、MacOS 和 Windows 上生成相同的测试覆盖率报告是有点冗余的。在这些情况下，您可以使用 GitHub Actions 的 `if` 条件关键字。下面的示例展示了如何仅在 `ubuntu`（Linux）运行器上运行代码覆盖率生成和上传步骤：
 
 ```yaml
 - name: Generate coverage report
@@ -125,27 +104,21 @@ coverage generation and upload steps only on the `ubuntu` (Linux) runner:
 
 - name: Upload coverage to Coveralls.io
   if: matrix.os == 'ubuntu-latest'
-  # Any code coverage service can be used, Coveralls.io is used here as an example.
+  # 可以使用任何代码覆盖率服务，Coveralls.io 这里作为示例使用。
   uses: coverallsapp/github-action@master
   with:
-    github-token: ${{ secrets.GITHUB_TOKEN }} # Generated by GitHub.
+    github-token: ${{ secrets.GITHUB_TOKEN }} # 由 GitHub 生成。
     path-to-lcov: cov.lcov
 ```
 
-### Caching dependencies
+### 缓存依赖
 
-As a project grows in size, more and more dependencies tend to be included. Deno
-will download these dependencies during testing and if a workflow is run many
-times a day, this can become a time-consuming process. A common solution to
-speed things up is to cache dependencies so that they do not need to be
-downloaded anew.
+随着项目规模的扩大，通常会包含越来越多的依赖。Deno 在测试期间会下载这些依赖，如果一个工作流程一天运行多次，这可能会变得耗时。加快速度的一个常见解决方案是缓存依赖，这样就不需要重新下载。
 
-Deno stores dependencies locally in a cache directory. In a pipeline the cache
-can be preserved between workflows by setting the `DENO_DIR` environment
-variable and adding a caching step to the workflow:
+Deno 将依赖项存储在本地缓存目录中。在管道中，可以通过设置 `DENO_DIR` 环境变量并向工作流程添加一个缓存步骤来在工作流之间保留缓存：
 
 ```yaml
-# Set DENO_DIR to an absolute or relative path on the runner.
+# 将 DENO_DIR 设置为运行器上的绝对或相对路径。
 env:
   DENO_DIR: my_cache_directory
 
@@ -157,55 +130,34 @@ steps:
       key: my_cache_key
 ```
 
-At first, when this workflow runs the cache is still empty and commands like
-`deno test` will still have to download dependencies, but when the job succeeds
-the contents of `DENO_DIR` are saved and any subsequent runs can restore them
-from cache instead of re-downloading.
+最开始，当此工作流程运行时，缓存仍然为空，像 `deno test` 这样的命令仍然需要下载依赖项，但当作业成功时，`DENO_DIR` 的内容会被保存，任何后续运行都可以从缓存中恢复（而不是重新下载）。
 
-There is still an issue in the workflow above: at the moment the name of the
-cache key is hardcoded to `my_cache_key`, which is going to restore the same
-cache every time, even if one or more dependencies are updated. This can lead to
-older versions being used in the pipeline even though you have updated some
-dependencies. The solution is to generate a different key each time the cache
-needs to be updated, which can be achieved by using a lockfile and by using the
-`hashFiles` function provided by GitHub Actions:
+上面的工作流仍然存在一个问题：目前缓存键的名称被硬编码为 `my_cache_key`，这将在每次恢复相同的缓存，即使更新了一个或多个依赖。这可能导致在管道中使用旧版本，即使您已更新了一些依赖。解决方案是每次需要更新缓存时生成不同的键，这可以通过使用锁文件和 GitHub Actions 提供的 `hashFiles` 函数来实现：
 
 ```yaml
 key: ${{ hashFiles('deno.lock') }}
 ```
 
-To make this work you will also need a have a lockfile in your Deno project,
-which is discussed in detail
-[here](/runtime/fundamentals/modules/#integrity-checking-and-lock-files). Now,
-if the contents of `deno.lock` are changed, a new cache will be made and used in
-subsequent pipeline runs thereafter.
+要使此工作，您还需要在 Deno 项目中有一个锁文件，详细讨论可见
+[这里](/runtime/fundamentals/modules/#integrity-checking-and-lock-files)。现在，如果 `deno.lock` 的内容发生更改，将生成新的缓存并在随后的管道运行中使用。
 
-To demonstrate, let's say you have a project that uses the logger from
-[`@std/log`](https://jsr.io/@std/log):
+为了演示，假设您有一个使用来自 [`@std/log`](https://jsr.io/@std/log) 的日志记录器的项目：
 
 ```ts
 import * as log from "jsr:@std/log@0.224.5";
 ```
 
-In order to increment this version, you can update the `import` statement and
-then reload the cache and update the lockfile locally:
+为了增加此版本，您可以更新 `import` 语句，然后在本地重新加载缓存并更新锁文件：
 
 ```console
 deno install --reload --lock=deno.lock --frozen=false --entrypoint deps.ts
 ```
 
-You should see changes in the lockfile's contents after running this. When this
-is committed and run through the pipeline, you should then see the `hashFiles`
-function saving a new cache and using it in any runs that follow.
+在运行此命令后，您应该会看到锁文件内容的更改。当这被提交并通过管道运行时，您应该会看到 `hashFiles` 函数保存一个新缓存，并在随后的运行中使用它。
 
-#### Clearing the cache
+#### 清除缓存
 
-Occasionally you may run into a cache that has been corrupted or malformed,
-which can happen for various reasons. It is possible to clear a cache from the
-GitHub Actions UI, or you can simply change the name of the cache key. A
-practical way of doing so without having to forcefully change your lockfile is
-to add a variable to the cache key name, which can be stored as a GitHub secret
-and can be changed if a new cache is needed:
+偶尔，您可能会遇到缓存损坏或格式错误的情况，这可能是由于各种原因造成的。可以从 GitHub Actions UI 清除缓存，或者您可以简单更改缓存键的名称。不强制更改锁文件的实用方法是向缓存键名称添加一个变量，该变量可以存储为 GitHub 秘密，并在需要新缓存时进行更改：
 
 ```yaml
 key: ${{ secrets.CACHE_VERSION }}-${{ hashFiles('deno.lock') }}

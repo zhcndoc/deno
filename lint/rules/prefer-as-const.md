@@ -1,30 +1,27 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Recommends using const assertion (`as const`) over explicitly specifying literal
-types or using type assertion.
+推荐使用常量断言（`as const`）而不是显式指定字面量类型或使用类型断言。
 
-When declaring a new variable of a primitive literal type, there are three ways:
+在声明一个新的原始字面量类型变量时，有三种方式：
 
-1. adding an explicit type annotation
-2. using normal type assertion (like `as "foo"`, or `<"foo">`)
-3. using const assertion (`as const`)
+1. 添加显式类型注解
+2. 使用普通类型断言（如 `as "foo"` 或 `<"foo">`）
+3. 使用常量断言（`as const`）
 
-This lint rule suggests using const assertion because it will generally lead to
-a safer code. For more details about const assertion, see
-[the official handbook](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions).
+此 lint 规则建议使用常量断言，因为这通常会导致更安全的代码。有关常量断言的更多细节，请参见 [官方手册](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions)。
 
-**Invalid:**
+**无效：**
 
 ```typescript
-let a: 2 = 2; // type annotation
-let b = 2 as 2; // type assertion
-let c = <2> 2; // type assertion
-let d = { foo: 1 as 1 }; // type assertion
+let a: 2 = 2; // 类型注解
+let b = 2 as 2; // 类型断言
+let c = <2> 2; // 类型断言
+let d = { foo: 1 as 1 }; // 类型断言
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
 let a = 2 as const;

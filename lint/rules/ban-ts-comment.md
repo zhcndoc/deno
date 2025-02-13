@@ -1,14 +1,12 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows the use of Typescript directives without a comment.
+不允许在没有注释的情况下使用 Typescript 指令。
 
-Typescript directives reduce the effectiveness of the compiler, something which
-should only be done in exceptional circumstances. The reason why should be
-documented in a comment alongside the directive.
+Typescript 指令降低了编译器的有效性，这种情况应仅在特殊情况下使用。原因应在指令旁边通过注释进行说明。
 
-**Invalid:**
+**无效：**
 
 ```typescript
 // @ts-expect-error
@@ -25,19 +23,19 @@ let a: number = "I am a string";
 let a: number = "I am a string";
 ```
 
-**Valid:**
+**有效：**
 
 ```typescript
-// @ts-expect-error: Temporary workaround (see ticket #422)
+// @ts-expect-error: 临时解决方案（请参见票据 #422）
 let a: number = "I am a string";
 ```
 
 ```typescript
-// @ts-ignore: Temporary workaround (see ticket #422)
+// @ts-ignore: 临时解决方案（请参见票据 #422）
 let a: number = "I am a string";
 ```
 
 ```typescript
-// @ts-nocheck: Temporary workaround (see ticket #422)
+// @ts-nocheck: 临时解决方案（请参见票据 #422）
 let a: number = "I am a string";
 ```

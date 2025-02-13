@@ -1,92 +1,79 @@
 ---
-title: "Build Astro with Deno"
+title: "使用 Deno 构建 Astro"
 url: /examples/astro_tutorial/
 ---
 
-[Astro](https://astro.build/) is a modern web framework focused on
-content-centric websites, which leverages islands architecture and sends zero
-JavaScript to the client by default. And with the recent release of
-[Deno 2](https://deno.com/2), now
-[backwards compatible with Node and npm](https://deno.com/blog/v2.0#backwards-compatible-forward-thinking),
-the experience of using Astro and Deno has improved.
+[Astro](https://astro.build/) 是一个专注于内容中心网站的现代网页框架，它采用岛屿架构，并默认不向客户端发送任何 JavaScript。随着最近 [Deno 2](https://deno.com/2) 的发布，现在
+[与 Node 和 npm 向后兼容](https://deno.com/blog/v2.0#backwards-compatible-forward-thinking)，使用 Astro 和 Deno 的体验得到了提升。
 
-We’ll go over how to build a simple Astro project using Deno:
+我们将介绍如何使用 Deno 构建一个简单的 Astro 项目：
 
-- [Scaffold an Astro project](#scaffold-an-astro-project)
-- [Update index page](#update-index-page-to-list-all-dinosaurs)
-- [Add a dynamic SSR page](#add-a-dynamic-ssr-page)
-- [What’s next?](#whats-next)
+- [创建一个 Astro 项目](#scaffold-an-astro-project)
+- [更新索引页面](#update-index-page-to-list-all-dinosaurs)
+- [添加动态 SSR 页面](#add-a-dynamic-ssr-page)
+- [接下来是什么？](#whats-next)
 
-Feel free to skip directly to
-[the source code](https://github.com/denoland/examples/tree/main/with-astro) or
-follow along below!
+可以直接跳转到 [源代码](https://github.com/denoland/examples/tree/main/with-astro) 或在下面继续阅读！
 
-## Scaffold an Astro project
+## 创建一个 Astro 项目
 
-Astro provides a CLI tool to quickly scaffold a new Astro project. In your
-terminal, run the command `deno init --npm astro@latest` to create a new Astro
-project with Deno. For this tutorial, we’ll select the “Empty” template so we
-can start from scratch, and skip installing dependencies so we can install them
-with Deno later:
+Astro 提供了一个 CLI 工具，可以快速创建一个新的 Astro 项目。在终端中运行命令 `deno init --npm astro@latest` 来使用 Deno 创建一个新的 Astro 项目。对于本教程，我们将选择“空”模板，以便从头开始，并跳过安装依赖项，以便稍后使用 Deno 安装它们：
 
 ```jsx
 deno -A npm:create-astro@latest
 
- astro   Launch sequence initiated.
+ astro   启动序列已启动。
 
-   dir   Where should we create your new project?
+   dir   我们应该在哪里创建您的新项目？
          ./dino-app
 
-  tmpl   How would you like to start your new project?
-         Empty
+  tmpl   您希望如何开始您的新项目？
+         空
 
-    ts   Do you plan to write TypeScript?
-         Yes
+    ts   您打算编写 TypeScript 吗？
+         是
 
-   use   How strict should TypeScript be?
-         Strict
+   use   TypeScript 的严格程度应该是多少？
+         严格
 
-  deps   Install dependencies?
-         No
-      ◼  No problem!
-         Remember to install dependencies after setup.
+  deps   安装依赖项？
+         否
+      ◼  没问题！
+         请记得在设置后安装依赖项。
 
-   git   Initialize a new git repository?
-         Yes
+   git   初始化一个新的 git 代码库？
+         是
 
-      ✔  Project initialized!
-         ■ Template copied
-         ■ TypeScript customized
-         ■ Git initialized
+      ✔  项目已初始化！
+         ■ 模板已复制
+         ■ TypeScript 已自定义
+         ■ Git 已初始化
 
-  next   Liftoff confirmed. Explore your project!
+  next   起飞确认。探索您的项目！
 
- Enter your project directory using cd ./dino-app
- Run npm run dev to start the dev server. CTRL+C to stop.
- Add frameworks like react or tailwind using astro add.
+  使用 cd ./dino-app 进入您的项目目录
+  运行 npm run dev 启动开发服务器。CTRL+C 停止。
+  使用 astro add 添加像 react 或 tailwind 这样的框架。
 
- Stuck? Join us at https://astro.build/chat
+ 有问题？加入我们 https://astro.build/chat
 
-╭─────╮  Houston:
-│ ◠ ◡ ◠  Good luck out there, astronaut! 🚀
+╭─────╮  休斯顿：
+│ ◠ ◡ ◠  祝你好运，宇航员！ 🚀
 ╰──🍫─╯
 ```
 
-As of Deno 2,
-[Deno can also install packages with the new `deno install` command](https://deno.com/blog/v2.0#deno-is-now-a-package-manager-with-deno-install).
-So let’s run
-[`deno install`](https://docs.deno.com/runtime/reference/cli/install/) with the
-flag `--allow-scripts` to execute any npm lifecycle scripts:
+从 Deno 2 开始，[Deno 还可以使用新的 `deno install` 命令安装包](https://deno.com/blog/v2.0#deno-is-now-a-package-manager-with-deno-install)。所以我们执行
+[`deno install`](https://docs.deno.com/runtime/reference/cli/install/) 并使用 `--allow-scripts` 标志来执行任何 npm 生命周期脚本：
 
 ```bash
 deno install --allow-scripts
 ```
 
-To see what commands we have, let’s run `deno task`:
+要查看我们有哪些命令，请运行 `deno task`：
 
 ```bash
 deno task
-Available tasks:
+可用任务：
 - dev (package.json)
     astro dev
 - start (package.json)
@@ -99,31 +86,24 @@ Available tasks:
     astro
 ```
 
-We can start the Astro server with `deno task dev`:
+我们可以使用 `deno task dev` 启动 Astro 服务器：
 
-![Getting the Astro app to work](./images/how-to/astro/hello-astro.png)
+![成功运行 Astro 应用](./images/how-to/astro/hello-astro.png)
 
-## Update index page to list all dinosaurs
+## 更新索引页面以列出所有恐龙
 
-Our app will display facts about a variety of dinosaurs. The first page to
-create will be the index page that lists links to all dinosaurs in our
-“database”.
+我们的应用将显示有关各种恐龙的事实。我们要创建的第一页是索引页面，它将列出我们“数据库”中所有恐龙的链接。
 
-First, let’s create the data that will be used in the app. In this example,
-we’ll hardcode the data in a json file, but you can use any data storage in
-practice. We’ll create a `data` folder in the root of the project, then a
-`dinosaurs.json` file with
-[this text](https://github.com/denoland/tutorial-with-react/blob/main/api/data.json)
-in it.
+首先，让我们创建将用于应用中的数据。在本示例中，我们将在一个 json 文件中硬编码数据，但您可以在实践中使用任何数据存储。我们将在项目根目录下创建一个 `data` 文件夹，然后创建一个 `dinosaurs.json` 文件，内容为
+[此文本](https://github.com/denoland/tutorial-with-react/blob/main/api/data.json)。
 
-> ⚠️️ In this tutorial we hard code the data. But you can connect to
-> [a variety of databases](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)
-> and
-> [even use ORMs like Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/)
-> with Deno.
+> ⚠️️ 在本教程中，我们硬编码了数据。但您可以连接到
+> [各种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)
+> 以及
+> [甚至使用 Prisma 等 ORM](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/)
+> 与 Deno。
 
-Once we have the data, let’s create an index page that lists all of the
-dinosaurs. In the `./src/pages/index.astro` page, let’s write the following:
+一旦我们有了数据，就让我们创建一个列出所有恐龙的索引页面。在 `./src/pages/index.astro` 页面中，写入以下内容：
 
 ```jsx
 ---
@@ -136,10 +116,10 @@ import data from "../../data/dinosaurs.json";
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Dinosaurs</title>
+		<title>恐龙</title>
 	</head>
 	<body>
-		<h1>Dinosaurs</h1>
+		<h1>恐龙</h1>
 		<ul>
 			{data.map((dinosaur) => (
 				<li>
@@ -151,23 +131,19 @@ import data from "../../data/dinosaurs.json";
 </html>
 ```
 
-Let’s start the server with `deno task dev` and point our browser to
-`localhost:4321`:
+让我们使用 `deno task dev` 启动服务器，并将浏览器指向 `localhost:4321`：
 
-![Index page that lists all dinosaurs](./images/how-to/astro/index-page.webp)
+![列出所有恐龙的索引页面](./images/how-to/astro/index-page.webp)
 
-Awesome! But when you click on a dinosaur, it 404’s. Let’s fix that.
+太棒了！但是当您点击一个恐龙时，它会出现 404 错误。让我们修复它。
 
-## Add a dynamic SSR page
+## 添加动态 SSR 页面
 
-Our app will display facts about a variety of dinosaurs. In order to do that,
-we’ll create a dynamic server-side rendered (”SSR”), which
-[offers better performance for end users while improving your pages SEO](https://deno.com/blog/the-future-and-past-is-server-side-rendering).
+我们的应用将显示有关各种恐龙的事实。为此，我们将创建一个动态服务器端渲染（“SSR”）页面，
+[这为最终用户提供了更好的性能，同时改善了您的页面 SEO](https://deno.com/blog/the-future-and-past-is-server-side-rendering)。
 
-Next, let’s create a new file under `/src/pages/` called `[dinosaur].astro`. At
-the top of the file, we'll add some logic to pull data from our hardcoded data
-source and filter that against the `dinosaur` parameter set from the URL path.
-At the bottom, we’ll render the data. Your file should look like this:
+接下来，让我们在 `/src/pages/` 下创建一个名为 `[dinosaur].astro` 的新文件。在文件顶部，我们将添加一些逻辑，以从我们的硬编码数据源中提取数据，并将其与从 URL 路径中设置的 `dinosaur` 参数进行过滤。
+在文件底部，我们将渲染数据。您的文件应该如下所示：
 
 ```jsx
 ---
@@ -185,32 +161,24 @@ const { name, description } = dinosaurObj;
 </p>
 ```
 
-> ⚠️️ The
-> [Deno language server](https://docs.deno.com/runtime/reference/lsp_integration/)
-> does not currently support `.astro` files, so you may experience false red
-> squigglies. We're working on improving this experience.
+> ⚠️️ 当前
+> [Deno 语言服务器](https://docs.deno.com/runtime/reference/lsp_integration/)
+> 不支持 `.astro` 文件，因此您可能会遇到虚假的红色波浪线。我们正在努力改进这个体验。
 
-Let’s run it with `deno task dev`, and point our browser to
-`localhost:4321/abrictosaurus`:
+让我们使用 `deno task dev` 运行它，并将浏览器指向 `localhost:4321/abrictosaurus`：
 
-![Rendering a dynamic page for abrictosaurus](./images/how-to/astro/dynamic-page.webp)
+![渲染 abrictosaurus 的动态页面](./images/how-to/astro/dynamic-page.webp)
 
-It works!
+它工作正常！
 
-## What’s next
+## 接下来是什么
 
-We hope this tutorial gives you a good idea of how to get started building with
-Astro and Deno. You can learn more about Astro and
-[their progressive approach to building websites](https://docs.astro.build/en/getting-started/).
-If you’re interested in swapping out our hardcoded data store, here are some
-resources on
-[connecting to databases with Deno](https://docs.deno.com/runtime/tutorials/connecting_to_databases/),
-including
+我们希望这个教程能让您对如何开始使用 Astro 和 Deno 构建有一个良好的了解。您可以了解更多关于 Astro 的信息，以及
+[他们渐进式的网站构建方法](https://docs.astro.build/en/getting-started/)。如果您有兴趣更换我们硬编码的数据存储，这里有一些关于
+[使用 Deno 连接数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 的资源，包括
 [Planetscale](https://docs.deno.com/runtime/tutorials/how_to_with_npm/planetscale/),
-[Redis](https://docs.deno.com/runtime/tutorials/how_to_with_npm/redis/), and
-more. Or you can learn how to
-[deploy your Astro project to Deno Deploy](https://deno.com/blog/astro-on-deno),
-or follow these guides on how to self-host Deno to
+[Redis](https://docs.deno.com/runtime/tutorials/how_to_with_npm/redis/)等资源。或者您可以学习如何
+[将您的 Astro 项目部署到 Deno Deploy](https://deno.com/blog/astro-on-deno)，或者按照这些指南了解如何将 Deno 自托管到
 [AWS](https://docs.deno.com/runtime/tutorials/aws_lightsail/),
-[Digital Ocean](https://docs.deno.com/runtime/tutorials/digital_ocean/), and
-[Google Cloud Run](https://docs.deno.com/runtime/tutorials/google_cloud_run/).
+[Digital Ocean](https://docs.deno.com/runtime/tutorials/digital_ocean/)，以及
+[Google Cloud Run](https://docs.deno.com/runtime/tutorials/google_cloud_run/)。

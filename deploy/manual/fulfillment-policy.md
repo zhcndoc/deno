@@ -1,32 +1,15 @@
 ---
-title: "Fulfillment Policy"
+title: "兑现政策"
 ---
 
-## Refund Policy
+## 退款政策
 
-At Deno Deploy, we strive to provide exceptional service. If you are not
-satisfied with our service, you may request a refund under the following
-conditions:
+在 Deno Deploy，我们努力提供卓越的服务。如果您对我们的服务不满意，您可以在以下条件下请求退款：
 
-A refund must be requested within 14 days of the initial purchase or upgrade of
-any subscription plan. Refunds may be considered if the service fails to
-function correctly and if the issue cannot be resolved by our support team
-within a reasonable time frame. No refunds will be issued for services used in
-violation of our terms of service or for problems clearly attributable to user
-error or external platform changes. Recurring subscriptions may be canceled but
-are only eligible for a refund for the initial billing cycle if requested within
-the 14-day period.
+退款必须在初次购买或升级任何订阅计划后的 14 天内请求。如果服务未能正常运行，并且如果我们的支持团队在合理的时间内无法解决问题，则可以考虑退款。对于违反我们的服务条款所使用的服务或明显归因于用户错误或外部平台变化的问题，将不予退款。定期订阅可以取消，但仅在 14 天内请求时才有资格获得初始计费周期的退款。
 
-## Cancellation Policy
+## 取消政策
 
-You can cancel your Deno Deploy subscription at any time under the following
-terms:
+您可以在以下条款下随时取消您的 Deno Deploy 订阅：
 
-Subscription cancellations are effective immediately, and the service will
-continue to run until the end of the current billing period. To cancel your
-subscription, please navigate to your account settings on the Deno Deploy
-dashboard and select 'Cancel Subscription'. Once the subscription is canceled,
-no further charges will be incurred, but you are responsible for any charges
-accrued before the effective date of cancellation. Contact Us For more
-information about our fulfillment policies, or if you require assistance, please
-contact our support team at [deploy@deno.com](mailto:deploy@deno.com).
+订阅取消将立即生效，服务将继续运行至当前计费周期结束。要取消您的订阅，请导航到 Deno Deploy 仪表板上的帐户设置，并选择“取消订阅”。一旦订阅被取消，将不再产生进一步费用，但您仍需对取消生效日期之前的所有费用负责。如需了解我们履行政策的更多信息，或如果您需要帮助，请通过 [deploy@deno.com](mailto:deploy@deno.com) 联系我们的支持团队。

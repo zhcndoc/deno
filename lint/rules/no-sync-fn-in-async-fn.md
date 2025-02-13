@@ -2,13 +2,11 @@
 tags: []
 ---
 
-Disallow sync function inside async function.
+不允许在异步函数内部使用同步函数。
 
-Using sync functions like `Deno.readTextFileSync` blocks the deno event loop so
-it's not recommended to use it inside of an async function, because it stops
-progress of all other async tasks.
+使用像 `Deno.readTextFileSync` 这样的同步函数会阻塞 Deno 事件循环，因此不推荐在异步函数内使用它，因为它会停止所有其他异步任务的进程。
 
-**Invalid:**
+**无效示例：**
 
 ```javascript
 async function foo() {
@@ -24,7 +22,7 @@ const fooFn = async () => {
 };
 ```
 
-**Valid:**
+**有效示例：**
 
 ```javascript
 async function foo() {

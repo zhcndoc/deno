@@ -1,19 +1,14 @@
 ---
-tags: [recommended]
+tags: [推荐]
 ---
 
-Disallows returning values from setters.
+不允许从设置器返回值。
 
-Setters are supposed to be used for setting some value to the property, which
-means that returning a value from a setter makes no sense. In fact, returned
-values are ignored and cannot ever be used at all although returning a value
-from a setter produces no error. This is why static check for this mistake by
-the linter is quite beneficial.
+设置器应该用于给属性设置某个值，这意味着从设置器返回值是没有意义的。实际上，返回的值会被忽略，根本无法使用，尽管从设置器返回值不会产生错误。这就是为什么静态检查这种错误的 lint 工具是非常有益的原因。
 
-Note that returning without a value is allowed; this is a useful technique to do
-early-return from a function.
+请注意，返回时不带值是被允许的；这是一种用于从函数中提前返回的有用技巧。
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 const a = {
@@ -37,10 +32,10 @@ const c = {
 };
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
-// return without a value is allowed since it is used to do early-return
+// 返回时不带值是允许的，因为它用于提前返回
 const a = {
   set foo(x: number) {
     if (x % 2 == 0) {
@@ -49,14 +44,14 @@ const a = {
   },
 };
 
-// not a setter, but a getter
+// 不是设置器，而是获取器
 class B {
   get foo() {
     return 42;
   }
 }
 
-// not a setter
+// 不是设置器
 const c = {
   set(x: number) {
     return "something";

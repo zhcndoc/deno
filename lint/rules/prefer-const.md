@@ -2,29 +2,19 @@
 tags: [recommended]
 ---
 
-Recommends declaring variables with [`const`] over [`let`].
+建议使用 [`const`] 声明变量，而不是 [`let`]。
 
-Since ES2015, JavaScript supports [`let`] and [`const`] for declaring variables.
-If variables are declared with [`let`], then they become mutable; we can set
-other values to them afterwards. Meanwhile, if declared with [`const`], they are
-immutable; we cannot perform re-assignment to them.
+自 ES2015 起，JavaScript 支持使用 [`let`] 和 [`const`] 来声明变量。如果变量使用 [`let`] 声明，那么它们变得可变；我们可以在后面为它们赋值。与此同时，如果使用 [`const`] 声明，则它们是不可变的；我们不能对它们进行重新赋值。
 
-In general, to make the codebase more robust, maintainable, and readable, it is
-highly recommended to use [`const`] instead of [`let`] wherever possible. The
-fewer mutable variables are, the easier it should be to keep track of the
-variable states while reading through the code, and thus it is less likely to
-write buggy code. So this lint rule checks if there are [`let`] variables that
-could potentially be declared with [`const`] instead.
+一般来说，为了使代码库更加健壮、可维护和可读，强烈建议在可能的情况下使用 [`const`] 而不是 [`let`]。可变变量越少，跟踪变量状态就越容易，从而在阅读代码时发生错误的可能性就越小。因此，这个 lint 规则会检查是否存在可以使用 [`const`] 替代的 [`let`] 变量。
 
-Note that this rule does not check for [`var`] variables. Instead,
-[the `no-var` rule](/lint/rules/no-var) is responsible for detecting and warning
-[`var`] variables.
+请注意，此规则不检查 [`var`] 变量。相反，[`no-var` 规则](/lint/rules/no-var) 负责检测和警告 [`var`] 变量。
 
 [`let`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let
 [`const`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
 [`var`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var
 
-**Invalid:**
+**无效示例：**
 
 ```typescript
 let a = 0;
@@ -32,22 +22,22 @@ let a = 0;
 let b = 0;
 someOperation(b);
 
-// `const` could be used instead
+// 可以使用 `const` 来替代
 for (let c in someObject) {}
 
-// `const` could be used instead
+// 可以使用 `const` 来替代
 for (let d of someArray) {}
 
-// variable that is uninitialized at first and then assigned in the same scope is NOT allowed
-// because we could simply write it like `const e = 2;` instead
+// 首先未初始化的变量然后在同一作用域中赋值是不允许的
+// 因为我们可以简单地写成 `const e = 2;`
 let e;
 e = 2;
 ```
 
-**Valid:**
+**有效示例：**
 
 ```typescript
-// uninitialized variable is allowed
+// 未初始化的变量是允许的
 let a;
 
 let b = 0;
@@ -56,24 +46,24 @@ b += 1;
 let c = 0;
 c = 1;
 
-// variable that is uninitialized at first and then assigned in the same scope _two or more times_ is allowed
-// because we cannot represent it with `const`
+// 首先未初始化的变量然后在同一作用域中 _赋值两次或多次_ 是允许的
+// 因为我们无法使用 `const` 来表示它
 let d;
 d = 2;
 d = 3;
 
 const e = 0;
 
-// `f` is mutated through `f++`
+// `f` 通过 `f++` 进行变更
 for (let f = 0; f < someArray.length; f++) {}
 
-// variable that is initialized (or assigned) in another scope is allowed
+// 在另一个作用域中初始化（或赋值）的变量是允许的
 let g;
 function func1() {
   g = 42;
 }
 
-// conditionally initialized variable is allowed
+// 有条件初始化的变量是允许的
 let h;
 if (trueOrFalse) {
   h = 0;
