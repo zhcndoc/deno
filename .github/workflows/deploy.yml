@@ -1,55 +1,56 @@
 name: Deploy
+
 on:
   push:
-    branches: main
-  pull_request:
-    branches: main
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-22.04-xl
-    permissions:
-      id-token: write # Needed for auth with Deno Deploy
-      contents: read # Needed to clone the repository
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Clone repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Deno
+      - name: Install Deno
         uses: denoland/setup-deno@v2
-
-      - name: "Reference: install"
-        working-directory: "reference_gen"
-        run: deno install
-
-      - name: "Reference: generate types"
-        working-directory: "reference_gen"
-        run: deno task types
-
-      - name: "Reference: generate docs"
-        working-directory: "reference_gen"
-        run: deno task doc
-
-      - name: Build
-        env:
-          ORAMA_CLOUD_INDEX_ID: ${{ vars.ORAMA_CLOUD_INDEX_ID }}
-          ORAMA_CLOUD_API_KEY: ${{ secrets.ORAMA_CLOUD_API_KEY }}
-        run: deno task build
-
-      - name: Run server
-        working-directory: _site
-        run: deno run --allow-read=. --allow-net --allow-env --lock=../deno.lock server.ts &
-
-      - name: Link checker
-        env:
-          DOCS_ROOT: "http://localhost:8000"
-        run: deno run --no-lock --allow-net --allow-env .github/workflows/better_link_checker.ts
-
-      - name: Upload to Deno Deploy
-        uses: denoland/deployctl@v1
         with:
-          project: "deno-docs"
-          entrypoint: "server.ts"
-          root: "_site"
+          deno-version: v2.x
+
+      - name: Build project
+        run: deno task reference && deno task build
+
+      - name: Compress build output
+        run: cd _site && zip -r ../build-artifact.zip .
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: build-artifact.zip
+
+  deploy-to-server:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: .
+
+      - name: Extract artifact
+        run: unzip -o build-artifact.zip -d extracted
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_PORT: ${{ secrets.SERVER_PORT }}
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_KEY }}
+          SOURCE: 'extracted/'
+          ARGS: '-azr --delete'
+          TARGET: '${{ secrets.SERVER_PATH }}/${{ github.event.repository.name }}/'
