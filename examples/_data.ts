@@ -659,6 +659,11 @@ export const sidebar = [
         type: "example",
       },
       {
+        label: "检查目录是否存在",
+        id: "/examples/checking_directory_existence",
+        type: "example",
+      },
+      {
         label: "移动/重命名文件",
         id: "/examples/moving_renaming_files",
         type: "example",

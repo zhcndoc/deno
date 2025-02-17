@@ -10,6 +10,10 @@ title: "定价和限制"
 
 在上传资源到部署时，所有文件的总大小（源文件和静态文件）**不得超过 1GB**。
 
+## 内存分配
+
+应用程序的最大内存分配为 512MB
+
 ## TLS 代理
 
 对于到 443 端口（HTTPS 使用的端口）的外发连接，要求进行 TLS 终止。禁止使用 [Deno.connect](https://docs.deno.com/api/deno/~/Deno.connect) 连接这些端口。如果您需要建立到 443 端口的 TLS 连接，请改用 [Deno.connectTls](https://docs.deno.com/api/deno/~/Deno.connectTls)。`fetch` 不会受到此限制的影响。

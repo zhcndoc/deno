@@ -169,10 +169,10 @@ export default createRouter({
 
 最后，你可以删除 `src/App.vue` 文件中的所有代码，并更新它只包含 `<RouterView>` 组件：
 
-```vue title="App.vue"
+```html title="App.vue"
 <template>
   <RouterView />
-</template>;
+</template>
 ```
 
 ### 组件
@@ -189,25 +189,27 @@ Vue.js 将前端 UI 分成组件。每个组件都是可复用的代码片段。
 [来自 Vue Router 的 `RouterLink` 组件](https://router.vuejs.org/guide/)。
 （因为我们正在创建一个 TypeScript 项目，不要忘记在 script 标签上指定 `lang="ts"` 属性。）将以下代码添加到 `Dinosaurs.vue` 文件中：
 
-```vue title="Dinosaurs.vue"
+```html title="Dinosaurs.vue"
 <script lang="ts">
-import { defineComponent } from 'vue';
+  import { defineComponent } from "vue";
 
-export default defineComponent({
+  export default defineComponent({
     async setup() {
-        const res = await fetch("http://localhost:8000/dinosaurs")
-        const dinosaurs = await res.json() as Dinosaur[];
-        return { dinosaurs };
-    }
-});
+      const res = await fetch("http://localhost:8000/dinosaurs");
+      const dinosaurs = await res.json() as Dinosaur[];
+      return { dinosaurs };
+    },
+  });
 </script>
 
 <template>
-    <div v-for="dinosaur in dinosaurs" :key="dinosaur.name">
-        <RouterLink :to="{ name: 'Dinosaur', params: { dinosaur: `${dinosaur.name.toLowerCase()}` } }" >
-            {{ dinosaur.name }}
-        </RouterLink>
-    </div>
+  <div v-for="dinosaur in dinosaurs" :key="dinosaur.name">
+    <RouterLink
+      :to="{ name: 'Dinosaur', params: { dinosaur: `${dinosaur.name.toLowerCase()}` } }"
+    >
+      {{ dinosaur.name }}
+    </RouterLink>
+  </div>
 </template>
 ```
 
@@ -218,9 +220,9 @@ export default defineComponent({
 
 主页将包含一个标题，然后渲染 `Dinosaurs` 组件。将以下代码添加到 `HomePage.vue` 文件中：
 
-```vue title="HomePage.vue"
+```html title="HomePage.vue"
 <script setup lang="ts">
-import Dinosaurs from './Dinosaurs.vue';
+  import Dinosaurs from "./Dinosaurs.vue";
 </script>
 <template>
   <h1>欢迎来到恐龙应用！🦕</h1>
@@ -258,28 +260,30 @@ type ComponentData = {
 
 然后更新 `Dinosaur.vue` 文件：
 
-```vue title="Dinosaur.vue"
+```html title="Dinosaur.vue"
 <script lang="ts">
-import { defineComponent } from 'vue';
+  import { defineComponent } from "vue";
 
-export default defineComponent({
+  export default defineComponent({
     props: { dinosaur: String },
     data(): ComponentData {
-        return { 
-            dinosaurDetails: null 
-        };
+      return {
+        dinosaurDetails: null,
+      };
     },
     async mounted() {
-        const res = await fetch(`http://localhost:8000/dinosaurs/${this.dinosaur}`);
-        this.dinosaurDetails = await res.json();
-    }
-});
+      const res = await fetch(
+        `http://localhost:8000/dinosaurs/${this.dinosaur}`,
+      );
+      this.dinosaurDetails = await res.json();
+    },
+  });
 </script>
 
 <template>
-    <h1>{{ dinosaurDetails?.name }}</h1>
-    <p>{{ dinosaurDetails?.description }}</p>
-    <RouterLink to="/">🠠 返回所有恐龙</RouterLink>
+  <h1>{{ dinosaurDetails?.name }}</h1>
+  <p>{{ dinosaurDetails?.description }}</p>
+  <RouterLink to="/">🠠 返回所有恐龙</RouterLink>
 </template>
 ```
 
