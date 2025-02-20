@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx, fresh]
 ---
 
 确保 HTML 中的空元素没有任何子元素，因为这不是有效的 HTML。有关更多信息，请参阅

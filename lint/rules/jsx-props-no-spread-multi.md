@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx]
 ---
 
 重复同样的表达式通常是一个错误，并且会导致不必要的计算。

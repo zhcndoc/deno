@@ -5,20 +5,20 @@ export const sidebar = [
     title: "入门",
     items: [
       {
-        label: "关于子托管",
-        id: "/subhosting/manual/",
+        title: "关于子托管",
+        href: "/subhosting/manual/",
       },
       {
-        label: "快速入门",
-        id: "/subhosting/manual/quick_start/",
+        title: "快速入门",
+        href: "/subhosting/manual/quick_start/",
       },
       {
-        label: "规划您的实施",
-        id: "/subhosting/manual/planning_your_implementation/",
+        title: "规划您的实施",
+        href: "/subhosting/manual/planning_your_implementation/",
       },
       {
-        label: "定价与限制",
-        id: "/subhosting/manual/pricing_and_limits/",
+        title: "定价与限制",
+        href: "/subhosting/manual/pricing_and_limits/",
       },
     ],
   },
@@ -26,19 +26,19 @@ export const sidebar = [
     title: "REST API",
     items: [
       {
-        label: "资源",
-        id: "/subhosting/api/",
+        title: "资源",
+        href: "/subhosting/api/",
       },
       {
-        label: "身份验证",
-        id: "/subhosting/api/authentication/",
+        title: "身份验证",
+        href: "/subhosting/api/authentication/",
       },
       {
-        label: "事件",
-        id: "/subhosting/manual/events/",
+        title: "事件",
+        href: "/subhosting/manual/events/",
       },
       {
-        label: "API 参考文档",
+        title: "API 参考文档",
         href: "https://apidocs.deno.com",
       },
     ],

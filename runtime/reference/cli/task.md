@@ -191,6 +191,18 @@ Task cycle detected: a -> b -> a
 
 运行 `deno task dev` 将并行运行 `dev-client` 和 `dev-server`。
 
+## Node 和 npx 二进制支持
+
+默认情况下，`deno task` 将使用 `deno` 二进制执行命令。如果您需要确保命令使用 `npm` 或 `npx` 二进制运行，您可以通过分别调用 `npm` 或 `npx` 的 `run` 命令来实现。例如：
+
+```json
+{
+  "tasks": {
+    "test:node": "npm run test"
+  }
+}
+```
+
 ## 工作空间支持
 
 `deno task` 可用于工作空间，从多个成员目录并行运行任务。要执行所有工作空间成员的 `dev` 任务，请使用 `--recursive` 标志：

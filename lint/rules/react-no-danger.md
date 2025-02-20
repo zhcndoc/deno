@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [react, fresh]
 ---
 
 防止使用 `dangerouslySetInnerHTML`，如果使用不当可能导致 XSS 漏洞。

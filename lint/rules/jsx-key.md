@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx]
 ---
 
 确保在将可迭代对象传递给 JSX 时存在 `key` 属性。这允许框架优化元素顺序的检查。

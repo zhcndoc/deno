@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx]
 ---
 
 确保在 JSX 表达式周围一致使用花括号。

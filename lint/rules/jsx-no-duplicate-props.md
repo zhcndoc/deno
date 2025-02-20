@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx, fresh]
 ---
 
 不允许重复的 JSX 属性。后面的属性将始终覆盖前面的属性，这常常会导致意想不到的结果。

@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx, fresh]
 ---
 
 将子元素作为 JSX 子元素传递，而不是作为属性。

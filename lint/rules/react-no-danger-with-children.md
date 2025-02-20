@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [react, fresh]
 ---
 
 使用 JSX 子元素与 `dangerouslySetInnerHTML` 一起是无效的，因为它们将被忽略。

@@ -24,7 +24,7 @@ deno run -RWE npm:create-vite-extra@latest
 要查看并编辑您的新项目，可以运行：
 
 ```sh
-deno run dev
+deno task dev
 ```
 
 ## 第三步：使用 Deno Deploy 部署您的项目

@@ -97,7 +97,21 @@ client.close();
 
 ## SQLite
 
-在 Deno 中连接到 SQLite 有两个主要解决方案：
+在 Deno 中连接 SQLite 有多种解决方案：
+
+### 使用 `node:sqlite` 模块连接 SQLite
+
+_`node:sqlite` 模块已在 Deno v2.2 中添加。_
+
+```ts
+import { DatabaseSync } from "node:sqlite";
+const database = new DatabaseSync("test.db");
+
+const result = database.prepare("select sqlite_version()").get();
+console.log(result);
+
+db.close();
+```
 
 ### 使用 FFI 模块连接到 SQLite
 
