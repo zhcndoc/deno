@@ -3,11 +3,11 @@ title: "发布计划"
 oldUrl: /runtime/manual/references/contributing/release_schedule/
 ---
 
-每个月的第三个星期四都会发布一个新的次要版本的 `deno` cli。
+`deno` CLI 的新小版本计划每 12 周发布一次。
 
 请查看 [Deno GitHub 的里程碑](https://github.com/denoland/deno/milestones) 了解即将发布的版本。
 
-在次要版本发布后，通常会有两个或三个修补版本（每周发布一次）；随后将开启新特性合并窗口，为即将到来的次要版本做准备。
+通常在小版本发布后会有几个补丁版本（每周进行一次）；之后，新的功能合并窗口将为即将到来的小版本发布打开。
 
 稳定版本可以在 [GitHub 发布页面](https://github.com/denoland/deno/releases) 上找到。
 

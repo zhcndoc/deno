@@ -56,6 +56,11 @@ export const sidebar = [
         type: "video",
       },
       {
+        title: "顶级 await",
+        href: "/examples/top_level_await/",
+        type: "example",
+      },
+      {
         title: "从 CommonJS 更新到 ESM",
         href: "/examples/cjs_to_esm_tutorial/",
         type: "tutorial",

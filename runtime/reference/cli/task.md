@@ -285,16 +285,16 @@ deno run output_data.ts ; deno run --allow-net server.ts
 ### 异步命令
 
 异步命令提供了一种使命令异步执行的方法。这在启动多个进程时可能很有用。要使命令异步，请在命令末尾添加 `&`。例如，以下命令将在同一时间执行
-`sleep 1 && deno run --allow-net client.ts` 和 `deno run --allow-net server.ts`：
+`sleep 1 && deno run --allow-net server.ts` 和 `deno run --allow-net client.ts`：
 
 ```sh
-sleep 1 && deno run --allow-net client.ts & deno run --allow-net server.ts
+sleep 1 && deno run --allow-net server.ts & deno run --allow-net client.ts
 ```
 
-与大多数 shell 中的行为不同，第一个失败的异步命令将导致所有其他命令立即失败。在上面的示例中，这意味着如果客户端命令失败，则服务器命令也将失败并退出。您可以通过在命令末尾添加 `|| true` 来选择退出此行为，这将强制退出码为 `0`。例如：
+与大多数 shell 不同，第一个失败的异步命令将导致所有其他命令立即失败。在上面的例子中，这意味着如果服务器命令失败，则客户端命令也会失败并退出。您可以通过在命令末尾添加 `|| true` 来选择退出此行为，这将强制返回 `0` 的退出代码。例如：
 
 ```sh
-deno run --allow-net client.ts || true & deno run --allow-net server.ts || true
+deno run --allow-net server.ts || true & deno run --allow-net client.ts || true
 ```
 
 ### 环境变量
