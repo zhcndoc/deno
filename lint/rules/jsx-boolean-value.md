@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended, react, jsx]
 ---
 
 强制一致的 JSX 布尔值样式。传递 `true` 作为布尔值可以使用简写语法省略。

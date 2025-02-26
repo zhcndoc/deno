@@ -164,6 +164,11 @@ export const sidebar = [
         type: "video",
       },
       {
+        title: "通过控制台 API 更好的调试",
+        href: "/examples/debugging_with_console_tutorial/",
+        type: "tutorial",
+      },
+      {
         title: "操作和解析 URL",
         href: "/examples/url_parsing/",
         type: "example",
