@@ -4,7 +4,7 @@ export const sidebar = [
     items: [
       {
         title: "什么是 Deno？",
-        href: "/examples/what_is_deno",
+        href: "/examples/what_is_deno/",
         externalURL:
           "https://www.youtube.com/watch?v=KPTOo4k8-GE&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe",
         type: "video",
@@ -26,7 +26,7 @@ export const sidebar = [
       },
       {
         title: "你的 Deno 开发环境",
-        href: "/examples/deno_dev_environment",
+        href: "/examples/deno_dev_environment/",
         externalURL:
           "https://www.youtube.com/watch?v=BFfrGrLm2tw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=3",
         type: "video",
@@ -43,14 +43,14 @@ export const sidebar = [
       },
       {
         title: "一体化工具",
-        href: "/examples/all-in-one_tooling",
+        href: "/examples/all-in-one_tooling/",
         externalURL:
           "https://www.youtube.com/watch?v=-4e9DkUrCr4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=5",
         type: "video",
       },
       {
         title: "使用 deno.json 进行任务和配置",
-        href: "/examples/configuration_with_deno_json",
+        href: "/examples/configuration_with_deno_json/",
         externalURL:
           "https://www.youtube.com/watch?v=bTmO5Tfgke4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=10",
         type: "video",
@@ -68,12 +68,12 @@ export const sidebar = [
 
       {
         title: "导入和导出函数",
-        href: "/examples/import_export",
+        href: "/examples/import_export/",
         type: "example",
       },
       {
         title: "与 Node.js 的互操作性",
-        href: "/examples/interoperability_with_nodejs",
+        href: "/examples/interoperability_with_nodejs/",
         externalURL:
           "https://www.youtube.com/watch?v=mgX1ymfqPSQ&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=2",
         type: "video",
@@ -92,25 +92,25 @@ export const sidebar = [
       },
       {
         title: "通过 Deno 覆盖进行更好的测试",
-        href: "/examples/deno_coverage",
+        href: "/examples/deno_coverage/",
         externalURL: "https://www.youtube.com/watch?v=P2BBYNPpgW8",
         type: "video",
       },
       {
         title: "使用 Deno fmt 格式化",
-        href: "/examples/deno_fmt",
+        href: "/examples/deno_fmt/",
         externalURL: "https://www.youtube.com/watch?v=Ouzso9gQqnc",
         type: "video",
       },
       {
         title: "使用 Deno bench 进行基准测试",
-        href: "/examples/deno_bench",
+        href: "/examples/deno_bench/",
         externalURL: "https://www.youtube.com/watch?v=IVde_GTN6TM",
         type: "video",
       },
       {
         title: "使用 Deno test 入门",
-        href: "/examples/deno_test",
+        href: "/examples/deno_test/",
         externalURL: "https://www.youtube.com/watch?v=gDtDVfsgHgs",
         type: "video",
       },
@@ -228,7 +228,7 @@ export const sidebar = [
       },
       {
         title: "构建一个 Fresh 应用",
-        href: "https://fresh.deno.dev/docs/getting-started/create-a-project",
+        href: "https://fresh.deno.dev/docs/getting-started/create-a-project/",
         type: "tutorial",
       },
       {
@@ -268,31 +268,31 @@ export const sidebar = [
       },
       {
         title: "用 TypeScript 构建 API 服务器",
-        href: "/examples/build_api_server_ts",
+        href: "/examples/build_api_server_ts/",
         externalURL:
           "https://www.youtube.com/watch?v=J8kZ-s-5-ms&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=13",
         type: "video",
       },
       {
         title: "构建一个 Vue 应用",
-        href: "/examples/vue_app_video",
+        href: "/examples/vue_app_video/",
         externalURL: "https://www.youtube.com/watch?v=MDPauM8fZDE",
         type: "video",
       },
       {
         title: "构建一个 SolidJS 应用",
-        href: "/examples/solidjs_tutorial",
+        href: "/examples/solidjs_tutorial/",
         type: "tutorial",
       },
       {
         title: "构建一个 React 应用",
-        href: "/examples/react_app_video",
+        href: "/examples/react_app_video/",
         externalURL: "https://www.youtube.com/watch?v=eStwt_2THd8",
         type: "video",
       },
       {
         title: "Build a Tanstack app",
-        href: "/examples/tanstack_tutorial",
+        href: "/examples/tanstack_tutorial/",
         type: "tutorial",
       },
     ],
@@ -307,7 +307,7 @@ export const sidebar = [
       },
       {
         title: "将 Deno 部署到 AWS Lambda",
-        href: "/examples/deploy_deno_to_aws_lambda",
+        href: "/examples/deploy_deno_to_aws_lambda/",
         externalURL:
           "https://www.youtube.com/watch?v=_xLOrT3cWK4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=17",
         type: "video",
@@ -339,7 +339,7 @@ export const sidebar = [
       },
       {
         title: "使用 Docker 部署 Deno",
-        href: "/examples/deploying_deno_with_docker",
+        href: "/examples/deploying_deno_with_docker/",
         externalURL:
           "https://www.youtube.com/watch?v=VRryNeYm6yw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=16",
         type: "video",
@@ -386,44 +386,44 @@ export const sidebar = [
       },
       {
         title: "连接到 Redis",
-        href: "/examples/redis",
+        href: "/examples/redis/",
         type: "example",
       },
       {
         title: "连接到 Postgres",
-        href: "/examples/postgres",
+        href: "/examples/postgres/",
         type: "example",
       },
       {
         title: "连接到 Supabase",
-        href: "/examples/supabase",
+        href: "/examples/supabase/",
         type: "example",
       },
       {
         title: "连接到 MongoDB",
-        href: "/examples/mongo",
+        href: "/examples/mongo/",
         type: "example",
       },
       {
         title: "连接到 SQLite",
-        href: "/examples/sqlite",
+        href: "/examples/sqlite/",
         type: "example",
       },
       {
         title: "连接到 Mongoose 和 MongoDB",
-        href: "/examples/mongoose",
+        href: "/examples/mongoose/",
         externalURL: "https://www.youtube.com/watch?v=dmZ9Ih0CR9g",
         type: "video",
       },
       {
         title: "连接到 Prisma",
-        href: "/examples/prisma",
+        href: "/examples/prisma/",
         externalURL: "https://www.youtube.com/watch?v=P8VzA_XSF8w",
         type: "video",
       },
       {
         title: "连接到 DuckDB",
-        href: "/examples/duckdb",
+        href: "/examples/duckdb/",
         type: "example",
       },
     ],
@@ -433,37 +433,37 @@ export const sidebar = [
     items: [
       {
         title: "十六进制和 base64 编码",
-        href: "/examples/hex_base64_encoding",
+        href: "/examples/hex_base64_encoding/",
         type: "example",
       },
       {
         title: "解析和序列化 TOML",
-        href: "/examples/parsing_serializing_toml",
+        href: "/examples/parsing_serializing_toml/",
         type: "example",
       },
       {
         title: "导入 JSON",
-        href: "/examples/importing_json",
+        href: "/examples/importing_json/",
         type: "example",
       },
       {
         title: "解析和序列化 CSV",
-        href: "/examples/parsing_serializing_csv",
+        href: "/examples/parsing_serializing_csv/",
         type: "example",
       },
       {
         title: "解析和序列化 JSON",
-        href: "/examples/parsing_serializing_json",
+        href: "/examples/parsing_serializing_json/",
         type: "example",
       },
       {
         title: "解析和序列化 YAML",
-        href: "/examples/parsing_serializing_yaml",
+        href: "/examples/parsing_serializing_yaml/",
         type: "example",
       },
       {
         title: "操作字节数组",
-        href: "/examples/byte_manipulation",
+        href: "/examples/byte_manipulation/",
         type: "example",
       },
     ],
@@ -473,34 +473,34 @@ export const sidebar = [
     items: [
       {
         title: "构建一个命令行工具",
-        href: "/examples/command_line_utility",
+        href: "/examples/command_line_utility/",
         externalURL:
           "https://www.youtube.com/watch?v=TUxj2TS5pNo&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=14",
         type: "video",
       },
       {
         title: "输入提示",
-        href: "/examples/prompts",
+        href: "/examples/prompts/",
         type: "example",
       },
       {
         title: "权限管理",
-        href: "/examples/permissions",
+        href: "/examples/permissions/",
         type: "example",
       },
       {
         title: "命令行参数",
-        href: "/examples/command_line_arguments",
+        href: "/examples/command_line_arguments/",
         type: "example",
       },
       {
         title: "编写测试",
-        href: "/examples/writing_tests",
+        href: "/examples/writing_tests/",
         type: "example",
       },
       {
         title: "获取 Deno 版本",
-        href: "/examples/deno_version",
+        href: "/examples/deno_version/",
         type: "example",
       },
     ],
@@ -510,82 +510,82 @@ export const sidebar = [
     items: [
       {
         title: "HTTP 请求",
-        href: "/examples/http_requests",
+        href: "/examples/http_requests/",
         type: "example",
       },
       {
         title: "HTTP 服务器：你好，世界",
-        href: "/examples/http_server",
+        href: "/examples/http_server/",
         type: "example",
       },
       {
         title: "HTTP 服务器：路由",
-        href: "/examples/http_server_routing",
+        href: "/examples/http_server_routing/",
         type: "example",
       },
       {
         title: "HTTP 服务器：提供文件",
-        href: "/examples/http_server_files",
+        href: "/examples/http_server_files/",
         type: "example",
       },
       {
         title: "HTTP 服务器：流式传输",
-        href: "/examples/http_server_streaming",
+        href: "/examples/http_server_streaming/",
         type: "example",
       },
       {
         title: "HTTP 服务器：使用 SQLite3 进行 CRUD",
-        href: "/examples/http_server_oak_crud_middleware_with_sqlite3_db",
+        href: "/examples/http_server_oak_crud_middleware_with_sqlite3_db/",
         type: "example",
       },
       {
         title: "Hono HTTP 服务器",
-        href: "/examples/hono",
+        href: "/examples/hono/",
         type: "example",
       },
       {
         title: "HTTP 服务器：WebSockets",
-        href: "/examples/http_server_websocket",
+        href: "/examples/http_server_websocket/",
         type: "example",
       },
       {
         title: "管道流",
-        href: "/examples/piping_streams",
+        href: "/examples/piping_streams/",
         type: "example",
       },
       {
         title: "外发 WebSockets",
-        href: "/examples/websocket",
+        href: "/examples/websocket/",
         type: "example",
       },
       {
         title: "TCP 回声服务器",
-        href: "/examples/tcp_echo_server",
+        href: "/examples/tcp_echo_server/",
         type: "example",
       },
       {
         title: "TCP 连接器：Ping",
-        href: "/examples/tcp_connector",
+        href: "/examples/tcp_connector/",
         type: "example",
       },
       {
         title: "TCP 监听器：Ping",
-        href: "/examples/tcp_listener",
+        href: "/examples/tcp_listener/",
         type: "example",
       },
       {
         title: "TCP/TLS 连接器：Ping",
-        href: "/examples/tls_connector",
+        href: "/examples/tls_connector/",
         type: "example",
       },
       {
         title: "TCP/TLS 监听器：Ping",
-        href: "/examples/tls_listener",
+        href: "/examples/tls_listener/",
         type: "example",
       },
       {
         title: "运行 DNS 查询",
-        href: "/examples/dns_queries",
+        href: "/examples/dns_queries/",
         type: "example",
       },
     ],
@@ -595,12 +595,12 @@ export const sidebar = [
     items: [
       {
         title: "处理操作系统信号",
-        href: "/examples/os_signals",
+        href: "/examples/os_signals/",
         type: "example",
       },
       {
         title: "基准测试",
-        href: "/examples/benchmarking",
+        href: "/examples/benchmarking/",
         type: "example",
       },
       {
@@ -610,32 +610,32 @@ export const sidebar = [
       },
       {
         title: "子进程生成",
-        href: "/examples/subprocess_running_files",
+        href: "/examples/subprocess_running_files/",
         type: "example",
       },
       {
         title: "从子进程收集输出",
-        href: "/examples/subprocesses_output",
+        href: "/examples/subprocesses_output/",
         type: "example",
       },
       {
         title: "读取系统指标",
-        href: "/examples/reading_system_metrics",
+        href: "/examples/reading_system_metrics/",
         type: "example",
       },
       {
         title: "进程信息",
-        href: "/examples/pid",
+        href: "/examples/pid/",
         type: "example",
       },
       {
         title: "环境变量",
-        href: "/examples/environment_variables",
+        href: "/examples/environment_variables/",
         type: "example",
       },
       {
         title: "子进程：生成",
-        href: "/examples/subprocesses_spawn",
+        href: "/examples/subprocesses_spawn/",
         type: "example",
       },
       {
@@ -650,72 +650,72 @@ export const sidebar = [
     items: [
       {
         title: "路径操作",
-        href: "/examples/path_operations",
+        href: "/examples/path_operations/",
         type: "example",
       },
       {
         title: "读取文件",
-        href: "/examples/reading_files",
+        href: "/examples/reading_files/",
         type: "example",
       },
       {
         title: "写入文件",
-        href: "/examples/writing_files",
+        href: "/examples/writing_files/",
         type: "example",
       },
       {
         title: "删除文件",
-        href: "/examples/deleting_files",
+        href: "/examples/deleting_files/",
         type: "example",
       },
       {
         title: "检查文件是否存在",
-        href: "/examples/checking_file_existence",
+        href: "/examples/checking_file_existence/",
         type: "example",
       },
       {
         title: "移动/重命名文件",
-        href: "/examples/moving_renaming_files",
+        href: "/examples/moving_renaming_files/",
         type: "example",
       },
       {
         title: "创建和删除目录",
-        href: "/examples/create_remove_directories",
+        href: "/examples/create_remove_directories/",
         type: "example",
       },
       {
         title: "监视文件系统",
-        href: "/examples/watching_files",
+        href: "/examples/watching_files/",
         type: "example",
       },
       {
         title: "行走目录",
-        href: "/examples/walking_directories",
+        href: "/examples/walking_directories/",
         type: "example",
       },
       {
         title: "Unix 猫",
-        href: "/examples/unix_cat",
+        href: "/examples/unix_cat/",
         type: "example",
       },
       {
         title: "创建和解析符号链接",
-        href: "/examples/symlinks",
+        href: "/examples/symlinks/",
         type: "example",
       },
       {
         title: "临时文件和目录",
-        href: "/examples/temporary_files",
+        href: "/examples/temporary_files/",
         type: "example",
       },
       {
         title: "流式文件操作",
-        href: "/examples/streaming_files",
+        href: "/examples/streaming_files/",
         type: "example",
       },
       {
         title: "解压缩 gzip 文件",
-        href: "/examples/unzip_gzipped_file",
+        href: "/examples/unzip_gzipped_file/",
         type: "example",
       },
     ],
@@ -725,32 +725,32 @@ export const sidebar = [
     items: [
       {
         title: "生成和验证 UUID",
-        href: "/examples/uuids",
+        href: "/examples/uuids/",
         type: "example",
       },
       {
         title: "ULID",
-        href: "/examples/ulid",
+        href: "/examples/ulid/",
         type: "example",
       },
       {
         title: "哈希",
-        href: "/examples/hashing",
+        href: "/examples/hashing/",
         type: "example",
       },
       {
         title: "RSASSA-PKCS1-v1_5 签名和验证",
-        href: "/examples/rsa_signature",
+        href: "/examples/rsa_signature/",
         type: "example",
       },
       {
         title: "HMAC 生成和验证",
-        href: "/examples/hmac_generate_verify",
+        href: "/examples/hmac_generate_verify/",
         type: "example",
       },
       {
         title: "AES 加密和解密",
-        href: "/examples/aes_encryption",
+        href: "/examples/aes_encryption/",
         type: "example",
       },
     ],
@@ -780,7 +780,7 @@ export const sidebar = [
       },
       {
         title: "构建实时 WebSocket 应用",
-        href: "/examples/realtime_websocket_app",
+        href: "/examples/realtime_websocket_app/",
         externalURL:
           "https://www.youtube.com/watch?v=FC4IrkHEg4A&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=15",
         type: "video",
@@ -797,7 +797,7 @@ export const sidebar = [
       },
       {
         title: "使用 Deno Collections 处理用户数据",
-        href: "/examples/data_processing",
+        href: "/examples/data_processing/",
         type: "example",
       },
       {
@@ -812,37 +812,37 @@ export const sidebar = [
     items: [
       {
         title: "Deno KV 监视",
-        href: "/examples/kv_watch",
+        href: "/examples/kv_watch/",
         type: "example",
       },
       {
         title: "Deno Cron",
-        href: "/examples/cron",
+        href: "/examples/cron/",
         type: "example",
       },
       {
         title: "Deno 队列",
-        href: "/examples/queues",
+        href: "/examples/queues/",
         type: "example",
       },
       {
         title: "Deno KV：键/值数据库",
-        href: "/examples/kv",
+        href: "/examples/kv/",
         type: "example",
       },
       {
         title: "UDP 监听器：Ping",
-        href: "/examples/udp_listener",
+        href: "/examples/udp_listener/",
         type: "example",
       },
       {
         title: "UDP 连接器：Ping",
-        href: "/examples/udp_connector",
+        href: "/examples/udp_connector/",
         type: "example",
       },
       {
         title: "时间 API",
-        href: "/examples/temporal",
+        href: "/examples/temporal/",
         type: "example",
       },
     ],

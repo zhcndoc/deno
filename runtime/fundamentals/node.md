@@ -16,9 +16,17 @@ oldUrl:
 - /runtime/manual/node/private_registries
 ---
 
-现代的 Node.js 项目在 Deno 中运行时几乎不需要重构。不过，在这两个运行环境之间存在一些关键差异，您可以利用这些差异在将 Node.js 项目迁移到 Deno 时使代码更简洁、更小。
+- **Deno 兼容 Node**。大多数 Node 项目可以在 Deno 中运行，几乎不需要更改！
 
-<a href="/api/node/" class="docs-cta runtime-cta">探索内置的 Node API</a>
+- **Deno 支持 npm 包**。只需在导入时使用 `npm:` 说明符，Deno 会处理其余部分。
+
+例如，在 Deno 项目中，您可以这样从 npm 导入 Hono：
+
+```ts
+import { Hono } from "npm:hono";
+```
+
+这就是你开始所需了解的全部！但是，在这两个运行时之间有一些关键差异，你可以利用这些差异在将你的 Node.js 项目迁移到 Deno 时使代码更简单、更小。
 
 ## 使用 Node 的内置模块
 
@@ -48,6 +56,8 @@ error: Relative import path "os" not prefixed with / or ./ or ../
 ```
 
 相同的提示和其他快速修复也由 Deno LSP 在您的编辑器中提供。
+
+<a href="/api/node/" class="docs-cta runtime-cta">探索内置的 Node API</a>
 
 ## 使用 npm 包
 
@@ -528,7 +538,7 @@ deno lint
 ```sh
 error[no-constant-condition]: Use of a constant expressions as conditions is not allowed.
  --> /my-project/bar.ts:1:5
-  | 
+  |
 1 | if (true) {
   |     ^^^^
   = hint: Remove the constant expression
