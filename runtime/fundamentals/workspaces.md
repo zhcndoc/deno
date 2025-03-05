@@ -267,7 +267,7 @@ Hi, friend!
 
 您甚至可以在现有的 Node.js 包中同时拥有 `deno.json` 和 `package.json`。此外，您还可以移除根目录中的 package.json，并在 deno.json 工作区成员中指定 npm 包。这使您可以逐渐迁移到 Deno，而无需投入大量的前期工作。
 
-例如，您可以添加 `log/deno.json` 来配置 Deno 的 linter 和格式化器：
+例如，您可以添加 `log/deno.json` 来配置 Deno 的 linter 和格式化工具：
 
 ```jsonc
 {

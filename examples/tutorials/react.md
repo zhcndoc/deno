@@ -10,7 +10,7 @@ oldUrl:
 [React](https://reactjs.org) 是最广泛使用的 JavaScript 前端库。
 
 在本教程中，我们将使用 Deno 构建一个简单的 React 应用。该应用将显示一组恐龙。当您点击其中一只时，将跳转到一个包含更多详细信息的恐龙页面。您可以查看
-[完成的应用仓库在 GitHub 上](https://github.com/denoland/tutorial-with-react-denojson)
+[完成的应用仓库在 GitHub 上](https://github.com/denoland/tutorial-with-react)
 
 ![应用演示](./images/how-to/react/react-dinosaur-app-demo.gif)
 

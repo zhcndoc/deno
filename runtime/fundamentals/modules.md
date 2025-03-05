@@ -109,6 +109,8 @@ import { pascalCase } from "cases";
 }
 ```
 
+`deno.json` 中 `importMap` 字段引用的 `import_map.json` 文件的行为与使用 `--import-map` 选项完全相同，包含的每个模块的条目要求与上面所示相同。
+
 相比之下，`deno.json` 扩展了导入映射标准。当你在 `deno.json` 中使用 imports 字段或通过 `importMap` 字段引用 `import_map.json` 文件时，你只需要指定模块说明符而不带尾随 `/`：
 
 ```json title="deno.json"
