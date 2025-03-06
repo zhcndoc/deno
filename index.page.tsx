@@ -242,7 +242,7 @@ export default function () {
                     },
                     {
                       text: "WebSockets",
-                      href: "/api/deno/web-sockets",
+                      href: "/api/deno/websockets",
                     },
                     {
                       text: "查看所有 Deno API",

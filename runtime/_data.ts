@@ -8,19 +8,19 @@ export const sidebar = [
     href: "/runtime/",
     items: [
       {
-        title: "Installation",
+        title: "安装",
         href: "/runtime/getting_started/installation/",
       },
       {
-        title: "First project",
+        title: "第一个项目",
         href: "/runtime/getting_started/first_project/",
       },
       {
-        title: "Setup your environment",
+        title: "设置你的环境",
         href: "/runtime/getting_started/setup_your_environment/",
       },
       {
-        title: "Command line interface",
+        title: "命令行界面",
         href: "/runtime/getting_started/command_line_interface/",
       },
     ],
@@ -38,7 +38,7 @@ export const sidebar = [
         href: "/runtime/fundamentals/node/",
       },
       {
-        title: "Security",
+        title: "安全",
         href: "/runtime/fundamentals/security/",
       },
       {
@@ -46,31 +46,31 @@ export const sidebar = [
         href: "/runtime/fundamentals/modules/",
       },
       {
-        title: "Configuration",
+        title: "配置",
         href: "/runtime/fundamentals/configuration/",
       },
       {
-        title: "Standard library",
+        title: "标准库",
         href: "/runtime/fundamentals/standard_library/",
       },
       {
-        title: "Web development",
+        title: "Web 开发",
         href: "/runtime/fundamentals/web_dev/",
       },
       {
-        title: "Testing",
+        title: "测试",
         href: "/runtime/fundamentals/testing/",
       },
       {
-        title: "Debugging",
+        title: "调试",
         href: "/runtime/fundamentals/debugging/",
       },
       {
-        title: "Workspaces",
+        title: "工作空间",
         href: "/runtime/fundamentals/workspaces/",
       },
       {
-        title: "Linting and formatting",
+        title: "代码检查和格式化",
         href: "/runtime/fundamentals/linting_and_formatting/",
       },
       {
@@ -82,7 +82,7 @@ export const sidebar = [
         href: "/runtime/fundamentals/open_telemetry/",
       },
       {
-        title: "Stability and releases",
+        title: "稳定性和发布",
         href: "/runtime/fundamentals/stability_and_releases/",
       },
     ],
@@ -222,11 +222,11 @@ export const sidebar = [
         href: "/runtime/reference/node_apis/",
       },
       {
-        title: "TS Config Migration",
+        title: "TS 配置迁移",
         href: "/runtime/reference/ts_config_migration/",
       },
       {
-        title: "Continuous Integration",
+        title: "持续集成",
         href: "/runtime/reference/continuous_integration/",
       },
       {
@@ -246,7 +246,7 @@ export const sidebar = [
         href: "/runtime/reference/documentation/",
       },
       {
-        title: "Lint Plugins",
+        title: "Lint 插件",
         href: "/runtime/reference/lint_plugins/",
       },
       {
@@ -254,7 +254,7 @@ export const sidebar = [
         href: "/runtime/reference/wasm/",
       },
       {
-        title: "Migration Guide",
+        title: "迁移指南",
         href: "/runtime/reference/migration_guide/",
       },
       {
@@ -275,41 +275,41 @@ export const sidebar = [
         title: "为 Deno 做出贡献",
         items: [
           {
-            title: "Architecture",
+            title: "内部细节",
             href: "/runtime/contributing/architecture/",
           },
           {
-            title: "Building from source",
+            title: "从源代码构建",
             href: "/runtime/contributing/building_from_source/",
           },
           {
-            title: "Profiling",
+            title: "分析",
             href: "/runtime/contributing/profiling/",
           },
           {
-            title: "Release schedule",
+            title: "发布计划",
             href: "/runtime/contributing/release_schedule/",
           },
           {
-            title: "Style guide",
+            title: "风格指南",
             href: "/runtime/contributing/style_guide/",
           },
           {
-            title: "Web platform tests",
+            title: "Web 平台测试",
             href: "/runtime/contributing/web_platform_tests/",
           },
           {
-            title: "Documentation",
+            title: "文档",
             href: "/runtime/contributing/docs/",
           },
           {
-            title: "Examples",
+            title: "示例",
             href: "/runtime/contributing/examples/",
           },
         ],
       },
       {
-        title: "Help",
+        title: "帮助",
         href: "/runtime/help/",
       },
     ],
