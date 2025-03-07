@@ -52,6 +52,35 @@ console.log(Deno.env.get("GREETING")); // "Hello, world."
 有关 `.env` 处理的更多文档可以在
 [@std/dotenv](https://jsr.io/@std/dotenv/doc) 文档中找到。
 
+## 在运行命令时设置变量
+
+与其他 CLI 命令一样，您可以在运行命令之前设置环境变量，如下所示：
+
+```shell
+MY_VAR="my value" deno run main.ts
+```
+
+当您想根据环境变量更改任务时，这可能是有用的，并且可以与
+[`deno task`](/runtime/reference/cli/task/) 命令结合使用，如下所示：
+
+```jsonc title="deno.json"
+{
+
+  ...
+  
+  "tasks": {
+    "build:full": {
+      "description": "Build the site with all features",
+      "command": "BUILD_TYPE=FULL deno run main.ts"
+    },
+    "build:light": {
+      "description": "Build the site without expensive operations",
+      "command": "BUILD_TYPE=LIGHT deno run main.ts"
+    }
+  }
+}
+```
+
 ## `std/cli`
 
 Deno 标准库具有 [`std/cli` 模块](https://jsr.io/@std/cli) 用于解析命令行参数。有关文档和示例，请参考该模块。

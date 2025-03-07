@@ -11,21 +11,33 @@ oldUrl:
 
 本指南将展示如何使用 Express 和 Deno 创建一个简单的 API。
 
-[在这里查看源代码。](https://github.com/denoland/examples/tree/main/with-express)
+[查看源代码。](https://github.com/denoland/tutorial-with-express)
 
-## 创建 `main.ts`
+## 初始化一个新的 Deno 项目
 
-让我们创建 `main.ts`：
+在命令行中运行以下命令以创建一个新的启动项目，然后导航到项目目录中：
 
-```console
-touch main.ts
+```sh
+deno init my-express-project
+cd my-express-project
 ```
 
-在 `main.ts` 中，创建一个简单的服务器：
+## 安装 Express
+
+要安装 Express，我们将使用 `npm:` 模块说明符。这个说明符允许我们从 npm 导入模块：
+
+```sh
+deno add npm:express
+```
+
+这将把最新的 `express` 包添加到 `deno.json` 文件中的 `imports` 字段。现在你可以在代码中使用 `import express from "express";` 导入 `express`。
+
+## 更新 `main.ts`
+
+在 `main.ts` 中，让我们创建一个简单的服务器：
 
 ```ts
-// @ts-types="npm:@types/express@4.17.15"
-import express from "npm:express@4.18.2";
+import express from "express";
 
 const app = express();
 
@@ -34,38 +46,58 @@ app.get("/", (req, res) => {
 });
 
 app.listen(8000);
+console.log(`服务器正在运行在 http://localhost:8000`);
 ```
 
-让我们运行这个服务器：
+你可能会注意到编辑器对 `req` 和 `res` 参数发出警告。这是因为 Deno 没有为 `express` 模块提供类型。为了解决这个问题，你可以直接从 npm 导入 Express 类型文件。在 `main.ts` 的顶部添加以下注释：
 
-```console
-deno run -A main.ts
+```ts
+// @ts-types="npm:@types/express@4.17.15"
 ```
 
-然后在浏览器中访问 `localhost:8000`。你应该看到：
+这个注释告诉 Deno 使用 `@types/express` 包中的类型。
+
+## 运行服务器
+
+当你初始化项目时，Deno 设置了一个任务来运行 `main.ts` 文件，你可以在 `deno.json` 文件中看到它。更新 `dev` 任务以包含 [`--allow-net`](/runtime/fundamentals/security/#network-access) 标志：
+
+````jsonc
+{
+  "scripts": {
+    "dev": "deno run --allow-net main.ts"
+  }, 
+  ...
+}
+````
+
+这将允许该项目进行网络请求。你可以 [阅读更多关于权限标志的信息](/runtime/fundamentals/security/)。
+
+现在你可以使用以下命令运行服务器：
+
+```sh
+deno run dev
+```
+
+如果你在浏览器中访问 `localhost:8000`，你应该看到：
 
 **欢迎来到恐龙 API！**
 
 ## 添加数据和路由
 
-接下来的步骤是添加一些数据。我们将使用从 [这篇文章](https://www.thoughtco.com/dinosaurs-a-to-z-1093748) 中找到的恐龙数据。随意
-[从这里复制数据](https://github.com/denoland/examples/blob/main/with-express/data.json)。
+接下来的步骤是添加一些数据。我们将使用来自 [这篇文章](https://www.thoughtco.com/dinosaurs-a-to-z-1093748) 的恐龙数据。随意
+[从这里复制它](https://raw.githubusercontent.com/denoland/tutorial-with-express/refs/heads/main/data.json)。
 
-我们来创建 `data.json`：
+在项目根目录中创建一个 `data.json` 文件，并粘贴恐龙数据。
 
-```console
-touch data.json
-```
-
-并粘贴恐龙数据。
-
-接下来，我们将这些数据导入 `main.ts`。在文件顶部添加这一行：
+接下来，我们将把这些数据导入到 `main.ts` 中：
 
 ```ts
-import data from "./data.json" assert { type: "json" };
+import data from "./data.json" with { type: "json" };
 ```
 
-然后，我们可以创建访问这些数据的路由。为了保持简单，我们只为 `/api/` 和 `/api/:dinosaur` 定义 `GET` 处理程序。在 `const app = express();` 行后添加以下内容：
+我们将创建访问这些数据的路由。
+
+为了简单起见，我们只为 `/api/` 和 `/api/:dinosaur` 定义 `GET` 处理程序。在 `const app = express();` 这一行后添加以下代码：
 
 ```ts
 app.get("/", (req, res) => {
@@ -90,11 +122,12 @@ app.get("/api/:dinosaur", (req, res) => {
 });
 
 app.listen(8000);
+console.log(`服务器正在运行在 http://localhost:8000`);
 ```
 
-让我们使用 `deno run -A main.ts` 运行服务器，并查看 `localhost:8000/api`。你应该看到恐龙的列表：
+让我们使用 `deno run dev` 运行服务器，并在浏览器中查看 `localhost:8000/api`。你应该会看到一列恐龙！
 
-```json
+```jsonc
 [
   {
     "name": "Aardonyx",
@@ -111,7 +144,7 @@ app.listen(8000);
 ...
 ```
 
-当我们访问 `localhost:8000/api/aardonyx` 时：
+你还可以通过访问 "/api/恐龙名称" 来获取特定恐龙的详细信息，例如 `localhost:8000/api/aardonyx` 将显示：
 
 ```json
 {
@@ -120,4 +153,5 @@ app.listen(8000);
 }
 ```
 
-太棒了！
+🦕 现在你已准备好在 Deno 中使用 Express。你可以考虑把这个示例扩展成一个恐龙网页应用。或者查看
+[Deno 内置的 HTTP 服务器](https://docs.deno.com/runtime/fundamentals/http_server/)。
