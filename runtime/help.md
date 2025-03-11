@@ -1,9 +1,10 @@
 ---
-title: "获取帮助的地方"
+title: "Where to get help"
+description: "Guide to getting help with Deno. Find community resources, support channels, discussion forums, and how to engage with the Deno community for troubleshooting and assistance."
 oldUrl: /runtime/manual/help/
 ---
 
-困住了吗？迷路了吗？从社区获得帮助。
+Stuck? Lost? Get Help from the Deno Community.
 
 ## [社区 Discord](https://discord.gg/deno)
 

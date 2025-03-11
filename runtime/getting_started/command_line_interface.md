@@ -1,5 +1,6 @@
 ---
-title: 命令行接口
+title: Command line interface
+description: "A comprehensive guide to using Deno's command-line interface (CLI). Learn about running scripts, managing permissions, using watch mode, and configuring Deno's runtime behavior through command-line flags and options."
 oldUrl:
  - /manual/getting_started/command_line_interface
  - /runtime/manual/getting_started/command_line_interface/
@@ -155,7 +156,15 @@ addEventListener("hmr", (e) => {
 > deno run --check main.ts
 ```
 
+<<<<<<< HEAD
 此标志影响 `deno run`、`deno eval`、`deno repl`。下面的表格描述了各种子命令的类型检查行为。在此，“本地”意味着只有本地代码中的错误会导致类型错误，从 https URL 导入的模块（远程）可能有未报告的类型错误。（要打开所有模块的类型检查，请使用 `--check=all`。）
+=======
+This flag affects `deno run` and `deno eval`. The following table describes the
+type-checking behavior of various subcommands. Here "Local" means that only
+errors from local code will induce type-errors, modules imported from https URLs
+(remote) may have type errors that are not reported. (To turn on type-checking
+for all modules, use `--check=all`.)
+>>>>>>> origin/upstream
 
 | 子命令         | 类型检查模式 |
 | -------------- | ------------------ |

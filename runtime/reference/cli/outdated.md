@@ -1,6 +1,9 @@
 ---
 title: "deno outdated"
 command: outdated
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno outdated"
+description: "Check for outdated dependencies in your project and safely update them with an interactive CLI"
 ---
 
 ## 检查过期依赖

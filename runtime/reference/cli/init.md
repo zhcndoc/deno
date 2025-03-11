@@ -2,6 +2,9 @@
 title: "`deno init`，启动一个新项目"
 oldUrl: /runtime/manual/tools/init/
 command: init
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno init"
+description: "Scaffold a new Deno project with tests and configuration"
 ---
 
 ## 示例

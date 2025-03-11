@@ -1,5 +1,6 @@
 ---
-title: "从源代码构建 Deno"
+title: "Building from Source"
+description: "Step-by-step guide for building Deno from source code. Learn how to set up your development environment and compile Deno for your target platform."
 oldUrl:
  - /runtime/references/contributing/building_from_source/
  - /runtime/manual/references/contributing/building_from_source/

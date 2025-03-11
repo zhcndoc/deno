@@ -1,5 +1,6 @@
 ---
 title: "如何在 Deno 中使用 Express"
+description: "Step-by-step guide to using Express.js with Deno. Learn how to set up an Express server, configure routes, handle middleware, and build REST APIs using Deno's Node.js compatibility features."
 url: /examples/express_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/express/

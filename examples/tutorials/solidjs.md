@@ -1,5 +1,6 @@
 ---
 title: "使用 Deno 构建 SolidJS 应用"
+description: "Build a SolidJS application with Deno. Learn how to set up a project, implement reactive components, handle routing, create API endpoints with Hono, and build a full-stack TypeScript application."
 url: /examples/solidjs_tutorial/
 ---
 

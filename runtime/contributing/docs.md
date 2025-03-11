@@ -1,5 +1,6 @@
 ---
-title: "Deno 文档"
+title: "Documentation guidelines"
+description: "Guide for contributing to Deno's documentation. Learn our documentation standards, writing style, and how to submit 文档 changes."
 ---
 
 我们欢迎并感谢对 Deno 文档的贡献。如果你发现了问题，或者想要添加内容，每个页面底部都有一个“编辑此页面”的按钮。点击此按钮将带你到该页面在 [Deno 文档库](https://github.com/denoland/docs/) 中的源文件。然后你可以进行更改并提交拉取请求。

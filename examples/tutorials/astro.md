@@ -1,7 +1,7 @@
 ---
 title: "使用 Deno 构建 Astro"
+description: "逐步教程：使用 Astro 和 Deno 构建 Web 应用程序。学习如何搭建项目、创建动态页面、实现服务器端渲染（SSR），以及使用 Deno 的 Node.js 兼容性部署你的 Astro 网站。"
 url: /examples/astro_tutorial/
-description: "学习如何使用 Deno 构建一个简单的 Astro 项目。"
 ---
 
 [Astro](https://astro.build/) 是一个专注于内容中心网站的现代网页框架，它采用岛屿架构，并默认不向客户端发送任何 JavaScript。随着最近 [Deno 2](https://deno.com/2) 的发布，现在

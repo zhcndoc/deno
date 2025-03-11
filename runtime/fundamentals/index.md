@@ -1,5 +1,6 @@
 ---
-title: 基础知识
+title: Fundamentals
+description: "The core guide to Deno's fundamental concepts and features. Learn about built-in tooling, TypeScript support, Node.js compatibility, security model, and modern JavaScript features that make Deno powerful and developer-friendly."
 ---
 
 Deno 的设计考虑了开发者的需求，旨在提供顺畅而愉快的开发体验。它的简单性和高效性使得即使是后端开发的新手也能迅速上手。

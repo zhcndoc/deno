@@ -2,6 +2,8 @@
 title: "打包器（已弃用）"
 oldUrl: /runtime/manual/cli/bundler/
 command: bundle
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno bundle"
 ---
 
 :::caution

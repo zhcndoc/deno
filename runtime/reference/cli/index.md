@@ -1,6 +1,8 @@
 ---
 title: "Deno CLI 子命令"
 oldUrl: "/runtime/reference/cli/all_commands"
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno help"
 ---
 
 Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运行时环境进行交互。CLI 具有一些子命令，可以用于执行不同的任务，下面的链接提供有关每个子命令的更多信息。

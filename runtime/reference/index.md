@@ -1,5 +1,6 @@
 ---
-title: 参考指南
+title: Reference guides
+description: "Technical references and guides for Deno. Includes detailed documentation on runtime APIs, environment setup, CLI tools, and advanced features for experienced Deno developers."
 ---
 
 在这里，您将找到详细的技术文档和全面的指南，以帮助您掌握 Deno 的高级功能和工具。

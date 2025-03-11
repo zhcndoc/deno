@@ -1,6 +1,9 @@
 ---
 title: "Deno 的 Jupyter 内核"
 oldUrl: /runtime/manual/tools/jupyter/
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno jupyter"
+description: "Write JavaScript and TypeScript in Jupyter notebooks thanks to Deno's built-in Jupyter kernel"
 ---
 
 Deno 附带一个内置的 Jupyter 内核，允许你在交互式笔记本中编写 JavaScript 和 TypeScript；使用 Web 和 Deno API，并直接导入 `npm` 包。

@@ -1,5 +1,6 @@
 ---
 title: "初始化一个项目"
+description: "Guide to creating and structuring new Deno projects. Learn about starting a new project, task configuration, dependency management, and best practices for growing applications."
 url: /examples/initialize_project_tutorial/
 oldUrl:
 ---

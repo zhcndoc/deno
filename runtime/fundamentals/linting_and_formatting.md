@@ -1,5 +1,6 @@
 ---
-title: "代码检查和格式化"
+title: "Linting and formatting"
+description: "A guide to Deno's built-in code quality tools. Learn how to use deno lint and deno fmt commands, configure rules, integrate with CI/CD pipelines, and maintain consistent code style across your projects."
 ---
 
 在理想的世界里，您的代码始终干净、一致，并且没有令人讨厌的错误。这就是 Deno 内置的代码检查和格式化工具的承诺。通过将这些功能直接集成到运行时，Deno 消除了项目中对外部依赖项和复杂配置的需求。这些内置工具快速且高效，不仅节省了时间，还确保每一行代码都遵循最佳实践。

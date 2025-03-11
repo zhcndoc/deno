@@ -2,6 +2,9 @@
 title: "deno coverage"
 oldUrl: /runtime/manual/tools/coverage/
 command: coverage
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno coverage"
+description: "Generate a coverage report for your code"
 ---
 
 ## 包含和排除
