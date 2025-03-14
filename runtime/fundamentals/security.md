@@ -62,6 +62,9 @@ deno run --allow-read script.ts
 
 # 仅允许读取文件 foo.txt 和 bar.txt
 deno run --allow-read=foo.txt,bar.txt script.ts
+
+# Allow reads from any file in any subdirectory of ./node_modules
+deno run --allow-read=node_modules script.ts
 ```
 
 定义：`--deny-read[=<PATH>...]`

@@ -9,7 +9,14 @@ description: "A guide to Deno's built-in code quality tools. Learn how to use de
 
 ## 代码检查
 
-代码检查是分析您的代码以发现潜在错误、Bug 和样式问题的过程。Deno 的内置代码检查工具 [`deno lint`](/runtime/reference/cli/linter/) 支持来自 [ESLint](https://eslint.org/) 的推荐规则集，以提供对您代码的全面反馈。这包括识别语法错误、强制编码约定和突出可能导致 Bug 的潜在问题。
+<comp.CTA href="/lint/" type="runtime">Explore all the lint rules</comp.CTA>
+
+Linting is the process of analyzing your code for potential errors, bugs, and
+stylistic issues. Deno’s built-in linter,
+[`deno lint`](/runtime/reference/cli/linter/), supports recommended set of rules
+from [ESLint](https://eslint.org/) to provide comprehensive feedback on your
+code. This includes identifying syntax errors, enforcing coding conventions, and
+highlighting potential issues that could lead to bugs.
 
 要运行代码检查器，请在终端中使用以下命令：
 
@@ -25,7 +32,9 @@ deno lint src/
 
 此命令将对 `src/` 目录中的所有文件进行代码检查。
 
-代码检查器可以在 [`deno.json`](/runtime/fundamentals/configuration/) 文件中进行配置。您可以指定自定义规则、插件和设置，以根据您的需求定制代码检查过程。
+The linter can be configured in a
+[`deno.json`](/runtime/fundamentals/configuration/#linting) file. You can specify custom
+rules, plugins, and settings to tailor the linting process to your needs.
 
 ### linting 规则
 

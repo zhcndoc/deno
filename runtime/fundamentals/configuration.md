@@ -397,7 +397,7 @@ dist/
 }
 ```
 
-## 完整示例
+## 一个示例 `deno.json` 文件
 
 ```json
 {
@@ -444,9 +444,19 @@ dist/
 }
 ```
 
-## JSON Schema
+This is an example of a `deno.json` file that configures the TypeScript compiler
+options, linter, formatter, node modules directory, etc. For a full list of
+available fields and configurations, see the
+[Deno configuration file schema](#json-schema).
 
-可用于编辑器提供自动完成的 JSON Schema 文件可在以下位置获得： https://deno.land/x/deno/cli/schemas/config-file.v1.json
+This is an example of a `deno.json` file that configures the TypeScript compiler
+options, linter, formatter, node modules directory, etc. For a full list of
+available fields and configurations, see the
+[Deno configuration file schema](#json-schema).
+
+## JSON 模式
+
+可用于编辑器提供自动完成的 JSON Schema 文件可在以下位置获得： [https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json](https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json)
 
 ## 代理
 

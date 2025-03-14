@@ -86,7 +86,7 @@ Deno 会自动为各种操作创建跨度，例如：
 
 请求处理后，将添加以下属性：
 
-- `http.status_code`: 响应的状态代码。
+- `http.response.status_code`: 响应的状态代码。
 
 Deno 不会自动向跨度添加 `http.route` 属性，因为运行时并不知道路由，而是由用户处理函数中的路由逻辑确定。如果您想向跨度添加 `http.route` 属性，可以在您的处理函数中使用 `npm:@opentelemetry/api` 添加。在这种情况下，您还应更新跨度名称以包含路由。
 

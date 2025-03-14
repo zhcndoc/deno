@@ -15,7 +15,7 @@ Node 兼容性是一个正在进行的项目 - 帮助我们识别缺口，并告
 您需要哪些模块，通过
 [在 GitHub 上开一个问题](https://github.com/denoland/deno)。
 
-{{ await generateNodeCompatability() }}
+{{ await generateNodeCompatibility() }}
 
 ## 全局变量
 

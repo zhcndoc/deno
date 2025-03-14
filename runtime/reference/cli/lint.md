@@ -126,3 +126,7 @@ console.log(42);
 ```
 
 请注意，忽略 `ban-unused-ignore` 本身仅通过文件级忽略指令有效。这意味着像 `// deno-lint-ignore ban-unused-ignore` 这样的行级指令完全无效。如果您出于某些特殊原因想要忽略 `ban-unused-ignore`，请确保将其作为文件级忽略指令添加。
+
+## 更多关于 linting 和格式化的信息
+
+有关 Deno 中 linting 和格式化的更多信息，以及这两种工具之间的差异，请访问我们基础部分的 [Linting 和格式化](/runtime/fundamentals/linting_and_formatting/) 页面。

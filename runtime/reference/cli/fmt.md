@@ -92,3 +92,6 @@ export const identity = [
 ```html
 # deno-fmt-ignore aaaaaa: bbbbbbb
 ```
+## 关于代码检查和格式化的更多信息
+
+有关 Deno 中代码检查和格式化的更多信息，以及这两个工具之间的区别，请访问我们基础知识部分的 [代码检查和格式化](/runtime/fundamentals/linting_and_formatting/) 页面。
