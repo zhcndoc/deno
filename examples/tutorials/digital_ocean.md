@@ -23,7 +23,7 @@ Digital Ocean 是一个受欢迎的云基础设施提供商，提供多种托管
 为了专注于部署，我们的应用程序仅为一个返回 HTTP 响应字符串的 `main.ts` 文件：
 
 ```ts title="main.ts"
-import { Application } from "https://deno.land/x/oak/mod.ts";
+import { Application } from "jsr:@oak/oak";
 
 const app = new Application();
 

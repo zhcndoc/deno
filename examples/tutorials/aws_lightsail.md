@@ -23,7 +23,7 @@ oldUrl:
 为了专注于部署，我们的应用程序将简单地是一个返回字符串作为 HTTP 响应的 `main.ts` 文件：
 
 ```ts
-import { Application } from "https://deno.land/x/oak/mod.ts";
+import { Application } from "jsr:@oak/oak";
 
 const app = new Application();
 

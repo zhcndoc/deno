@@ -45,7 +45,7 @@ let channel = new BroadcastChannel(channelName);
 像 `BroadcastChannel` 这样启用的消息总线的一个用例是，在跨网络不同数据中心运行的隔离体之间更新数据的内存缓存。在下面的示例中，我们展示了如何配置一个简单的服务器，使用 `BroadcastChannel` 在所有运行的服务器实例之间同步状态。
 
 ```ts
-import { Hono } from "https://deno.land/x/hono/mod.ts";
+import { Hono } from "jsr:@hono/hono";
 
 // 内存消息缓存
 const messages = [];

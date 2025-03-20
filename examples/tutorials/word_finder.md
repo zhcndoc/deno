@@ -41,7 +41,7 @@ export function renderHtml(pattern, words) {
     }
     searchResultsContent = `
         <p id="search-result-count" data-count="${words.length}">找到的单词数量: ${words.length}</p>
-        <ul id="search-result" name="search-results"> 
+        <ul id="search-result" name="search-results">
           ${wordList}
         </ul>
       `;
@@ -54,17 +54,17 @@ export function renderHtml(pattern, words) {
     </head>
     <body>
         <h1>Deno 字词查找器</h1>
-  
+
         <form id="perform-search" name="perform-search" method="get" action="/api/search">
             <label for="search-text">搜索文本:</label>
             <input id="search-text" name="search-text" type="text" value="${pattern}" />
             <input type="submit" />
         </form>
-  
+
         ${searchResultsContent}
-  
+
         <h2>使用说明</h2>
-  
+
         <p>
             输入一个单词，使用 _ 和 ? 来表示未知字符。使用 ? 代表包括那些未被使用的字母（可以将其视为“财富之轮”的占位符）。使用 _ 将找到包含任何字符的单词（无论它是否为“已揭示”）。
             <br />
@@ -133,15 +133,15 @@ export function search(pattern, dictionary) {
 
 ## 运行 Deno 服务器
 
-[Oak](https://deno.land/x/oak@v11.1.0) 是一个框架，它可以让您轻松地在 Deno 中
-设置服务器（类似于 JavaScript 的 Express），我们将使用它来
-托管我们的应用。我们的服务器将使用我们的搜索函数来填充我们的
-HTML 模板数据，然后将定制的 HTML 返回给查看者。
-我们可以方便地依赖 `/usr/share/dict/words` 文件作为我们的字典，
-这是大多数类 Unix 操作系统上都存在的标准文件。
+[Oak](https://jsr.io/@oak/oak) is a framework that lets you easily setup a
+server in Deno (analogous to JavaScript's Express) and we'll be using it to host
+our application. Our server will use our search function to populate our HTML
+template with data and then return the customized HTML back to the viewer. We
+can conveniently rely on the `/usr/share/dict/words` file as our dictionary
+which is a standard file present on most Unix-like operating systems.
 
 ```jsx title="server.js"
-import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+import { Application, Router } from "jsr:@oak/oak";
 import { search } from "./search.js";
 import { renderHtml } from "./render.js";
 

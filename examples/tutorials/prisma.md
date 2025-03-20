@@ -150,7 +150,7 @@ deno run -A npm:prisma studio
 
 ## 创建您的 API 路由
 
-我们将使用 [`oak`](https://deno.land/x/oak) 来创建 API 路由。现在让我们保持简单。
+我们将使用 [`oak`](https://jsr.io/@oak/oak) 来创建 API 路由。现在让我们保持简单。
 
 首先创建一个 `main.ts` 文件：
 
@@ -162,7 +162,7 @@ touch main.ts
 
 ```ts
 import { PrismaClient } from "./generated/client/deno/edge.ts";
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Application, Router } from "jsr:@oak/oak";
 
 /**
  * 初始化。

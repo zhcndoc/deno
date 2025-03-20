@@ -279,7 +279,10 @@ deno run --deny-run script.ts
 
 ### FFI（外部函数接口）
 
-Deno 提供了一种机制，用于从 Deno 运行时执行用其他语言（如 Rust、C 或 C++）编写的代码。这是通过 `Deno.dlopen` API 来完成的，它可以加载共享库并从中调用函数。
+Deno provides an
+[FFI mechanism for executing code written in other languages](/runtime/fundamentals/ffi/),
+such as Rust, C, or C++, from within a Deno runtime. This is done using the
+`Deno.dlopen` API, which can load shared libraries and call functions from them.
 
 默认情况下，执行的代码不能使用 `Deno.dlopen` API，因为这违反了代码不能在未获得用户同意的情况下提升其特权的原则。
 
