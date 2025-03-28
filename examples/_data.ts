@@ -91,12 +91,6 @@ export const sidebar = [
         type: "tutorial",
       },
       {
-        title: "通过 Deno 覆盖进行更好的测试",
-        href: "/examples/deno_coverage/",
-        externalURL: "https://www.youtube.com/watch?v=P2BBYNPpgW8",
-        type: "video",
-      },
-      {
         title: "使用 Deno fmt 格式化",
         href: "/examples/deno_fmt/",
         externalURL: "https://www.youtube.com/watch?v=Ouzso9gQqnc",
@@ -106,12 +100,6 @@ export const sidebar = [
         title: "使用 Deno bench 进行基准测试",
         href: "/examples/deno_bench/",
         externalURL: "https://www.youtube.com/watch?v=IVde_GTN6TM",
-        type: "video",
-      },
-      {
-        title: "使用 Deno test 入门",
-        href: "/examples/deno_test/",
-        externalURL: "https://www.youtube.com/watch?v=gDtDVfsgHgs",
         type: "video",
       },
     ],
@@ -298,7 +286,44 @@ export const sidebar = [
     ],
   },
   {
-    title: "部署 Deno 项目",
+    title: "Testing",
+    items: [
+      {
+        title: "Writing tests",
+        href: "/examples/writing_tests/",
+        type: "example",
+      },
+      {
+        title: "Basics of testing",
+        href: "/examples/testing_tutorial/",
+        type: "tutorial",
+      },
+      {
+        title: "Mocking data in tests",
+        href: "/examples/mocking_tutorial/",
+        type: "tutorial",
+      },
+      {
+        title: "Spy functions",
+        href: "/examples/spy_functions/",
+        type: "example",
+      },
+      {
+        title: "Getting started with Deno test",
+        href: "/examples/deno_test/",
+        externalURL: "https://www.youtube.com/watch?v=gDtDVfsgHgs",
+        type: "video",
+      },
+      {
+        title: "Better testing with Deno coverage",
+        href: "/examples/deno_coverage/",
+        externalURL: "https://www.youtube.com/watch?v=P2BBYNPpgW8",
+        type: "video",
+      },
+    ],
+  },
+  {
+    title: "Deploying Deno projects",
     items: [
       {
         title: "AWS Lambda",
@@ -491,11 +516,6 @@ export const sidebar = [
       {
         title: "命令行参数",
         href: "/examples/command_line_arguments/",
-        type: "example",
-      },
-      {
-        title: "编写测试",
-        href: "/examples/writing_tests/",
         type: "example",
       },
       {

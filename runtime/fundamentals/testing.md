@@ -507,3 +507,69 @@ Deno.test({
 [Deno 标准库](/runtime/fundamentals/standard_library/) 包含一个 [快照模块](https://jsr.io/@std/testing/doc/snapshot/~)，允许开发者通过将值与参考快照进行比较来编写测试。这些快照是原始值的序列化表示，存储在测试文件旁边。
 
 快照测试能够通过极少的代码捕捉到广泛的错误。在难以准确表达应该断言什么的情况下非常有用，而不需要过多的代码，或者在预期测试所做的断言经常变化的情况下也特别有帮助。
+## Tests and Permissions
+
+The `permissions` property in the `Deno.test` configuration allows you to
+specifically deny permissions, but does not grant them. Permissions must be
+provided when running the test command. When building robust applications, you
+often need to handle cases where permissions are denied, (for example you may
+want to write tests to check whether fallbacks have been set up correctly).
+
+Consider a situation where you are reading from a file, you may want to offer a
+fallback value in the case that the function does not have read permission:
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import getFileText from "./main.ts";
+
+Deno.test({
+  name: "File reader gets text with permission",
+  permissions: { read: true },
+  fn: async () => {
+    const result = await getFileText();
+    console.log(result);
+    assertEquals(result, "the content of the file");
+  },
+});
+
+Deno.test({
+  name: "File reader falls back to error message without permission",
+  permissions: { read: false },
+  fn: async () => {
+    const result = await getFileText();
+    console.log(result);
+    assertEquals(result, "oops don't have permission");
+  },
+});
+```
+
+```sh
+# Run the tests with read permission
+deno test --allow-read
+```
+
+The permissions object supports detailed configuration:
+
+```ts
+Deno.test({
+  name: "permission configuration example",
+  permissions: {
+    read: true, // Grant all read permissions
+    // OR
+    read: ["./data", "./config"], // Grant read to specific paths only
+
+    write: false, // Explicitly deny write permissions
+    net: ["example.com:443"], // Allow specific host:port combinations
+    env: ["API_KEY"], // Allow access to specific env variables
+    run: false, // Deny subprocess execution
+    ffi: false, // Deny loading dynamic libraries
+    hrtime: false, // Deny high-resolution time
+  },
+  fn() {
+    // Test code that respects these permission boundaries
+  },
+});
+```
+
+Remember that any permission not explicitly granted at the command line will be
+denied, regardless of what's specified in the test configuration.
