@@ -229,6 +229,23 @@ export default plugin;
 }
 ```
 
+## 忽略自定义 lint 报告
+
+有时您希望在代码的特定位置禁用报告的 lint 错误。您可以通过在该位置之前放置代码注释来禁用报告的位置，而不是完全禁用自定义 lint 规则。
+
+```ts
+// deno-lint-ignore my-custom-plugin/no-console
+console.log("hey");
+```
+
+这将禁用特定行的 lint 插件中的 lint 规则。
+
+忽略注释的语法是：
+
+```ts
+// deno-lint-ignore <my-plugin>/<my-rule>
+```
+
 ## 测试插件
 
 `Deno.lint.runPlugin` API 提供了一种方便的方式来测试您的插件。它允许您断言插件根据特定输入生成预期的诊断信息。

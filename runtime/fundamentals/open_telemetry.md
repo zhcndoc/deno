@@ -36,7 +36,7 @@ OTEL_DENO=true deno run --unstable-otel my_script.ts
 
 :::tip
 
-如果您尚未设置 OpenTelemetry 收集器，可以使用以下命令开始搭建 [Docker 中的本地 LGTM 堆栈](https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file)（Loki（日志）、Grafana（仪表板）、Tempo（追踪）和 Mimir（指标））：
+如果您尚未设置 OpenTelemetry 收集器，可以使用以下命令开始搭建 [Docker 中的本地 LGTM 堆栈](https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file)（Loki（日志）、Grafana（仪表板）、Tempo（追踪）和 Prometheus（指标））：
 
 ```sh
 docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \

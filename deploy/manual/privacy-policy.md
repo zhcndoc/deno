@@ -1,133 +1,310 @@
 ---
-title: "隐私政策"
+title: "Privacy Policy"
 ---
 
-**DENO 隐私政策** 2024年9月9日
+**DENO PRIVACY POLICY** 09 September 2024
 
-Deno Land Inc.（“Deno”，“我们”，“我们自己”或“我们的”）收集和使用个人信息，以提供产品和服务给您。本隐私政策（“政策”）描述我们收集的个人信息、我们使用这些信息的目的、我们可能与之共享信息的各方，以及您对此类信息的选择。为了本隐私政策的目的，“个人信息”是指与您作为个人相关的任何信息，并且可以合理地用来识别您。本隐私政策适用于我们通过(i) 我们的网站 [https://deno.com](https://deno.com)（“网站”）；(ii) 任何链接至本隐私政策的网站、应用程序或其他数字财产；以及 (iii) 我们在以下网站上通过我们专有平台（“平台”）提供给您的产品和服务（“Deno 提供”）：
+Deno Land Inc. (“Deno,” “we,” “us,” or “our”) collects and uses personal
+information in order to provide its products and services to you. This Privacy
+Policy (the “Policy”) describes the personal information we collect, the
+purposes for which we use it, the parties with whom we may share it, and your
+choices with respect to such information. For purposes of this Privacy Policy,
+“personal information” means any information that relates to you as an
+individual and could reasonably be used to identify you. This Privacy Policy
+applies to our collection and use of personal information through (i) our
+website at [https://deno.com](https://deno.com) (the “Site”); (ii) any websites,
+applications or other digital properties that link to this Privacy Policy; and
+(iii) the products and services (the “Deno Offerings”) we offer to you on our
+proprietary platform (the “Platform”) via the following websites:
 
-- Deno Deploy ([https://deno.com/deploy](https://deno.com/deploy)); 和
+- Deno Deploy ([https://deno.com/deploy](https://deno.com/deploy)); and
 - Deno Subhosting ([https://deno.com/subhosting](https://deno.com/subhosting)).
 
-通过访问或使用网站或任何其他链接到本隐私政策的数字财产，您可以了解 Deno 及我们的技术平台，而注册客户还可以访问 Deno 提供（统称为“服务”）。在适用法律允许的范围内，您使用 Deno 的产品和服务即表示您承认和/或同意本政策中描述的做法。
+By accessing or using the Site or any other digital property that links to this
+Privacy Policy, you may learn about Deno and our technology platform, and
+registered customers may also access the Deno Offerings (collectively, the
+“Services”). To the extent permitted by applicable law, your use of Deno’
+products and services constitutes your acknowledgment and/or consent to the
+practices described in this Policy.
 
-本隐私政策包含[Deno 的条款和条件](https://docs.deno.com/deploy/manual/terms-and-conditions/)（“条款”）。在隐私政策中未定义的首字母大写术语具有条款中赋予的含义。
+This Privacy Policy incorporates
+[Deno’s Terms and Conditions](https://docs.deno.com/deploy/manual/terms-and-conditions/)
+(the “Terms”). Capitalized terms that are not defined in the Privacy Policy have
+the meaning given to them in the Terms.
 
-**一、我们收集的信息，以及我们如何收集它**
+**I. The Information We Collect, And How We Collect It**
 
-我们收集以下类别的信息，其中可能包括个人信息（统称为“**信息**”）。
+We collect the following categories of information, which may include personal
+information (collectively, the “**Information**”).
 
-**1\. 您直接提供给我们的信息**
+**1\. Information You Provide To Us**
 
-我们直接从您那里收集信息。这些信息可能在您联系我们、填写表格、创建账户、订阅我们的博客、访问或参与我们的网站、回复调查或以其他方式与我们互动时收集。这些信息可能包括：
+We collect information from and about you directly when you provide it to us.
+This information may be collected when you contact us, fill out a form, create
+an account, subscribe to our blog, access or participate on our Sites, respond
+to surveys, or otherwise interact with us. This information may include:
 
-*联系信息。*我们在您自愿提供给我们时收集您的联系信息。例如，您可能通过我们网站上的“联系我们”链接向我们披露联系信息，或在注册订阅我们的通讯和其他营销通信时，通过邮件、电话、亲自或电子方式提交信息，或在注册参加活动或程序时。联系信息通常包括名字、姓氏、电子邮件地址、邮政地址、组织、电话和其他识别您或可以用于识别或联系您的信息。
+*Contact Information. *We collect your contact information when you voluntarily
+provide it to us. For example, you may disclose contact information to us via
+the “Contact” link on our Sites, submit information by mail, telephone, in
+person or electronically, when signing up for our newsletters and other
+marketing communications, or when you register to attend an event or program.
+Contact Information typically includes first name, last name, e-mail address,
+postal address, organization, telephone number and other information that
+identifies you or can be used to identify or contact you.
 
-_账户凭证。_当您注册创建我们账户时，我们将收集某些额外的个人信息，包括您的姓名、电子邮件地址，以及可能的其他信息，例如您的 GitHub 用户名和公共 GitHub 资料。
+_Account Credentials_. When you register to create an account with us, we will
+collect certain additional personal information, including your name, email
+address, and potentially other information such as your GitHub user name and
+public GitHub profile.
 
-除了联系信息和账户凭证外，我们可能会收集其他类型的信息，例如：
+In addition to Contact Information and Account Credentials, we may collect other
+kinds of information, such as:
 
-- 您可能提出的评论、问题和请求；
+- Comments, questions, and requests you may make;
 
-- 关于您的偏好信息，例如您首选的沟通方式和您感兴趣的信息类型；
+- Information about your preferences, such as your preferred methods of
+  communication and the types of information in which you are interested;
 
-- 事件和服务相关信息（例如注册、进入场所或在线资源所需的信息、饮食限制和兴趣领域）；
+- Event and service-related information (such as information required for
+  registration, access to premises or online resources, dietary restrictions,
+  and areas of interest);
 
-- 音频和视觉信息，例如照片、视频和语音记录（例如，来自您与我们参加的活动），或如果您访问我们的场所，则来自安全摄像头的录音；
+- Audio and visual information, such as photographs, video and voice recordings
+  (e.g., from events you attended with us), or security camera recordings if you
+  visit our premises;
 
-- 从我们网站下载的详细信息；
+- Details of downloads from our Sites;
 
-- 如果您联系到我们，您的通信记录和副本（包括电子邮件地址和电话号码）；以及
+- Records and copies of your correspondence (including email addresses and phone
+  numbers), if you contact us; and
 
-- 您自愿提供的任何其他信息。
+- Any other information you voluntarily provide.
 
-**2\. 从第三方获得的信息**
+**2\. Information Obtained From Third Parties**
 
-我们可能会从其他来源获得有关您的某些信息，包括公开可用的来源（例如公共记录和社交媒体平台），以及我们的服务提供商和营销合作伙伴。
+We may receive certain information about you from other sources, including
+publicly available sources (such as public records and social media platforms),
+as well as our service providers and marketing partners.
 
-当我们从其他您与我们互动的网站的用户和访问者收集个人信息时，我们将根据这些网站的使用条款和隐私政策及适用法律进行收集。当您评论我们的社交媒体广告、发布关于我们的评论或在公共社交媒体帖子中标记我们时，我们也可能会收到个人信息。托管我们社交媒体页面的第三方社交媒体网站也可能会收集个人信息。这些网站可能会向我们提供关于访客使用我们社交媒体页面的汇总信息和分析。这使我们能够更好地理解和分析我们的用户增长、关于这些页面用户的一般人口统计信息以及与我们发布内容的互动。总的来说，这些信息可用于帮助我们理解我们社交媒体页面访客和用户的类型以及内容的使用。本隐私政策不涵盖这些第三方社交媒体网站收集的个人信息。有关其隐私和安全实践的更多信息，请查看各自网站上的隐私政策和使用条款。
+When we collect personal information from users and visitors of other sites on
+which you have interacted with us, we will do so in accordance with the terms of
+use and privacy policies of those sites and applicable law. We may also receive
+personal information when you comment on our social media advertisements, post
+comments about us, or tag us in a public-facing social media post. Personal
+information may also be collected by the third-party social media sites that
+host our social media pages. These sites may provide aggregate information and
+analysis to us about visitors’ use of our social media pages. This allows us to
+better understand and analyze our user growth, general demographic information
+about the users of these pages, and interaction with the content that we post.
+Overall, this information may be used to help us understand the types of
+visitors and users of our social media pages and use of the content. This
+Privacy Policy does not cover personal information collected by such third-party
+social media sites. For more information on their privacy and security practices
+please review the privacy policies and terms of use on their respective
+websites.
 
-**3\. 自动收集的信息**
+**3\. Information Collected Automatically**
 
-我们和我们的服务提供商可能会自动获取有关您、您的电子设备和您与我们的互动的某些信息，包括以下内容：
+We and our service providers may automatically obtain certain information about
+you, your electronic device, and your interactions with us, including the
+following:
 
-- _设备数据。_我们可能会收集有关设备类型及其操作系统和设置、浏览器类型、移动设备运营商、国家、IP 地址和唯一标识符的数据。
+- _Device data_. We may collect data such as the type of device and its
+  operating system and settings, browser type, mobile device carrier, country,
+  IP address, and unique identifiers.
 
-- _互联网及其他或电子活动数据。_这包括有关您与我们网站、电子邮件和其他在线内容互动的信息。
+- _Internet and other or electronic activity data_. This includes information
+  about your interaction with our Sites, emails, and other online content.
 
-- _追踪数据。_我们可能使用第一方和第三方cookies、像素、网络服务器日志、网页信标以及在网站、第三方网站、应用程序和在线服务及您设备之间（例如 IP 地址、浏览器、类型、ISP、平台类型、设备类型）等相似的数据收集和追踪技术收集追踪数据。广告网络和分析提供商等第三方也可能在您访问或使用网站时收集您在不同网站和设备上的在线活动信息。
+- _Tracking Data_. We may collect tracking data using first and third-party
+  cookies, pixels, web server logs, web beacons, and similar data collection and
+  tracking technologies on the Sites, third party websites, apps and online
+  services, and across your devices (such as IP address, browser, type, ISP,
+  platform type, device type). Third parties such as advertising networks and
+  analytics providers may also collect information about your online activities
+  over time and across different websites and devices when you access or use the
+  Sites.
 
-**二、我们如何使用和共享您的信息**
+**II. How We Use And Share Your Information**
 
-Deno 根据信息收集的目的及符合本隐私政策的方式使用信息。这些功能包括网站的运营、维护和改进、提供我们的产品和服务、征求您的反馈、深入了解我们的客户和我们网站的访问者、回应您的请求和问题、主办活动，以及通知您有关我们组织、产品、服务、活动及其他兴趣领域的信息。
+Deno uses the Information for the purpose for which it was collected and in a
+manner that is consistent with this Privacy Policy. These functions include
+operation, maintenance and improvements to the Sites, providing our products and
+services, solicitation of your feedback, gaining a better understanding of our
+customers and visitors of our Sites, responding to your requests and questions,
+hosting events, and informing you about our organization, products, services,
+events, and other areas of interest.
 
-_分析服务。_我们可能使用第三方网络分析服务，如 Google Analytics，来帮助我们理解和分析网站访客如何使用我们的服务。有关 Google Analytics 如何使用通过我们网站收集的数据的更多信息，请访问 [www.google.com/policies/privacy/partners](http://www.google.com/policies/privacy/partners)。
+_Analytics Services_. We may use third-party web analytics services, such as
+Google Analytics, to help us understand and analyze how Site visitors use our
+services. For more information on how Google Analytics uses data collected
+through our Sites, visit
+[www.google.com/policies/privacy/partners](http://www.google.com/policies/privacy/partners).
 
-_汇总数据。_我们可能以不识别您个人的汇总形式分析您的个人信息（“**汇总数据**”）。汇总数据可用于运营、维护、管理和改善网站、与我们的附属公司、代理和商业伙伴共享以及用于合法商业目的。我们不对去标识或汇总的信息进行重新识别。
+_Aggregated Data_. We may analyze your personal information in aggregate form
+which does not identify you personally (“**Aggregated Data**”). The Aggregated
+Data may be used to operate, maintain, manage, and improve the Sites, shared
+with our affiliates, agents, and business partners, and otherwise used and
+disclosed for lawful business purposes. We do not re-identify de-identified or
+aggregated information.
 
-_服务提供商/供应商。_像许多企业一样，我们雇用其他公司来执行某些与业务相关的服务。我们可能会向某些类型的第三方公司披露个人信息，但仅在需要的范围内，以使他们能够提供此类服务，例如网站托管、灾难恢复、客户调查和营销及数据存储。
+_Service Providers/Vendors_. Like many businesses, we hire other companies to
+perform certain business-related services. We may disclose personal information
+to certain types of third party companies but only to the extent needed to
+enable them to provide such services, for example web hosting, disaster
+recovery, client survey and marketing, and data storage.
 
-_重组。_如果将来 Deno 进行企业、合伙或商业重组，我们可能会将信息，包括个人信息，转移给新的或存续的实体。
+_Reorganization_. If, in the future, Deno undergoes a corporate, partnership, or
+business reorganization, we may transfer the Information, including personal
+information, to the new or surviving entity. 
 
-_保护权利和合规性。_我们可能会使用您的信息来保护您、我们或他人的权利、隐私或安全；确保我们遵守法律和合同要求；以及防止和调查非法、不道德或未经授权的活动（包括网络攻击和身份盗窃）。
+_Protection of Rights and Compliance_. We may use your Information to protect
+the rights, privacy or safety of you, us or others; to ensure our compliance
+with legal and contractual requirements; and to prevent and investigate illegal,
+unethical, or unauthorized activities (including cyberattacks and identity
+theft).
 
-如果 Deno 打算以任何与本隐私政策不一致的方式使用或披露您的个人信息，您将在个人信息收集前或收集时被告知该预期用途。
+If Deno intends on using or disclosing your personal information in any manner
+that is not consistent with this Privacy Policy, you will be informed of such
+anticipated use prior to or at the time at which the personal information is
+collected.
 
-**三、我们如何保护您的信息**
+**III. How We Protect Your Information**
 
-我们采取商业上合理的措施来保护您的个人信息免受丢失、滥用、未经授权的访问、披露、更改或销毁。然而，请您理解，没有任何安全系统是坚不可摧的。我们无法保证数据库的安全性，也无法保证您提供的个人信息在传输到我们与我们之间时不会被拦截。
+We take commercially reasonable steps to protect your personal information from
+loss, misuse, and unauthorized access, disclosure, alteration, or destruction.
+Please understand, however, that no security system is impenetrable. We cannot
+guarantee the security of our databases, nor can we guarantee that the personal
+information that you supply will not be intercepted while being transmitted to
+and from us over the Internet.
 
-**四、数据保留**
+**IV. Data Retention**
 
-Deno 根据我们收集和/或接收信息的目的以及税务、法律和监管要求来确定所有信息的保留期限。除此之外，我们还可能考虑其他因素，例如数据的性质和敏感性，以及我们是否可以通过其他方式达到我们收集数据的目的。
+Deno determines the retention period for all Information based on the purposes
+for which we collect and/or receive the Information and/or tax, legal and
+regulatory requirements. In addition to this, we may consider other factors,
+such as the nature and sensitivity of the data, and whether we can achieve the
+purpose for which we collected the data through other means.
 
-**五、您的隐私选择**
+**V. Your Privacy Choices**
 
-**1\. 您的信息**
+**1\. Your Information**
 
-您可以请求访问、纠正或删除我们保持的关于您的个人信息，我们将努力及时回应您的请求。要提出此类请求，请按以下指示与我们联系。
+You may request access to, correction of, or deletion of the personal
+information we maintain about you, and we will endeavor to respond promptly to
+your request. In order to make such a request, please contact us as indicated
+below.
 
-**2\. 营销通信**
+**2\. Marketing Communications**
 
-您可以通过点击任何营销电子邮件底部的“取消订阅”链接来选择不接收与营销相关的电子邮件，或通过电子邮件与我们联系 [support@deno.com](mailto:support@deno.com)。我们将尽商业上的合理努力及时处理此类请求。请注意，即使您选择退订与营销相关的电子邮件，您仍将继续收到与服务相关的其他非营销电子邮件。
+You may opt-out of marketing-related emails by clicking on the “unsubscribe”
+link located on the bottom of any marketing email or emailing us at
+[support@deno.com](mailto:support@deno.com). We will use commercially reasonable
+efforts to process such requests in a timely manner. Please note that even if
+you opt-out of marketing-related emails, you will continue to receive
+service-related and other non-marketing emails.
 
-**3\. 追踪技术**
+**3\. Tracking Technology**
 
-您可以选择在使用我们的服务时不允许追踪技术（例如 cookies 和网页信标），但阻止某些类型的追踪技术可能会影响您的体验。
+You can choose not to permit tracking technologies, such as cookies and web
+beacons, when you use our services, but blocking some types of these tracking
+technologies may interfere with your experience.
 
-_基于浏览器的选择退出。_您可以使用浏览器设置禁用追踪技术。请查看您浏览器的说明或访问 [All About Cookies](https://allaboutcookies.org/) 以获取有关一般信息。请注意，您的网页浏览器可能具有允许您在使用在线服务时发送“请勿追踪”信号的设置。像许多网站一样，我们的网站当前并未设计为响应来自浏览器的“请勿追踪”信号。
+_Browser-Based Opt-Outs_. You may be able to disable tracking technologies using
+your web browser settings. Please review your browser’s instructions or visit
+[All About Cookies](https://allaboutcookies.org/) for general information. Note
+that your web browser may have settings that allow you to transmit a “Do Not
+Track” signal when you use online services. Like many websites, our Sites are
+not currently designed to respond to “Do Not Track” signals received from
+browsers.
 
-_自我监管计划选择退出。_有两个自我监管计划可帮助您控制浏览器上追踪技术的使用——[数字广告联盟](https://digitaladvertisingalliance.org/) 与 [网络广告倡议](https://thenai.org/)。这两个程序有助于监管数字广告领域的供应商。它们的自我监管计划之一的功能是让您能够选择退出来自其成员公司的定向（或基于兴趣）广告，包括使用追踪技术。您可以访问数字广告联盟的您的广告选择网站，选择不再接受参与的供应商的定向广告。网络广告倡议同样通过其选择退出基于兴趣广告网页来协助选择退出。
+_Self-Regulatory Program Opt-Outs_. Two self-regulatory programs are available
+to help you control the use of tracking technologies on your browsers — the
+[Digital Advertising Alliance](https://digitaladvertisingalliance.org/) and the
+[Network Advertising Initiative](https://thenai.org/). Both programs help to
+regulate vendors in the digital advertising space. One function of their
+self-regulatory programs is to give you the ability to opt out of targeted (or
+interest-based) advertising, including the use of tracking technologies, from
+their member companies. You can visit the Digital Advertising Alliance’s Your Ad
+Choices website to opt out of targeted advertising for participating vendors.
+The Network Advertising Initiative similarly assists with opt outs through their
+Opt Out of Interest-Based Advertising webpage.
 
-_Google Analytics 选择退出。_要选择退出 Google Analytics cookies，请访问 Google 的 [我的广告中心](https://myadcenter.google.com/personalizationoff) 和/或下载 Google Analytics 选择退出浏览器附加组件。
+_Google Analytics Opt-Out._ To opt out of Google Analytics cookies, visit
+Google’s [My Ad Center](https://myadcenter.google.com/personalizationoff) and/or
+download the Google Analytics Opt-Out Browser Add-On.
 
-**六、儿童**
+**VI. Children**
 
-我们不会故意通过网站收集18岁以下儿童的个人信息。如果您未满18岁，请不要向我们提供任何个人信息。我们鼓励父母和法定监护人监控其子女的互联网使用，并通过指示其子女在没有他们的许可下绝不向网站提供个人信息来帮助执行我们的隐私政策。如果您有理由相信18岁以下的儿童已向我们提供个人信息，请联系 [support@deno.com](mailto:support@deno.com) ，我们将努力从我们的数据库中删除该信息。
+We do not knowingly collect personal information from children under the age of
+18 through the Sites. If you are under 18, please do not give us any personal
+information. We encourage parents and legal guardians to monitor their
+children’s Internet usage and to help enforce our Privacy Policy by instructing
+their children never to provide personal information through the Sites without
+their permission. If you have reason to believe that a child under the age of 18
+has provided personal information to us, please contact us, at
+[support@deno.com](mailto:support@deno.com) and we will endeavor to delete that
+information from our databases.
 
-**七、外部网站**
+**VII. External Websites**
 
-网站可能包含指向第三方网站的链接。这些第三方网站如果您点击链接可能会收集有关您的信息。我们对这些网站的隐私实践或内容没有控制权。因此，我们不对这些第三方网站的内容或隐私政策负责。在访问其他网站时，您应检查适用的第三方隐私政策和使用条款。
+The Sites may contain links to third-party websites. These third-party sites may
+collect information about you if you click on a link. We have no control over
+the privacy practices or the content of these websites. As such, we are not
+responsible for the content or the privacy policies of those third-party
+websites. You should check the applicable third-party privacy policy and terms
+of use when visiting any other websites.
 
-**八、对非美国居民的重要通知**
+**VIII. Important Notice To Non-U.S. Residents**
 
-网站在美国及其他国家托管和提供。如果您位于美国之外，请注意您提供给我们的任何信息可能会转移到美国或其他隐私法律可能不如您原籍国那样有保护力度的国家。如果您位于美国之外并选择使用网站，您同意根据本隐私政策转移和处理您的个人信息，并自担风险。
+The Sites are hosted in and provided from the United States and other countries.
+If you are located outside of the United States, please be aware that any
+information you provide to us may be transferred to the United States or other
+countries where the privacy laws may not be as protective as those in your
+country of origin. If you are located outside the United States and choose to
+use the Sites, you consent to any transfer and processing of your personal
+information in accordance with this Privacy Policy, and you do so at your own
+risk.
 
-**九、对加利福尼亚居民的通知**
+**IX. Notice To California Residents**
 
-根据加利福尼亚民法典第1798.83条， 加利福尼亚居民有权获取有关建立商业关系（并且未豁免）的公司在前一个日历年内出于直接营销目的与第三方分享的个人信息类型的某些信息，包括那些第三方的名称和地址，以及那些第三方所营销的产品或服务的示例。为了提交此类请求，请使用本文件末尾提供的联系信息与我们联系。然而，请注意，我们并不分享，也在过去没有分享个人信息给第三方以进行直接营销目的。
+Pursuant to Section 1798.83 of the California Civil Code, residents of
+California have the right to obtain certain information about the types of
+personal information that companies with whom they have an established business
+relationship (and that are not otherwise exempt) have shared with third parties
+for direct marketing purposes during the preceding calendar year, including the
+names and addresses of those third parties, and examples of the types of
+services or products marketed by those third parties. In order to submit such a
+request, please contact us using the contact information provided at the end of
+this document. Please note, however, that we do not share, nor have we shared in
+the past, personal information with third parties for direct marketing purposes.
 
-**十、对内华达州居民的通知**
+**X. Notice To Nevada Residents**
 
-如果您是内华达州居民，您有权选择不向第三方销售个人信息。您可以通过向我们发送电子邮件至 [support@deno.com](mailto:support@deno.com)，主题为“内华达州不销售请求”，并提供您的姓名和电子邮件地址来行使此权利。然而，请注意，我们不向第三方出售任何个人信息。
+If you are a resident of Nevada, you have the right to opt-out of the sale of
+personal information to third parties. You can exercise this right by contacting
+us at [support@deno.com](mailto:support@deno.com) with the subject line “Nevada
+Do Not Sell Request” and providing us with your name and the email address.
+Please note, however, that we do not sell any personal information to third
+parties.
 
-**十一、本隐私政策的变更**
+**XI. Changes To This Privacy Policy**
 
-本隐私政策自本隐私政策顶部所述日期生效。我们可能会不时更改本隐私政策。任何此类变更将在网站上发布。通过在我们对本隐私政策进行任何此类变更后访问网站，您被视为接受此类变更。请注意，在适用法律允许的范围内，我们对信息的使用受收集信息时有效的隐私政策的约束。请定期查看此隐私政策。
+This Privacy Policy is effective as of the date stated at the top of this
+Privacy Policy. We may change this Privacy Policy from time to time. Any such
+changes will be posted on the Sites. By accessing the Sites after we make any
+such changes to this Privacy Policy, you are deemed to have accepted such
+changes. Please be aware that, to the extent permitted by applicable law, our
+use of the Information is governed by the Privacy Policy in effect at the time
+we collect the Information. Please refer back to this Privacy Policy on a
+regular basis.
 
-**十二、如何联系我们**
+**XII. How To Contact Us**
 
-如对本隐私政策有任何问题、投诉或请求，请通过 [support@deno.com](mailto:support@deno.com) 联系我们，并在主题行中注明“隐私政策”，或通过邮寄与我们联系：
+Please reach out to [support@deno.com](mailto:support@deno.com) for any
+questions, complaints, or requests regarding this Privacy Policy, and include in
+the subject line “Privacy Policy", or contact us by mail at:
 
 Deno Land Inc.\
 1111 6th Ave Ste 550\
@@ -135,4 +312,4 @@ PMB 702973\
 San Diego CA, 92101\
 USA
 
-**© 2024 Deno Land Inc. 版权所有。**
+**© 2024 Deno Land Inc. All rights reserved.**
