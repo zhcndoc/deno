@@ -302,6 +302,10 @@ args = ["lsp"]
 config.deno.enable = true
 ```
 
+### Zed
+
+[Zed 编辑器](https://zed.dev) 可以通过 [Deno 扩展](https://zed.dev/extensions?query=deno&filter=language-servers) 集成 Deno 语言服务器。
+
 ## Shell 自动补全
 
 Deno CLI 内置支持为 CLI 自身生成 shell 补全信息。通过使用 `deno completions <shell>`，Deno CLI 将输出补全到 stdout。当前支持的 shell 有：

@@ -13,7 +13,7 @@ description: "Publish your package or workspace to the JSR registry"
 
 - `name` 字段必须是唯一的，并遵循 `@<scope_name>/<package_name>` 约定。
 - `version` 字段必须是有效的 semver 版本。
-- `exports` 字段必须指向包的主要入口点。
+- `exports` 字段必须指向包的主要入口点。`exports` 字段可以指定为一个字符串，或者作为一个对象，将入口点名称映射到您包中的路径。
 
 示例：
 

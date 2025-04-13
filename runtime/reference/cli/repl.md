@@ -143,4 +143,6 @@ readTextFileSync  readFileSync      readDir           readLink          readAllS
 
 ## `DENO_REPL_HISTORY`
 
+默认情况下，Deno 将 REPL 历史存储在 `deno_history.txt` 文件中，该文件位于 `DENO_DIR` 目录内。您可以通过运行 `deno info` 找到您的 `DENO_DIR` 目录及其他资源的位置。
+
 您可以使用 `DENO_REPL_HISTORY` 环境变量来控制 Deno 存储 REPL 历史文件的位置。您可以将其设置为空值，Deno 将不会存储历史文件。

@@ -236,6 +236,17 @@ const kv = await Deno.openKv();
 有关详细信息，请参见
 [Deno 1.40 博客文章](https://deno.com/blog/v1.40#changes-to-how-we-handle-unstable-features)。
 
+## 导入断言移除
+
+导入断言已从 JavaScript 中移除，并在 Deno 2.0 中被弃用。请改用导入属性：
+
+```diff
+- import data from "./data.json" assert { type: "json" };
++ import data from "./data.json" with { type: "json" };
+```
+
+这是少数几个提案在达到第三阶段后被 [降级的情况之一](https://github.com/tc39/proposal-import-attributes?tab=readme-ov-file#history)。
+
 ## API 更改
 
 - `Deno.Buffer`

@@ -55,10 +55,10 @@ postgres://user:password@127.0.0.1:5432/deploy?sslmode=disable
 
 ## 编写连接到 Postgres 的代码
 
-要进行读写操作，导入 Postgres 模块，从环境变量中读取连接字符串，并创建一个连接池。
+要读取/写入Postgres，请导入合适的Postgres模块，例如 [这个来自 JSR 的模块](https://jsr.io/@bartlomieju/postgres)，从环境变量中读取连接字符串，并创建一个连接池。
 
 ```ts
-import { Pool } from "https://deno.land/x/postgres@v0.17.0/mod.ts";
+import { Pool } from "jsr:@bartlomieju/postgres";
 
 // 从环境变量 "DATABASE_URL" 获取连接字符串
 const databaseUrl = Deno.env.get("DATABASE_URL")!;
