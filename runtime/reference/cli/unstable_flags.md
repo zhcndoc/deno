@@ -169,6 +169,7 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 
 在 `Deno` 命名空间中启用不稳定网络 API。这些 API 包括：
 
+- [`WebSocketStream`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream)
 - [`Deno.DatagramConn`](https://docs.deno.com/api/deno/~/Deno.DatagramConn)
 
 ## `--unstable-otel`
