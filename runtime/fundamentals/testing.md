@@ -251,7 +251,7 @@ deno test --junit-path=./report.xml
 
 ## 监视、模拟（测试替身）、存根和时间伪造
 
-[Denos 标准库](/runtime/fundamentals/standard_library/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些实用工具的更多信息，请查看 [@std/testing 文档](https://jsr.io/@std/testing)。
+[Deno 标准库](/runtime/fundamentals/standard_library/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些工具的更多信息，请查看 [JSR 上的 @std/testing 文档](https://jsr.io/@std/testing) 或我们的 [关于使用 deno 进行测试的模拟和监视的教程](/examples/mocking_tutorial/)。
 
 ## 覆盖率
 
@@ -284,6 +284,8 @@ describe("add 函数", () => {
 ```
 
 请查看 [JSR 的文档](https://jsr.io/@std/testing/doc/bdd/~) 获取有关这些函数和钩子的更多信息。
+
+- [BDD 测试教程](/examples/bdd_tutorial/)
 
 ## 文档测试
 
@@ -507,16 +509,13 @@ Deno.test({
 [Deno 标准库](/runtime/fundamentals/standard_library/) 包含一个 [快照模块](https://jsr.io/@std/testing/doc/snapshot/~)，允许开发者通过将值与参考快照进行比较来编写测试。这些快照是原始值的序列化表示，存储在测试文件旁边。
 
 快照测试能够通过极少的代码捕捉到广泛的错误。在难以准确表达应该断言什么的情况下非常有用，而不需要过多的代码，或者在预期测试所做的断言经常变化的情况下也特别有帮助。
-## Tests and Permissions
+- [快照测试教程](/examples/snapshot_tutorial/)
 
-The `permissions` property in the `Deno.test` configuration allows you to
-specifically deny permissions, but does not grant them. Permissions must be
-provided when running the test command. When building robust applications, you
-often need to handle cases where permissions are denied, (for example you may
-want to write tests to check whether fallbacks have been set up correctly).
+## 测试和权限
 
-Consider a situation where you are reading from a file, you may want to offer a
-fallback value in the case that the function does not have read permission:
+`Deno.test` 配置中的 `permissions` 属性允许您具体拒绝权限，但不授予权限。运行测试命令时必须提供权限。当构建健壮的应用程序时，您通常需要处理权限被拒绝的情况（例如，您可能希望编写测试以检查回退是否已正确设置）。
+
+考虑一种情况，您正在从文件中读取，您可能希望在函数没有读取权限的情况下提供一个回退值：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -548,7 +547,7 @@ Deno.test({
 deno test --allow-read
 ```
 
-The permissions object supports detailed configuration:
+权限对象支持详细配置：
 
 ```ts
 Deno.test({
@@ -571,5 +570,4 @@ Deno.test({
 });
 ```
 
-Remember that any permission not explicitly granted at the command line will be
-denied, regardless of what's specified in the test configuration.
+请记住，任何在命令行中未明确授予的权限将被拒绝，无论测试配置中指定的内容是什么。

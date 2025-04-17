@@ -11,7 +11,12 @@ oldUrl:
 直接构建在 Deno 运行时中，提供在
 [`Deno.Kv` 命名空间](https://docs.deno.com/api/deno/~/Deno.Kv) 中可用。它可以用于许多类型的数据存储用例，但在存储简单数据结构时表现出色，这些数据结构受益于非常快速的读取和写入。Deno KV 可在 Deno CLI 和 [Deno Deploy](./on_deploy) 上使用。
 
-<deno-admonition></deno-admonition>
+:::caution
+
+Deno KV is still in development and may change. To use it, you must pass the
+`--unstable-kv` flag to Deno.
+
+:::
 
 让我们来了解 Deno KV 的关键特性。
 

@@ -45,11 +45,11 @@ deno coverage --exclude="test\.(js|mjs|ts|jsx|tsx)$"
 
 被忽略的文件将不会出现在覆盖率报告中。
 
-要忽略单个行，请在要忽略的代码上方的行添加 `// deno-coverage-ignore-next` 注释。
+要忽略单行，请在您想要忽略的代码上方添加 `// deno-coverage-ignore` 注释。
 
 ```ts
-// deno-coverage-ignore-next
-console.log("这一行被忽略");
+// deno-coverage-ignore
+console.log("this line is ignored");
 ```
 
 要忽略多行，请在要忽略的代码上方添加 `// deno-coverage-ignore-start` 注释，并在下方添加 `// deno-coverage-ignore-stop` 注释。
@@ -62,39 +62,47 @@ if (condition) {
 // deno-coverage-ignore-stop
 ```
 
-在 `// deno-coverage-ignore-start` 注释后面的所有代码都将被忽略，直到达到 `// deno-coverage-ignore-stop`。但是，如果有多个连续的开始注释，则每个这样的注释必须由相应的停止注释终止。
+所有在 `// deno-coverage-ignore-start` 注释之后的代码会被忽略，直到 `// deno-coverage-ignore-stop` 被遇到。
+
+每个 `// deno-coverage-ignore-start` 注释必须以 `// deno-coverage-ignore-stop` 注释结束，并且忽略的范围不能嵌套。
+
+当这些要求没有满足时，某些行可能会在覆盖率报告中意外包含。`deno coverage` 命令会对任何无效注释记录警告。
 
 ```ts
 // deno-coverage-ignore-start
 if (condition) {
-  // deno-coverage-ignore-start
-  console.log("这一行被忽略");
+  // deno-coverage-ignore-start - A warning will be logged because the previous
+  //                              coverage range is unterminated.
+  console.log("this code is ignored");
   // deno-coverage-ignore-stop
-  console.log("这一行也被忽略");
 }
 // deno-coverage-ignore-stop
 
-console.log("这一行没有被忽略");
+// ...
+
+// deno-coverage-ignore-start - This comment will be ignored and a warning will
+//                              be logged, because this range is unterminated.
+console.log("this code is not ignored");
 ```
 
 在覆盖注释中，只有空格可以位于覆盖指令之前。然而，任何文本可以跟随该指令。
 
 ```ts
-// deno-coverage-ignore-next 尾随文本是允许的。
-console.log("这一行被忽略");
+// deno-coverage-ignore Trailing text is allowed.
+console.log("This line is ignored");
 
-// 但前导文本是不允许的。 deno-coverage-ignore-next
-console.log("这一行没有被忽略");
+// But leading text isn't. deno-coverage-ignore
+console.log("This line is not ignored");
 ```
 
 覆盖注释必须以 `//` 开头。以 `/*` 开头的注释不是有效的覆盖注释。
 
 ```ts
-// deno-coverage-ignore-next
-console.log("这一行被忽略");
+// deno-coverage-ignore
+console.log("This line is ignored");
 
-/* deno-coverage-ignore-next */
-console.log("这一行没有被忽略");
+/* deno-coverage-ignore */
+console.log("This line is not ignored");
 ```
 
 ## 输出格式
