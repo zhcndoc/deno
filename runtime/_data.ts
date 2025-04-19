@@ -299,10 +299,6 @@ export const sidebar = [
             href: "/runtime/contributing/style_guide/",
           },
           {
-            title: "Web 平台测试",
-            href: "/runtime/contributing/web_platform_tests/",
-          },
-          {
             title: "文档",
             href: "/runtime/contributing/docs/",
           },

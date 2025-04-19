@@ -95,6 +95,7 @@ Deno 运行时具有以下特殊环境变量。
 | DENO_AUTH_TOKENS     | 用于从私有存储库获取远程模块时要使用的以分号分隔的 bearer 令牌和主机名列表<br />(例如 `abcde12345@deno.land;54321edcba@github.com`) |
 | DENO_TLS_CA_STORE    | 以逗号分隔的顺序相关证书存储列表.<br />可能的值：`system`，`mozilla`。默认为 `mozilla`。                                                                                     |
 | DENO_CERT            | 从 PEM 编码文件加载证书颁发机构                                                                                                                                      |
+| DENO_COVERAGE_DIR    | 设置收集覆盖率分析数据的目录。此选项仅适用于 [`deno test` 子命令](/runtime/reference/cli/test/)。                                        |
 | DENO_DIR             | 设置缓存目录                                                                                                                                                           |
 | DENO_INSTALL_ROOT    | 设置 deno 安装的输出目录（默认为 `$HOME/.deno/bin`）                                                                                                               |
 | DENO_REPL_HISTORY    | 设置 REPL 历史文件路径，当值为空时禁用历史文件<br />(默认为 `$DENO_DIR/deno_history.txt`)                                                                         |

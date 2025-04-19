@@ -137,6 +137,14 @@ deno test --coverage=custom_profile_name
 deno coverage custom_profile_name
 ```
 
+> 注意：您也可以通过 `DENO_COVERAGE_DIR` 环境变量设置覆盖目录。
+>
+> ```
+> DENO_COVERAGE_DIR=custom_profile_name deno test
+> deno coverage custom_profile_name
+> ```
+
+
 仅包括匹配特定模式的覆盖率 - 在这种情况下，仅包括 main.ts 的测试。
 
 ```bash
