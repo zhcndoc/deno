@@ -105,7 +105,7 @@ await app.listen({ port: 8000 });
 
 在你的 `package.json` 文件中，更新 `scripts` 字段以包含以下内容：
 
-```jsonc
+```jsonc title="package.json"
 {
   "scripts": {
     "dev": "deno task dev:api & deno task dev:vite",
@@ -117,17 +117,41 @@ await app.listen({ port: 8000 });
 
 如果你现在运行 `deno task dev` 并访问 `localhost:8000/api/dinosaurs`，在浏览器中应该能看到所有恐龙的 JSON 响应。
 
+## Deno 中的 React 支持
+
+此时，您的 IDE 或编辑器可能会向您显示有关项目中缺少类型的警告。Deno 对 React 应用程序提供内置的 TypeScript 支持。要启用此功能，您需要使用适当的类型定义和 DOM 库配置您的项目。创建或更新您的 `deno.json` 文件，添加以下 TypeScript 编译器选项：
+
+```jsonc title="deno.json"
+"compilerOptions": {
+  "types": [
+    "react",
+    "react-dom",
+    "@types/react"
+  ],
+  "lib": [
+    "dom",
+    "dom.iterable",
+    "deno.ns"
+  ],
+  "jsx": "react-jsx",
+  "jsxImportSource": "react"
+}
+```
+
 ## 更新入口点
 
 React 应用的入口点在 `src/main.tsx` 文件中。我们的将非常基础：
 
 ```tsx title="main.tsx"
-import ReactDOM from "react-dom/client";
-import App from "./App";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import "./index.css";
+import App from "./App.tsx";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <App />,
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
 );
 ```
 
@@ -147,8 +171,8 @@ deno add npm:react-router-dom
 
 ```tsx title="App.tsx"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Index from "./pages/index";
-import Dinosaur from "./pages/Dinosaur";
+import Index from "./pages/index.tsx";
+import Dinosaur from "./pages/Dinosaur.tsx";
 import "./App.css";
 
 function App() {
@@ -247,7 +271,7 @@ export default function Index() {
 ```tsx title="Dinosaur.tsx"
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Dino } from "../types";
+import { Dino } from "../types.ts";
 
 export default function Dinosaur() {
   const { selectedDinosaur } = useParams();

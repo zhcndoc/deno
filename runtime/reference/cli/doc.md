@@ -95,7 +95,7 @@ Deno 实现了一大套 JSDoc 标签，但并不严格遵循 JSDoc 标准，而�
 - `tags`: 为符号定义额外的自定义标签，通过逗号分隔的列表。
 - [`since`](https://jsdoc.app/tags-since): 定义该符号从何时可用。
 - [`callback`](https://jsdoc.app/tags-callback): 定义一个回调。
-- [`template`/`typeparam`/`typeParam`](https://tsdoc.org/pages/tags/typeparam): 定义一个回调。
+- [`template`/`typeparam`/`typeParam`](https://tsdoc.org/pages/tags/typeparam): 定义一个通用参数。
 - [`prop`/`property`](https://jsdoc.app/tags-property): 在符号上定义一个属性。
 - [`typedef`](https://jsdoc.app/tags-typedef): 定义一种类型。
 - [`param`/`arg`/`argument`](https://jsdoc.app/tags-param): 在函数上定义一个参数。

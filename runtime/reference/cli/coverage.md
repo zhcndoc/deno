@@ -107,7 +107,7 @@ console.log("This line is not ignored");
 
 ## 输出格式
 
-默认情况下，我们支持 Deno 自己的覆盖格式 - 但您也可以以 lcov 格式或 html 格式输出覆盖率报告。
+默认情况下，我们支持 Deno 自己的覆盖率格式 - 但您也可以输出覆盖率报告为 [lcov 格式](https://github.com/linux-test-project/lcov?tab=readme-ov-file)（一种用于描述代码覆盖率数据的标准文件格式），或以 html 格式。
 
 ```bash
 deno coverage --lcov --output=cov.lcov

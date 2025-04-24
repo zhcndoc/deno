@@ -85,6 +85,17 @@ npm 前缀的格式如下：
 npm:<package-name>[@<version-requirement>][/<sub-path>]
 ```
 
+这也允许一些可能与 `npx` 命令相似的功能。
+
+```console
+# npx allows remote execution of a package from npm or a URL
+$ npx create-next-app@latest
+
+# deno run allows remote execution of a package from various locations,
+# and can scoped to npm via the `npm:` specifier.
+$ deno run -A npm:create-next-app@latest
+```
+
 有关流行库的示例，请参考 [教程部分](/runtime/tutorials)。
 
 ## CommonJS 支持

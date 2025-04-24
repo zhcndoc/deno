@@ -21,7 +21,7 @@ Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运
 - [deno install](/runtime/reference/cli/install/) - 安装依赖或脚本
 - [deno uninstall](/runtime/reference/cli/uninstall/) - 卸载依赖或脚本
 - [deno remove](/runtime/reference/cli/remove) - 移除依赖
-- [deno outdated](/runtime/reference/cli/outdated) - 查看或更新过期的依赖
+- [deno outdated](/runtime/reference/cli/outdated) - 查看或更新过时的依赖
 
 ## 工具
 
