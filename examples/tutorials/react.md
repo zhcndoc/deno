@@ -123,19 +123,19 @@ if (import.meta.main) {
 }
 ```
 
-您可以使用
-`deno run --allow-env --allow-net server/main.ts` 运行 API 服务器。我们将创建一个任务在后台运行此命令，并更新开发任务以同时运行 React 应用和 API 服务器。
+您可以使用以下命令运行 API 服务器：`deno run --allow-env --allow-net --allow-read server/main.ts`。我们将创建一个任务在后台运行此命令，并更新开发任务以同时运行 React 应用程序和 API 服务器。
 
-在您的 `package.json` 文件中，更新 `scripts` 字段以包含以下内容：
+在您的 `deno.json` 文件中，更新 `tasks` 字段以包含以下内容：
 
 ```diff title="deno.json"
 {
   "tasks": {
-+   "dev": "deno run -A --node-modules-dir=auto npm:vite & deno run server:start",
-    "build": "deno run -A --node-modules-dir=auto npm:vite build",
++   "dev": "deno run -A npm:vite & deno run server:start",
+    "build": "deno run -A npm:vite build",
     "server:start": "deno run -A --node-modules-dir --watch ./server/main.ts",
     "serve": "deno run build && deno run server:start"
-}
+},
++ "nodeModulesDir": "auto",
 ```
 
 如果您现在运行 `deno run dev` 并访问 `localhost:8000/api/dinosaurs`，在您的浏览器中，您应该会看到所有恐龙的 JSON 响应。
@@ -311,7 +311,7 @@ export default function Dinosaur() {
 deno run dev
 ```
 
-在浏览器中导航到本地 Vite 服务器 (`localhost:5173`)，您应该会看到列出的恐龙，您可以单击以了解每个恐龙的详细信息。
+在浏览器中导航到本地 Vite 服务器 (`localhost:3000`)，您应该会看到列出的恐龙，您可以单击以了解每个恐龙的详细信息。
 
 ![应用演示](./images/how-to/react/react-dinosaur-app-demo.gif)
 
