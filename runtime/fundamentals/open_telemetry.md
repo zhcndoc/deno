@@ -1,6 +1,6 @@
 ---
 title: OpenTelemetry
-description: "Learn how to implement observability in Deno applications using OpenTelemetry. Covers tracing, metrics collection, and integration with monitoring systems."
+description: "学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"
 ---
 
 :::caution
@@ -293,25 +293,45 @@ span.setStatus({
 });
 ```
 
-跨度还可以添加 [事件](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addEvent) 和 [链接](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addLink)。事件是与跨度关联的时间点，链接是对其他跨度的引用。
+跨度还可以有
+[事件](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addEvent)
+和
+[链接](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addLink)
+被添加到它们。事件是在时间点与跨度相关联的。
+链接是对其他跨度的引用。
 
-还可以使用 `tracer.startSpan` 手动创建跨度，该方法返回一个跨度对象。此方法不会将创建的跨度设置为活动跨度，因此它不会自动用作后续创建的任何跨度的父跨度或任何 `console.log` 调用。可以通过使用 [上下文传播 API](#context-propagation) 手动将跨度设置为回调的活动跨度。
+```ts
+// 向跨度添加事件
+span.addEvent("button_clicked", {
+  id: "submit-button",
+  action: "submit",
+});
 
-`tracer.startActiveSpan` 和 `tracer.startSpan` 都可以接受一个可选的选项包，其中包含以下任意属性：
+// 添加带时间戳的事件
+span.addEvent("process_completed", { status: "success" }, Date.now());
+```
+
+事件可以包括类似于跨度的可选属性。它们用于标记跨度生命周期内的重要时刻，而无需创建单独的跨度。
+
+跨度也可以使用 `tracer.startSpan` 手动创建，该方法返回一个跨度对象。此方法不会将创建的跨度设置为活动跨度，因此它不会自动用作后续创建的任何跨度或任何 `console.log` 调用的父跨度。可以使用 [上下文传播 API](#context-propagation) 手动将跨度设置为回调的活动跨度。
+
+`tracer.startActiveSpan` 和 `tracer.startSpan` 都可以接受一个包含以下任意属性的可选参数：
 
 - `kind`: 跨度的类型。可以是 `SpanKind.CLIENT`、`SpanKind.SERVER`、`SpanKind.PRODUCER`、`SpanKind.CONSUMER` 或 `SpanKind.INTERNAL`。默认为 `SpanKind.INTERNAL`。
-- `startTime`: 表示跨度开始时间的 `Date` 对象，或表示自 Unix 纪元以来的毫秒数的数字。如果未提供，将使用当前时间。
-- `attributes`: 包含要添加到跨度的属性的对象。
-- `links`: 要添加到跨度的链接数组。
-- `root`: 一个布尔值，指示跨度是否应为根跨度。如果为 `true`，则该跨度将没有父跨度（即使有一个活动跨度）。
+- `startTime`: 表示跨度开始时间的 `Date` 对象，或表示自 Unix 纪元以来的毫秒数。如果未提供，将使用当前时间。
+- `attributes`: 一个包含要添加到跨度的属性的对象。
+- `links`: 一个要添加到跨度的链接数组。
+- `root`: 一个布尔值，指示该跨度是否应为根跨度。如果 `true`，则该跨度将没有父跨度（即使存在活动跨度）。
 
-在选项包之后，`tracer.startActiveSpan` 和 `tracer.startSpan` 还可以接受来自 [上下文传播 API](#context-propagation) 的 `context` 对象。
+在选项参数之后，`tracer.startActiveSpan` 和 `tracer.startSpan` 还可以接受来自
+[上下文传播 API](#context-propagation) 的 `context` 对象。
 
-在 [OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html) 中了解完整的追踪 API。
+在
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html) 中了解完整的追踪 API。
 
 ### 指标
 
-要创建指标，首先从 `npm:@opentelemetry/api` 导入 `metrics` 对象并创建新的仪表：
+要创建一个指标，首先从 `npm:@opentelemetry/api` 导入 `metrics` 对象并创建一个新的仪表：
 
 ```ts
 import { metrics } from "npm:@opentelemetry/api@1";
@@ -469,29 +489,77 @@ OTLP 导出的端点和协议可以使用环境变量 `OTEL_EXPORTER_OTLP_ENDPOI
 - `process.runtime.version`: Deno 运行时的版本。
 - `telemetry.sdk.name`: `deno-opentelemetry`
 - `telemetry.sdk.language`: `deno-rust`
-- `telemetry.sdk.version`: Deno 运行时的版本，加上 Deno 使用的 `opentelemetry` Rust crate 的版本，中间以 `-` 分隔。
+- `telemetry.sdk.version`: Deno 运行时的版本，加上 Deno 使用的 `opentelemetry` Rust crate 的版本，以 `-` 分隔。
+
+传播者可以使用 `OTEL_PROPAGATORS` 环境变量配置。
+默认值为 `tracecontext,baggage`。可以通过逗号分隔指定多个传播者。当前支持的传播者有：
+
+- `tracecontext`: W3C Trace Context 传播格式
+- `baggage`: W3C Baggage 传播格式
 
 指标收集频率可以使用 `OTEL_METRIC_EXPORT_INTERVAL` 环境变量进行配置。默认值为 `60000` 毫秒（60 秒）。
 
-跨度导出的批处理可以使用在 [OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-span-processor) 中描述的批量跨度处理器环境变量进行配置。
+跨度导出器批处理可以使用在 [OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-span-processor) 中描述的批跨度处理器环境变量进行配置。
 
-日志导出的批处理可以使用在 [OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-log-record-processor) 中描述的批量日志记录处理器环境变量进行配置。
+日志导出器批处理可以使用在 [OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-log-record-processor) 中描述的批日志记录处理器环境变量进行配置。
+
+## 传播者
+
+Deno 支持上下文传播者，这使得跨进程边界自动传播追踪上下文，支持分布式追踪，使您能够跟踪请求在不同服务中流动的过程。
+
+传播者负责将上下文信息（如追踪和跨度 ID）编码到载体格式（如 HTTP 头）中并从中解码。这使得追踪上下文能够在服务边界之间传递。
+
+默认情况下，Deno 支持以下传播者：
+
+- `tracecontext`: W3C Trace Context 传播格式，这是通过 HTTP 头传播追踪上下文的标准方式。
+- `baggage`: W3C Baggage 传播格式，允许在服务边界之间传递键值对。
+
+:::note
+
+这些传播者自动与 Deno 的 `fetch` API 和 `Deno.serve` 配合使用，使 HTTP 请求跨越的端到端追踪成为可能，无需手动管理上下文。
+
+:::
+
+您可以通过 `@opentelemetry/api` 包访问传播 API：
+
+```ts
+import { context, propagation, trace } from "npm:@opentelemetry/api@1";
+
+// 从传入的头部提取上下文
+function extractContextFromHeaders(headers: Headers) {
+  const ctx = context.active();
+  return propagation.extract(ctx, headers);
+}
+
+// 向传出的头部注入上下文
+function injectContextIntoHeaders(headers: Headers) {
+  const ctx = context.active();
+  propagation.inject(ctx, headers);
+  return headers;
+}
+
+// 示例：发出一个传播追踪上下文的 fetch 请求
+async function tracedFetch(url: string) {
+  const headers = new Headers();
+  injectContextIntoHeaders(headers);
+
+  return await fetch(url, { headers });
+}
+```
 
 ## 限制
 
-虽然 Deno 的 OpenTelemetry 集成正在开发中，但仍需注意以下一些限制：
+虽然 Deno 的 OpenTelemetry 集成正在开发中，但存在一些限制需注意：
 
-- 追踪始终是抽样的（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
-- 追踪不支持事件。
+- 追踪总是被采样（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
 - 追踪仅支持没有属性的链接。
-- 在 `Deno.serve` 和 `fetch` 中的追踪上下文的自动传播不被支持。
 - 不支持指标示例。
-- 自定义日志流（例如，除了 `console.log` 和 `console.error` 的日志）不被支持。
-- 仅支持 OTLP 导出器 - 不支持其他导出器。
-- 仅支持 `http/protobuf` 和 `http/json` 协议用于 OTLP。不支持 `grpc` 等其他协议。
-- 从可观察（异步）仪表收集的指标在进程退出/崩溃时不会被收集，因此可能不会导出指标的最后值。同步指标在进程退出/崩溃时被导出。
-- 在追踪跨度中未遵循的限制包括 `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、`OTEL_ATTRIBUTE_COUNT_LIMIT`、`OTEL_SPAN_EVENT_COUNT_LIMIT`、`OTEL_SPAN_LINK_COUNT_LIMIT`、`OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和 `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 环境变量。
-- `OTEL_METRIC_EXPORT_TIMEOUT` 环境变量未被遵循。
-- 不为 `http.request.method` 跨度属性的未知 HTTP 方法标准化为 `_OTHER`，这符合 OpenTelemetry 语义约定。
-- `Deno.serve` 的 HTTP 服务器跨度未设置 OpenTelemetry 状态，并且如果处理程序抛出（即调用 `onError`），则跨度不会设置错误状态，并且不会通过事件将错误附加到跨度。
-- 没有机制可以将 `http.route` 属性添加到 `fetch` 的 HTTP 客户端跨度，或更新跨度名称以包含路由。
+- 不支持自定义日志流（例如，非 `console.log` 和 `console.error` 的日志）。
+- 唯一支持的导出器是 OTLP - 其他导出器不受支持。
+- 仅支持 `http/protobuf` 和 `http/json` 协议用于 OTLP。其他协议如 `grpc` 不受支持。
+- 从可观察（异步）仪表收集的指标不会在进程退出/崩溃时收集，因此最后的指标值可能不会被导出。同步指标会在进程退出/崩溃时导出。
+- 在追踪跨度中，不遵守 `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、`OTEL_ATTRIBUTE_COUNT_LIMIT`、`OTEL_SPAN_EVENT_COUNT_LIMIT`、`OTEL_SPAN_LINK_COUNT_LIMIT`、`OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和 `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 环境变量中指定的限制。
+- 不尊重环境变量 `OTEL_METRIC_EXPORT_TIMEOUT`。
+- 未知的 HTTP 方法在 `http.request.method` 跨度属性中不会标准化为 `_OTHER`，这与 OpenTelemetry 语义约定不符。
+- `Deno.serve` 的 HTTP 服务器跨度没有设置 OpenTelemetry 状态，如果处理程序抛出（即调用 `onError`），则该跨度将没有错误状态设置，且错误将不会通过事件附加到跨度。
+- 在 `fetch` 的 HTTP 客户端跨度中没有机制添加 `http.route` 属性，或更新跨度名称以包含路由。

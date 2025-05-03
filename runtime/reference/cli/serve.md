@@ -4,7 +4,7 @@ oldUrl: /runtime/manual/tools/serve/
 command: serve
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno serve"
-description: "A flexible and configurable HTTP server for Deno"
+description: "一个灵活且可配置的 Deno HTTP 服务器"
 ---
 
 ## 示例
@@ -16,10 +16,12 @@ export default {
   async fetch(_req) {
     return new Response("Hello world!");
   },
-};
+} satisfies Deno.ServeDefaultExport;
 ```
 
-然后您可以使用 `deno serve` 命令运行服务器：
+`satisfies Deno.ServeDefaultExport` 类型断言确保您导出的对象符合 Deno HTTP 服务器的预期接口。这提供了类型安全性和更好的编辑器自动完成功能，同时允许您保持实现的推断类型。
+
+然后，您可以使用 `deno serve` 命令运行服务器：
 
 ```bash
 deno serve server.ts
@@ -36,5 +38,5 @@ export default {
 
     return new Response("Hello world!");
   },
-};
+} satisfies Deno.ServeDefaultExport;
 ```

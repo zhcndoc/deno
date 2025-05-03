@@ -41,7 +41,6 @@ Deno.test("异步测试", async () => {
 
 Deno.test({
   name: "读取文件测试",
-  permissions: { read: true },
   fn: () => {
     const data = Deno.readTextFileSync("./somefile.txt");
     assertEquals(data, "预期内容");
@@ -84,7 +83,7 @@ deno test --parallel
 deno test my_test.ts -- -e --foo --bar
 
 # 提供文件系统的读取权限，这对于上面的最终测试是必要的
-deno test --allow-read my_test.ts
+deno test --allow-read=. my_test.ts
 ```
 
 ## 测试步骤
@@ -523,7 +522,7 @@ import getFileText from "./main.ts";
 
 Deno.test({
   name: "File reader gets text with permission",
-  permissions: { read: true },
+  // no `permissions` means "inherit"
   fn: async () => {
     const result = await getFileText();
     console.log(result);
@@ -552,11 +551,10 @@ deno test --allow-read
 ```ts
 Deno.test({
   name: "permission configuration example",
+  // permissions: { read: true } // Grant all read permissions and deny all others
+  // OR
   permissions: {
-    read: true, // Grant all read permissions
-    // OR
     read: ["./data", "./config"], // Grant read to specific paths only
-
     write: false, // Explicitly deny write permissions
     net: ["example.com:443"], // Allow specific host:port combinations
     env: ["API_KEY"], // Allow access to specific env variables

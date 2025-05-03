@@ -26,12 +26,19 @@ TypeScript 的主要优势之一是它可以使您的代码类型安全，捕获
 Deno 允许您使用 [`deno check`](/runtime/reference/cli/check/) 子命令对代码进行类型检查（而不执行它）：
 
 ```shell
+# Check the current directory/module
+deno check
+
+# Check a specific TypeScript file
 deno check module.ts
-# 也可以对远程模块和 npm 包进行类型检查
+
+# Include remote modules and npm packages in the check
 deno check --all module.ts
-# 用 JSDoc 编写的代码片段也可以进行类型检查
+
+# Check code snippets in JSDoc comments
 deno check --doc module.ts
-# 或者对 markdown 文件中的代码片段进行类型检查
+
+# Check code snippets in markdown files
 deno check --doc-only markdown.md
 ```
 

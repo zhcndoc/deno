@@ -1,6 +1,6 @@
 ---
-title: "Modules and dependencies"
-description: "A guide to managing modules and dependencies in Deno. Learn about ECMAScript modules, third-party packages, import maps, dependency management, versioning, and how to publish your own modules."
+title: "模块与依赖"
+description: "管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。"
 oldUrl:
   - /runtime/manual/basics/modules/
   - /runtime/manual/basics/modules/integrity_checking/
@@ -56,21 +56,18 @@ import { add } from "./calc";
 import { add } from "./calc.ts";
 ```
 
-## Import attributes
+## 导入属性
 
-Deno supports the `with { type: "json" }` import attribute syntax for importing
-JSON files:
+Deno 支持 `with { type: "json" }` 导入属性语法以导入 JSON 文件：
 
 ```ts
 import data from "./data.json" with { type: "json" };
 
-console.log(data.property); // Access JSON data as an object
+console.log(data.property); // 访问 JSON 数据作为对象
 ```
 
-This is the only import attribute type currently supported in Deno. Support for
-`type: text` and `type: bytes` is being considered for future updates, and
-currently waiting on the
-[Module Harmony proposal](https://github.com/whatwg/html/issues/9444).
+这是当前 Deno 中唯一支持的导入属性类型。对 `type: text` 和 `type: bytes` 的支持正在考虑未来更新中，并且目前在等待
+[模块和谐提案](https://github.com/whatwg/html/issues/9444)。
 
 ## 导入第三方模块和库
 
@@ -264,24 +261,46 @@ Deno 提供机制来覆盖依赖项，使开发者在开发或测试期间使用
 
 关键点：
 
-- `patch` 字段接受包含 JSR 包或工作区的目录的路径。如果你在工作区内引用单个包，整个工作区都会被包含。
-- 此功能仅在工作区根目录中被尊重。在其他地方使用 `patch` 会触发警告。
-- 目前，`patch` 限制为 JSR 包。尝试对 `npm` 包进行修补将导致警告且没有效果。
+- `patch` 字段接受包含 JSR 包或工作区的目录路径。如果你在工作区中引用单个包，整个工作区将被包括在内。
+- 此功能仅在工作区根目录中被尊重。在其他位置使用 `patch` 将触发警告。
+- 目前，`patch` 仅限于 JSR 包。尝试覆盖 `npm` 包将导致警告而无效。
 
 限制：
 
-- 暂不支持 `npm` 包覆盖。这计划在未来更新中实现。
-- 基于 Git 的依赖覆盖不可用。
-- `patch` 字段需要在工作区根目录中进行适当配置。
-- 此功能仍在实验阶段，可能会根据用户反馈进行更改。
+- 目前不支持 `npm` 包的覆盖。这计划在未来的更新中实现。
+- 不支持基于 Git 的依赖项覆盖。
+- `patch` 字段要求在工作区根目录中进行适当配置。
+- 此功能为实验性质，可能会根据用户反馈进行更改。
 
 ### 覆盖 NPM 包
 
-我们计划支持带有上述修补功能的 NPM 包，但在此之前，如果你有一个 `node_modules` 目录，可以在不更改的情况下使用 `npm link` 来实现相同效果。通常这通过在 `deno.json` 文件中设置 `{ "nodeModulesDir": "manual" }` 来完成。另请参见 [`node_modules`](/runtime/fundamentals/node/#node_modules) 的文档。
+Deno 支持通过本地版本覆盖 npm 包，类似于如何覆盖 JSR 包。这允许你在开发期间使用本地 npm 包副本而无需发布它。
+
+要使用本地 npm 包，请在你的 `deno.json` 中配置 `patch` 字段：
+
+```json
+{
+  "patch": [
+    "../path/to/local_npm_package"
+  ],
+  "unstable": ["npm-patch"]
+}
+```
+
+此功能需要一个 `node_modules` 目录，并且根据你的 `nodeModulesDir` 设置具有不同的行为：
+
+- 使用 `"nodeModulesDir": "auto"`：该目录在每次运行时重新创建，这略微增加启动时间，但确保始终使用最新版本。
+- 使用 `"nodeModulesDir": "manual"`（使用 package.json 时的默认设置）：更新包后必须运行 `deno install` 以将更改应用到工作区的 `node_modules` 目录。
+
+限制：
+
+- 指定本地 npm 包副本或更改其依赖项将从锁文件中清除 npm 包，这可能导致 npm 解析工作方式不同。
+- 即使使用本地副本，npm 包名称必须在注册表中存在。
+- 此功能目前处于 `unstable` 标志后面。
 
 ### 覆盖 HTTPS 导入
 
-Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS 导入。当将远程依赖项替换为本地修补版本以进行调试或临时修复时，此功能特别有用。
+Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS 导入。此功能在调试或临时修复中用本地修补版本替换远程依赖项时特别有用。
 
 示例：
 
