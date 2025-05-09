@@ -1,6 +1,6 @@
 ---
 title: "WebAssembly"
-description: "A guide to using WebAssembly (Wasm) in Deno. Learn about module imports, type checking, streaming APIs, optimization techniques, and how to work with various programming languages that compile to Wasm."
+description: "在 Deno 中使用 WebAssembly (Wasm) 的指南。了解模块导入、类型检查、流式 API、优化技术以及如何与编译为 Wasm 的各种编程语言进行协作。"
 oldUrl:
   - /runtime/manual/getting_started/webassembly/
   - /runtime/manual/runtime/webassembly/
@@ -230,16 +230,24 @@ instance.exports.increment as (input: number) => number;
 
 ## WebAssembly API
 
-有关 WebAssembly API 所有部分的更多信息，请参见 [Deno 参考指南](/api/web/~/WebAssembly) 和 [MDN](https://developer.mozilla.org/en-US/docs/WebAssembly)。
+有关 WebAssembly API 所有部分的更多信息，请参见
+[Deno 参考指南](/api/web/~/WebAssembly) 和
+[MDN](https://developer.mozilla.org/en-US/docs/WebAssembly)。
 
-## 处理非数值类型
+## 处理非数字类型
 
-本文档中的代码示例仅在 WebAssembly 模块中使用了数值类型。要使用更复杂的类型（例如字符串或类）运行 WebAssembly，您将需要使用生成 JavaScript 和编译到 WebAssembly 的语言之间的类型绑定的工具。
+本文档中的代码示例仅使用了 WebAssembly 模块中的数字类型。要使用更复杂的类型（如字符串或类）运行 WebAssembly，您需要使用生成 JavaScript 和编译为 WebAssembly 的语言之间类型绑定的工具。
 
-关于如何在 JavaScript 和 Rust 之间创建类型绑定，将其编译为二进制并从 JavaScript 程序调用的示例可以在 [MDN](https://developer.mozilla.org/en-US/docs/WebAssembly/Rust_to_wasm) 中找到。
+关于如何在 JavaScript 和 Rust 之间创建类型绑定、将其编译为二进制文件并从 JavaScript 程序调用的示例，可以在 [MDN](https://developer.mozilla.org/en-US/docs/WebAssembly/Rust_to_wasm) 上找到。
 
-如果您计划在 Rust+WebAssembly 中进行大量 Web API 工作，您可能会发现 [web_sys](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html) 和 [js_sys](https://rustwasm.github.io/wasm-bindgen/contributing/js-sys/index.html) Rust crate 非常有用。`web_sys` 包含对 Deno 中可用的大多数 Web API 的绑定，而 `js_sys` 提供对 JavaScript 标准内置对象的绑定。
+如果您计划在 Rust+WebAssembly 中进行大量 Web API 工作，您可能会发现 [web_sys](https://rustwasm.github.io/wasm-bindgen/web-sys/index.html) 和 [js_sys](https://rustwasm.github.io/wasm-bindgen/contributing/js-sys/index.html) Rust crates 很有用。`web_sys` 包含 Deno 中可用的大多数 Web API 的绑定，而 `js_sys` 提供 JavaScript 标准内置对象的绑定。
+
+## 在 Deno 中使用 wasmbuild 进行 Rust WebAssembly 开发
+
+[wasmbuild](https://github.com/denoland/wasmbuild) 是一个官方的 Deno 工具，简化了在 Deno 项目中使用 Rust 和 WebAssembly。它自动化了将 Rust 代码编译为 WebAssembly 和生成 TypeScript 绑定的过程，使从 JavaScript 调用 Rust 函数变得简单。
+
+wasmbuild 为您的 Rust 函数生成 TypeScript 定义，提供完整的类型检查。生成的 JavaScript 可以与 esbuild 等打包器一起使用。生成的文件可以直接提交到源代码控制中，以便于部署。
 
 ## 优化
 
-对于生产构建，您可以对 WebAssembly 二进制文件进行优化。如果您通过网络提供二进制文件，则优化大小可以带来实际差异。如果您主要在服务器上执行 WebAssembly 以执行计算密集型任务，优化速度可能是有利的。您可以在这里找到关于优化（生产）构建的好指南 [here](https://rustwasm.github.io/docs/book/reference/code-size.html)。此外， [rust-wasm 组](https://rustwasm.github.io/docs/book/reference/tools.html) 还有一份可以用来优化和处理 WebAssembly 二进制文件的工具列表。
+对于生产构建，您可以对 WebAssembly 二进制文件进行优化。如果您通过网络提供二进制文件，则优化大小可以产生真正的差异。如果您主要在服务器上执行 WebAssembly 以执行计算密集型任务，则优化速度可能是有益的。您可以在 [这里](https://rustwasm.github.io/docs/book/reference/code-size.html) 找到有关优化（生产）构建的良好指南。此外， [rust-wasm 小组](https://rustwasm.github.io/docs/book/reference/tools.html) 提供了一些用于优化和处理 WebAssembly 二进制文件的工具列表。

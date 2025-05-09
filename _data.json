@@ -13,12 +13,9 @@
       "href": "/examples/"
     },
     {
-      "name": "Deno Deploy",
-      "href": "/deploy/manual/"
-    },
-    {
-      "name": "子托管",
-      "href": "/subhosting/manual/"
+      "name": "服务",
+      "href": "/deploy/manual/",
+      "style": "services"
     }
   ],
   "sidebar": [

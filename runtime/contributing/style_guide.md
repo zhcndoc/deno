@@ -1,6 +1,6 @@
 ---
 title: "Deno 风格指南"
-description: "Comprehensive style guide for contributing to Deno's internal runtime code and standard library. Covers coding conventions, documentation standards, testing requirements, and best practices for TypeScript and Rust development."
+description: "为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。"
 oldUrl:
 - /runtime/manual/contributing/style_guide/
 - /runtime/manual/references/contributing/style_guide/
@@ -8,7 +8,7 @@ oldUrl:
 
 :::note
 
-请注意，这是 Deno 运行时和 Deno 标准库中**内部运行时代码**的风格指南。这并不意味着是面向 Deno 用户的一般风格指南。
+请注意，这是 Deno 运行时和 Deno 标准库中**内部运行时代码**的风格指南。这并不是面向 Deno 用户的一般风格指南。
 
 :::
 
@@ -318,9 +318,11 @@ export function foo(): string {
 }
 ```
 
+常规函数和箭头函数在提升、绑定、参数和构造等方面的行为不同。`function` 关键字清楚地表明了定义函数的意图，提高了可读性和调试追踪能力。
+
 #### 错误消息
 
-从 JavaScript / TypeScript 引发的面向用户的错误消息应清晰、简洁且一致。错误消息应为句子大小写，但不应以句号结束。错误消息应无语法错误和拼写错误，并以美式英语撰写。
+从 JavaScript / TypeScript 抛出的面向用户的错误消息应清晰、简洁且一致。错误消息应采用句首字母大写的形式，但不应以句号结束。错误消息应避免语法错误和拼写错误，并应使用美式英语书写。
 
 :::note
 

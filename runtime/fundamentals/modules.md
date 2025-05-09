@@ -63,15 +63,47 @@ Deno 支持 `with { type: "json" }` 导入属性语法以导入 JSON 文件：
 ```ts
 import data from "./data.json" with { type: "json" };
 
-console.log(data.property); // 访问 JSON 数据作为对象
+console.log(data.property); // Access JSON data as an object
 ```
 
-这是当前 Deno 中唯一支持的导入属性类型。对 `type: text` 和 `type: bytes` 的支持正在考虑未来更新中，并且目前在等待
-[模块和谐提案](https://github.com/whatwg/html/issues/9444)。
+这是 Deno 当前唯一支持的导入属性类型。对 `type: text` 和 `type: bytes` 的支持正在考虑未来的更新中，并且当前在等待
+[Module Harmony proposal](https://github.com/whatwg/html/issues/9444)。
+
+## 数据 URL 导入
+
+Deno 支持导入数据 URL，这允许你导入不在单独文件中的内容。这对测试、原型设计或当你需要以编程方式生成模块时非常有用。
+
+你可以使用 `data:` URL 方案动态创建模块：
+
+```ts
+// 从数据 URL 导入一个简单的 JavaScript 模块
+import * as module from "data:application/javascript;base64,ZXhwb3J0IGNvbnN0IG1lc3NhZ2UgPSAiSGVsbG8gZnJvbSBkYXRhIFVSTCI7";
+console.log(module.message); // 输出: Hello from data URL
+
+// 你也可以使用非 base64 格式
+const plainModule = await import(
+  "data:application/javascript,export function greet() { return 'Hi there!'; }"
+);
+console.log(plainModule.greet()); // 输出: Hi there!
+
+// 带有文本内容的简单示例
+const textModule = await import(
+  "data:text/plain,export default 'This is plain text'"
+);
+console.log(textModule.default); // 输出: This is plain text
+```
+
+数据 URL 格式遵循以下模式：
+
+```sh
+data:[<media type>][;base64],<data>
+```
+
+对于 JavaScript 模块，请使用 `application/javascript` 作为媒体类型。TypeScript 也支持 `application/typescript`。这个功能对在隔离下测试模块和在测试期间创建模拟模块特别有用。
 
 ## 导入第三方模块和库
 
-在 Deno 中处理第三方模块时，使用与本地代码相同的 `import` 语法。第三方模块通常是从远程注册中心导入，并以 `jsr:`、`npm:` 或 `https://` 开头。
+在 Deno 中使用第三方模块时，使用与本地代码相同的 `import` 语法。第三方模块通常从远程注册表导入，并以 `jsr:` 、 `npm:` 或 `https://` 开头。
 
 ```ts title="main.ts"
 import { camelCase } from "jsr:@luca/cases@1.0.0";
@@ -498,4 +530,4 @@ DENO_AUTH_TOKENS=a1b2c3d4e5f6@raw.githubusercontent.com
 
 当令牌不正确或用户没有访问模块的权限时，GitHub 将发出 `404 Not Found` 状态，而不是未授权状态。因此，如果你在命令行中收到访问模块未找到的错误，请检查环境变量设置和个人访问令牌设置。
 
-此外，`deno run -L debug` 应该打印出关于从环境变量解析出的令牌数量的调试信息。如果它觉得任何令牌格式错误，它会打印错误消息。但出于安全原因，它不会打印任何令牌的详细信息。
+此外，`deno run -L debug` 应该打印出关于从环境变量解析出的令牌数量的调试信息。如果它觉得任何令牌格式错误，它会打印错误消息，但出于安全原因，它不会打印任何令牌的详细信息。

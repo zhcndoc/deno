@@ -1,6 +1,6 @@
 ---
-title: "Contributing and support"
-description: "Guide to contributing to the Deno project and ecosystem. Learn about different Deno repositories, contribution guidelines, and how to submit effective pull requests."
+title: "贡献与支持"
+description: "关于如何为 Deno 项目和生态系统做出贡献的指南。了解不同的 Deno 仓库、贡献方针，以及如何提交高质量的拉取请求。"
 oldUrl:
   - /runtime/manual/contributing/
   - /runtime/manual/contributing/contribute
@@ -14,97 +14,51 @@ oldUrl:
 
 ## 项目
 
-在 [`denoland`](https://github.com/denoland) 组织中，有众多的代码库是 Deno 生态系统的一部分。
+在 [`denoland`](https://github.com/denoland) 组织中，存在许多属于 Deno 生态系统的代码库。
 
-这些代码库的范围各异，使用不同的编程语言，并且在贡献方面的难度也有所不同。
+这些代码库的类型多样，使用不同的编程语言，贡献难度也各不相同。
 
-为了帮助您决定哪个代码库可能是开始贡献的最佳选择（和/或符合您的兴趣），以下是一个简短的比较（**代码库主要由粗体字标出的语言构成**）：
+为了帮助您决定哪个代码库可能是开始贡献的最佳选择（或最符合您的兴趣），以下是一个简短的对比（**主要由粗体字标注的语言**）：
 
 ### [deno](https://github.com/denoland/deno)
 
-这是提供 `deno` CLI 的主要代码库。
+这是提供 `deno` 命令行工具的主仓库。
 
-如果您想修复一个错误或向 `deno` 添加一个新特性，这就是您要贡献的代码库。
-
-一些系统，包括大量的 Node.js 兼容层，是用 JavaScript 和 TypeScript 模块实现的。如果您想进行第一次贡献，这些模块是一个很好的起点。
-
-[这里](https://node-test-viewer.deno.dev/results/latest) 是 Node.js 测试用例的列表，包括成功的和失败的案例。审查这些可以提供对兼容性层如何在实践中工作的宝贵见解，以及在哪里可能需要改进。它们还可以作为识别贡献最有影响力的领域的有用指南。
-
-在迭代这些模块时，建议在您的 `cargo` 标志中包括 `--features hmr`。这是一个特殊的开发模式，其中 JS/TS 源在运行时读取，而不包括在二进制文件中。这意味着如果它们被更改，二进制文件无需重建。
-
-要使用下面的命令，您需要首先按照 [此处](building_from_source) 的描述在系统上安装必要的工具。
-
-```sh
-# cargo build
-cargo build --features hmr
-
-# cargo run -- run hello.ts
-cargo run --features hmr -- run hello.ts
-
-# cargo test integration::node_unit_tests::os_test
-cargo test --features hmr integration::node_unit_tests::os_test
-```
-
-还请记得在编辑器设置中引用此功能标志。对于 VSCode 用户，将以下内容合并到您的工作区文件中：
-
-```jsonc
-{
-  "settings": {
-    "rust-analyzer.cargo.features": ["hmr"],
-    // 添加对解析内部 `ext:*` 模块的支持
-    "deno.importMap": "tools/core_import_map.json"
-  }
-}
-```
-
-要在 VSCode 中使用开发版本的 LSP：
-
-1. 安装并启用
-   [Deno VSCode 扩展](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
-2. 更新您的 VSCode 设置并将 `deno.path` 指向您的开发二进制文件：
-
-```jsonc
-// .vscode/settings.json
-{
-  "deno.path": "/path/to/your/deno/target/debug/deno"
-}
-```
-
-语言：**Rust**, **JavaScript**, **TypeScript**
+语言：**Rust**、**JavaScript**、**TypeScript**
 
 ### [deno_std](https://github.com/denoland/deno_std)
 
 Deno 的标准库。
 
-语言：**TypeScript**, WebAssembly
+语言：**TypeScript**、WebAssembly
 
 ### [fresh](https://github.com/denoland/fresh)
 
 下一代网页框架。
 
-语言：**TypeScript**, TSX
+语言：**TypeScript**、TSX
 
 ### [deno_lint](https://github.com/denoland/deno_lint)
 
-驱动 `deno lint` 子命令的代码检查工具。
+驱动 `deno lint` 子命令的代码质量检测工具。
 
 语言：**Rust**
 
 ### [deno_doc](https://github.com/denoland/deno_doc)
 
-文档生成器，驱动 `deno doc` 子命令，以及 https://docs.deno.com/api 和 https://jsr.io 上的参考文档。
+文档生成器，支撑 `deno doc` 命令，以及 https://docs.deno.com/api 和 https://jsr.io 上的参考文档。
 
 语言：**Rust**
 
 ### [rusty_v8](https://github.com/denoland/rusty_v8)
 
-V8 JavaScript 引擎的 Rust 绑定。非常技术性和底层。
+V8 JavaScript 引擎的 Rust 绑定，非常底层且技术性强。
 
 语言：**Rust**
 
 ### [serde_v8](https://github.com/denoland/deno_core/tree/main/serde_v8)
 
-提供 V8 与 Rust 对象之间的双射层的库。基于 [`serde`](https://crates.io/crates/serde) 库。非常技术性和底层。
+提供 V8 与 Rust 对象之间相互转换的库，基于 [`serde`](https://crates.io/crates/serde)。技术性较强。
 
 语言：**Rust**
 
@@ -116,21 +70,21 @@ Deno 的官方 Docker 镜像。
 
 - 请阅读 [风格指南](/runtime/contributing/style_guide)。
 
-- 请不要使 [基准测试](https://deno.land/benchmarks) 变得更差。
+- 请勿让 [基准测试](https://deno.land/benchmarks) 变得更差。
 
-- 在 [社区聊天室](https://discord.gg/deno) 中寻求帮助。
+- 在 [社区聊天室](https://discord.gg/deno) 寻求帮助。
 
-- 如果您将要处理一个问题，请在开始工作之前在问题的评论中提到这一点。
+- 如果您准备处理某个问题，请在开始工作前在该问题的讨论中提及。
 
-- 如果您将要处理一个新特性，请在开始工作之前创建一个问题并与其他贡献者讨论；我们欢迎所有贡献，但并不是所有提议的特性都会被接受。我们不希望您花费数小时工作于可能不会被接受的代码。
+- 如果您准备开发新特性，请在开始工作前创建一个问题并与其他贡献者讨论；我们欢迎所有贡献，但并非所有提案都会被采纳。我们不希望您为可能不会被接受的代码花费数小时。
 
-- 请在论坛中保持专业。我们遵循 [Rust 的行为准则](https://www.rust-lang.org/policies/code-of-conduct) (CoC)。遇到问题？请邮件联系 [ry@tinyclouds.org](mailto:ry@tinyclouds.org)。
+- 在论坛中保持专业。我们遵守 [Rust 的行为准则](https://www.rust-lang.org/policies/code-of-conduct)(CoC)。遇到问题？请联系邮箱 [ry@tinyclouds.org](mailto:ry@tinyclouds.org)。
 
 ## 提交拉取请求
 
-在向任何代码库提交 PR 之前，请确保完成以下事项：
+在向任何仓库提交 PR 之前，请确保完成以下事项：
 
-1. 给 PR 一个描述性的标题。
+1. 给 PR 起一个描述性标题。
 
 良好的 PR 标题示例：
 
@@ -138,59 +92,52 @@ Deno 的官方 Docker 镜像。
 - docs(console): 更新文档字符串
 - feat(doc): 处理嵌套重新导出
 
-不好的 PR 标题示例：
+不佳的 PR 标题示例：
 
 - fix #7123
 - update docs
 - fix bugs
 
-2. 确保有相关问题并在 PR 文本中引用它。
-3. 确保有覆盖更改的测试。
+2. 确保关联了相关问题，并在 PR 内容中引用。
 
-## 向 [`deno`](https://github.com/denoland/deno) 提交 PR
+3. 确保有覆盖变更的测试。
 
-除了上述事项外，请确保：
+## 文档化 API
 
-> 要使用下面的命令，您需要首先按照 [此处](building_from_source) 的描述在系统上安装必要的工具。
+详细记录所有公共 API 十分重要，我们希望尽可能在代码中进行文档注释。这有助于确保代码与文档紧密结合。
 
-1. `cargo test` 通过 - 这将运行 `deno` 的完整测试套件，包括单元测试、集成测试和 Web 平台测试。
+### JavaScript 与 TypeScript
 
-1. 运行 `./tools/format.js` - 这将格式化所有代码以符合代码库中的一致风格。
-
-1. 运行 `./tools/lint.js` - 这将使用 `clippy`（用于 Rust）和 `dlint`（用于 JavaScript）检查常见错误和问题。
-
-## 向 [`deno_std`](https://github.com/denoland/deno_std) 提交 PR
-
-除了上述事项外，请确保：
-
-1. 您编写的所有代码都使用 `TypeScript`（即，不要使用 `JavaScript`）。
-
-1. `deno test --unstable --allow-all` 通过 - 这将运行标准库的完整测试套件。
-
-1. 在代码库的根目录中运行 `deno fmt` - 这将格式化所有代码以符合代码库中的一致风格。
-
-1. 运行 `deno lint` - 这将检查 TypeScript 代码中的常见错误。
-
-## 向 [`fresh`](https://github.com/denoland/fresh) 提交 PR
-
-首先，请确保 [安装 Puppeteer](https://github.com/lucacasonato/deno-puppeteer#installation)。
-然后，请确保运行 `deno task ok` 并成功通过。
-
-## 文档 API
-
-文档所有公共 API 是很重要的，我们希望能与代码内联。这有助于确保代码与文档紧密结合在一起。
-
-### JavaScript 和 TypeScript
-
-所有公开的 API 和类型，无论是通过 `deno` 模块还是全局/`window` 命名空间，都应具有 JSDoc 文档。此文档会被解析并提供给 TypeScript 编译器，因此很容易向下游提供。JSDoc 块位于适用语句的前面，并以 `/**` 开头，以 `*/` 结束。例如：
+所有公开暴露的 API 和类型，无论是通过 `deno` 模块还是全局/`window` 命名空间，都应有 JSDoc 注释。这些注释会被解析，并提供给 TypeScript 编译器，从而方便后续使用。JSDoc 注释块位于对应语句之前，以 `/**` 开始，以 `*/` 结束。例如：
 
 ```ts
 /** 一个简单的 JSDoc 注释 */
 export const FOO = "foo";
 ```
 
-更多信息请见：https://jsdoc.app/
+更多内容请参见：https://jsdoc.app/
 
 ### Rust
 
-使用 [这份指南](https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html) 在 Rust 代码中编写文档注释。
+请按照 [该指南](https://doc.rust-lang.org/rustdoc/how-to-write-documentation.html) 编写 Rust 代码中的文档注释。
+
+## 性能分析
+
+在贡献性能敏感部分时，进行性能分析非常有帮助，可确保改动不带来负面影响或验证优化的效果。
+
+### 使用 Samply
+
+[Samply](https://github.com/mstange/samply) 是一款适用于 macOS 和 Linux 的采样剖析器，与 Deno 配合良好。它可以生成火焰图，帮助你可视化 CPU 时间的分布。
+
+```sh
+# 基本用法
+samply record -r 20000 deno run -A main.js
+```
+
+生成的火焰图可以帮助你识别：
+
+- CPU 时间主要花费的位置（热点）
+- 异常的函数调用
+- 潜在的优化空间
+
+在提交涉及性能改进的贡献时，附上剖析数据可以帮助团队理解和验证你的改进效果。

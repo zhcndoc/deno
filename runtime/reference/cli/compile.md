@@ -158,3 +158,4 @@ $ signtool sign /fd SHA256 main.exe
 ## 在可执行文件中不可用
 
 - [Web 存储 API](/runtime/reference/web_platform_apis/#web-storage)
+- [Web 缓存](/api/web/~/Cache)

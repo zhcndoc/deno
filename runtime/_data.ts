@@ -283,10 +283,6 @@ export const sidebar = [
             href: "/runtime/contributing/architecture/",
           },
           {
-            title: "从源代码构建",
-            href: "/runtime/contributing/building_from_source/",
-          },
-          {
             title: "分析",
             href: "/runtime/contributing/profiling/",
           },

@@ -219,5 +219,4 @@ deno upgrade --version 1.0.1
 
 ## 从源代码构建
 
-有关如何从源代码构建的信息可以在
-[`贡献`](/runtime/contributing/building_from_source/) 章节中找到。
+有关如何从源代码构建的信息可以在 [`从源代码构建`](https://github.com/denoland/deno/blob/main/.github/CONTRIBUTING.md#building-from-source) 指南中找到。

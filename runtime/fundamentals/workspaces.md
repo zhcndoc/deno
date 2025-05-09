@@ -452,3 +452,49 @@ export function subtract(a: number, b: number): number {
 2. 在包之间共享代码而无需发布到注册表
 3. 一起测试和开发互相依赖的模块
 4. 逐步将单体代码库迁移到模块化架构
+
+## 在 package.json 中使用工作区协议
+
+Deno 支持 `package.json` 文件中的工作区协议说明符。这些在您有依赖于工作区内其他包的 npm 包时非常有用：
+
+```json title="package.json"
+{
+  "name": "my-npm-package",
+  "dependencies": {
+    "another-workspace-package": "workspace:*"
+  }
+}
+```
+
+以下工作区协议说明符受支持：
+
+- `workspace:*` - Use the latest version available in the workspace
+- `workspace:~` - Use the workspace version with only patch-level changes
+- `workspace:^` - Use the workspace version with semver-compatible changes
+
+## npm 和 pnpm 工作区兼容性
+
+Deno 与 `package.json` 中定义的标准 npm 工作区无缝协作：
+
+```json title="package.json"
+{
+  "workspaces": ["packages/*"]
+}
+```
+
+对于 pnpm 用户，Deno 支持典型的 pnpm 工作区配置。然而，如果您使用的是 `pnpm-workspace.yaml` 文件，您需要迁移到 `deno.json` 工作区配置：
+
+```yaml title="pnpm-workspace.yaml (to be replaced)"
+packages:
+  - "packages/*"
+```
+
+应该转换为：
+
+```json title="deno.json"
+{
+  "workspace": ["packages/*"]
+}
+```
+
+这允许在迁移或混合项目中，Deno 与 npm/pnpm 生态系统之间实现顺畅集成。
