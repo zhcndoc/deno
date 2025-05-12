@@ -12,7 +12,7 @@ oldUrl:
 
 全局 `Deno` 命名空间包含不符合网络标准的 API，包括用于从文件读取、打开 TCP 套接字、提供 HTTP 服务和执行子进程等的 API。
 
-<comp.CTA href="/api/deno" type="runtime">Explore all Deno APIs</comp.CTA>
+<a href="/api/deno/" class="docs-cta runtime-cta">Explore all Deno APIs</a>
 
 以下是一些重要的 Deno API 的高亮介绍。
 

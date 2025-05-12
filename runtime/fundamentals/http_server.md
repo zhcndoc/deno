@@ -230,6 +230,8 @@ deno serve server.ts
 
 服务器将启动并在控制台中显示消息。打开您的浏览器并导航到 [http://localhost:8000/](http://localhost:8000/) 以查看用户代理信息。
 
+`Deno.ServeDefaultExport` 接口定义了可以与 `deno serve` 命令一起使用的默认导出的结构。为了确保您的代码经过正确的类型检查，请确保在 `export default { ... }` 中添加 `satisfies Deno.ServeDefaultExport`。
+
 ## 在这些示例基础上构建
 
 您可能希望在这些示例的基础上扩展，创建更复杂的服务器。Deno 推荐使用 [Oak](https://jsr.io/@oak/oak) 来构建 web 服务器。Oak 是一个用于 Deno HTTP 服务器的中间件框架，旨在表达和易于使用。它提供了一个简单的方法来创建支持中间件的 web 服务器。查看 [Oak 文档](https://oakserver.github.io/oak/) 以获取有关如何定义路由的示例。
