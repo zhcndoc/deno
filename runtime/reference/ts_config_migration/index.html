@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Configuring TypeScript - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="Configuring TypeScript"/><meta name="twitter:description" content="A guide to TypeScript configuration in Deno. Learn about compiler options, type checking JavaScript, JSDoc support, type declarations, and configuring TypeScript for cross-platform compatibility."/><meta name="twitter:image" content="https://docs.deno.com/runtime/reference/ts_config_migration/index.png"/><meta name="twitter:image:alt" content="A guide to TypeScript configuration in Deno. Learn about compiler options, type checking JavaScript, JSDoc support, type declarations, and configuring TypeScript for cross-platform compatibility."/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="Configuring TypeScript"/><meta property="og:description" content="A guide to TypeScript configuration in Deno. Learn about compiler options, type checking JavaScript, JSDoc support, type declarations, and configuring TypeScript for cross-platform compatibility."/><meta property="og:image" content="https://docs.deno.com/runtime/reference/ts_config_migration/index.png"/><meta property="og:image:alt" content="A guide to TypeScript configuration in Deno. Learn about compiler options, type checking JavaScript, JSDoc support, type declarations, and configuring TypeScript for cross-platform compatibility."/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined" data-active="true">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined">示例</a><a href="/deploy/manual/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/deploy/manual/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink">deno bench</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink" data-active="true">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/reference/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">参考指南</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">Configuring TypeScript</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#javascript-%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">JavaScript 的类型检查 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-javascript-%E4%B8%AD%E4%BD%BF%E7%94%A8-jsdoc" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 JavaScript 中使用 JSDoc </a></li><li class="m-2 leading-4"><a href="#%E8%B7%B3%E8%BF%87%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">跳过类型检查 </a></li><li class="m-2 leading-4"><a href="#%E5%B0%86-js-%E6%96%87%E4%BB%B6%E9%87%8D%E5%91%BD%E5%90%8D%E4%B8%BA-ts-%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">将 JS 文件重命名为 TS 文件 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno-%E4%B8%AD%E9%85%8D%E7%BD%AE-typescript" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 Deno 中配置 TypeScript </a></li><li class="m-2 leading-4"><a href="#ts-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">TS 编译器选项 </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8-%22lib%22-%E5%B1%9E%E6%80%A7" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用 &quot;lib&quot; 属性 </a></li><li class="m-2 leading-4"><a href="#%E9%92%88%E5%AF%B9-deno-%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">针对 Deno 和浏览器 </a></li><li class="m-2 leading-4"><a href="#%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">类型和类型声明 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入时提供类型 </a></li><li class="m-2 leading-4"><a href="#%E6%89%98%E7%AE%A1%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">托管时提供类型 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%40ts-self-types" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">@ts-self-types </a></li><li class="m-2 leading-4"><a href="#x-typescript-types" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">X-TypeScript-Types </a></li></ul></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E6%88%96%E5%85%A8%E5%B1%80%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用环境或全局类型 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">三斜杠指令 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22types%22" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 deno.json 中提供 &quot;types&quot; </a></li></ul></li><li class="m-2 leading-4"><a href="#%E5%AF%B9-web-%E5%B7%A5%E4%BD%9C%E8%80%85%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">对 Web 工作者进行类型检查 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4-1" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">三斜杠指令 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22lib%22-%E8%AE%BE%E7%BD%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 deno.json 中提供 &quot;lib&quot; 设置 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E9%87%8D%E8%A6%81%E4%BA%8B%E9%A1%B9" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">重要事项 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E8%AF%AD%E4%B9%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">类型声明语义 </a></li></ul></li><li class="m-2 leading-4"><a href="#javascript-%E5%9C%A8%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">JavaScript 在类型检查时的行为 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%86%85%E9%83%A8%E9%80%BB%E8%BE%91" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">内部逻辑 </a></li></ul></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>Configuring TypeScript</h1><div><p>Deno 的灵活性体现在对 TypeScript 和 JavaScript 的平等对待。
+无论您是从 JavaScript 迁移到 TypeScript，还是反之，Deno
+都提供了便利功能来帮助您顺利过渡。</p>
+<h2 id="javascript-%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" tabindex="-1">JavaScript 的类型检查 <a class="header-anchor" href="#javascript-%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>您可能希望使您的 JavaScript 更加符合类型，而不必在每个地方添加类型注解。Deno 支持使用 TypeScript 类型检查器来检查 JavaScript 的类型。您可以通过向文件添加检查 JavaScript 的 pragma 来标记单个文件：</p>
+<div class="relative"><pre><code class="highlight notranslate language-js"><span class="token comment">// @ts-check</span>
+</code></pre>
+
+      <button id="copy-button-9" class="copyButton" data-copy="// @ts-check
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这将导致类型检查器推断 JavaScript 代码的类型信息，并将任何问题作为诊断问题提出。</p>
+<p>您可以通过提供配置文件并将 check JS 选项设置为 <code>true</code> 来为程序中的所有 JavaScript 文件启用此功能，如下所示。然后在命令行运行时使用 <code>--config</code> 选项。</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"checkJs"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-16" class="copyButton" data-copy="{
+  &quot;compilerOptions&quot;: {
+    &quot;checkJs&quot;: true
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E5%9C%A8-javascript-%E4%B8%AD%E4%BD%BF%E7%94%A8-jsdoc" tabindex="-1">在 JavaScript 中使用 JSDoc <a class="header-anchor" href="#%E5%9C%A8-javascript-%E4%B8%AD%E4%BD%BF%E7%94%A8-jsdoc"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在对 JavaScript 进行类型检查或将 JavaScript 导入到 TypeScript 时，JSDoc 注释可以提供超出代码本身可以推断的额外类型信息。如果您在代码中以支持的
+<a href="https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html">TypeScript JSDoc</a> 进行内联注释，Deno 将无缝支持这一点。</p>
+<p>例如，要设置数组的类型，可以使用以下 JSDoc 注释：</p>
+<div class="relative"><pre><code class="highlight notranslate language-js"><span class="token comment">/** @type {string[]} */</span>
+<span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-26" class="copyButton" data-copy="/** @type {string[]} */
+const a = [];
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E8%B7%B3%E8%BF%87%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" tabindex="-1">跳过类型检查 <a class="header-anchor" href="#%E8%B7%B3%E8%BF%87%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>您可能有正在尝试的 TypeScript 代码，其中语法有效但并不完全安全。您可以通过传递 <code>--no-check</code> 标志来绕过整个程序的类型检查。</p>
+<p>如果您已启用 check JS，还可以通过使用 <code>nocheck</code> pragma 跳过整个文件的类型检查，包括 JavaScript：</p>
+<div class="relative"><pre><code class="highlight notranslate language-js"><span class="token comment">// @ts-nocheck</span>
+</code></pre>
+
+      <button id="copy-button-36" class="copyButton" data-copy="// @ts-nocheck
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E5%B0%86-js-%E6%96%87%E4%BB%B6%E9%87%8D%E5%91%BD%E5%90%8D%E4%B8%BA-ts-%E6%96%87%E4%BB%B6" tabindex="-1">将 JS 文件重命名为 TS 文件 <a class="header-anchor" href="#%E5%B0%86-js-%E6%96%87%E4%BB%B6%E9%87%8D%E5%91%BD%E5%90%8D%E4%B8%BA-ts-%E6%96%87%E4%BB%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>TypeScript 文件受益于 TypeScript 编译器能够对您的代码进行更彻底的安全检查。这通常被称为 <em>严格模式</em>。
+当您将 <code>.js</code> 文件重命名为 <code>.ts</code> 时，您可能会看到 TypeScript 之前无法检测到的新类型错误。</p>
+<h2 id="%E5%9C%A8-deno-%E4%B8%AD%E9%85%8D%E7%BD%AE-typescript" tabindex="-1">在 Deno 中配置 TypeScript <a class="header-anchor" href="#%E5%9C%A8-deno-%E4%B8%AD%E9%85%8D%E7%BD%AE-typescript"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>TypeScript 提供了许多配置选项，对于刚刚开始使用 TS 的人来说可能会觉得令人生畏。Deno 旨在简化 TypeScript 的使用，而不是让您淹没在无数设置中。Deno 配置 TypeScript 以 <strong>开箱即用</strong>。无需额外的配置麻烦！</p>
+<p>但是，如果您确实想更改 TypeScript 编译器选项，Deno 允许您在 <code>deno.json</code> 文件中进行更改。在命令行中提供路径，或使用默认路径。例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-console">deno run --config ./deno.json main.ts
+</code></pre>
+
+      <button id="copy-button-52" class="copyButton" data-copy="deno run --config ./deno.json main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>如果您正在创建需要配置文件的库，请记住，您的所有 TS 模块的消费者也需要该配置文件。此外，配置文件中可能有使其他 TypeScript 模块不兼容的设置。</p>
+<p>
+</div>
+</p>
+<h2 id="ts-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9" tabindex="-1">TS 编译器选项 <a class="header-anchor" href="#ts-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>以下是可以更改的编译器选项的表格，它们在 Deno 中的默认值以及关于该选项的其他说明：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认值</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>allowJs</code></td>
+<td><code>true</code></td>
+<td>这几乎永远不需要更改</td>
+</tr>
+<tr>
+<td><code>allowUnreachableCode</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>allowUnusedLabels</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>checkJs</code></td>
+<td><code>false</code></td>
+<td>如果为 <code>true</code>，则会导致 TypeScript 对 JavaScript 进行类型检查</td>
+</tr>
+<tr>
+<td><code>jsx</code></td>
+<td><code>&quot;react&quot;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>jsxFactory</code></td>
+<td><code>&quot;React.createElement&quot;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>jsxFragmentFactory</code></td>
+<td><code>&quot;React.Fragment&quot;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>keyofStringsOnly</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>lib</code></td>
+<td><code>[ &quot;deno.window&quot; ]</code></td>
+<td>该选项的默认值根据 Deno 中的其他设置而有所不同。如果提供，则会覆盖默认值。有关更多信息，请参见下文。</td>
+</tr>
+<tr>
+<td><code>noErrorTruncation</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noFallthroughCasesInSwitch</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noImplicitAny</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noImplicitOverride</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noImplicitReturns</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noImplicitThis</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noImplicitUseStrict</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noStrictGenericChecks</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noUnusedLocals</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noUnusedParameters</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>noUncheckedIndexedAccess</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>reactNamespace</code></td>
+<td><code>React</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>strict</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>strictBindCallApply</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>strictFunctionTypes</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>strictPropertyInitialization</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>strictNullChecks</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>suppressExcessPropertyErrors</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>suppressImplicitAnyIndexErrors</code></td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>useUnknownInCatchVariables</code></td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>有关全系列编译器选项及其如何影响 TypeScript 的信息，请参阅
+<a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">TypeScript 手册</a>。</p>
+<h2 id="%E4%BD%BF%E7%94%A8-%22lib%22-%E5%B1%9E%E6%80%A7" tabindex="-1">使用 &quot;lib&quot; 属性 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8-%22lib%22-%E5%B1%9E%E6%80%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>如果您正在处理一个向多个运行时（如浏览器）发送代码的项目，您可以通过 <code>compilerOptions</code> 中的 &quot;lib&quot; 属性调整默认类型。</p>
+<p>对用户感兴趣的内置库包括：</p>
+<ul>
+<li><code>&quot;deno.ns&quot;</code> - 包含所有自定义的 <code>Deno</code> 全局命名空间 API 以及 Deno 对 <code>import.meta</code> 的扩展。通常这不会与其他库或全局类型冲突。</li>
+<li><code>&quot;deno.unstable&quot;</code> - 包含额外的不稳定 <code>Deno</code> 全局命名空间 API。</li>
+<li><code>&quot;deno.window&quot;</code> - 这是在检查 Deno 主运行时脚本时使用的 &quot;默认&quot; 库。它包括 <code>&quot;deno.ns&quot;</code> 以及用于内置的扩展的其他类型库。此库会与标准 TypeScript 库（如 <code>&quot;dom&quot;</code> 和 <code>&quot;dom.iterable&quot;</code>）冲突。</li>
+<li><code>&quot;deno.worker&quot;</code> - 这是在检查 Deno 网络工作者脚本时使用的库。有关网络工作者的更多信息，请查阅
+<a href="/runtime/reference/ts_config_migration/#type-checking-web-workers">Web 工作者的类型检查</a>。</li>
+<li><code>&quot;dom.asynciterable&quot;</code> - TypeScript 当前不包括 Deno 实现的 DOM 异步可迭代对象（以及多个浏览器），因此我们自己实现了它，直到它在 TypeScript 中可用。</li>
+</ul>
+<p>这些是不会默认启用但在编写计划在其他运行时中也能正常工作的代码时实用的公共库：</p>
+<ul>
+<li><code>&quot;dom&quot;</code> - 包含 TypeScript 的主要浏览器全局库。类型定义在许多方面与 <code>&quot;deno.window&quot;</code> 冲突，因此如果使用了 <code>&quot;dom&quot;</code>，则考虑仅使用 <code>&quot;deno.ns&quot;</code> 来暴露 Deno 特定的 API。</li>
+<li><code>&quot;dom.iterable&quot;</code> - 浏览器全局库的可迭代扩展。</li>
+<li><code>&quot;scripthost&quot;</code> - Microsoft Windows 脚本主机的库。</li>
+<li><code>&quot;webworker&quot;</code> - 浏览器中网络工作者的主要库。与 <code>&quot;dom&quot;</code> 一样，这会与 <code>&quot;deno.window&quot;</code> 或 <code>&quot;deno.worker&quot;</code> 冲突，因此考虑仅使用 <code>&quot;deno.ns&quot;</code> 来暴露 Deno 特定的 API。</li>
+<li><code>&quot;webworker.importscripts&quot;</code> - 使 <code>importScripts()</code> API 在网络工作者中可用的库。</li>
+<li><code>&quot;webworker.iterable&quot;</code> - 将可迭代添加到网络工作者中的对象的库。现代浏览器支持此功能。</li>
+</ul>
+<h2 id="%E9%92%88%E5%AF%B9-deno-%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8" tabindex="-1">针对 Deno 和浏览器 <a class="header-anchor" href="#%E9%92%88%E5%AF%B9-deno-%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>您可能希望编写可以无缝运行于 Deno 和浏览器中的代码。在这种情况下，您需要在使用任何独占于某一个环境的 API 之前有条件地检查执行环境。在这种情况下，典型的 <code>compilerOptions</code> 配置可能如下所示：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"lib"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"dom"</span><span class="token punctuation">,</span> <span class="token string">"dom.iterable"</span><span class="token punctuation">,</span> <span class="token string">"dom.asynciterable"</span><span class="token punctuation">,</span> <span class="token string">"deno.ns"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-484" class="copyButton" data-copy="{
+  &quot;compilerOptions&quot;: {
+    &quot;lib&quot;: [&quot;dom&quot;, &quot;dom.iterable&quot;, &quot;dom.asynciterable&quot;, &quot;deno.ns&quot;]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>这应该允许大多数代码在 Deno 中被正确地类型检查。</p>
+<p>如果您预计将在使用 <code>--unstable</code> 标志的 Deno 中运行代码，那么您还应该将该库添加到配置中：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"lib"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"dom"</span><span class="token punctuation">,</span>
+      <span class="token string">"dom.iterable"</span><span class="token punctuation">,</span>
+      <span class="token string">"dom.asynciterable"</span><span class="token punctuation">,</span>
+      <span class="token string">"deno.ns"</span><span class="token punctuation">,</span>
+      <span class="token string">"deno.unstable"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-491" class="copyButton" data-copy="{
+  &quot;compilerOptions&quot;: {
+    &quot;lib&quot;: [
+      &quot;dom&quot;,
+      &quot;dom.iterable&quot;,
+      &quot;dom.asynciterable&quot;,
+      &quot;deno.ns&quot;,
+      &quot;deno.unstable&quot;
+    ]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>通常情况下，当您在 TypeScript 中使用 <code>&quot;lib&quot;</code> 选项时，您还需要包括一个 &quot;es&quot; 库。在 <code>&quot;deno.ns&quot;</code> 和 <code>&quot;deno.unstable&quot;</code> 的情况下，它们在引入时会自动包含 <code>&quot;esnext&quot;</code>。</p>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>如果您遇到类型错误，例如 <strong>找不到 <code>document</code> 或 <code>HTMLElement</code></strong>，则可能您使用的库依赖于 DOM。这在设计为在浏览器内和服务器端运行的包中很常见。默认情况下，Deno 仅包括直接支持的库。假设该包正确识别其在运行时所处的环境，那么使用 DOM 库进行类型检查是 &quot;安全&quot; 的。</p>
+<p>
+</div>
+</p>
+<h2 id="%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E" tabindex="-1">类型和类型声明 <a class="header-anchor" href="#%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 运用 <em>无非标准模块解析</em> 的设计原则。当 TypeScript 检查一个文件时，它只关注其类型。相比之下，<code>tsc</code> 编译器使用复杂的逻辑来解析这些类型。默认情况下，<code>tsc</code> 期望带有扩展名的模糊模块描述符（例如 <code>.ts</code>、<code>.d.ts</code> 或 <code>.js</code>）。然而，Deno 处理的是明确的描述符。</p>
+<p>这里的有趣之处在于：假设您希望使用已经转译为 JavaScript 的 TypeScript 文件及其类型定义文件（<code>mod.js</code> 和 <code>mod.d.ts</code>）。如果您将 <code>mod.js</code> 导入到 Deno，它会严格遵循您的请求并导入 JavaScript 文件。但这里有个问题：您的代码不会像 TypeScript 考虑 <code>mod.d.ts</code> 文件和 <code>mod.js</code> 文件一样得到全面的类型检查。</p>
+<p>为了解决这个问题，Deno 提供了两种解决方案，分别适用于特定场景：</p>
+<p><strong>作为导入者：</strong> 如果您知道应该应用于 JavaScript 模块的类型，可以通过显式指定类型来增强类型检查。</p>
+<p><strong>作为提供者：</strong> 如果您是模块的提供者或宿主，则所有使用该模块的人受益于不必担心类型解析。</p>
+<h2 id="%E5%AF%BC%E5%85%A5%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B" tabindex="-1">导入时提供类型 <a class="header-anchor" href="#%E5%AF%BC%E5%85%A5%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>如果您正在使用一个 JavaScript 模块，并且您已经创建了类型（<code>.d.ts</code> 文件）或以其他方式获取了您想要使用的类型，您可以指示 Deno 在类型检查时使用该文件，而不是 JavaScript 文件，使用 <code>@ts-types</code> 编译提示。</p>
+<p>例如，如果您有一个 JavaScript 模块 <code>coolLib.js</code> 和一个单独的 <code>coolLib.d.ts</code> 文件，您可以这样导入它：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// @ts-types="./coolLib.d.ts"</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> coolLib <span class="token keyword">from</span> <span class="token string">"./coolLib.js"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-531" class="copyButton" data-copy="// @ts-types=&quot;./coolLib.d.ts&quot;
+import * as coolLib from &quot;./coolLib.js&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在对 <code>coolLib</code> 进行类型检查并在文件中使用时，<code>coolLib.d.ts</code> 的 TypeScript 类型定义将优先于查看 JavaScript 文件。</p>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>在过去，<code>@ts-types</code> 指令被称为 <code>@deno-types</code>。这个别名仍然有效，但不再推荐使用。请使用 <code>@ts-types</code>。</p>
+<p>
+</div>
+</p>
+<h2 id="%E6%89%98%E7%AE%A1%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B" tabindex="-1">托管时提供类型 <a class="header-anchor" href="#%E6%89%98%E7%AE%A1%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>如果您控制模块的源代码或其在 Web 服务器上的文件托管方式，有两种方式可以让 Deno 知道特定模块的类型（这无需导入者采取任何特别操作）。</p>
+<h3 id="%40ts-self-types" tabindex="-1">@ts-self-types <a class="header-anchor" href="#%40ts-self-types"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>如果您提供一个 JavaScript 文件，并希望提供一个声明文件来包含此文件的类型，您可以在 JS 文件中指定一个 <code>@ts-self-types</code> 指令，指向声明文件。</p>
+<p>例如，如果您制作一个 <code>coolLib.js</code> 库，并在 <code>coolLib.d.ts</code> 中编写其类型定义，<code>ts-self-types</code> 指令将如下所示：</p>
+<div><div class="markdownBlockTitle">coolLib.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token comment">// @ts-self-types="./coolLib.d.ts"</span>
+
+<span class="token comment">// ... JavaScript 的其他部分 ...</span>
+</code></pre>
+
+      <button id="copy-button-559" class="copyButton" data-copy="// @ts-self-types=&quot;./coolLib.d.ts&quot;
+
+// ... JavaScript 的其他部分 ...
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><h3 id="x-typescript-types" tabindex="-1">X-TypeScript-Types <a class="header-anchor" href="#x-typescript-types"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno 支持用于远程模块的头部，它指示 Deno 在何处找到给定模块的类型。例如，对 <code>https://example.com/coolLib.js</code> 的响应可能如下所示：</p>
+<div class="relative"><pre><code class="highlight notranslate language-console">HTTP/1.1 200 OK
+Content-Type: application/javascript; charset=UTF-8
+Content-Length: 648
+X-TypeScript-Types: ./coolLib.d.ts
+</code></pre>
+
+      <button id="copy-button-566" class="copyButton" data-copy="HTTP/1.1 200 OK
+Content-Type: application/javascript; charset=UTF-8
+Content-Length: 648
+X-TypeScript-Types: ./coolLib.d.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>当看到这个头部时，Deno 会尝试检索 <code>https://example.com/coolLib.d.ts</code> 并在对原始模块进行类型检查时使用它。</p>
+<h2 id="%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E6%88%96%E5%85%A8%E5%B1%80%E7%B1%BB%E5%9E%8B" tabindex="-1">使用环境或全局类型 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E6%88%96%E5%85%A8%E5%B1%80%E7%B1%BB%E5%9E%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>总体而言，最好在 Deno 中使用模块/UMD 类型定义，模块明确导入其依赖的类型。模块化类型定义可以通过类型定义中的 <code>declare global</code> 表达
+<a href="https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html">全局作用域的增强</a>。例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">declare</span> global <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> AGlobalString<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-576" class="copyButton" data-copy="declare global {
+  var AGlobalString: string;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这会使 <code>AGlobalString</code> 在导入类型定义时可用于全局命名空间。</p>
+<p>在某些情况下，当利用其他现有类型库时，可能无法利用模块化类型定义。因此，在类型检查程序时，有一些方法可以包含任意类型定义。</p>
+<h3 id="%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4" tabindex="-1">三斜杠指令 <a class="header-anchor" href="#%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>此选项将类型定义与代码本身关联。通过在 TS 文件（非 JS 文件！）中的模块类型附近添加三斜杠的 <code>types</code> 指令，类型检查该文件将包括类型定义。例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/// &lt;reference types="./types.d.ts" /></span>
+</code></pre>
+
+      <button id="copy-button-589" class="copyButton" data-copy="/// <reference types=&quot;./types.d.ts&quot; />
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>提供的描述符与 Deno 中的其他描述符一样进行解析，这意味着它需要一个扩展名，并且相对于引用它的模块。它也可以是一个完全合格的 URL：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/// &lt;reference types="https://deno.land/x/pkg@1.0.0/types.d.ts" /></span>
+</code></pre>
+
+      <button id="copy-button-593" class="copyButton" data-copy="/// <reference types=&quot;https://deno.land/x/pkg@1.0.0/types.d.ts&quot; />
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22types%22" tabindex="-1">在 deno.json 中提供 &quot;types&quot; <a class="header-anchor" href="#%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22types%22"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>另一种选择是在您的 <code>deno.json</code> 中为 <code>&quot;compilerOptions&quot;</code> 提供一个 <code>&quot;types&quot;</code> 值。例如：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"types"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"./types.d.ts"</span><span class="token punctuation">,</span>
+      <span class="token string">"https://deno.land/x/pkg@1.0.0/types.d.ts"</span><span class="token punctuation">,</span>
+      <span class="token string">"/Users/me/pkg/types.d.ts"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-600" class="copyButton" data-copy="{
+  &quot;compilerOptions&quot;: {
+    &quot;types&quot;: [
+      &quot;./types.d.ts&quot;,
+      &quot;https://deno.land/x/pkg@1.0.0/types.d.ts&quot;,
+      &quot;/Users/me/pkg/types.d.ts&quot;
+    ]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>与上面的三斜杠引用类似，提供的 <code>&quot;types&quot;</code> 数组中的描述符将像 Deno 中的其他描述符一样进行解析。在相对描述符的情况下，它将相对于配置文件的路径进行解析。通过指定 <code>--config=path/to/file</code> 标志确保 Deno 使用该文件。</p>
+<h2 id="%E5%AF%B9-web-%E5%B7%A5%E4%BD%9C%E8%80%85%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" tabindex="-1">对 Web 工作者进行类型检查 <a class="header-anchor" href="#%E5%AF%B9-web-%E5%B7%A5%E4%BD%9C%E8%80%85%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>当 Deno 在 Web 工作者中加载 TypeScript 模块时，它将自动对模块及其依赖项进行类型检查，以确保符合 Deno 网络工作者库。这在其他上下文中（如 <code>deno check</code> 或编辑器中）可能会带来挑战。您可以通过几种方式指示 Deno 使用网络工作者库，而不是标准 Deno 库。</p>
+<h3 id="%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4-1" tabindex="-1">三斜杠指令 <a class="header-anchor" href="#%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>此选项将库设置与代码本身关联。通过在工作者脚本的入口文件顶部添加以下三斜杠指令，Deno 将会将其作为 Deno 网络工作者脚本进行类型检查，无论该模块如何分析：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/// &lt;reference no-default-lib="true" /></span>
+<span class="token comment">/// &lt;reference lib="deno.worker" /></span>
+</code></pre>
+
+      <button id="copy-button-616" class="copyButton" data-copy="/// <reference no-default-lib=&quot;true&quot; />
+/// <reference lib=&quot;deno.worker&quot; />
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>第一个指令确保不使用其他默认库。如果省略此项，您将收到一些冲突的类型定义，因为 Deno 会尝试应用标准 Deno 库。第二个指令则告诉 Deno 应用内置的 Deno 网络工作者类型定义及相关依赖库（如 <code>&quot;esnext&quot;</code>）。</p>
+<p>这种方法的一个缺点是，代码在其他非 Deno 平台（如 <code>tsc</code>）上的可移植性较差，因为只有 Deno 内置了 <code>&quot;deno.worker&quot;</code> 库。</p>
+<h3 id="%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22lib%22-%E8%AE%BE%E7%BD%AE" tabindex="-1">在 deno.json 中提供 &quot;lib&quot; 设置 <a class="header-anchor" href="#%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22lib%22-%E8%AE%BE%E7%BD%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>您可以在 <code>deno.json</code> 文件中提供 &quot;lib&quot; 选项来指示 Deno 使用库文件。例如：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"target"</span><span class="token operator">:</span> <span class="token string">"esnext"</span><span class="token punctuation">,</span>
+    <span class="token property">"lib"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"deno.worker"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-629" class="copyButton" data-copy="{
+  &quot;compilerOptions&quot;: {
+    &quot;target&quot;: &quot;esnext&quot;,
+    &quot;lib&quot;: [&quot;deno.worker&quot;]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>然后在运行 deno 子命令时，您需要传递 <code>--config path/to/file</code> 参数，或者如果您正在使用利用 Deno 语言服务器的 IDE，则设置 <code>deno.config</code> 设置。</p>
+<p>如果您还有非工作者脚本，您要么需要省略 <code>--config</code> 参数，要么配置一个适合您的非工作者脚本的配置。</p>
+<h2 id="%E9%87%8D%E8%A6%81%E4%BA%8B%E9%A1%B9" tabindex="-1">重要事项 <a class="header-anchor" href="#%E9%87%8D%E8%A6%81%E4%BA%8B%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E8%AF%AD%E4%B9%89" tabindex="-1">类型声明语义 <a class="header-anchor" href="#%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E8%AF%AD%E4%B9%89"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>类型声明文件（<code>.d.ts</code> 文件）遵循与 Deno 中其他文件相同的语义。这意味着声明文件被假定为模块声明（<em>UMD 声明</em>），而不是环境/全局声明。Deno 将如何处理环境/全局声明是不可预测的。</p>
+<p>此外，如果类型声明导入了其他内容，例如另一个 <code>.d.ts</code> 文件，它的解析遵循 Deno 的正常导入规则。对于许多生成的并可在网上获得的 <code>.d.ts</code> 文件，它们可能与 Deno 不兼容。</p>
+<p><a href="https://esm.sh">esm.sh</a> 是一个提供默认类型声明的 CDN（通过 <code>X-TypeScript-Types</code> 头部）。通过在导入 URL 后附加 <code>?no-dts</code> 可以禁用它：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"https://esm.sh/react?no-dts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-651" class="copyButton" data-copy="import React from &quot;https://esm.sh/react?no-dts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="javascript-%E5%9C%A8%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA" tabindex="-1">JavaScript 在类型检查时的行为 <a class="header-anchor" href="#javascript-%E5%9C%A8%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>当您在 Deno 中将 JavaScript 代码导入 TypeScript 时，即使您已将 <code>checkJs</code> 设置为 <code>false</code>（这是 Deno 的默认行为），TypeScript 编译器仍会分析 JavaScript 模块。它试图从该模块推断导出形状，以验证在您的 TypeScript 文件中的导入。</p>
+<p>通常，这在导入标准 ES 模块时不会出现问题。然而，在某些情况下，TypeScript 的分析可能会失败，例如，在具有特殊打包或全局 UMD（通用模块定义）模块的情况下。面对这种情况，最好的方法是使用前面提到的某种形式的类型信息。</p>
+<h3 id="%E5%86%85%E9%83%A8%E9%80%BB%E8%BE%91" tabindex="-1">内部逻辑 <a class="header-anchor" href="#%E5%86%85%E9%83%A8%E9%80%BB%E8%BE%91"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>虽然理解 Deno 如何在内部工作并不是使用 TypeScript 和 Deno 时的必要条件，但理解其工作原理是有帮助的。</p>
+<p>在执行或编译任何代码之前，Deno 通过解析根模块生成一个模块图，然后检测其所有依赖，并递归检索和解析这些模块，直到获取所有依赖。</p>
+<p>对于每个依赖项，有两个潜在的 &quot;插槽&quot; 被使用。一个是代码插槽，一个是类型插槽。随着模块图的填充，如果模块是可以发射到 JavaScript 的内容，则填充代码插槽，而类型依赖项，如 <code>.d.ts</code> 文件，则填充类型插槽。</p>
+<p>当构建模块图并需要进行类型检查时，Deno 启动 TypeScript 编译器，并将需要作为 JavaScript 发射的模块的名称提供给它。在该过程中，TypeScript 编译器会请求额外的模块，而 Deno 将查看依赖的插槽，在填充类型插槽后再提供代码插槽。</p>
+<p>这意味着当您导入一个 <code>.d.ts</code> 模块或使用上述某个解决方案为 JavaScript 代码提供替代类型模块时，提供给 TypeScript 的即是该类型模块，而不是解析模块时的代码。</p>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/reference/ts_config_migration.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2 !mb-4">谢谢！反馈已收到。 <span aria-hidden="true">✅</span></p><div class="space-y-1"><label for="feedback-comment">还有其他意见吗？（<i>可选</i>）</label><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment"></textarea></div><div class="space-y-1"><label for="feedback-contact">电子邮件地址（<i>可选</i>）</label><input type="email" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" value/></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送更多反馈</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#javascript-%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">JavaScript 的类型检查 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-javascript-%E4%B8%AD%E4%BD%BF%E7%94%A8-jsdoc" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 JavaScript 中使用 JSDoc </a></li><li class="m-2 leading-4"><a href="#%E8%B7%B3%E8%BF%87%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">跳过类型检查 </a></li><li class="m-2 leading-4"><a href="#%E5%B0%86-js-%E6%96%87%E4%BB%B6%E9%87%8D%E5%91%BD%E5%90%8D%E4%B8%BA-ts-%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">将 JS 文件重命名为 TS 文件 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno-%E4%B8%AD%E9%85%8D%E7%BD%AE-typescript" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 Deno 中配置 TypeScript </a></li><li class="m-2 leading-4"><a href="#ts-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">TS 编译器选项 </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8-%22lib%22-%E5%B1%9E%E6%80%A7" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用 &quot;lib&quot; 属性 </a></li><li class="m-2 leading-4"><a href="#%E9%92%88%E5%AF%B9-deno-%E5%92%8C%E6%B5%8F%E8%A7%88%E5%99%A8" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">针对 Deno 和浏览器 </a></li><li class="m-2 leading-4"><a href="#%E7%B1%BB%E5%9E%8B%E5%92%8C%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">类型和类型声明 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入时提供类型 </a></li><li class="m-2 leading-4"><a href="#%E6%89%98%E7%AE%A1%E6%97%B6%E6%8F%90%E4%BE%9B%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">托管时提供类型 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%40ts-self-types" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">@ts-self-types </a></li><li class="m-2 leading-4"><a href="#x-typescript-types" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">X-TypeScript-Types </a></li></ul></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E6%88%96%E5%85%A8%E5%B1%80%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用环境或全局类型 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">三斜杠指令 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22types%22" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 deno.json 中提供 &quot;types&quot; </a></li></ul></li><li class="m-2 leading-4"><a href="#%E5%AF%B9-web-%E5%B7%A5%E4%BD%9C%E8%80%85%E8%BF%9B%E8%A1%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">对 Web 工作者进行类型检查 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%B8%89%E6%96%9C%E6%9D%A0%E6%8C%87%E4%BB%A4-1" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">三斜杠指令 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno.json-%E4%B8%AD%E6%8F%90%E4%BE%9B-%22lib%22-%E8%AE%BE%E7%BD%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 deno.json 中提供 &quot;lib&quot; 设置 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E9%87%8D%E8%A6%81%E4%BA%8B%E9%A1%B9" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">重要事项 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E%E8%AF%AD%E4%B9%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">类型声明语义 </a></li></ul></li><li class="m-2 leading-4"><a href="#javascript-%E5%9C%A8%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">JavaScript 在类型检查时的行为 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%86%85%E9%83%A8%E9%80%BB%E8%BE%91" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">内部逻辑 </a></li></ul></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>

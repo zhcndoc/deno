@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>WebAssembly - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="WebAssembly"/><meta name="twitter:description" content="在 Deno 中使用 WebAssembly (Wasm) 的指南。了解模块导入、类型检查、流式 API、优化技术以及如何与编译为 Wasm 的各种编程语言进行协作。"/><meta name="twitter:image" content="https://docs.deno.com/runtime/reference/wasm/index.png"/><meta name="twitter:image:alt" content="在 Deno 中使用 WebAssembly (Wasm) 的指南。了解模块导入、类型检查、流式 API、优化技术以及如何与编译为 Wasm 的各种编程语言进行协作。"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="WebAssembly"/><meta property="og:description" content="在 Deno 中使用 WebAssembly (Wasm) 的指南。了解模块导入、类型检查、流式 API、优化技术以及如何与编译为 Wasm 的各种编程语言进行协作。"/><meta property="og:image" content="https://docs.deno.com/runtime/reference/wasm/index.png"/><meta property="og:image:alt" content="在 Deno 中使用 WebAssembly (Wasm) 的指南。了解模块导入、类型检查、流式 API、优化技术以及如何与编译为 Wasm 的各种编程语言进行协作。"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined" data-active="true">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined">示例</a><a href="/deploy/manual/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/deploy/manual/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink">deno bench</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink" data-active="true">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/reference/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">参考指南</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">WebAssembly</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#wasm-%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Wasm 模块 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">类型检查 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E9%87%8D%E5%86%99%E5%AF%BC%E5%85%A5%E8%AF%B4%E6%98%8E%E7%AC%A6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">重写导入说明符 </a></li></ul></li></ul></li><li class="m-2 leading-4"><a href="#%E9%80%9A%E8%BF%87-webassembly-api-%E4%BD%BF%E7%94%A8-webassembly" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">通过 WebAssembly API 使用 WebAssembly </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8%E6%B5%81%E5%BC%8F-webassembly-api" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用流式 WebAssembly API </a></li><li class="m-2 leading-4"><a href="#webassembly-api" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">WebAssembly API </a></li><li class="m-2 leading-4"><a href="#%E5%A4%84%E7%90%86%E9%9D%9E%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">处理非数字类型 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno-%E4%B8%AD%E4%BD%BF%E7%94%A8-wasmbuild-%E8%BF%9B%E8%A1%8C-rust-webassembly-%E5%BC%80%E5%8F%91" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 Deno 中使用 wasmbuild 进行 Rust WebAssembly 开发 </a></li><li class="m-2 leading-4"><a href="#%E4%BC%98%E5%8C%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">优化 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>WebAssembly</h1><div><p>WebAssembly（Wasm）旨在与 JavaScript 一起使用，以加快关键应用程序组件的速度，其执行速度可以比 JavaScript 高得多且更一致 - 类似于 C、C++ 或 Rust。Deno 可以使用与 <a href="https://developer.mozilla.org/en-US/docs/WebAssembly">浏览器提供的</a> 相同的接口执行 WebAssembly 模块，并通过将其作为模块导入来使用它们。</p>
+<h2 id="wasm-%E6%A8%A1%E5%9D%97" tabindex="-1">Wasm 模块 <a class="header-anchor" href="#wasm-%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>从 Deno 2.1 开始，可以导入 WebAssembly 模块并对其使用进行类型检查。</p>
+<p>假设我们有一个 <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format">WebAssembly 文本格式</a> 文件，它导出一个 <code>add</code> 函数，该函数将两个数字相加并返回结果：</p>
+<div><div class="markdownBlockTitle">add.wat</div><div class="relative"><pre><code class="highlight notranslate language-wat">(module
+  (func (export "add") (param $a i32) (param $b i32) (result i32)
+    local.get $a
+    local.get $b
+    i32.add
+  )
+)
+</code></pre>
+
+      <button id="copy-button-12" class="copyButton" data-copy="(module
+  (func (export &quot;add&quot;) (param $a i32) (param $b i32) (result i32)
+    local.get $a
+    local.get $b
+    i32.add
+  )
+)
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>我们可以通过 <a href="https://github.com/webassembly/wabt">wat2wasm</a> 将其编译为 <code>add.wasm</code>：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">wat2wasm add.wat
+</code></pre>
+
+      <button id="copy-button-16" class="copyButton" data-copy="wat2wasm add.wat
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后通过导入语句使用此 WebAssembly 模块：</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> add <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./add.wasm"</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-20" class="copyButton" data-copy="import { add } from &quot;./add.wasm&quot;;
+
+console.log(add(1, 2));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div class="relative"><pre><code class="highlight notranslate language-shellsession">> deno run main.ts
+3
+</code></pre>
+
+      <button id="copy-button-21" class="copyButton" data-copy="> deno run main.ts
+3
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" tabindex="-1">类型检查 <a class="header-anchor" href="#%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno 理解 Wasm 模块的导出并对其使用进行类型检查。如果在前面的示例中，我们错误地调用 <code>add</code> 函数，则会看到类型检查错误。</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> add <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./add.wasm"</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-28" class="copyButton" data-copy="import { add } from &quot;./add.wasm&quot;;
+
+console.log(add(1, &quot;&quot;));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div class="relative"><pre><code class="highlight notranslate language-shellsession">> deno check main.ts   
+Check file:///.../main.ts
+error: TS2345 [ERROR]: Argument of type 'string' is not assignable to parameter of type 'number'.
+console.log(add(1, ""));
+                   ~~
+    at file:///.../main.ts:3:20
+</code></pre>
+
+      <button id="copy-button-29" class="copyButton" data-copy="> deno check main.ts   
+Check file:///.../main.ts
+error: TS2345 [ERROR]: Argument of type &apos;string&apos; is not assignable to parameter of type &apos;number&apos;.
+console.log(add(1, &quot;&quot;));
+                   ~~
+    at file:///.../main.ts:3:20
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%AF%BC%E5%85%A5" tabindex="-1">导入 <a class="header-anchor" href="#%E5%AF%BC%E5%85%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>与 JavaScript 类似，Wasm 模块也可以导入其他模块。</p>
+<p>例如，我们可以创建一个 Wasm 模块，导入 <code>&quot;./values.js&quot;</code> 说明符并调用 <code>getValue</code> 导出：</p>
+<div><div class="markdownBlockTitle">toolkit.wat</div><div class="relative"><pre><code class="highlight notranslate language-wat">(module
+  (import "./time.ts" "getTimeInSeconds" (func $get_time (result i32)))
+
+  (func (export "getValue") (result i32)
+    call $get_time
+  )
+)
+</code></pre>
+
+      <button id="copy-button-39" class="copyButton" data-copy="(module
+  (import &quot;./time.ts&quot; &quot;getTimeInSeconds&quot; (func $get_time (result i32)))
+
+  (func (export &quot;getValue&quot;) (result i32)
+    call $get_time
+  )
+)
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">time.ts</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">getTimeInSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-40" class="copyButton" data-copy="export function getTimeInSeconds() {
+  return Date.now() / 1000;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> getValue <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./toolkit.wasm"</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-41" class="copyButton" data-copy="import { getValue } from &quot;./toolkit.wasm&quot;;
+
+console.log(getValue());
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>现在运行：</p>
+<div class="relative"><pre><code class="highlight notranslate language-shellsession">> wat2wasm toolkit.wat
+> deno run main.ts
+1732147633
+V:\scratch
+> deno run main.ts
+1732147637
+</code></pre>
+
+      <button id="copy-button-45" class="copyButton" data-copy="> wat2wasm toolkit.wat
+> deno run main.ts
+1732147633
+V:\scratch
+> deno run main.ts
+1732147637
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E9%87%8D%E5%86%99%E5%AF%BC%E5%85%A5%E8%AF%B4%E6%98%8E%E7%AC%A6" tabindex="-1">重写导入说明符 <a class="header-anchor" href="#%E9%87%8D%E5%86%99%E5%AF%BC%E5%85%A5%E8%AF%B4%E6%98%8E%E7%AC%A6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>通常，Wasm 模块不会使用相对说明符来方便地导入另一个 JavaScript 模块。假设我们有以下与之前类似的设置，但注意 Wasm 模块通过 &quot;env&quot; 说明符进行导入。</p>
+<div><div class="markdownBlockTitle">toolkit.wat</div><div class="relative"><pre><code class="highlight notranslate language-wat">(module
+  (import "env" "get_time_in_seconds" (func $get_time (result i32)))
+
+  (func (export "getValue") (result i32)
+    call $get_time
+  )
+)
+</code></pre>
+
+      <button id="copy-button-52" class="copyButton" data-copy="(module
+  (import &quot;env&quot; &quot;get_time_in_seconds&quot; (func $get_time (result i32)))
+
+  (func (export &quot;getValue&quot;) (result i32)
+    call $get_time
+  )
+)
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">env.ts</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">function</span> <span class="token function">getTimeInSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token punctuation">{</span> getTimeInSeconds <span class="token keyword">as</span> get_time_in_seconds <span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-53" class="copyButton" data-copy="function getTimeInSeconds() {
+  return Date.now() / 1000;
+}
+
+export { getTimeInSeconds as get_time_in_seconds };
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> getValue <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./toolkit.wasm"</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-54" class="copyButton" data-copy="import { getValue } from &quot;./toolkit.wasm&quot;;
+
+console.log(getValue());
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div class="relative"><pre><code class="highlight notranslate language-shellsession">> wat2wasm toolkit.wat
+> deno run main.ts
+error: Relative import path "env" not prefixed with / or ./ or ../
+    at file:///.../toolkit.wasm
+</code></pre>
+
+      <button id="copy-button-55" class="copyButton" data-copy="> wat2wasm toolkit.wat
+> deno run main.ts
+error: Relative import path &quot;env&quot; not prefixed with / or ./ or ../
+    at file:///.../toolkit.wasm
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这并不是很方便，因为我们希望它导入 <code>&quot;./env.ts&quot;</code>。</p>
+<p>幸运的是，通过在 <em>deno.json</em> 中通过 <a href="https://github.com/WICG/import-maps">导入映射</a> 将说明符映射，可以很简单地使其工作：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"env"</span><span class="token operator">:</span> <span class="token string">"./env.ts"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-62" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;env&quot;: &quot;./env.ts&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>现在它可以正常工作：</p>
+<div class="relative"><pre><code class="highlight notranslate language-shellsession">> deno run main.ts
+1732148355
+</code></pre>
+
+      <button id="copy-button-66" class="copyButton" data-copy="> deno run main.ts
+1732148355
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E9%80%9A%E8%BF%87-webassembly-api-%E4%BD%BF%E7%94%A8-webassembly" tabindex="-1">通过 WebAssembly API 使用 WebAssembly <a class="header-anchor" href="#%E9%80%9A%E8%BF%87-webassembly-api-%E4%BD%BF%E7%94%A8-webassembly"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>要在 Deno 中运行 WebAssembly，您只需要一个要运行的 Wasm 模块。以下模块导出一个 <code>main</code> 函数，该函数在调用时仅返回 <code>42</code>：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// deno-fmt-ignore</span>
+<span class="token keyword">const</span> wasmCode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Uint8Array</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+  <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">97</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">,</span> <span class="token number">109</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">133</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">96</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">127</span><span class="token punctuation">,</span>
+  <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">130</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">132</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">112</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span>
+  <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">131</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">129</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">145</span><span class="token punctuation">,</span>
+  <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">109</span><span class="token punctuation">,</span> <span class="token number">101</span><span class="token punctuation">,</span> <span class="token number">109</span><span class="token punctuation">,</span> <span class="token number">111</span><span class="token punctuation">,</span> <span class="token number">114</span><span class="token punctuation">,</span> <span class="token number">121</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">109</span><span class="token punctuation">,</span> <span class="token number">97</span><span class="token punctuation">,</span>
+  <span class="token number">105</span><span class="token punctuation">,</span> <span class="token number">110</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">138</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">132</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span>
+  <span class="token number">65</span><span class="token punctuation">,</span> <span class="token number">42</span><span class="token punctuation">,</span> <span class="token number">11</span>
+<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> wasmModule <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WebAssembly</span><span class="token punctuation">.</span><span class="token function">Module</span><span class="token punctuation">(</span>wasmCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> wasmInstance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WebAssembly</span><span class="token punctuation">.</span><span class="token function">Instance</span><span class="token punctuation">(</span>wasmModule<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> main <span class="token operator">=</span> wasmInstance<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>main <span class="token keyword">as</span> CallableFunction<span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-73" class="copyButton" data-copy="// deno-fmt-ignore
+const wasmCode = new Uint8Array([
+  0, 97, 115, 109, 1, 0, 0, 0, 1, 133, 128, 128, 128, 0, 1, 96, 0, 1, 127,
+  3, 130, 128, 128, 128, 0, 1, 0, 4, 132, 128, 128, 128, 0, 1, 112, 0, 0,
+  5, 131, 128, 128, 128, 0, 1, 0, 1, 6, 129, 128, 128, 128, 0, 0, 7, 145,
+  128, 128, 128, 0, 2, 6, 109, 101, 109, 111, 114, 121, 2, 0, 4, 109, 97,
+  105, 110, 0, 0, 10, 138, 128, 128, 128, 0, 1, 132, 128, 128, 128, 0, 0,
+  65, 42, 11
+]);
+
+const wasmModule = new WebAssembly.Module(wasmCode);
+
+const wasmInstance = new WebAssembly.Instance(wasmModule);
+
+const main = wasmInstance.exports.main as CallableFunction;
+console.log(main().toString());
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>为了通过 WebAssembly API 加载 WebAssembly，需要执行以下步骤：</p>
+<ol>
+<li>获取二进制文件（通常为 <code>.wasm</code> 文件，尽管我们现在使用一个简单的字节数组）</li>
+<li>将二进制文件编译为 <code>WebAssembly.Module</code> 对象</li>
+<li>实例化 WebAssembly 模块</li>
+</ol>
+<p>WebAssembly 是一种二进制数据格式，旨在不易于人类阅读，也不应手动编写。您的 <code>.wasm</code> 文件应由如 <a href="https://www.rust-lang.org/">Rust</a>、<a href="https://golang.org/">Go</a> 或 <a href="https://www.assemblyscript.org/">AssemblyScript</a> 等语言的编译器生成。</p>
+<p>例如，编译成上述字节的 Rust 程序可能看起来像这样：</p>
+<div class="relative"><pre><code class="highlight notranslate language-rust">#[no_mangle]
+pub fn main() -> u32 { // u32 代表使用 32 位内存的无符号整数。
+  42
+}
+</code></pre>
+
+      <button id="copy-button-100" class="copyButton" data-copy="#[no_mangle]
+pub fn main() -> u32 { // u32 代表使用 32 位内存的无符号整数。
+  42
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E4%BD%BF%E7%94%A8%E6%B5%81%E5%BC%8F-webassembly-api" tabindex="-1">使用流式 WebAssembly API <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8%E6%B5%81%E5%BC%8F-webassembly-api"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>获取、编译和实例化 WebAssembly 模块的 <a href="/api/web/~/WebAssembly.instantiateStreaming">最有效</a> 方法是使用 WebAssembly API 的流式变体。例如，您可以使用 <code>instantiateStreaming</code> 结合 <code>fetch</code> 一次性执行这三步：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> <span class="token punctuation">{</span> instance<span class="token punctuation">,</span> module <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">await</span> WebAssembly<span class="token punctuation">.</span><span class="token function">instantiateStreaming</span><span class="token punctuation">(</span>
+  <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">"https://wpt.live/wasm/incrementer.wasm"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> increment <span class="token operator">=</span> instance<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>increment <span class="token keyword">as</span> <span class="token punctuation">(</span>input<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">increment</span><span class="token punctuation">(</span><span class="token number">41</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-107" class="copyButton" data-copy="const { instance, module } = await WebAssembly.instantiateStreaming(
+  fetch(&quot;https://wpt.live/wasm/incrementer.wasm&quot;),
+);
+
+const increment = instance.exports.increment as (input: number) => number;
+console.log(increment(41));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>请注意，<code>.wasm</code> 文件必须使用 <code>application/wasm</code> MIME 类型提供。如果您希望在实例化之前对模块执行其他操作，您可以改为使用 <a href="/api/web/~/WebAssembly.compileStreaming"><code>compileStreaming</code></a>：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> module <span class="token operator">=</span> <span class="token keyword">await</span> WebAssembly<span class="token punctuation">.</span><span class="token function">compileStreaming</span><span class="token punctuation">(</span>
+  <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">"https://wpt.live/wasm/incrementer.wasm"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">/* do some more stuff */</span>
+
+<span class="token keyword">const</span> instance <span class="token operator">=</span> <span class="token keyword">await</span> WebAssembly<span class="token punctuation">.</span><span class="token function">instantiate</span><span class="token punctuation">(</span>module<span class="token punctuation">)</span><span class="token punctuation">;</span>
+instance<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>increment <span class="token keyword">as</span> <span class="token punctuation">(</span>input<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-111" class="copyButton" data-copy="const module = await WebAssembly.compileStreaming(
+  fetch(&quot;https://wpt.live/wasm/incrementer.wasm&quot;),
+);
+
+/* do some more stuff */
+
+const instance = await WebAssembly.instantiate(module);
+instance.exports.increment as (input: number) => number;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果由于某种原因您无法使用流式方法，则可以回退到效率较低的 <a href="/api/web/~/WebAssembly.compile"><code>compile</code></a> 和 <a href="/api/web/~/WebAssembly.instantiate"><code>instantiate</code></a> 方法。</p>
+<p>有关流式方法为何更高效的更深入了解，请 <a href="https://hacks.mozilla.org/2018/01/making-webassembly-even-faster-firefoxs-new-streaming-and-tiering-compiler/">查看这篇文章</a>。</p>
+<h2 id="webassembly-api" tabindex="-1">WebAssembly API <a class="header-anchor" href="#webassembly-api"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>有关 WebAssembly API 所有部分的更多信息，请参见
+<a href="/api/web/~/WebAssembly">Deno 参考指南</a> 和
+<a href="https://developer.mozilla.org/en-US/docs/WebAssembly">MDN</a>。</p>
+<h2 id="%E5%A4%84%E7%90%86%E9%9D%9E%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B" tabindex="-1">处理非数字类型 <a class="header-anchor" href="#%E5%A4%84%E7%90%86%E9%9D%9E%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>本文档中的代码示例仅使用了 WebAssembly 模块中的数字类型。要使用更复杂的类型（如字符串或类）运行 WebAssembly，您需要使用生成 JavaScript 和编译为 WebAssembly 的语言之间类型绑定的工具。</p>
+<p>关于如何在 JavaScript 和 Rust 之间创建类型绑定、将其编译为二进制文件并从 JavaScript 程序调用的示例，可以在 <a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Rust_to_wasm">MDN</a> 上找到。</p>
+<p>如果您计划在 Rust+WebAssembly 中进行大量 Web API 工作，您可能会发现 <a href="https://rustwasm.github.io/wasm-bindgen/web-sys/index.html">web_sys</a> 和 <a href="https://rustwasm.github.io/wasm-bindgen/contributing/js-sys/index.html">js_sys</a> Rust crates 很有用。<code>web_sys</code> 包含 Deno 中可用的大多数 Web API 的绑定，而 <code>js_sys</code> 提供 JavaScript 标准内置对象的绑定。</p>
+<h2 id="%E5%9C%A8-deno-%E4%B8%AD%E4%BD%BF%E7%94%A8-wasmbuild-%E8%BF%9B%E8%A1%8C-rust-webassembly-%E5%BC%80%E5%8F%91" tabindex="-1">在 Deno 中使用 wasmbuild 进行 Rust WebAssembly 开发 <a class="header-anchor" href="#%E5%9C%A8-deno-%E4%B8%AD%E4%BD%BF%E7%94%A8-wasmbuild-%E8%BF%9B%E8%A1%8C-rust-webassembly-%E5%BC%80%E5%8F%91"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><a href="https://github.com/denoland/wasmbuild">wasmbuild</a> 是一个官方的 Deno 工具，简化了在 Deno 项目中使用 Rust 和 WebAssembly。它自动化了将 Rust 代码编译为 WebAssembly 和生成 TypeScript 绑定的过程，使从 JavaScript 调用 Rust 函数变得简单。</p>
+<p>wasmbuild 为您的 Rust 函数生成 TypeScript 定义，提供完整的类型检查。生成的 JavaScript 可以与 esbuild 等打包器一起使用。生成的文件可以直接提交到源代码控制中，以便于部署。</p>
+<h2 id="%E4%BC%98%E5%8C%96" tabindex="-1">优化 <a class="header-anchor" href="#%E4%BC%98%E5%8C%96"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>对于生产构建，您可以对 WebAssembly 二进制文件进行优化。如果您通过网络提供二进制文件，则优化大小可以产生真正的差异。如果您主要在服务器上执行 WebAssembly 以执行计算密集型任务，则优化速度可能是有益的。您可以在 <a href="https://rustwasm.github.io/docs/book/reference/code-size.html">这里</a> 找到有关优化（生产）构建的良好指南。此外， <a href="https://rustwasm.github.io/docs/book/reference/tools.html">rust-wasm 小组</a> 提供了一些用于优化和处理 WebAssembly 二进制文件的工具列表。</p>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/reference/wasm.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2 !mb-4">谢谢！反馈已收到。 <span aria-hidden="true">✅</span></p><div class="space-y-1"><label for="feedback-comment">还有其他意见吗？（<i>可选</i>）</label><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment"></textarea></div><div class="space-y-1"><label for="feedback-contact">电子邮件地址（<i>可选</i>）</label><input type="email" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" value/></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送更多反馈</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#wasm-%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Wasm 模块 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">类型检查 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E9%87%8D%E5%86%99%E5%AF%BC%E5%85%A5%E8%AF%B4%E6%98%8E%E7%AC%A6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">重写导入说明符 </a></li></ul></li></ul></li><li class="m-2 leading-4"><a href="#%E9%80%9A%E8%BF%87-webassembly-api-%E4%BD%BF%E7%94%A8-webassembly" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">通过 WebAssembly API 使用 WebAssembly </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8%E6%B5%81%E5%BC%8F-webassembly-api" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用流式 WebAssembly API </a></li><li class="m-2 leading-4"><a href="#webassembly-api" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">WebAssembly API </a></li><li class="m-2 leading-4"><a href="#%E5%A4%84%E7%90%86%E9%9D%9E%E6%95%B0%E5%AD%97%E7%B1%BB%E5%9E%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">处理非数字类型 </a></li><li class="m-2 leading-4"><a href="#%E5%9C%A8-deno-%E4%B8%AD%E4%BD%BF%E7%94%A8-wasmbuild-%E8%BF%9B%E8%A1%8C-rust-webassembly-%E5%BC%80%E5%8F%91" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">在 Deno 中使用 wasmbuild 进行 Rust WebAssembly 开发 </a></li><li class="m-2 leading-4"><a href="#%E4%BC%98%E5%8C%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">优化 </a></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>
