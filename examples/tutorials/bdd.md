@@ -1,41 +1,30 @@
 ---
-title: "Behavior-Driven Development (BDD)"
-description: "Implementing Behavior-Driven Development with Deno's Standard Library's BDD module. Create readable, well organised tests with effective assertions."
+title: "行为驱动开发 (BDD)"
+description: "使用 Deno 标准库的 BDD 模块实现行为驱动开发。创建可读性强、组织良好的测试，并进行有效的断言。"
 url: /examples/bdd_tutorial/
 ---
 
-Behavior-Driven Development (BDD) is an approach to software development that
-encourages collaboration between developers, QA, and non-technical stakeholders.
-BDD focuses on defining the behavior of an application through examples written
-in a natural, ubiquitous language that all stakeholders can understand.
+行为驱动开发 (BDD) 是一种软件开发方法，鼓励开发人员、质量保证人员和非技术利益相关者之间的协作。BDD 关注通过用所有利益相关者都能理解的自然语言编写的示例来定义应用程序的行为。
 
-Deno's Standard Library provides a BDD-style testing module that allows you to
-structure tests in a way that's both readable for non-technical stakeholders and
-practical for implementation. In this tutorial, we'll explore how to use the BDD
-module to create descriptive test suites for your applications.
+Deno 的标准库提供了一个 BDD 风格的测试模块，使您能够以对非技术利益相关者友好且在实现上实用的方式构建测试。在本教程中，我们将探索如何使用 BDD 模块为您的应用程序创建描述性测试套件。
 
-## Introduction to BDD
+## BDD 简介
 
-BDD extends
-[Test-Driven Development](https://en.wikipedia.org/wiki/Test-driven_development)
-(TDD) by writing tests in a natural language that is easy to read. Rather than
-thinking about "tests," BDD encourages us to consider "specifications" or
-"specs" that describe how software should behave from the user's perspective.
-This approach helps to keep tests focused on what the code should do rather than
-how it is implemented.
+BDD 扩展了
+[测试驱动开发](https://en.wikipedia.org/wiki/Test-driven_development)
+(TDD)，通过使用易于阅读的自然语言编写测试。与其考虑“测试”，BDD 鼓励我们考虑“规范”或“规格”，这些规格描述软件应如何从用户的角度进行操作。这种方法有助于保持测试专注于代码应做什么，而不是它是如何实现的。
 
-The basic elements of BDD include:
+BDD 的基本元素包括：
 
-- **Describe** blocks that group related specifications
-- **It** statements that express a single behavior
-- **Before/After** hooks for setup and teardown operations
+- **Describe** 块，用于分组相关的规范
+- **It** 语句，表达单一的行为
+- **Before/After** 钩子，用于设置和拆解操作
 
-## Using Deno's BDD module
+## 使用 Deno 的 BDD 模块
 
-To get started with BDD testing in Deno, we'll use the `@std/testing/bdd` module
-from the [Deno Standard Library](https://jsr.io/@std/testing/doc/bdd).
+要开始在 Deno 中进行 BDD 测试，我们将使用 [Deno 标准库](https://jsr.io/@std/testing/doc/bdd) 中的 `@std/testing/bdd` 模块。
 
-First, let's import the necessary functions:
+首先，让我们导入所需的函数：
 
 ```ts
 import {
@@ -49,19 +38,18 @@ import {
 import { assertEquals, assertThrows } from "jsr:@std/assert";
 ```
 
-These imports provide the core BDD functions:
+这些导入提供了核心的 BDD 函数：
 
-- `describe` creates a block that groups related tests
-- `it` declares a test case that verifies a specific behavior
-- `beforeEach`/`afterEach` run before or after each test case
-- `beforeAll`/`afterAll` run once before or after all tests in a describe block
+- `describe` 创建一个块，分组相关的测试
+- `it` 声明一个验证特定行为的测试用例
+- `beforeEach`/`afterEach` 在每个测试用例前后运行
+- `beforeAll`/`afterAll` 在描述块中的所有测试之前或之后运行一次
 
-We'll also use assertion functions from
-[`@std/assert`](https://jsr.io/@std/assert) to verify our expectations.
+我们还将使用来自 [`@std/assert`](https://jsr.io/@std/assert) 的断言函数来验证我们的期望。
 
-### Writing your first BDD test
+### 编写您的第一个 BDD 测试
 
-Let's create a simple calculator module and test it using BDD:
+让我们创建一个简单的计算器模块并使用 BDD 对其进行测试：
 
 ```ts title="calculator.ts"
 export class Calculator {
@@ -88,7 +76,7 @@ export class Calculator {
 
   divide(number: number): Calculator {
     if (number === 0) {
-      throw new Error("Cannot divide by zero");
+      throw new Error("无法被零除");
     }
     this.value /= number;
     return this;
@@ -100,215 +88,205 @@ export class Calculator {
 }
 ```
 
-Now, let's test this calculator using the BDD style:
+现在，让我们使用 BDD 风格测试这个计算器：
 
 ```ts title="calculator_test.ts"
 import { afterEach, beforeEach, describe, it } from "jsr:@std/testing/bdd";
 import { assertEquals, assertThrows } from "jsr:@std/assert";
 import { Calculator } from "./calculator.ts";
 
-describe("Calculator", () => {
+describe("计算器", () => {
   let calculator: Calculator;
 
-  // Before each test, create a new Calculator instance
+  // 在每个测试之前创建一个新的 Calculator 实例
   beforeEach(() => {
     calculator = new Calculator();
   });
 
-  it("should initialize with zero", () => {
+  it("应初始化为零", () => {
     assertEquals(calculator.result, 0);
   });
 
-  it("should initialize with a provided value", () => {
+  it("应初始化为提供的值", () => {
     const initializedCalculator = new Calculator(10);
     assertEquals(initializedCalculator.result, 10);
   });
 
-  describe("add method", () => {
-    it("should add a positive number correctly", () => {
+  describe("加法方法", () => {
+    it("应正确地加一个正数", () => {
       calculator.add(5);
       assertEquals(calculator.result, 5);
     });
 
-    it("should handle negative numbers", () => {
+    it("应正确处理负数", () => {
       calculator.add(-5);
       assertEquals(calculator.result, -5);
     });
 
-    it("should be chainable", () => {
+    it("应支持链式调用", () => {
       calculator.add(5).add(10);
       assertEquals(calculator.result, 15);
     });
   });
 
-  describe("subtract method", () => {
-    it("should subtract a number correctly", () => {
+  describe("减法方法", () => {
+    it("应正确地减去一个数", () => {
       calculator.subtract(5);
       assertEquals(calculator.result, -5);
     });
 
-    it("should be chainable", () => {
+    it("应支持链式调用", () => {
       calculator.subtract(5).subtract(10);
       assertEquals(calculator.result, -15);
     });
   });
 
-  describe("multiply method", () => {
+  describe("乘法方法", () => {
     beforeEach(() => {
-      // For multiplication tests, start with value 10
+      // 对于乘法测试，初始值为 10
       calculator = new Calculator(10);
     });
 
-    it("should multiply by a number correctly", () => {
+    it("应正确地乘以一个数", () => {
       calculator.multiply(5);
       assertEquals(calculator.result, 50);
     });
 
-    it("should be chainable", () => {
+    it("应支持链式调用", () => {
       calculator.multiply(2).multiply(3);
       assertEquals(calculator.result, 60);
     });
   });
 
-  describe("divide method", () => {
+  describe("除法方法", () => {
     beforeEach(() => {
-      // For division tests, start with value 10
+      // 对于除法测试，初始值为 10
       calculator = new Calculator(10);
     });
 
-    it("should divide by a number correctly", () => {
+    it("应正确地除以一个数", () => {
       calculator.divide(2);
       assertEquals(calculator.result, 5);
     });
 
-    it("should throw when dividing by zero", () => {
+    it("应在除以零时抛出错误", () => {
       assertThrows(
         () => calculator.divide(0),
         Error,
-        "Cannot divide by zero",
+        "无法被零除",
       );
     });
   });
 });
 ```
 
-To run this test, use the `deno test` command:
+要运行此测试，请使用 `deno test` 命令：
 
 ```sh
 deno test calculator_test.ts
 ```
 
-You'll see output similar to this:
+您将看到类似以下的输出：
 
 ```sh
 running 1 test from file:///path/to/calculator_test.ts
-Calculator
-  ✓ should initialize with zero 
-  ✓ should initialize with a provided value 
-  add method
-    ✓ should add a positive number correctly 
-    ✓ should handle negative numbers 
-    ✓ should be chainable 
-  subtract method
-    ✓ should subtract a number correctly 
-    ✓ should be chainable 
-  multiply method
-    ✓ should multiply by a number correctly 
-    ✓ should be chainable 
-  divide method
-    ✓ should divide by a number correctly 
-    ✓ should throw when dividing by zero 
+计算器
+  ✓ 应初始化为零 
+  ✓ 应初始化为提供的值 
+  加法方法
+    ✓ 应正确地加一个正数 
+    ✓ 应正确处理负数 
+    ✓ 应支持链式调用 
+  减法方法
+    ✓ 应正确地减去一个数 
+    ✓ 应支持链式调用 
+  乘法方法
+    ✓ 应正确地乘以一个数 
+    ✓ 应支持链式调用 
+  除法方法
+    ✓ 应正确地除以一个数 
+    ✓ 应在除以零时抛出错误 
 
 ok | 11 passed | 0 failed (234ms)
 ```
 
-## Organizing tests with dested describe blocks
+## 使用嵌套的 describe 块组织测试
 
-One of the powerful features of BDD is the ability to nest `describe` blocks,
-which helps organize tests hierarchically. In the calculator example, we grouped
-tests for each method within their own `describe` blocks. This not only makes
-the tests more readable, but also makes it easier to locate issues when the test
-fails.
+BDD 的一个强大特性是能够嵌套 `describe` 块，从而帮助以层次结构组织测试。在计算器示例中，我们在各自的 `describe` 块中分组了每个方法的测试。这不仅使测试更具可读性，而且在测试失败时更容易定位问题。
 
-You can nest `describe` blocks, but be cautious of nesting too deep as excessive
-nesting can make tests harder to follow.
+您可以嵌套 `describe` 块，但要注意不要嵌套得太深，因为过度嵌套可能使测试更难以理解。
 
-## Hooks
+## 钩子
 
-The BDD module provides four hooks:
+BDD 模块提供了四个钩子：
 
-- `beforeEach` runs before each test in the current describe block
-- `afterEach` runs after each test in the current describe block
-- `beforeAll` runs once before all tests in the current describe block
-- `afterAll` runs once after all tests in the current describe block
+- `beforeEach` 在当前 describe 块中的每个测试之前运行
+- `afterEach` 在当前 describe 块中的每个测试之后运行
+- `beforeAll` 在当前 describe 块中的所有测试之前运行一次
+- `afterAll` 在当前 describe 块中的所有测试之后运行一次
 
 ### beforeEach/afterEach
 
-These hooks are ideal for:
+这些钩子非常适合于：
 
-- Setting up a fresh test environment for each test
-- Cleaning up resources after each test
-- Ensuring test isolation
+- 为每个测试设置一个新的测试环境
+- 在每个测试后清理资源
+- 确保测试隔离
 
-In the calculator example, we used `beforeEach` to create a new calculator
-instance before each test, ensuring each test starts with a clean state.
+在计算器示例中，我们使用 `beforeEach` 在每个测试之前创建一个新的计算器实例，以确保每个测试都从干净的状态开始。
 
 ### beforeAll/afterAll
 
-These hooks are useful for:
+这些钩子适用于：
 
-- Expensive setup operations that can be shared across tests
-- Setting up and tearing down database connections
-- Creating and cleaning up shared resources
+- 可以共享的昂贵设置操作
+- 设置和拆除数据库连接
+- 创建和清理共享资源
 
-Here's an example of how you might use `beforeAll` and `afterAll`:
+以下是如何使用 `beforeAll` 和 `afterAll` 的示例：
 
 ```ts
-describe("Database operations", () => {
+describe("数据库操作", () => {
   let db: Database;
 
   beforeAll(async () => {
-    // Connect to the database once before all tests
+    // 在所有测试之前一次连接到数据库
     db = await Database.connect(TEST_CONNECTION_STRING);
     await db.migrate();
   });
 
   afterAll(async () => {
-    // Disconnect after all tests are complete
+    // 在所有测试完成后断开连接
     await db.close();
   });
 
-  it("should insert a record", async () => {
-    const result = await db.insert({ name: "Test" });
+  it("应插入一条记录", async () => {
+    const result = await db.insert({ name: "测试" });
     assertEquals(result.success, true);
   });
 
-  it("should retrieve a record", async () => {
+  it("应检索一条记录", async () => {
     const record = await db.findById(1);
-    assertEquals(record.name, "Test");
+    assertEquals(record.name, "测试");
   });
 });
 ```
 
-## Gherkin vs. JavaScript-style BDD
+## Gherkin 与 JavaScript 风格的 BDD
 
-If you're familiar with Cucumber or other BDD frameworks, you might be expecting
-Gherkin syntax with "Given-When-Then" statements.
+如果您熟悉 Cucumber 或其他 BDD 框架，您可能会期待使用 "Given-When-Then" 语句的 Gherkin 语法。
 
-Deno's BDD module uses a JavaScript-style syntax rather than Gherkin. This
-approach is similar to other JavaScript testing frameworks like Mocha or
-Jasmine. However, you can still follow BDD principles by:
+Deno 的 BDD 模块使用的是 JavaScript 风格的语法，而不是 Gherkin。这种方法类似于其他 JavaScript 测试框架，如 Mocha 或 Jasmine。然而，您仍然可以通过以下方式遵循 BDD 原则：
 
-1. Writing clear, behavior-focused test descriptions
-2. Structuring your tests to reflect user stories
-3. Following the "Arrange-Act-Assert" pattern in your test implementations
+1. 编写清晰、以行为为中心的测试描述
+2. 组织测试以反映用户故事
+3. 在测试实现中遵循 "Arrange-Act-Assert" 模式
 
-For example, you can structure your `it` blocks to mirror the Given-When-Then
-format:
+例如，您可以将您的 `it` 块构造为与 Given-When-Then 格式相对应：
 
 ```ts
-describe("Calculator", () => {
-  it("should add numbers correctly", () => {
+describe("计算器", () => {
+  it("应正确加法运算", () => {
     // Given
     const calculator = new Calculator();
 
@@ -321,131 +299,120 @@ describe("Calculator", () => {
 });
 ```
 
-If you need full Gherkin support with natural language specifications, consider
-using a dedicated BDD framework that integrates with Deno, such as
-[cucumber-js](https://github.com/cucumber/cucumber-js).
+如果您需要完整的 Gherkin 支持和自然语言规范，请考虑使用与 Deno 兼容的专用 BDD 框架，例如
+[cucumber-js](https://github.com/cucumber/cucumber-js)。
 
-## Best Practices for BDD with Deno
+## Deno 的 BDD 最佳实践
 
-### Write your tests for humans to read
+### 编写易于阅读的测试
 
-BDD tests should read like documentation. Use clear, descriptive language in
-your `describe` and `it` statements:
+BDD 测试应像文档一样可读。在您的 `describe` 和 `it` 语句中使用清晰、描述性的语言：
 
 ```ts
-// Good
-describe("User authentication", () => {
-  it("should reject login with incorrect password", () => {
-    // Test code
+// 好
+describe("用户认证", () => {
+  it("应拒绝不正确密码的登录", () => {
+    // 测试代码
   });
 });
 
-// Not good
+// 不好
 describe("auth", () => {
   it("bad pw fails", () => {
-    // Test code
+    // 测试代码
   });
 });
 ```
 
-### Keep tests focused
+### 保持测试专注
 
-Each test should verify a single behavior. Avoid testing multiple behaviors in a
-single `it` block:
+每个测试应验证单一行为。避免在单个 `it` 块中测试多个行为：
 
 ```ts
-// Good
-it("should add an item to the cart", () => {
-  // Test adding to cart
+// 好
+it("应将商品添加到购物车", () => {
+  // 测试添加到购物车
 });
 
-it("should calculate the correct total", () => {
-  // Test total calculation
+it("应计算出正确的总数", () => {
+  // 测试总数计算
 });
 
-// Bad
-it("should add an item and calculate total", () => {
-  // Test adding to cart
-  // Test total calculation
+// 不好
+it("应添加商品并计算总数", () => {
+  // 测试添加到购物车
+  // 测试总数计算
 });
 ```
 
-### Use context-specific setup
+### 使用上下文特定的设置
 
-When tests within a describe block need different setup, use nested describes
-with their own `beforeEach` hooks rather than conditional logic:
+当一个描述块中的测试需要不同的设置时，使用嵌套的描述和它们自己的 `beforeEach` 钩子，而不是条件逻辑：
 
 ```ts
-// Good
-describe("User operations", () => {
-  describe("when user is logged in", () => {
+// 好
+describe("用户操作", () => {
+  describe("当用户已登录时", () => {
     beforeEach(() => {
-      // Setup logged-in user
+      // 设置已登录用户
     });
 
-    it("should show the dashboard", () => {
-      // Test
+    it("应显示仪表盘", () => {
+      // 测试
     });
   });
 
-  describe("when user is logged out", () => {
+  describe("当用户未登录时", () => {
     beforeEach(() => {
-      // Setup logged-out state
+      // 设置未登录状态
     });
 
-    it("should redirect to login", () => {
-      // Test
+    it("应重定向到登录", () => {
+      // 测试
     });
   });
 });
 
-// Avoid
-describe("User operations", () => {
+// 避免
+describe("用户操作", () => {
   beforeEach(() => {
-    // Setup base state
+    // 设置基本状态
     if (isLoggedInTest) {
-      // Setup logged-in state
+      // 设置已登录状态
     } else {
-      // Setup logged-out state
+      // 设置未登录状态
     }
   });
 
-  it("should show dashboard when logged in", () => {
+  it("应在已登录时显示仪表盘", () => {
     isLoggedInTest = true;
-    // Test
+    // 测试
   });
 
-  it("should redirect to login when logged out", () => {
+  it("应在未登录时重定向到登录", () => {
     isLoggedInTest = false;
-    // Test
+    // 测试
   });
 });
 ```
 
-### Handle asynchronous tests properly
+### 正确处理异步测试
 
-When testing asynchronous code, remember to:
+在测试异步代码时，请记住：
 
-- Mark your test functions as `async`
-- Use `await` for promises
-- Handle errors properly
+- 将您的测试函数标记为 `async`
+- 对于 Promise 使用 `await`
+- 正确处理错误
 
 ```ts
-it("should fetch user data asynchronously", async () => {
+it("应异步获取用户数据", async () => {
   const user = await fetchUser(1);
-  assertEquals(user.name, "John Doe");
+  assertEquals(user.name, "约翰·多");
 });
 ```
 
-🦕 By following the BDD principles and practices outlined in this tutorial, you
-can build more reliable software and solidify your resoning about the 'business
-logic' of your code.
+🦕 通过遵循本教程中概述的 BDD 原则和实践，您可以构建更可靠的软件，并加深对代码业务逻辑的理解。
 
-Remember that BDD is not just about the syntax or tools but about the
-collaborative approach to defining and verifying application behavior. The most
-successful BDD implementations combine these technical practices with regular
-conversations between developers, testers, product and business stakeholders.
+请记住，BDD 不仅仅是关于语法或工具，而是共同定义和验证应用程序行为的方法。最成功的 BDD 实施将这些技术实践与开发人员、测试人员、产品与业务利益相关者之间的定期对话结合在一起。
 
-To continue learning about testing in Deno, explore other modules in the
-Standard Library's testing suite, such as [mocking](/examples/mocking_tutorial/)
-and [snapshot testing](/examples/snapshot_tutorial/).
+要继续学习 Deno 中的测试，请探索标准库测试套件中的其他模块，例如 [模拟](/examples/mocking_tutorial/) 和 [快照测试](/examples/snapshot_tutorial/)。

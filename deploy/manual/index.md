@@ -84,7 +84,7 @@ deployctl deploy
 
 ### 部署您现有的项目
 
-导入项目并在边缘使用 Deno Deploy 运行它。
+导入一个项目并在边缘使用 Deno Deploy 运行它。
 
 1. [从 Deno Deploy 仪表板](https://dash.deno.com) 点击 "新建项目" 按钮。
 
