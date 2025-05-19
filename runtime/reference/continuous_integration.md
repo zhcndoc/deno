@@ -21,7 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x # 使用最新的稳定版 Deno 运行。
@@ -63,9 +63,7 @@ jobs:
 
 :::caution
 
-注意：GitHub Actions 有一个已知的
-[问题](https://github.com/actions/checkout/issues/135)，与处理
-Windows 风格的行尾（CRLF）有关。这可能会导致在 `windows` 上运行的作业中运行 `deno fmt` 时出现问题。为防止这种情况，请在运行 `actions/checkout@v3` 步骤之前，配置 Actions 运行器以使用 Linux 风格的行尾：
+注意：GitHub Actions 在处理 Windows 风格的行结束符（CRLF）时存在一个已知 [问题](https://github.com/actions/checkout/issues/135)。这可能导致在管道中运行 `deno fmt` 时出现问题，而该管道的作业在 `windows` 上运行。为防止此情况发生，请在运行 `actions/checkout@v4` 步骤之前，将 Actions 运行器配置为使用 Linux 风格的行结束符：
 
 ```sh
 git config --system core.autocrlf false
@@ -116,50 +114,48 @@ jobs:
 
 随着项目规模的扩大，通常会包含越来越多的依赖。Deno 在测试期间会下载这些依赖，如果一个工作流程一天运行多次，这可能会变得耗时。加快速度的一个常见解决方案是缓存依赖，这样就不需要重新下载。
 
-Deno 将依赖项存储在本地缓存目录中。在管道中，可以通过设置 `DENO_DIR` 环境变量并向工作流程添加一个缓存步骤来在工作流之间保留缓存：
+Deno 将依赖项存储在本地缓存目录中。在管道中，可以通过在 `denoland/setup-deno` 上启用 `cache: true` 选项来保留工作流之间的缓存。
 
 ```yaml
-# 将 DENO_DIR 设置为运行器上的绝对或相对路径。
-env:
-  DENO_DIR: my_cache_directory
-
 steps:
-  - name: Cache Deno dependencies
-    uses: actions/cache@v4
+  - uses: actions/checkout@v4
+  - uses: denoland/setup-deno@v2
     with:
-      path: ${{ env.DENO_DIR }}
-      key: my_cache_key
+      cache: true
 ```
 
-最开始，当此工作流程运行时，缓存仍然为空，像 `deno test` 这样的命令仍然需要下载依赖项，但当作业成功时，`DENO_DIR` 的内容会被保存，任何后续运行都可以从缓存中恢复（而不是重新下载）。
+最初，当这个工作流程运行时，缓存仍然是空的，像 `deno test` 这样的命令仍然需要下载依赖项，但当作业成功时，缓存的依赖项内容会被保存，任何后续运行都可以从缓存中恢复它们，而不是重新下载。
 
-上面的工作流仍然存在一个问题：目前缓存键的名称被硬编码为 `my_cache_key`，这将在每次恢复相同的缓存，即使更新了一个或多个依赖。这可能导致在管道中使用旧版本，即使您已更新了一些依赖。解决方案是每次需要更新缓存时生成不同的键，这可以通过使用锁文件和 GitHub Actions 提供的 `hashFiles` 函数来实现：
+为了演示，假设你有一个使用来自 [`@std/log`](https://jsr.io/@std/log) 的日志记录器的项目：
 
-```yaml
-key: ${{ hashFiles('deno.lock') }}
+```json, title="deno.json"
+{
+  "imports": {
+    "@std/log": "jsr:@std/log@0.224.5"
+  }
+}
 ```
 
-要使此工作，您还需要在 Deno 项目中有一个锁文件，详细讨论可见
-[这里](/runtime/fundamentals/modules/#integrity-checking-and-lock-files)。现在，如果 `deno.lock` 的内容发生更改，将生成新的缓存并在随后的管道运行中使用。
-
-为了演示，假设您有一个使用来自 [`@std/log`](https://jsr.io/@std/log) 的日志记录器的项目：
-
-```ts
-import * as log from "jsr:@std/log@0.224.5";
-```
-
-为了增加此版本，您可以更新 `import` 语句，然后在本地重新加载缓存并更新锁文件：
+为了增加这个版本，您可以更新依赖项，然后重新加载缓存并在本地更新锁定文件：
 
 ```console
-deno install --reload --lock=deno.lock --frozen=false --entrypoint deps.ts
+deno install --reload --frozen=false
 ```
 
-在运行此命令后，您应该会看到锁文件内容的更改。当这被提交并通过管道运行时，您应该会看到 `hashFiles` 函数保存一个新缓存，并在随后的运行中使用它。
+您应该在运行此操作后看到锁定文件内容的变化。当这个更改被提交并通过管道运行时，您应该看到一个新的缓存，并在随后的任何运行中使用它。
 
-#### 清除缓存
+默认情况下，缓存会自动根据以下内容生成键：
 
-偶尔，您可能会遇到缓存损坏或格式错误的情况，这可能是由于各种原因造成的。可以从 GitHub Actions UI 清除缓存，或者您可以简单更改缓存键的名称。不强制更改锁文件的实用方法是向缓存键名称添加一个变量，该变量可以存储为 GitHub 秘密，并在需要新缓存时进行更改：
+- github [job_id](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_id)
+- 运行器的操作系统和架构
+- 项目中 `deno.lock` 文件的哈希值
+
+可以通过 `cache-hash` 输入自定义作为缓存键一部分的默认哈希（`${{ hashFiles('**/deno.lock') }}`）。
 
 ```yaml
-key: ${{ secrets.CACHE_VERSION }}-${{ hashFiles('deno.lock') }}
+- uses: denoland/setup-deno@v2
+  with:
+    # setting `cache-hash` implies `cache: true` and will replace
+    # the default cache-hash of `${{ hashFiles('**/deno.lock') }}`
+    cache-hash: ${{ hashFiles('**/deno.json') }}
 ```
