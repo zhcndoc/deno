@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>模块与依赖 - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="模块与依赖"/><meta name="twitter:description" content="管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。"/><meta name="twitter:image" content="https://docs.deno.com/runtime/fundamentals/modules/index.png"/><meta name="twitter:image:alt" content="管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="模块与依赖"/><meta property="og:description" content="管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。"/><meta property="og:image" content="https://docs.deno.com/runtime/fundamentals/modules/index.png"/><meta property="og:image:alt" content="管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined" data-active="true">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined">示例</a><a href="/deploy/manual/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/deploy/manual/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink" data-active="true">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink">deno bench</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/fundamentals/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">基础知识</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">模块与依赖</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入模块 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E5%B1%9E%E6%80%A7" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入属性 </a></li><li class="m-2 leading-4"><a href="#%E6%95%B0%E6%8D%AE-url-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">数据 URL 导入 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入第三方模块和库 </a></li><li class="m-2 leading-4"><a href="#%E7%AE%A1%E7%90%86%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">管理第三方模块和库 </a></li><li class="m-2 leading-4"><a href="#%E5%8C%BA%E5%88%86-deno.json-%E4%B8%AD%E7%9A%84-imports-%E6%88%96-importmap-%E9%80%89%E9%A1%B9%E5%92%8C---import-map-%E9%80%89%E9%A1%B9" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">区分 deno.json 中的 imports 或 importMap 选项和 --import-map 选项 </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8-deno-add-%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用 deno add 添加依赖 </a></li><li class="m-2 leading-4"><a href="#%E5%8C%85%E7%89%88%E6%9C%AC" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">包版本 </a></li><li class="m-2 leading-4"><a href="#https-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">HTTPS 导入 </a></li><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96%E4%BE%9D%E8%B5%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖依赖 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0-jsr-%E5%8C%85" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖本地 JSR 包 </a></li><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96-npm-%E5%8C%85" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖 NPM 包 </a></li><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96-https-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖 HTTPS 导入 </a></li></ul></li><li class="m-2 leading-4"><a href="#vendoring-%E8%BF%9C%E7%A8%8B%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Vendoring 远程模块 </a></li><li class="m-2 leading-4"><a href="#%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">发布模块 </a></li><li class="m-2 leading-4"><a href="#%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">重新加载模块 </a></li><li class="m-2 leading-4"><a href="#%E5%8F%AA%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">只使用缓存模块 </a></li><li class="m-2 leading-4"><a href="#%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A3%80%E6%9F%A5%E5%92%8C%E9%94%81%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">完整性检查和锁文件 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%86%BB%E7%BB%93%E9%94%81%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">冻结锁文件 </a></li><li class="m-2 leading-4"><a href="#%E6%9B%B4%E6%94%B9%E9%94%81%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">更改锁文件路径 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">私有仓库 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#deno_auth_tokens" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">DENO_AUTH_TOKENS </a></li><li class="m-2 leading-4"><a href="#github" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">GitHub </a></li></ul></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>模块与依赖</h1><div><p>Deno 使用
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules">ECMAScript 模块</a>
+作为其默认模块系统，以符合现代 JavaScript 标准并提升更高效和一致的开发体验。这是 JavaScript 模块的官方标准，允许更好的树摇优化，改进的工具集成，以及在不同环境中的原生支持。</p>
+<p>通过采用 ECMAScript 模块，Deno 确保与不断发展的 JavaScript 生态系统的兼容性。对开发者而言，这意味着一个流畅且可预测的模块系统，避免了与遗留模块格式（如 CommonJS）相关的复杂性。</p>
+<h2 id="%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97" tabindex="-1">导入模块 <a class="header-anchor" href="#%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在这个例子中，<code>add</code> 函数是从本地的 <code>calc.ts</code> 模块导入的。</p>
+<div><div class="markdownBlockTitle">calc.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">number</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-12" class="copyButton" data-copy="export function add(a: number, b: number): number {
+  return a + b;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 导入与此文件相邻的 `calc.ts` 模块</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> add <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./calc.ts"</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 3</span>
+</code></pre>
+
+      <button id="copy-button-13" class="copyButton" data-copy="// 导入与此文件相邻的 `calc.ts` 模块
+import { add } from &quot;./calc.ts&quot;;
+
+console.log(add(1, 2)); // 3
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>你可以在包含 <code>main.ts</code> 和 <code>calc.ts</code> 的目录中运行这个例子，通过调用 <code>deno run main.ts</code>。</p>
+<p>使用 ECMAScript 模块时，本地导入规范必须始终包含完整的文件扩展名，不能省略。</p>
+<div><div class="markdownBlockTitle">example.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 错误：缺少文件扩展名</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> add <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./calc"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 正确：包含文件扩展名</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> add <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./calc.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-20" class="copyButton" data-copy="// 错误：缺少文件扩展名
+import { add } from &quot;./calc&quot;;
+
+// 正确：包含文件扩展名
+import { add } from &quot;./calc.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><h2 id="%E5%AF%BC%E5%85%A5%E5%B1%9E%E6%80%A7" tabindex="-1">导入属性 <a class="header-anchor" href="#%E5%AF%BC%E5%85%A5%E5%B1%9E%E6%80%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 支持 <code>with { type: &quot;json&quot; }</code> 导入属性语法以导入 JSON 文件：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> data <span class="token keyword">from</span> <span class="token string">"./data.json"</span> <span class="token keyword">with</span> <span class="token punctuation">{</span> type<span class="token operator">:</span> <span class="token string">"json"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>data<span class="token punctuation">.</span>property<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Access JSON data as an object</span>
+</code></pre>
+
+      <button id="copy-button-27" class="copyButton" data-copy="import data from &quot;./data.json&quot; with { type: &quot;json&quot; };
+
+console.log(data.property); // Access JSON data as an object
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这是 Deno 当前唯一支持的导入属性类型。对 <code>type: text</code> 和 <code>type: bytes</code> 的支持正在考虑未来的更新中，并且当前在等待
+<a href="https://github.com/whatwg/html/issues/9444">Module Harmony proposal</a>。</p>
+<h2 id="%E6%95%B0%E6%8D%AE-url-%E5%AF%BC%E5%85%A5" tabindex="-1">数据 URL 导入 <a class="header-anchor" href="#%E6%95%B0%E6%8D%AE-url-%E5%AF%BC%E5%85%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 支持导入数据 URL，这允许你导入不在单独文件中的内容。这对测试、原型设计或当你需要以编程方式生成模块时非常有用。</p>
+<p>你可以使用 <code>data:</code> URL 方案动态创建模块：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 从数据 URL 导入一个简单的 JavaScript 模块</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> <span class="token keyword">module</span> <span class="token keyword">from</span> <span class="token string">"data:application/javascript;base64,ZXhwb3J0IGNvbnN0IG1lc3NhZ2UgPSAiSGVsbG8gZnJvbSBkYXRhIFVSTCI7"</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>module<span class="token punctuation">.</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 输出: Hello from data URL</span>
+
+<span class="token comment">// 你也可以使用非 base64 格式</span>
+<span class="token keyword">const</span> plainModule <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">import</span><span class="token punctuation">(</span>
+  <span class="token string">"data:application/javascript,export function greet() { return 'Hi there!'; }"</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>plainModule<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 输出: Hi there!</span>
+
+<span class="token comment">// 带有文本内容的简单示例</span>
+<span class="token keyword">const</span> textModule <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">import</span><span class="token punctuation">(</span>
+  <span class="token string">"data:text/plain,export default 'This is plain text'"</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>textModule<span class="token punctuation">.</span>default<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 输出: This is plain text</span>
+</code></pre>
+
+      <button id="copy-button-40" class="copyButton" data-copy="// 从数据 URL 导入一个简单的 JavaScript 模块
+import * as module from &quot;data:application/javascript;base64,ZXhwb3J0IGNvbnN0IG1lc3NhZ2UgPSAiSGVsbG8gZnJvbSBkYXRhIFVSTCI7&quot;;
+console.log(module.message); // 输出: Hello from data URL
+
+// 你也可以使用非 base64 格式
+const plainModule = await import(
+  &quot;data:application/javascript,export function greet() { return &apos;Hi there!&apos;; }&quot;
+);
+console.log(plainModule.greet()); // 输出: Hi there!
+
+// 带有文本内容的简单示例
+const textModule = await import(
+  &quot;data:text/plain,export default &apos;This is plain text&apos;&quot;
+);
+console.log(textModule.default); // 输出: This is plain text
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>数据 URL 格式遵循以下模式：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">data:<span class="token punctuation">[</span><span class="token operator">&lt;</span>media type<span class="token operator">></span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token punctuation">;</span>base64<span class="token punctuation">]</span>,<span class="token operator">&lt;</span>data<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-44" class="copyButton" data-copy="data:[<media type>][;base64],<data>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>对于 JavaScript 模块，请使用 <code>application/javascript</code> 作为媒体类型。TypeScript 也支持 <code>application/typescript</code>。这个功能对在隔离下测试模块和在测试期间创建模拟模块特别有用。</p>
+<h2 id="%E5%AF%BC%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93" tabindex="-1">导入第三方模块和库 <a class="header-anchor" href="#%E5%AF%BC%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在 Deno 中使用第三方模块时，使用与本地代码相同的 <code>import</code> 语法。第三方模块通常从远程注册表导入，并以 <code>jsr:</code> 、 <code>npm:</code> 或 <code>https://</code> 开头。</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> camelCase <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@luca/cases@1.0.0"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> say <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:cowsay@1.6.0"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> pascalCase <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/case/mod.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-54" class="copyButton" data-copy="import { camelCase } from &quot;jsr:@luca/cases@1.0.0&quot;;
+import { say } from &quot;npm:cowsay@1.6.0&quot;;
+import { pascalCase } from &quot;https://deno.land/x/case/mod.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>Deno 推荐使用 <a href="https://jsr.io">JSR</a>，这是一个现代的 JavaScript 注册中心，用于第三方模块。在那里，你将会找到许多文档完善的 ES 模块供你的项目使用，包括
+<a href="/runtime/fundamentals/standard_library/">Deno 标准库</a>。</p>
+<p>你可以
+<a href="/runtime/fundamentals/node/#using-npm-modules">在这里阅读更多关于 Deno 对 npm 包支持的内容</a>。</p>
+<h2 id="%E7%AE%A1%E7%90%86%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93" tabindex="-1">管理第三方模块和库 <a class="header-anchor" href="#%E7%AE%A1%E7%90%86%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在多个文件中导入模块时，输入模块名称和完整版本说明符可能会变得繁琐。你可以通过在 <code>deno.json</code> 文件中使用 <code>imports</code> 字段来集中管理远程模块。我们将这个 <code>imports</code> 字段称为 <strong>导入映射（import map）</strong>，它基于 <a href="https://github.com/WICG/import-maps">导入映射标准</a>。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@luca/cases"</span><span class="token operator">:</span> <span class="token string">"jsr:@luca/cases@^1.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"cowsay"</span><span class="token operator">:</span> <span class="token string">"npm:cowsay@^1.6.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"cases"</span><span class="token operator">:</span> <span class="token string">"https://deno.land/x/case/mod.ts"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-67" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;@luca/cases&quot;: &quot;jsr:@luca/cases@^1.0.0&quot;,
+    &quot;cowsay&quot;: &quot;npm:cowsay@^1.6.0&quot;,
+    &quot;cases&quot;: &quot;https://deno.land/x/case/mod.ts&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>使用重新映射的说明符，代码看起来更加简洁：</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> camelCase <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@luca/cases"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> say <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"cowsay"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> pascalCase <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"cases"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-71" class="copyButton" data-copy="import { camelCase } from &quot;@luca/cases&quot;;
+import { say } from &quot;cowsay&quot;;
+import { pascalCase } from &quot;cases&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>重新映射名称可以是任何有效的说明符。这是 Deno 中一个非常强大的功能，可以重新映射任何内容。了解更多关于导入映射可以做什么的信息
+<a href="/runtime/fundamentals/configuration/#dependencies">这里</a>。</p>
+<h2 id="%E5%8C%BA%E5%88%86-deno.json-%E4%B8%AD%E7%9A%84-imports-%E6%88%96-importmap-%E9%80%89%E9%A1%B9%E5%92%8C---import-map-%E9%80%89%E9%A1%B9" tabindex="-1">区分 <code>deno.json</code> 中的 <code>imports</code> 或 <code>importMap</code> 选项和 <code>--import-map</code> 选项 <a class="header-anchor" href="#%E5%8C%BA%E5%88%86-deno.json-%E4%B8%AD%E7%9A%84-imports-%E6%88%96-importmap-%E9%80%89%E9%A1%B9%E5%92%8C---import-map-%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>[导入映射标准]要求每个模块有两个条目：一个是模块说明符，另一个是带有尾随 <code>/</code> 的说明符。这是因为该标准只允许每个模块说明符一个条目，而尾随的 <code>/</code> 表示该说明符指代一个目录。例如，当使用 <code>--import-map import_map.json</code> 选项时，<code>import_map.json</code> 文件必须为每个模块包含这两个条目（注意使用 <code>jsr:/@std/async</code> 而不是 <code>jsr:@std/async</code>）：</p>
+<div><div class="markdownBlockTitle">import_map.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@std/async"</span><span class="token operator">:</span> <span class="token string">"jsr:@std/async@^1.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"@std/async/"</span><span class="token operator">:</span> <span class="token string">"jsr:/@std/async@^1.0.0/"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-81" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;@std/async&quot;: &quot;jsr:@std/async@^1.0.0&quot;,
+    &quot;@std/async/&quot;: &quot;jsr:/@std/async@^1.0.0/&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p><code>deno.json</code> 中 <code>importMap</code> 字段引用的 <code>import_map.json</code> 文件的行为与使用 <code>--import-map</code> 选项完全相同，包含的每个模块的条目要求与上面所示相同。</p>
+<p>相比之下，<code>deno.json</code> 扩展了导入映射标准。当你在 <code>deno.json</code> 中使用 imports 字段或通过 <code>importMap</code> 字段引用 <code>import_map.json</code> 文件时，你只需要指定模块说明符而不带尾随 <code>/</code>：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@std/async"</span><span class="token operator">:</span> <span class="token string">"jsr:@std/async@^1.0.0"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-88" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;@std/async&quot;: &quot;jsr:@std/async@^1.0.0&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><h2 id="%E4%BD%BF%E7%94%A8-deno-add-%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96" tabindex="-1">使用 <code>deno add</code> 添加依赖 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8-deno-add-%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>使用 <code>deno add</code> 子命令可以轻松完成安装过程。它将自动将你请求的包的最新版本添加到 <code>deno.json</code> 的 <code>imports</code> 部分。</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 将模块的最新版本添加到 deno.json</span>
+$ deno <span class="token function">add</span> jsr:@luca/cases
+Add @luca/cases - jsr:@luca/cases@1.0.0
+</code></pre>
+
+      <button id="copy-button-95" class="copyButton" data-copy="# 将模块的最新版本添加到 deno.json
+$ deno add jsr:@luca/cases
+Add @luca/cases - jsr:@luca/cases@1.0.0
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@luca/cases"</span><span class="token operator">:</span> <span class="token string">"jsr:@luca/cases@^1.0.0"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-96" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;@luca/cases&quot;: &quot;jsr:@luca/cases@^1.0.0&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>你也可以指定确切的版本：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 传入确切版本</span>
+$ deno <span class="token function">add</span> jsr:@luca/cases@1.0.0
+Add @luca/cases - jsr:@luca/cases@1.0.0
+</code></pre>
+
+      <button id="copy-button-100" class="copyButton" data-copy="# 传入确切版本
+$ deno add jsr:@luca/cases@1.0.0
+Add @luca/cases - jsr:@luca/cases@1.0.0
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在 <a href="/runtime/reference/cli/add/"><code>deno add</code> 参考文档</a> 中阅读更多内容。</p>
+<p>你也可以使用 <code>deno remove</code> 移除依赖项：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno remove @luca/cases
+Remove @luca/cases
+</code></pre>
+
+      <button id="copy-button-107" class="copyButton" data-copy="$ deno remove @luca/cases
+Remove @luca/cases
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-108" class="copyButton" data-copy="{
+  &quot;imports&quot;: {}
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>在 <a href="/runtime/reference/cli/remove/"><code>deno remove</code> 参考文档</a> 中阅读更多内容。</p>
+<h2 id="%E5%8C%85%E7%89%88%E6%9C%AC" tabindex="-1">包版本 <a class="header-anchor" href="#%E5%8C%85%E7%89%88%E6%9C%AC"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>你可以为正在导入的包指定一个版本范围。这通过 <code>@</code> 符号后跟版本范围说明符来完成，并遵循 <a href="https://semver.org/">semver</a> 版本方案。</p>
+<p>例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">@scopename/mypackage           <span class="token comment"># 最高版本</span>
+@scopename/mypackage@16.1.0    <span class="token comment"># 精确版本</span>
+@scopename/mypackage@16        <span class="token comment"># 最高的 16.x 版本 >= 16.0.0</span>
+@scopename/mypackage@^16.1.0   <span class="token comment"># 最高的 16.x 版本 >= 16.1.0</span>
+@scopename/mypackage@~16.1.0   <span class="token comment"># 最高的 16.1.x 版本 >= 16.1.0</span>
+</code></pre>
+
+      <button id="copy-button-121" class="copyButton" data-copy="@scopename/mypackage           # 最高版本
+@scopename/mypackage@16.1.0    # 精确版本
+@scopename/mypackage@16        # 最高的 16.x 版本 >= 16.0.0
+@scopename/mypackage@^16.1.0   # 最高的 16.x 版本 >= 16.1.0
+@scopename/mypackage@~16.1.0   # 最高的 16.1.x 版本 >= 16.1.0
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>以下是所有你可以指定版本或范围的方式的概述：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.2.3</code></td>
+<td>精确版本。仅使用此特定版本。</td>
+<td><code>1.2.3</code></td>
+</tr>
+<tr>
+<td><code>^1.2.3</code></td>
+<td>兼容版本 1.2.3。允许更新而不改变最左侧的非零数字。<br>例如，<code>1.2.4</code> 和 <code>1.3.0</code> 是允许的，但 <code>2.0.0</code> 不是。</td>
+<td><code>^1.2.3</code></td>
+</tr>
+<tr>
+<td><code>~1.2.3</code></td>
+<td>大约等价于版本 1.2.3。允许对补丁版本进行更新。<br>例如，<code>1.2.4</code> 是允许的，但 <code>1.3.0</code> 不是。</td>
+<td><code>~1.2.3</code></td>
+</tr>
+<tr>
+<td><code>&gt;=1.2.3</code></td>
+<td>大于或等于版本 1.2.3。任何版本 <code>1.2.3</code> 或更高的版本都是允许的。</td>
+<td><code>&gt;=1.2.3</code></td>
+</tr>
+<tr>
+<td><code>&lt;=1.2.3</code></td>
+<td>小于或等于版本 1.2.3。任何版本 <code>1.2.3</code> 或更低的版本都是允许的。</td>
+<td><code>&lt;=1.2.3</code></td>
+</tr>
+<tr>
+<td><code>&gt;1.2.3</code></td>
+<td>大于版本 1.2.3。仅允许版本高于 <code>1.2.3</code> 的版本。</td>
+<td><code>&gt;1.2.3</code></td>
+</tr>
+<tr>
+<td><code>&lt;1.2.3</code></td>
+<td>小于版本 1.2.3。仅允许低于 <code>1.2.3</code> 的版本。</td>
+<td><code>&lt;1.2.3</code></td>
+</tr>
+<tr>
+<td><code>1.2.x</code></td>
+<td>在次版本 1.2 中的任何补丁版本。例如，<code>1.2.0</code>、<code>1.2.1</code> 等。</td>
+<td><code>1.2.x</code></td>
+</tr>
+<tr>
+<td><code>1.x</code></td>
+<td>在主版本 1 中的任何次版本和补丁版本。例如，<code>1.0.0</code>、<code>1.1.0</code>、<code>1.2.0</code> 等。</td>
+<td><code>1.x</code></td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>任何版本都是允许的。</td>
+<td><code>*</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="https-%E5%AF%BC%E5%85%A5" tabindex="-1">HTTPS 导入 <a class="header-anchor" href="#https-%E5%AF%BC%E5%85%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 还支持引用 HTTP/HTTPS URL 的导入语句，可以直接：</p>
+<div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> Application <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/oak/mod.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-258" class="copyButton" data-copy="import { Application } from &quot;https://deno.land/x/oak/mod.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>或作为你的 <code>deno.json</code> 导入映射的一部分：</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"oak"</span><span class="token operator">:</span> <span class="token string">"https://deno.land/x/oak/mod.ts"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-262" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;oak&quot;: &quot;https://deno.land/x/oak/mod.ts&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>支持 HTTPS 导入使我们能够支持以下 JavaScript CDN，因为它们提供对 JavaScript 模块的 URL 访问：</p>
+<ul>
+<li><a href="https://deno.land/x">deno.land/x</a></li>
+<li><a href="https://esm.sh">esm.sh</a></li>
+<li><a href="https://unpkg.com">unpkg.com</a></li>
+</ul>
+<p>HTTPS 导入在你的项目是一个小型且通常是单文件的 Deno 项目时非常有用，因为不需要其他配置。使用 HTTPS 导入，你可以完全避免拥有 <code>deno.json</code> 文件。然而，在更大的应用中建议不要使用这种导入方式，因为你可能会遇到版本冲突（不同的文件使用不同的版本说明符）。</p>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>使用 HTTPS 导入时请谨慎，并且仅<strong>从受信任的来源</strong>。如果服务器被攻破，它可能会向你的应用程序提供恶意代码。如果你在不同的文件中导入不同版本，可能还会导致版本问题。HTTPS 导入仍然被支持，<strong>但我们建议使用包注册中心以获得更好的体验。</strong></p>
+<p>
+</div>
+</p>
+<h2 id="%E8%A6%86%E7%9B%96%E4%BE%9D%E8%B5%96" tabindex="-1">覆盖依赖 <a class="header-anchor" href="#%E8%A6%86%E7%9B%96%E4%BE%9D%E8%B5%96"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 提供机制来覆盖依赖项，使开发者在开发或测试期间使用自定义或本地版本库。</p>
+<p>注意：如果你需要在构建之间缓存和修改本地依赖项，考虑<a href="#vendoring-remote-modules">对远程模块进行 vendoring</a>。</p>
+<h3 id="%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0-jsr-%E5%8C%85" tabindex="-1">覆盖本地 JSR 包 <a class="header-anchor" href="#%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0-jsr-%E5%8C%85"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>对于熟悉 Node.js 中 <code>npm link</code> 的开发者，Deno 通过 <code>deno.json</code> 中的 <code>patch</code> 字段提供了类似的功能。这允许你在开发期间使用本地版本覆盖依赖项，而不需要发布它们。</p>
+<p>示例：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"patch"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"../some-package-or-workspace"</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-313" class="copyButton" data-copy="{
+  &quot;patch&quot;: [
+    &quot;../some-package-or-workspace&quot;
+  ]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>关键点：</p>
+<ul>
+<li><code>patch</code> 字段接受包含 JSR 包或工作区的目录路径。如果你在工作区中引用单个包，整个工作区将被包括在内。</li>
+<li>此功能仅在工作区根目录中被尊重。在其他位置使用 <code>patch</code> 将触发警告。</li>
+<li>目前，<code>patch</code> 仅限于 JSR 包。尝试覆盖 <code>npm</code> 包将导致警告而无效。</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>目前不支持 <code>npm</code> 包的覆盖。这计划在未来的更新中实现。</li>
+<li>不支持基于 Git 的依赖项覆盖。</li>
+<li><code>patch</code> 字段要求在工作区根目录中进行适当配置。</li>
+<li>此功能为实验性质，可能会根据用户反馈进行更改。</li>
+</ul>
+<h3 id="%E8%A6%86%E7%9B%96-npm-%E5%8C%85" tabindex="-1">覆盖 NPM 包 <a class="header-anchor" href="#%E8%A6%86%E7%9B%96-npm-%E5%8C%85"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno 支持通过本地版本覆盖 npm 包，类似于如何覆盖 JSR 包。这允许你在开发期间使用本地 npm 包副本而无需发布它。</p>
+<p>要使用本地 npm 包，请在你的 <code>deno.json</code> 中配置 <code>patch</code> 字段：</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"patch"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"../path/to/local_npm_package"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"unstable"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"npm-patch"</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-368" class="copyButton" data-copy="{
+  &quot;patch&quot;: [
+    &quot;../path/to/local_npm_package&quot;
+  ],
+  &quot;unstable&quot;: [&quot;npm-patch&quot;]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>此功能需要一个 <code>node_modules</code> 目录，并且根据你的 <code>nodeModulesDir</code> 设置具有不同的行为：</p>
+<ul>
+<li>使用 <code>&quot;nodeModulesDir&quot;: &quot;auto&quot;</code>：该目录在每次运行时重新创建，这略微增加启动时间，但确保始终使用最新版本。</li>
+<li>使用 <code>&quot;nodeModulesDir&quot;: &quot;manual&quot;</code>（使用 package.json 时的默认设置）：更新包后必须运行 <code>deno install</code> 以将更改应用到工作区的 <code>node_modules</code> 目录。</li>
+</ul>
+<p>限制：</p>
+<ul>
+<li>指定本地 npm 包副本或更改其依赖项将从锁文件中清除 npm 包，这可能导致 npm 解析工作方式不同。</li>
+<li>即使使用本地副本，npm 包名称必须在注册表中存在。</li>
+<li>此功能目前处于 <code>unstable</code> 标志后面。</li>
+</ul>
+<h3 id="%E8%A6%86%E7%9B%96-https-%E5%AF%BC%E5%85%A5" tabindex="-1">覆盖 HTTPS 导入 <a class="header-anchor" href="#%E8%A6%86%E7%9B%96-https-%E5%AF%BC%E5%85%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno 还允许通过 <code>deno.json</code> 中的 <code>importMap</code> 字段覆盖 HTTPS 导入。此功能在调试或临时修复中用本地修补版本替换远程依赖项时特别有用。</p>
+<p>示例：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"example/"</span><span class="token operator">:</span> <span class="token string">"https://deno.land/x/example/"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"scopes"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"https://deno.land/x/example/"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"https://deno.land/x/my-library@1.0.0/mod.ts"</span><span class="token operator">:</span> <span class="token string">"./patched/mod.ts"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-413" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;example/&quot;: &quot;https://deno.land/x/example/&quot;
+  },
+  &quot;scopes&quot;: {
+    &quot;https://deno.land/x/example/&quot;: {
+      &quot;https://deno.land/x/my-library@1.0.0/mod.ts&quot;: &quot;./patched/mod.ts&quot;
+    }
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>关键点：</p>
+<ul>
+<li>导入映射中的 <code>scopes</code> 字段允许你将特定导入重定向到其他路径。</li>
+<li>这通常用于使用本地文件覆盖远程依赖项以进行测试或开发目的。</li>
+<li>导入映射仅适用于项目的根目录。依赖项中的嵌套导入映射会被忽略。</li>
+</ul>
+<h2 id="vendoring-%E8%BF%9C%E7%A8%8B%E6%A8%A1%E5%9D%97" tabindex="-1">Vendoring 远程模块 <a class="header-anchor" href="#vendoring-%E8%BF%9C%E7%A8%8B%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>如果你的项目具有外部依赖项，你可能希望将它们存储在本地，以避免每次构建项目时都从互联网下载它们。这在你在 CI 服务器或 Docker 容器中构建项目时尤其有用，或者需要修补或以其他方式修改远程依赖项。</p>
+<p>Deno 通过在 <code>deno.json</code> 文件中设置以下功能来提供此功能：</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"vendor"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-443" class="copyButton" data-copy="{
+  &quot;vendor&quot;: true
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>将上述代码段添加到你的 <code>deno.json</code> 文件中，Deno 将在项目运行时将所有依赖项缓存到 <code>vendor</code> 目录中，或者你可以选择运行 <code>deno install --entrypoint</code> 命令以立即缓存依赖项：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno <span class="token function">install</span> <span class="token parameter variable">--entrypoint</span> main.ts
+</code></pre>
+
+      <button id="copy-button-447" class="copyButton" data-copy="deno install --entrypoint main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后你可以像往常一样使用 <code>deno run</code> 运行应用程序：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno run main.ts
+</code></pre>
+
+      <button id="copy-button-451" class="copyButton" data-copy="deno run main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在进行 vendoring 后，你可以使用 <code>--cached-only</code> 标志在没有互联网访问的情况下运行 <code>main.ts</code>，这会强制 Deno 仅使用本地可用的模块。</p>
+<p>有关更加高级的覆盖，例如在开发期间替代依赖项，请参见 <a href="#overriding-dependencies">覆盖依赖</a>。</p>
+<h2 id="%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9D%97" tabindex="-1">发布模块 <a class="header-anchor" href="#%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>任何定义导出的 Deno 程序都可以作为模块发布。这允许其他开发人员在自己的项目中导入和使用你的代码。模块可以发布到：</p>
+<ul>
+<li><a href="https://jsr.io">JSR</a> - 推荐，原生支持 TypeScript，并为你自动生成文档</li>
+<li><a href="https://www.npmjs.com/">npm</a> - 使用 <a href="https://github.com/denoland/dnt">dnt</a> 创建 npm 包</li>
+<li><a href="https://deno.com/add_module">deno.land/x</a> - 用于 HTTPS 导入，尽可能使用 JSR，而不是</li>
+</ul>
+<h2 id="%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97" tabindex="-1">重新加载模块 <a class="header-anchor" href="#%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>默认情况下，Deno 使用全局缓存目录（<code>DENO_DIR</code>）来存储下载的依赖项。这个缓存共享于所有项目。</p>
+<p>你可以使用 <code>--reload</code> 标志强制 Deno 重新获取并重新编译模块到缓存中。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 重新加载所有内容</span>
+deno run <span class="token parameter variable">--reload</span> my_module.ts
+
+<span class="token comment"># 重新加载特定模块</span>
+deno run <span class="token parameter variable">--reload</span><span class="token operator">=</span>jsr:@std/fs my_module.ts
+</code></pre>
+
+      <button id="copy-button-490" class="copyButton" data-copy="# 重新加载所有内容
+deno run --reload my_module.ts
+
+# 重新加载特定模块
+deno run --reload=jsr:@std/fs my_module.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E5%8F%AA%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97" tabindex="-1">只使用缓存模块 <a class="header-anchor" href="#%E5%8F%AA%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>要强制 Deno 只使用之前已缓存的模块，请使用 <code>--cached-only</code> 标志：</p>
+<div class="relative"><pre><code class="highlight notranslate language-shell">deno run --cached-only mod.ts
+</code></pre>
+
+      <button id="copy-button-497" class="copyButton" data-copy="deno run --cached-only mod.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果有任何依赖于 mod.ts 的依赖树中的依赖项尚未缓存，这将失败。</p>
+<h2 id="%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A3%80%E6%9F%A5%E5%92%8C%E9%94%81%E6%96%87%E4%BB%B6" tabindex="-1">完整性检查和锁文件 <a class="header-anchor" href="#%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A3%80%E6%9F%A5%E5%92%8C%E9%94%81%E6%96%87%E4%BB%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>想象一下，你的模块依赖于位于 <a href="https://some.url/a.ts">https://some.url/a.ts</a> 的远程模块。当你第一次编译模块时，<code>a.ts</code> 被获取、编译并缓存。此缓存版本将在你在不同机器上运行模块（例如在生产环境中）或手动重新加载缓存（使用命令，如 <code>deno install --reload</code>）之前使用。</p>
+<p>但是如果 <code>https://some.url/a.ts</code> 的内容发生变化呢？这可能导致你的生产模块与本地模块运行的依赖代码不同。为了检测这一点，Deno 使用完整性检查和锁文件。</p>
+<p>Deno 使用 <code>deno.lock</code> 文件检查外部模块的完整性。要启用锁文件，应该做到以下两点之一：</p>
+<ol>
+<li>
+<p>在当前或祖先目录中创建 <code>deno.json</code> 文件，这将自动创建一个附加锁文件 <code>deno.lock</code>。</p>
+<p>注意，可以通过在 deno.json 中指定以下内容来禁用此功能：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"lock"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-521" class="copyButton" data-copy="{
+  &quot;lock&quot;: false
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></li>
+<li>
+<p>使用 <code>--lock</code> 标志以启用并指定锁文件检查。</p>
+</li>
+</ol>
+<h3 id="%E5%86%BB%E7%BB%93%E9%94%81%E6%96%87%E4%BB%B6" tabindex="-1">冻结锁文件 <a class="header-anchor" href="#%E5%86%BB%E7%BB%93%E9%94%81%E6%96%87%E4%BB%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>默认情况下，Deno 使用附加锁文件，新的依赖项将被添加到锁文件中，而不是发生错误。</p>
+<p>在某些情况下（例如 CI 流水线或生产环境），这可能并不是所希望的，在这些情况下你希望 Deno 在遇到从未见过的依赖项时报错。为此，你可以指定 <code>--frozen</code> 标志，或在 deno.json 文件中设置以下内容：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"lock"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"frozen"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-538" class="copyButton" data-copy="{
+  &quot;lock&quot;: {
+    &quot;frozen&quot;: true
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>在使用冻结的锁文件运行 deno 命令时，任何尝试用新内容更新锁文件的操作都会导致命令退出，并显示将要进行的修改的错误信息。</p>
+<p>如果你希望更新锁文件，可以在命令行中指定 <code>--frozen=false</code> ，以暂时禁用冻结锁文件。</p>
+<h3 id="%E6%9B%B4%E6%94%B9%E9%94%81%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84" tabindex="-1">更改锁文件路径 <a class="header-anchor" href="#%E6%9B%B4%E6%94%B9%E9%94%81%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>可以通过指定 <code>--lock=deps.lock</code> 或在 Deno 配置文件中设置以下内容来配置锁文件路径：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"lock"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"deps.lock"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-551" class="copyButton" data-copy="{
+  &quot;lock&quot;: {
+    &quot;path&quot;: &quot;deps.lock&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><h2 id="%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93" tabindex="-1">私有仓库 <a class="header-anchor" href="#%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>如果你在寻找私有 npm 注册中心和 <code>.npmrc</code> 支持，请访问
+<a href="/runtime/fundamentals/node/#private-registries">npm 支持</a> 页面。</p>
+<p>
+</div>
+</p>
+<p>可能会有一些情况，你希望加载位于 <em>私有</em> 仓库中的远程模块，例如 GitHub 中的私有仓库。</p>
+<p>Deno 支持在请求远程模块时发送 bearer token。Bearer tokens 是与 OAuth 2.0 一起使用的主流访问令牌类型，并且广泛得到托管服务的支持（例如 GitHub、GitLab、Bitbucket、Cloudsmith 等）。</p>
+<h3 id="deno_auth_tokens" tabindex="-1">DENO_AUTH_TOKENS <a class="header-anchor" href="#deno_auth_tokens"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno CLI 将寻找名为 <code>DENO_AUTH_TOKENS</code> 的环境变量，以确定应考虑使用哪些身份验证令牌来请求远程模块。环境变量的值格式为 <em>n</em> 数量的令牌，由分号（<code>;</code>）分隔，其中每个令牌可以是：</p>
+<ul>
+<li>格式为 <code>{token}@{hostname[:port]}</code> 的 bearer token，或者</li>
+<li>格式为 <code>{username}:{password}@{hostname[:port]}</code> 的基本认证数据</li>
+</ul>
+<p>例如，单个令牌对于 <code>deno.land</code> 看起来像这样：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token assign-left variable">DENO_AUTH_TOKENS</span><span class="token operator">=</span>a1b2c3d4e5f6@deno.land
+</code></pre>
+
+      <button id="copy-button-591" class="copyButton" data-copy="DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>或者：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token assign-left variable">DENO_AUTH_TOKENS</span><span class="token operator">=</span>username:password@deno.land
+</code></pre>
+
+      <button id="copy-button-595" class="copyButton" data-copy="DENO_AUTH_TOKENS=username:password@deno.land
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>多个令牌则看起来像这样：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token assign-left variable">DENO_AUTH_TOKENS</span><span class="token operator">=</span>a1b2c3d4e5f6@deno.land<span class="token punctuation">;</span>f1e2d3c4b5a6@example.com:8080<span class="token punctuation">;</span>username:password@deno.land
+</code></pre>
+
+      <button id="copy-button-599" class="copyButton" data-copy="DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land;f1e2d3c4b5a6@example.com:8080;username:password@deno.land
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>当 Deno 前往获取一个远程模块时，如果主机名与远程模块的主机名匹配，Deno 将把请求的 <code>Authorization</code> 头设置为 <code>Bearer {token}</code> 或 <code>Basic {base64EncodedData}</code> 的值。这允许远程服务器识别请求是与特定已认证用户关联的授权请求，并提供对服务器上适当资源和模块的访问。</p>
+<h3 id="github" tabindex="-1">GitHub <a class="header-anchor" href="#github"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要访问 GitHub 上的私有仓库，你需要为自己发放一个 <em>个人访问令牌</em>。你可以通过登录 GitHub 并进入
+<em>设置 -&gt; 开发者设置 -&gt; 个人访问令牌</em>：</p>
+<p><img src="/runtime/fundamentals/images/private-pat.png" alt="GitHub 上的个人访问令牌设置"></p>
+<p>然后选择 <em>生成新令牌</em>，为你的令牌提供描述，并相应地授予 <code>repo</code> 权限。<code>repo</code> 权限将使你能够读取文件内容（有关 <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes">GitHub 中作用域的更多信息</a>）：</p>
+<p><img src="/runtime/fundamentals/images/private-github-new-token.png" alt="在 GitHub 上创建新的个人访问令牌"></p>
+<p>创建后，GitHub 将仅显示新令牌一次，此时你要在环境变量中使用的值：</p>
+<p><img src="/runtime/fundamentals/images/private-github-token-display.png" alt="在 GitHub 上显示新生成的令牌"></p>
+<p>为了访问包含在 GitHub 私有仓库中的模块，你需要在环境变量 <code>DENO_AUTH_TOKENS</code> 中使用发放的令牌，作用域为 <code>raw.githubusercontent.com</code> 主机名。例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token assign-left variable">DENO_AUTH_TOKENS</span><span class="token operator">=</span>a1b2c3d4e5f6@raw.githubusercontent.com
+</code></pre>
+
+      <button id="copy-button-627" class="copyButton" data-copy="DENO_AUTH_TOKENS=a1b2c3d4e5f6@raw.githubusercontent.com
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这应该允许 Deno 访问任何由该令牌发放用户可以访问的模块。</p>
+<p>当令牌不正确或用户没有访问模块的权限时，GitHub 将发出 <code>404 Not Found</code> 状态，而不是未授权状态。因此，如果你在命令行中收到访问模块未找到的错误，请检查环境变量设置和个人访问令牌设置。</p>
+<p>此外，<code>deno run -L debug</code> 应该打印出关于从环境变量解析出的令牌数量的调试信息。如果它觉得任何令牌格式错误，它会打印错误消息，但出于安全原因，它不会打印任何令牌的详细信息。</p>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/fundamentals/modules.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入模块 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E5%B1%9E%E6%80%A7" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入属性 </a></li><li class="m-2 leading-4"><a href="#%E6%95%B0%E6%8D%AE-url-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">数据 URL 导入 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导入第三方模块和库 </a></li><li class="m-2 leading-4"><a href="#%E7%AE%A1%E7%90%86%E7%AC%AC%E4%B8%89%E6%96%B9%E6%A8%A1%E5%9D%97%E5%92%8C%E5%BA%93" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">管理第三方模块和库 </a></li><li class="m-2 leading-4"><a href="#%E5%8C%BA%E5%88%86-deno.json-%E4%B8%AD%E7%9A%84-imports-%E6%88%96-importmap-%E9%80%89%E9%A1%B9%E5%92%8C---import-map-%E9%80%89%E9%A1%B9" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">区分 deno.json 中的 imports 或 importMap 选项和 --import-map 选项 </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8-deno-add-%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用 deno add 添加依赖 </a></li><li class="m-2 leading-4"><a href="#%E5%8C%85%E7%89%88%E6%9C%AC" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">包版本 </a></li><li class="m-2 leading-4"><a href="#https-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">HTTPS 导入 </a></li><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96%E4%BE%9D%E8%B5%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖依赖 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0-jsr-%E5%8C%85" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖本地 JSR 包 </a></li><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96-npm-%E5%8C%85" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖 NPM 包 </a></li><li class="m-2 leading-4"><a href="#%E8%A6%86%E7%9B%96-https-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">覆盖 HTTPS 导入 </a></li></ul></li><li class="m-2 leading-4"><a href="#vendoring-%E8%BF%9C%E7%A8%8B%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Vendoring 远程模块 </a></li><li class="m-2 leading-4"><a href="#%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">发布模块 </a></li><li class="m-2 leading-4"><a href="#%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">重新加载模块 </a></li><li class="m-2 leading-4"><a href="#%E5%8F%AA%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">只使用缓存模块 </a></li><li class="m-2 leading-4"><a href="#%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A3%80%E6%9F%A5%E5%92%8C%E9%94%81%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">完整性检查和锁文件 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%86%BB%E7%BB%93%E9%94%81%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">冻结锁文件 </a></li><li class="m-2 leading-4"><a href="#%E6%9B%B4%E6%94%B9%E9%94%81%E6%96%87%E4%BB%B6%E8%B7%AF%E5%BE%84" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">更改锁文件路径 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">私有仓库 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#deno_auth_tokens" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">DENO_AUTH_TOKENS </a></li><li class="m-2 leading-4"><a href="#github" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">GitHub </a></li></ul></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>
