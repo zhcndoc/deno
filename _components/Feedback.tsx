@@ -102,39 +102,40 @@ export default function Feedback({ file }: { file: string | undefined }) {
                   id="feedback-more"
                   class="hidden w-full overflow-hidden"
                 >
-                  <p class="font-semibold !mt-2 !mb-4">
-                    谢谢！反馈已收到。{" "}
-                    <span aria-hidden="true">✅</span>
+                  <p class="font-semibold !mt-2">
+                    我们可以做些什么来改善这个页面？
                   </p>
                   <div class="space-y-1">
-                    <label for="feedback-comment">
-                      还有其他意见吗？（<i>可选</i>）
-                    </label>
                     <textarea
                       class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded"
                       name="feedback-comment"
                       id="feedback-comment"
+                      placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"
                     >
                     </textarea>
                   </div>
                   <div class="space-y-1">
                     <label for="feedback-contact">
-                    电子邮件地址（<i>可选</i>）
+                      GitHub 用户名（可选）
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded"
                       name="feedback-contact"
                       id="feedback-contact"
                       aria-invalid="false"
+                      placeholder="username"
                       value=""
                     />
+                    <p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">
+                      如果提供，您将在创建的 GitHub 问题中被 @提及
+                    </p>
                   </div>
                   <button
                     type="submit"
                     class="btn bg-green-400 dark:bg-green-600 mt-4"
                   >
-                    发送更多反馈
+                    发送反馈给我们
                   </button>
                 </div>
               </div>

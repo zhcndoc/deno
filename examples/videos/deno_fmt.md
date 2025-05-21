@@ -1,25 +1,22 @@
 ---
-title: "Formatting with Deno fmt"
+title: "使用 Deno fmt 进行格式化"
 url: /examples/deno_fmt/
 videoUrl: https://www.youtube.com/watch?v=Ouzso9gQqnc
 layout: video.tsx
 ---
 
-## Video description
+## 视频描述
 
-A quick cut of tips and tricks on
-[Deno's built in formatter, `deno fmt`](/runtime/reference/cli/fmt/).
+一个快速的提示和技巧集，关于
+[Deno 内置格式化工具 `deno fmt`](/runtime/reference/cli/fmt/)。
 
-what's up everyone, Andy from Deno here, back for another episode of the **Deno
-tool chain series** where we dig a little deeper into the deno subcommands.
+大家好，我是来自 Deno 的 Andy，回到 **Deno 工具链系列** 的另一集，在这里我们深入探讨 Deno 的子命令。
 
-Today we're going to look at `deno fmt`, our built-in formatter that's
-customizable, performant and flexible enough to fit into any workflow. Let's
-dive right in.
+今天我们将看看 `deno fmt`，我们的内置格式化工具，它是可定制的、性能优越并且灵活到适应任何工作流。让我们直接开始吧。
 
-### What is `deno fmt`?
+### 什么是 `deno fmt`？
 
-`deno fmt` will format these file extensions:
+`deno fmt` 将格式化以下文件扩展名：
 
 - `.js`
 - `.jsx`
@@ -30,34 +27,31 @@ dive right in.
 - `.md`
 - `.markdown`
 
-The simplest way to use `deno fmt` is to run it from the command line:
+使用 `deno fmt` 的最简单方法是从命令行运行它：
 
 ```sh
 deno fmt
 ```
 
-You could even pipe in a string or file:
+你甚至可以将字符串或文件输入到它：
 
 ```sh
-echo ' console.log(    5  );' | deno fmt
+echo ' console.log(    5  );' | deno fmt -
 ## console.log(5);
 ```
 
-You can also use the `--check` flag which will check if your code has been
-formatted by `deno fmt`. If it's not formatted, it will return a nonzero exit
-code:
+你还可以使用 `--check` 标志，它将检查你的代码是否被 `deno fmt` 格式化。如果没有格式化，它将返回一个非零的退出代码：
 
 ```sh
-echo 'deno fmt --check
-## error: Found 1 not formatted file in 1 files
+echo ' console.log(    5  );' | deno fmt --check -
+## Not formatted stdin
 ```
 
-This is useful in CI where you want to check if the code is formatted properly.
+这在 CI 中非常有用，当你想检查代码是否正确格式化时。
 
-### Editor integration
+### 编辑器集成
 
-`deno fmt` also works in your editor, like VS Code. Set `deno fmt` as your
-default formatter in your editors settings, eg for VS Code:
+`deno fmt` 也可以在你的编辑器中使用，比如 VS Code。可以在编辑器设置中将 `deno fmt` 设置为默认格式化工具，例如在 VS Code 中：
 
 ```json title=".vscode/settings.json"
 {
@@ -66,18 +60,16 @@ default formatter in your editors settings, eg for VS Code:
 }
 ```
 
-You can also set format on save to be true
+你也可以设置保存时自动格式化为 true。
 
-### Multiple ways to format
+### 多种格式化方式
 
-In some situations, there are multiple ways to format, and Deno lets you decide
-how you want to format. For example an object can be formatted horizontally or
-vertically, it depends on where you put your first item. Eg:
+在某些情况下，有多种格式化方式，并且 Deno 允许你决定想要如何格式化。例如，一个对象可以水平或垂直格式化，这取决于你将第一个项放置在哪里。例如：
 
 ```typescript
 const foo = { bar: "baz", qux: "quux" };
 
-// or
+// 或者
 
 const foo = {
   bar: "baz",
@@ -85,13 +77,12 @@ const foo = {
 };
 ```
 
-Same with an array. You can format it horizontally or vertically depending on
-where you put your first item. Eg:
+数组也是如此。你可以根据第一个项的位置选择水平或垂直格式化。例如：
 
 ```typescript
 const foo = ["bar", "baz", "qux"];
 
-// or
+// 或者
 
 const foo = [
   "bar",
@@ -100,25 +91,25 @@ const foo = [
 ];
 ```
 
-### Remove escaped quotes
+### 移除转义引号
 
-`deno fmt` can also reduce the escaped characters in your strings. For example,
-if you have a string with escaped quotes, `deno fmt` will remove them:
+`deno fmt` 还可以减少字符串中的转义字符。例如， 如果你有一个包含转义引号的字符串，`deno fmt` 将移除它们：
+
+<!-- deno-fmt-ignore-start -->
+```typescript
+console.log("hello \"world\"");
+```
+<!-- deno-fmt-ignore-end -->
+
+将会格式化为：
 
 ```typescript
 console.log('hello "world"');
 ```
 
-will be formatted to:
+### 忽略行或文件
 
-```typescript
-console.log('hello "world"');
-```
-
-### Ignoring lines or files
-
-What if you want `deno fmt` to skip a line or a file? You can use the
-`//deno-fmt-ignore` comment to tell `deno fmt` to skip the following line, eg:
+如果你想让 `deno fmt` 跳过一行或一个文件怎么办？你可以使用 `//deno-fmt-ignore` 注释来告诉 `deno fmt` 跳过下一行，例如：
 
 ```typescript
 console.log("This   line    will  be  formatted");
@@ -127,9 +118,7 @@ console.log("This   line    will  be  formatted");
 console.log("This   line  will  not be    formatted");
 ```
 
-To tell `deno fmt` to skip a file, you can use the `// deno-fmt-ignore-file`
-comment at the top of the file to ignore. Or you can use your `deno.json` config
-file under the `fmt` field:
+要让 `deno fmt` 跳过一个文件，可以在文件顶部使用 `// deno-fmt-ignore-file` 注释来忽略它。或者，你可以在你的 `deno.json` 配置文件的 `fmt` 字段下使用：
 
 ```json
 {
@@ -139,8 +128,7 @@ file under the `fmt` field:
 }
 ```
 
-Or at the top level of `deno.json` to tell both `deno fmt` and `deno lint` to
-ignore it. (This is a good place to put your generated files):
+或者在 `deno.json` 的顶层告诉 `deno fmt` 和 `deno lint` 都忽略它。（这是放置生成文件的好地方）：
 
 ```json
 {
@@ -150,10 +138,9 @@ ignore it. (This is a good place to put your generated files):
 }
 ```
 
-### Formatting markdown
+### 格式化 markdown
 
-`deno fmt` also works on markdown files. You can choose how to format prose with
-the option `"proseWrap"` set to either `always`, `never` or `preserve`, eg:
+`deno fmt` 也适用于 markdown 文件。你可以选择如何格式化散文，通过将选项 `"proseWrap"` 设置为 `always`、`never` 或 `preserve`，例如：
 
 ```json
 {
@@ -163,8 +150,7 @@ the option `"proseWrap"` set to either `always`, `never` or `preserve`, eg:
 }
 ```
 
-`deno fmt` can also format numbered lists if you start a number list with two
-ones, for example:
+如果你用两个 `1` 开始编号列表，`deno fmt` 也可以格式化带有编号的列表，例如：
 
 ```markdown title="list.md"
 1. First
@@ -174,20 +160,17 @@ ones, for example:
 1. Fifth
 ```
 
-The formatter will automatically format the list to all ones, but when you
-render it, it will show the number list properly!
+格式化工具将自动将列表格式化为所有的 `1`，但当你渲染它时，它会正确显示编号列表！
 
-If that's weird you can also put `1` and then `2` and then run `deno fmt`, which
-will number the rest of the list correctly for you.
+如果这样做很奇怪，你也可以先写下 `1` 然后写下 `2`，运行 `deno fmt`，这样将会为你正确编号其余的列表。
 
-`deno fmt` will also format code blocks of JavaScript and TypeScript in your
-markdown. It can even format markdown in markdown!
+`deno fmt` 也会格式化你 markdown 中的 JavaScript 和 TypeScript 代码块。它甚至可以在 markdown 中格式化 markdown！
 
-### Formatter options
+### 格式化选项
 
-Let's take a look at
-[all the options available in `deno fmt`](/runtime/reference/cli/fmt/#formatting-options).
-Note that all these options also have a corresponding flags in the CLI.
+让我们看看
+[在 `deno fmt` 中可用的所有选项](/runtime/reference/cli/fmt/#formatting-options)。
+注意，所有这些选项在 CLI 中都有相应的标志。
 
 ```json
 {
@@ -211,12 +194,6 @@ Note that all these options also have a corresponding flags in the CLI.
 - `--prose-wrap <prose-wrap>`
 - `--ignore=<ignore>`
 
-### `deno fmt`'s Performance
+### `deno fmt` 的性能
 
-`deno fmt` is really fast, especially on subsequent runs due to caching, which
-is enabled by default. Here's the first run that we did on Deno's standard
-Library. Let's run it again! The system time shows that the second run is a
-third faster. If we update a file and run it again it's still fast since
-`deno fmt` checks only the changed file. Let's compare this to `Prettier` (a
-popular Node formatter), we'll run Prettier with a caching flag enabled. Even on
-a second run, `deno fmt` is almost 20 times faster!
+`deno fmt` 非常快，尤其是在随后的运行中由于缓存，默认启用缓存。下面是我们对 Deno 标准库进行的第一次运行。让我们再运行一次！系统时间显示第二次运行快了三分之一。如果我们更新文件并再次运行，依然很快，因为 `deno fmt` 只检查更改的文件。让我们将其与 `Prettier`（一款流行的 Node 格式化工具）进行比较，我们将启用缓存标志运行 Prettier。即便是在第二次运行时，`deno fmt` 的速度几乎快了 20 倍！
