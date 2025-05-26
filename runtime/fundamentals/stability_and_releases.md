@@ -29,7 +29,11 @@ Deno 提供 4 种发布渠道：
 
 LTS 渠道是一个小版本的语义化版本，我们只维护向后兼容的 bug 修复。
 
-![Deno 长期支持计划](./images/deno-lts-support.png)
+| LTS release version | LTS maintenance start | LTS maintenance end |
+| ------------------- | --------------------- | ------------------- |
+| v2.1                | Feb 1st, 2025         | Apr 30th, 2025      |
+| v2.2                | May 1st, 2025         | Oct 31st, 2025      |
+| v2.4                | Nov 1st, 2025         | Apr 30th, 2026      |
 
 在我们完善此过程的同时，我们最初保持 LTS 支持窗口较短。**LTS 发布每六个月进行一次**，根据需要提供补丁发布以修复bug。我们计划在将来将此支持窗口延长至一年。
 
