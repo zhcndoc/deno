@@ -1,6 +1,6 @@
 ---
-title: "Environment variables"
-description: "A guide to working with environment variables in Deno. Learn about Deno.env API, .env file support, CLI configuration, and special environment variables that control Deno's behavior."
+title: "环境变量"
+description: "Deno 中使用环境变量的指南。了解 Deno.env API、.env 文件支持、CLI 配置以及控制 Deno 行为的特殊环境变量。"
 oldUrl:
 - /runtime/manual/basics/env_variables/
 - /runtime/reference/cli/env_variables/
@@ -8,7 +8,7 @@ oldUrl:
 
 在 Deno 中使用环境变量有几种方式：
 
-## 内置 Deno.env
+## 内置 Deno.env 方法
 
 Deno 运行时提供了对环境变量的内置支持，通过
 [`Deno.env`](https://docs.deno.com/api/deno/~/Deno.env)。
@@ -26,7 +26,16 @@ console.log(Deno.env.has("FIREBASE_AUTH_DOMAIN")); // true
 
 ## .env 文件
 
-Deno 支持 `.env` 文件。您可以使用 `--env-file` 标志使 Deno 从 `.env` 读取环境变量：`deno run --env-file <script>`。这将从当前工作目录或包含该文件的第一个父目录读取 `.env`；如果您想从不同的文件加载环境变量，可以将该文件作为参数指定给标志。此外，您可以传递多个 `--env-file` 标志（例如，`deno run --env-file=.env.one --env-file=.env.two --allow-env <script>`）以从多个文件加载变量。
+Deno 也支持 `.env` 文件。您可以通过 `--env-file` 标志告诉 Deno 从 `.env` 中读取环境变量，例如：
+
+```sh
+deno run --env-file main.ts
+```
+
+这将从当前工作目录或包含 `.env` 文件的第一个父目录中读取 `.env` 文件。如果要从不同的文件加载环境变量，可以将该文件作为标志参数指定。
+
+您可以传递多个 `--env-file` 标志（例如，
+`deno run --env-file=.env.one --env-file=.env.two --allow-env <script>`）以从多个文件加载变量。
 
 :::note
 

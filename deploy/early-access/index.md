@@ -1,60 +1,75 @@
 ---
-title: "Deno Deploy 早期访问"
-description: "Deno Deploy 早期访问功能指南，与 Deno Deploy Classic 的比较，以及部署的入门说明。"
+title: "关于 Early Access"
+description: "Deno Deploy Early Access 功能指南、与 Deploy Classic 的比较及部署入门说明。"
 ---
 
 :::info
 
-您正在查看 Deno Deploy 早期访问的文档。寻找 Deno Deploy Classic 文档？[在这里查看](/deploy/)。
+您正在查看 Deno Deploy<sup>EA</sup> 的文档。寻找 Deploy Classic 文档？[点击此处查看](/deploy/)。
 
 :::
 
-Deno Deploy 早期访问是对原始 Deno Deploy 的全面改进，具有：
+Deno Deploy Early Access（Deno Deploy<sup>EA</sup>）是对原始 Deploy 的彻底重构，具有以下特点：
 
 - 改进的 NPM 兼容性和 Web 框架支持
 - 内置的 OpenTelemetry 集成
 - 集成的构建系统
 - 显著增强的基础设施
 
-<a href="https://app.deno.com" class="docs-cta runtime-cta">尝试 Deno Deploy 早期访问</a>
+<a href="https://app.deno.com" class="docs-cta runtime-cta">试用 Deno Deploy<sup>EA</sup></a>
 
-Deno Deploy EA 在 [app.deno.com](https://app.deno.com) 提供了一个新的仪表板。在这个仪表板中，您可以创建包含 Deno Deploy EA 应用的新的 Deno Deploy EA 组织。请注意，在单个组织内，您不能混合使用 Deno Deploy EA 应用和 Deno Deploy Classic 项目。您可以通过仪表板左上角的组织选择器在 Deno Deploy EA 组织和 Deno Deploy Classic 组织之间切换。
+:::note
 
-## 与 Deno Deploy Classic 的比较
+Deno Deploy<sup>EA</sup> 目前处于私密测试阶段。要使用 Deno Deploy<sup>EA</sup>，您必须通过[Deploy Classic 账户设置页面](https://dash.deno.com/account#early-access)加入 Early Access 计划。
 
-| 特性                          | Deno Deploy EA                 | Deno Deploy Classic                                                                                                                     |
-| ----------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Web 界面                     | app.deno.com                   | dash.deno.com                                                                                                                           |
-| 构建                          | ✅ 完全集成                    | 🟠 在 GitHub Actions 中运行，仪表板中没有实时流式日志，缓存需要手动设置，修改配置需要编辑 YAML                                       |
-| 可以运行 Deno 应用            | ✅ 完全支持                    | 🟠 有限支持（无 FFI、子进程、写入权限）                                                                                                 |
-| 可以运行 Node 应用            | ✅ 完全支持                    | 🟠 有限支持（无 FFI、原生插件、子进程、写入权限，以及降低的 NPM 兼容性）                                                               |
-| 可以运行 Next.js/Astro/SvelteKit | ✅ 一流支持                   | 🟠 框架依赖，需手动设置                                                                                                                 |
-| 一流的静态站点                | ✅ 支持                        | ❌ 不支持                                                                                                                               |
-| 环境变量                     | ✅ 不同的 dev/prod 环境变量    | 🟠 针对所有部署的一个环境变量集                                                                                                        |
-| CDN 缓存                     | ✅ 支持                        | ❌ 不支持                                                                                                                               |
-| Web 缓存 API                 | ✅ 支持                        | ✅ 支持                                                                                                                                |
-| 数据库                       | ⏳ 即将推出                   | 🟠 Deno KV                                                                                                                             |
-| 队列                          | ❌ 不支持                     | ✅ 支持                                                                                                                                |
-| Cron                          | ❌ 不支持                     | ✅ 支持                                                                                                                                |
-| 从 GitHub 部署                | ✅ 支持                        | ✅ 支持                                                                                                                                |
-| 从 CLI 部署                   | ⏳ 即将推出                   | ✅ 支持                                                                                                                                |
-| 即时回滚                     | ✅ 支持                        | ✅ 支持                                                                                                                                |
-| 日志                          | ✅ 支持                        | ✅ 支持                                                                                                                                |
-| 跟踪                          | ✅ 支持                        | ❌ 不支持                                                                                                                               |
-| 指标                          | ✅ 支持                        | ❌ 不支持                                                                                                                               |
-| OpenTelemetry 导出            | ⏳ 进行中                     | ❌ 不支持                                                                                                                               |
-| 区域                          | 2                              | 6                                                                                                                                     |
-| 自托管区域                   | ✅ 支持                        | ❌ 不支持                                                                                                                               |
+加入 Early Access 计划后，可能仍无法立即访问 Deno Deploy<sup>EA</sup>，因为我们正在分批逐步开放访问权限。
 
-即将推出
+:::
 
-## 入门
+Deno Deploy<sup>EA</sup> 配备了位于 [app.deno.com](https://app.deno.com) 的全新仪表板。您可以在此仪表板上创建包含 Deno Deploy<sup>EA</sup> 应用的新组织。
 
-要开始使用 Deno Deploy 早期访问：
+单个组织内不能混用 Deno Deploy<sup>EA</sup> 应用和 Deploy Classic 项目。您可以通过仪表板左上角的组织选择器在 Deno Deploy<sup>EA</sup> 组织和 Deploy Classic 组织之间切换。
 
-1. 访问 [app.deno.com](https://app.deno.com) 以访问新的仪表板
-2. 创建一个新的 Deno Deploy EA 组织
+## 什么是 Deno Deploy<sup>EA</sup>？
+
+Deno Deploy 是一个无服务器平台，用于在云端（或您自有基础设施上自行托管）运行 JavaScript 和 TypeScript 应用。Deno Deploy 充当部署和运行应用的管理平台，例如通过 GitHub 集成实现部署。
+
+## 与 Deploy Classic 的比较
+
+Deno Deploy<sup>EA</sup> 是 Deploy Classic 的彻底重新设计。它拥有全新的仪表板和执行环境，使用 Deno 2.0，功能远强于 Deploy Classic。下表比较了两个版本的 Deno Deploy。
+
+| 功能                           | Deno Deploy<sup>EA</sup>       | Deploy Classic                                                                                                                            |
+| ------------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Web 界面                       | app.deno.com                   | dash.deno.com                                                                                                                             |
+| 暗色模式                       | ✅ 支持                       | ❌ 不支持                                                                                                                                |
+| 构建流程                       | ✅ 完全集成                   | 🟠 通过 GitHub Actions 运行，仪表板无实时日志，缓存需手动设置，修改配置需编辑 YAML 文件                                                  |
+| 运行 Deno 应用                 | ✅ 完全支持                   | 🟠 有限支持（不支持 FFI、子进程、写权限）                                                                                                 |
+| 运行 Node 应用                 | ✅ 完全支持                   | 🟠 有限支持（不支持 FFI、本地插件、子进程、写权限，且 NPM 兼容性较差）                                                                   |
+| 运行 Next.js/Astro/SvelteKit   | ✅ 一流支持                   | 🟠 依赖框架，需要手动设置                                                                                                                 |
+| 一流的静态站点支持             | ✅ 支持                       | ❌ 不支持                                                                                                                                |
+| 环境变量                       | ✅ 支持区分开发/生产环境变量  | 🟠 所有部署共用一套环境变量                                                                                                               |
+| CDN 缓存                       | ✅ 支持                       | ❌ 不支持                                                                                                                                |
+| Web Cache API                  | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| 数据库                         | ⏳ 即将推出                   | 🟠 Deno KV                                                                                                                              |
+| 队列                           | ❌ 不支持                     | ✅ 支持                                                                                                                                |
+| 定时任务                       | ❌ 不支持                     | ✅ 支持                                                                                                                                |
+| 从 GitHub 部署                 | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| 从命令行部署                   | ⏳ 即将推出                   | ✅ 支持                                                                                                                                |
+| 即时回滚                       | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| 日志                           | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| 跟踪                           | ✅ 支持                       | ❌ 不支持                                                                                                                                |
+| 指标                           | ✅ 支持                       | ❌ 不支持                                                                                                                                |
+| OpenTelemetry 导出            | ⏳ 开发中                     | ❌ 不支持                                                                                                                                |
+| 区域数量                       | 2                              | 6                                                                                                                                       |
+| 自托管区域                     | ✅ 支持                       | ❌ 不支持                                                                                                                                |
+
+## 如何访问 EA
+
+开始使用 Deno Deploy Early Access：
+
+1. 访问 [app.deno.com](https://app.deno.com) 以进入新仪表板
+2. 创建新的 Deno Deploy<sup>EA</sup> 组织
 3. 在组织内创建您的第一个应用
-4. 连接您的 GitHub 仓库或直接从仪表板进行部署
+4. 连接您的 GitHub 仓库或直接从仪表板部署
 
-有关特定框架的部署或配置您的应用的详细文档，请访问我们的 [指南和资源](/deploy/early-access)。
+有关部署特定框架或配置应用的详细文档，请参阅参考文档。

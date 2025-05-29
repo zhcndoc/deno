@@ -63,7 +63,7 @@ Deno 支持 `with { type: "json" }` 导入属性语法以导入 JSON 文件：
 ```ts
 import data from "./data.json" with { type: "json" };
 
-console.log(data.property); // Access JSON data as an object
+console.log(data.property); // 访问 JSON 数据作为对象
 ```
 
 这是 Deno 当前唯一支持的导入属性类型。对 `type: text` 和 `type: bytes` 的支持正在考虑未来的更新中，并且当前在等待
@@ -263,7 +263,7 @@ import { Application } from "https://deno.land/x/oak/mod.ts";
 - [esm.sh](https://esm.sh)
 - [unpkg.com](https://unpkg.com)
 
-HTTPS 导入在你的项目是一个小型且通常是单文件的 Deno 项目时非常有用，因为不需要其他配置。使用 HTTPS 导入，你可以完全避免拥有 `deno.json` 文件。然而，在更大的应用中建议不要使用这种导入方式，因为你可能会遇到版本冲突（不同的文件使用不同的版本说明符）。
+HTTPS 导入对于小型且通常是单文件的 Deno 项目特别有用，这些项目不需要其他配置。使用 HTTPS 导入，你可以完全避免拥有 `deno.json` 文件。然而，在较大的应用程序中不建议使用这种导入风格，因为你可能会遇到版本冲突（不同文件使用不同的版本说明符）。HTTP 导入不支持 `deno add`/`deno install` 命令。
 
 :::info
 
@@ -321,18 +321,18 @@ Deno 支持通过本地版本覆盖 npm 包，类似于如何覆盖 JSR 包。�
 
 此功能需要一个 `node_modules` 目录，并且根据你的 `nodeModulesDir` 设置具有不同的行为：
 
-- 使用 `"nodeModulesDir": "auto"`：该目录在每次运行时重新创建，这略微增加启动时间，但确保始终使用最新版本。
-- 使用 `"nodeModulesDir": "manual"`（使用 package.json 时的默认设置）：更新包后必须运行 `deno install` 以将更改应用到工作区的 `node_modules` 目录。
+- 当 `"nodeModulesDir": "auto"` 时：目录会在每次运行时重新创建，这会稍微增加启动时间，但确保始终使用最新版本。
+- 当 `"nodeModulesDir": "manual"`（使用 package.json 时的默认值）：你必须在更新包后运行 `deno install` 才能将更改应用到工作区的 `node_modules` 目录。
 
 限制：
 
-- 指定本地 npm 包副本或更改其依赖项将从锁文件中清除 npm 包，这可能导致 npm 解析工作方式不同。
-- 即使使用本地副本，npm 包名称必须在注册表中存在。
-- 此功能目前处于 `unstable` 标志后面。
+- 指定本地副本的 npm 包或更改其依赖项将会清除锁文件中的 npm 包，这可能会导致 npm 解析工作出现不同。
+- npm 包名称必须在注册中心中存在，即使你使用的是本地副本。
+- 此功能当前处于 `unstable` 标志下。
 
 ### 覆盖 HTTPS 导入
 
-Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS 导入。此功能在调试或临时修复中用本地修补版本替换远程依赖项时特别有用。
+Deno 还允许通过 `deno.json` 中的 `scopes` 字段覆盖 HTTPS 导入。此功能在调试或临时修复时，将远程依赖项替换为本地修补版本时特别有用。
 
 示例：
 
@@ -352,14 +352,14 @@ Deno 还允许通过 `deno.json` 中的 `importMap` 字段覆盖 HTTPS 导入。
 关键点：
 
 - 导入映射中的 `scopes` 字段允许你将特定导入重定向到其他路径。
-- 这通常用于使用本地文件覆盖远程依赖项以进行测试或开发目的。
-- 导入映射仅适用于项目的根目录。依赖项中的嵌套导入映射会被忽略。
+- 这通常用于用本地文件覆盖远程依赖项，用于测试或开发目的。
+- Scopes 仅适用于项目的根目录。嵌套在依赖项中的 scopes 会被忽略。
 
 ## Vendoring 远程模块
 
-如果你的项目具有外部依赖项，你可能希望将它们存储在本地，以避免每次构建项目时都从互联网下载它们。这在你在 CI 服务器或 Docker 容器中构建项目时尤其有用，或者需要修补或以其他方式修改远程依赖项。
+如果你的项目有外部依赖项，你可能希望将它们本地存储，以避免每次构建项目时都从互联网下载它们。在 CI 服务器或 Docker 容器中构建项目或修补或其他修改远程依赖项时，这尤其有用。
 
-Deno 通过在 `deno.json` 文件中设置以下功能来提供此功能：
+Deno 通过在 `deno.json` 文件中设置提供此功能：
 
 ```json
 {
