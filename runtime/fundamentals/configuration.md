@@ -1,6 +1,6 @@
 ---
-title: "deno.json and package.json"
-description: "The guide to configuring your Deno projects. Learn about TypeScript settings, tasks, dependencies, formatting, linting, and how to use both deno.json and/or package.json effectively."
+title: "deno.json 和 package.json"
+description: "配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"
 oldUrl:
 - /runtime/manual/getting_started/configuration_file/
 - /runtime/manual/basics/modules/import_maps/
@@ -105,7 +105,28 @@ import * as bar from "bar/file.ts";
 import { MyUtil } from "/util.ts";
 ```
 
-这会导致以 `/` 开头的导入指定符相对于导入映射的 URL 或文件路径解析。
+这会使以 `/` 开头的导入指定符相对于导入映射的 URL 或文件路径进行解析。
+
+### 覆盖包
+
+`deno.json` 中的 `patch` 字段允许您在不修改源代码的情况下覆盖依赖项。它还允许您使用存储在本地磁盘上的包。
+
+```json title="deno.json"
+{
+  "patch": [
+    "../some-package"
+  ]
+}
+```
+
+此功能解决了几个常见的开发问题：
+
+- 依赖项错误修复
+- 私有本地库
+- 兼容性问题
+- 安全问题
+
+被引用的包不必发布。只需要在 `deno.json` 或 `package.json` 中具有正确的包名和元数据，Deno 就能识别它正在处理哪个包。这提供了更大的灵活性和模块化，保持主代码与外部包的清晰分离。
 
 ## 任务
 
@@ -167,10 +188,10 @@ deno task build
 此配置将：
 
 - 仅检查 `src/` 目录中的文件，
-- 不检查 `src/testdata/` 目录中的文件或 `src/fixtures/` 目录中的任何 TypeScript 文件。
+- 排除检查 `src/testdata/` 目录中的文件或 `src/fixtures/` 目录中的任何 TypeScript 文件。
 - 指定应应用推荐的代码检查规则，
-- 添加 `ban-untagged-todo`
-- 移除排除的 `no-unused-vars` 规则。
+- 添加对 `ban-untagged-todo` 规则的启用，
+- 排除 `no-unused-vars` 规则。
 
 您可以在 [规则列表](/lint/) 文档页面中找到所有可用的代码检查规则的完整列表。
 
@@ -201,7 +222,7 @@ deno task build
 - 将行限制为 80 个字符，
 - 使用 4 个空格的缩进宽度，
 - 在语句结束时添加分号，
-- 对字符串使用单引号，
+- 使用单引号包裹字符串，
 - 保留文本换行，
 - 格式化 `src/` 目录中的文件，
 - 排除 `src/testdata/` 目录中的文件和任何 TypeScript 文件。
@@ -256,7 +277,7 @@ Deno 默认使用锁定文件，您可以使用以下配置禁用它：
 
 不需要指定此设置，以下默认值会被应用：
 
-- 如果您的项目目录中没有 `package.json` 文件，则为 `"none"`
+- 如果您的项目目录中没有 `package.json` 文件，则为 `"none"`  
 - 如果您的项目目录中有 `package.json` 文件，则为 `"manual"`
 
 使用工作区时，此设置只能在工作区根目录中使用。在任何成员中指定此设置都会导致警告。只有在工作区根目录中有 `package.json` 文件时，`"manual"` 设置才会被自动应用。
@@ -444,15 +465,11 @@ dist/
 }
 ```
 
-This is an example of a `deno.json` file that configures the TypeScript compiler
-options, linter, formatter, node modules directory, etc. For a full list of
-available fields and configurations, see the
-[Deno configuration file schema](#json-schema).
+这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、node_modules 目录等的 `deno.json` 文件示例。有关可用字段和配置的完整列表，请参阅
+[Deno 配置文件模式](#json-schema)。
 
-This is an example of a `deno.json` file that configures the TypeScript compiler
-options, linter, formatter, node modules directory, etc. For a full list of
-available fields and configurations, see the
-[Deno configuration file schema](#json-schema).
+这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、node_modules 目录等的 `deno.json` 文件示例。有关可用字段和配置的完整列表，请参阅
+[Deno 配置文件模式](#json-schema)。
 
 ## JSON 模式
 

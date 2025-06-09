@@ -1,6 +1,6 @@
 ---
-title: "Build a Nuxt app with Deno"
-description: "Step-by-step guide to building Nuxt applications with Deno. Learn how to create a full-stack Vue.js app, implement server-side rendering, add Tailwind styling, and deploy your application."
+title: "使用 Deno 构建 Nuxt 应用"
+description: "逐步指南，教你如何使用 Deno 构建 Nuxt 应用。学习如何创建完整的 Vue.js 全栈应用，实现服务器端渲染，添加 Tailwind 样式，并部署你的应用。"
 url: /examples/nuxt_tutorial/
 ---
 
@@ -8,13 +8,13 @@ url: /examples/nuxt_tutorial/
 
 在本教程中，我们将使用 Deno 构建一个简单的 Nuxt 应用，展示恐龙列表，并允许您点击名称来了解每一种恐龙的更多信息：
 
-- [搭建 Nuxt 应用](#scaffold-a-nuxt-app-with-deno)
-- [设置服务器 API 路由](#setup-server-api-routes)
-- [设置 Vue 前端](#setup-vue-frontend)
-- [添加 Tailwind](#add-tailwind)
-- [后续步骤](#next-steps)
+- [搭建 Nuxt 应用](#搭建-nuxt-应用)
+- [设置服务器 API 路由](#设置服务器-api-路由)
+- [设置 Vue 前端](#设置-vue-前端)
+- [添加 Tailwind](#添加-tailwind)
+- [后续步骤](#后续步骤)
 
-您可以在这个 [repo](https://github.com/denoland/examples/tree/main/with-nuxt) 中找到该项目的代码。
+您可以在这个 [仓库](https://github.com/denoland/examples/tree/main/with-nuxt) 中找到该项目的代码。
 
 ## 搭建 Nuxt 应用
 
@@ -29,19 +29,19 @@ deno -A npm:nuxi@latest init
 ```
 NUXT-APP/
 ├── .nuxt/                   # Nuxt 构建目录
-├── node_modules/           # Node.js 依赖
-├── public/                 # 静态文件
+├── node_modules/            # Node.js 依赖
+├── public/                  # 静态文件
 │   ├── favicon.ico        
 │   └── robots.txt         
-├── server/                # 服务器端代码
+├── server/                  # 服务器端代码
 │   └── tsconfig.json     
 ├── .gitignore            
-├── app.vue               # 根 Vue 组件
-├── nuxt.config.ts        # Nuxt 配置
-├── package-lock.json     # NPM 锁文件
-├── package.json          # 项目清单
+├── app.vue                  # 根 Vue 组件
+├── nuxt.config.ts           # Nuxt 配置
+├── package-lock.json        # NPM 锁文件
+├── package.json             # 项目清单
 ├── README.md            
-└── tsconfig.json        # TypeScript 配置
+└── tsconfig.json            # TypeScript 配置
 ```
 
 ## 设置服务器 API 路由
@@ -264,40 +264,32 @@ const { data: dinosaur } = await useFetch(
 在这个项目中，我们还将使用 [tailwind](https://tailwindcss.com/) 来进行一些基本设计，因此我们需要安装这些依赖：
 
 ```bash
-deno install -D npm:tailwindcss npm:postcss npm:autoprefixer
+deno install -D npm:tailwindcss npm:@tailwindcss/vite
 ```
 
-然后初始化 Tailwind：
-
-```bash
-deno -A npm:tailwindcss init
-```
-
-这将在我们的目录根部创建一个 `tailwind.config.js` 文件。让我们打开并更新 `content` 部分，以包含我们项目中的关键文件：
+然后，我们将通过在 Nuxt 配置中将 `@tailwindcss/vite` 插件作为 Vite 插件添加到 `nuxt.config.ts` 文件来更新配置。
 
 ```tsx
-// tailwind.config.js
+// nuxt.config.ts
 
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
-    "./pages/**/*.vue",
-    "./plugins/**/*.{js,ts}",
-    "./app.vue",
-  ],
-  theme: {
-    extend: {},
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineNuxtConfig({
+  compatbilityDate: "2025-05-15",
+  devtools: { enabled: true },
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
-  plugins: [],
-};
+});
 ```
 
-接下来，让我们将 Tailwind 的实用程序添加到新的 css 文件 `assets/css/main.css`：
+接下来，创建一个新的 css 文件 `assets/css/main.css`，并添加一个导入 `@import`，引入 tailwind 以及 tailwind 的工具类。
 
 ```tsx
 // assets/css/main.css
+@import "tailwindcss";
 
 @tailwind base;
 @tailwind components;
@@ -309,31 +301,25 @@ export default {
 ```tsx
 // nuxt.config.ts
 
-import { defineNuxtConfig } from "nuxt/config";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
+  compatbilityDate: "2025-05-15",
   devtools: { enabled: true },
-
   nitro: {
     preset: "deno",
   },
-
   app: {
     head: {
       title: "恐龙百科全书",
     },
   },
-
   css: ["~/assets/css/main.css"],
-
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
-
-  compatibilityDate: "2024-11-06",
 });
 ```
 

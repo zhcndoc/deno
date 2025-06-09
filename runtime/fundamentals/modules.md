@@ -99,7 +99,9 @@ console.log(textModule.default); // 输出: This is plain text
 data:[<media type>][;base64],<data>
 ```
 
-对于 JavaScript 模块，请使用 `application/javascript` 作为媒体类型。TypeScript 也支持 `application/typescript`。这个功能对在隔离下测试模块和在测试期间创建模拟模块特别有用。
+对于 JavaScript 模块，请使用 `application/javascript` 作为媒体类型。
+
+TypeScript 也支持 `application/typescript`。此功能特别适用于在隔离环境中测试模块以及在测试期间创建模拟模块。
 
 ## 导入第三方模块和库
 

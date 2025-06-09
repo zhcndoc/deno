@@ -1,6 +1,6 @@
 ---
-title: "Node and npm Compatibility"
-description: "Guide to using Node.js modules and npm packages in Deno. Learn about compatibility features, importing npm packages, and differences between Node.js and Deno environments."
+title: "Node 和 npm 兼容性"
+description: "关于在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包以及 Node.js 和 Deno 环境之间的差异。"
 oldUrl:
 - /runtime/reference/node/
 - /runtime/manual/npm_nodejs/std_node/
@@ -267,9 +267,27 @@ module.exports = {
     docs: https://docs.deno.com/go/commonjs
 ```
 
+## 条件导出（Conditional exports）
+
+包的导出可以根据[解析模式进行条件判断](https://nodejs.org/api/packages.html#conditional-exports)。从 Deno ESM 模块导入满足的条件如下：
+
+```json
+["deno", "node", "import", "default"]
+```
+
+这意味着在包导出中键等于这些字符串中的任意一个时，将匹配第一个出现的条件。您可以使用 `--unstable-node-conditions` CLI 标志扩展此列表：
+
+```shell
+deno run --unstable-node-conditions development,react-server main.ts
+```
+
+```json
+["development", "react-server", "deno", "node", "import", "default"]
+```
+
 ## 导入类型
 
-许多 npm 包随附类型，您可以直接导入这些类型并使用它们：
+许多 npm 包带有类型，您可以导入这些类型并直接使用：
 
 ```ts
 import chalk from "npm:chalk@5";
@@ -284,20 +302,19 @@ import express from "npm:express@^4.17";
 
 **模块解析**
 
-官方的 TypeScript 编译器 `tsc` 支持不同的
-[moduleResolution](https://www.typescriptlang.org/tsconfig#moduleResolution) 设置。 Deno 仅支持现代的 `node16` 解析。不幸的是，许多 npm 包在 node16 模块解析下未能正确提供类型，可能会导致 `deno check` 报告类型错误，而 `tsc` 不报告这些错误。
+官方 TypeScript 编译器 `tsc` 支持不同的 [moduleResolution](https://www.typescriptlang.org/tsconfig#moduleResolution) 设置。Deno 仅支持现代的 `node16` 解析。不幸的是，许多 npm 包在 node16 模块解析下未能正确提供类型，可能会导致 `deno check` 报告类型错误，而 `tsc` 不报告这些错误。
 
-如果 `npm:` 导入的默认导出似乎具有错误类型（正确的类型似乎在 `.default` 属性下），很可能是该包在从 ESM 的 node16 模块解析下提供了错误的类型。您可以通过检查是否在 `tsc --module node16` 和 `package.json` 中 `"type": "module"` 时也发生错误来验证这一点，或通过咨询 [类型错误吗？](https://arethetypeswrong.github.io/) 网站（特别是在 “从 ESM 的 node16” 行）。
+如果 `npm:` 导入的默认导出似乎具有错误类型（正确的类型似乎在 `.default` 属性下），很可能是该包在从 ESM 的 node16 模块解析下提供了错误的类型。您可以通过检查是否在 `tsc --module node16` 和 `package.json` 中 `"type": "module"` 时也发生错误来验证，或通过访问 [类型错误吗？](https://arethetypeswrong.github.io/) 网站（特别是在 “从 ESM 的 node16” 行）。
 
 如果您想使用不支持 TypeScript node16 模块解析的包，您可以：
 
-1. 在该包的问题跟踪器上打开一个问题报告。 （或许可以贡献一个修复 :)（但不幸的是，由于包需要支持 ESM 和 CJS 缺乏工具，默认导出需要不同的语法。参见 [microsoft/TypeScript#54593](https://github.com/microsoft/TypeScript/issues/54593)）
+1. 在该包的问题跟踪器上打开一个问题报告。（或许可以贡献一个修复 :)）不幸的是，由于包需要支持 ESM 和 CJS 缺乏工具，默认导出需要不同的语法。参见 [microsoft/TypeScript#54593](https://github.com/microsoft/TypeScript/issues/54593)
 2. 使用一个 [CDN](/runtime/fundamentals/modules/#url_imports)，该 CDN 为 Deno 支持重建包，而不是使用 `npm:` 标识。
 3. 使用 `// @ts-expect-error` 或 `// @ts-ignore` 忽略您代码库中出现的类型错误。
 
-## 包括 Node 类型
+## 包含 Node 类型
 
-Node 随附许多内置类型，如 `Buffer`，这些类型可能在 npm 包的类型中引用。要加载这些类型，您必须向 `@types/node` 包添加类型引用指令：
+Node 附带许多内置类型，如 `Buffer`，这些类型可能在 npm 包的类型中引用。要加载这些类型，您必须向 `@types/node` 包添加类型引用指令：
 
 ```ts
 /// <reference types="npm:@types/node" />
@@ -568,7 +585,7 @@ Checked 4 files
 deno lint --fix
 ```
 
-所有支持的 linting 规则的完整列表可以在 [https://docs.deno.com/lint/](https://docs.deno.com/lint/) 找到。要了解更多关于如何配置 linter的信息，请查看 [deno lint 子命令](/runtime/reference/cli/linter/)。
+所有支持的 linting 规则的完整列表可以在 [https://docs.deno.com/lint/](https://docs.deno.com/lint/) 找到。要了解更多关于如何配置 linter 的信息，请查看 [deno lint 子命令](/runtime/reference/cli/linter/)。
 
 **格式化**
 

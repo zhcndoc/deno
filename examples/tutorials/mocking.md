@@ -195,15 +195,18 @@ Deno.test("在受控环境下生成报告", () => {
 });
 ```
 
-### 模拟时间 (Faking Time)
+### 模拟时间 (Faking time)
 
-时间相关的代码测试较难，因为结果可能因测试执行时间而不同。Deno 提供了 [`fakeTime`](https://jsr.io/@std/testing/doc/mock#faking-time) 工具，允许你在测试中模拟时间流逝并控制日期函数。
+与时间相关的代码难以测试，因为测试结果可能随执行时间变化。Deno 提供了一个
+[`FakeTime`](https://jsr.io/@std/testing/doc/time) 工具，可在测试中模拟时间流动，控制日期相关函数。
 
-以下示例测试基于时间的函数：`isWeekend()` 判断当前是否是周末，`delayedGreeting()` 在 1 秒延时后调用回调：
+以下示例演示如何测试依赖时间的函数：
+`isWeekend()`（判断当天是否周六或周日返回 true），以及
+`delayedGreeting()`（1 秒延迟后回调）：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
-import { FakeTime, fakeTime } from "jsr:@std/testing/mock";
+import { FakeTime } from "jsr:@std/testing/time";
 
 // 基于当前时间的函数
 function isWeekend(): boolean {
@@ -219,8 +222,10 @@ function delayedGreeting(callback: (message: string) => void): void {
   }, 1000); // 1 秒延迟
 }
 
-Deno.test("基于时间的测试", () => {
-  // 创建一个模拟时间，初始为 2023 年 5 月 1 日（周一）
+Deno.test("time-dependent tests", () => {
+  using fakeTime = new FakeTime();
+
+  // 创建从特定日期（星期一）开始的假时间
   const mockedTime: FakeTime = fakeTime(new Date("2023-05-01T12:00:00Z"));
 
   try {
@@ -377,7 +382,8 @@ Deno 的测试 API 提供了 `t.step()` 方法，将测试逻辑分割为步骤�
 
 ```ts
 import { assertEquals, assertRejects } from "jsr:@std/assert";
-import { FakeTime, fakeTime, spy, stub } from "jsr:@std/testing/mock";
+import { spy, stub } from "jsr:@std/testing/mock";
+import { FakeTime } from "jsr:@std/testing/time";
 
 // 目标服务
 class AuthService {
@@ -471,7 +477,9 @@ Deno.test("AuthService 综合测试", async (t) => {
     }
   });
 
-  await t.step("token 过期逻辑应正确", () => {
+  await t.step("token expiration should work correctly", () => {
+    using fakeTime = new FakeTime();
+
     const authService = new AuthService();
     const time = fakeTime(new Date("2023-01-01T12:00:00Z"));
 
