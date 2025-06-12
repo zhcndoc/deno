@@ -15,7 +15,7 @@ oldUrl:
 `dee-no`）是一个
 [开源](https://github.com/denoland/deno/blob/main/LICENSE.md) 的 JavaScript、
 TypeScript 和 WebAssembly 运行时，具有安全的默认设置和出色的开发体验。它基于 [V8](https://v8.dev/),
-[Rust](https://www.rust-lang.org/) 和 [Tokio](https://tokio.rs/) 构建。
+[Rust](https://www.rust-lang.org/zh-CN/) 和 [Tokio](https://tokio.rs/) 构建。
 
 让我们在不到五分钟的时间里创建并运行你的第一个 Deno 程序。
 
@@ -55,7 +55,7 @@ deno --version
 
 ## 你好，世界
 
-Deno 可以运行 JavaScript 和 [TypeScript](https://www.typescriptlang.org/)，无需额外的工具或配置。让我们创建一个简单的“你好，世界”程序，并用 Deno 运行它。
+Deno 可以运行 JavaScript 和 [TypeScript](https://www.typescriptlang.org/zh/)，无需额外的工具或配置。让我们创建一个简单的“你好，世界”程序，并用 Deno 运行它。
 
 创建一个名为 `main` 的 TypeScript 或 JavaScript 文件，并包含以下代码：
 
