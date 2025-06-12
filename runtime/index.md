@@ -55,7 +55,7 @@ deno --version
 
 ## 你好，世界
 
-Deno 可以运行 JavaScript 和 [TypeScript](https://www.typescriptlang.org/)，无需额外的工具或配置。让我们创建一个简单的“你好，世界”程序，并用 Deno 运行它。
+Deno 可以运行 JavaScript 和 [TypeScript](https://www.typescriptlang.org/zh/)，无需额外的工具或配置。让我们创建一个简单的“你好，世界”程序，并用 Deno 运行它。
 
 创建一个名为 `main` 的 TypeScript 或 JavaScript 文件，并包含以下代码：
 
