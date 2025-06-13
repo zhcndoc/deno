@@ -1,5 +1,6 @@
 ---
 title: 账户
+description: "关于用户账户、通过 GitHub 进行身份验证以及在 Deno Deploy 早期访问中管理您的个人资料的信息。"
 ---
 
 :::info

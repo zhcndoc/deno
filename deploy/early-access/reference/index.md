@@ -21,22 +21,26 @@ Deploy 早期访问版使用了特定术语。请使用本参考指南了解平�
 
 了解如何创建和管理组织、团队成员、角色和权限。
 
-### [应用](/deploy/early-access/reference/applications)
+### [Applications](/deploy/early-access/reference/apps)
 
 有关应用创建、配置和生命周期管理的详细信息。
 
 ### [构建](/deploy/early-access/reference/builds)
 
-了解构建过程、构建配置和部署流水线。
+了解构建流程、构建配置和部署管道。
+
+### [Playgrounds](/deploy/early-access/reference/playgrounds)
+
+编写并部署代码，无需创建 git 仓库。
 
 ### [可观测性](/deploy/early-access/reference/observability)
 
 监控应用，访问日志、指标和性能洞察。
 
-### [环境](/deploy/early-access/reference/environments)
+### [Environments](/deploy/early-access/reference/env-vars-and-contexts/)
 
 管理不同的部署环境，包括开发、预发布和生产。
 
-### [自定义域名](/deploy/early-access/reference/custom-domains)
+### [Custom Domains](/deploy/early-access/reference/domains)
 
 为您的应用设置和配置自定义域名。

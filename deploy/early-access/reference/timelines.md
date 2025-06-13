@@ -1,5 +1,6 @@
 ---
 title: 时间线
+description: "了解 Deno Deploy 早期访问中的部署时间线，包括生产和开发上下文、活动修订、回滚和时间线锁定。"
 ---
 
 :::info

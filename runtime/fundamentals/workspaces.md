@@ -195,11 +195,51 @@ COPY project-b/ /app/project-b/
 - `@scope/my-package/foo`
 - `@scope/my-package/other`
 
+### 发布工作区包到注册表
+
+工作区使得向如 JSR 或 NPM 这类注册表发布包变得简单。您可以发布单个工作区成员，同时保持它们在单体仓库中的开发关联。
+
+#### 发布到 JSR
+
+发布工作区包到 JSR，请按以下步骤操作：
+
+1. 确保每个包的 `deno.json` 文件中包含适当的元数据：
+
+```json title="my-package/deno.json"
+{
+  "name": "@scope/my-package",
+  "version": "1.0.0",
+  "exports": "./mod.ts",
+  "publish": {
+    "exclude": ["tests/", "*.test.ts", "examples/"]
+  }
+}
+```
+
+2. 进入具体包目录并发布：
+
+```sh
+cd my-package
+deno publish
+```
+
+#### 管理相互依赖的包
+
+当发布具有相互依赖关系的工作区包时，请在相关包之间使用一致的版本方案。先发布被依赖的包，然后发布依赖它们的包。发布后，验证发布的包是否正常工作：
+
+```sh
+# 测试已发布的包
+deno add jsr:@scope/my-published-package
+deno test integration-test.ts
+```
+
+当发布依赖其他工作区成员的包时，Deno 会自动将工作区引用替换为发布代码中的正确注册表引用。
+
 ### 从 `npm` 工作区迁移
 
-Deno 工作区支持从现有 npm 包中使用 Deno 首选包。在这个例子中，我们将名为 `@deno/hi` 的 Deno 库与几年前开发的 Node.js 库 `@deno/log` 混合使用。
+Deno 工作区支持从现有的 npm 包中使用 Deno 优先的包。在此示例中，我们混合使用了名为 `@deno/hi` 的 Deno 库和几年前开发的 Node.js 库 `@deno/log`。
 
-我们需要在根目录中包含一个 `deno.json` 配置文件：
+我们需要在根目录包含一个 `deno.json` 配置文件：
 
 ```json title="deno.json"
 {
@@ -209,7 +249,7 @@ Deno 工作区支持从现有 npm 包中使用 Deno 首选包。在这个例子�
 }
 ```
 
-与我们现有的 package.json 工作区一起：
+以及我们现有的 `package.json` 工作区：
 
 ```json title="package.json"
 {
@@ -217,7 +257,7 @@ Deno 工作区支持从现有 npm 包中使用 Deno 首选包。在这个例子�
 }
 ```
 
-工作区目前有一个日志 npm 包：
+该工作区当前有一个日志 npm 包：
 
 ```json title="log/package.json"
 {
@@ -268,7 +308,7 @@ $ deno run main.ts
 Hi, friend!
 ```
 
-您甚至可以在现有的 Node.js 包中同时拥有 `deno.json` 和 `package.json`。此外，您还可以移除根目录中的 package.json，并在 deno.json 工作区成员中指定 npm 包。这使您可以逐渐迁移到 Deno，而无需投入大量的前期工作。
+您甚至可以在现有的 Node.js 包中同时拥有 `deno.json` 和 `package.json`。此外，您还可以移除根目录中的 `package.json`，并在 `deno.json` 工作区成员中指定 npm 包。这使您可以逐渐迁移到 Deno，而无需投入大量的前期工作。
 
 例如，您可以添加 `log/deno.json` 来配置 Deno 的 linter 和格式化工具：
 
@@ -468,9 +508,9 @@ Deno 支持 `package.json` 文件中的工作区协议说明符。这些在您�
 
 以下工作区协议说明符受支持：
 
-- `workspace:*` - Use the latest version available in the workspace
-- `workspace:~` - Use the workspace version with only patch-level changes
-- `workspace:^` - Use the workspace version with semver-compatible changes
+- `workspace:*` - 使用工作区中可用的最新版
+- `workspace:~` - 使用工作区版本且仅允许补丁级别变更
+- `workspace:^` - 使用与语义版本兼容的工作区版本
 
 ## npm 和 pnpm 工作区兼容性
 

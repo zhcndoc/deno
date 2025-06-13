@@ -22,7 +22,7 @@ oldUrl:
 ---
 
 Deno 使用
-[ECMAScript 模块](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+[ECMAScript 模块](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules)
 作为其默认模块系统，以符合现代 JavaScript 标准并提升更高效和一致的开发体验。这是 JavaScript 模块的官方标准，允许更好的树摇优化，改进的工具集成，以及在不同环境中的原生支持。
 
 通过采用 ECMAScript 模块，Deno 确保与不断发展的 JavaScript 生态系统的兼容性。对开发者而言，这意味着一个流畅且可预测的模块系统，避免了与遗留模块格式（如 CommonJS）相关的复杂性。
@@ -407,27 +407,68 @@ deno run --reload my_module.ts
 deno run --reload=jsr:@std/fs my_module.ts
 ```
 
-## 只使用缓存模块
+## 仅开发依赖
 
-要强制 Deno 只使用之前已缓存的模块，请使用 `--cached-only` 标志：
+有时依赖项仅在开发期间需要，例如测试文件或构建工具的依赖。在 Deno 中，运行时不要求你区分开发和生产依赖，因为
+[运行时只会加载和安装实际执行代码中使用的依赖](#why-does-deno-not-have-a-devimports-field)。
+
+然而，标记开发依赖对于阅读你包的用户来说是有帮助的。在使用 `deno.json` 时，约定是在任何“仅限开发”的依赖后添加 `// dev` 注释：
+
+```json title="deno.json"
+{
+  "imports": {
+    "@std/fs": "jsr:@std/fs@1",
+    "@std/testing": "jsr:@std/testing@1" // dev
+  }
+}
+```
+
+当使用 `package.json` 文件时，开发依赖可以添加在单独的 `devDependencies` 字段中：
+
+```json title="package.json"
+{
+  "dependencies": {
+    "pg": "npm:pg@^8.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3"
+  }
+}
+```
+
+### 为什么 Deno 没有 `devImports` 字段？
+
+理解为什么 Deno 不在包清单中将开发依赖分离出来，重要的是理解开发依赖试图解决的问题。
+
+在部署应用时，你经常只想安装实际执行代码中用到的依赖。这有助于加快启动时间并减小部署体积。
+
+历史上，这通过在 `package.json` 中将开发依赖分离到 `devDependencies` 字段实现。当部署应用时，会跳过 `devDependencies`，只安装正式依赖。
+
+然而，这种方法在实践中存在问题。很容易忘记将依赖从 `dependencies` 移到 `devDependencies`，当依赖从运行时变为仅开发时。此外，一些语义上的“开发时”依赖（如 `@types/*`），经常被放在 `dependencies` 中，导致它们被安装到生产环境，虽然没有用处。
+
+因此，Deno 使用不同的方式来安装仅适用于生产的依赖：在执行 `deno install` 时，可以传入 `--entrypoint` 标志，让 Deno 只安装指定入口文件（及其递归导入）实际使用的依赖。因为这是自动完成的且基于实际执行的代码，所以不需要单独指定开发依赖字段。
+
+## 仅使用缓存模块
+
+为了强制 Deno 仅使用之前缓存的模块，请使用 `--cached-only` 标志：
 
 ```shell
 deno run --cached-only mod.ts
 ```
 
-如果有任何依赖于 mod.ts 的依赖树中的依赖项尚未缓存，这将失败。
+如果 `mod.ts` 依赖树中的任何依赖尚未被缓存，这将失败。
 
 ## 完整性检查和锁文件
 
-想象一下，你的模块依赖于位于 https://some.url/a.ts 的远程模块。当你第一次编译模块时，`a.ts` 被获取、编译并缓存。此缓存版本将在你在不同机器上运行模块（例如在生产环境中）或手动重新加载缓存（使用命令，如 `deno install --reload`）之前使用。
+假设你的模块依赖于位于 https://some.url/a.ts 的远程模块。当你首次编译模块时，`a.ts` 被获取、编译并缓存。此缓存版本将在你在不同机器上运行模块（例如在生产环境中）或手动重新加载缓存（使用命令，如 `deno install --reload`）之前使用。
 
-但是如果 `https://some.url/a.ts` 的内容发生变化呢？这可能导致你的生产模块与本地模块运行的依赖代码不同。为了检测这一点，Deno 使用完整性检查和锁文件。
+但如果 `https://some.url/a.ts` 的内容发生变化怎么办？这可能导致你的生产模块运行的依赖与本地的不一致。为了检测这一点，Deno 使用完整性检查和锁文件。
 
-Deno 使用 `deno.lock` 文件检查外部模块的完整性。要启用锁文件，应该做到以下两点之一：
+Deno 使用 `deno.lock` 文件来验证外部模块的完整性。启用锁文件应满足以下两个条件之一：
 
-1. 在当前或祖先目录中创建 `deno.json` 文件，这将自动创建一个附加锁文件 `deno.lock`。
+1. 在当前或祖先目录中创建 `deno.json` 文件，这将自动创建附带的锁文件 `deno.lock`。
 
-   注意，可以通过在 deno.json 中指定以下内容来禁用此功能：
+   注意，你可以通过在 `deno.json` 中设置以下内容禁用此功能：
 
    ```json title="deno.json"
    {
@@ -435,13 +476,13 @@ Deno 使用 `deno.lock` 文件检查外部模块的完整性。要启用锁文�
    }
    ```
 
-2. 使用 `--lock` 标志以启用并指定锁文件检查。
+2. 使用 `--lock` 标志启用并指定锁文件检查。
 
 ### 冻结锁文件
 
-默认情况下，Deno 使用附加锁文件，新的依赖项将被添加到锁文件中，而不是发生错误。
+默认情况下，Deno 使用附加锁文件，即新依赖项会被添加到锁文件中，而不会报错。
 
-在某些情况下（例如 CI 流水线或生产环境），这可能并不是所希望的，在这些情况下你希望 Deno 在遇到从未见过的依赖项时报错。为此，你可以指定 `--frozen` 标志，或在 deno.json 文件中设置以下内容：
+但在某些情况（如 CI 流水线或生产环境），你可能希望 Deno 遇到未见过的新依赖时报错，而不是默默添加。此时可以使用 `--frozen` 标志，或者在 `deno.json` 中设置：
 
 ```json title="deno.json"
 {
@@ -451,13 +492,13 @@ Deno 使用 `deno.lock` 文件检查外部模块的完整性。要启用锁文�
 }
 ```
 
-在使用冻结的锁文件运行 deno 命令时，任何尝试用新内容更新锁文件的操作都会导致命令退出，并显示将要进行的修改的错误信息。
+使用冻结锁文件执行命令时，任何会修改锁文件的操作都会令命令失败并显示变更的错误。
 
-如果你希望更新锁文件，可以在命令行中指定 `--frozen=false` ，以暂时禁用冻结锁文件。
+若你想更新锁文件，可以在命令行中指定 `--frozen=false`，暂时解除冻结限制。
 
 ### 更改锁文件路径
 
-可以通过指定 `--lock=deps.lock` 或在 Deno 配置文件中设置以下内容来配置锁文件路径：
+可以通过指定 `--lock=deps.lock` 或在 Deno 配置文件中设置如下，配置锁文件路径：
 
 ```json title="deno.json"
 {
@@ -476,18 +517,18 @@ Deno 使用 `deno.lock` 文件检查外部模块的完整性。要启用锁文�
 
 :::
 
-可能会有一些情况，你希望加载位于 _私有_ 仓库中的远程模块，例如 GitHub 中的私有仓库。
+有时你希望加载来自 _私有_ 仓库的远程模块，例如 GitHub 私有仓库。
 
-Deno 支持在请求远程模块时发送 bearer token。Bearer tokens 是与 OAuth 2.0 一起使用的主流访问令牌类型，并且广泛得到托管服务的支持（例如 GitHub、GitLab、Bitbucket、Cloudsmith 等）。
+Deno 支持在请求远程模块时发送 bearer token。Bearer tokens 是主流的 OAuth 2.0 访问令牌类型，且被托管服务广泛支持（如 GitHub、GitLab、Bitbucket、Cloudsmith 等）。
 
 ### DENO_AUTH_TOKENS
 
-Deno CLI 将寻找名为 `DENO_AUTH_TOKENS` 的环境变量，以确定应考虑使用哪些身份验证令牌来请求远程模块。环境变量的值格式为 _n_ 数量的令牌，由分号（`;`）分隔，其中每个令牌可以是：
+Deno CLI 会查找环境变量 `DENO_AUTH_TOKENS`，用于决定使用哪些身份验证令牌请求远程模块。其值为若干令牌（以分号 `;` 分隔），每个令牌格式可以是：
 
-- 格式为 `{token}@{hostname[:port]}` 的 bearer token，或者
-- 格式为 `{username}:{password}@{hostname[:port]}` 的基本认证数据
+- `{token}@{hostname[:port]}` 格式的 bearer token，或者
+- `{username}:{password}@{hostname[:port]}` 格式的基本认证数据
 
-例如，单个令牌对于 `deno.land` 看起来像这样：
+例如，对 `deno.land` 的单个令牌示例：
 
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land
@@ -499,37 +540,37 @@ DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land
 DENO_AUTH_TOKENS=username:password@deno.land
 ```
 
-多个令牌则看起来像这样：
+多个令牌示例：
 
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@deno.land;f1e2d3c4b5a6@example.com:8080;username:password@deno.land
 ```
 
-当 Deno 前往获取一个远程模块时，如果主机名与远程模块的主机名匹配，Deno 将把请求的 `Authorization` 头设置为 `Bearer {token}` 或 `Basic {base64EncodedData}` 的值。这允许远程服务器识别请求是与特定已认证用户关联的授权请求，并提供对服务器上适当资源和模块的访问。
+当 Deno 请求远程模块时，如果主机名与远程模块主机名匹配，Deno 会把请求的 `Authorization` 头设置成 `Bearer {token}` 或 `Basic {base64EncodedData}`。这让远程服务器能识别请求是否由已认证用户发出，进而访问相应资源。
 
 ### GitHub
 
-要访问 GitHub 上的私有仓库，你需要为自己发放一个 _个人访问令牌_。你可以通过登录 GitHub 并进入
+要访问 GitHub 上的私有仓库，你需要获取一个 _个人访问令牌_。你可以登录 GitHub，然后进入
 _设置 -> 开发者设置 -> 个人访问令牌_：
 
 ![GitHub 上的个人访问令牌设置](./images/private-pat.png)
 
-然后选择 _生成新令牌_，为你的令牌提供描述，并相应地授予 `repo` 权限。`repo` 权限将使你能够读取文件内容（有关 [GitHub 中作用域的更多信息](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes)）：
+点击 _生成新令牌_，给令牌命名并赋予 `repo` 权限。`repo` 权限允许读取文件内容（详见 [GitHub 的权限范围说明](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps#available-scopes)）：
 
 ![在 GitHub 上创建新的个人访问令牌](./images/private-github-new-token.png)
 
-创建后，GitHub 将仅显示新令牌一次，此时你要在环境变量中使用的值：
+创建后，GitHub 只会显示一次新令牌，你需要将它设置到环境变量中：
 
 ![在 GitHub 上显示新生成的令牌](./images/private-github-token-display.png)
 
-为了访问包含在 GitHub 私有仓库中的模块，你需要在环境变量 `DENO_AUTH_TOKENS` 中使用发放的令牌，作用域为 `raw.githubusercontent.com` 主机名。例如：
+要访问 GitHub 私有仓库中的模块，你需将令牌放入环境变量 `DENO_AUTH_TOKENS`，作用域设置为 `raw.githubusercontent.com` 主机名，例如：
 
 ```sh
 DENO_AUTH_TOKENS=a1b2c3d4e5f6@raw.githubusercontent.com
 ```
 
-这应该允许 Deno 访问任何由该令牌发放用户可以访问的模块。
+这将允许 Deno 访问该令牌拥有权限的所有模块。
 
-当令牌不正确或用户没有访问模块的权限时，GitHub 将发出 `404 Not Found` 状态，而不是未授权状态。因此，如果你在命令行中收到访问模块未找到的错误，请检查环境变量设置和个人访问令牌设置。
+当令牌错误或无权限访问时，GitHub 返回的是 `404 Not Found`，而非未授权错误。如果你收到未找到模块的错误，请检查令牌和环境变量配置。
 
-此外，`deno run -L debug` 应该打印出关于从环境变量解析出的令牌数量的调试信息。如果它觉得任何令牌格式错误，它会打印错误消息，但出于安全原因，它不会打印任何令牌的详细信息。
+另外，执行 `deno run -L debug` 会打印关于环境变量中解析的令牌数量的调试信息。如果格式有误，它会报错，但为了安全起见，不会显示令牌详情。

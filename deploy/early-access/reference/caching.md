@@ -1,5 +1,6 @@
 ---
 title: 缓存
+description: "Deno Deploy 早期访问中的 CDN 缓存功能概览，涵盖缓存配置、指令及最佳实践。"
 ---
 
 :::info

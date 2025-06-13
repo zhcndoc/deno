@@ -1,5 +1,6 @@
 ---
 title: 可观测性
+description: "Deno Deploy 早期访问中监控功能的全面概述，包括日志、跟踪、指标和过滤选项。"
 ---
 
 :::info

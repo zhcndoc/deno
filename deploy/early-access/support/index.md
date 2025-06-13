@@ -8,6 +8,8 @@ title: 支持与反馈
 
 :::
 
-如果您对 Deno Deploy 早期访问版有任何问题或反馈，请通过 [Deno Discord](https://discord.gg/deno) 的 `#deploy-ea` 频道与我们联系，或[联系我们](mailto:deploy@deno.com)。
+If you have any questions or feedback about Deno Deploy<sup>EA</sup>, please
+reach out to us on the [Deno Discord](https://discord.gg/deno) in the
+`#deploy-ea` channel or [contact us](mailto:deploy@deno.com).
 
 我们正在积极改进该平台，期待听到您的想法！

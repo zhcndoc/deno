@@ -1,5 +1,6 @@
 ---
 title: 组织
+description: "在 Deno Deploy 早期访问中创建和管理组织的指南，包括成员、权限和组织管理。"
 ---
 
 :::info

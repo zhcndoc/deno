@@ -1,5 +1,6 @@
 ---
 title: 框架
+description: "Deno Deploy 早期访问中支持的 JavaScript 和 TypeScript 框架的详细指南，包括 Next.js、Astro、Nuxt、SvelteKit 等。"
 ---
 
 :::info

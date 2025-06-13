@@ -109,11 +109,11 @@ import { MyUtil } from "/util.ts";
 
 ### 覆盖包
 
-`deno.json` 中的 `patch` 字段允许您在不修改源代码的情况下覆盖依赖项。它还允许您使用存储在本地磁盘上的包。
+`deno.json` 中的 `links` 字段允许您用存储在磁盘上的本地包覆盖依赖项。这类似于 `npm link`。
 
 ```json title="deno.json"
 {
-  "patch": [
+  "links": [
     "../some-package"
   ]
 }
@@ -124,7 +124,6 @@ import { MyUtil } from "/util.ts";
 - 依赖项错误修复
 - 私有本地库
 - 兼容性问题
-- 安全问题
 
 被引用的包不必发布。只需要在 `deno.json` 或 `package.json` 中具有正确的包名和元数据，Deno 就能识别它正在处理哪个包。这提供了更大的灵活性和模块化，保持主代码与外部包的清晰分离。
 

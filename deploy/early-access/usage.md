@@ -1,9 +1,9 @@
 ---
-title: "Deno Deploy 早期访问使用指南"
-description: "Deno Deploy 早期访问程序的重要限制、服务级别期望和使用条款。"
+title: "Deno Deployᴱᴬ 使用指南"
+description: "Deno Deploy 早期访问计划的重要限制、服务级别期望及使用条款。"
 ---
 
-作为一个早期访问产品，Deno Deploy 早期访问目前有一些限制，你在使用之前应当了解：
+作为一款早期访问产品，Deno Deploy<sup>EA</sup> 目前存在一些您在使用前应了解的限制：
 
 - Deno Deploy Pro 账户功能尚未扩展至 Deno Deploy<sup>EA</sup>
 - CLI 部署以及从 GitHub Actions 部署尚不可用在 Deno Deploy<sup>EA</sup>
