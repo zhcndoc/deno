@@ -57,24 +57,129 @@ Deno.test("saveUser 调用了 database.save", async () => {
 });
 ```
 
-我们从 Deno 标准库导入了断言函数和 Spy 相关功能。
+我们从 Deno 标准库导入必要的函数，用于断言相等和创建及校验 spy 函数。
 
-mock 数据库是实数据库对象的替代品，其 `save` 方法被包裹进 Spy。Spy 记录对该方法的调用、传入参数，并执行真实实现（这里返回带有 `user` 数据和 `id` 的 Promise）。
+这个模拟数据库是一个替代真实数据库对象的站位符，带有一个被 `spy` 包裹的 `save` 方法。这个 spy 函数会跟踪该方法的调用次数、记录传入的参数，并执行其底层实现（这里返回了包含 `user` 及 `id` 的 Promise）。
 
-测试调用 `saveUser()` 使用 mock 数据后，通过断言验证：
+测试中调用了带有模拟数据的 `saveUser()`，我们通过断言验证了：
 
-1. `save` 方法被调用一次
-2. 调用的第一个参数是传入的 `user` 对象
-3. 返回结果包含原始用户数据和新增的 ID
+1. `save` 方法被调用了且仅调用了一次
+2. 调用的第一个参数是我们传入的 `user` 对象
+3. 返回结果包含原有的用户数据和新增的 ID
 
-这样，我们无需设置或清理复杂的数据库状态便完成了对 `saveUser` 的测试。
+我们能够在无需搭建或清理复杂数据库状态的情况下，测试了 `saveUser` 功能。
 
-### 孔函数 (Stubbing)
+### 清除 Spy
 
-Spy 仅监听方法调用，不改变其行为，而 Stub 是完全替换原函数实现的技术。
-[Stubbing](https://jsr.io/@std/testing/doc/mock#stubbing) 是一种 Mock 形式，暂时用受控的实现替换函数或方法，以模拟特定行为并返回预设值，也常用于覆盖与环境相关的功能。
+当多个测试都使用 spy 时，重要的是在测试之间重置或清除 spy，以避免相互干扰。Deno 测试库提供了使用 `restore()` 方法轻松恢复所有 spy 到原始状态。
 
-在 Deno 中，可以使用标准测试库的 `stub` 函数创建 Stub：
+下面示例演示如何在完成使用 spy 后清理它：
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
+
+Deno.test("spy 清理示例", () => {
+  // 创建一个监听函数的 spy
+  const myFunction = spy((x: number) => x * 2);
+
+  // 使用 spy
+  const result = myFunction(5);
+  assertEquals(result, 10);
+  assertSpyCalls(myFunction, 1);
+
+  // 测试完成后，恢复 spy
+  try {
+    // 使用 spy 的测试代码
+    // ...
+  } finally {
+    // 始终清理 spy
+    myFunction.restore();
+  }
+});
+```
+
+方法的 spy 是可销毁的，可以用 `using` 关键字让它们自动恢复。这种做法避免了你必须用 `try` 代码块包裹断言，确保测试结束前方法能被恢复。
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
+
+Deno.test("使用可自动恢复的 spies", () => {
+  const calculator = {
+    add: (a: number, b: number) => a + b,
+    multiply: (a: number, b: number) => a * b,
+  };
+
+  // spy 会在超出作用域时自动恢复
+  using addSpy = spy(calculator, "add");
+
+  // 使用 spy
+  const sum = calculator.add(3, 4);
+  assertEquals(sum, 7);
+  assertSpyCalls(addSpy, 1);
+  assertEquals(addSpy.calls[0].args, [3, 4]);
+
+  // 不需要 try/finally 块，spy 会自动恢复
+});
+
+Deno.test("同时使用多个可自动恢复的 spies", () => {
+  const calculator = {
+    add: (a: number, b: number) => a + b,
+    multiply: (a: number, b: number) => a * b,
+  };
+
+  // 两个 spy 都会自动恢复
+  using addSpy = spy(calculator, "add");
+  using multiplySpy = spy(calculator, "multiply");
+
+  calculator.add(5, 3);
+  calculator.multiply(4, 2);
+
+  assertSpyCalls(addSpy, 1);
+  assertSpyCalls(multiplySpy, 1);
+
+  // 不需要清理代码
+});
+```
+
+如果你有多个不支持 `using` 关键字的 spy，可以将它们保存在数组里，一次性调用恢复：
+
+```ts
+Deno.test("多个 spies 清理", () => {
+  const spies = [];
+
+  // 创建 spy
+  const functionA = spy((x: number) => x + 1);
+  spies.push(functionA);
+
+  const objectB = {
+    method: (x: number) => x * 2,
+  };
+  const spyB = spy(objectB, "method");
+  spies.push(spyB);
+
+  // 测试中使用 spies
+  // ...
+
+  // 测试结束时清理所有 spies
+  try {
+    // 使用 spies 的测试代码
+  } finally {
+    // 恢复所有 spies
+    spies.forEach((spyFn) => spyFn.restore());
+  }
+});
+```
+
+正确清理 spies 能确保每个测试从干净的状态开始，避免测试间侧漏副作用。
+
+### Stub（存根）
+
+虽然 spy 用于记录方法调用而不改变行为，但 stub 会完全替换原有实现。
+[Stub](https://jsr.io/@std/testing/doc/mock#stubbing) 是 mock 的一种形式，用于临时替换函数或方法实现，可用于模拟特定情况或预设返回值，也常用于重写依赖环境的功能。
+
+在 Deno 中，你可以通过标准测试库的 `stub` 函数创建 stub：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -222,7 +327,7 @@ function delayedGreeting(callback: (message: string) => void): void {
   }, 1000); // 1 秒延迟
 }
 
-Deno.test("time-dependent tests", () => {
+Deno.test("时间相关测试", () => {
   using fakeTime = new FakeTime();
 
   // 创建从特定日期（星期一）开始的假时间
@@ -477,7 +582,7 @@ Deno.test("AuthService 综合测试", async (t) => {
     }
   });
 
-  await t.step("token expiration should work correctly", () => {
+  await t.step("token 过期应正常工作", () => {
     using fakeTime = new FakeTime();
 
     const authService = new AuthService();

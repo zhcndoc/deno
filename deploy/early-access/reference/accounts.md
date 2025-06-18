@@ -9,8 +9,9 @@ description: "关于用户账户、通过 GitHub 进行身份验证以及在 Den
 
 :::
 
-Deno Deploy 账户始终关联 GitHub 账户。只能通过 GitHub 登录 Deno Deploy。
+Deno Deploy 账户与 GitHub 账户关联。您只能通过 GitHub 身份验证登录 Deno Deploy。
 
-主联系邮箱地址和名称均从 GitHub 同步。用户名和邮箱地址会在每次登录时更新。在 GitHub 更改邮箱、登录名或名称后，您可能需要重新登录以使更改反映在 Deno Deploy 控制面板中。
+您的主要联系电子邮件地址和名称会从 GitHub 同步。您的用户名和电子邮件地址会在每次登录时更新。在 GitHub 上更改电子邮件、登录名或名称后，请重新登录以便在 Deno Deploy<sup>EA</sup> 控制面板中看到这些更改。
 
-目前，只有参与早期访问计划的账户才能访问 Deno Deploy<sup>EA</sup>。要加入早期访问计划，请访问 [Deploy Classic 中的账户设置](https://dash.deno.com/account#early-access) 并注册。要获得早期访问 Discord 频道的访问权限，请通过相同的早期访问设置将您的 Discord 账户与 Deno Deploy 账户连接。
+目前，只有注册早期访问计划的账户可以访问 Deno Deploy<sup>EA</sup>。要加入该计划，请访问
+[Deploy Classic 中的账户设置](https://dash.deno.com/account#early-access) 并注册。要访问早期访问 Discord 频道，请通过同一早期访问设置将 Discord 账户连接到您的 Deno Deploy 账户。

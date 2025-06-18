@@ -16,7 +16,8 @@ Deno Deploy Early Access（Deno Deploy<sup>EA</sup>）是对原始 Deploy 的彻
 - 集成的构建系统
 - 显著增强的基础设施
 
-<a href="https://app.deno.com" class="docs-cta runtime-cta">试用 Deno Deploy<sup>EA</sup></a>
+<a href="https://dash.deno.com/account#early-access" class="docs-cta runtime-cta">加入 Early Access 计划</a>
+<a href="https://app.deno.com" class="docs-cta deploy-cta">前往您的 Deno Deploy<sup>EA</sup> 仪表板</a>
 
 :::note
 
@@ -24,17 +25,17 @@ Deno Deploy<sup>EA</sup> 处于私密测试阶段。要使用 Deno Deploy<sup>EA
 
 :::
 
-Deno Deploy<sup>EA</sup> 配备了位于 [app.deno.com](https://app.deno.com) 的全新仪表板。您可以在此仪表板上创建包含 Deno Deploy<sup>EA</sup> 应用的新组织。
+Deno Deploy<sup>EA</sup> 带来了全新的仪表板，地址为 [app.deno.com](https://app.deno.com)。在此仪表板中，您可以创建包含 Deno Deploy<sup>EA</sup> 应用的新组织。
 
-单个组织内不能混用 Deno Deploy<sup>EA</sup> 应用和 Deploy Classic 项目。您可以通过仪表板左上角的组织选择器在 Deno Deploy<sup>EA</sup> 组织和 Deploy Classic 组织之间切换。
+在单个组织内，您不能混合使用 Deno Deploy<sup>EA</sup> 应用和 Deploy Classic 项目。您可以通过仪表板左上角的组织选择器切换不同组织。
 
 ## 什么是 Deno Deploy<sup>EA</sup>？
 
-Deno Deploy 是一个无服务器平台，用于在云端（或您自有基础设施上自行托管）运行 JavaScript 和 TypeScript 应用。Deno Deploy 充当部署和运行应用的管理平台，例如通过 GitHub 集成实现部署。
+Deno Deploy 是一个用于在云端（或自行托管的基础设施上）运行 JavaScript 和 TypeScript 应用的无服务器平台。它通过 GitHub 部署等集成方式，提供应用部署和运行的管理平面。
 
 ## 与 Deploy Classic 的比较
 
-Deno Deploy<sup>EA</sup> 是 Deploy Classic 的彻底重新设计。它拥有全新的仪表板和执行环境，使用 Deno 2.0，功能远强于 Deploy Classic。下表比较了两个版本的 Deno Deploy。
+Deno Deploy<sup>EA</sup> 是对 Deploy Classic 的完全重新设计。它拥有全新的仪表板和执行环境，使用 Deno 2.0，功能远超 Deploy Classic。下表对比了两个版本的 Deno Deploy。
 
 | 功能                           | Deno Deploy<sup>EA</sup>       | Deploy Classic                                                                                                                            |
 | ------------------------------ | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -65,9 +66,9 @@ Deno Deploy<sup>EA</sup> 是 Deploy Classic 的彻底重新设计。它拥有全
 
 要开始使用 Deno Deploy<sup>EA</sup>：
 
-1. 访问 [app.deno.com](https://app.deno.com) 以进入新仪表板
+1. 访问 [app.deno.com](https://app.deno.com) 进入全新仪表板
 2. 创建新的 Deno Deploy<sup>EA</sup> 组织
-3. 在组织内创建您的第一个应用
-4. 连接您的 GitHub 仓库或直接从仪表板部署
+3. 在该组织内创建您的第一个应用
+4. 从 GitHub 仓库或直接通过仪表板进行部署
 
-有关部署特定框架或配置应用的详细文档，请参阅参考文档。
+有关详细的配置说明和特定框架指南，请参阅我们的参考文档。
