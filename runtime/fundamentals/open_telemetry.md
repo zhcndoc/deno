@@ -396,6 +396,13 @@ counter.addCallback((res) => {
 
 在 [OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.MetricsAPI.html) 中了解完整的指标 API。
 
+### 实用示例
+
+有关在 Deno 应用程序中实现 OpenTelemetry 的实用示例，请参见我们的教程：
+
+- [基本 OpenTelemetry 教程](/examples/basic_opentelemetry_tutorial/) - 一个带有自定义指标和追踪的简单 HTTP 服务器
+- [分布式追踪教程](/examples/otel_span_propagation_tutorial/) - 跨服务边界追踪的高级技术
+
 ## 上下文传播
 
 在 OpenTelemetry 中，上下文传播是将一些上下文信息（例如当前跨度）从应用程序的一部分传递到另一部分的过程，而不必将其显式作为参数传递给每个函数。

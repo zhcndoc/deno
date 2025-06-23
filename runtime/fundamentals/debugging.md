@@ -127,3 +127,26 @@ deno run --strace-ops your_script.ts
 ```
 
 每个 op 应该具有一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间是执行 op 所需的时间。此标志对于性能分析、调试挂起的程序或理解 Deno 背后的工作原理可能非常有用。
+
+## OpenTelemetry 集成
+
+对于生产应用程序或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方法。Deno 内置支持 OpenTelemetry，允许您：
+
+- 跟踪请求通过您的应用程序
+- 监控应用程序性能指标
+- 收集结构化日志
+- 将遥测数据导出到监控系统
+
+要启用 OpenTelemetry，请使用 `--unstable-otel` 标志运行您的应用程序：
+
+```sh
+OTEL_DENO=true deno run --unstable-otel your_script.ts
+```
+
+这将自动收集和导出运行时可观察性数据，包括：
+
+- HTTP 请求跟踪
+- 运行时指标
+- 控制台日志和错误
+
+有关 Deno 的 OpenTelemetry 集成的完整详细信息，包括自定义指标、跟踪和配置选项，请参见 [OpenTelemetry 文档](/runtime/fundamentals/open_telemetry)。

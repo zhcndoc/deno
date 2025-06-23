@@ -269,3 +269,79 @@ const jsx = _jsxTemplate(
   }),
 );
 ```
+## 在服务器响应中渲染 JSX
+
+在 Deno 中使用 JSX 进行服务器端渲染时，您需要将 JSX 组件转换为可以在响应中发送的 HTML 字符串。这在使用 Deno.serve 构建 Web 应用程序时特别有用。
+
+### 使用 Preact 和 renderToString
+
+对于 Preact 应用程序，您可以使用 `preact-render-to-string` 包：
+
+```json title="deno.json"
+{
+  "compilerOptions": {
+    "jsx": "precompile",
+    "jsxImportSource": "preact"
+  },
+  "imports": {
+    "preact": "npm:preact@^10.26.6",
+    "preact-render-to-string": "npm:preact-render-to-string@^6.5.13"
+  }
+}
+```
+
+然后在你的服务器代码中：
+
+```tsx title="server.tsx"
+import { renderToString } from "preact-render-to-string";
+
+const App = () => {
+  return <h1>Hello world</h1>;
+};
+
+Deno.serve(() => {
+  const html = `<!DOCTYPE html>${renderToString(<App />)}`;
+  return new Response(html, {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
+});
+```
+
+这种方法与预编译转换配合良好，提供了最佳的服务器端渲染性能。
+
+### 使用 React 的 renderToString
+
+如果你使用 React 而不是 Preact，可以使用 React 自身的服务器渲染能力：
+
+```json title="deno.json"
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "imports": {
+    "react": "npm:react@^18.2.0",
+    "react-dom": "npm:react-dom@^18.2.0",
+    "react-dom/server": "npm:react-dom@^18.2.0/server"
+  }
+}
+```
+
+在您的服务器代码中：
+
+```tsx title="server.tsx"
+import { renderToString } from "react-dom/server";
+
+const App = () => {
+  return <h1>Hello from React</h1>;
+};
+
+Deno.serve(() => {
+  const html = `<!DOCTYPE html>${renderToString(<App />)}`;
+  return new Response(html, {
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
+});
+```
+
+使用这些配置，您的 Deno 服务器可以高效地将 JSX 组件渲染为 HTML 并将其提供给客户端。

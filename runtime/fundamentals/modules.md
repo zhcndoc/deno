@@ -121,7 +121,9 @@ Deno 推荐使用 [JSR](https://jsr.io)，这是一个现代的 JavaScript 注�
 
 ## 管理第三方模块和库
 
-在多个文件中导入模块时，输入模块名称和完整版本说明符可能会变得繁琐。你可以通过在 `deno.json` 文件中使用 `imports` 字段来集中管理远程模块。我们将这个 `imports` 字段称为 **导入映射（import map）**，它基于 [导入映射标准](https://github.com/WICG/import-maps)。
+在多个文件中导入模块时，输入完整版本说明符的模块名称可能会变得繁琐。您可以通过在 `deno.json` 文件中使用 `imports` 字段来集中管理远程模块。我们称这个 `imports` 字段为 **导入映射**，它基于 [导入映射标准]。
+
+[导入映射标准]: https://html.spec.whatwg.org/multipage/webappapis.html#import-maps
 
 ```json title="deno.json"
 {

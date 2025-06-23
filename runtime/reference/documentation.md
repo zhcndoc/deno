@@ -63,3 +63,8 @@ export function foo(): string {
   return "foo";
 }
 ````
+有关 Deno 中测试的更多指南，请查看：
+
+- [基本测试教程](/examples/testing_tutorial/)
+- [测试中的数据模拟教程](/examples/mocking_tutorial/)
+- [Web 应用程序测试教程](/examples/web_testing_tutorial/)

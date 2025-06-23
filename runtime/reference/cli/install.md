@@ -153,6 +153,18 @@ deno install --allow-scripts=npm:sqlite3
 
 _安装所有依赖项，并允许 `npm:sqlite3` 软件包运行其生命周期脚本_。
 
+## --quiet 标志
+
+`--quiet` 标志在安装依赖项时抑制诊断输出。
+
+与 `deno install` 一起使用时，它将隐藏进度指示器、下载信息和成功消息。
+
+```shell
+$ deno install --quiet jsr:@std/http/file-server
+```
+
+这对于脚本环境或当您希望在 CI 管道中获得更清晰的输出时非常有用。
+
 ## 卸载
 
 您可以使用 `deno uninstall` 命令卸载依赖项或二进制脚本：

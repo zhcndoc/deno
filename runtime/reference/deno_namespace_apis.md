@@ -38,6 +38,14 @@ Deno 运行时提供
 - [连接到主机名和端口 (`Deno.connect`)](/api/deno/~/Deno.connect)
 - [在本地传输地址上宣布 (`Deno.listen`)](/api/deno/~/Deno.listen)
 
+网络功能的实际示例：
+
+- [HTTP 服务器：你好，世界](/examples/http_server/)
+- [HTTP 服务器：路由](/examples/http_server_routing/)
+- [TCP 回声服务器](/examples/tcp_echo_server/)
+- [WebSockets 示例](/examples/http_server_websocket/)
+- [使用 WebSockets 构建聊天应用教程](/examples/chat_app_tutorial/)
+
 ## Subprocesses
 
 The Deno runtime comes with
@@ -45,7 +53,8 @@ The Deno runtime comes with
 
 Refer to the links below for code samples of how to create a subprocess.
 
-- [Creating a subprocess (`Deno.Command`)](/runtime/tutorials/subprocess/)
+- [Creating a subprocess (`Deno.Command`)](/examples/subprocess_tutorial/)
+- [Collecting output from subprocesses](/examples/subprocesses_output/)
 
 ## 错误
 
@@ -94,6 +103,13 @@ Deno.serve((_req) => {
 
 您可以
 [阅读有关如何使用 HTTP 服务器 API 的更多信息](/runtime/fundamentals/http_server/)。
+
+HTTP 服务器的实际示例：
+
+- [简单文件服务器教程](/examples/file_server_tutorial/)
+- [提供文件的 HTTP 服务器](/examples/http_server_files/)
+- [带流媒体的 HTTP 服务器](/examples/http_server_streaming/)
+- [HTTP 服务器 WebSockets](/examples/http_server_websocket/)
 
 ## 权限
 

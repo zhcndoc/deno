@@ -561,3 +561,5 @@ packages:
 ```
 
 这使得在迁移或混合项目中，Deno 和 npm/pnpm 生态系统间能实现平滑集成。
+
+有关配置项目的更多信息，请查看 [使用 deno.json 进行配置](/examples/configuration_with_deno_json/) 教程。
