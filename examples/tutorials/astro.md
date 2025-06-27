@@ -21,7 +21,7 @@ url: /examples/astro_tutorial/
 Astro 提供了一个 CLI 工具，可以快速创建一个新的 Astro 项目。在终端中运行命令 `deno init --npm astro@latest` 来使用 Deno 创建一个新的 Astro 项目。对于本教程，我们将选择“空”模板，以便从头开始，并跳过安装依赖项，以便稍后使用 Deno 安装它们：
 
 ```jsx
-deno -A npm:create-astro@latest
+deno init --npm astro@latest
 
  astro   启动序列已启动。
 
@@ -87,9 +87,25 @@ deno task
     astro
 ```
 
-我们可以使用 `deno task dev` 启动 Astro 服务器：
+我们可以用 `deno task dev` 启动 Astro 服务器：
 
-![成功运行 Astro 应用](./images/how-to/astro/hello-astro.png)
+![Getting the Astro app to work](./images/how-to/astro/hello-astro.png)
+
+## 配置代码格式化工具
+
+`deno fmt` 通过
+[`--unstable-component`](https://docs.deno.com/runtime/reference/cli/fmt/#formatting-options-unstable-component)
+标志支持 Astro 文件。要使用它，请运行以下命令：
+
+```sh
+deno fmt --unstable-component
+```
+
+要配置 `deno fmt` 始终格式化你的 Astro 文件，请在你的 `deno.json` 文件顶层添加以下内容：
+
+```json
+"unstable": ["fmt-component"]
+```
 
 ## 更新索引页面以列出所有恐龙
 

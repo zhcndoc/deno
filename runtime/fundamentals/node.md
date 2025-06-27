@@ -467,7 +467,18 @@ import { Buffer } from "node:buffer";
 const buf = new Buffer(5, "0");
 ```
 
-建议使用 [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) 或其他 [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) 子类。
+对于需要 Node.js 特定类型如 `BufferEncoding` 的 TypeScript 用户，使用 `@types/node` 时，这些类型可以通过 `NodeJS` 命名空间获取：
+
+```ts title="buffer-types.ts"
+/// <reference types="npm:@types/node" />
+
+// Now you can use NodeJS namespace types
+function writeToBuffer(data: string, encoding: NodeJS.BufferEncoding): Buffer {
+  return Buffer.from(data, encoding);
+}
+```
+
+更倾向于使用 [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) 或其他 [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) 子类。
 
 - `__filename` - 使用 `import.meta.filename` 替代。
 

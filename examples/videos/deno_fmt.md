@@ -128,16 +128,6 @@ console.log("This   line  will  not be    formatted");
 }
 ```
 
-或者在 `deno.json` 的顶层告诉 `deno fmt` 和 `deno lint` 都忽略它。（这是放置生成文件的好地方）：
-
-```json
-{
-  "fmt": {
-    "ignore": ["main.ts", "*.json"]
-  }
-}
-```
-
 ### 格式化 markdown
 
 `deno fmt` 也适用于 markdown 文件。你可以选择如何格式化散文，通过将选项 `"proseWrap"` 设置为 `always`、`never` 或 `preserve`，例如：
@@ -181,7 +171,7 @@ console.log("This   line  will  not be    formatted");
     "semiColon": false,
     "singleQuote": true,
     "proseWrap": "always",
-    "ignore": ["**/logs.json"]
+    "exclude": ["**/logs.json"]
   }
 }
 ```

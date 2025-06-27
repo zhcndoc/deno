@@ -375,11 +375,21 @@ export const sidebar = [
         href: "/examples/otel_span_propagation_tutorial/",
         type: "tutorial",
       },
+      {
+        title: "OpenTelemetry with Deno Deploy",
+        href: "/examples/deploy_otel_tutorial/",
+        type: "tutorial",
+      },
     ],
   },
   {
     title: "Deploying Deno projects",
     items: [
+      {
+        title: "Deploy with Deno Deploy",
+        href: "/examples/deno_deploy_tutorial/",
+        type: "tutorial",
+      },
       {
         title: "AWS Lambda",
         href: "/examples/aws_lambda_tutorial/",

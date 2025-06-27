@@ -1,80 +1,74 @@
 ---
-title: "Getting Started with OpenTelemetry in Deno"
-description: "Set up basic OpenTelemetry instrumentation in a Deno application. This tutorial covers creating a simple HTTP server with custom metrics and traces, and viewing the telemetry data."
+title: "在 Deno 中入门 OpenTelemetry"
+description: "在 Deno 应用中设置基本的 OpenTelemetry 监测。本教程涵盖创建一个带有自定义指标和跟踪的简单 HTTP 服务器，以及查看遥测数据。"
 url: /examples/basic_opentelemetry_tutorial/
 ---
 
-# Getting Started with OpenTelemetry in Deno
+OpenTelemetry 为您的应用提供强大的可观察性工具。借助 Deno 内置的 OpenTelemetry 支持，您可以轻松地对代码进行监测，收集指标、跟踪和日志。
 
-OpenTelemetry provides powerful observability tools for your applications. With
-Deno's built-in OpenTelemetry support, you can easily instrument your code to
-collect metrics, traces, and logs.
+本教程将指导您如何设置一个带有 OpenTelemetry 监测的简单 Deno 应用。
 
-This tutorial will walk you through setting up a simple Deno application with
-OpenTelemetry instrumentation.
+## 前提条件
 
-## Prerequisites
+- Deno 2.3 或更高版本
 
-- Deno 2.3 or later
+## 第一步：创建一个简单的 HTTP 服务器
 
-## Step 1: Create a Simple HTTP Server
-
-Let's start by creating a basic HTTP server that simulates a small web
-application:
+让我们开始创建一个基础的 HTTP 服务器，模拟一个小型的网页应用：
 
 ```ts title="server.ts"
 import { metrics, trace } from "npm:@opentelemetry/api@1";
 
-// Create a tracer and meter for our application
+// 为我们的应用创建 tracer 和 meter
 const tracer = trace.getTracer("my-server", "1.0.0");
 const meter = metrics.getMeter("my-server", "1.0.0");
 
-// Create some metrics
+// 创建一些指标
 const requestCounter = meter.createCounter("http_requests_total", {
-  description: "Total number of HTTP requests",
+  description: "HTTP 请求总数",
 });
 
 const requestDuration = meter.createHistogram("http_request_duration_ms", {
-  description: "HTTP request duration in milliseconds",
+  description: "HTTP 请求持续时间（毫秒）",
   unit: "ms",
 });
 
-// Start the server
+// 启动服务器
 Deno.serve({ port: 8000 }, (req) => {
-  // Record the start time for measuring request duration
+  // 记录请求开始时间，以测量请求持续时间
   const startTime = performance.now();
 
-  // Create a span for this request
+  // 为该请求创建一个 span
   return tracer.startActiveSpan("handle_request", async (span) => {
     try {
-      // Extract the path from the URL
+      // 从 URL 中提取路径
       const url = new URL(req.url);
       const path = url.pathname;
 
-      // Add attributes to the span
+      // 为 span 添加属性
       span.setAttribute("http.route", path);
       span.setAttribute("http.method", req.method);
       span.updateName(`${req.method} ${path}`);
 
-      // Add an event to the span
+      // 为 span 添加事件
       span.addEvent("request_started", {
         timestamp: startTime,
         request_path: path,
       });
 
-      // Simulate some processing time
+      // 模拟一些处理时间
       const waitTime = Math.random() * 100;
       await new Promise((resolve) => setTimeout(resolve, waitTime));
 
-      // Add another event to the span
+      // 为 span 添加另一个事件
       span.addEvent("processing_completed");
 
-      // Create the response
+      // 创建响应
       const response = new Response(`Hello from ${path}!`, {
         headers: { "Content-Type": "text/plain" },
       });
 
-      // Record metrics
+      // 记录指标
       requestCounter.add(1, {
         method: req.method,
         path,
@@ -91,7 +85,7 @@ Deno.serve({ port: 8000 }, (req) => {
 
       return response;
     } catch (error) {
-      // Record error in span
+      // 在 span 中记录错误
       if (error instanceof Error) {
         span.recordException(error);
         span.setStatus({
@@ -100,71 +94,68 @@ Deno.serve({ port: 8000 }, (req) => {
         });
       }
 
-      return new Response("Internal Server Error", { status: 500 });
+      return new Response("内部服务器错误", { status: 500 });
     } finally {
-      // Always end the span
+      // 始终结束 span
       span.end();
     }
   });
 });
 ```
 
-This server:
+该服务器功能：
 
-1. Creates a tracer and meter for our application
-2. Sets up metrics to count requests and measure their duration
-3. Creates a span for each request with attributes and events
-4. Simulates some processing time
-5. Records metrics for each request
+1. 为应用创建 tracer 和 meter
+2. 设置指标以统计请求数量并测量请求持续时间
+3. 为每个请求创建带有属性和事件的 span
+4. 模拟处理时间
+5. 记录每个请求的指标
 
-## Step 2: Run the Server with OpenTelemetry Enabled
+## 第二步：启用 OpenTelemetry 并运行服务器
 
-To run the server with OpenTelemetry, use these flags:
+使用以下命令行标志运行服务器以启用 OpenTelemetry：
 
 ```sh
 OTEL_DENO=true OTEL_SERVICE_NAME=my-server deno run --unstable-otel --allow-net server.ts
 ```
 
-## Step 3: Create a Test Client
+## 第三步：创建测试客户端
 
-Let's create a simple client to send requests to our server:
+让我们创建一个简单客户端，向服务器发送请求：
 
 ```ts title="client.ts"
-// Send 10 requests to different paths
+// 向不同路径发送 10 个请求
 for (let i = 0; i < 10; i++) {
   const path = ["", "about", "users", "products", "contact"][i % 5];
   const url = `http://localhost:8000/${path}`;
 
-  console.log(`Sending request to ${url}`);
+  console.log(`正在向 ${url} 发送请求`);
 
   try {
     const response = await fetch(url);
     const text = await response.text();
-    console.log(`Response from ${url}: ${text}`);
+    console.log(`来自 ${url} 的响应：${text}`);
   } catch (error) {
-    console.error(`Error fetching ${url}:`, error);
+    console.error(`获取 ${url} 时出错：`, error);
   }
 }
 ```
 
-## Step 4: Run the Client
+## 第四步：运行客户端
 
-In a separate terminal, run the client:
+在另一个终端中运行客户端：
 
 ```sh
 deno run --allow-net client.ts
 ```
 
-## Step 5: View the Telemetry Data
+## 第五步：查看遥测数据
 
-By default, Deno exports telemetry data to `http://localhost:4318` using the
-OTLP protocol. You'll need an OpenTelemetry collector to receive and visualize
-this data.
+默认情况下，Deno 会使用 OTLP 协议将遥测数据导出到 `http://localhost:4318`。您需要一个 OpenTelemetry collector 来接收并可视化这些数据。
 
-### Setting up a Local Collector
+### 安装本地 Collector
 
-The quickest way to get started is with a local LGTM stack (Loki, Grafana,
-Tempo, Mimir) in Docker:
+最快速的方式是使用 Docker 运行本地 LGTM 堆栈（Loki, Grafana, Tempo, Mimir）：
 
 ```sh
 docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
@@ -175,70 +166,66 @@ docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
   docker.io/grafana/otel-lgtm:0.8.1
 ```
 
-Then access Grafana at http://localhost:3000 (username: admin, password: admin).
+然后访问 http://localhost:3000 登录 Grafana（用户名：admin，密码：admin）。
 
-In Grafana, you can:
+在 Grafana 中，您可以：
 
-1. View **Traces** in Tempo to see the individual request spans
-2. View **Metrics** in Mimir/Prometheus to see request counts and durations
-3. View **Logs** in Loki to see any logs from your application
+1. 在 Tempo 中查看 **Traces（跟踪）**，查看每个请求的 span
+2. 在 Mimir/Prometheus 中查看 **Metrics（指标）**，查看请求计数和持续时间
+3. 在 Loki 中查看 **Logs（日志）**，查看应用的任何日志
 
-## Understanding What You're Seeing
+## 理解你所看到的内容
 
-### Traces
+### 跟踪（Traces）
 
-In the Traces view, you'll see spans for:
+在 Traces 视图中，您将看到：
 
-- Each HTTP request processed by your server
-- Each fetch request made by your client
-- The relationships between these spans
+- 服务器处理的每个 HTTP 请求的 span
+- 客户端发出的每个 fetch 请求的 span
+- 这些 span 之间的关联关系
 
-Click on any span to see its details, including:
+点击任一 span 可查看详细信息，包括：
 
-- Duration
-- Attributes (http.route, http.method, etc.)
-- Events (request_started, processing_completed)
+- 持续时间
+- 属性（如 http.route、http.method 等）
+- 事件（request_started、processing_completed）
 
-### Metrics
+### 指标（Metrics）
 
-In the Metrics view, you can query for:
+在 Metrics 视图中，您可以查询：
 
-- `http_requests_total` - The counter tracking the number of HTTP requests
-- `http_request_duration_ms` - The histogram of request durations
+- `http_requests_total` — 统计 HTTP 请求数量的计数器
+- `http_request_duration_ms` — 请求持续时间的直方图
 
-You can also see built-in Deno metrics like:
+您还可以看到内置的 Deno 指标，如：
 
 - `http.server.request.duration`
 - `http.server.active_requests`
 
-### Logs
+### 日志（Logs）
 
-In the Logs view, you'll see all console logs from your application with correct
-trace context.
+在 Logs 视图中，您将看到应用的所有控制台日志，且带有正确的跟踪上下文。
 
-## Troubleshooting
+## 故障排查
 
-If you're not seeing data in your collector:
+如果在 collector 中未看到数据：
 
-1. Check that you've set `OTEL_DENO=true` and used the `--unstable-otel` flag
-2. Verify the collector is running and accessible at the default endpoint
-3. Check if you need to set `OTEL_EXPORTER_OTLP_ENDPOINT` to a different URL
-4. Look for errors in your Deno console output
+1. 确认已设置 `OTEL_DENO=true` 并使用了 `--unstable-otel` 标志
+2. 确认 collector 正在运行且可访问默认端点
+3. 检查是否需要将 `OTEL_EXPORTER_OTLP_ENDPOINT` 设置为其他 URL
+4. 查看 Deno 控制台输出是否有错误
 
-Remember that OpenTelemetry support in Deno is still marked as unstable and may
-change in future versions.
+请记住，Deno 中的 OpenTelemetry 支持仍处于不稳定状态，未来版本可能会有所变动。
 
-🦕 This tutorial provides a simple starting point for users who want to
-experiment with OpenTelemetry in Deno without diving into more complex concepts
-immediately.
+🦕 本教程为想要在 Deno 中尝试 OpenTelemetry 的用户提供了一个简单的起点，无需立即深入复杂概念。
 
-This basic example can be extended in many ways:
+此基础示例可在多方面扩展：
 
-- Add more custom metrics for business logic
-- Create additional spans for important operations
-- Use baggage to pass context attributes between services
-- Set up alerts based on metrics thresholds
+- 为业务逻辑添加更多自定义指标
+- 为重要操作创建更多 span
+- 使用 baggage 在服务间传递上下文属性
+- 根据指标阈值设置告警
 
-For more advanced usage, see our
-[Distributed Tracing with Context Propagation](/examples/otel_span_propagation_tutorial/)
-tutorial.
+有关更高级的用法，请参考我们的
+[分布式跟踪与上下文传播](/examples/otel_span_propagation_tutorial/)
+教程。

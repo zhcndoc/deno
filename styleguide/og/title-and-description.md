@@ -1,12 +1,10 @@
 ---
-title: "An example OG image with a title that is long enough to wrap to three lines"
-description: "A description of typical length that will wrap under the title and offer some additional information about this page"
+title: "一个示例 OG 图片，标题足够长，换行显示为整整三行"
+description: "一个典型长度的描述，会换行显示在标题下方，提供关于此页面的一些额外信息"
 ---
 
-There are different variants of the OG image depending on what content is
-available on the page. This page is an example of an OG image has both a title
-and a description.
+根据页面上的内容不同，OG 图片也会有不同的变体。此页面的示例 OG 图片同时包含标题和描述。
 
-## The OG image for this page
+## 本页面的 OG 图片
 
 <img src="./index.png"  />

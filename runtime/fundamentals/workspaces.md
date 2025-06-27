@@ -119,11 +119,11 @@ export function subtract(a: number, b: number): number {
 
 ---
 
-Deno 工作区灵活且可以与 Node 包一起使用。为了使现有 Node.js 项目的迁移更容易，您可以在单个工作区中同时拥有 Deno 优先和 Node 优先的包。
+Deno 工作区具有灵活性且可以与 Node 包协同工作。为了更方便地迁移现有的 Node.js 项目，您可以在单个工作区中同时拥有以 Deno 优先和以 Node 优先的包。
 
 ## 工作区路径模式
 
-Deno 支持对工作区成员文件夹进行模式匹配，使管理具有多个成员或特定目录结构的工作区更加容易。您可以使用通配符模式一次性包含多个目录：
+Deno 支持工作区成员文件夹的模式匹配，这让管理包含大量成员或特定目录结构的工作区变得更简单。您可以使用通配符模式一次性包含多个目录：
 
 ```json title="deno.json"
 {
@@ -136,53 +136,64 @@ Deno 支持对工作区成员文件夹进行模式匹配，使管理具有多个
 
 模式匹配语法遵循关于文件夹深度的特定规则：
 
-`some-path/*` 匹配 `some-path` 目录下的直接文件和子目录（仅第一层缩进）。例如，对于 `packages/*`，这包括 `packages/foo` 和 `packages/bar`，但不包括 `packages/foo/subpackage`。
+`some-path/*` 匹配位于 `some-path` 目录下的文件和文件夹（仅第一层级）。例如，使用 `packages/*` 时，包括 `packages/foo` 和 `packages/bar`，但不包括 `packages/foo/subpackage`。
 
-`some-path/*/*` 匹配 `some-path` 目录的子目录中的文件和目录（第二层缩进）。它不匹配直接位于 `some-path` 下的项。例如，对于 `examples/*/*`，这包括 `examples/basic/demo` 和 `examples/advanced/sample`，但不包括 `examples/basic`。
+`some-path/*/*` 匹配位于 `some-path` 子目录中的文件和文件夹（第二层级）。它不匹配直接位于 `some-path` 里的项目。例如，使用 `examples/*/*`，包括 `examples/basic/demo` 和 `examples/advanced/sample`，但不包括 `examples/basic`。
 
-模式中的每个 `/*` 段对应相对于基础路径的特定文件夹深度。这允许精确定位目录结构中不同层级的工作区成员。
+模式中的每个 `/*` 段对应相对于基础路径的特定文件夹深度。这允许您精确指定目录结构中不同层级的工作区成员。
 
 ## Deno 如何解析工作区依赖
 
-当在一个工作区中运行项目，该项目从另一个工作区成员中导入时，Deno 遵循以下步骤解析依赖：
+在运行一个从另一个工作区成员导入的项目时，Deno 按以下步骤解析依赖：
 
-1. Deno 从执行项目的目录开始（例如，项目 A）
+1. Deno 从执行项目的目录开始（例如项目 A）
+
 2. 向上查找父目录中的根 `deno.json` 文件
-3. 如果找到，检查该文件中的 `workspace` 属性
-4. 对项目 A 中的每个导入语句，Deno 检查是否匹配任何工作区成员 `deno.json` 中定义的包名
-5. 如果找到匹配的包名，Deno 验证该包所在目录是否列在根工作区配置中
-6. 导入随后通过工作区成员 `deno.json` 的 `exports` 字段解析到正确的文件
 
-例如，给定以下结构：
+3. 如果找到，会检查该文件中的 `workspace` 属性
+
+4. 对于项目 A 中的每个导入语句，Deno 检查它是否匹配任何工作区成员 `deno.json` 中定义的包名称
+
+5. 如果找到匹配的包名，Deno 确认所在目录列在根工作区配置中
+
+6. 然后根据工作区成员 `deno.json` 中的 `exports` 字段解析导入到正确文件
+
+例如，假设结构如下：
 
 ```sh
 /
 ├── deno.json         # workspace: ["./project-a", "./project-b"]
 ├── project-a/
 │   ├── deno.json     # name: "@scope/project-a"
-│   └── mod.ts        # imports from "@scope/project-b"
+│   └── mod.ts        # 从 "@scope/project-b" 导入
 └── project-b/
     ├── deno.json     # name: "@scope/project-b"
     └── mod.ts
 ```
 
-当 `project-a/mod.ts` 导入 `"@scope/project-b"` 时，Deno：
+当 `project-a/mod.ts` 导入 `"@scope/project-b"` 时，Deno 的解析流程是：
 
-1. 识别导入语句
+1. 看到导入语句
+
 2. 检查父目录的 `deno.json`
+
 3. 在工作区数组中找到 `project-b`
-4. 验证 `project-b/deno.json` 存在且具有匹配的包名称
-5. 使用 `project-b` 的 `exports` 解析导入
 
-### 容器化的重要注意事项
+4. 验证 `project-b/deno.json` 存在且包名匹配
 
-当将依赖其他工作区成员的工作区成员容器化时，您必须包括：
+5. 使用 `project-b` 的 exports 解析该导入
 
-1. 根 `deno.json` 文件
-2. 所有依赖的工作区包
-3. 与开发环境一致的目录结构
+### 容器化的重要提示
 
-例如，要将上述 `project-a` 制作成 Docker 镜像，您的 Dockerfile 应该如下：
+在将依赖其他工作区成员的工作区成员容器化时，您必须包括：
+
+1. 根目录的 `deno.json` 文件
+
+2. 所有相关依赖的工作区包
+
+3. 与开发环境相同的目录结构
+
+例如，如果要将上述的 `project-a` 制作为 Docker 镜像，Dockerfile 应该：
 
 ```dockerfile
 COPY deno.json /app/deno.json
@@ -190,13 +201,13 @@ COPY project-a/ /app/project-a/
 COPY project-b/ /app/project-b/
 ```
 
-这确保了 Deno 用于查找和导入工作区依赖项的解析机制得以保留。
+这样确保了 Deno 用于查找和导入工作区依赖的解析机制得以保留。
 
 ### 多个包条目
 
-`exports` 属性详细说明了入口点并指示包用户应导入哪些模块。
+`exports` 属性详述入口点并指示包用户应导入哪些模块。
 
-目前我们的包只有单一条目。虽然对于简单包这没问题，但通常您希望拥有多个条目，将包的相关方面分组。这可以通过将 `exports` 设置为对象而非字符串实现：
+目前我们的包只有单一条目。虽然这适合简单包，通常您希望有多个条目，把包的相关部分分组。这可以通过将 `exports` 设置为对象（而非字符串）实现：
 
 ```json title="my-package/deno.json"
 {
@@ -210,21 +221,23 @@ COPY project-b/ /app/project-b/
 }
 ```
 
-其中 `"."` 是导入 `@scope/my-package` 时的默认条目。因此，上述 `deno.json` 提供以下条目：
+`"."` 条目是导入 `@scope/my-package` 时默认使用的入口点。因此，上述示例提供了以下入口：
 
 - `@scope/my-package`
+
 - `@scope/my-package/foo`
+
 - `@scope/my-package/other`
 
 ### 发布工作区包到注册表
 
-工作区简化了向如 JSR 或 NPM 等注册表发布包的流程。您可以发布单个工作区成员，同时保持它们在单体仓库中的开发关联。
+工作区简化了向如 JSR 或 NPM 等注册表发布包的流程。您可以发布单个工作区成员，同时保持它们在单体仓库中的开发联系。
 
 #### 发布到 JSR
 
 发布工作区包到 JSR，请按以下步骤操作：
 
-1. 确保每个包的 `deno.json` 文件中包含适当的元数据：
+1. 确保每个包的 `deno.json` 文件包含适当的元数据：
 
 ```json title="my-package/deno.json"
 {
@@ -246,7 +259,7 @@ deno publish
 
 #### 管理相互依赖的包
 
-当发布相互依赖的工作区包时，请在相关包之间使用一致的版本策略。先发布被依赖的包，再发布依赖它们的包。发布后，验证发布包是否正常工作：
+发布相互依赖的工作区包时，请在相关包之间保持一致的版本策略。先发布被依赖的包，再发布依赖它们的包。发布后，验证发布包是否正常工作：
 
 ```sh
 # 测试已发布的包
@@ -256,7 +269,7 @@ deno test integration-test.ts
 
 发布依赖其他工作区成员的包时，Deno 会自动将工作区引用替换为发布代码中的正确注册表引用。
 
-### 从 `npm` 工作区迁移
+### 从 npm 工作区迁移
 
 Deno 工作区支持从现有 npm 包中使用 Deno 优先的包。在此示例中，我们混用名为 `@deno/hi` 的 Deno 库和几年前开发的 Node.js 库 `@deno/log`。
 
@@ -348,98 +361,98 @@ Hi, friend!
 }
 ```
 
-在工作区中运行 `deno fmt` 时， `log` 包将格式化为不带分号，同时如果源文件中有未使用的变量则 `deno lint` 不会报错。
+在工作区运行 `deno fmt` 时，会将 `log` 包格式化为不带分号；运行 `deno lint` 时，如果代码中存在未使用的变量，将不会报错。
 
 ## 配置内置 Deno 工具
 
-某些配置选项仅在工作区根目录下有效，例如，在单个成员中指定 `nodeModulesDir` 选项时不可用，Deno 会警告如果该选项需要在工作区根部应用。
+有些配置只在工作区根部设置才有意义，例如在成员中指定 `nodeModulesDir` 选项不可用，Deno 会警告需要在工作区根部应用该选项。
 
-以下为工作区根和成员中支持的各种 `deno.json` 选项完整矩阵：
+下面是工作区根及其成员中各种 `deno.json` 选项的完整矩阵：
 
-| 选项               | 工作区  | 包     | 注释                                                                                                                                                                                                        |
-| ------------------ | ------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| compilerOptions    | ✅      | ✅     |                                                                                                                                                                                                               |
-| importMap          | ✅      | ❌     | 每个配置文件的导入和作用域互斥。此外，工作区配置中不支持 importMap，且包配置中亦不支持导入。                                                                                                        |
-| imports            | ✅      | ✅     | 每个配置文件的导入映射互斥。                                                                                                                                                                                  |
-| scopes             | ✅      | ❌     | 每个配置文件的导入映射互斥。                                                                                                                                                                                  |
-| exclude            | ✅      | ✅     |                                                                                                                                                                                                               |
-| lint.include       | ✅      | ✅     |                                                                                                                                                                                                               |
-| lint.exclude       | ✅      | ✅     |                                                                                                                                                                                                               |
-| lint.files         | ⚠️      | ❌     | 已弃用                                                                                                                                                                                                         |
-| lint.rules.tags    | ✅      | ✅     | 标签通过将包附加到工作区列表进行合并，忽略重复项。                                                                                                                                                          |
-| lint.rules.include |         |        |                                                                                                                                                                                                               |
-| lint.rules.exclude | ✅      | ✅     | 规则按包合并，包优先于工作区（包包含比工作区排除权重更大）。                                                                                                                                                   |
-| lint.report        | ✅      | ❌     | 仅允许一个 reporter 处于活动状态，因此在跨多个包的文件中进行 lint 时，允许每个工作区不同 reporters 将无法工作。                                                                                      |
-| fmt.include        | ✅      | ✅     |                                                                                                                                                                                                               |
-| fmt.exclude        | ✅      | ✅     |                                                                                                                                                                                                               |
-| fmt.files          | ⚠️      | ❌     | 已弃用                                                                                                                                                                                                         |
-| fmt.useTabs        | ✅      | ✅     | 包配置优先于工作区。                                                                                                                                                                                           |
-| fmt.indentWidth    | ✅      | ✅     | 包配置优先于工作区。                                                                                                                                                                                           |
-| fmt.singleQuote    | ✅      | ✅     | 包配置优先于工作区。                                                                                                                                                                                           |
-| fmt.proseWrap      | ✅      | ✅     | 包配置优先于工作区。                                                                                                                                                                                           |
-| fmt.semiColons     | ✅      | ✅     | 包配置优先于工作区。                                                                                                                                                                                           |
-| fmt.options.\*     | ⚠️      | ❌     | 已弃用                                                                                                                                                                                                         |
-| nodeModulesDir     | ✅      | ❌     | 整个工作区解析行为必须统一。                                                                                                                                                                                |
-| vendor             | ✅      | ❌     | 整个工作区解析行为必须统一。                                                                                                                                                                                |
-| tasks              | ✅      | ✅     | 包任务优先于工作区。任务的当前工作目录（cwd）是任务所在配置文件目录。                                                                                                                                         |
-| test.include       | ✅      | ✅     |                                                                                                                                                                                                               |
-| test.exclude       | ✅      | ✅     |                                                                                                                                                                                                               |
-| test.files         | ⚠️      | ❌     | 已弃用                                                                                                                                                                                                         |
-| publish.include    | ✅      | ✅     |                                                                                                                                                                                                               |
-| publish.exclude    | ✅      | ✅     |                                                                                                                                                                                                               |
-| bench.include      | ✅      | ✅     |                                                                                                                                                                                                               |
-| bench.exclude      | ✅      | ✅     |                                                                                                                                                                                                               |
-| bench.files        | ⚠️      | ❌     | 已弃用                                                                                                                                                                                                         |
-| lock               | ✅      | ❌     | 每个解析器只能存在一个锁文件，每个工作区只能存在一个解析器，因此每个包开启锁定文件是不合理的。                                                                                                   |
-| unstable           | ✅      | ❌     | 为简化起见不允许不稳定标志，因为许多 CLI 假定不稳定标志不可变且为全局设置，并且存在与 DENO_UNSTABLE_* 标志的奇怪交互。                                                                                             |
-| name               | ❌      | ✅     |                                                                                                                                                                                                               |
-| version            | ❌      | ✅     |                                                                                                                                                                                                               |
-| exports            | ❌      | ✅     |                                                                                                                                                                                                               |
-| workspace          | ✅      | ❌     | 不支持嵌套工作区。                                                                                                                                                                                           |
+| 选项                | 工作区 | 包     | 说明                                                                                                                                                             |
+| ------------------ | ------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| compilerOptions    | ✅     | ✅     |                                                                                                                                                                |
+| importMap          | ✅     | ❌     | 与每个配置文件的 imports 和 scopes 互斥。此外，工作区配置中不支持 importMap，包配置中不支持 imports。                                                           |
+| imports            | ✅     | ✅     | 与每个配置文件的 importMap 互斥。                                                                                                                              |
+| scopes             | ✅     | ❌     | 与每个配置文件的 importMap 互斥。                                                                                                                              |
+| exclude            | ✅     | ✅     |                                                                                                                                                                |
+| lint.include       | ✅     | ✅     |                                                                                                                                                                |
+| lint.exclude       | ✅     | ✅     |                                                                                                                                                                |
+| lint.files         | ⚠️     | ❌     | 已弃用                                                                                                                                                          |
+| lint.rules.tags    | ✅     | ✅     | 标签通过追加包到工作区列表进行合并，重复项被忽略。                                                                                                              |
+| lint.rules.include |        |        |                                                                                                                                                                |
+| lint.rules.exclude | ✅     | ✅     | 规则按包合并，包的优先级高于工作区（包的 include 比工作区的 exclude 权重更强）。                                                                              |
+| lint.report        | ✅     | ❌     | 一次只能激活一个报告器，因此在跨多个包 lint 文件时，不支持每个工作区使用不同报告器。                                                                            |
+| fmt.include        | ✅     | ✅     |                                                                                                                                                                |
+| fmt.exclude        | ✅     | ✅     |                                                                                                                                                                |
+| fmt.files          | ⚠️     | ❌     | 已弃用                                                                                                                                                          |
+| fmt.useTabs        | ✅     | ✅     | 包优先级高于工作区。                                                                                                                                             |
+| fmt.indentWidth    | ✅     | ✅     | 包优先级高于工作区。                                                                                                                                             |
+| fmt.singleQuote    | ✅     | ✅     | 包优先级高于工作区。                                                                                                                                             |
+| fmt.proseWrap      | ✅     | ✅     | 包优先级高于工作区。                                                                                                                                             |
+| fmt.semiColons     | ✅     | ✅     | 包优先级高于工作区。                                                                                                                                             |
+| fmt.options.*      | ⚠️     | ❌     | 已弃用                                                                                                                                                          |
+| nodeModulesDir     | ✅     | ❌     | 解析行为必须在整个工作区保持一致。                                                                                                                             |
+| vendor             | ✅     | ❌     | 解析行为必须在整个工作区保持一致。                                                                                                                             |
+| tasks              | ✅     | ✅     | 包任务优先于工作区。cwd 是包含任务配置文件的目录的工作目录。                                                                                                   |
+| test.include       | ✅     | ✅     |                                                                                                                                                                |
+| test.exclude       | ✅     | ✅     |                                                                                                                                                                |
+| test.files         | ⚠️     | ❌     | 已弃用                                                                                                                                                          |
+| publish.include    | ✅     | ✅     |                                                                                                                                                                |
+| publish.exclude    | ✅     | ✅     |                                                                                                                                                                |
+| bench.include      | ✅     | ✅     |                                                                                                                                                                |
+| bench.exclude      | ✅     | ✅     |                                                                                                                                                                |
+| bench.files        | ⚠️     | ❌     | 已弃用                                                                                                                                                          |
+| lock               | ✅     | ❌     | 每个解析器只能存在一个锁定文件，且每个工作区只能有一个解析器，所以不支持为包单独启用锁文件。                                                                      |
+| unstable           | ✅     | ❌     | 为简化操作，不允许使用 unstable 标志，因为 CLI 假设该标志为全局且不可变，这也避免了与 DENO_UNSTABLE_* 标志的奇怪交互。                                        |
+| name               | ❌     | ✅     |                                                                                                                                                                |
+| version            | ❌     | ✅     |                                                                                                                                                                |
+| exports            | ❌     | ✅     |                                                                                                                                                                |
+| workspace          | ✅     | ❌     | 不支持嵌套工作区。                                                                                                                                               |
 
 ## 跨工作区运行命令
 
-Deno 提供了多种方法在所有或特定工作区成员中运行命令：
+Deno 提供多种方式在所有或特定工作区成员中运行命令：
 
 ### 运行测试
 
-要在所有工作区成员中运行测试，只需从工作区根目录执行：
+要在所有工作区成员中运行测试，只需在工作区根目录执行：
 
 ```sh
 deno test
 ```
 
-这将根据每个工作区成员的测试配置执行测试。
+这将基于每个成员的测试配置执行测试。
 
-要运行特定工作区成员的测试，可以：
+若要运行特定工作区成员的测试，可以：
 
-1. 进入该成员目录并运行测试命令：
+1. 进入该成员目录，运行测试命令：
 
 ```sh
 cd my-directory
 deno test
 ```
 
-2. 或从工作区根目录指定路径：
+2. 或从根目录指定路径：
 
 ```sh
 deno test my-directory/
 ```
 
-### 格式化和代码检查
+### 格式化和 lint
 
-与测试类似，格式化和 linting 命令默认会在所有工作区成员中运行：
+与测试类似，格式化和 lint 命令默认在所有工作区成员中运行：
 
 ```sh
 deno fmt
 deno lint
 ```
 
-每个工作区成员遵循其 `deno.json` 中定义的格式化和 lint 规则，某些设置从根配置继承，如上表所示。
+每个成员遵循其 `deno.json` 中配置的格式化和 lint 规则，某些设置从根配置继承（如上述表格所示）。
 
 ### 使用工作区任务
 
-您可以在工作区根和单个工作区成员中定义任务：
+您可以在工作区根目录和单个成员中定义任务：
 
 ```json title="deno.json"
 {
@@ -463,19 +476,19 @@ deno lint
 }
 ```
 
-要运行特定包中定义的任务：
+运行某个包内定义的任务：
 
 ```sh
 deno task --cwd=add build
 ```
 
-## 共享和管理依赖关系
+## 共享和管理依赖
 
-工作区提供了强大的方法来共享和管理跨项目的依赖关系：
+工作区提供强大的方法来共享和管理跨项目依赖：
 
 ### 共享开发依赖
 
-通常的开发依赖（如测试库）可以在工作区根部定义：
+通常的开发依赖（如测试库）可在工作区根部定义：
 
 ```json title="deno.json"
 {
@@ -487,19 +500,19 @@ deno task --cwd=add build
 }
 ```
 
-这使它们对所有工作区成员可用，无需在每个包中重复定义。
+这使得所有工作区成员都可以使用这些依赖，无需重新定义。
 
 ### 管理版本冲突
 
-解析依赖时，工作区成员可以覆盖根部定义的依赖版本。如果根和成员分别指定了同一依赖的不同版本，则在解析成员内的文件时将使用成员的版本。这允许个别包在需要时使用特定依赖版本。
+解析依赖时，工作区成员可覆盖根部分定义的依赖。如果根和成员指定同一依赖的不同版本，解析成员文件夹内依赖时使用成员的版本。这样允许单个包按需使用特定的依赖版本。
 
-但是，成员特定依赖仅限于该成员目录。成员目录外，或处理根级别文件时，将使用根工作区的导入映射解析依赖（包括 JSR 和 HTTPS 依赖）。
+但是，成员特定依赖仅在该成员文件夹内生效。成员文件夹外，或根级文件操作时，依赖解析使用工作区根部的导入映射（包括 JSR 和 HTTPS 依赖）。
 
-### 相互依赖的工作区成员
+### 互相依赖的工作区成员
 
-如先前示例所示，工作区成员可以相互依赖。这使您能够保持关注点分离的同时，共同开发和测试相互依赖的模块。
+如之前 `add` 与 `subtract` 模块示例，工作区成员间可互为依赖。这方便实现职责清晰的拆分，且可共同开发和测试互依模块。
 
-例如，`subtract` 模块从 `add` 模块导入功能，演示工作区成员间的联动构建：
+`subtract` 模块导入 `add` 模块功能，示范工作区成员如何基于彼此构建：
 
 ```ts title="subtract/mod.ts"
 import { add } from "@scope/add";
@@ -509,16 +522,19 @@ export function subtract(a: number, b: number): number {
 }
 ```
 
-这种方法允许您：
+此方法允许您：
 
-1. 将复杂项目拆分为单一职责的包
-2. 在包间共享代码而无需发布至注册表
-3. 一起开发和测试相互依赖模块
-4. 逐步从单体代码库向模块化架构迁移
+1. 将复杂项目拆分成职责单一的包
+
+2. 在包间共享代码，无需发布到注册表
+
+3. 共同开发、测试相互依赖模块
+
+4. 逐步将单体代码库迁移为模块化架构
 
 ## 在 package.json 中使用工作区协议
 
-Deno 支持 `package.json` 中的工作区协议说明符，非常适合依赖于工作区内其他包的 npm 包：
+Deno 支持在 `package.json` 中使用工作区协议说明符，非常适合依赖工作区内其他包的 npm 包：
 
 ```json title="package.json"
 {
@@ -532,12 +548,14 @@ Deno 支持 `package.json` 中的工作区协议说明符，非常适合依赖�
 支持的工作区协议说明符包括：
 
 - `workspace:*` —— 使用工作区中可用的最新版
+
 - `workspace:~` —— 使用工作区版本，且仅允许补丁级变更
+
 - `workspace:^` —— 使用与语义版本兼容的工作区版本
 
 ## npm 和 pnpm 工作区兼容性
 
-Deno 能无缝协作使用 `package.json` 中定义的标准 npm 工作区：
+Deno 能无缝兼容使用 `package.json` 中定义的标准 npm 工作区：
 
 ```json title="package.json"
 {
@@ -545,7 +563,7 @@ Deno 能无缝协作使用 `package.json` 中定义的标准 npm 工作区：
 }
 ```
 
-对于 pnpm 用户，Deno 支持典型的 pnpm 工作区配置。然而，若您使用 `pnpm-workspace.yaml`，需将其迁移到 `deno.json` 工作区配置：
+对于 pnpm 用户，Deno 支持典型 pnpm 工作区配置。然而，若您使用 `pnpm-workspace.yaml`，需将其迁移到 `deno.json` 工作区配置：
 
 ```yaml title="pnpm-workspace.yaml (应替换)"
 packages:
@@ -560,6 +578,6 @@ packages:
 }
 ```
 
-这使得在迁移或混合项目中，Deno 和 npm/pnpm 生态系统间能实现平滑集成。
+这样，在迁移或混合项目中，Deno 与 npm／pnpm 生态系统能实现顺畅集成。
 
 有关配置项目的更多信息，请查看 [使用 deno.json 进行配置](/examples/configuration_with_deno_json/) 教程。
