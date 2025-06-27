@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>OpenTelemetry - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="OpenTelemetry"/><meta name="twitter:description" content="学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"/><meta name="twitter:image" content="https://docs.deno.com/runtime/fundamentals/open_telemetry/index.png"/><meta name="twitter:image:alt" content="学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="OpenTelemetry"/><meta property="og:description" content="学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"/><meta property="og:image" content="https://docs.deno.com/runtime/fundamentals/open_telemetry/index.png"/><meta property="og:image:alt" content="学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined" data-active="true">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink" data-active="true">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink">deno bench</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/fundamentals/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">基础知识</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">OpenTelemetry</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">快速开始 </a></li><li class="m-2 leading-4"><a href="#%E8%87%AA%E5%8A%A8%E4%BB%AA%E5%99%A8%E5%8C%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">自动仪器化 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%BF%BD%E8%B8%AA" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">追踪 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#deno.serve" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Deno.serve </a></li><li class="m-2 leading-4"><a href="#fetch" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">fetch </a></li></ul></li><li class="m-2 leading-4"><a href="#%E6%8C%87%E6%A0%87" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">指标 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#deno.serve-%2F-deno.servehttp" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Deno.serve / Deno.serveHttp </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#http.server.request.duration" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.request.duration </a></li><li class="m-2 leading-4"><a href="#http.server.active_requests" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.active_requests </a></li><li class="m-2 leading-4"><a href="#http.server.request.body.size" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.request.body.size </a></li><li class="m-2 leading-4"><a href="#http.server.response.body.size" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.response.body.size </a></li></ul></li></ul></li><li class="m-2 leading-4"><a href="#%E6%97%A5%E5%BF%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">日志 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E7%94%A8%E6%88%B7%E6%8C%87%E6%A0%87" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">用户指标 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%BF%BD%E8%B8%AA-1" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">追踪 </a></li><li class="m-2 leading-4"><a href="#%E6%8C%87%E6%A0%87-1" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">指标 </a></li><li class="m-2 leading-4"><a href="#%E5%AE%9E%E7%94%A8%E7%A4%BA%E4%BE%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">实用示例 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%A0%E6%92%AD" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">上下文传播 </a></li><li class="m-2 leading-4"><a href="#%E9%85%8D%E7%BD%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">配置 </a></li><li class="m-2 leading-4"><a href="#%E4%BC%A0%E6%92%AD%E8%80%85" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">传播者 </a></li><li class="m-2 leading-4"><a href="#%E9%99%90%E5%88%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">限制 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>OpenTelemetry</h1><div><p>
+<div class="admonition caution">
+  <div class="title">Caution</div>
+
+</p>
+<p>OpenTelemetry 的 Deno 集成仍在开发中，可能会发生变化。
+要使用它，您必须将 <code>--unstable-otel</code> 标志传递给 Deno。</p>
+<p>
+</div>
+</p>
+<p>Deno 内置支持 <a href="https://opentelemetry.io/">OpenTelemetry</a>。</p>
+<blockquote>
+<p>OpenTelemetry 是一组 API、SDK 和工具。使用它来对软件进行仪器化，生成、收集和导出遥测数据（指标、日志和追踪）以帮助您分析软件的性能和行为。</p>
+<p><i>- <a href="https://opentelemetry.io/">https://opentelemetry.io/</a></i></p>
+</blockquote>
+<p>此集成使您能够使用 OpenTelemetry 可观察性工具监控您的 Deno 应用程序，使用日志、指标和追踪等工具。</p>
+<p>Deno 提供以下功能：</p>
+<ul>
+<li>使用 OpenTelemetry 协议将收集的指标、追踪和日志导出到服务器。</li>
+<li>对 Deno 运行时进行 <a href="#auto-instrumentation">自动仪器化</a>，以生成 OpenTelemetry 指标、追踪和日志。</li>
+<li>收集使用 <code>npm:@opentelemetry/api</code> 包创建的 <a href="#user-metrics">用户定义的指标、追踪和日志</a>。</li>
+</ul>
+<h2 id="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B" tabindex="-1">快速开始 <a class="header-anchor" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>要启用 OpenTelemetry 集成，请使用 <code>--unstable-otel</code> 标志运行您的 Deno 脚本，并设置环境变量 <code>OTEL_DENO=true</code>：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token assign-left variable">OTEL_DENO</span><span class="token operator">=</span>true deno run --unstable-otel my_script.ts
+</code></pre>
+
+      <button id="copy-button-49" class="copyButton" data-copy="OTEL_DENO=true deno run --unstable-otel my_script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这将自动收集并导出运行时可观察性数据到 <code>localhost:4318</code> 的 OpenTelemetry 端点，使用 Protobuf 通过 HTTP（<code>http/protobuf</code>）。</p>
+<p>
+<div class="admonition tip">
+  <div class="title">Tip</div>
+
+</p>
+<p>如果您尚未设置 OpenTelemetry 收集器，可以使用以下命令开始搭建 <a href="https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file">Docker 中的本地 LGTM 堆栈</a>（Loki（日志）、Grafana（仪表板）、Tempo（追踪）和 Prometheus（指标））：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token function">docker</span> run <span class="token parameter variable">--name</span> lgtm <span class="token parameter variable">-p</span> <span class="token number">3000</span>:3000 <span class="token parameter variable">-p</span> <span class="token number">4317</span>:4317 <span class="token parameter variable">-p</span> <span class="token number">4318</span>:4318 <span class="token parameter variable">--rm</span> <span class="token parameter variable">-ti</span> <span class="token punctuation">\</span>
+	<span class="token parameter variable">-v</span> <span class="token string">"<span class="token environment constant">$PWD</span>"</span>/lgtm/grafana:/data/grafana <span class="token punctuation">\</span>
+	<span class="token parameter variable">-v</span> <span class="token string">"<span class="token environment constant">$PWD</span>"</span>/lgtm/prometheus:/data/prometheus <span class="token punctuation">\</span>
+	<span class="token parameter variable">-v</span> <span class="token string">"<span class="token environment constant">$PWD</span>"</span>/lgtm/loki:/data/loki <span class="token punctuation">\</span>
+	<span class="token parameter variable">-e</span> <span class="token assign-left variable">GF_PATHS_DATA</span><span class="token operator">=</span>/data/grafana <span class="token punctuation">\</span>
+	docker.io/grafana/otel-lgtm:0.8.1
+</code></pre>
+
+      <button id="copy-button-59" class="copyButton" data-copy="docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
+	-v &quot;$PWD&quot;/lgtm/grafana:/data/grafana \
+	-v &quot;$PWD&quot;/lgtm/prometheus:/data/prometheus \
+	-v &quot;$PWD&quot;/lgtm/loki:/data/loki \
+	-e GF_PATHS_DATA=/data/grafana \
+	docker.io/grafana/otel-lgtm:0.8.1
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后，您可以使用用户名 <code>admin</code> 和密码 <code>admin</code> 访问 Grafana 仪表板，地址为 <code>http://localhost:3000</code>。</p>
+<p>
+</div>
+</p>
+<p>这将自动收集和导出运行时可观察性数据，例如 <code>console.log</code>、HTTP 请求的追踪和 Deno 运行时的指标。
+<a href="#auto-instrumentation">了解更多关于自动仪器化的信息</a>。</p>
+<p>您还可以使用 <code>npm:@opentelemetry/api</code> 包创建自己的指标、追踪和日志。
+<a href="#user-metrics">了解更多关于用户定义的指标</a>。</p>
+<h2 id="%E8%87%AA%E5%8A%A8%E4%BB%AA%E5%99%A8%E5%8C%96" tabindex="-1">自动仪器化 <a class="header-anchor" href="#%E8%87%AA%E5%8A%A8%E4%BB%AA%E5%99%A8%E5%8C%96"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 会自动收集并将一些可观察性数据导出到 OTLP 端点。</p>
+<p>这些数据以 Deno 运行时的内置仪器化范围导出。该范围的名称为 <code>deno</code>。Deno 运行时的版本是 <code>deno</code> 仪器化范围的版本。（例如，<code>deno:2.1.4</code>）。</p>
+<h3 id="%E8%BF%BD%E8%B8%AA" tabindex="-1">追踪 <a class="header-anchor" href="#%E8%BF%BD%E8%B8%AA"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno 会自动为各种操作创建跨度，例如：</p>
+<ul>
+<li>使用 <code>Deno.serve</code> 提供的传入 HTTP 请求。</li>
+<li>使用 <code>fetch</code> 发出的传出 HTTP 请求。</li>
+</ul>
+<h4 id="deno.serve" tabindex="-1"><code>Deno.serve</code> <a class="header-anchor" href="#deno.serve"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>当您使用 <code>Deno.serve</code> 创建 HTTP 服务器时，会为每个传入请求创建一个跨度。该跨度在响应头发送时自动结束（而不是在响应体完成发送时）。</p>
+<p>创建的跨度的名称为 <code>${method}</code>。跨度类型为 <code>server</code>。</p>
+<p>以下属性在创建时会自动添加到跨度中：</p>
+<ul>
+<li><code>http.request.method</code>: 请求的 HTTP 方法。</li>
+<li><code>url.full</code>: 请求的完整 URL（如 <code>req.url</code> 所报告）。</li>
+<li><code>url.scheme</code>: 请求 URL 的方案（例如，<code>http</code> 或 <code>https</code>）。</li>
+<li><code>url.path</code>: 请求 URL 的路径。</li>
+<li><code>url.query</code>: 请求 URL 的查询字符串。</li>
+</ul>
+<p>请求处理后，将添加以下属性：</p>
+<ul>
+<li><code>http.response.status_code</code>: 响应的状态代码。</li>
+</ul>
+<p>Deno 不会自动向跨度添加 <code>http.route</code> 属性，因为运行时并不知道路由，而是由用户处理函数中的路由逻辑确定。如果您想向跨度添加 <code>http.route</code> 属性，可以在您的处理函数中使用 <code>npm:@opentelemetry/api</code> 添加。在这种情况下，您还应更新跨度名称以包含路由。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> trace <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token constant">INDEX_ROUTE</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URLPattern</span><span class="token punctuation">(</span><span class="token punctuation">{</span> pathname<span class="token operator">:</span> <span class="token string">"/"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token constant">BOOK_ROUTE</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URLPattern</span><span class="token punctuation">(</span><span class="token punctuation">{</span> pathname<span class="token operator">:</span> <span class="token string">"/book/:id"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span>req<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> span <span class="token operator">=</span> trace<span class="token punctuation">.</span><span class="token function">getActiveSpan</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token constant">INDEX_ROUTE</span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>url<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    span<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"http.route"</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    span<span class="token punctuation">.</span><span class="token function">updateName</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>req<span class="token punctuation">.</span>method<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> /</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 处理首页路由</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token constant">BOOK_ROUTE</span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>url<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    span<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"http.route"</span><span class="token punctuation">,</span> <span class="token string">"/book/:id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    span<span class="token punctuation">.</span><span class="token function">updateName</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>req<span class="token punctuation">.</span>method<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> /book/:id</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 处理图书路由</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token string">"未找到"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> status<span class="token operator">:</span> <span class="token number">404</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-151" class="copyButton" data-copy="import { trace } from &quot;npm:@opentelemetry/api@1&quot;;
+
+const INDEX_ROUTE = new URLPattern({ pathname: &quot;/&quot; });
+const BOOK_ROUTE = new URLPattern({ pathname: &quot;/book/:id&quot; });
+
+Deno.serve(async (req) => {
+  const span = trace.getActiveSpan();
+  if (INDEX_ROUTE.test(req.url)) {
+    span.setAttribute(&quot;http.route&quot;, &quot;/&quot;);
+    span.updateName(`${req.method} /`);
+
+    // 处理首页路由
+  } else if (BOOK_ROUTE.test(req.url)) {
+    span.setAttribute(&quot;http.route&quot;, &quot;/book/:id&quot;);
+    span.updateName(`${req.method} /book/:id`);
+
+    // 处理图书路由
+  } else {
+    return new Response(&quot;未找到&quot;, { status: 404 });
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="fetch" tabindex="-1"><code>fetch</code> <a class="header-anchor" href="#fetch"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>当您使用 <code>fetch</code> 发出 HTTP 请求时，会为该请求创建一个跨度。该跨度在收到响应头时自动结束。</p>
+<p>创建的跨度的名称为 <code>${method}</code>。跨度类型为 <code>client</code>。</p>
+<p>以下属性在创建时会自动添加到跨度中：</p>
+<ul>
+<li><code>http.request.method</code>: 请求的 HTTP 方法。</li>
+<li><code>url.full</code>: 请求的完整 URL。</li>
+<li><code>url.scheme</code>: 请求 URL 的方案。</li>
+<li><code>url.path</code>: 请求 URL 的路径。</li>
+<li><code>url.query</code>: 请求 URL 的查询字符串。</li>
+</ul>
+<p>收到响应后，将添加以下属性：</p>
+<ul>
+<li><code>http.status_code</code>: 响应的状态代码。</li>
+</ul>
+<h3 id="%E6%8C%87%E6%A0%87" tabindex="-1">指标 <a class="header-anchor" href="#%E6%8C%87%E6%A0%87"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>自动收集和导出的指标包括：</p>
+<h4 id="deno.serve-%2F-deno.servehttp" tabindex="-1"><code>Deno.serve</code> / <code>Deno.serveHttp</code> <a class="header-anchor" href="#deno.serve-%2F-deno.servehttp"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<h5 id="http.server.request.duration" tabindex="-1"><code>http.server.request.duration</code> <a class="header-anchor" href="#http.server.request.duration"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h5>
+<p>一个直方图，记录通过 <code>Deno.serve</code> 或 <code>Deno.serveHttp</code> 提供的传入 HTTP 请求的持续时间。测量的时间是从接收到请求到发送响应头的时间。这不包括发送响应体的时间。该指标的单位为秒。直方图的桶为
+<code>[0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0]</code>。</p>
+<p>此指标记录以下属性：</p>
+<ul>
+<li><code>http.request.method</code>: 请求的 HTTP 方法。</li>
+<li><code>url.scheme</code>: 请求 URL 的方案。</li>
+<li><code>network.protocol.version</code>: 用于请求的 HTTP 协议版本（例如，<code>1.1</code> 或 <code>2</code>）。</li>
+<li><code>server.address</code>: 服务器正在监听的地址。</li>
+<li><code>server.port</code>: 服务器正在监听的端口。</li>
+<li><code>http.response.status_code</code>: 响应的状态代码（如果请求未遭遇致命错误）。</li>
+<li><code>error.type</code>: 发生的错误类型（如果请求处理遇到错误）。</li>
+</ul>
+<h5 id="http.server.active_requests" tabindex="-1"><code>http.server.active_requests</code> <a class="header-anchor" href="#http.server.active_requests"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h5>
+<p>一个量表，记录在任何给定时刻由 <code>Deno.serve</code> 或 <code>Deno.serveHttp</code> 处理的活动请求的数量。这是已接收但尚未响应的请求数量（尚未发送响应头）。该指标记录如下属性：</p>
+<ul>
+<li><code>http.request.method</code>: 请求的 HTTP 方法。</li>
+<li><code>url.scheme</code>: 请求 URL 的方案。</li>
+<li><code>server.address</code>: 服务器正在监听的地址。</li>
+<li><code>server.port</code>: 服务器正在监听的端口。</li>
+</ul>
+<h5 id="http.server.request.body.size" tabindex="-1"><code>http.server.request.body.size</code> <a class="header-anchor" href="#http.server.request.body.size"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h5>
+<p>一个直方图，记录通过 <code>Deno.serve</code> 或 <code>Deno.serveHttp</code> 提供的传入 HTTP 请求的请求体大小。该指标的单位为字节。直方图的桶为
+<code>[0, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000]</code>。</p>
+<p>此指标记录以下属性：</p>
+<ul>
+<li><code>http.request.method</code>: 请求的 HTTP 方法。</li>
+<li><code>url.scheme</code>: 请求 URL 的方案。</li>
+<li><code>network.protocol.version</code>: 用于请求的 HTTP 协议版本（例如，<code>1.1</code> 或 <code>2</code>）。</li>
+<li><code>server.address</code>: 服务器正在监听的地址。</li>
+<li><code>server.port</code>: 服务器正在监听的端口。</li>
+<li><code>http.response.status_code</code>: 响应的状态代码（如果请求未遭遇致命错误）。</li>
+<li><code>error.type</code>: 发生的错误类型（如果请求处理遇到错误）。</li>
+</ul>
+<h5 id="http.server.response.body.size" tabindex="-1"><code>http.server.response.body.size</code> <a class="header-anchor" href="#http.server.response.body.size"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h5>
+<p>一个直方图，记录通过 <code>Deno.serve</code> 或 <code>Deno.serveHttp</code> 提供的传入 HTTP 请求的响应体大小。该指标的单位为字节。直方图的桶为
+<code>[0, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000]</code>。</p>
+<p>此指标记录以下属性：</p>
+<ul>
+<li><code>http.request.method</code>: 请求的 HTTP 方法。</li>
+<li><code>url.scheme</code>: 请求 URL 的方案。</li>
+<li><code>network.protocol.version</code>: 用于请求的 HTTP 协议版本（例如，<code>1.1</code> 或 <code>2</code>）。</li>
+<li><code>server.address</code>: 服务器正在监听的地址。</li>
+<li><code>server.port</code>: 服务器正在监听的端口。</li>
+<li><code>http.response.status_code</code>: 响应的状态代码（如果请求未遭遇致命错误）。</li>
+<li><code>error.type</code>: 发生的错误类型（如果请求处理遇到错误）。</li>
+</ul>
+<h3 id="%E6%97%A5%E5%BF%97" tabindex="-1">日志 <a class="header-anchor" href="#%E6%97%A5%E5%BF%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>自动收集和导出的日志包括：</p>
+<ul>
+<li>使用 <code>console.*</code> 方法创建的任何日志，例如 <code>console.log</code> 和 <code>console.error</code>。</li>
+<li>Deno 运行时生成的任何日志，例如调试日志、<code>Downloading</code> 日志等。</li>
+<li>任何导致 Deno 运行时退出的错误（无论是用户代码还是运行时本身）。</li>
+</ul>
+<p>来自 JavaScript 代码引发的日志将带有相关的跨度上下文，如果日志发生在活动的跨度内部。</p>
+<p><code>console</code> 自动仪器化可以使用环境变量 <code>OTEL_DENO_CONSOLE</code> 进行配置：</p>
+<ul>
+<li><code>capture</code>: 日志被发出到 stdout/stderr，并且也会与 OpenTelemetry 一起导出。（默认）</li>
+<li><code>replace</code>: 日志仅与 OpenTelemetry 一起导出，而不发出到 stdout/stderr。</li>
+<li><code>ignore</code>: 日志仅发出到 stdout/stderr，不会与 OpenTelemetry 一起导出。</li>
+</ul>
+<h2 id="%E7%94%A8%E6%88%B7%E6%8C%87%E6%A0%87" tabindex="-1">用户指标 <a class="header-anchor" href="#%E7%94%A8%E6%88%B7%E6%8C%87%E6%A0%87"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>除了自动收集的遥测数据，您还可以使用 <code>npm:@opentelemetry/api</code> 包创建自己的指标和追踪。</p>
+<p>您不需要配置 <code>npm:@opentelemetry/api</code> 包以在 Deno 中使用它。当传递 <code>--unstable-otel</code> 标志时，Deno 会自动设置 <code>npm:@opentelemetry/api</code> 包。无需调用 <code>metrics.setGlobalMeterProvider()</code>、<code>trace.setGlobalTracerProvider()</code> 或 <code>context.setGlobalContextManager()</code>。所有资源、导出设置等的配置都是通过环境变量完成的。</p>
+<p>Deno 与版本 <code>1.x</code> 的 <code>npm:@opentelemetry/api</code> 包配合使用。您可以直接从 <code>npm:@opentelemetry/api@1</code> 导入，或者可以使用 <code>deno add</code> 本地安装该包并从 <code>@opentelemetry/api</code> 导入。</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">deno <span class="token function">add</span> npm:@opentelemetry/api@1
+</code></pre>
+
+      <button id="copy-button-434" class="copyButton" data-copy="deno add npm:@opentelemetry/api@1
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>对于追踪和指标，您需要分别定义跟踪器和仪表的名称。如果您正在对库进行仪器化，则应以库的名称命名跟踪器或仪表（例如 <code>my-awesome-lib</code>）。如果您正在对应用程序进行仪器化，则应以应用程序的名称命名跟踪器或仪表（例如 <code>my-app</code>）。跟踪器或仪表的版本应设置为库或应用程序的版本。</p>
+<h3 id="%E8%BF%BD%E8%B8%AA-1" tabindex="-1">追踪 <a class="header-anchor" href="#%E8%BF%BD%E8%B8%AA-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要创建一个新的跨度，首先从 <code>npm:@opentelemetry/api</code> 导入 <code>trace</code> 对象并创建一个新的跟踪器：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> trace <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> tracer <span class="token operator">=</span> trace<span class="token punctuation">.</span><span class="token function">getTracer</span><span class="token punctuation">(</span><span class="token string">"my-app"</span><span class="token punctuation">,</span> <span class="token string">"1.0.0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-444" class="copyButton" data-copy="import { trace } from &quot;npm:@opentelemetry/api@1&quot;;
+
+const tracer = trace.getTracer(&quot;my-app&quot;, &quot;1.0.0&quot;);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后，使用 <code>tracer.startActiveSpan</code> 方法创建一个新的跨度并传递一个回调函数。您必须通过调用返回的跨度对象的 <code>end</code> 方法手动结束跨度。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">function</span> <span class="token function">myFunction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> tracer<span class="token punctuation">.</span><span class="token function">startActiveSpan</span><span class="token punctuation">(</span><span class="token string">"myFunction"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>span<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token comment">// 执行 myFunction 的工作</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      span<span class="token punctuation">.</span><span class="token function">recordException</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      span<span class="token punctuation">.</span><span class="token function">setStatus</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        code<span class="token operator">:</span> trace<span class="token punctuation">.</span>SpanStatusCode<span class="token punctuation">.</span><span class="token constant">ERROR</span><span class="token punctuation">,</span>
+        message<span class="token operator">:</span> <span class="token punctuation">(</span>error <span class="token keyword">as</span> Error<span class="token punctuation">)</span><span class="token punctuation">.</span>message<span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">throw</span> error<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      span<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-448" class="copyButton" data-copy="function myFunction() {
+  return tracer.startActiveSpan(&quot;myFunction&quot;, (span) => {
+    try {
+      // 执行 myFunction 的工作
+    } catch (error) {
+      span.recordException(error);
+      span.setStatus({
+        code: trace.SpanStatusCode.ERROR,
+        message: (error as Error).message,
+      });
+      throw error;
+    } finally {
+      span.end();
+    }
+  });
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>应在 <code>finally</code> 块中调用 <code>span.end()</code>，以确保即使发生错误也能结束跨度。<code>span.recordException</code> 和 <code>span.setStatus</code> 也应在 <code>catch</code> 块中调用，以记录发生的任何错误。</p>
+<p>在回调函数内部，创建的跨度是“活动跨度”。您可以使用 <code>trace.getActiveSpan()</code> 获取活动跨度。创建的“活动跨度”将用作在回调函数（或从回调函数调用的任何函数）内部创建的任何跨度的父跨度。
+<a href="#context-propagation">了解更多关于上下文传播的信息</a>。</p>
+<p><code>startActiveSpan</code> 方法返回回调函数的返回值。</p>
+<p>在跨度的生命周期内，可以向其添加属性。属性是表示跨度的结构化元数据的键值对。可以使用跨度对象上的 <code>setAttribute</code> 和 <code>setAttributes</code> 方法添加属性。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">span<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"key"</span><span class="token punctuation">,</span> <span class="token string">"value"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+span<span class="token punctuation">.</span><span class="token function">setAttributes</span><span class="token punctuation">(</span><span class="token punctuation">{</span> success<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token string-property property">"bar.count"</span><span class="token operator">:</span> <span class="token number">42n</span><span class="token punctuation">,</span> <span class="token string-property property">"foo.duration"</span><span class="token operator">:</span> <span class="token number">123.45</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-461" class="copyButton" data-copy="span.setAttribute(&quot;key&quot;, &quot;value&quot;);
+span.setAttributes({ success: true, &quot;bar.count&quot;: 42n, &quot;foo.duration&quot;: 123.45 });
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>属性的值可以是字符串、数字（浮点）、大整数（限制为 u64）、布尔值或任意这些类型的数组。如果属性值不是这些类型之一，将被忽略。</p>
+<p>可以使用跨度对象上的 <code>updateName</code> 方法更新跨度的名称。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">span<span class="token punctuation">.</span><span class="token function">updateName</span><span class="token punctuation">(</span><span class="token string">"new name"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-468" class="copyButton" data-copy="span.updateName(&quot;new name&quot;);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>可以使用跨度对象上的 <code>setStatus</code> 方法设置跨度的状态。<code>recordException</code> 方法用于记录在跨度的生命周期内发生的异常。<code>recordException</code> 创建一个带有异常堆栈跟踪和名称的事件，并将其附加到跨度。<strong><code>recordException</code> 不会将跨度状态设置为 <code>ERROR</code>，您必须手动执行该操作。</strong></p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> SpanStatusCode <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+span<span class="token punctuation">.</span><span class="token function">setStatus</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  code<span class="token operator">:</span> SpanStatusCode<span class="token punctuation">.</span><span class="token constant">ERROR</span><span class="token punctuation">,</span>
+  message<span class="token operator">:</span> <span class="token string">"发生了一个错误"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+span<span class="token punctuation">.</span><span class="token function">recordException</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"发生了一个错误"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 或者</span>
+
+span<span class="token punctuation">.</span><span class="token function">setStatus</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  code<span class="token operator">:</span> SpanStatusCode<span class="token punctuation">.</span><span class="token constant">OK</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-472" class="copyButton" data-copy="import { SpanStatusCode } from &quot;npm:@opentelemetry/api@1&quot;;
+
+span.setStatus({
+  code: SpanStatusCode.ERROR,
+  message: &quot;发生了一个错误&quot;,
+});
+span.recordException(new Error(&quot;发生了一个错误&quot;));
+
+// 或者
+
+span.setStatus({
+  code: SpanStatusCode.OK,
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>跨度还可以有
+<a href="https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addEvent">事件</a>
+和
+<a href="https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addLink">链接</a>
+被添加到它们。事件是在时间点与跨度相关联的。
+链接是对其他跨度的引用。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 向跨度添加事件</span>
+span<span class="token punctuation">.</span><span class="token function">addEvent</span><span class="token punctuation">(</span><span class="token string">"button_clicked"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  id<span class="token operator">:</span> <span class="token string">"submit-button"</span><span class="token punctuation">,</span>
+  action<span class="token operator">:</span> <span class="token string">"submit"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 添加带时间戳的事件</span>
+span<span class="token punctuation">.</span><span class="token function">addEvent</span><span class="token punctuation">(</span><span class="token string">"process_completed"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> status<span class="token operator">:</span> <span class="token string">"success"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-476" class="copyButton" data-copy="// 向跨度添加事件
+span.addEvent(&quot;button_clicked&quot;, {
+  id: &quot;submit-button&quot;,
+  action: &quot;submit&quot;,
+});
+
+// 添加带时间戳的事件
+span.addEvent(&quot;process_completed&quot;, { status: &quot;success&quot; }, Date.now());
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>事件可以包括类似于跨度的可选属性。它们用于标记跨度生命周期内的重要时刻，而无需创建单独的跨度。</p>
+<p>跨度也可以使用 <code>tracer.startSpan</code> 手动创建，该方法返回一个跨度对象。此方法不会将创建的跨度设置为活动跨度，因此它不会自动用作后续创建的任何跨度或任何 <code>console.log</code> 调用的父跨度。可以使用 <a href="#context-propagation">上下文传播 API</a> 手动将跨度设置为回调的活动跨度。</p>
+<p><code>tracer.startActiveSpan</code> 和 <code>tracer.startSpan</code> 都可以接受一个包含以下任意属性的可选参数：</p>
+<ul>
+<li><code>kind</code>: 跨度的类型。可以是 <code>SpanKind.CLIENT</code>、<code>SpanKind.SERVER</code>、<code>SpanKind.PRODUCER</code>、<code>SpanKind.CONSUMER</code> 或 <code>SpanKind.INTERNAL</code>。默认为 <code>SpanKind.INTERNAL</code>。</li>
+<li><code>startTime</code>: 表示跨度开始时间的 <code>Date</code> 对象，或表示自 Unix 纪元以来的毫秒数。如果未提供，将使用当前时间。</li>
+<li><code>attributes</code>: 一个包含要添加到跨度的属性的对象。</li>
+<li><code>links</code>: 一个要添加到跨度的链接数组。</li>
+<li><code>root</code>: 一个布尔值，指示该跨度是否应为根跨度。如果 <code>true</code>，则该跨度将没有父跨度（即使存在活动跨度）。</li>
+</ul>
+<p>在选项参数之后，<code>tracer.startActiveSpan</code> 和 <code>tracer.startSpan</code> 还可以接受来自
+<a href="#context-propagation">上下文传播 API</a> 的 <code>context</code> 对象。</p>
+<p>在
+<a href="https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html">OpenTelemetry JS API 文档</a> 中了解完整的追踪 API。</p>
+<h3 id="%E6%8C%87%E6%A0%87-1" tabindex="-1">指标 <a class="header-anchor" href="#%E6%8C%87%E6%A0%87-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要创建一个指标，首先从 <code>npm:@opentelemetry/api</code> 导入 <code>metrics</code> 对象并创建一个新的仪表：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> metrics <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> meter <span class="token operator">=</span> metrics<span class="token punctuation">.</span><span class="token function">getMeter</span><span class="token punctuation">(</span><span class="token string">"my-app"</span><span class="token punctuation">,</span> <span class="token string">"1.0.0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-525" class="copyButton" data-copy="import { metrics } from &quot;npm:@opentelemetry/api@1&quot;;
+
+const meter = metrics.getMeter(&quot;my-app&quot;, &quot;1.0.0&quot;);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后，可以从仪表创建仪器并用于记录值：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> counter <span class="token operator">=</span> meter<span class="token punctuation">.</span><span class="token function">createCounter</span><span class="token punctuation">(</span><span class="token string">"my_counter"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  description<span class="token operator">:</span> <span class="token string">"一个简单的计数器"</span><span class="token punctuation">,</span>
+  unit<span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+counter<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+counter<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-529" class="copyButton" data-copy="const counter = meter.createCounter(&quot;my_counter&quot;, {
+  description: &quot;一个简单的计数器&quot;,
+  unit: &quot;1&quot;,
+});
+
+counter.add(1);
+counter.add(2);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>每次记录也可以有相关的属性：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">counter<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> color<span class="token operator">:</span> <span class="token string">"red"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+counter<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> color<span class="token operator">:</span> <span class="token string">"blue"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-533" class="copyButton" data-copy="counter.add(1, { color: &quot;red&quot; });
+counter.add(2, { color: &quot;blue&quot; });
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>
+<div class="admonition tip">
+  <div class="title">Tip</div>
+
+</p>
+<p>在 OpenTelemetry 中，指标属性通常应具有较低的基数。这意味着属性值的唯一组合不应太多。例如，拥有一个属性表示用户所在的洲可能是好的，但拥有一个属性表示用户的确切纬度和经度则基数过高。高基数属性可能会导致指标存储和导出的问题，应尽量避免。对于高基数数据，请使用跨度和日志。</p>
+<p>
+</div>
+</p>
+<p>可以使用仪表创建几种类型的仪器：</p>
+<ul>
+<li>
+<p><strong>计数器</strong>：计数器是单调递增值。计数器只能是正数。它们可用于始终增加的值，例如处理的请求数量。</p>
+</li>
+<li>
+<p><strong>上下计数器</strong>：上下计数器是一个既可以增加又可以减少的值。上下计数器可用于可以增加和减少的值，例如活动连接数或进行中的请求数。</p>
+</li>
+<li>
+<p><strong>仪表</strong>：仪表是可以设置为任何值的值。它们用于不随时间“累积”的值，而是在任何给定时间具有特定值的值，例如当前温度。</p>
+</li>
+<li>
+<p><strong>直方图</strong>：直方图是以值的分布记录的值。直方图可用于表示不仅是单个数字的值，而是数字的分布，例如请求的响应时间（以毫秒为单位）。直方图可用于计算百分位数、平均值和其他统计数据。它们有一组预定义的边界，定义了将值放入其中的桶。默认情况下，边界为 <code>[0.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0, 250.0, 500.0, 750.0, 1000.0, 2500.0, 5000.0, 7500.0, 10000.0]</code>。</p>
+</li>
+</ul>
+<p>还有几种可观察的仪器类型。这些仪器没有同步记录方法，而是返回一个可以调用以记录值的回调。当 OpenTelemetry SDK 准备记录值时，例如在导出之前，将调用该回调。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> counter <span class="token operator">=</span> meter<span class="token punctuation">.</span><span class="token function">createObservableCounter</span><span class="token punctuation">(</span><span class="token string">"my_counter"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  description<span class="token operator">:</span> <span class="token string">"一个简单的计数器"</span><span class="token punctuation">,</span>
+  unit<span class="token operator">:</span> <span class="token string">"1"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+counter<span class="token punctuation">.</span><span class="token function">addCallback</span><span class="token punctuation">(</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  res<span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// 或者</span>
+  res<span class="token punctuation">.</span><span class="token function">observe</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> color<span class="token operator">:</span> <span class="token string">"red"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-571" class="copyButton" data-copy="const counter = meter.createObservableCounter(&quot;my_counter&quot;, {
+  description: &quot;一个简单的计数器&quot;,
+  unit: &quot;1&quot;,
+});
+counter.addCallback((res) => {
+  res.observe(1);
+  // 或者
+  res.observe(1, { color: &quot;red&quot; });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>有三种类型的可观察仪器：</p>
+<ul>
+<li><strong>可观察计数器</strong>：可观察计数器是可以异步观察的计数器。它可用于始终增加的值，例如处理的请求数量。</li>
+<li><strong>可观察上下计数器</strong>：可观察上下计数器是一个可以增加和减少的值，可以异步观察。上下计数器可用于可以增加和减少的值，例如活动连接数或进行中的请求数。</li>
+<li><strong>可观察仪表</strong>：可观察仪表是可以设置为任何值并可以异步观察的值。它们用于不随时间“累积”的值，而是在任何给定时间具有特定值的值，例如当前温度。</li>
+</ul>
+<p>在 <a href="https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.MetricsAPI.html">OpenTelemetry JS API 文档</a> 中了解完整的指标 API。</p>
+<h3 id="%E5%AE%9E%E7%94%A8%E7%A4%BA%E4%BE%8B" tabindex="-1">实用示例 <a class="header-anchor" href="#%E5%AE%9E%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>有关在 Deno 应用程序中实现 OpenTelemetry 的实用示例，请参见我们的教程：</p>
+<ul>
+<li><a href="/examples/basic_opentelemetry_tutorial/">基本 OpenTelemetry 教程</a> - 一个带有自定义指标和追踪的简单 HTTP 服务器</li>
+<li><a href="/examples/otel_span_propagation_tutorial/">分布式追踪教程</a> - 跨服务边界追踪的高级技术</li>
+</ul>
+<h2 id="%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%A0%E6%92%AD" tabindex="-1">上下文传播 <a class="header-anchor" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%A0%E6%92%AD"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在 OpenTelemetry 中，上下文传播是将一些上下文信息（例如当前跨度）从应用程序的一部分传递到另一部分的过程，而不必将其显式作为参数传递给每个函数。</p>
+<p>在 Deno 中，上下文传播是使用 <code>AsyncContext</code> 的规则进行的，这是 TC39 关于异步上下文传播的提议。<code>AsyncContext</code> API 目前尚未向 Deno 用户开放，但它在内部用于在异步边界跨越时传播活动跨度和其他上下文信息。</p>
+<p>以下是 <code>AsyncContext</code> 传播工作原理的快速概述：</p>
+<ul>
+<li>当启动新的异步任务时（例如 Promise 或定时器），当前上下文被保存。</li>
+<li>然后，可以在与异步任务不同的上下文中并发执行其他代码。</li>
+<li>当异步任务完成时，保存的上下文被恢复。</li>
+</ul>
+<p>这意味着异步上下文传播本质上表现得像是一个范围限于当前异步任务的全局变量，并自动复制到从当前任务启动的任何新异步任务。</p>
+<p><code>npm:@opentelemetry/api@1</code> 中的 <code>context</code> API 向用户公开此功能。其工作方式如下：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> context <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 获取当前活动的上下文</span>
+<span class="token keyword">const</span> currentContext <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 您可以创建一个新的上下文并添加一个值</span>
+<span class="token keyword">const</span> newContext <span class="token operator">=</span> currentContext<span class="token punctuation">.</span><span class="token function">setValue</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 调用 setValue 不会更改当前上下文</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>currentContext<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// undefined</span>
+
+<span class="token comment">// 您可以在新上下文内部运行一个函数</span>
+context<span class="token punctuation">.</span><span class="token function">with</span><span class="token punctuation">(</span>newContext<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 此块中的任意代码将运行在新上下文中</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1</span>
+
+  <span class="token comment">// 此上下文也可在从此块调用的任何函数中使用</span>
+  <span class="token keyword">function</span> <span class="token function">myFunction</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">myFunction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1</span>
+
+  <span class="token comment">// 并且它也可在从这里调度的任何异步回调中使用</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 在外部，上下文仍然相同</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// undefined</span>
+</code></pre>
+
+      <button id="copy-button-648" class="copyButton" data-copy="import { context } from &quot;npm:@opentelemetry/api@1&quot;;
+
+// 获取当前活动的上下文
+const currentContext = context.active();
+
+// 您可以创建一个新的上下文并添加一个值
+const newContext = currentContext.setValue(&quot;id&quot;, 1);
+
+// 调用 setValue 不会更改当前上下文
+console.log(currentContext.getValue(&quot;id&quot;)); // undefined
+
+// 您可以在新上下文内部运行一个函数
+context.with(newContext, () => {
+  // 此块中的任意代码将运行在新上下文中
+  console.log(context.active().getValue(&quot;id&quot;)); // 1
+
+  // 此上下文也可在从此块调用的任何函数中使用
+  function myFunction() {
+    return context.active().getValue(&quot;id&quot;);
+  }
+  console.log(myFunction()); // 1
+
+  // 并且它也可在从这里调度的任何异步回调中使用
+  setTimeout(() => {
+    console.log(context.active().getValue(&quot;id&quot;)); // 1
+  }, 10);
+});
+
+// 在外部，上下文仍然相同
+console.log(context.active().getValue(&quot;id&quot;)); // undefined
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>上下文 API 还与跨度集成。例如，要在特定跨度的上下文中运行某个函数，可以将跨度添加到上下文中，然后在该上下文中运行该函数：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> context<span class="token punctuation">,</span> trace <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> tracer <span class="token operator">=</span> trace<span class="token punctuation">.</span><span class="token function">getTracer</span><span class="token punctuation">(</span><span class="token string">"my-app"</span><span class="token punctuation">,</span> <span class="token string">"1.0.0"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> span <span class="token operator">=</span> tracer<span class="token punctuation">.</span><span class="token function">startSpan</span><span class="token punctuation">(</span><span class="token string">"myFunction"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> contextWithSpan <span class="token operator">=</span> trace<span class="token punctuation">.</span><span class="token function">setSpan</span><span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> span<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+context<span class="token punctuation">.</span><span class="token function">with</span><span class="token punctuation">(</span>contextWithSpan<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> activeSpan <span class="token operator">=</span> trace<span class="token punctuation">.</span><span class="token function">getActiveSpan</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>activeSpan <span class="token operator">===</span> span<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// true</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 别忘了结束跨度！</span>
+span<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-652" class="copyButton" data-copy="import { context, trace } from &quot;npm:@opentelemetry/api@1&quot;;
+
+const tracer = trace.getTracer(&quot;my-app&quot;, &quot;1.0.0&quot;);
+
+const span = tracer.startSpan(&quot;myFunction&quot;);
+const contextWithSpan = trace.setSpan(context.active(), span);
+
+context.with(contextWithSpan, () => {
+  const activeSpan = trace.getActiveSpan();
+  console.log(activeSpan === span); // true
+});
+
+// 别忘了结束跨度！
+span.end();
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在 <a href="https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.ContextAPI.html">OpenTelemetry JS API 文档</a> 中了解完整的上下文 API。</p>
+<h2 id="%E9%85%8D%E7%BD%AE" tabindex="-1">配置 <a class="header-anchor" href="#%E9%85%8D%E7%BD%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>可以通过设置 <code>OTEL_DENO=true</code> 环境变量启用 OpenTelemetry 集成。</p>
+<p>OTLP 导出的端点和协议可以使用环境变量 <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> 和 <code>OTEL_EXPORTER_OTLP_PROTOCOL</code> 进行配置。</p>
+<p>如果端点需要身份验证，可以使用环境变量 <code>OTEL_EXPORTER_OTLP_HEADERS</code> 配置头。</p>
+<p>可以为指标、追踪和日志分别使用特定环境变量覆盖端点，例如：</p>
+<ul>
+<li><code>OTEL_EXPORTER_OTLP_METRICS_ENDPOINT</code></li>
+<li><code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code></li>
+<li><code>OTEL_EXPORTER_OTLP_LOGS_ENDPOINT</code></li>
+</ul>
+<p>有关可用于配置 OTLP 导出的头的更多信息，请 <a href="https://opentelemetry.io/docs/specs/otel/protocol/exporter/#configuration-options">查看 OpenTelemetry 网站</a>。</p>
+<p>与遥测数据相关联的资源可以使用 <code>OTEL_SERVICE_NAME</code> 和 <code>OTEL_RESOURCE_ATTRIBUTES</code> 环境变量进行配置。除了通过 <code>OTEL_RESOURCE_ATTRIBUTES</code> 环境变量设置的属性外，还有以下属性会自动设置：</p>
+<ul>
+<li><code>service.name</code>: 如果未设置 <code>OTEL_SERVICE_NAME</code>，则值设置为 <code>&lt;unknown_service&gt;</code>。</li>
+<li><code>process.runtime.name</code>: <code>deno</code></li>
+<li><code>process.runtime.version</code>: Deno 运行时的版本。</li>
+<li><code>telemetry.sdk.name</code>: <code>deno-opentelemetry</code></li>
+<li><code>telemetry.sdk.language</code>: <code>deno-rust</code></li>
+<li><code>telemetry.sdk.version</code>: Deno 运行时的版本，加上 Deno 使用的 <code>opentelemetry</code> Rust crate 的版本，以 <code>-</code> 分隔。</li>
+</ul>
+<p>传播者可以使用 <code>OTEL_PROPAGATORS</code> 环境变量配置。
+默认值为 <code>tracecontext,baggage</code>。可以通过逗号分隔指定多个传播者。当前支持的传播者有：</p>
+<ul>
+<li><code>tracecontext</code>: W3C Trace Context 传播格式</li>
+<li><code>baggage</code>: W3C Baggage 传播格式</li>
+</ul>
+<p>指标收集频率可以使用 <code>OTEL_METRIC_EXPORT_INTERVAL</code> 环境变量进行配置。默认值为 <code>60000</code> 毫秒（60 秒）。</p>
+<p>跨度导出器批处理可以使用在 <a href="https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-span-processor">OpenTelemetry 规范</a> 中描述的批跨度处理器环境变量进行配置。</p>
+<p>日志导出器批处理可以使用在 <a href="https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-log-record-processor">OpenTelemetry 规范</a> 中描述的批日志记录处理器环境变量进行配置。</p>
+<h2 id="%E4%BC%A0%E6%92%AD%E8%80%85" tabindex="-1">传播者 <a class="header-anchor" href="#%E4%BC%A0%E6%92%AD%E8%80%85"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 支持上下文传播者，这使得跨进程边界自动传播追踪上下文，支持分布式追踪，使您能够跟踪请求在不同服务中流动的过程。</p>
+<p>传播者负责将上下文信息（如追踪和跨度 ID）编码到载体格式（如 HTTP 头）中并从中解码。这使得追踪上下文能够在服务边界之间传递。</p>
+<p>默认情况下，Deno 支持以下传播者：</p>
+<ul>
+<li><code>tracecontext</code>: W3C Trace Context 传播格式，这是通过 HTTP 头传播追踪上下文的标准方式。</li>
+<li><code>baggage</code>: W3C Baggage 传播格式，允许在服务边界之间传递键值对。</li>
+</ul>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>这些传播者自动与 Deno 的 <code>fetch</code> API 和 <code>Deno.serve</code> 配合使用，使 HTTP 请求跨越的端到端追踪成为可能，无需手动管理上下文。</p>
+<p>
+</div>
+</p>
+<p>您可以通过 <code>@opentelemetry/api</code> 包访问传播 API：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> context<span class="token punctuation">,</span> propagation<span class="token punctuation">,</span> trace <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:@opentelemetry/api@1"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 从传入的头部提取上下文</span>
+<span class="token keyword">function</span> <span class="token function">extractContextFromHeaders</span><span class="token punctuation">(</span>headers<span class="token operator">:</span> Headers<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> propagation<span class="token punctuation">.</span><span class="token function">extract</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> headers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 向传出的头部注入上下文</span>
+<span class="token keyword">function</span> <span class="token function">injectContextIntoHeaders</span><span class="token punctuation">(</span>headers<span class="token operator">:</span> Headers<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> ctx <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token function">active</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  propagation<span class="token punctuation">.</span><span class="token function">inject</span><span class="token punctuation">(</span>ctx<span class="token punctuation">,</span> headers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> headers<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 示例：发出一个传播追踪上下文的 fetch 请求</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">tracedFetch</span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> headers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Headers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">injectContextIntoHeaders</span><span class="token punctuation">(</span>headers<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token punctuation">{</span> headers <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-786" class="copyButton" data-copy="import { context, propagation, trace } from &quot;npm:@opentelemetry/api@1&quot;;
+
+// 从传入的头部提取上下文
+function extractContextFromHeaders(headers: Headers) {
+  const ctx = context.active();
+  return propagation.extract(ctx, headers);
+}
+
+// 向传出的头部注入上下文
+function injectContextIntoHeaders(headers: Headers) {
+  const ctx = context.active();
+  propagation.inject(ctx, headers);
+  return headers;
+}
+
+// 示例：发出一个传播追踪上下文的 fetch 请求
+async function tracedFetch(url: string) {
+  const headers = new Headers();
+  injectContextIntoHeaders(headers);
+
+  return await fetch(url, { headers });
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E9%99%90%E5%88%B6" tabindex="-1">限制 <a class="header-anchor" href="#%E9%99%90%E5%88%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>虽然 Deno 的 OpenTelemetry 集成正在开发中，但存在一些限制需注意：</p>
+<ul>
+<li>追踪总是被采样（即 <code>OTEL_TRACE_SAMPLER=parentbased_always_on</code>）。</li>
+<li>追踪仅支持没有属性的链接。</li>
+<li>不支持指标示例。</li>
+<li>不支持自定义日志流（例如，非 <code>console.log</code> 和 <code>console.error</code> 的日志）。</li>
+<li>唯一支持的导出器是 OTLP - 其他导出器不受支持。</li>
+<li>仅支持 <code>http/protobuf</code> 和 <code>http/json</code> 协议用于 OTLP。其他协议如 <code>grpc</code> 不受支持。</li>
+<li>从可观察（异步）仪表收集的指标不会在进程退出/崩溃时收集，因此最后的指标值可能不会被导出。同步指标会在进程退出/崩溃时导出。</li>
+<li>在追踪跨度中，不遵守 <code>OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT</code>、<code>OTEL_ATTRIBUTE_COUNT_LIMIT</code>、<code>OTEL_SPAN_EVENT_COUNT_LIMIT</code>、<code>OTEL_SPAN_LINK_COUNT_LIMIT</code>、<code>OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT</code> 和 <code>OTEL_LINK_ATTRIBUTE_COUNT_LIMIT</code> 环境变量中指定的限制。</li>
+<li>不尊重环境变量 <code>OTEL_METRIC_EXPORT_TIMEOUT</code>。</li>
+<li>未知的 HTTP 方法在 <code>http.request.method</code> 跨度属性中不会标准化为 <code>_OTHER</code>，这与 OpenTelemetry 语义约定不符。</li>
+<li><code>Deno.serve</code> 的 HTTP 服务器跨度没有设置 OpenTelemetry 状态，如果处理程序抛出（即调用 <code>onError</code>），则该跨度将没有错误状态设置，且错误将不会通过事件附加到跨度。</li>
+<li>在 <code>fetch</code> 的 HTTP 客户端跨度中没有机制添加 <code>http.route</code> 属性，或更新跨度名称以包含路由。</li>
+</ul>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/fundamentals/open_telemetry.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">快速开始 </a></li><li class="m-2 leading-4"><a href="#%E8%87%AA%E5%8A%A8%E4%BB%AA%E5%99%A8%E5%8C%96" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">自动仪器化 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%BF%BD%E8%B8%AA" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">追踪 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#deno.serve" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Deno.serve </a></li><li class="m-2 leading-4"><a href="#fetch" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">fetch </a></li></ul></li><li class="m-2 leading-4"><a href="#%E6%8C%87%E6%A0%87" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">指标 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#deno.serve-%2F-deno.servehttp" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Deno.serve / Deno.serveHttp </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#http.server.request.duration" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.request.duration </a></li><li class="m-2 leading-4"><a href="#http.server.active_requests" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.active_requests </a></li><li class="m-2 leading-4"><a href="#http.server.request.body.size" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.request.body.size </a></li><li class="m-2 leading-4"><a href="#http.server.response.body.size" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">http.server.response.body.size </a></li></ul></li></ul></li><li class="m-2 leading-4"><a href="#%E6%97%A5%E5%BF%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">日志 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E7%94%A8%E6%88%B7%E6%8C%87%E6%A0%87" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">用户指标 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%BF%BD%E8%B8%AA-1" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">追踪 </a></li><li class="m-2 leading-4"><a href="#%E6%8C%87%E6%A0%87-1" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">指标 </a></li><li class="m-2 leading-4"><a href="#%E5%AE%9E%E7%94%A8%E7%A4%BA%E4%BE%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">实用示例 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%A0%E6%92%AD" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">上下文传播 </a></li><li class="m-2 leading-4"><a href="#%E9%85%8D%E7%BD%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">配置 </a></li><li class="m-2 leading-4"><a href="#%E4%BC%A0%E6%92%AD%E8%80%85" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">传播者 </a></li><li class="m-2 leading-4"><a href="#%E9%99%90%E5%88%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">限制 </a></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>
