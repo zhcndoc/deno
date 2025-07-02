@@ -1,15 +1,14 @@
 ---
-title: "打包器（已弃用）"
+title: "捆绑器"
 oldUrl: /runtime/manual/cli/bundler/
 command: bundle
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno bundle"
 ---
 
-:::caution
+:::info
 
-`deno bundle` 已被弃用，并将在未来的某个版本中移除。
-请使用 [deno_emit](https://github.com/denoland/deno_emit)、[esbuild](https://esbuild.github.io/) 或 [rollup](https://rollupjs.org)。
+`deno bundle` 目前是一个实验性子命令，可能会有所更改。
 
 :::
 

@@ -108,6 +108,10 @@ export const sidebar = [
             href: "/runtime/reference/cli/bench/",
           },
           {
+            title: "deno bundle",
+            href: "/runtime/reference/cli/bundle/",
+          },
+          {
             title: "deno check",
             href: "/runtime/reference/cli/check/",
           },
@@ -204,6 +208,10 @@ export const sidebar = [
             href: "/runtime/reference/cli/uninstall/",
           },
           {
+            title: "deno update",
+            href: "/runtime/reference/cli/update/",
+          },
+          {
             title: "deno upgrade",
             href: "/runtime/reference/cli/upgrade/",
           },
@@ -248,6 +256,10 @@ export const sidebar = [
       {
         title: "在文档中测试代码",
         href: "/runtime/reference/documentation/",
+      },
+      {
+        title: "捆绑",
+        href: "/runtime/reference/bundling/",
       },
       {
         title: "Lint 插件",

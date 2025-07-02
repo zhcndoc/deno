@@ -66,14 +66,55 @@ import data from "./data.json" with { type: "json" };
 console.log(data.property); // 访问 JSON 数据作为对象
 ```
 
-这是 Deno 当前唯一支持的导入属性类型。对 `type: text` 和 `type: bytes` 的支持正在考虑未来的更新中，并且当前在等待
-[Module Harmony proposal](https://github.com/whatwg/html/issues/9444)。
+从 Deno 2.4 开始，也可以导入 `text` 和 `bytes` 模块。
+
+:::info
+
+对导入 `text` 和 `bytes` 模块的支持尚属实验性功能，需通过以下方式启用：
+
+在命令行中使用 `--unstable-raw-imports` 标志或在 `deno.json` 配置文件中设置 `unstable.raw-import` 选项
+
+:::
+
+```ts
+import text from "./log.txt" with { type: "text" };
+
+console.log(typeof text === "string");
+// true
+console.log(text);
+// Hello from a text file
+```
+
+```ts
+import bytes from "./image.png" with { type: "bytes" };
+
+console.log(bytes instanceof Uint8Array);
+// true
+console.log(bytes);
+Uint8Array(12) [
+//    72, 101, 108, 108, 111,
+//    44,  32,  68, 101, 110,
+//   111,  33
+// ]
+```
+
+## WebAssembly 模块
+
+Deno 支持直接导入 Wasm 模块：
+
+```ts
+import { add } from "./add.wasm";
+
+console.log(add(1, 2));
+```
+
+要了解更多信息，请访问 [WebAssembly 部分](/runtime/reference/wasm/#wasm-modules)
 
 ## 数据 URL 导入
 
-Deno 支持导入数据 URL，这允许你导入不在单独文件中的内容。这对测试、原型设计或当你需要以编程方式生成模块时非常有用。
+Deno 支持导入数据 URL，这使您能够导入不在单独文件中的内容。这对于测试、原型设计或当您需要以编程方式生成模块时非常有用。
 
-你可以使用 `data:` URL 方案动态创建模块：
+您可以使用 `data:` URL 方案动态创建模块：
 
 ```ts
 // 从数据 URL 导入一个简单的 JavaScript 模块
