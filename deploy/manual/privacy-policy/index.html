@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Privacy Policy - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="Privacy Policy"/><meta name="twitter:description" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta name="twitter:image" content="https://docs.deno.com/deploy/manual/privacy-policy/index.png"/><meta name="twitter:image:alt" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="Privacy Policy"/><meta property="og:description" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta property="og:image" content="https://docs.deno.com/deploy/manual/privacy-policy/index.png"/><meta property="og:image:alt" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><nav class="refheader"><ul class="flex"><li><a class="blocklink refheader-link" data-active="false" href="/deploy/early-access/"><span>Deno Deploy<sup>EA</sup></span></a></li><li><a class="blocklink refheader-link" data-active="true" href="/deploy/manual/"><span>Deploy Classic</span></a></li><li><a class="blocklink refheader-link" data-active="false" href="/subhosting/manual/"><span>Subhosting</span></a></li></ul></nav><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="deploy" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">入门</span></h2><ul class="sub-nav"><li><a href="/deploy/manual/" class="sub-nav-link blocklink">快速开始</a></li><li><label for="sub-nav-toggle-Deploy基础知识" class="sub-nav-toggle blocklink">Deploy 基础知识</label><input type="checkbox" id="sub-nav-toggle-Deploy基础知识" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/manual/use-cases/" class="sub-nav-link blocklink">用例</a></li><li><a href="/deploy/manual/playgrounds/" class="sub-nav-link blocklink">游乐场</a></li><li><a href="/deploy/manual/how-to-deploy/" class="sub-nav-link blocklink">如何部署</a></li><li><a href="/deploy/manual/ci_github/" class="sub-nav-link blocklink">GitHub CI</a></li><li><a href="/deploy/manual/deployctl/" class="sub-nav-link blocklink">deployctl</a></li><li><a href="/deploy/manual/regions/" class="sub-nav-link blocklink">地区</a></li><li><a href="/deploy/manual/pricing-and-limits/" class="sub-nav-link blocklink">定价和限制</a></li></ul></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Deploy 平台</span></h2><ul class="sub-nav"><li><a href="/deploy/manual/deployments/" class="sub-nav-link blocklink">部署</a></li><li><a href="/deploy/manual/custom-domains/" class="sub-nav-link blocklink">绑定域名</a></li><li><a href="/deploy/manual/environment-variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/deploy/manual/organizations/" class="sub-nav-link blocklink">组织</a></li><li><a href="/deploy/manual/logs/" class="sub-nav-link blocklink">日志</a></li><li><label for="sub-nav-toggle-KV" class="sub-nav-toggle blocklink">KV</label><input type="checkbox" id="sub-nav-toggle-KV" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/kv/manual/" class="sub-nav-link blocklink">概述</a></li><li><a href="/deploy/kv/manual/key_space/" class="sub-nav-link blocklink">键空间</a></li><li><a href="/deploy/kv/manual/operations/" class="sub-nav-link blocklink">操作</a></li><li><a href="/deploy/kv/manual/key_expiration/" class="sub-nav-link blocklink">键过期</a></li><li><a href="/deploy/kv/manual/secondary_indexes/" class="sub-nav-link blocklink">辅助索引</a></li><li><a href="/deploy/kv/manual/transactions/" class="sub-nav-link blocklink">交易</a></li><li><a href="/deploy/kv/manual/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/deploy/kv/manual/data_modeling_typescript/" class="sub-nav-link blocklink">数据建模</a></li><li><a href="/deploy/kv/manual/backup/" class="sub-nav-link blocklink">备份</a></li></ul></li><li><a href="/deploy/kv/manual/queue_overview/" class="sub-nav-link blocklink">队列</a></li><li><a href="/deploy/kv/manual/cron/" class="sub-nav-link blocklink">定时任务</a></li><li><a href="/deploy/manual/edge-cache/" class="sub-nav-link blocklink">边缘缓存</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">连接到数据库</span></h2><ul class="sub-nav"><li><a href="/deploy/kv/manual/on_deploy/" class="sub-nav-link blocklink">Deno KV</a></li><li><label for="sub-nav-toggle-第三方数据库" class="sub-nav-toggle blocklink">第三方数据库</label><input type="checkbox" id="sub-nav-toggle-第三方数据库" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/manual/dynamodb/" class="sub-nav-link blocklink">DynamoDB</a></li><li><a href="/deploy/manual/faunadb/" class="sub-nav-link blocklink">FaunaDB</a></li><li><a href="/deploy/manual/firebase/" class="sub-nav-link blocklink">Firebase</a></li><li><a href="/deploy/manual/postgres/" class="sub-nav-link blocklink">Postgres</a></li><li><a href="/deploy/manual/neon-postgres/" class="sub-nav-link blocklink">Neon Postgres</a></li></ul></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">政策和限制</span></h2><ul class="sub-nav"><li><a href="/deploy/manual/acceptable-use-policy/" class="sub-nav-link blocklink">可接受使用政策</a></li><li><a href="/deploy/manual/fulfillment-policy/" class="sub-nav-link blocklink">履行政策</a></li><li><a href="/deploy/manual/privacy-policy/" class="sub-nav-link blocklink" data-active="true">隐私政策</a></li><li><a href="/deploy/manual/security/" class="sub-nav-link blocklink">Security</a></li><li><a href="/deploy/manual/terms-and-conditions/" class="sub-nav-link blocklink">条款和条件</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">教程与示例</span></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-部署教程" class="sub-nav-toggle blocklink">部署教程</label><input type="checkbox" id="sub-nav-toggle-部署教程" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/tutorials/" class="sub-nav-link blocklink">概述</a></li><li><a href="/deploy/tutorials/discord-slash/" class="sub-nav-link blocklink">Discord 斜杠命令</a></li><li><a href="/deploy/tutorials/fresh/" class="sub-nav-link blocklink">Fresh 框架</a></li><li><a href="/deploy/tutorials/simple-api/" class="sub-nav-link blocklink">简单 API</a></li><li><a href="/deploy/tutorials/static-site/" class="sub-nav-link blocklink">静态站点</a></li><li><a href="/deploy/tutorials/tutorial-blog-fresh/" class="sub-nav-link blocklink">Fresh 博客教程</a></li><li><a href="/deploy/tutorials/tutorial-dynamodb/" class="sub-nav-link blocklink">DynamoDB 集成</a></li><li><a href="/deploy/tutorials/tutorial-faunadb/" class="sub-nav-link blocklink">FaunaDB 集成</a></li><li><a href="/deploy/tutorials/tutorial-firebase/" class="sub-nav-link blocklink">Firebase 集成</a></li><li><a href="/deploy/tutorials/tutorial-http-server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/deploy/tutorials/tutorial-hugo-blog/" class="sub-nav-link blocklink">Hugo 博客</a></li><li><a href="/deploy/tutorials/tutorial-postgres/" class="sub-nav-link blocklink">Postgres 集成</a></li><li><a href="/deploy/tutorials/tutorial-wordpress-frontend/" class="sub-nav-link blocklink">WordPress 前端</a></li><li><a href="/deploy/tutorials/vite/" class="sub-nav-link blocklink">Vite</a></li><li><a href="/deploy/kv/tutorials/schedule_notification/" class="sub-nav-link blocklink">日程通知</a></li><li><a href="/deploy/kv/tutorials/webhook_processor/" class="sub-nav-link blocklink">Webhook 处理器</a></li></ul></li><li><a href="/deploy/kv/tutorials/" class="sub-nav-link blocklink">KV 教程</a></li><li><a href="/examples/" class="sub-nav-link blocklink">更多关于 Deno 的示例</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">参考</span></h2><ul class="sub-nav"><li><a href="/deploy/api" class="sub-nav-link blocklink">运行时 API</a></li><li><a href="/deploy/api/runtime-fs/" class="sub-nav-link blocklink">运行时 FS</a></li><li><a href="/deploy/api/runtime-node/" class="sub-nav-link blocklink">运行时 Node</a></li><li><a href="/deploy/api/compression/" class="sub-nav-link blocklink">压缩</a></li><li><a href="/deploy/api/runtime-sockets/" class="sub-nav-link blocklink">运行时 Sockets</a></li><li><a href="/deploy/api/runtime-broadcast-channel/" class="sub-nav-link blocklink">运行时广播频道</a></li><li><a href="/deploy/api/runtime-fetch/" class="sub-nav-link blocklink">运行时 Fetch</a></li><li><a href="/deploy/api/runtime-request/" class="sub-nav-link blocklink">运行时 Request</a></li><li><a href="/deploy/api/runtime-response/" class="sub-nav-link blocklink">运行时 Response</a></li><li><a href="/deploy/api/runtime-headers/" class="sub-nav-link blocklink">运行时 Headers</a></li><li><a href="/deploy/api/dynamic-import/" class="sub-nav-link blocklink">动态导入</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/deploy/manual/"><span itemprop="name">Deno Deploy</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">政策和限制</span><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">Privacy Policy</span><meta itemprop="position" content="3"/></li></ul></nav><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>Privacy Policy</h1><div><p><strong>DENO PRIVACY POLICY</strong> 09 September 2024</p>
+<p>Deno Land Inc. (“Deno,” “we,” “us,” or “our”) collects and uses personal
+information in order to provide its products and services to you. This Privacy
+Policy (the “Policy”) describes the personal information we collect, the
+purposes for which we use it, the parties with whom we may share it, and your
+choices with respect to such information. For purposes of this Privacy Policy,
+“personal information” means any information that relates to you as an
+individual and could reasonably be used to identify you. This Privacy Policy
+applies to our collection and use of personal information through (i) our
+website at <a href="https://deno.com">https://deno.com</a> (the “Site”); (ii) any websites,
+applications or other digital properties that link to this Privacy Policy; and
+(iii) the products and services (the “Deno Offerings”) we offer to you on our
+proprietary platform (the “Platform”) via the following websites:</p>
+<ul>
+<li>Deno Deploy (<a href="https://deno.com/deploy">https://deno.com/deploy</a>); and</li>
+<li>Deno Subhosting (<a href="https://deno.com/subhosting">https://deno.com/subhosting</a>).</li>
+</ul>
+<p>By accessing or using the Site or any other digital property that links to this
+Privacy Policy, you may learn about Deno and our technology platform, and
+registered customers may also access the Deno Offerings (collectively, the
+“Services”). To the extent permitted by applicable law, your use of Deno’
+products and services constitutes your acknowledgment and/or consent to the
+practices described in this Policy.</p>
+<p>This Privacy Policy incorporates
+<a href="https://docs.deno.com/deploy/manual/terms-and-conditions/">Deno’s Terms and Conditions</a>
+(the “Terms”). Capitalized terms that are not defined in the Privacy Policy have
+the meaning given to them in the Terms.</p>
+<p><strong>I. The Information We Collect, And How We Collect It</strong></p>
+<p>We collect the following categories of information, which may include personal
+information (collectively, the “<strong>Information</strong>”).</p>
+<p><strong>1. Information You Provide To Us</strong></p>
+<p>We collect information from and about you directly when you provide it to us.
+This information may be collected when you contact us, fill out a form, create
+an account, subscribe to our blog, access or participate on our Sites, respond
+to surveys, or otherwise interact with us. This information may include:</p>
+<p>*Contact Information. *We collect your contact information when you voluntarily
+provide it to us. For example, you may disclose contact information to us via
+the “Contact” link on our Sites, submit information by mail, telephone, in
+person or electronically, when signing up for our newsletters and other
+marketing communications, or when you register to attend an event or program.
+Contact Information typically includes first name, last name, e-mail address,
+postal address, organization, telephone number and other information that
+identifies you or can be used to identify or contact you.</p>
+<p><em>Account Credentials</em>. When you register to create an account with us, we will
+collect certain additional personal information, including your name, email
+address, and potentially other information such as your GitHub user name and
+public GitHub profile.</p>
+<p>In addition to Contact Information and Account Credentials, we may collect other
+kinds of information, such as:</p>
+<ul>
+<li>
+<p>Comments, questions, and requests you may make;</p>
+</li>
+<li>
+<p>Information about your preferences, such as your preferred methods of
+communication and the types of information in which you are interested;</p>
+</li>
+<li>
+<p>Event and service-related information (such as information required for
+registration, access to premises or online resources, dietary restrictions,
+and areas of interest);</p>
+</li>
+<li>
+<p>Audio and visual information, such as photographs, video and voice recordings
+(e.g., from events you attended with us), or security camera recordings if you
+visit our premises;</p>
+</li>
+<li>
+<p>Details of downloads from our Sites;</p>
+</li>
+<li>
+<p>Records and copies of your correspondence (including email addresses and phone
+numbers), if you contact us; and</p>
+</li>
+<li>
+<p>Any other information you voluntarily provide.</p>
+</li>
+</ul>
+<p><strong>2. Information Obtained From Third Parties</strong></p>
+<p>We may receive certain information about you from other sources, including
+publicly available sources (such as public records and social media platforms),
+as well as our service providers and marketing partners.</p>
+<p>When we collect personal information from users and visitors of other sites on
+which you have interacted with us, we will do so in accordance with the terms of
+use and privacy policies of those sites and applicable law. We may also receive
+personal information when you comment on our social media advertisements, post
+comments about us, or tag us in a public-facing social media post. Personal
+information may also be collected by the third-party social media sites that
+host our social media pages. These sites may provide aggregate information and
+analysis to us about visitors’ use of our social media pages. This allows us to
+better understand and analyze our user growth, general demographic information
+about the users of these pages, and interaction with the content that we post.
+Overall, this information may be used to help us understand the types of
+visitors and users of our social media pages and use of the content. This
+Privacy Policy does not cover personal information collected by such third-party
+social media sites. For more information on their privacy and security practices
+please review the privacy policies and terms of use on their respective
+websites.</p>
+<p><strong>3. Information Collected Automatically</strong></p>
+<p>We and our service providers may automatically obtain certain information about
+you, your electronic device, and your interactions with us, including the
+following:</p>
+<ul>
+<li>
+<p><em>Device data</em>. We may collect data such as the type of device and its
+operating system and settings, browser type, mobile device carrier, country,
+IP address, and unique identifiers.</p>
+</li>
+<li>
+<p><em>Internet and other or electronic activity data</em>. This includes information
+about your interaction with our Sites, emails, and other online content.</p>
+</li>
+<li>
+<p><em>Tracking Data</em>. We may collect tracking data using first and third-party
+cookies, pixels, web server logs, web beacons, and similar data collection and
+tracking technologies on the Sites, third party websites, apps and online
+services, and across your devices (such as IP address, browser, type, ISP,
+platform type, device type). Third parties such as advertising networks and
+analytics providers may also collect information about your online activities
+over time and across different websites and devices when you access or use the
+Sites.</p>
+</li>
+</ul>
+<p><strong>II. How We Use And Share Your Information</strong></p>
+<p>Deno uses the Information for the purpose for which it was collected and in a
+manner that is consistent with this Privacy Policy. These functions include
+operation, maintenance and improvements to the Sites, providing our products and
+services, solicitation of your feedback, gaining a better understanding of our
+customers and visitors of our Sites, responding to your requests and questions,
+hosting events, and informing you about our organization, products, services,
+events, and other areas of interest.</p>
+<p><em>Analytics Services</em>. We may use third-party web analytics services, such as
+Google Analytics, to help us understand and analyze how Site visitors use our
+services. For more information on how Google Analytics uses data collected
+through our Sites, visit
+<a href="http://www.google.com/policies/privacy/partners">www.google.com/policies/privacy/partners</a>.</p>
+<p><em>Aggregated Data</em>. We may analyze your personal information in aggregate form
+which does not identify you personally (“<strong>Aggregated Data</strong>”). The Aggregated
+Data may be used to operate, maintain, manage, and improve the Sites, shared
+with our affiliates, agents, and business partners, and otherwise used and
+disclosed for lawful business purposes. We do not re-identify de-identified or
+aggregated information.</p>
+<p><em>Service Providers/Vendors</em>. Like many businesses, we hire other companies to
+perform certain business-related services. We may disclose personal information
+to certain types of third party companies but only to the extent needed to
+enable them to provide such services, for example web hosting, disaster
+recovery, client survey and marketing, and data storage.</p>
+<p><em>Reorganization</em>. If, in the future, Deno undergoes a corporate, partnership, or
+business reorganization, we may transfer the Information, including personal
+information, to the new or surviving entity.</p>
+<p><em>Protection of Rights and Compliance</em>. We may use your Information to protect
+the rights, privacy or safety of you, us or others; to ensure our compliance
+with legal and contractual requirements; and to prevent and investigate illegal,
+unethical, or unauthorized activities (including cyberattacks and identity
+theft).</p>
+<p>If Deno intends on using or disclosing your personal information in any manner
+that is not consistent with this Privacy Policy, you will be informed of such
+anticipated use prior to or at the time at which the personal information is
+collected.</p>
+<p><strong>III. How We Protect Your Information</strong></p>
+<p>We take commercially reasonable steps to protect your personal information from
+loss, misuse, and unauthorized access, disclosure, alteration, or destruction.
+Please understand, however, that no security system is impenetrable. We cannot
+guarantee the security of our databases, nor can we guarantee that the personal
+information that you supply will not be intercepted while being transmitted to
+and from us over the Internet.</p>
+<p><strong>IV. Data Retention</strong></p>
+<p>Deno determines the retention period for all Information based on the purposes
+for which we collect and/or receive the Information and/or tax, legal and
+regulatory requirements. In addition to this, we may consider other factors,
+such as the nature and sensitivity of the data, and whether we can achieve the
+purpose for which we collected the data through other means.</p>
+<p><strong>V. Your Privacy Choices</strong></p>
+<p><strong>1. Your Information</strong></p>
+<p>You may request access to, correction of, or deletion of the personal
+information we maintain about you, and we will endeavor to respond promptly to
+your request. In order to make such a request, please contact us as indicated
+below.</p>
+<p><strong>2. Marketing Communications</strong></p>
+<p>You may opt-out of marketing-related emails by clicking on the “unsubscribe”
+link located on the bottom of any marketing email or emailing us at
+<a href="mailto:support@deno.com">support@deno.com</a>. We will use commercially reasonable
+efforts to process such requests in a timely manner. Please note that even if
+you opt-out of marketing-related emails, you will continue to receive
+service-related and other non-marketing emails.</p>
+<p><strong>3. Tracking Technology</strong></p>
+<p>You can choose not to permit tracking technologies, such as cookies and web
+beacons, when you use our services, but blocking some types of these tracking
+technologies may interfere with your experience.</p>
+<p><em>Browser-Based Opt-Outs</em>. You may be able to disable tracking technologies using
+your web browser settings. Please review your browser’s instructions or visit
+<a href="https://allaboutcookies.org/">All About Cookies</a> for general information. Note
+that your web browser may have settings that allow you to transmit a “Do Not
+Track” signal when you use online services. Like many websites, our Sites are
+not currently designed to respond to “Do Not Track” signals received from
+browsers.</p>
+<p><em>Self-Regulatory Program Opt-Outs</em>. Two self-regulatory programs are available
+to help you control the use of tracking technologies on your browsers — the
+<a href="https://digitaladvertisingalliance.org/">Digital Advertising Alliance</a> and the
+<a href="https://thenai.org/">Network Advertising Initiative</a>. Both programs help to
+regulate vendors in the digital advertising space. One function of their
+self-regulatory programs is to give you the ability to opt out of targeted (or
+interest-based) advertising, including the use of tracking technologies, from
+their member companies. You can visit the Digital Advertising Alliance’s Your Ad
+Choices website to opt out of targeted advertising for participating vendors.
+The Network Advertising Initiative similarly assists with opt outs through their
+Opt Out of Interest-Based Advertising webpage.</p>
+<p><em>Google Analytics Opt-Out.</em> To opt out of Google Analytics cookies, visit
+Google’s <a href="https://myadcenter.google.com/personalizationoff">My Ad Center</a> and/or
+download the Google Analytics Opt-Out Browser Add-On.</p>
+<p><strong>VI. Children</strong></p>
+<p>We do not knowingly collect personal information from children under the age of
+18 through the Sites. If you are under 18, please do not give us any personal
+information. We encourage parents and legal guardians to monitor their
+children’s Internet usage and to help enforce our Privacy Policy by instructing
+their children never to provide personal information through the Sites without
+their permission. If you have reason to believe that a child under the age of 18
+has provided personal information to us, please contact us, at
+<a href="mailto:support@deno.com">support@deno.com</a> and we will endeavor to delete that
+information from our databases.</p>
+<p><strong>VII. External Websites</strong></p>
+<p>The Sites may contain links to third-party websites. These third-party sites may
+collect information about you if you click on a link. We have no control over
+the privacy practices or the content of these websites. As such, we are not
+responsible for the content or the privacy policies of those third-party
+websites. You should check the applicable third-party privacy policy and terms
+of use when visiting any other websites.</p>
+<p><strong>VIII. Important Notice To Non-U.S. Residents</strong></p>
+<p>The Sites are hosted in and provided from the United States and other countries.
+If you are located outside of the United States, please be aware that any
+information you provide to us may be transferred to the United States or other
+countries where the privacy laws may not be as protective as those in your
+country of origin. If you are located outside the United States and choose to
+use the Sites, you consent to any transfer and processing of your personal
+information in accordance with this Privacy Policy, and you do so at your own
+risk.</p>
+<p><strong>IX. Notice To California Residents</strong></p>
+<p>Pursuant to Section 1798.83 of the California Civil Code, residents of
+California have the right to obtain certain information about the types of
+personal information that companies with whom they have an established business
+relationship (and that are not otherwise exempt) have shared with third parties
+for direct marketing purposes during the preceding calendar year, including the
+names and addresses of those third parties, and examples of the types of
+services or products marketed by those third parties. In order to submit such a
+request, please contact us using the contact information provided at the end of
+this document. Please note, however, that we do not share, nor have we shared in
+the past, personal information with third parties for direct marketing purposes.</p>
+<p><strong>X. Notice To Nevada Residents</strong></p>
+<p>If you are a resident of Nevada, you have the right to opt-out of the sale of
+personal information to third parties. You can exercise this right by contacting
+us at <a href="mailto:support@deno.com">support@deno.com</a> with the subject line “Nevada
+Do Not Sell Request” and providing us with your name and the email address.
+Please note, however, that we do not sell any personal information to third
+parties.</p>
+<p><strong>XI. Changes To This Privacy Policy</strong></p>
+<p>This Privacy Policy is effective as of the date stated at the top of this
+Privacy Policy. We may change this Privacy Policy from time to time. Any such
+changes will be posted on the Sites. By accessing the Sites after we make any
+such changes to this Privacy Policy, you are deemed to have accepted such
+changes. Please be aware that, to the extent permitted by applicable law, our
+use of the Information is governed by the Privacy Policy in effect at the time
+we collect the Information. Please refer back to this Privacy Policy on a
+regular basis.</p>
+<p><strong>XII. How To Contact Us</strong></p>
+<p>Please reach out to <a href="mailto:support@deno.com">support@deno.com</a> for any
+questions, complaints, or requests regarding this Privacy Policy, and include in
+the subject line “Privacy Policy&quot;, or contact us by mail at:</p>
+<p>Deno Land Inc.<br>
+1111 6th Ave Ste 550<br>
+PMB 702973<br>
+San Diego CA, 92101<br>
+USA</p>
+<p><strong>© 2024 Deno Land Inc. All rights reserved.</strong></p>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/deploy/manual/privacy-policy.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>

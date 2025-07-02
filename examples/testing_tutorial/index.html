@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Writing tests - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="Writing tests"/><meta name="twitter:description" content="Learn key concepts like test setup and structure, assertions, async testing, mocking, test fixtures, and code coverage"/><meta name="twitter:image" content="https://docs.deno.com/examples/testing_tutorial/index.png"/><meta name="twitter:image:alt" content="Learn key concepts like test setup and structure, assertions, async testing, mocking, test fixtures, and code coverage"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="Writing tests"/><meta property="og:description" content="Learn key concepts like test setup and structure, assertions, async testing, mocking, test fixtures, and code coverage"/><meta property="og:image" content="https://docs.deno.com/examples/testing_tutorial/index.png"/><meta property="og:image:alt" content="Learn key concepts like test setup and structure, assertions, async testing, mocking, test fixtures, and code coverage"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined" data-active="true">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="examples" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link" data-active="true">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">基础</span></h2><ul class="sub-nav"><li><a href="/examples/what_is_deno/" class="sub-nav-link blocklink">什么是 Deno？</a></li><li><a href="/examples/run_script_tutorial/" class="sub-nav-link blocklink">运行脚本</a></li><li><a href="/examples/hello_world/" class="sub-nav-link blocklink">你好，世界</a></li><li><a href="/examples/typescript_support/" class="sub-nav-link blocklink">内置 TypeScript 支持</a></li><li><a href="/examples/deno_dev_environment/" class="sub-nav-link blocklink">你的 Deno 开发环境</a></li><li><a href="/examples/initialize_project_tutorial/" class="sub-nav-link blocklink">初始化项目</a></li><li><a href="/examples/hashbang_tutorial/" class="sub-nav-link blocklink">可执行脚本</a></li><li><a href="/examples/all-in-one_tooling/" class="sub-nav-link blocklink">一体化工具</a></li><li><a href="/examples/configuration_with_deno_json/" class="sub-nav-link blocklink">使用 deno.json 进行任务和配置</a></li><li><a href="/examples/top_level_await/" class="sub-nav-link blocklink">顶级 await</a></li><li><a href="/examples/cjs_to_esm_tutorial/" class="sub-nav-link blocklink">从 CommonJS 更新到 ESM</a></li><li><a href="/examples/import_export/" class="sub-nav-link blocklink">导入和导出函数</a></li><li><a href="/examples/interoperability_with_nodejs/" class="sub-nav-link blocklink">与 Node.js 的互操作性</a></li><li><a href="/examples/intro_to_deno_apis/" class="sub-nav-link blocklink">Deno API 简介</a></li><li><a href="/examples/file_server_tutorial/" class="sub-nav-link blocklink">简单文件服务器</a></li><li><a href="/examples/deno_fmt/" class="sub-nav-link blocklink">使用 Deno fmt 格式化</a></li><li><a href="/examples/deno_bench/" class="sub-nav-link blocklink">使用 Deno bench 进行基准测试</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">模块和包管理</span></h2><ul class="sub-nav"><li><a href="/examples/node_built_in/" class="sub-nav-link blocklink">使用 Node.js 的内置模块</a></li><li><a href="/examples/npm/" class="sub-nav-link blocklink">从 npm 导入模块</a></li><li><a href="/examples/backward_compat_with_node_npm/" class="sub-nav-link blocklink">与 Node &amp; npm 的兼容性</a></li><li><a href="/examples/esmodules/" class="sub-nav-link blocklink">ECMAScript 模块</a></li><li><a href="/examples/publishing_modules_with_jsr/" class="sub-nav-link blocklink">发布模块与 JSR</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Web 标准 API</span></h2><ul class="sub-nav"><li><a href="/examples/browser_apis_in_deno/" class="sub-nav-link blocklink">Deno 中的浏览器 API</a></li><li><a href="/examples/debugging_with_console_tutorial/" class="sub-nav-link blocklink">通过控制台 API 更好的调试</a></li><li><a href="/examples/url_parsing/" class="sub-nav-link blocklink">操作和解析 URL</a></li><li><a href="/examples/fetch_data_tutorial/" class="sub-nav-link blocklink">获取和流式数据</a></li><li><a href="/examples/timers/" class="sub-nav-link blocklink">设置超时和间隔</a></li><li><a href="/examples/color_logging/" class="sub-nav-link blocklink">带颜色的日志记录</a></li><li><a href="/examples/web_workers/" class="sub-nav-link blocklink">Web Workers</a></li><li><a href="/examples/webassembly/" class="sub-nav-link blocklink">Web Assembly</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Web 框架和库</span></h2><ul class="sub-nav"><li><a href="/examples/ts_jsx/" class="sub-nav-link blocklink">TypeScript 和 JSX</a></li><li><a href="/examples/react_tutorial/" class="sub-nav-link blocklink">构建一个 React 应用</a></li><li><a href="/examples/create_react_tutorial/" class="sub-nav-link blocklink">使用 create-vite 构建 React 应用</a></li><li><a href="/examples/next_tutorial/" class="sub-nav-link blocklink">构建一个 Next.js 应用</a></li><li><a href="https://fresh.deno.dev/docs/getting-started/create-a-project/" class="sub-nav-link blocklink">构建一个 Fresh 应用</a></li><li><a href="/examples/vue_tutorial/" class="sub-nav-link blocklink">构建一个 Vue 应用</a></li><li><a href="/examples/express_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Express</a></li><li><a href="/examples/apollo_tutorial/" class="sub-nav-link blocklink">如何在 Deno 中使用 Apollo</a></li><li><a href="/examples/astro_tutorial/" class="sub-nav-link blocklink">使用 Deno 构建 Astro 网站</a></li><li><a href="/examples/qwik_tutorial/" class="sub-nav-link blocklink">用 Deno 构建 Qwik 应用</a></li><li><a href="/examples/nuxt_tutorial/" class="sub-nav-link blocklink">用 Deno 构建 Nuxt 应用</a></li><li><a href="/examples/trpc_tutorial/" class="sub-nav-link blocklink">用 tRPC 和 Deno 构建类型安全 API</a></li><li><a href="/examples/build_api_server_ts/" class="sub-nav-link blocklink">用 TypeScript 构建 API 服务器</a></li><li><a href="/examples/vue_app_video/" class="sub-nav-link blocklink">构建一个 Vue 应用</a></li><li><a href="/examples/solidjs_tutorial/" class="sub-nav-link blocklink">构建一个 SolidJS 应用</a></li><li><a href="/examples/react_app_video/" class="sub-nav-link blocklink">构建一个 React 应用</a></li><li><a href="/examples/tanstack_tutorial/" class="sub-nav-link blocklink">Build a Tanstack app</a></li><li><a href="/examples/http_server_file_upload/" class="sub-nav-link blocklink">HTTP server file upload</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Testing</span></h2><ul class="sub-nav"><li><a href="/examples/writing_tests/" class="sub-nav-link blocklink">Writing tests</a></li><li><a href="/examples/testing_tutorial/" class="sub-nav-link blocklink" data-active="true">Basics of testing</a></li><li><a href="/examples/mocking_tutorial/" class="sub-nav-link blocklink">Mocking data in tests</a></li><li><a href="/examples/stubbing_tutorial/" class="sub-nav-link blocklink">Stubbing</a></li><li><a href="/examples/snapshot_tutorial/" class="sub-nav-link blocklink">Snapshot testing</a></li><li><a href="/examples/spy_functions/" class="sub-nav-link blocklink">Spy functions</a></li><li><a href="/examples/deno_test/" class="sub-nav-link blocklink">Getting started with Deno test</a></li><li><a href="/examples/deno_coverage/" class="sub-nav-link blocklink">Better testing with Deno coverage</a></li><li><a href="/examples/web_testing_tutorial/" class="sub-nav-link blocklink">Testing web applications</a></li><li><a href="/examples/bdd_tutorial/" class="sub-nav-link blocklink">BDD testing</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">OpenTelemetry</span></h2><ul class="sub-nav"><li><a href="/examples/basic_opentelemetry_tutorial/" class="sub-nav-link blocklink">Basic OpenTelemetry setup</a></li><li><a href="/examples/grafana_tutorial/" class="sub-nav-link blocklink">Export telemetry to Grafana</a></li><li><a href="/examples/hyperdx_tutorial/" class="sub-nav-link blocklink">Export telemetry to Hyperdx</a></li><li><a href="/examples/honeycomb_tutorial/" class="sub-nav-link blocklink">Export telemetry to Honeycomb</a></li><li><a href="/examples/otel_span_propagation_tutorial/" class="sub-nav-link blocklink">Span propagation</a></li><li><a href="/examples/deploy_otel_tutorial/" class="sub-nav-link blocklink">OpenTelemetry with Deno Deploy</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Deploying Deno projects</span></h2><ul class="sub-nav"><li><a href="/examples/deno_deploy_tutorial/" class="sub-nav-link blocklink">Deploy with Deno Deploy</a></li><li><a href="/examples/aws_lambda_tutorial/" class="sub-nav-link blocklink">AWS Lambda</a></li><li><a href="/examples/deploy_deno_to_aws_lambda/" class="sub-nav-link blocklink">将 Deno 部署到 AWS Lambda</a></li><li><a href="/examples/aws_lightsail_tutorial/" class="sub-nav-link blocklink">AWS Lightsail</a></li><li><a href="/examples/cloudflare_workers_tutorial/" class="sub-nav-link blocklink">Cloudflare Workers</a></li><li><a href="/examples/digital_ocean_tutorial/" class="sub-nav-link blocklink">Digital Ocean</a></li><li><a href="/examples/google_cloud_run_tutorial/" class="sub-nav-link blocklink">Google Cloud Run</a></li><li><a href="/examples/kinsta_tutorial/" class="sub-nav-link blocklink">Kinsta</a></li><li><a href="/examples/deploying_deno_with_docker/" class="sub-nav-link blocklink">使用 Docker 部署 Deno</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">连接到数据库</span></h2><ul class="sub-nav"><li><a href="/examples/connecting_to_databases_tutorial/" class="sub-nav-link blocklink">连接到数据库</a></li><li><a href="/examples/mysql2_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 MySQL2</a></li><li><a href="/examples/planetscale_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 PlanetScale</a></li><li><a href="/examples/redis_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Redis</a></li><li><a href="/examples/prisma_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Prisma</a></li><li><a href="/examples/drizzle_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Drizzle</a></li><li><a href="/examples/mongoose_tutorial/" class="sub-nav-link blocklink">使用 Mongoose 和 MongoDB</a></li><li><a href="/examples/redis/" class="sub-nav-link blocklink">连接到 Redis</a></li><li><a href="/examples/postgres/" class="sub-nav-link blocklink">连接到 Postgres</a></li><li><a href="/examples/supabase/" class="sub-nav-link blocklink">连接到 Supabase</a></li><li><a href="/examples/mongo/" class="sub-nav-link blocklink">连接到 MongoDB</a></li><li><a href="/examples/sqlite/" class="sub-nav-link blocklink">连接到 SQLite</a></li><li><a href="/examples/mongoose/" class="sub-nav-link blocklink">连接到 Mongoose 和 MongoDB</a></li><li><a href="/examples/prisma/" class="sub-nav-link blocklink">连接到 Prisma</a></li><li><a href="/examples/duckdb/" class="sub-nav-link blocklink">连接到 DuckDB</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">编码</span></h2><ul class="sub-nav"><li><a href="/examples/hex_base64_encoding/" class="sub-nav-link blocklink">十六进制和 base64 编码</a></li><li><a href="/examples/parsing_serializing_toml/" class="sub-nav-link blocklink">解析和序列化 TOML</a></li><li><a href="/examples/importing_json/" class="sub-nav-link blocklink">导入 JSON</a></li><li><a href="/examples/parsing_serializing_csv/" class="sub-nav-link blocklink">解析和序列化 CSV</a></li><li><a href="/examples/parsing_serializing_json/" class="sub-nav-link blocklink">解析和序列化 JSON</a></li><li><a href="/examples/parsing_serializing_yaml/" class="sub-nav-link blocklink">解析和序列化 YAML</a></li><li><a href="/examples/byte_manipulation/" class="sub-nav-link blocklink">操作字节数组</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">命令行接口</span></h2><ul class="sub-nav"><li><a href="/examples/command_line_utility/" class="sub-nav-link blocklink">构建一个命令行工具</a></li><li><a href="/examples/prompts/" class="sub-nav-link blocklink">输入提示</a></li><li><a href="/examples/permissions/" class="sub-nav-link blocklink">权限管理</a></li><li><a href="/examples/command_line_arguments/" class="sub-nav-link blocklink">命令行参数</a></li><li><a href="/examples/deno_version/" class="sub-nav-link blocklink">获取 Deno 版本</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">网络</span></h2><ul class="sub-nav"><li><a href="/examples/http_requests/" class="sub-nav-link blocklink">HTTP 请求</a></li><li><a href="/examples/http_server/" class="sub-nav-link blocklink">HTTP 服务器：你好，世界</a></li><li><a href="/examples/http_server_routing/" class="sub-nav-link blocklink">HTTP 服务器：路由</a></li><li><a href="/examples/http_server_files/" class="sub-nav-link blocklink">HTTP 服务器：提供文件</a></li><li><a href="/examples/http_server_streaming/" class="sub-nav-link blocklink">HTTP 服务器：流式传输</a></li><li><a href="/examples/http_server_oak_crud_middleware_with_sqlite3_db/" class="sub-nav-link blocklink">HTTP 服务器：使用 SQLite3 进行 CRUD</a></li><li><a href="/examples/hono/" class="sub-nav-link blocklink">Hono HTTP 服务器</a></li><li><a href="/examples/http_server_websocket/" class="sub-nav-link blocklink">HTTP 服务器：WebSockets</a></li><li><a href="/examples/piping_streams/" class="sub-nav-link blocklink">管道流</a></li><li><a href="/examples/websocket/" class="sub-nav-link blocklink">外发 WebSockets</a></li><li><a href="/examples/tcp_echo_server/" class="sub-nav-link blocklink">TCP 回声服务器</a></li><li><a href="/examples/tcp_connector/" class="sub-nav-link blocklink">TCP 连接器：Ping</a></li><li><a href="/examples/tcp_listener/" class="sub-nav-link blocklink">TCP 监听器：Ping</a></li><li><a href="/examples/tls_connector/" class="sub-nav-link blocklink">TCP/TLS 连接器：Ping</a></li><li><a href="/examples/tls_listener/" class="sub-nav-link blocklink">TCP/TLS 监听器：Ping</a></li><li><a href="/examples/dns_queries/" class="sub-nav-link blocklink">运行 DNS 查询</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">系统</span></h2><ul class="sub-nav"><li><a href="/examples/os_signals/" class="sub-nav-link blocklink">处理操作系统信号</a></li><li><a href="/examples/benchmarking/" class="sub-nav-link blocklink">基准测试</a></li><li><a href="/examples/subprocess_tutorial/" class="sub-nav-link blocklink">创建子进程</a></li><li><a href="/examples/subprocess_running_files/" class="sub-nav-link blocklink">子进程生成</a></li><li><a href="/examples/subprocesses_output/" class="sub-nav-link blocklink">从子进程收集输出</a></li><li><a href="/examples/reading_system_metrics/" class="sub-nav-link blocklink">读取系统指标</a></li><li><a href="/examples/pid/" class="sub-nav-link blocklink">进程信息</a></li><li><a href="/examples/environment_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/examples/subprocesses_spawn/" class="sub-nav-link blocklink">子进程：生成</a></li><li><a href="/examples/os_signals_tutorial/" class="sub-nav-link blocklink">处理操作系统信号</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">文件系统</span></h2><ul class="sub-nav"><li><a href="/examples/path_operations/" class="sub-nav-link blocklink">路径操作</a></li><li><a href="/examples/reading_files/" class="sub-nav-link blocklink">读取文件</a></li><li><a href="/examples/writing_files/" class="sub-nav-link blocklink">写入文件</a></li><li><a href="/examples/deleting_files/" class="sub-nav-link blocklink">删除文件</a></li><li><a href="/examples/checking_file_existence/" class="sub-nav-link blocklink">检查文件是否存在</a></li><li><a href="/examples/moving_renaming_files/" class="sub-nav-link blocklink">移动/重命名文件</a></li><li><a href="/examples/create_remove_directories/" class="sub-nav-link blocklink">创建和删除目录</a></li><li><a href="/examples/watching_files/" class="sub-nav-link blocklink">监视文件系统</a></li><li><a href="/examples/walking_directories/" class="sub-nav-link blocklink">行走目录</a></li><li><a href="/examples/unix_cat/" class="sub-nav-link blocklink">Unix 猫</a></li><li><a href="/examples/symlinks/" class="sub-nav-link blocklink">创建和解析符号链接</a></li><li><a href="/examples/temporary_files/" class="sub-nav-link blocklink">临时文件和目录</a></li><li><a href="/examples/streaming_files/" class="sub-nav-link blocklink">流式文件操作</a></li><li><a href="/examples/unzip_gzipped_file/" class="sub-nav-link blocklink">解压缩 gzip 文件</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">加密</span></h2><ul class="sub-nav"><li><a href="/examples/uuids/" class="sub-nav-link blocklink">生成和验证 UUID</a></li><li><a href="/examples/ulid/" class="sub-nav-link blocklink">ULID</a></li><li><a href="/examples/hashing/" class="sub-nav-link blocklink">哈希</a></li><li><a href="/examples/rsa_signature/" class="sub-nav-link blocklink">RSASSA-PKCS1-v1_5 签名和验证</a></li><li><a href="/examples/hmac_generate_verify/" class="sub-nav-link blocklink">HMAC 生成和验证</a></li><li><a href="/examples/aes_encryption/" class="sub-nav-link blocklink">AES 加密和解密</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">高级</span></h2><ul class="sub-nav"><li><a href="/examples/file_system_events_tutorial/" class="sub-nav-link blocklink">文件系统事件</a></li><li><a href="/examples/module_metadata_tutorial/" class="sub-nav-link blocklink">模块元数据</a></li><li><a href="/examples/file_based_routing_tutorial/" class="sub-nav-link blocklink">基于文件的路由</a></li><li><a href="/examples/chat_app_tutorial/" class="sub-nav-link blocklink">使用 WebSockets 构建聊天应用</a></li><li><a href="/examples/realtime_websocket_app/" class="sub-nav-link blocklink">构建实时 WebSocket 应用</a></li><li><a href="/examples/word_finder_tutorial/" class="sub-nav-link blocklink">构建一个单词查找应用</a></li><li><a href="/examples/openai_chat_completion/" class="sub-nav-link blocklink">连接到 OpenAI - 聊天补全</a></li><li><a href="/examples/data_processing/" class="sub-nav-link blocklink">使用 Deno Collections 处理用户数据</a></li><li><a href="/examples/exponential_backoff/" class="sub-nav-link blocklink">指数退避</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">不稳定的 API</span></h2><ul class="sub-nav"><li><a href="/examples/kv_watch/" class="sub-nav-link blocklink">Deno KV 监视</a></li><li><a href="/examples/cron/" class="sub-nav-link blocklink">Deno Cron</a></li><li><a href="/examples/queues/" class="sub-nav-link blocklink">Deno 队列</a></li><li><a href="/examples/kv/" class="sub-nav-link blocklink">Deno KV：键/值数据库</a></li><li><a href="/examples/udp_listener/" class="sub-nav-link blocklink">UDP 监听器：Ping</a></li><li><a href="/examples/udp_connector/" class="sub-nav-link blocklink">UDP 连接器：Ping</a></li><li><a href="/examples/temporal/" class="sub-nav-link blocklink">时间 API</a></li><li><a href="/examples/importing_text/" class="sub-nav-link blocklink">Importing text</a></li><li><a href="/examples/importing_bytes/" class="sub-nav-link blocklink">Importing bytes</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#why-testing-matters" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Why testing matters </a></li><li class="m-2 leading-4"><a href="#writing-tests-with-deno.test" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Writing tests with Deno.test </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#a-simple-example-test" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">A simple example test </a></li></ul></li><li class="m-2 leading-4"><a href="#test-structure-and-organization" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Test structure and organization </a></li><li class="m-2 leading-4"><a href="#assertions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Assertions </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#real-world-example" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Real-world Example </a></li></ul></li><li class="m-2 leading-4"><a href="#async-testing" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Async testing </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#testing-async-functions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing async functions </a></li></ul></li><li class="m-2 leading-4"><a href="#mocking-in-tests" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Mocking in tests </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#basic-mocking" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Basic Mocking </a></li><li class="m-2 leading-4"><a href="#using-spy-functions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Using Spy Functions </a></li></ul></li><li class="m-2 leading-4"><a href="#coverage" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Coverage </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#coverage-configuration" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Coverage Configuration </a></li><li class="m-2 leading-4"><a href="#integrating-with-ci" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Integrating with CI </a></li></ul></li><li class="m-2 leading-4"><a href="#comparison-with-other-testing-frameworks" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Comparison with other testing frameworks </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#testing-style-comparison" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing Style Comparison </a></li></ul></li><li class="m-2 leading-4"><a href="#next-steps" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Next steps </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>Writing tests</h1><div><p>Testing is critical in software development to ensure your code works as
+expected, and continues to work as you make changes. Tests verify that your
+functions, modules, and applications behave correctly, handle edge cases
+appropriately, and maintain expected performance characteristics.</p>
+<h2 id="why-testing-matters" tabindex="-1">Why testing matters <a class="header-anchor" href="#why-testing-matters"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Testing your code allows you to catch bugs, issues or regressions before they
+reach production, saving time and resources. Tests are also useful to help plan
+out the logic of your application, they can serve as a human readable
+description of how your code is meant to be used.</p>
+<p>Deno provides <a href="/runtime/fundamentals/testing/">built-in testing capabilities</a>,
+making it straightforward to implement robust testing practices in your
+projects.</p>
+<h2 id="writing-tests-with-deno.test" tabindex="-1">Writing tests with <code>Deno.test</code> <a class="header-anchor" href="#writing-tests-with-deno.test"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Defining a test in Deno is straightforward - use the <code>Deno.test()</code> function to
+register your test with the test runner. This function accepts either a test
+name and function, or a configuration object with more detailed options. All
+test functions in files that match patterns like <code>*_test.{ts,js,mjs,jsx,tsx}</code> or
+<code>*.test.{ts,js,mjs,jsx,tsx}</code> are automatically discovered and executed when you
+run the <code>deno test</code> command.</p>
+<p>Here are the basic ways to define tests:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// Basic test with a name and function</span>
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"my first test"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Your test code here</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Test with configuration options</span>
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"my configured test"</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token comment">// Your test code here</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  ignore<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// Optional: set to true to skip this test</span>
+  only<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token comment">// Optional: set to true to only run this test</span>
+  permissions<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token comment">// Optional: specify required permissions</span>
+    read<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    write<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-21" class="copyButton" data-copy="// Basic test with a name and function
+Deno.test(&quot;my first test&quot;, () => {
+  // Your test code here
+});
+
+// Test with configuration options
+Deno.test({
+  name: &quot;my configured test&quot;,
+  fn: () => {
+    // Your test code here
+  },
+  ignore: false, // Optional: set to true to skip this test
+  only: false, // Optional: set to true to only run this test
+  permissions: { // Optional: specify required permissions
+    read: true,
+    write: false,
+  },
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="a-simple-example-test" tabindex="-1">A simple example test <a class="header-anchor" href="#a-simple-example-test"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Let's start with a simple test. Create a file called <code>main_test.ts</code>, in it we
+will test a basic addition operation using Deno's testing API and the
+<code>assertEquals</code> function from the <a href="https://jsr.io/@std">Deno Standard Library</a>.</p>
+<p>We use <code>Deno.test</code> and provide a name that describes what the test will do:</p>
+<div><div class="markdownBlockTitle">main_test.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// hello_test.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Function we want to test</span>
+<span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">number</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"basic addition test"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Arrange - set up the test data</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> b <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Act - call the function being tested</span>
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Assert - verify the result is what we expect</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-31" class="copyButton" data-copy="// hello_test.ts
+import { assertEquals } from &quot;jsr:@std/assert&quot;;
+
+// Function we want to test
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+Deno.test(&quot;basic addition test&quot;, () => {
+  // Arrange - set up the test data
+  const a = 1;
+  const b = 2;
+
+  // Act - call the function being tested
+  const result = add(a, b);
+
+  // Assert - verify the result is what we expect
+  assertEquals(result, 3);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>To run this test, use the <code>deno test</code> command:</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">deno <span class="token builtin class-name">test</span> hello_test.ts
+</code></pre>
+
+      <button id="copy-button-35" class="copyButton" data-copy="deno test hello_test.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>You should see output indicating that your test has passed:</p>
+<div class="relative"><pre><code>running 1 test from ./hello_test.ts
+basic addition test ... ok (2ms)
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (2ms)
+</code></pre>
+
+      <button id="copy-button-39" class="copyButton" data-copy="running 1 test from ./hello_test.ts
+basic addition test ... ok (2ms)
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (2ms)
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>Try changing the function implementation to make the test fail:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">function</span> <span class="token function">add</span><span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">number</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> a <span class="token operator">-</span> b<span class="token punctuation">;</span> <span class="token comment">// Changed from addition to subtraction</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-43" class="copyButton" data-copy="function add(a: number, b: number): number {
+  return a - b; // Changed from addition to subtraction
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>You'll see an error message that clearly shows what went wrong:</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">running <span class="token number">1</span> <span class="token builtin class-name">test</span> from ./hello_test.ts
+basic addition <span class="token builtin class-name">test</span> <span class="token punctuation">..</span>. FAILED <span class="token punctuation">(</span>3ms<span class="token punctuation">)</span>
+
+failures:
+
+basic addition <span class="token builtin class-name">test</span> <span class="token operator">=</span><span class="token operator">></span> ./hello_test.ts:12:3
+error: AssertionError: Values are not equal:
+    
+    <span class="token punctuation">[</span>Diff<span class="token punctuation">]</span> Actual / Expected
+    
+    -   <span class="token parameter variable">-1</span>
+    +   <span class="token number">3</span>
+
+  at assertEquals <span class="token punctuation">(</span>https://jsr.io/@std/assert@0.218.2/assert_equals.ts:31:9<span class="token punctuation">)</span>
+  at Object.fn <span class="token punctuation">(</span>file:///path/to/hello_test.ts:12:3<span class="token punctuation">)</span>
+  at asyncOpSanitizer <span class="token punctuation">(</span>ext:core/01_core.js:199:13<span class="token punctuation">)</span>
+  at Object.sanitizeOps <span class="token punctuation">(</span>ext:core/01_core.js:219:15<span class="token punctuation">)</span>
+  at runTest <span class="token punctuation">(</span>ext:test/06_test_runner.js:319:29<span class="token punctuation">)</span>
+  at <span class="token builtin class-name">test</span> <span class="token punctuation">(</span>ext:test/06_test_runner.js:593:7<span class="token punctuation">)</span>
+
+<span class="token builtin class-name">test</span> result: FAILED. <span class="token number">0</span> passed<span class="token punctuation">;</span> <span class="token number">1</span> failed<span class="token punctuation">;</span> <span class="token number">0</span> ignored<span class="token punctuation">;</span> <span class="token number">0</span> measured<span class="token punctuation">;</span> <span class="token number">0</span> filtered out <span class="token punctuation">(</span>3ms<span class="token punctuation">)</span>
+</code></pre>
+
+      <button id="copy-button-47" class="copyButton" data-copy="running 1 test from ./hello_test.ts
+basic addition test ... FAILED (3ms)
+
+failures:
+
+basic addition test => ./hello_test.ts:12:3
+error: AssertionError: Values are not equal:
+    
+    [Diff] Actual / Expected
+    
+    -   -1
+    +   3
+
+  at assertEquals (https://jsr.io/@std/assert@0.218.2/assert_equals.ts:31:9)
+  at Object.fn (file:///path/to/hello_test.ts:12:3)
+  at asyncOpSanitizer (ext:core/01_core.js:199:13)
+  at Object.sanitizeOps (ext:core/01_core.js:219:15)
+  at runTest (ext:test/06_test_runner.js:319:29)
+  at test (ext:test/06_test_runner.js:593:7)
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out (3ms)
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>This clear feedback helps you quickly identify and fix issues in your code.</p>
+<h2 id="test-structure-and-organization" tabindex="-1">Test structure and organization <a class="header-anchor" href="#test-structure-and-organization"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno will automatically find and run tests that match naming patterns like
+<code>*_test.{ts,js,mjs,jsx,tsx}</code> or <code>*.test.{ts,js,mjs,jsx,tsx}</code>. There are plenty
+of ways to organize your test files, we recommend co-locating your unit tests
+with the code they are testing, and keeping integration tests and configuration
+in a <code>tests</code> directory. This allows for immediate discovery of unit tests and
+simplified imports, while keeping a separation between different types of tests.</p>
+<p>Here's an example of how you might structure your project with tests:</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">my-deno-project/
+├── src/
+│   ├── models/
+│   │   ├── user.ts
+│   │   ├── user_test.ts          // Unit tests <span class="token keyword">for</span> user model
+│   │   ├── product.ts
+│   │   └── product_test.ts       // Unit tests <span class="token keyword">for</span> product model
+│   ├── services/
+│   │   ├── auth-service.ts
+│   │   ├── auth-service_test.ts  // Unit tests <span class="token keyword">for</span> auth <span class="token function">service</span>
+│   │   ├── data-service.ts
+│   │   └── data-service_test.ts  // Unit tests <span class="token keyword">for</span> data <span class="token function">service</span>
+│   └── utils/
+│       ├── helpers.ts
+│       └── helpers_test.ts       // Unit tests <span class="token keyword">for</span> helpers
+├── tests/
+│   ├── integration/              // Integration tests directory
+│   │   ├── api_test.ts           // Tests API endpoints
+│   │   └── db_test.ts            // Tests database interactions
+│   ├── e2e/                      // End-to-end tests
+│   │   └── user_flow_test.ts     // Tests complete user workflows
+│   └── fixtures/                 // Shared <span class="token builtin class-name">test</span> data and utilities
+│       ├── test_data.ts          // Test data used across tests
+│       └── setup.ts              // Common setup functions
+├── main.ts
+└── deno.json                     // Project configuration
+</code></pre>
+
+      <button id="copy-button-60" class="copyButton" data-copy="my-deno-project/
+├── src/
+│   ├── models/
+│   │   ├── user.ts
+│   │   ├── user_test.ts          // Unit tests for user model
+│   │   ├── product.ts
+│   │   └── product_test.ts       // Unit tests for product model
+│   ├── services/
+│   │   ├── auth-service.ts
+│   │   ├── auth-service_test.ts  // Unit tests for auth service
+│   │   ├── data-service.ts
+│   │   └── data-service_test.ts  // Unit tests for data service
+│   └── utils/
+│       ├── helpers.ts
+│       └── helpers_test.ts       // Unit tests for helpers
+├── tests/
+│   ├── integration/              // Integration tests directory
+│   │   ├── api_test.ts           // Tests API endpoints
+│   │   └── db_test.ts            // Tests database interactions
+│   ├── e2e/                      // End-to-end tests
+│   │   └── user_flow_test.ts     // Tests complete user workflows
+│   └── fixtures/                 // Shared test data and utilities
+│       ├── test_data.ts          // Test data used across tests
+│       └── setup.ts              // Common setup functions
+├── main.ts
+└── deno.json                     // Project configuration
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>This kind of structure offers a centralized place for test configuration while
+maintaining the benefits of co-locating unit tests with their relevant files.
+With this structure, you can:</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># Run all tests</span>
+deno <span class="token builtin class-name">test</span>
+
+<span class="token comment"># Run only unit tests</span>
+deno <span class="token builtin class-name">test</span> src/
+
+<span class="token comment"># Run only integration tests</span>
+deno <span class="token builtin class-name">test</span> tests/integration/
+
+<span class="token comment"># Run specific module tests</span>
+deno <span class="token builtin class-name">test</span> src/models/
+
+<span class="token comment"># Run a specific test file</span>
+deno <span class="token builtin class-name">test</span> src/models/user_test.ts
+</code></pre>
+
+      <button id="copy-button-64" class="copyButton" data-copy="# Run all tests
+deno test
+
+# Run only unit tests
+deno test src/
+
+# Run only integration tests
+deno test tests/integration/
+
+# Run specific module tests
+deno test src/models/
+
+# Run a specific test file
+deno test src/models/user_test.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="assertions" tabindex="-1">Assertions <a class="header-anchor" href="#assertions"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Assertions are the building blocks of effective tests, allowing you to verify
+that your code behaves as expected. They check if a specific condition is true
+and throw an error if it's not, causing the test to fail. Good assertions are
+clear, specific, and help identify exactly what went wrong when a test fails.</p>
+<p>Deno doesn't include assertions in its core library, but you can import them
+from the <a href="https://jsr.io/@std/assert">Deno standard library</a>:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span>
+  assertArrayIncludes<span class="token punctuation">,</span> <span class="token comment">// Check that array contains value</span>
+  assertEquals<span class="token punctuation">,</span> <span class="token comment">// Check that values are equal</span>
+  assertExists<span class="token punctuation">,</span> <span class="token comment">// Check that value is not null or undefined</span>
+  assertMatch<span class="token punctuation">,</span> <span class="token comment">// Check that string matches regex pattern</span>
+  assertNotEquals<span class="token punctuation">,</span> <span class="token comment">// Check that values are not equal</span>
+  assertObjectMatch<span class="token punctuation">,</span> <span class="token comment">// Check that object has expected properties</span>
+  assertRejects<span class="token punctuation">,</span> <span class="token comment">// Check that Promise rejects</span>
+  assertStrictEquals<span class="token punctuation">,</span> <span class="token comment">// Check that values are strictly equal (===)</span>
+  assertStringIncludes<span class="token punctuation">,</span> <span class="token comment">// Check that string contains substring</span>
+  assertThrows<span class="token punctuation">,</span> <span class="token comment">// Check that function throws an error</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"assertion examples"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Basic assertions</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertNotEquals</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">,</span> <span class="token string">"world"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertExists</span><span class="token punctuation">(</span><span class="token string">"Hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// String assertions</span>
+  <span class="token function">assertStringIncludes</span><span class="token punctuation">(</span><span class="token string">"Hello, world!"</span><span class="token punctuation">,</span> <span class="token string">"world"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertMatch</span><span class="token punctuation">(</span><span class="token string">"deno@1.0.0"</span><span class="token punctuation">,</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">^deno@\d+\.\d+\.\d+$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Object assertions</span>
+  <span class="token function">assertObjectMatch</span><span class="token punctuation">(</span>
+    <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Jane"</span><span class="token punctuation">,</span> age<span class="token operator">:</span> <span class="token number">25</span><span class="token punctuation">,</span> city<span class="token operator">:</span> <span class="token string">"Tokyo"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Jane"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token comment">// Only checks specified properties</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Strict equality (type + value)</span>
+  <span class="token function">assertStrictEquals</span><span class="token punctuation">(</span><span class="token string">"deno"</span><span class="token punctuation">,</span> <span class="token string">"deno"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Error assertions</span>
+  <span class="token function">assertThrows</span><span class="token punctuation">(</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Something went wrong"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    Error<span class="token punctuation">,</span>
+    <span class="token string">"Something went wrong"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-74" class="copyButton" data-copy="import {
+  assertArrayIncludes, // Check that array contains value
+  assertEquals, // Check that values are equal
+  assertExists, // Check that value is not null or undefined
+  assertMatch, // Check that string matches regex pattern
+  assertNotEquals, // Check that values are not equal
+  assertObjectMatch, // Check that object has expected properties
+  assertRejects, // Check that Promise rejects
+  assertStrictEquals, // Check that values are strictly equal (===)
+  assertStringIncludes, // Check that string contains substring
+  assertThrows, // Check that function throws an error
+} from &quot;jsr:@std/assert&quot;;
+
+Deno.test(&quot;assertion examples&quot;, () => {
+  // Basic assertions
+  assertEquals(1 + 1, 2);
+  assertNotEquals(&quot;hello&quot;, &quot;world&quot;);
+  assertExists(&quot;Hello&quot;);
+
+  // String assertions
+  assertStringIncludes(&quot;Hello, world!&quot;, &quot;world&quot;);
+  assertMatch(&quot;deno@1.0.0&quot;, /^deno@\d+\.\d+\.\d+$/);
+
+  // Object assertions
+  assertObjectMatch(
+    { name: &quot;Jane&quot;, age: 25, city: &quot;Tokyo&quot; },
+    { name: &quot;Jane&quot; }, // Only checks specified properties
+  );
+
+  // Strict equality (type + value)
+  assertStrictEquals(&quot;deno&quot;, &quot;deno&quot;);
+
+  // Error assertions
+  assertThrows(
+    () => {
+      throw new Error(&quot;Something went wrong&quot;);
+    },
+    Error,
+    &quot;Something went wrong&quot;,
+  );
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>For those that prefer fluent assertions (familiar to users of Jest), you can use
+the <code>expect</code> module:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> expect <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/expect"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"expect style assertions"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Basic matchers</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"deno"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEqual</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"deno"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Collection matchers</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toContain</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Truthiness matchers</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeTruthy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeFalsy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeNull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token keyword">undefined</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeUndefined</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Number matchers</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeGreaterThan</span><span class="token punctuation">(</span><span class="token number">99</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBeLessThan</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// String matchers</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token string">"Hello world"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toMatch</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">world</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Function/error matchers</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"fail"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toThrow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-78" class="copyButton" data-copy="import { expect } from &quot;jsr:@std/expect&quot;;
+
+Deno.test(&quot;expect style assertions&quot;, () => {
+  // Basic matchers
+  expect(5).toBe(5);
+  expect({ name: &quot;deno&quot; }).toEqual({ name: &quot;deno&quot; });
+
+  // Collection matchers
+  expect([1, 2, 3]).toContain(2);
+
+  // Truthiness matchers
+  expect(true).toBeTruthy();
+  expect(0).toBeFalsy();
+  expect(null).toBeNull();
+  expect(undefined).toBeUndefined();
+
+  // Number matchers
+  expect(100).toBeGreaterThan(99);
+  expect(1).toBeLessThan(2);
+
+  // String matchers
+  expect(&quot;Hello world&quot;).toMatch(/world/);
+
+  // Function/error matchers
+  expect(() => {
+    throw new Error(&quot;fail&quot;);
+  }).toThrow();
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="real-world-example" tabindex="-1">Real-world Example <a class="header-anchor" href="#real-world-example"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Here's a more realistic example testing a function that processes user data:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// user_processor.ts</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">validateUser</span><span class="token punctuation">(</span>user<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> valid<span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span> errors<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">}</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> errors<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">.</span>name <span class="token operator">||</span> <span class="token keyword">typeof</span> user<span class="token punctuation">.</span>name <span class="token operator">!==</span> <span class="token string">"string"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    errors<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">"Name is required and must be a string"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>user<span class="token punctuation">.</span>email <span class="token operator">||</span> <span class="token operator">!</span>user<span class="token punctuation">.</span>email<span class="token punctuation">.</span><span class="token function">includes</span><span class="token punctuation">(</span><span class="token string">"@"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    errors<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">"Valid email is required"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>
+    user<span class="token punctuation">.</span>age <span class="token operator">!==</span> <span class="token keyword">undefined</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token keyword">typeof</span> user<span class="token punctuation">.</span>age <span class="token operator">!==</span> <span class="token string">"number"</span> <span class="token operator">||</span> user<span class="token punctuation">.</span>age <span class="token operator">&lt;</span> <span class="token number">18</span><span class="token punctuation">)</span>
+  <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    errors<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">"Age must be a number and at least 18"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    valid<span class="token operator">:</span> errors<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    errors<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// user_processor_test.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> validateUser <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./user_processor.ts"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"validateUser"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">await</span> t<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token string">"should validate a correct user object"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token punctuation">{</span>
+      name<span class="token operator">:</span> <span class="token string">"John Doe"</span><span class="token punctuation">,</span>
+      email<span class="token operator">:</span> <span class="token string">"john@example.com"</span><span class="token punctuation">,</span>
+      age<span class="token operator">:</span> <span class="token number">30</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">validateUser</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>valid<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">.</span>length<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> t<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token string">"should return errors for invalid user"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token punctuation">{</span>
+      name<span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+      email<span class="token operator">:</span> <span class="token string">"invalid-email"</span><span class="token punctuation">,</span>
+      age<span class="token operator">:</span> <span class="token number">16</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">validateUser</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>valid<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">.</span>length<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"Name is required and must be a string"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"Valid email is required"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"Age must be a number and at least 18"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> t<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token string">"should handle missing properties"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token punctuation">{</span>
+      name<span class="token operator">:</span> <span class="token string">"Jane Doe"</span><span class="token punctuation">,</span>
+      <span class="token comment">// email and age missing</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">validateUser</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>valid<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">.</span>length<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>errors<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"Valid email is required"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-85" class="copyButton" data-copy="// user_processor.ts
+export function validateUser(user: any): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
+
+  if (!user.name || typeof user.name !== &quot;string&quot;) {
+    errors.push(&quot;Name is required and must be a string&quot;);
+  }
+
+  if (!user.email || !user.email.includes(&quot;@&quot;)) {
+    errors.push(&quot;Valid email is required&quot;);
+  }
+
+  if (
+    user.age !== undefined && (typeof user.age !== &quot;number&quot; || user.age < 18)
+  ) {
+    errors.push(&quot;Age must be a number and at least 18&quot;);
+  }
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}
+
+// user_processor_test.ts
+import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { validateUser } from &quot;./user_processor.ts&quot;;
+
+Deno.test(&quot;validateUser&quot;, async (t) => {
+  await t.step(&quot;should validate a correct user object&quot;, () => {
+    const user = {
+      name: &quot;John Doe&quot;,
+      email: &quot;john@example.com&quot;,
+      age: 30,
+    };
+
+    const result = validateUser(user);
+    assertEquals(result.valid, true);
+    assertEquals(result.errors.length, 0);
+  });
+
+  await t.step(&quot;should return errors for invalid user&quot;, () => {
+    const user = {
+      name: &quot;&quot;,
+      email: &quot;invalid-email&quot;,
+      age: 16,
+    };
+
+    const result = validateUser(user);
+    assertEquals(result.valid, false);
+    assertEquals(result.errors.length, 3);
+    assertEquals(result.errors[0], &quot;Name is required and must be a string&quot;);
+    assertEquals(result.errors[1], &quot;Valid email is required&quot;);
+    assertEquals(result.errors[2], &quot;Age must be a number and at least 18&quot;);
+  });
+
+  await t.step(&quot;should handle missing properties&quot;, () => {
+    const user = {
+      name: &quot;Jane Doe&quot;,
+      // email and age missing
+    };
+
+    const result = validateUser(user);
+    assertEquals(result.valid, false);
+    assertEquals(result.errors.length, 1);
+    assertEquals(result.errors[0], &quot;Valid email is required&quot;);
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="async-testing" tabindex="-1">Async testing <a class="header-anchor" href="#async-testing"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno handles async tests naturally. Just make your test function async and use
+await:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"async test example"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> status <span class="token operator">=</span> response<span class="token punctuation">.</span>status<span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>status<span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-92" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+
+Deno.test(&quot;async test example&quot;, async () => {
+  const response = await fetch(&quot;https://deno.land&quot;);
+  const status = response.status;
+  assertEquals(status, 200);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="testing-async-functions" tabindex="-1">Testing async functions <a class="header-anchor" href="#testing-async-functions"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>When testing functions that return promises, you should always await the result:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// async-function.ts</span>
+<span class="token keyword">export</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">fetchUserData</span><span class="token punctuation">(</span>userId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">https://api.example.com/users/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>userId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>response<span class="token punctuation">.</span>ok<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Failed to fetch user: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>response<span class="token punctuation">.</span>status<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// async-function_test.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals<span class="token punctuation">,</span> assertRejects <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> fetchUserData <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./async-function.ts"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"fetchUserData success"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Mock the fetch function for testing</span>
+  globalThis<span class="token punctuation">.</span><span class="token function-variable function">fetch</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span><span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token string">"123"</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"Test User"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> <span class="token punctuation">{</span> status<span class="token operator">:</span> <span class="token number">200</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> userData <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetchUserData</span><span class="token punctuation">(</span><span class="token string">"123"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>userData<span class="token punctuation">.</span>id<span class="token punctuation">,</span> <span class="token string">"123"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>userData<span class="token punctuation">.</span>name<span class="token punctuation">,</span> <span class="token string">"Test User"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"fetchUserData failure"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Mock the fetch function to simulate an error</span>
+  globalThis<span class="token punctuation">.</span><span class="token function-variable function">fetch</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token string">"Not Found"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> status<span class="token operator">:</span> <span class="token number">404</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> <span class="token function">assertRejects</span><span class="token punctuation">(</span>
+    <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">await</span> <span class="token function">fetchUserData</span><span class="token punctuation">(</span><span class="token string">"nonexistent"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    Error<span class="token punctuation">,</span>
+    <span class="token string">"Failed to fetch user: 404"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-99" class="copyButton" data-copy="// async-function.ts
+export async function fetchUserData(userId: string) {
+  const response = await fetch(`https://api.example.com/users/${userId}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user: ${response.status}`);
+  }
+  return await response.json();
+}
+
+// async-function_test.ts
+import { assertEquals, assertRejects } from &quot;jsr:@std/assert&quot;;
+import { fetchUserData } from &quot;./async-function.ts&quot;;
+
+Deno.test(&quot;fetchUserData success&quot;, async () => {
+  // Mock the fetch function for testing
+  globalThis.fetch = async (url: string) => {
+    const data = JSON.stringify({ id: &quot;123&quot;, name: &quot;Test User&quot; });
+    return new Response(data, { status: 200 });
+  };
+
+  const userData = await fetchUserData(&quot;123&quot;);
+  assertEquals(userData.id, &quot;123&quot;);
+  assertEquals(userData.name, &quot;Test User&quot;);
+});
+
+Deno.test(&quot;fetchUserData failure&quot;, async () => {
+  // Mock the fetch function to simulate an error
+  globalThis.fetch = async (url: string) => {
+    return new Response(&quot;Not Found&quot;, { status: 404 });
+  };
+
+  await assertRejects(
+    async () => await fetchUserData(&quot;nonexistent&quot;),
+    Error,
+    &quot;Failed to fetch user: 404&quot;,
+  );
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="mocking-in-tests" tabindex="-1">Mocking in tests <a class="header-anchor" href="#mocking-in-tests"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Mocking is an essential technique for isolating the code being tested from its
+dependencies. Deno provides built-in utilities and third-party libraries for
+creating mocks.</p>
+<h3 id="basic-mocking" tabindex="-1">Basic Mocking <a class="header-anchor" href="#basic-mocking"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>You can create simple mocks by
+<a href="/examples/mocking_tutorial/">replacing functions or objects with your own
+implementations</a>. This allows you to control the
+behavior of dependencies and test how your code interacts with them.</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// Example of a module with a function we want to mock</span>
+<span class="token keyword">const</span> api <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token function-variable function">fetchData</span><span class="token operator">:</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">"https://api.example.com/data"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> response<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment">// In your test file</span>
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"basic mocking example"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Store the original function</span>
+  <span class="token keyword">const</span> originalFetchData <span class="token operator">=</span> api<span class="token punctuation">.</span>fetchData<span class="token punctuation">;</span>
+
+  <span class="token comment">// Replace with mock implementation</span>
+  api<span class="token punctuation">.</span><span class="token function-variable function">fetchData</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"Test Data"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Test using the mock</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> api<span class="token punctuation">.</span><span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"Test Data"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// Restore the original function</span>
+    api<span class="token punctuation">.</span>fetchData <span class="token operator">=</span> originalFetchData<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-112" class="copyButton" data-copy="// Example of a module with a function we want to mock
+const api = {
+  fetchData: async () => {
+    const response = await fetch(&quot;https://api.example.com/data&quot;);
+    return response.json();
+  },
+};
+
+// In your test file
+Deno.test(&quot;basic mocking example&quot;, async () => {
+  // Store the original function
+  const originalFetchData = api.fetchData;
+
+  // Replace with mock implementation
+  api.fetchData = async () => {
+    return { id: 1, name: &quot;Test Data&quot; };
+  };
+
+  try {
+    // Test using the mock
+    const result = await api.fetchData();
+    assertEquals(result, { id: 1, name: &quot;Test Data&quot; });
+  } finally {
+    // Restore the original function
+    api.fetchData = originalFetchData;
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="using-spy-functions" tabindex="-1">Using Spy Functions <a class="header-anchor" href="#using-spy-functions"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Spies allow you to track function calls without changing their behavior:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> spy <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"spy example"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Create a spy on console.log</span>
+  <span class="token keyword">const</span> consoleSpy <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span><span class="token builtin">console</span><span class="token punctuation">,</span> <span class="token string">"log"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Call the function we're spying on</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"World"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Verify the function was called correctly</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>consoleSpy<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>consoleSpy<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>args<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"Hello"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>consoleSpy<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>args<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"World"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Restore the original function</span>
+  consoleSpy<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-119" class="copyButton" data-copy="import { spy } from &quot;jsr:@std/testing/mock&quot;;
+
+Deno.test(&quot;spy example&quot;, () => {
+  // Create a spy on console.log
+  const consoleSpy = spy(console, &quot;log&quot;);
+
+  // Call the function we&apos;re spying on
+  console.log(&quot;Hello&quot;);
+  console.log(&quot;World&quot;);
+
+  // Verify the function was called correctly
+  assertEquals(consoleSpy.calls.length, 2);
+  assertEquals(consoleSpy.calls[0].args, [&quot;Hello&quot;]);
+  assertEquals(consoleSpy.calls[1].args, [&quot;World&quot;]);
+
+  // Restore the original function
+  consoleSpy.restore();
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>For more advanced mocking techniques, check our
+<a href="/examples/mocking_tutorial/">dedicated guide on mocking in Deno</a>.</p>
+<h2 id="coverage" tabindex="-1">Coverage <a class="header-anchor" href="#coverage"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Code coverage is a metric that helps you understand how much of your code is
+being tested. It measures which lines, functions, and branches of your code are
+executed during your tests, giving you insight into areas that might lack proper
+testing.</p>
+<p>Coverage analysis helps you to:</p>
+<ul>
+<li>Identify untested parts of your codebase</li>
+<li>Ensure critical paths have tests</li>
+<li>Prevent regressions when making changes</li>
+<li>Measure testing progress over time</li>
+</ul>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>High coverage doesn't guarantee high-quality tests. It simply shows what code
+was executed, not whether your assertions are meaningful or if edge cases are
+handled correctly.</p>
+<p>
+</div>
+</p>
+<p>Deno provides built-in coverage tools to help you analyze your test coverage. To
+collect coverage information:</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno <span class="token builtin class-name">test</span> <span class="token parameter variable">--coverage</span><span class="token operator">=</span>coverage_dir
+</code></pre>
+
+      <button id="copy-button-166" class="copyButton" data-copy="deno test --coverage=coverage_dir
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>This generates coverage data in a specified directory (here, <code>coverage_dir</code>). To
+view a human-readable report:</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno coverage coverage_dir
+</code></pre>
+
+      <button id="copy-button-170" class="copyButton" data-copy="deno coverage coverage_dir
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>You'll see output like:</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">file:///projects/my-project/src/utils.ts <span class="token number">85.7</span>% <span class="token punctuation">(</span><span class="token number">6</span>/7<span class="token punctuation">)</span>
+file:///projects/my-project/src/models/user.ts <span class="token number">100.0</span>% <span class="token punctuation">(</span><span class="token number">15</span>/15<span class="token punctuation">)</span>
+file:///projects/my-project/src/services/auth.ts <span class="token number">78.3</span>% <span class="token punctuation">(</span><span class="token number">18</span>/23<span class="token punctuation">)</span>
+
+total: <span class="token number">87.5</span>% <span class="token punctuation">(</span><span class="token number">39</span>/45<span class="token punctuation">)</span>
+</code></pre>
+
+      <button id="copy-button-174" class="copyButton" data-copy="file:///projects/my-project/src/utils.ts 85.7% (6/7)
+file:///projects/my-project/src/models/user.ts 100.0% (15/15)
+file:///projects/my-project/src/services/auth.ts 78.3% (18/23)
+
+total: 87.5% (39/45)
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>For more detailed insights, you can also generate an HTML report:</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno coverage <span class="token parameter variable">--html</span> coverage_dir
+</code></pre>
+
+      <button id="copy-button-178" class="copyButton" data-copy="deno coverage --html coverage_dir
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>This creates an interactive HTML report in the specified directory that shows
+exactly which lines are covered and which are not.</p>
+<p>By default, the coverage tool automatically excludes:</p>
+<ul>
+<li>Test files (matching patterns like <code>test.ts</code> or <code>test.js</code>)</li>
+<li>Remote files (those not starting with <code>file:</code>)</li>
+</ul>
+<p>This ensures your coverage reports focus on your application code rather than
+test files or external dependencies.</p>
+<h3 id="coverage-configuration" tabindex="-1">Coverage Configuration <a class="header-anchor" href="#coverage-configuration"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>You can exclude files from coverage reports by using the <code>--exclude</code> flag:</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno coverage <span class="token parameter variable">--exclude</span><span class="token operator">=</span><span class="token string">"test_,vendor/,_build/,node_modules/"</span> coverage_dir
+</code></pre>
+
+      <button id="copy-button-206" class="copyButton" data-copy="deno coverage --exclude=&quot;test_,vendor/,_build/,node_modules/&quot; coverage_dir
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="integrating-with-ci" tabindex="-1">Integrating with CI <a class="header-anchor" href="#integrating-with-ci"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>For continuous integration environments, you might want to enforce a minimum
+coverage threshold:</p>
+<div class="relative"><pre><code class="highlight notranslate language-yaml"># In your GitHub Actions workflow
+- name: Run tests with coverage
+  run: deno test --coverage=coverage_dir
+
+- name: Check coverage meets threshold
+  run: |
+    COVERAGE=$(deno coverage coverage_dir | grep "total:" | grep -o '[0-9]\+\.[0-9]\+')
+    if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+      echo "Test coverage is below 80%: $COVERAGE%"
+      exit 1
+    fi
+</code></pre>
+
+      <button id="copy-button-213" class="copyButton" data-copy="# In your GitHub Actions workflow
+- name: Run tests with coverage
+  run: deno test --coverage=coverage_dir
+
+- name: Check coverage meets threshold
+  run: |
+    COVERAGE=$(deno coverage coverage_dir | grep &quot;total:&quot; | grep -o &apos;[0-9]\+\.[0-9]\+&apos;)
+    if (( $(echo &quot;$COVERAGE < 80&quot; | bc -l) )); then
+      echo &quot;Test coverage is below 80%: $COVERAGE%&quot;
+      exit 1
+    fi
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>When working on your test coverage, remember to set realistic goals, aim for
+meaningful coverage with high quality tests over 100% coverage.</p>
+<h2 id="comparison-with-other-testing-frameworks" tabindex="-1">Comparison with other testing frameworks <a class="header-anchor" href="#comparison-with-other-testing-frameworks"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>If you're coming from other JavaScript testing frameworks, here's how Deno's
+testing capabilities compare:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Deno</th>
+<th>Jest</th>
+<th>Mocha</th>
+<th>Jasmine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>Built-in</td>
+<td>Requires installation</td>
+<td>Requires installation</td>
+<td>Requires installation</td>
+</tr>
+<tr>
+<td>Syntax</td>
+<td><code>Deno.test()</code></td>
+<td><code>test()</code>, <code>describe()</code></td>
+<td><code>it()</code>, <code>describe()</code></td>
+<td><code>it()</code>, <code>describe()</code></td>
+</tr>
+<tr>
+<td>Assertions</td>
+<td>From std library</td>
+<td>Built-in expect</td>
+<td>Requires assertion library</td>
+<td>Built-in expect</td>
+</tr>
+<tr>
+<td>Mocking</td>
+<td>From std library</td>
+<td>Built-in jest.mock()</td>
+<td>Requires sinon or similar</td>
+<td>Built-in spies</td>
+</tr>
+<tr>
+<td>Async support</td>
+<td>Native</td>
+<td>Needs special handling</td>
+<td>Supports promises</td>
+<td>Supports promises</td>
+</tr>
+<tr>
+<td>File watching</td>
+<td><code>--watch</code> flag</td>
+<td>watch mode</td>
+<td>Requires nodemon</td>
+<td>Requires extra tools</td>
+</tr>
+<tr>
+<td>Code coverage</td>
+<td>Built-in</td>
+<td>Built-in</td>
+<td>Requires istanbul</td>
+<td>Requires istanbul</td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing-style-comparison" tabindex="-1">Testing Style Comparison <a class="header-anchor" href="#testing-style-comparison"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><strong>Deno:</strong></p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"add function"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-371" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+
+Deno.test(&quot;add function&quot;, () => {
+  assertEquals(1 + 2, 3);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>Jest:</strong></p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"add function"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token function">expect</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-375" class="copyButton" data-copy="test(&quot;add function&quot;, () => {
+  expect(1 + 2).toBe(3);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>Mocha:</strong></p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assert <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"chai"</span><span class="token punctuation">;</span>
+
+<span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">"math"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">"should add numbers"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    assert<span class="token punctuation">.</span><span class="token function">equal</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-379" class="copyButton" data-copy="import { assert } from &quot;chai&quot;;
+
+describe(&quot;math&quot;, () => {
+  it(&quot;should add numbers&quot;, () => {
+    assert.equal(1 + 2, 3);
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>Jasmine:</strong></p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token function">describe</span><span class="token punctuation">(</span><span class="token string">"math"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token function">it</span><span class="token punctuation">(</span><span class="token string">"should add numbers"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token function">expect</span><span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toBe</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-383" class="copyButton" data-copy="describe(&quot;math&quot;, () => {
+  it(&quot;should add numbers&quot;, () => {
+    expect(1 + 2).toBe(3);
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="next-steps" tabindex="-1">Next steps <a class="header-anchor" href="#next-steps"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>🦕 Deno's built-in testing capabilities make it easy to write and run tests
+without needing to install extra testing frameworks or tools. By following the
+patterns and practices outlined in this tutorial, you can ensure your Deno
+applications are well-tested and reliable.</p>
+<p>For more information about testing in Deno, check out:</p>
+<ul>
+<li><a href="/runtime/fundamentals/testing">Testing documentation</a></li>
+<li><a href="/examples/mocking_tutorial/">Mocking data for tests</a></li>
+<li><a href="/examples/benchmarking/">Writing benchmark tests</a></li>
+</ul>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/examples/tutorials/testing.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#why-testing-matters" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Why testing matters </a></li><li class="m-2 leading-4"><a href="#writing-tests-with-deno.test" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Writing tests with Deno.test </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#a-simple-example-test" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">A simple example test </a></li></ul></li><li class="m-2 leading-4"><a href="#test-structure-and-organization" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Test structure and organization </a></li><li class="m-2 leading-4"><a href="#assertions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Assertions </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#real-world-example" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Real-world Example </a></li></ul></li><li class="m-2 leading-4"><a href="#async-testing" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Async testing </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#testing-async-functions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing async functions </a></li></ul></li><li class="m-2 leading-4"><a href="#mocking-in-tests" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Mocking in tests </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#basic-mocking" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Basic Mocking </a></li><li class="m-2 leading-4"><a href="#using-spy-functions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Using Spy Functions </a></li></ul></li><li class="m-2 leading-4"><a href="#coverage" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Coverage </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#coverage-configuration" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Coverage Configuration </a></li><li class="m-2 leading-4"><a href="#integrating-with-ci" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Integrating with CI </a></li></ul></li><li class="m-2 leading-4"><a href="#comparison-with-other-testing-frameworks" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Comparison with other testing frameworks </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#testing-style-comparison" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing Style Comparison </a></li></ul></li><li class="m-2 leading-4"><a href="#next-steps" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Next steps </a></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Snapshot testing - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="Snapshot testing"/><meta name="twitter:description" content="Learn how to use snapshot testing in Deno to compare outputs against recorded references, making it easier to detect unintended changes in your code"/><meta name="twitter:image" content="https://docs.deno.com/examples/snapshot_tutorial/index.png"/><meta name="twitter:image:alt" content="Learn how to use snapshot testing in Deno to compare outputs against recorded references, making it easier to detect unintended changes in your code"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="Snapshot testing"/><meta property="og:description" content="Learn how to use snapshot testing in Deno to compare outputs against recorded references, making it easier to detect unintended changes in your code"/><meta property="og:image" content="https://docs.deno.com/examples/snapshot_tutorial/index.png"/><meta property="og:image:alt" content="Learn how to use snapshot testing in Deno to compare outputs against recorded references, making it easier to detect unintended changes in your code"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined" data-active="true">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="examples" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link" data-active="true">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">基础</span></h2><ul class="sub-nav"><li><a href="/examples/what_is_deno/" class="sub-nav-link blocklink">什么是 Deno？</a></li><li><a href="/examples/run_script_tutorial/" class="sub-nav-link blocklink">运行脚本</a></li><li><a href="/examples/hello_world/" class="sub-nav-link blocklink">你好，世界</a></li><li><a href="/examples/typescript_support/" class="sub-nav-link blocklink">内置 TypeScript 支持</a></li><li><a href="/examples/deno_dev_environment/" class="sub-nav-link blocklink">你的 Deno 开发环境</a></li><li><a href="/examples/initialize_project_tutorial/" class="sub-nav-link blocklink">初始化项目</a></li><li><a href="/examples/hashbang_tutorial/" class="sub-nav-link blocklink">可执行脚本</a></li><li><a href="/examples/all-in-one_tooling/" class="sub-nav-link blocklink">一体化工具</a></li><li><a href="/examples/configuration_with_deno_json/" class="sub-nav-link blocklink">使用 deno.json 进行任务和配置</a></li><li><a href="/examples/top_level_await/" class="sub-nav-link blocklink">顶级 await</a></li><li><a href="/examples/cjs_to_esm_tutorial/" class="sub-nav-link blocklink">从 CommonJS 更新到 ESM</a></li><li><a href="/examples/import_export/" class="sub-nav-link blocklink">导入和导出函数</a></li><li><a href="/examples/interoperability_with_nodejs/" class="sub-nav-link blocklink">与 Node.js 的互操作性</a></li><li><a href="/examples/intro_to_deno_apis/" class="sub-nav-link blocklink">Deno API 简介</a></li><li><a href="/examples/file_server_tutorial/" class="sub-nav-link blocklink">简单文件服务器</a></li><li><a href="/examples/deno_fmt/" class="sub-nav-link blocklink">使用 Deno fmt 格式化</a></li><li><a href="/examples/deno_bench/" class="sub-nav-link blocklink">使用 Deno bench 进行基准测试</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">模块和包管理</span></h2><ul class="sub-nav"><li><a href="/examples/node_built_in/" class="sub-nav-link blocklink">使用 Node.js 的内置模块</a></li><li><a href="/examples/npm/" class="sub-nav-link blocklink">从 npm 导入模块</a></li><li><a href="/examples/backward_compat_with_node_npm/" class="sub-nav-link blocklink">与 Node &amp; npm 的兼容性</a></li><li><a href="/examples/esmodules/" class="sub-nav-link blocklink">ECMAScript 模块</a></li><li><a href="/examples/publishing_modules_with_jsr/" class="sub-nav-link blocklink">发布模块与 JSR</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Web 标准 API</span></h2><ul class="sub-nav"><li><a href="/examples/browser_apis_in_deno/" class="sub-nav-link blocklink">Deno 中的浏览器 API</a></li><li><a href="/examples/debugging_with_console_tutorial/" class="sub-nav-link blocklink">通过控制台 API 更好的调试</a></li><li><a href="/examples/url_parsing/" class="sub-nav-link blocklink">操作和解析 URL</a></li><li><a href="/examples/fetch_data_tutorial/" class="sub-nav-link blocklink">获取和流式数据</a></li><li><a href="/examples/timers/" class="sub-nav-link blocklink">设置超时和间隔</a></li><li><a href="/examples/color_logging/" class="sub-nav-link blocklink">带颜色的日志记录</a></li><li><a href="/examples/web_workers/" class="sub-nav-link blocklink">Web Workers</a></li><li><a href="/examples/webassembly/" class="sub-nav-link blocklink">Web Assembly</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Web 框架和库</span></h2><ul class="sub-nav"><li><a href="/examples/ts_jsx/" class="sub-nav-link blocklink">TypeScript 和 JSX</a></li><li><a href="/examples/react_tutorial/" class="sub-nav-link blocklink">构建一个 React 应用</a></li><li><a href="/examples/create_react_tutorial/" class="sub-nav-link blocklink">使用 create-vite 构建 React 应用</a></li><li><a href="/examples/next_tutorial/" class="sub-nav-link blocklink">构建一个 Next.js 应用</a></li><li><a href="https://fresh.deno.dev/docs/getting-started/create-a-project/" class="sub-nav-link blocklink">构建一个 Fresh 应用</a></li><li><a href="/examples/vue_tutorial/" class="sub-nav-link blocklink">构建一个 Vue 应用</a></li><li><a href="/examples/express_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Express</a></li><li><a href="/examples/apollo_tutorial/" class="sub-nav-link blocklink">如何在 Deno 中使用 Apollo</a></li><li><a href="/examples/astro_tutorial/" class="sub-nav-link blocklink">使用 Deno 构建 Astro 网站</a></li><li><a href="/examples/qwik_tutorial/" class="sub-nav-link blocklink">用 Deno 构建 Qwik 应用</a></li><li><a href="/examples/nuxt_tutorial/" class="sub-nav-link blocklink">用 Deno 构建 Nuxt 应用</a></li><li><a href="/examples/trpc_tutorial/" class="sub-nav-link blocklink">用 tRPC 和 Deno 构建类型安全 API</a></li><li><a href="/examples/build_api_server_ts/" class="sub-nav-link blocklink">用 TypeScript 构建 API 服务器</a></li><li><a href="/examples/vue_app_video/" class="sub-nav-link blocklink">构建一个 Vue 应用</a></li><li><a href="/examples/solidjs_tutorial/" class="sub-nav-link blocklink">构建一个 SolidJS 应用</a></li><li><a href="/examples/react_app_video/" class="sub-nav-link blocklink">构建一个 React 应用</a></li><li><a href="/examples/tanstack_tutorial/" class="sub-nav-link blocklink">Build a Tanstack app</a></li><li><a href="/examples/http_server_file_upload/" class="sub-nav-link blocklink">HTTP server file upload</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Testing</span></h2><ul class="sub-nav"><li><a href="/examples/writing_tests/" class="sub-nav-link blocklink">Writing tests</a></li><li><a href="/examples/testing_tutorial/" class="sub-nav-link blocklink">Basics of testing</a></li><li><a href="/examples/mocking_tutorial/" class="sub-nav-link blocklink">Mocking data in tests</a></li><li><a href="/examples/stubbing_tutorial/" class="sub-nav-link blocklink">Stubbing</a></li><li><a href="/examples/snapshot_tutorial/" class="sub-nav-link blocklink" data-active="true">Snapshot testing</a></li><li><a href="/examples/spy_functions/" class="sub-nav-link blocklink">Spy functions</a></li><li><a href="/examples/deno_test/" class="sub-nav-link blocklink">Getting started with Deno test</a></li><li><a href="/examples/deno_coverage/" class="sub-nav-link blocklink">Better testing with Deno coverage</a></li><li><a href="/examples/web_testing_tutorial/" class="sub-nav-link blocklink">Testing web applications</a></li><li><a href="/examples/bdd_tutorial/" class="sub-nav-link blocklink">BDD testing</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">OpenTelemetry</span></h2><ul class="sub-nav"><li><a href="/examples/basic_opentelemetry_tutorial/" class="sub-nav-link blocklink">Basic OpenTelemetry setup</a></li><li><a href="/examples/grafana_tutorial/" class="sub-nav-link blocklink">Export telemetry to Grafana</a></li><li><a href="/examples/hyperdx_tutorial/" class="sub-nav-link blocklink">Export telemetry to Hyperdx</a></li><li><a href="/examples/honeycomb_tutorial/" class="sub-nav-link blocklink">Export telemetry to Honeycomb</a></li><li><a href="/examples/otel_span_propagation_tutorial/" class="sub-nav-link blocklink">Span propagation</a></li><li><a href="/examples/deploy_otel_tutorial/" class="sub-nav-link blocklink">OpenTelemetry with Deno Deploy</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Deploying Deno projects</span></h2><ul class="sub-nav"><li><a href="/examples/deno_deploy_tutorial/" class="sub-nav-link blocklink">Deploy with Deno Deploy</a></li><li><a href="/examples/aws_lambda_tutorial/" class="sub-nav-link blocklink">AWS Lambda</a></li><li><a href="/examples/deploy_deno_to_aws_lambda/" class="sub-nav-link blocklink">将 Deno 部署到 AWS Lambda</a></li><li><a href="/examples/aws_lightsail_tutorial/" class="sub-nav-link blocklink">AWS Lightsail</a></li><li><a href="/examples/cloudflare_workers_tutorial/" class="sub-nav-link blocklink">Cloudflare Workers</a></li><li><a href="/examples/digital_ocean_tutorial/" class="sub-nav-link blocklink">Digital Ocean</a></li><li><a href="/examples/google_cloud_run_tutorial/" class="sub-nav-link blocklink">Google Cloud Run</a></li><li><a href="/examples/kinsta_tutorial/" class="sub-nav-link blocklink">Kinsta</a></li><li><a href="/examples/deploying_deno_with_docker/" class="sub-nav-link blocklink">使用 Docker 部署 Deno</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">连接到数据库</span></h2><ul class="sub-nav"><li><a href="/examples/connecting_to_databases_tutorial/" class="sub-nav-link blocklink">连接到数据库</a></li><li><a href="/examples/mysql2_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 MySQL2</a></li><li><a href="/examples/planetscale_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 PlanetScale</a></li><li><a href="/examples/redis_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Redis</a></li><li><a href="/examples/prisma_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Prisma</a></li><li><a href="/examples/drizzle_tutorial/" class="sub-nav-link blocklink">在 Deno 中使用 Drizzle</a></li><li><a href="/examples/mongoose_tutorial/" class="sub-nav-link blocklink">使用 Mongoose 和 MongoDB</a></li><li><a href="/examples/redis/" class="sub-nav-link blocklink">连接到 Redis</a></li><li><a href="/examples/postgres/" class="sub-nav-link blocklink">连接到 Postgres</a></li><li><a href="/examples/supabase/" class="sub-nav-link blocklink">连接到 Supabase</a></li><li><a href="/examples/mongo/" class="sub-nav-link blocklink">连接到 MongoDB</a></li><li><a href="/examples/sqlite/" class="sub-nav-link blocklink">连接到 SQLite</a></li><li><a href="/examples/mongoose/" class="sub-nav-link blocklink">连接到 Mongoose 和 MongoDB</a></li><li><a href="/examples/prisma/" class="sub-nav-link blocklink">连接到 Prisma</a></li><li><a href="/examples/duckdb/" class="sub-nav-link blocklink">连接到 DuckDB</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">编码</span></h2><ul class="sub-nav"><li><a href="/examples/hex_base64_encoding/" class="sub-nav-link blocklink">十六进制和 base64 编码</a></li><li><a href="/examples/parsing_serializing_toml/" class="sub-nav-link blocklink">解析和序列化 TOML</a></li><li><a href="/examples/importing_json/" class="sub-nav-link blocklink">导入 JSON</a></li><li><a href="/examples/parsing_serializing_csv/" class="sub-nav-link blocklink">解析和序列化 CSV</a></li><li><a href="/examples/parsing_serializing_json/" class="sub-nav-link blocklink">解析和序列化 JSON</a></li><li><a href="/examples/parsing_serializing_yaml/" class="sub-nav-link blocklink">解析和序列化 YAML</a></li><li><a href="/examples/byte_manipulation/" class="sub-nav-link blocklink">操作字节数组</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">命令行接口</span></h2><ul class="sub-nav"><li><a href="/examples/command_line_utility/" class="sub-nav-link blocklink">构建一个命令行工具</a></li><li><a href="/examples/prompts/" class="sub-nav-link blocklink">输入提示</a></li><li><a href="/examples/permissions/" class="sub-nav-link blocklink">权限管理</a></li><li><a href="/examples/command_line_arguments/" class="sub-nav-link blocklink">命令行参数</a></li><li><a href="/examples/deno_version/" class="sub-nav-link blocklink">获取 Deno 版本</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">网络</span></h2><ul class="sub-nav"><li><a href="/examples/http_requests/" class="sub-nav-link blocklink">HTTP 请求</a></li><li><a href="/examples/http_server/" class="sub-nav-link blocklink">HTTP 服务器：你好，世界</a></li><li><a href="/examples/http_server_routing/" class="sub-nav-link blocklink">HTTP 服务器：路由</a></li><li><a href="/examples/http_server_files/" class="sub-nav-link blocklink">HTTP 服务器：提供文件</a></li><li><a href="/examples/http_server_streaming/" class="sub-nav-link blocklink">HTTP 服务器：流式传输</a></li><li><a href="/examples/http_server_oak_crud_middleware_with_sqlite3_db/" class="sub-nav-link blocklink">HTTP 服务器：使用 SQLite3 进行 CRUD</a></li><li><a href="/examples/hono/" class="sub-nav-link blocklink">Hono HTTP 服务器</a></li><li><a href="/examples/http_server_websocket/" class="sub-nav-link blocklink">HTTP 服务器：WebSockets</a></li><li><a href="/examples/piping_streams/" class="sub-nav-link blocklink">管道流</a></li><li><a href="/examples/websocket/" class="sub-nav-link blocklink">外发 WebSockets</a></li><li><a href="/examples/tcp_echo_server/" class="sub-nav-link blocklink">TCP 回声服务器</a></li><li><a href="/examples/tcp_connector/" class="sub-nav-link blocklink">TCP 连接器：Ping</a></li><li><a href="/examples/tcp_listener/" class="sub-nav-link blocklink">TCP 监听器：Ping</a></li><li><a href="/examples/tls_connector/" class="sub-nav-link blocklink">TCP/TLS 连接器：Ping</a></li><li><a href="/examples/tls_listener/" class="sub-nav-link blocklink">TCP/TLS 监听器：Ping</a></li><li><a href="/examples/dns_queries/" class="sub-nav-link blocklink">运行 DNS 查询</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">系统</span></h2><ul class="sub-nav"><li><a href="/examples/os_signals/" class="sub-nav-link blocklink">处理操作系统信号</a></li><li><a href="/examples/benchmarking/" class="sub-nav-link blocklink">基准测试</a></li><li><a href="/examples/subprocess_tutorial/" class="sub-nav-link blocklink">创建子进程</a></li><li><a href="/examples/subprocess_running_files/" class="sub-nav-link blocklink">子进程生成</a></li><li><a href="/examples/subprocesses_output/" class="sub-nav-link blocklink">从子进程收集输出</a></li><li><a href="/examples/reading_system_metrics/" class="sub-nav-link blocklink">读取系统指标</a></li><li><a href="/examples/pid/" class="sub-nav-link blocklink">进程信息</a></li><li><a href="/examples/environment_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/examples/subprocesses_spawn/" class="sub-nav-link blocklink">子进程：生成</a></li><li><a href="/examples/os_signals_tutorial/" class="sub-nav-link blocklink">处理操作系统信号</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">文件系统</span></h2><ul class="sub-nav"><li><a href="/examples/path_operations/" class="sub-nav-link blocklink">路径操作</a></li><li><a href="/examples/reading_files/" class="sub-nav-link blocklink">读取文件</a></li><li><a href="/examples/writing_files/" class="sub-nav-link blocklink">写入文件</a></li><li><a href="/examples/deleting_files/" class="sub-nav-link blocklink">删除文件</a></li><li><a href="/examples/checking_file_existence/" class="sub-nav-link blocklink">检查文件是否存在</a></li><li><a href="/examples/moving_renaming_files/" class="sub-nav-link blocklink">移动/重命名文件</a></li><li><a href="/examples/create_remove_directories/" class="sub-nav-link blocklink">创建和删除目录</a></li><li><a href="/examples/watching_files/" class="sub-nav-link blocklink">监视文件系统</a></li><li><a href="/examples/walking_directories/" class="sub-nav-link blocklink">行走目录</a></li><li><a href="/examples/unix_cat/" class="sub-nav-link blocklink">Unix 猫</a></li><li><a href="/examples/symlinks/" class="sub-nav-link blocklink">创建和解析符号链接</a></li><li><a href="/examples/temporary_files/" class="sub-nav-link blocklink">临时文件和目录</a></li><li><a href="/examples/streaming_files/" class="sub-nav-link blocklink">流式文件操作</a></li><li><a href="/examples/unzip_gzipped_file/" class="sub-nav-link blocklink">解压缩 gzip 文件</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">加密</span></h2><ul class="sub-nav"><li><a href="/examples/uuids/" class="sub-nav-link blocklink">生成和验证 UUID</a></li><li><a href="/examples/ulid/" class="sub-nav-link blocklink">ULID</a></li><li><a href="/examples/hashing/" class="sub-nav-link blocklink">哈希</a></li><li><a href="/examples/rsa_signature/" class="sub-nav-link blocklink">RSASSA-PKCS1-v1_5 签名和验证</a></li><li><a href="/examples/hmac_generate_verify/" class="sub-nav-link blocklink">HMAC 生成和验证</a></li><li><a href="/examples/aes_encryption/" class="sub-nav-link blocklink">AES 加密和解密</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">高级</span></h2><ul class="sub-nav"><li><a href="/examples/file_system_events_tutorial/" class="sub-nav-link blocklink">文件系统事件</a></li><li><a href="/examples/module_metadata_tutorial/" class="sub-nav-link blocklink">模块元数据</a></li><li><a href="/examples/file_based_routing_tutorial/" class="sub-nav-link blocklink">基于文件的路由</a></li><li><a href="/examples/chat_app_tutorial/" class="sub-nav-link blocklink">使用 WebSockets 构建聊天应用</a></li><li><a href="/examples/realtime_websocket_app/" class="sub-nav-link blocklink">构建实时 WebSocket 应用</a></li><li><a href="/examples/word_finder_tutorial/" class="sub-nav-link blocklink">构建一个单词查找应用</a></li><li><a href="/examples/openai_chat_completion/" class="sub-nav-link blocklink">连接到 OpenAI - 聊天补全</a></li><li><a href="/examples/data_processing/" class="sub-nav-link blocklink">使用 Deno Collections 处理用户数据</a></li><li><a href="/examples/exponential_backoff/" class="sub-nav-link blocklink">指数退避</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">不稳定的 API</span></h2><ul class="sub-nav"><li><a href="/examples/kv_watch/" class="sub-nav-link blocklink">Deno KV 监视</a></li><li><a href="/examples/cron/" class="sub-nav-link blocklink">Deno Cron</a></li><li><a href="/examples/queues/" class="sub-nav-link blocklink">Deno 队列</a></li><li><a href="/examples/kv/" class="sub-nav-link blocklink">Deno KV：键/值数据库</a></li><li><a href="/examples/udp_listener/" class="sub-nav-link blocklink">UDP 监听器：Ping</a></li><li><a href="/examples/udp_connector/" class="sub-nav-link blocklink">UDP 连接器：Ping</a></li><li><a href="/examples/temporal/" class="sub-nav-link blocklink">时间 API</a></li><li><a href="/examples/importing_text/" class="sub-nav-link blocklink">Importing text</a></li><li><a href="/examples/importing_bytes/" class="sub-nav-link blocklink">Importing bytes</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#basic-usage" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Basic usage </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#basic-snapshot-example" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Basic snapshot example </a></li></ul></li><li class="m-2 leading-4"><a href="#updating-snapshots" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Updating snapshots </a></li><li class="m-2 leading-4"><a href="#permissions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Permissions </a></li><li class="m-2 leading-4"><a href="#version-control" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Version Control </a></li><li class="m-2 leading-4"><a href="#options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Options </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#serializer" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">serializer </a></li><li class="m-2 leading-4"><a href="#serialization-with-deno.custominspect" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Serialization with Deno.customInspect </a></li><li class="m-2 leading-4"><a href="#dir-and-path" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">dir and path </a></li><li class="m-2 leading-4"><a href="#mode" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">mode </a></li><li class="m-2 leading-4"><a href="#name" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">name </a></li><li class="m-2 leading-4"><a href="#msg" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">msg </a></li></ul></li><li class="m-2 leading-4"><a href="#testing-different-data-types" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing Different Data Types </a></li><li class="m-2 leading-4"><a href="#working-with-asynchronous-code" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Working with Asynchronous Code </a></li><li class="m-2 leading-4"><a href="#best-practices" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Best Practices </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#keep-snapshots-concise" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Keep Snapshots Concise </a></li><li class="m-2 leading-4"><a href="#descriptive-test-names" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Descriptive Test Names </a></li><li class="m-2 leading-4"><a href="#review-snapshots-during-code-reviews" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Review Snapshots During Code Reviews </a></li><li class="m-2 leading-4"><a href="#snapshot-organization" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Snapshot Organization </a></li></ul></li><li class="m-2 leading-4"><a href="#snapshot-testing-in-ci%2Fcd" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Snapshot Testing in CI/CD </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#github-actions-example" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">GitHub Actions Example </a></li></ul></li><li class="m-2 leading-4"><a href="#practical-examples" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Practical Examples </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#testing-html-output" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing HTML Output </a></li><li class="m-2 leading-4"><a href="#testing-api-responses" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing API Responses </a></li></ul></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>Snapshot testing</h1><div><p>Snapshot testing is a testing technique that captures the output of your code
+and compares it against a stored reference version. Rather than manually writing
+assertions for each property, you let the test runner record the entire output
+structure, making it easier to detect any unexpected changes.</p>
+<p>The <a href="/runtime/fundamentals/standard_library/">Deno Standard Library</a> has a
+<a href="https://jsr.io/@std/testing/doc/snapshot">snapshot module</a>, which enables
+developers to write tests which assert a value against a reference snapshot.
+This reference snapshot is a serialized representation of the original value and
+is stored alongside the test file.</p>
+<h2 id="basic-usage" tabindex="-1">Basic usage <a class="header-anchor" href="#basic-usage"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>The <code>assertSnapshot</code> function will create a snapshot of a value and compare it
+to a reference snapshot, which is stored alongside the test file in the
+<code>__snapshots__</code> directory.</p>
+<p>To create an initial snapshot (or to update an existing snapshot), use the
+<code>-- --update</code> flag with the <code>deno test</code> command.</p>
+<h3 id="basic-snapshot-example" tabindex="-1">Basic snapshot example <a class="header-anchor" href="#basic-snapshot-example"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>The below example shows how to use the snapshot library with the <code>Deno.test</code>
+API. We can test a snapshot of a basic object, containing string and number
+properties.</p>
+<p>The <code>assertSnapshot(t, a)</code> function compares the object against a stored
+snapshot. The <code>t</code> parameter is the test context that Deno provides, which the
+snapshot function uses to determine the test name and location for storing
+snapshots.</p>
+<div><div class="markdownBlockTitle">example_test.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertSnapshot <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/snapshot"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"isSnapshotMatch"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token punctuation">{</span>
+    hello<span class="token operator">:</span> <span class="token string">"world!"</span><span class="token punctuation">,</span>
+    example<span class="token operator">:</span> <span class="token number">123</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-24" class="copyButton" data-copy="import { assertSnapshot } from &quot;jsr:@std/testing/snapshot&quot;;
+
+Deno.test(&quot;isSnapshotMatch&quot;, async (t) => {
+  const a = {
+    hello: &quot;world!&quot;,
+    example: 123,
+  };
+  await assertSnapshot(t, a);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>You will need to grant read and write file permissions in order for Deno to
+write a snapshot file and then read it to test the assertion. If it is the first
+time you are running the test a do not already have a snapshot, add the
+<code>--update</code> flag:</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno <span class="token builtin class-name">test</span> --allow-read --allow-write -- <span class="token parameter variable">--update</span>
+</code></pre>
+
+      <button id="copy-button-28" class="copyButton" data-copy="deno test --allow-read --allow-write -- --update
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>If you already have a snapshot file, you can run the test with:</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno <span class="token builtin class-name">test</span> --allow-read
+</code></pre>
+
+      <button id="copy-button-32" class="copyButton" data-copy="deno test --allow-read
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>The test will compare the current output of the object against the stored
+snapshot. If they match, the test passes; if they differ, the test fails.</p>
+<p>The snapshot file will look like this:</p>
+<div><div class="markdownBlockTitle">__snapshots__/example_test.ts.snap</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">const</span> snapshot <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+snapshot<span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">isSnapshotMatch 1</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+{
+  example: 123,
+  hello: "world!",
+}
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-39" class="copyButton" data-copy="export const snapshot = {};
+
+snapshot[`isSnapshotMatch 1`] = `
+{
+  example: 123,
+  hello: &quot;world!&quot;,
+}
+`;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>You can edit your test to change the <code>hello</code> string to <code>&quot;everyone!&quot;</code> and run the
+test again with <code>deno test --allow-read</code>. This time the <code>assertSnapshot</code>
+function will throw an <code>AssertionError</code>, causing the test to fail because the
+snapshot created during the test does not match the one in the snapshot file.</p>
+<h2 id="updating-snapshots" tabindex="-1">Updating snapshots <a class="header-anchor" href="#updating-snapshots"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>When adding new snapshot assertions to your test suite, or when intentionally
+making changes which cause your snapshots to fail, you can update your snapshots
+by running the snapshot tests in update mode. Tests can be run in update mode by
+passing the <code>--update</code> or <code>-u</code> flag as an argument when running the test. When
+this flag is passed, then any snapshots which do not match will be updated.</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno <span class="token builtin class-name">test</span> --allow-read --allow-write -- <span class="token parameter variable">--update</span>
+</code></pre>
+
+      <button id="copy-button-49" class="copyButton" data-copy="deno test --allow-read --allow-write -- --update
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>New snapshots will only be created when the <code>--update</code> flag is present.</p>
+<p>
+</div>
+</p>
+<h2 id="permissions" tabindex="-1">Permissions <a class="header-anchor" href="#permissions"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>When running snapshot tests, the <code>--allow-read</code> permission must be enabled, or
+else any calls to <code>assertSnapshot</code> will fail due to insufficient permissions.
+Additionally, when updating snapshots, the <code>--allow-write</code> permission must be
+enabled, as this is required in order to update snapshot files.</p>
+<p>The assertSnapshot function will only attempt to read from and write to snapshot
+files. As such, the allow list for <code>--allow-read</code> and <code>--allow-write</code> can be
+limited to only include existing snapshot files, if desired.</p>
+<h2 id="version-control" tabindex="-1">Version Control <a class="header-anchor" href="#version-control"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Snapshot testing works best when changes to snapshot files are committed
+alongside other code changes. This allows for changes to reference snapshots to
+be reviewed along side the code changes that caused them, and ensures that when
+others pull your changes, their tests will pass without needing to update
+snapshots locally.</p>
+<h2 id="options" tabindex="-1">Options <a class="header-anchor" href="#options"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>The <code>assertSnapshot</code> function can be called with an <code>options</code> object which
+offers greater flexibility and enables some non standard use cases:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertSnapshot <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/snapshot"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"isSnapshotMatch"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token punctuation">{</span>
+    hello<span class="token operator">:</span> <span class="token string">"world!"</span><span class="token punctuation">,</span>
+    example<span class="token operator">:</span> <span class="token number">123</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> a<span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token comment">/*custom options go here*/</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-80" class="copyButton" data-copy="import { assertSnapshot } from &quot;jsr:@std/testing/snapshot&quot;;
+
+Deno.test(&quot;isSnapshotMatch&quot;, async (t) => {
+  const a = {
+    hello: &quot;world!&quot;,
+    example: 123,
+  };
+  await assertSnapshot(t, a, {/*custom options go here*/});
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="serializer" tabindex="-1">serializer <a class="header-anchor" href="#serializer"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>When you run a test with <code>assertSnapshot</code>, the data you're testing needs to be
+converted to a string format that can be written to the snapshot file (when
+creating or updating snapshots) and compared with the existing snapshot (when
+validating), this is called serialization.</p>
+<p>The <code>serializer</code> option allows you to provide a custom serializer function. This
+custom function will be called by <code>assertSnapshot</code> and be passed the value being
+asserted. Your custom function must:</p>
+<ol>
+<li>Return a <code>string</code></li>
+<li>Be deterministic, (it will always produce the same output, given the same
+input).</li>
+</ol>
+<p>The code below shows a practical example of creating and using a custom
+serializer function for snapshot testing. This serialiser removes any ANSI
+colour codes from a string using the
+<a href="https://jsr.io/@std/fmt/doc/colors"><code>stripColour</code></a> string formatter from the
+Deno Standard Library.</p>
+<div><div class="markdownBlockTitle">example_test.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertSnapshot<span class="token punctuation">,</span> serialize <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/snapshot"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> stripColor <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/fmt/colors"</span><span class="token punctuation">;</span>
+
+<span class="token comment">/**
+ * Serializes `actual` and removes ANSI escape codes.
+ */</span>
+<span class="token keyword">function</span> <span class="token function">customSerializer</span><span class="token punctuation">(</span>actual<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token function">serialize</span><span class="token punctuation">(</span><span class="token function">stripColor</span><span class="token punctuation">(</span>actual<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"Custom Serializer"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> output <span class="token operator">=</span> <span class="token string">"\x1b[34mHello World!\x1b[39m"</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> output<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    serializer<span class="token operator">:</span> customSerializer<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-105" class="copyButton" data-copy="import { assertSnapshot, serialize } from &quot;jsr:@std/testing/snapshot&quot;;
+import { stripColor } from &quot;jsr:@std/fmt/colors&quot;;
+
+/**
+ * Serializes `actual` and removes ANSI escape codes.
+ */
+function customSerializer(actual: string) {
+  return serialize(stripColor(actual));
+}
+
+Deno.test(&quot;Custom Serializer&quot;, async (t) => {
+  const output = &quot;\x1b[34mHello World!\x1b[39m&quot;;
+  await assertSnapshot(t, output, {
+    serializer: customSerializer,
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">__snapshots__/example_test.ts.snap</div><div class="relative"><pre><code class="highlight notranslate language-ts">snapshot <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+snapshot<span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Custom Serializer 1</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">"Hello World!"</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-106" class="copyButton" data-copy="snapshot = {};
+
+snapshot[`Custom Serializer 1`] = `&quot;Hello World!&quot;`;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>Custom serializers can be useful in a variety of scenarios:</p>
+<ul>
+<li>To remove irrelevant formatting (like ANSI codes shown above) and improve
+legibility</li>
+<li>To handle non-deterministic data. Timestamps, UUIDs, or random values can be
+replaced with placeholders</li>
+<li>To mask or remove sensitive data that shouldn't be saved in snapshots</li>
+<li>Custom formatting to present complex objects in a domain-specific format</li>
+</ul>
+<h3 id="serialization-with-deno.custominspect" tabindex="-1">Serialization with <code>Deno.customInspect</code> <a class="header-anchor" href="#serialization-with-deno.custominspect"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Because the default serializer uses <code>Deno.inspect</code> under the hood, you can set
+the property <code>Symbol.for(&quot;Deno.customInspect&quot;)</code> to a custom serialization
+function if desired:</p>
+<div><div class="markdownBlockTitle">example_test.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// example_test.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertSnapshot <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/snapshot"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">HTMLTag</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span>
+    <span class="token keyword">public</span> name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+    <span class="token keyword">public</span> children<span class="token operator">:</span> <span class="token builtin">Array</span><span class="token operator">&lt;</span>HTMLTag <span class="token operator">|</span> <span class="token builtin">string</span><span class="token operator">></span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token function">render</span><span class="token punctuation">(</span>depth<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> indent <span class="token operator">=</span> <span class="token string">"  "</span><span class="token punctuation">.</span><span class="token function">repeat</span><span class="token punctuation">(</span>depth<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> output <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>indent<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">>\n</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> child <span class="token keyword">of</span> <span class="token keyword">this</span><span class="token punctuation">.</span>children<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>child <span class="token keyword">instanceof</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        output <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>child<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>depth <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">\n</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        output <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>indent<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">  </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>child<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">\n</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    output <span class="token operator">+=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>indent<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> output<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span><span class="token function">for</span><span class="token punctuation">(</span><span class="token string">"Deno.customInspect"</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"Page HTML Tree"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> page <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">(</span><span class="token string">"html"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+    <span class="token keyword">new</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">(</span><span class="token string">"head"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+      <span class="token keyword">new</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+        <span class="token string">"Simple SSR Example"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token keyword">new</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">(</span><span class="token string">"body"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+      <span class="token keyword">new</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">(</span><span class="token string">"h1"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+        <span class="token string">"Simple SSR Example"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token keyword">new</span> <span class="token class-name">HTMLTag</span><span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+        <span class="token string">"This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> page<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-138" class="copyButton" data-copy="// example_test.ts
+import { assertSnapshot } from &quot;jsr:@std/testing/snapshot&quot;;
+
+class HTMLTag {
+  constructor(
+    public name: string,
+    public children: Array<HTMLTag | string> = [],
+  ) {}
+
+  public render(depth: number) {
+    const indent = &quot;  &quot;.repeat(depth);
+    let output = `${indent}<${this.name}>\n`;
+    for (const child of this.children) {
+      if (child instanceof HTMLTag) {
+        output += `${child.render(depth + 1)}\n`;
+      } else {
+        output += `${indent}  ${child}\n`;
+      }
+    }
+    output += `${indent}</${this.name}>`;
+    return output;
+  }
+
+  public [Symbol.for(&quot;Deno.customInspect&quot;)]() {
+    return this.render(0);
+  }
+}
+
+Deno.test(&quot;Page HTML Tree&quot;, async (t) => {
+  const page = new HTMLTag(&quot;html&quot;, [
+    new HTMLTag(&quot;head&quot;, [
+      new HTMLTag(&quot;title&quot;, [
+        &quot;Simple SSR Example&quot;,
+      ]),
+    ]),
+    new HTMLTag(&quot;body&quot;, [
+      new HTMLTag(&quot;h1&quot;, [
+        &quot;Simple SSR Example&quot;,
+      ]),
+      new HTMLTag(&quot;p&quot;, [
+        &quot;This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation&quot;,
+      ]),
+    ]),
+  ]);
+
+  await assertSnapshot(t, page);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>This test will produce the following snapshot.</p>
+<div><div class="markdownBlockTitle">__snapshots__/example_test.ts.snap</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">const</span> snapshot <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+snapshot<span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Page HTML Tree 1</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+&lt;html>
+  &lt;head>
+    &lt;title>
+      Simple SSR Example
+    &lt;/title>
+  &lt;/head>
+  &lt;body>
+    &lt;h1>
+      Simple SSR Example
+    &lt;/h1>
+    &lt;p>
+      This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation
+    &lt;/p>
+  &lt;/body>
+&lt;/html>
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-142" class="copyButton" data-copy="export const snapshot = {};
+
+snapshot[`Page HTML Tree 1`] = `
+<html>
+  <head>
+    <title>
+      Simple SSR Example
+    </title>
+  </head>
+  <body>
+    <h1>
+      Simple SSR Example
+    </h1>
+    <p>
+      This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation
+    </p>
+  </body>
+</html>
+`;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>In contrast, when we remove the <code>Deno.customInspect</code> method, the test will
+produce the following snapshot:</p>
+<div><div class="markdownBlockTitle">__snapshots__/example_test.ts.snap</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">const</span> snapshot <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+snapshot<span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Page HTML Tree 1</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">HTMLTag {
+  children: [
+    HTMLTag {
+      children: [
+        HTMLTag {
+          children: [
+            "Simple SSR Example",
+          ],
+          name: "title",
+        },
+      ],
+      name: "head",
+    },
+    HTMLTag {
+      children: [
+        HTMLTag {
+          children: [
+            "Simple SSR Example",
+          ],
+          name: "h1",
+        },
+        HTMLTag {
+          children: [
+            "This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation",
+          ],
+          name: "p",
+        },
+      ],
+      name: "body",
+    },
+  ],
+  name: "html",
+}</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-146" class="copyButton" data-copy="export const snapshot = {};
+
+snapshot[`Page HTML Tree 1`] = `HTMLTag {
+  children: [
+    HTMLTag {
+      children: [
+        HTMLTag {
+          children: [
+            &quot;Simple SSR Example&quot;,
+          ],
+          name: &quot;title&quot;,
+        },
+      ],
+      name: &quot;head&quot;,
+    },
+    HTMLTag {
+      children: [
+        HTMLTag {
+          children: [
+            &quot;Simple SSR Example&quot;,
+          ],
+          name: &quot;h1&quot;,
+        },
+        HTMLTag {
+          children: [
+            &quot;This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation&quot;,
+          ],
+          name: &quot;p&quot;,
+        },
+      ],
+      name: &quot;body&quot;,
+    },
+  ],
+  name: &quot;html&quot;,
+}`;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>You can see that this second snapshot is much less readable. This is because:</p>
+<ol>
+<li>The keys are sorted alphabetically, so the name of the element is displayed
+after its children</li>
+<li>It includes a lot of extra information, causing the snapshot to be more than
+twice as long</li>
+<li>It is not an accurate serialization of the HTML which the data represents</li>
+</ol>
+<p>Note that in this example it would be possible to achieve the same result by
+calling:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> page<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-170" class="copyButton" data-copy="await assertSnapshot(t, page.render(0));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>However, depending on the public API you choose to expose, this may not be
+practical.</p>
+<p>It is also worth considering that this could have an impact beyond your snapshot
+testing. For example, <code>Deno.customInspect</code> is also used to serialize objects
+when calling <code>console.log</code> (and in some other cases). This may or may not be
+desirable.</p>
+<h3 id="dir-and-path" tabindex="-1"><code>dir</code> and <code>path</code> <a class="header-anchor" href="#dir-and-path"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>The <code>dir</code> and <code>path</code> options allow you to control where the snapshot file will
+be saved to and read from. These can be absolute paths or relative paths. If
+relative, they will be resolved relative to the test file.</p>
+<p>For example, if your test file is located at <code>/path/to/test.ts</code> and the <code>dir</code>
+option is set to <code>snapshots</code>, then the snapshot file would be written to
+<code>/path/to/snapshots/test.ts.snap</code>.</p>
+<ul>
+<li>
+<p><code>dir</code> allows you to specify the snapshot directory, while still using the
+default format for the snapshot file name.</p>
+</li>
+<li>
+<p><code>path</code> allows you to specify the directory and file name of the snapshot file.</p>
+</li>
+</ul>
+<p>If your test file is located at <code>/path/to/test.ts</code> and the <code>path</code> option is set
+to <code>snapshots/test.snapshot</code>, then the snapshot file would be written to
+<code>/path/to/snapshots/test.snapshot</code>.</p>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>If both <code>dir</code> and <code>path</code> are specified, the <code>dir</code> option will be ignored and the
+<code>path</code> option will be handled as normal.</p>
+<p>
+</div>
+</p>
+<h3 id="mode" tabindex="-1"><code>mode</code> <a class="header-anchor" href="#mode"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>The <code>mode</code> option controls how <code>assertSnapshot</code> behaves regardless of command
+line flags and has two settings, <code>assert</code> or <code>update</code>:</p>
+<ul>
+<li>
+<p><code>assert</code>: Always performs comparison only, ignoring any <code>--update</code> or <code>-u</code>
+flags. If snapshots don't match, the test will fail with an <code>AssertionError</code>.</p>
+</li>
+<li>
+<p><code>update</code>: Always updates snapshots. Any mismatched snapshots will be updated
+after tests complete.</p>
+</li>
+</ul>
+<p>This option is useful when you need different snapshot behaviors within the same
+test suite:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// Create a new snapshot or verify an existing one</span>
+<span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> stableComponent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Always update this snapshot regardless of command line flags</span>
+<span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> experimentalComponent<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  mode<span class="token operator">:</span> <span class="token string">"update"</span><span class="token punctuation">,</span>
+  name<span class="token operator">:</span> <span class="token string">"experimental feature"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// Always verify but never update this snapshot regardless of command line flags</span>
+<span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> criticalComponent<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  mode<span class="token operator">:</span> <span class="token string">"assert"</span><span class="token punctuation">,</span>
+  name<span class="token operator">:</span> <span class="token string">"critical feature"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-231" class="copyButton" data-copy="// Create a new snapshot or verify an existing one
+await assertSnapshot(t, stableComponent);
+
+// Always update this snapshot regardless of command line flags
+await assertSnapshot(t, experimentalComponent, {
+  mode: &quot;update&quot;,
+  name: &quot;experimental feature&quot;,
+});
+
+// Always verify but never update this snapshot regardless of command line flags
+await assertSnapshot(t, criticalComponent, {
+  mode: &quot;assert&quot;,
+  name: &quot;critical feature&quot;,
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="name" tabindex="-1"><code>name</code> <a class="header-anchor" href="#name"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>The name of the snapshot. If unspecified, the name of the test step will be used
+instead.</p>
+<div><div class="markdownBlockTitle">example_test.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertSnapshot <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/snapshot"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"isSnapshotMatch"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> a <span class="token operator">=</span> <span class="token punctuation">{</span>
+    hello<span class="token operator">:</span> <span class="token string">"world!"</span><span class="token punctuation">,</span>
+    example<span class="token operator">:</span> <span class="token number">123</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> a<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    name<span class="token operator">:</span> <span class="token string">"Test Name"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-238" class="copyButton" data-copy="import { assertSnapshot } from &quot;jsr:@std/testing/snapshot&quot;;
+
+Deno.test(&quot;isSnapshotMatch&quot;, async (t) => {
+  const a = {
+    hello: &quot;world!&quot;,
+    example: 123,
+  };
+  await assertSnapshot(t, a, {
+    name: &quot;Test Name&quot;,
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">__snapshots__/example_test.ts.snap</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">const</span> snapshot <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+snapshot<span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Test Name 1</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+{
+  example: 123,
+  hello: "world!",
+}
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-239" class="copyButton" data-copy="export const snapshot = {};
+
+snapshot[`Test Name 1`] = `
+{
+  example: 123,
+  hello: &quot;world!&quot;,
+}
+`;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>When <code>assertSnapshot</code> is run multiple times with the same value for name, then
+the suffix will be incremented as normal. i.e. <code>Test Name 1</code>, <code>Test Name 2</code>,
+<code>Test Name 3</code>, etc.</p>
+<h3 id="msg" tabindex="-1"><code>msg</code> <a class="header-anchor" href="#msg"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Used to set a custom error message. This will overwrite the default error
+message, which includes the diff for failed snapshots:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"custom error message example"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> userData <span class="token operator">=</span> <span class="token punctuation">{</span>
+    name<span class="token operator">:</span> <span class="token string">"John Doe"</span><span class="token punctuation">,</span>
+    role<span class="token operator">:</span> <span class="token string">"admin"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> userData<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    msg<span class="token operator">:</span>
+      <span class="token string">"User data structure has changed unexpectedly. Please verify your changes are intentional."</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-249" class="copyButton" data-copy="Deno.test(&quot;custom error message example&quot;, async (t) => {
+  const userData = {
+    name: &quot;John Doe&quot;,
+    role: &quot;admin&quot;,
+  };
+
+  await assertSnapshot(t, userData, {
+    msg:
+      &quot;User data structure has changed unexpectedly. Please verify your changes are intentional.&quot;,
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>When the snapshot fails, instead of seeing the default diff message, you'll see
+your custom error message.</p>
+<h2 id="testing-different-data-types" tabindex="-1">Testing Different Data Types <a class="header-anchor" href="#testing-different-data-types"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Snapshot testing works with various data types and structures:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"snapshot various types"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Arrays</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">"four"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> five<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Complex objects</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    user<span class="token operator">:</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Test"</span><span class="token punctuation">,</span> roles<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"admin"</span><span class="token punctuation">,</span> <span class="token string">"user"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    settings<span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token string">"theme"</span><span class="token punctuation">,</span> <span class="token string">"dark"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">"language"</span><span class="token punctuation">,</span> <span class="token string">"en"</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Error objects</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Test error message"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-259" class="copyButton" data-copy="Deno.test(&quot;snapshot various types&quot;, async (t) => {
+  // Arrays
+  await assertSnapshot(t, [1, 2, 3, &quot;four&quot;, { five: true }]);
+
+  // Complex objects
+  await assertSnapshot(t, {
+    user: { name: &quot;Test&quot;, roles: [&quot;admin&quot;, &quot;user&quot;] },
+    settings: new Map([[&quot;theme&quot;, &quot;dark&quot;], [&quot;language&quot;, &quot;en&quot;]]),
+  });
+
+  // Error objects
+  await assertSnapshot(t, new Error(&quot;Test error message&quot;));
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="working-with-asynchronous-code" tabindex="-1">Working with Asynchronous Code <a class="header-anchor" href="#working-with-asynchronous-code"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>When testing asynchronous functions, ensure you await the results before passing
+them to the snapshot:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"async function test"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token function-variable function">fetchData</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token comment">// Simulate API call</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> success<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> data<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"item1"</span><span class="token punctuation">,</span> <span class="token string">"item2"</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetchData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-266" class="copyButton" data-copy="Deno.test(&quot;async function test&quot;, async (t) => {
+  const fetchData = async () => {
+    // Simulate API call
+    return { success: true, data: [&quot;item1&quot;, &quot;item2&quot;] };
+  };
+
+  const result = await fetchData();
+  await assertSnapshot(t, result);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="best-practices" tabindex="-1">Best Practices <a class="header-anchor" href="#best-practices"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="keep-snapshots-concise" tabindex="-1">Keep Snapshots Concise <a class="header-anchor" href="#keep-snapshots-concise"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Avoid capturing large data structures that aren't necessary for your test. Focus
+on capturing only what's relevant.</p>
+<h3 id="descriptive-test-names" tabindex="-1">Descriptive Test Names <a class="header-anchor" href="#descriptive-test-names"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Use descriptive test names that clearly indicate what's being tested:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>
+  <span class="token string">"renders user profile card with all required fields"</span><span class="token punctuation">,</span>
+  <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token comment">// ... test code</span>
+    <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> component<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-282" class="copyButton" data-copy="Deno.test(
+  &quot;renders user profile card with all required fields&quot;,
+  async (t) => {
+    // ... test code
+    await assertSnapshot(t, component);
+  },
+);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="review-snapshots-during-code-reviews" tabindex="-1">Review Snapshots During Code Reviews <a class="header-anchor" href="#review-snapshots-during-code-reviews"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Always review snapshot changes during code reviews to ensure they represent
+intentional changes and not regressions.</p>
+<h3 id="snapshot-organization" tabindex="-1">Snapshot Organization <a class="header-anchor" href="#snapshot-organization"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>For larger projects, consider organizing snapshots by feature or component:</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> component<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  path<span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">__snapshots__/components/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>componentName<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">.snap</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-295" class="copyButton" data-copy="await assertSnapshot(t, component, {
+  path: `__snapshots__/components/${componentName}.snap`,
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="snapshot-testing-in-ci%2Fcd" tabindex="-1">Snapshot Testing in CI/CD <a class="header-anchor" href="#snapshot-testing-in-ci%2Fcd"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="github-actions-example" tabindex="-1">GitHub Actions Example <a class="header-anchor" href="#github-actions-example"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>When running snapshot tests in CI environments, you'll typically want to verify
+existing snapshots rather than updating them:</p>
+<div><div class="markdownBlockTitle">.github/workflows/test.yml</div><div class="relative"><pre><code class="highlight notranslate language-yaml">name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Run tests
+        run: deno test --allow-read
+</code></pre>
+
+      <button id="copy-button-305" class="copyButton" data-copy="name: Test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Run tests
+        run: deno test --allow-read
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>For pull requests that intentionally update snapshots, reviewers should verify
+the changes are expected before merging.</p>
+<h2 id="practical-examples" tabindex="-1">Practical Examples <a class="header-anchor" href="#practical-examples"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="testing-html-output" tabindex="-1">Testing HTML Output <a class="header-anchor" href="#testing-html-output"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>HTML output testing with snapshots is particularly useful for web applications
+where you want to ensure your components render the expected markup. This
+approach allows you to catch unintended changes in your HTML structure,
+attributes, or content that might affect the visual appearance or functionality
+of your UI components.</p>
+<p>By capturing a snapshot of the HTML output, you can:</p>
+<ul>
+<li>Verify that UI components render correctly with different props/data</li>
+<li>Detect regressions when refactoring rendering logic</li>
+<li>Document the expected output format of components</li>
+</ul>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"HTML rendering"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token function-variable function">renderComponent</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">&lt;div class="card">
+      &lt;h2>User Profile&lt;/h2>
+      &lt;p>Username: testuser&lt;/p>
+    &lt;/div></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> <span class="token function">renderComponent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-338" class="copyButton" data-copy="Deno.test(&quot;HTML rendering&quot;, async (t) => {
+  const renderComponent = () => {
+    return `<div class=&quot;card&quot;>
+      <h2>User Profile</h2>
+      <p>Username: testuser</p>
+    </div>`;
+  };
+
+  await assertSnapshot(t, renderComponent());
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="testing-api-responses" tabindex="-1">Testing API Responses <a class="header-anchor" href="#testing-api-responses"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>When building applications that interact with APIs, snapshot testing helps
+ensure that the structure and format of API responses remain consistent. This is
+particularly valuable for:</p>
+<ul>
+<li>Maintaining backward compatibility when updating API integrations</li>
+<li>Verifying that your API response parsing logic works correctly</li>
+<li>Documenting the expected shape of API responses for team collaboration</li>
+<li>Detecting unexpected changes in API responses that could break your
+application</li>
+</ul>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"API response format"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> mockApiResponse <span class="token operator">=</span> <span class="token punctuation">{</span>
+    status<span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span>
+    data<span class="token operator">:</span> <span class="token punctuation">{</span>
+      users<span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"User 1"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"User 2"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      pagination<span class="token operator">:</span> <span class="token punctuation">{</span> page<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> total<span class="token operator">:</span> <span class="token number">10</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> <span class="token function">assertSnapshot</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> mockApiResponse<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-367" class="copyButton" data-copy="Deno.test(&quot;API response format&quot;, async (t) => {
+  const mockApiResponse = {
+    status: 200,
+    data: {
+      users: [
+        { id: 1, name: &quot;User 1&quot; },
+        { id: 2, name: &quot;User 2&quot; },
+      ],
+      pagination: { page: 1, total: 10 },
+    },
+  };
+
+  await assertSnapshot(t, mockApiResponse);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>🦕 Snapshot testing is a powerful technique that complements traditional unit
+tests by allowing you to capture and verify complex outputs without writing
+detailed assertions. By incorporating snapshot tests into your testing strategy,
+you can catch unintended changes, document expected behavior, and build more
+resilient applications.</p>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/examples/tutorials/snapshot.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#basic-usage" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Basic usage </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#basic-snapshot-example" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Basic snapshot example </a></li></ul></li><li class="m-2 leading-4"><a href="#updating-snapshots" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Updating snapshots </a></li><li class="m-2 leading-4"><a href="#permissions" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Permissions </a></li><li class="m-2 leading-4"><a href="#version-control" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Version Control </a></li><li class="m-2 leading-4"><a href="#options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Options </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#serializer" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">serializer </a></li><li class="m-2 leading-4"><a href="#serialization-with-deno.custominspect" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Serialization with Deno.customInspect </a></li><li class="m-2 leading-4"><a href="#dir-and-path" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">dir and path </a></li><li class="m-2 leading-4"><a href="#mode" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">mode </a></li><li class="m-2 leading-4"><a href="#name" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">name </a></li><li class="m-2 leading-4"><a href="#msg" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">msg </a></li></ul></li><li class="m-2 leading-4"><a href="#testing-different-data-types" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing Different Data Types </a></li><li class="m-2 leading-4"><a href="#working-with-asynchronous-code" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Working with Asynchronous Code </a></li><li class="m-2 leading-4"><a href="#best-practices" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Best Practices </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#keep-snapshots-concise" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Keep Snapshots Concise </a></li><li class="m-2 leading-4"><a href="#descriptive-test-names" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Descriptive Test Names </a></li><li class="m-2 leading-4"><a href="#review-snapshots-during-code-reviews" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Review Snapshots During Code Reviews </a></li><li class="m-2 leading-4"><a href="#snapshot-organization" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Snapshot Organization </a></li></ul></li><li class="m-2 leading-4"><a href="#snapshot-testing-in-ci%2Fcd" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Snapshot Testing in CI/CD </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#github-actions-example" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">GitHub Actions Example </a></li></ul></li><li class="m-2 leading-4"><a href="#practical-examples" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Practical Examples </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#testing-html-output" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing HTML Output </a></li><li class="m-2 leading-4"><a href="#testing-api-responses" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Testing API Responses </a></li></ul></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>

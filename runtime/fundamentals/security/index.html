@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Security and permissions - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="Security and permissions"/><meta name="twitter:description" content="A guide to Deno's security model and permissions system. Learn about secure defaults, permission flags, runtime prompts, and how to safely execute code with granular access controls."/><meta name="twitter:image" content="https://docs.deno.com/runtime/fundamentals/security/index.png"/><meta name="twitter:image:alt" content="A guide to Deno's security model and permissions system. Learn about secure defaults, permission flags, runtime prompts, and how to safely execute code with granular access controls."/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="Security and permissions"/><meta property="og:description" content="A guide to Deno's security model and permissions system. Learn about secure defaults, permission flags, runtime prompts, and how to safely execute code with granular access controls."/><meta property="og:image" content="https://docs.deno.com/runtime/fundamentals/security/index.png"/><meta property="og:image:alt" content="A guide to Deno's security model and permissions system. Learn about secure defaults, permission flags, runtime prompts, and how to safely execute code with granular access controls."/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink undefined" data-active="true">手册</a><a href="/api/deno/" class="header-nav-link blocklink undefined">API 参考</a><a href="/examples/" class="header-nav-link blocklink undefined">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink" data-active="true">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink">deno bench</a></li><li><a href="/runtime/reference/cli/bundle/" class="sub-nav-link blocklink">deno bundle</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/update/" class="sub-nav-link blocklink">deno update</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/bundling/" class="sub-nav-link blocklink">捆绑</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/fundamentals/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">基础知识</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">Security and permissions</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#%E5%85%B3%E9%94%AE%E5%8E%9F%E5%88%99" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">关键原则 </a></li><li class="m-2 leading-4"><a href="#%E6%9D%83%E9%99%90" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">权限 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">文件系统访问 </a></li><li class="m-2 leading-4"><a href="#%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">网络访问 </a></li><li class="m-2 leading-4"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">环境变量 </a></li><li class="m-2 leading-4"><a href="#%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">系统信息 </a></li><li class="m-2 leading-4"><a href="#%E5%AD%90%E8%BF%9B%E7%A8%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">子进程 </a></li><li class="m-2 leading-4"><a href="#ffi%EF%BC%88%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3%EF%BC%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">FFI（外部函数接口） </a></li><li class="m-2 leading-4"><a href="#%E4%BB%8E-web-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">从 Web 导入 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E4%BB%A3%E7%A0%81%E8%AF%84%E4%BC%B0" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">代码评估 </a></li><li class="m-2 leading-4"><a href="#%E6%89%A7%E8%A1%8C%E4%B8%8D%E5%8F%AF%E4%BF%A1%E4%BB%A3%E7%A0%81" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">执行不可信代码 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>Security and permissions</h1><div><p>Deno 默认是安全的。除非你特意启用，否则在 Deno 中运行的程序没有访问敏感 API 的权限，例如文件系统访问、网络连接或环境访问。你必须通过命令行标志或运行时权限提示明确授予对这些资源的访问。这与 Node 的一个主要区别是，Node 中的依赖项会自动获得对所有系统 I/O 的完全访问权限，这可能会将隐藏的漏洞引入你的项目。</p>
+<p>在使用 Deno 运行完全不可信的代码之前，请阅读下面的 <a href="#executing-untrusted-code">执行不可信代码</a> 部分。</p>
+<h2 id="%E5%85%B3%E9%94%AE%E5%8E%9F%E5%88%99" tabindex="-1">关键原则 <a class="header-anchor" href="#%E5%85%B3%E9%94%AE%E5%8E%9F%E5%88%99"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在深入了解权限的具体细节之前，了解 Deno 安全模型的关键原则是很重要的：</p>
+<ul>
+<li><strong>默认情况下没有 I/O 访问</strong>：在 Deno 运行时中执行的代码没有权限读取或写入任意文件，在文件系统上进行网络请求或打开网络监听器，访问环境变量，或生成子进程。</li>
+<li><strong>同一特权级别下代码的执行没有限制</strong>：Deno 允许通过多种方式执行任何代码（JS/TS/Wasm），包括 <code>eval</code>、<code>new Function</code>、动态导入和网页工作者，几乎不限制代码来源（网络、npm、JSR 等）。</li>
+<li><strong>同一应用程序的多次调用可以共享数据</strong>：Deno 提供了一种机制，使同一应用程序的多次调用可以通过内置缓存和 KV 存储 API 共享数据。不同的应用程序不能看到彼此的数据。</li>
+<li><strong>所有在同一线程上执行的代码共享相同的特权级别</strong>：所有在同一线程上执行的代码共享相同的特权级别。在同一线程内，不同模块不可能拥有不同的特权级别。</li>
+<li><strong>代码不能在未获得用户同意的情况下提升其特权</strong>：在 Deno 运行时中执行的代码不能在未获得用户的明确同意（通过交互式提示或调用时间标志）提升其特权。</li>
+<li><strong>初始静态模块图可以不受限制地导入本地文件</strong>：所有在初始静态模块图中导入的文件可以不受限制地导入，即使该文件未明确授予读取权限。这不适用于任何动态模块导入。</li>
+</ul>
+<p>这些关键原则旨在提供一个用户可以以最低风险执行代码的环境，以免对主机计算机或网络造成伤害。安全模型旨在易于理解，并在运行时与执行其中的代码之间提供清晰的关注点分离。安全模型由 Deno 运行时强制执行，并不依赖于底层操作系统。</p>
+<h2 id="%E6%9D%83%E9%99%90" tabindex="-1">权限 <a class="header-anchor" href="#%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>默认情况下，对大多数系统 I/O 的访问是被拒绝的。即便如此，仍然有一些 I/O 操作在有限的范围内允许，这些将在下面描述。</p>
+<p>为了启用这些操作，用户必须明确授予 Deno 运行时权限。这是通过将 <code>--allow-read</code>、<code>--allow-write</code>、<code>--allow-net</code>、<code>--allow-env</code> 和 <code>--allow-run</code> 标志传递给 <code>deno</code> 命令来完成的。</p>
+<p>在执行脚本时，用户也可以在运行时提示时明确授予对特定文件、目录、网络地址、环境变量和子进程的访问权限。如果 stdout/stderr 不是 TTY，或者在 <code>deno</code> 命令中传递了 <code>--no-prompt</code> 标志，则不会显示提示。</p>
+<p>用户还可以通过使用 <code>--deny-read</code>、<code>--deny-write</code>、<code>--deny-net</code>、<code>--deny-env</code> 和 <code>--deny-run</code> 标志明确拒绝对特定资源的访问。这些标志优先于许可标志。例如，如果你允许网络访问但拒绝访问特定域，则拒绝标志将优先。</p>
+<p>Deno 还提供了 <code>--allow-all</code> 标志，该标志授予脚本所有权限。这将 <strong>完全禁用</strong> 安全沙箱，应该谨慎使用。<code>--allow-all</code> 具有与在 Node.js 中运行脚本相同的安全属性（即无安全性）。</p>
+<p>定义：<code>-A, --allow-all</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">deno run <span class="token parameter variable">-A</span> script.ts
+deno run --allow-all script.ts
+</code></pre>
+
+      <button id="copy-button-68" class="copyButton" data-copy="deno run -A script.ts
+deno run --allow-all script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>默认情况下，Deno 不会为权限请求生成堆栈跟踪，因为这对性能有一定影响。用户可以通过 <code>DENO_TRACE_PERMISSIONS</code> 环境变量启用堆栈跟踪。</p>
+<h3 id="%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE" tabindex="-1">文件系统访问 <a class="header-anchor" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>默认情况下，执行的代码无法读取或写入文件系统上的任意文件。这包括列出目录内容，检查指定文件的存在性，以及打开或连接 Unix 套接字。</p>
+<p>通过使用 <code>--allow-read</code>（或 <code>-R</code>）标志授予读取文件的权限，通过使用 <code>--allow-write</code>（或 <code>-W</code>）标志授予写入文件的权限。这些标志可以通过指定路径列表来允许访问特定文件或目录。</p>
+<p>定义：<code>--allow-read[=&lt;PATH&gt;...]</code> 或 <code>-R[=&lt;PATH&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许从文件系统读取所有文件</span>
+deno run <span class="token parameter variable">-R</span> script.ts
+<span class="token comment"># 或 </span>
+deno run --allow-read script.ts
+
+<span class="token comment"># 仅允许读取文件 foo.txt 和 bar.txt</span>
+deno run --allow-read<span class="token operator">=</span>foo.txt,bar.txt script.ts
+
+<span class="token comment"># Allow reads from any file in any subdirectory of ./node_modules</span>
+deno run --allow-read<span class="token operator">=</span>node_modules script.ts
+</code></pre>
+
+      <button id="copy-button-84" class="copyButton" data-copy="# 允许从文件系统读取所有文件
+deno run -R script.ts
+# 或 
+deno run --allow-read script.ts
+
+# 仅允许读取文件 foo.txt 和 bar.txt
+deno run --allow-read=foo.txt,bar.txt script.ts
+
+# Allow reads from any file in any subdirectory of ./node_modules
+deno run --allow-read=node_modules script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--deny-read[=&lt;PATH&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许读取 /etc 中的文件，但不允许读取 /etc/hosts</span>
+deno run --allow-read<span class="token operator">=</span>/etc --deny-read<span class="token operator">=</span>/etc/hosts script.ts
+
+<span class="token comment"># 拒绝所有对磁盘的读取访问，禁用读取的权限提示。</span>
+deno run --deny-read script.ts
+</code></pre>
+
+      <button id="copy-button-88" class="copyButton" data-copy="# 允许读取 /etc 中的文件，但不允许读取 /etc/hosts
+deno run --allow-read=/etc --deny-read=/etc/hosts script.ts
+
+# 拒绝所有对磁盘的读取访问，禁用读取的权限提示。
+deno run --deny-read script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--allow-write[=&lt;PATH&gt;...]</code> 或 <code>-W[=&lt;PATH&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许对文件系统的所有写入</span>
+deno run <span class="token parameter variable">-W</span> script.ts
+<span class="token comment"># 或 </span>
+deno run --allow-write script.ts
+
+<span class="token comment"># 仅允许写入文件 foo.txt 和 bar.txt</span>
+deno run --allow-write<span class="token operator">=</span>foo.txt,bar.txt script.ts
+</code></pre>
+
+      <button id="copy-button-92" class="copyButton" data-copy="# 允许对文件系统的所有写入
+deno run -W script.ts
+# 或 
+deno run --allow-write script.ts
+
+# 仅允许写入文件 foo.txt 和 bar.txt
+deno run --allow-write=foo.txt,bar.txt script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--deny-write[=&lt;PATH&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许读取当前工作目录中的文件 </span>
+<span class="token comment"># 但不允许写入 ./secrets 目录。</span>
+deno run --allow-write<span class="token operator">=</span>./ --deny-write<span class="token operator">=</span>./secrets script.ts
+
+<span class="token comment"># 拒绝所有对磁盘的写入访问，禁用写入的权限提示。</span>
+deno run --deny-write script.ts
+</code></pre>
+
+      <button id="copy-button-96" class="copyButton" data-copy="# 允许读取当前工作目录中的文件 
+# 但不允许写入 ./secrets 目录。
+deno run --allow-write=./ --deny-write=./secrets script.ts
+
+# 拒绝所有对磁盘的写入访问，禁用写入的权限提示。
+deno run --deny-write script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>一些 Deno 中的 API 是在后台使用文件系统操作实现的，即使它们并不直接提供对特定文件的读/写访问。这些 API 会读取和写入磁盘，但不需要任何明确的读/写权限。这些 API 的一些例子包括：</p>
+<ul>
+<li><code>localStorage</code></li>
+<li>Deno KV</li>
+<li><code>caches</code></li>
+<li><code>Blob</code></li>
+</ul>
+<p>由于这些 API 使用文件系统操作实现，用户可以使用它们来消耗存储空间等文件系统资源，即使他们没有对文件系统的直接访问权限。</p>
+<p>在加载模块时，Deno 可以从磁盘加载文件。这有时需要明确的权限，有时则默认允许：</p>
+<ul>
+<li>以可以静态分析的方式从入口模块导入的所有文件默认被允许读取。这包括静态 <code>import</code> 语句和动态 <code>import()</code> 调用，其中参数是指向特定文件或文件目录的字符串字面量。可以使用 <code>deno info &lt;entrypoint&gt;</code> 打印出这个列表中的文件的完整列表。</li>
+<li>以不可以静态分析的方式动态导入的文件要求运行时读取权限。</li>
+<li><code>node_modules/</code> 目录中的文件默认允许读取。</li>
+</ul>
+<p>当从网络中获取模块或将 TypeScript 代码转译为 JavaScript 时，Deno 使用文件系统作为缓存。这意味着即使用户未明确授予读/写权限，Deno 仍然可以消耗像存储空间这样的文件系统资源。</p>
+<h3 id="%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE" tabindex="-1">网络访问 <a class="header-anchor" href="#%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>默认情况下，执行的代码不能进行网络请求、打开网络监听器或执行 DNS 解析。这包括发起 HTTP 请求、打开 TCP/UDP 套接字和监听 TCP 或 UDP 上的传入连接。</p>
+<p>网络访问是通过 <code>--allow-net</code> 标志授予的。该标志可以通过指定 IP 地址或主机名的列表来允许访问特定的网络地址。</p>
+<p>定义：<code>--allow-net[=&lt;IP_OR_HOSTNAME&gt;...]</code> 或 <code>-N[=&lt;IP_OR_HOSTNAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许网络访问</span>
+deno run <span class="token parameter variable">-N</span> script.ts
+<span class="token comment"># 或</span>
+deno run --allow-net script.ts
+
+<span class="token comment"># 允许访问 github.com 和 jsr.io 的网络</span>
+deno run --allow-net<span class="token operator">=</span>github.com,jsr.io script.ts
+
+<span class="token comment"># 主机名在 80 端口：</span>
+deno run --allow-net<span class="token operator">=</span>example.com:80 script.ts
+
+<span class="token comment"># IPv4 地址在 443 端口</span>
+deno run --allow-net<span class="token operator">=</span><span class="token number">1.1</span>.1.1:443 script.ts
+
+<span class="token comment"># 一个 IPv6 地址，所有端口都允许</span>
+deno run --allow-net<span class="token operator">=</span><span class="token punctuation">[</span><span class="token number">2606</span>:4700:4700::1111<span class="token punctuation">]</span> script.ts
+</code></pre>
+
+      <button id="copy-button-160" class="copyButton" data-copy="# 允许网络访问
+deno run -N script.ts
+# 或
+deno run --allow-net script.ts
+
+# 允许访问 github.com 和 jsr.io 的网络
+deno run --allow-net=github.com,jsr.io script.ts
+
+# 主机名在 80 端口：
+deno run --allow-net=example.com:80 script.ts
+
+# IPv4 地址在 443 端口
+deno run --allow-net=1.1.1.1:443 script.ts
+
+# 一个 IPv6 地址，所有端口都允许
+deno run --allow-net=[2606:4700:4700::1111] script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--deny-net[=&lt;IP_OR_HOSTNAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许访问网络，但拒绝访问 </span>
+<span class="token comment"># github.com 和 jsr.io</span>
+deno run --allow-net --deny-net<span class="token operator">=</span>github.com,jsr.io script.ts
+
+<span class="token comment"># 拒绝所有网络访问，禁用权限提示。</span>
+deno run --deny-net script.ts
+</code></pre>
+
+      <button id="copy-button-164" class="copyButton" data-copy="# 允许访问网络，但拒绝访问 
+# github.com 和 jsr.io
+deno run --allow-net --deny-net=github.com,jsr.io script.ts
+
+# 拒绝所有网络访问，禁用权限提示。
+deno run --deny-net script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在加载模块时，Deno 可以从网络加载模块。默认情况下，Deno 允许使用静态和动态导入从以下位置加载模块，而不需要明确的网络访问：</p>
+<ul>
+<li><code>https://deno.land/</code></li>
+<li><code>https://jsr.io/</code></li>
+<li><code>https://esm.sh/</code></li>
+<li><code>https://raw.githubusercontent.com</code></li>
+<li><code>https://gist.githubusercontent.com</code></li>
+</ul>
+<p>这些位置是受信任的“公共良好”注册表，不被期望通过 URL 路径启用数据外泄。你可以使用 <code>--allow-imports</code> 标志添加更多受信任的注册表。</p>
+<p>此外，Deno 允许通过 <code>npm:</code> 说明符导入任何 NPM 包。</p>
+<p>Deno 还每天最多向 <code>https://dl.deno.land/</code> 发送一次请求，以检查 Deno CLI 的更新。这可以通过设置环境变量 <code>DENO_NO_UPDATE_CHECK=1</code> 来禁用。</p>
+<h3 id="%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" tabindex="-1">环境变量 <a class="header-anchor" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>默认情况下，执行的代码不能读取或写入环境变量。这包括读取环境变量和设置新值。</p>
+<p>访问环境变量的权限是通过 <code>--allow-env</code> 标志授予的。该标志可以通过指定允许访问特定环境变量的环境变量列表来使用。从 Deno v2.1 开始，你现在可以指定后缀通配符以允许对环境变量的“作用域”访问。</p>
+<p>定义：<code>--allow-env[=&lt;VARIABLE_NAME&gt;...]</code> 或 <code>-E[=&lt;VARIABLE_NAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许访问所有环境变量</span>
+deno run <span class="token parameter variable">-E</span> script.ts
+<span class="token comment"># 或</span>
+deno run --allow-env script.ts
+
+<span class="token comment"># 允许访问 HOME 和 FOO 环境变量</span>
+deno run --allow-env<span class="token operator">=</span><span class="token environment constant">HOME</span>,FOO script.ts
+
+<span class="token comment"># 允许访问所有以 AWS_ 开头的环境变量</span>
+deno run --allow-env<span class="token operator">=</span><span class="token string">"AWS_*"</span> script.ts
+</code></pre>
+
+      <button id="copy-button-216" class="copyButton" data-copy="# 允许访问所有环境变量
+deno run -E script.ts
+# 或
+deno run --allow-env script.ts
+
+# 允许访问 HOME 和 FOO 环境变量
+deno run --allow-env=HOME,FOO script.ts
+
+# 允许访问所有以 AWS_ 开头的环境变量
+deno run --allow-env=&quot;AWS_*&quot; script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--deny-env[=&lt;VARIABLE_NAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许所有环境变量，但拒绝 </span>
+<span class="token comment"># AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY。</span>
+deno run <span class="token punctuation">\</span>
+  --allow-env <span class="token punctuation">\</span>
+  --deny-env<span class="token operator">=</span>AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY <span class="token punctuation">\</span>
+  script.ts
+
+<span class="token comment"># 拒绝所有对环境变量的访问，禁用权限提示。</span>
+deno run --deny-env script.ts
+</code></pre>
+
+      <button id="copy-button-220" class="copyButton" data-copy="# 允许所有环境变量，但拒绝 
+# AWS_ACCESS_KEY_ID 和 AWS_SECRET_ACCESS_KEY。
+deno run \
+  --allow-env \
+  --deny-env=AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY \
+  script.ts
+
+# 拒绝所有对环境变量的访问，禁用权限提示。
+deno run --deny-env script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><blockquote>
+<p>Windows 用户注意：环境变量在 Windows 上不区分大小写，Deno 也会在 Windows 上不区分大小写地匹配它们。</p>
+</blockquote>
+<p>Deno 在启动时读取某些环境变量，例如 <code>DENO_DIR</code> 和 <code>NO_COLOR</code>（<a href="/runtime/reference/cli/env_variables/">查看完整列表</a>）。</p>
+<p><code>NO_COLOR</code> 环境变量的值对在 Deno 运行时中运行的所有代码都是可见的，无论该代码是否已被授予读取环境变量的权限。</p>
+<h3 id="%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF" tabindex="-1">系统信息 <a class="header-anchor" href="#%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>默认情况下，执行的代码不能访问系统信息，例如操作系统版本、系统正常运行时间、负载平均值、网络接口和系统内存信息。</p>
+<p>访问系统信息的权限是通过 <code>--allow-sys</code> 标志授予的。该标志可以通过指定允许访问的接口列表来使用，接口可以包括：<code>hostname</code>、<code>osRelease</code>、<code>osUptime</code>、<code>loadavg</code>、<code>networkInterfaces</code>、<code>systemMemoryInfo</code>、<code>uid</code> 和 <code>gid</code>。这些字符串映射到 <code>Deno</code> 命名空间中的提供 OS 信息的函数，比如
+<a href="https://docs.deno.com/api/deno/~/Deno.SystemMemoryInfo">Deno.systemMemoryInfo</a>。</p>
+<p>定义：<code>--allow-sys[=&lt;API_NAME&gt;...]</code> 或 <code>-S[=&lt;API_NAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许所有系统信息 API</span>
+deno run <span class="token parameter variable">-S</span> script.ts
+<span class="token comment"># 或</span>
+deno run --allow-sys script.ts
+
+<span class="token comment"># 允许 systemMemoryInfo 和 osRelease APIs</span>
+deno run --allow-sys<span class="token operator">=</span><span class="token string">"systemMemoryInfo,osRelease"</span> script.ts
+</code></pre>
+
+      <button id="copy-button-244" class="copyButton" data-copy="# 允许所有系统信息 API
+deno run -S script.ts
+# 或
+deno run --allow-sys script.ts
+
+# 允许 systemMemoryInfo 和 osRelease APIs
+deno run --allow-sys=&quot;systemMemoryInfo,osRelease&quot; script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--deny-sys[=&lt;API_NAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许访问所有系统信息，但限制 "networkInterfaces"</span>
+deno run --allow-sys --deny-sys<span class="token operator">=</span><span class="token string">"networkInterfaces"</span> script.ts
+
+<span class="token comment"># 拒绝对系统信息的所有访问，禁用权限提示。</span>
+deno run --deny-sys script.ts
+</code></pre>
+
+      <button id="copy-button-248" class="copyButton" data-copy="# 允许访问所有系统信息，但限制 &quot;networkInterfaces&quot;
+deno run --allow-sys --deny-sys=&quot;networkInterfaces&quot; script.ts
+
+# 拒绝对系统信息的所有访问，禁用权限提示。
+deno run --deny-sys script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%AD%90%E8%BF%9B%E7%A8%8B" tabindex="-1">子进程 <a class="header-anchor" href="#%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>默认情况下，在 Deno 运行时中执行的代码不能生成子进程，因为这将构成违反不可以在未获得用户同意的情况下提升其特权的原则。</p>
+<p>Deno 提供了一种执行子进程的机制，但这需要用户的明确权限。这是通过使用 <code>--allow-run</code> 标志来完成的。</p>
+<p>从程序生成的任何子进程独立于父进程所授予的权限运行。这意味着子进程可以访问系统资源，而不考虑已授予生成它的 Deno 进程的权限。这通常被称为特权提升。</p>
+<p>因此，请确保仔细考虑是否想要授予程序 <code>--allow-run</code> 访问权限：这本质上无效化了 Deno 的安全沙箱。如果你确实需要生成特定的可执行文件，可以通过将特定的可执行文件名称传递给 <code>--allow-run</code> 标志来降低风险。</p>
+<p>定义：<code>--allow-run[=&lt;PROGRAM_NAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许运行所有子进程</span>
+deno run --allow-run script.ts
+
+<span class="token comment"># 允许运行 "curl" 和 "whoami" 子进程</span>
+deno run --allow-run<span class="token operator">=</span><span class="token string">"curl,whoami"</span> script.ts
+</code></pre>
+
+      <button id="copy-button-267" class="copyButton" data-copy="# 允许运行所有子进程
+deno run --allow-run script.ts
+
+# 允许运行 &quot;curl&quot; 和 &quot;whoami&quot; 子进程
+deno run --allow-run=&quot;curl,whoami&quot; script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>
+<div class="admonition caution">
+  <div class="title">Caution</div>
+
+</p>
+<p>除非父进程具有 <code>--allow-all</code>，否则你可能永远不想使用 <code>--allow-run=deno</code>，因为能够生成一个 <code>deno</code> 进程意味着该脚本可以生成另一个具有完全权限的 <code>deno</code> 进程。</p>
+<p>
+</div>
+</p>
+<p>定义：<code>--deny-run[=&lt;PROGRAM_NAME&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许运行所有程序，但 "whoami" 和 "ps"。</span>
+deno run --allow-run --deny-run<span class="token operator">=</span><span class="token string">"whoami,ps"</span> script.ts
+
+<span class="token comment"># 拒绝所有生成子进程的访问，禁用权限提示。</span>
+deno run --deny-run script.ts
+</code></pre>
+
+      <button id="copy-button-280" class="copyButton" data-copy="# 允许运行所有程序，但 &quot;whoami&quot; 和 &quot;ps&quot;。
+deno run --allow-run --deny-run=&quot;whoami,ps&quot; script.ts
+
+# 拒绝所有生成子进程的访问，禁用权限提示。
+deno run --deny-run script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>默认情况下，<code>npm</code> 包的后安装脚本不会在安装期间执行（例如通过 <code>deno install</code>），因为这会允许任意代码执行。当使用 <code>--allow-scripts</code> 标志运行时，npm 包的后安装脚本将作为子进程执行。</p>
+<h3 id="ffi%EF%BC%88%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3%EF%BC%89" tabindex="-1">FFI（外部函数接口） <a class="header-anchor" href="#ffi%EF%BC%88%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3%EF%BC%89"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno provides an
+<a href="/runtime/fundamentals/ffi/">FFI mechanism for executing code written in other languages</a>,
+such as Rust, C, or C++, from within a Deno runtime. This is done using the
+<code>Deno.dlopen</code> API, which can load shared libraries and call functions from them.</p>
+<p>默认情况下，执行的代码不能使用 <code>Deno.dlopen</code> API，因为这违反了代码不能在未获得用户同意的情况下提升其特权的原则。</p>
+<p>除了 <code>Deno.dlopen</code>，FFI 也可以通过 Node-API (NAPI) 原生添加模块使用。这些默认情况下也不被允许。</p>
+<p><code>Deno.dlopen</code> 和 NAPI 原生添加模块都需要使用 <code>--allow-ffi</code> 标志明确授权。该标志可以通过指定允许访问特定动态库的文件或目录列表来使用。</p>
+<p><em>同子进程一样，动态库不会在沙箱中运行，因此没有与它们被加载到的 Deno 进程相同的安全限制。因此，请极其小心地使用。</em></p>
+<p>定义：<code>--allow-ffi[=&lt;PATH&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许加载所有动态库</span>
+deno run --allow-ffi script.ts
+
+<span class="token comment"># 允许从特定路径加载动态库</span>
+deno run --allow-ffi<span class="token operator">=</span>./libfoo.so script.ts
+</code></pre>
+
+      <button id="copy-button-305" class="copyButton" data-copy="# 允许加载所有动态库
+deno run --allow-ffi script.ts
+
+# 允许从特定路径加载动态库
+deno run --allow-ffi=./libfoo.so script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义：<code>--deny-ffi[=&lt;PATH&gt;...]</code></p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 允许加载所有动态库，但 ./libfoo.so</span>
+deno run --allow-ffi --deny-ffi<span class="token operator">=</span>./libfoo.so script.ts
+
+<span class="token comment"># 拒绝加载所有动态库，禁用权限提示。</span>
+deno run --deny-ffi script.ts
+</code></pre>
+
+      <button id="copy-button-309" class="copyButton" data-copy="# 允许加载所有动态库，但 ./libfoo.so
+deno run --allow-ffi --deny-ffi=./libfoo.so script.ts
+
+# 拒绝加载所有动态库，禁用权限提示。
+deno run --deny-ffi script.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E4%BB%8E-web-%E5%AF%BC%E5%85%A5" tabindex="-1">从 Web 导入 <a class="header-anchor" href="#%E4%BB%8E-web-%E5%AF%BC%E5%85%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>允许从 Web 导入代码。默认情况下，Deno 限制可以从中导入代码的主机。这对于静态和动态导入都是如此。</p>
+<p>如果你想动态导入代码，无论是使用 <code>import()</code> 还是 <code>new Worker()</code> API，都需要授予额外的权限。从本地文件系统导入 <a href="#file-system-read-access">需要 <code>--allow-read</code></a>，但 Deno 也允许从 <code>http:</code> 和 <code>https:</code> URL 导入。在这种情况下，你需要指定一个明确的 <code>--allow-import</code> 标志：</p>
+<div class="relative"><pre><code># 允许从 `https://example.com` 导入代码
+$ deno run --allow-import=example.com main.ts
+</code></pre>
+
+      <button id="copy-button-319" class="copyButton" data-copy="# 允许从 `https://example.com` 导入代码
+$ deno run --allow-import=example.com main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>默认情况下，Deno 允许从以下主机导入源：</p>
+<ul>
+<li><code>deno.land</code></li>
+<li><code>esm.sh</code></li>
+<li><code>jsr.io</code></li>
+<li><code>cdn.jsdelivr.net</code></li>
+<li><code>raw.githubusercontent.com</code></li>
+<li><code>gist.githubusercontent.com</code></li>
+</ul>
+<p><strong>仅允许使用 HTTPS 进行导入</strong></p>
+<p>此允许列表默认适用于静态导入，并在指定 <code>--allow-import</code> 标志时默认适用于动态导入。</p>
+<div class="relative"><pre><code># 允许从 `https://deno.land` 动态导入代码
+$ deno run --allow-import main.ts
+</code></pre>
+
+      <button id="copy-button-361" class="copyButton" data-copy="# 允许从 `https://deno.land` 动态导入代码
+$ deno run --allow-import main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>请注意，为 <code>--allow-import</code> 指定允许列表将覆盖默认主机列表。</p>
+<h2 id="%E4%BB%A3%E7%A0%81%E8%AF%84%E4%BC%B0" tabindex="-1">代码评估 <a class="header-anchor" href="#%E4%BB%A3%E7%A0%81%E8%AF%84%E4%BC%B0"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 对同一特权级别下的代码执行没有限制。这意味着在 Deno 运行时中执行的代码可以使用 <code>eval</code>、<code>new Function</code>，甚至动态导入或 web 工作者，以相同的特权级别执行<strong>任意</strong>代码，与调用 <code>eval</code>、<code>new Function</code> 或动态导入或 web 工作者的代码相同。</p>
+<p>这些代码可以托管在网络上，可以是本地文件（如果已授予读取权限），或以字符串形式在调用 <code>eval</code>、<code>new Function</code> 或动态导入或 web 工作者的代码中存储的纯文本。</p>
+<h2 id="%E6%89%A7%E8%A1%8C%E4%B8%8D%E5%8F%AF%E4%BF%A1%E4%BB%A3%E7%A0%81" tabindex="-1">执行不可信代码 <a class="header-anchor" href="#%E6%89%A7%E8%A1%8C%E4%B8%8D%E5%8F%AF%E4%BF%A1%E4%BB%A3%E7%A0%81"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>虽然 Deno 提供了一些旨在保护主机计算机和网络免受伤害的安全功能，但不可信代码仍然令人害怕。在执行不可信代码时，确保拥有多层防御是很重要的。以下是一些执行不可信代码的建议，我们建议在执行任意不可信代码时使用以下所有建议：</p>
+<ul>
+<li>限制权限运行 <code>deno</code>，并预先确定实际需要运行的代码（并通过使用 <code>--frozen</code> 锁定文件和 <code>--cached-only</code> 防止更多代码被加载）。</li>
+<li>使用操作系统提供的沙箱机制，如 <code>chroot</code>、<code>cgroups</code>、<code>seccomp</code> 等。</li>
+<li>使用虚拟机或 MicroVM（gVisor、Firecracker 等）等沙箱环境。</li>
+</ul>
+</div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-blue-100 dark:border-background-tertiary bg-blue-50 dark:bg-background-secondary rounded mx-auto"><h2 class="text-xl border-b border-blue-100 dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/fundamentals/security.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#%E5%85%B3%E9%94%AE%E5%8E%9F%E5%88%99" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">关键原则 </a></li><li class="m-2 leading-4"><a href="#%E6%9D%83%E9%99%90" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">权限 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BF%E9%97%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">文件系统访问 </a></li><li class="m-2 leading-4"><a href="#%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">网络访问 </a></li><li class="m-2 leading-4"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">环境变量 </a></li><li class="m-2 leading-4"><a href="#%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">系统信息 </a></li><li class="m-2 leading-4"><a href="#%E5%AD%90%E8%BF%9B%E7%A8%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">子进程 </a></li><li class="m-2 leading-4"><a href="#ffi%EF%BC%88%E5%A4%96%E9%83%A8%E5%87%BD%E6%95%B0%E6%8E%A5%E5%8F%A3%EF%BC%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">FFI（外部函数接口） </a></li><li class="m-2 leading-4"><a href="#%E4%BB%8E-web-%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">从 Web 导入 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E4%BB%A3%E7%A0%81%E8%AF%84%E4%BC%B0" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">代码评估 </a></li><li class="m-2 leading-4"><a href="#%E6%89%A7%E8%A1%8C%E4%B8%8D%E5%8F%AF%E4%BF%A1%E4%BB%A3%E7%A0%81" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">执行不可信代码 </a></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>
