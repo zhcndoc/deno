@@ -122,13 +122,13 @@ const response = await fetch("http://localhost:8000/");
 运行此示例，首先启动服务器，为你的 otel 服务命名：
 
 ```sh
-OTEL_DENO=true OTEL_SERVICE_NAME=server deno run --unstable-otel --allow-net server.ts
+OTEL_DENO=true OTEL_SERVICE_NAME=server deno run --allow-net server.ts
 ```
 
 然后，在另一个终端运行客户端，为客户端服务指定不同的名称，以便更清晰地观察传播：
 
 ```sh
-OTEL_DENO=true OTEL_SERVICE_NAME=client deno run --unstable-otel --allow-net client.ts
+OTEL_DENO=true OTEL_SERVICE_NAME=client deno run --allow-net client.ts
 ```
 
 你应当看到：

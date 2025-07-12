@@ -172,7 +172,7 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 - [`WebSocketStream`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream)
 - [`Deno.DatagramConn`](https://docs.deno.com/api/deno/~/Deno.DatagramConn)
 
-## `--unstable-otel`
+## ``
 
 启用 [Deno 的 OpenTelemetry 集成](/runtime/fundamentals/open_telemetry)。
 
@@ -195,4 +195,38 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 deno run --unstable your_script.ts
 ```
 
-建议您使用更细粒度的不稳定标志，而不是使用此标志，`--unstable` 标志现在已被弃用，并将在 Deno 2 中移除。
+建议您改用更细粒度的不稳定标志，`--unstable` 标志现已弃用，并将在 Deno 2 中被移除。
+
+## `--unstable-temporal`
+
+启用全局作用域中的实验性 [Temporal API](https://tc39.es/proposal-temporal/docs/)。Temporal API 是正在开发中的现代日期和时间 API，旨在替代 JavaScript 中的传统 `Date` 对象。它提供了更好的时区、日历支持以及更精确的日期/时间计算。
+
+要在 Deno 程序中使用 Temporal API，请使用以下标志运行：
+
+```sh
+deno run --unstable-temporal your_script.ts
+```
+
+或在您的 `deno.json` 中配置：
+
+```json title="deno.json"
+{
+  "unstable": ["temporal"]
+}
+```
+
+```ts title="example.ts"
+// 使用 Temporal API 的示例
+const now = Temporal.Now.plainDateTimeISO();
+console.log(`当前日期和时间: ${now}`);
+
+const date = Temporal.PlainDate.from("2025-07-10");
+const nextWeek = date.add({ days: 7 });
+console.log(`下一周: ${nextWeek}`);
+
+// 处理时区
+const zonedDateTime = Temporal.Now.zonedDateTimeISO("America/New_York");
+console.log(`纽约时间: ${zonedDateTime}`);
+```
+
+请注意，Temporal API 仍处于实验阶段，规范可能在稳定之前发生变化。仅用于测试和试验目的使用此标志。

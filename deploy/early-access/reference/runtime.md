@@ -9,19 +9,19 @@ description: "关于 Deno Deploy 早期访问运行时环境的详细信息，�
 
 :::
 
-在 Deno Deploy<sup>EA</sup> 中，所有应用程序均使用标准的 Deno 运行时在安全、隔离的 Linux 环境中执行。
+在 Deno Deploy<sup>EA</sup> 中，所有应用程序都使用标准的 Deno 运行时在安全、隔离的 Linux 环境中执行。
 
-Deno Deploy<sup>EA</sup> 中使用的 Deno 运行时是标准的 Deno 运行时，完全支持 Deno CLI 的所有功能，包括 JSR 和 NPM 依赖、文件系统的读写、网络请求、子进程启动，以及加载 FFI 和 node 原生插件。
+Deno Deploy<sup>EA</sup> 使用的 Deno 运行时是标准的 Deno 运行时，完全支持 Deno CLI 的所有功能，包括 JSR 和 NPM 依赖、读写文件系统、发起网络请求、生成子进程，以及加载 FFI 和 node 原生插件。
 
-Deno 运行时使用 `--allow-all` 权限运行。
+Deno 运行时以 `--allow-all` 权限运行。
 
-不能向 Deno 运行时传递自定义标志。
+无法向 Deno 运行时传递自定义标志。
 
 ## 运行时环境
 
-运行时环境是基于 Linux 的环境，运行在 x64 或 ARM64 架构上。运行时环境中可用的工具集可能会发生变化，因此不应依赖于其具体内容。
+运行时环境是基于 Linux 的环境，运行在 x64 或 ARM64 架构上。运行时环境中可用的具体工具集可能会发生变化，因此无法依赖其稳定性。
 
-当前 Deno Deploy<sup>EA</sup> 运行在 Deno 2.3.2 版本上。
+目前 Deno Deploy<sup>EA</sup> 运行在 Deno 2.4.0 上。
 
 ## 生命周期
 

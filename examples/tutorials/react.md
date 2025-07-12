@@ -1,94 +1,112 @@
 ---
-title: "Build a React app with a starter template"
-description: "Complete guide to building React applications with Deno and Vite. Learn how to set up a project from a template, implement routing, add API endpoints, and deploy your full-stack TypeScript application."
+title: "使用起始模板构建 React 应用"
+description: "使用 Deno 和 Vite 构建 React 应用的完整指南。学习如何从模板设置项目，实现路由，添加 API 端点，并部署你的全栈 TypeScript 应用。"
 url: /examples/react_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/react/
   - /runtime/manual/basics/react/
   - /runtime/tutorials/how_to_with_npm/react/
+  - /runtime/tutorials/create_react_tutorial/
 ---
 
 [React](https://reactjs.org) 是最广泛使用的 JavaScript 前端库。
 
-在本教程中，我们将使用 Deno 构建一个简单的 React 应用。该应用将显示一组恐龙。当您点击其中一只时，将跳转到一个包含更多详细信息的恐龙页面。您可以查看
-[完成的应用仓库在 GitHub 上](https://github.com/denoland/tutorial-with-react)
+在本教程中，我们将使用 Deno 构建一个简单的 React 应用。该应用将展示一列恐龙。当你点击其中一只时，它会带你到一个有更多信息的恐龙页面。你可以查看 [GitHub 上的完成应用仓库](https://github.com/denoland/tutorial-with-react)，以及在 [Deno Deploy 上的应用演示](https://tutorial-with-react.deno.deno.net/)。
 
-![应用演示](./images/how-to/react/react-dinosaur-app-demo.gif)
+## 使用 Vite 创建基础 React 应用
 
-本教程将使用 [Vite](https://vitejs.dev/) 在本地提供应用。Vite 是一个现代 Web 项目的构建工具和开发服务器。它很好地与 React 和 Deno 配合使用，利用 ES 模块并允许您直接导入 React 组件。
+本教程将使用 [Vite](https://vitejs.dev/) 在本地提供该应用。Vite 是一个现代 Web 项目的构建工具和开发服务器。它与 React 和 Deno 配合良好，利用 ES 模块，允许你直接导入 React 组件。
 
-## 启动应用
-
-我们为您准备了一个
-[起始模板](https://github.com/denoland/react-vite-ts-template)。这将为您设置一个基本的启动应用，其中包括 React、Vite 和一个 deno.json 文件，您可以在其中配置您的项目。访问 GitHub 仓库 [https://github.com/denoland/react-vite-ts-template](https://github.com/denoland/react-vite-ts-template)，然后点击“使用此模板”按钮以创建一个新的仓库。
-
-在您从模板创建新仓库后，将其克隆到本地计算机并导航到项目目录。
-
-## 在本地克隆仓库
+在你的终端运行以下命令，使用 typescript 模板创建一个新的 React 应用：
 
 ```sh
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-```
-
-## 安装依赖
-
-通过运行以下命令安装项目依赖：
-
-```sh
-deno install
+deno run -A npm:create-vite@latest --template react-ts
 ```
 
 ## 运行开发服务器
 
-现在您可以通过运行以下命令来提供新的 React 应用：
+切换目录到你新创建的 react 应用并安装依赖：
+
+```sh
+cd <your_new_react_app>
+deno install
+```
+
+现在你可以通过运行以下命令来提供新的 React 应用：
 
 ```sh
 deno run dev
 ```
 
-这将启动 Vite 服务器，点击输出链接到 localhost，以在浏览器中查看您的应用。
+这将启动 Vite 服务器，点击输出中的 localhost 链接，在浏览器中查看你的应用。
 
-## 关于模板
+## 配置项目
 
-您克隆的模板仓库带有一个基本的 React 应用。该应用使用 Vite 作为开发服务器，并提供一个使用 [oak](https://jsr.io/@oak/oak) 构建的静态文件服务器，当部署时将提供构建的应用。React 应用位于 `client` 文件夹，后端服务器位于 `server` 文件夹。
+我们将构建一个带有 Deno 后端的全栈 React 应用。需要配置 Vite 和 Deno 以协同工作。
 
-`deno.json` 文件用于配置项目并指定运行应用所需的权限，它包含 `tasks` 字段，定义可以使用 `deno run` 运行的任务。它有一个 `dev` 任务，用于运行 Vite 服务器，有一个 `build` 任务，用于使用 Vite 构建应用，还有一个 `serve` 任务，用于运行后端服务器以提供构建的应用。
+安装 Vite 的 deno 插件、React 类型和 Vite React 插件：
+
+```sh
+deno add npm:deno-vite-plugin@latest npm:@types/react@latest npm:@vitejs/plugin-react@latest
+```
+
+还需要安装 Deno 的 Oak Web 框架来处理我们的 API 请求，以及 CORS 中间件允许来自 React 应用的跨域请求：
+
+```sh
+deno add jsr:@oak/oak@ jsr:@tajpouria/cors
+```
+
+这会将这些依赖添加到新的 `deno.json` 文件中。
+
+在该文件中，我们还将添加一些任务，使得在开发和生产模式下运行应用更方便，同时添加配置以设置 Deno 与 React 和 Vite。将以下内容添加到你的 `deno.json` 文件：
+
+```json
+"tasks": {
+    "dev": "deno run -A npm:vite & deno run server:start",
+    "build": "deno run -A npm:vite build",
+    "server:start": "deno run -A --watch ./api/main.ts",
+    "serve": "deno run build && deno run server:start"
+},
+"nodeModulesDir": "auto",
+"compilerOptions": {
+    "types": [
+        "react",
+        "react-dom",
+        "@types/react"
+    ],
+    "lib": [
+        "dom",
+        "dom.iterable",
+        "deno.ns"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+}
+```
+
+我们既可以使用 `package.json` 也可以使用 `deno.json` 来管理依赖和配置，但如果你愿意，可以删除 `package.json` 文件，仅使用 `deno.json` 来配置项目，确保先将依赖从 `package.json` 迁移至 `deno.json` 的 imports。
 
 ## 添加后端 API
 
-我们将在模板提供的服务器中构建一个 API。这将是我们获取恐龙数据的地方。
+我们的项目将有一个提供恐龙数据的后端 API。该 API 将使用 Deno 和 Oak 构建，提供端点来获取恐龙列表和特定恐龙的详细信息，数据来源于一个 JSON 文件。在生产应用中这通常来自数据库，但本教程使用静态 JSON 文件。
 
-在新项目的 `server` 目录中，创建一个 `api` 文件夹。在该文件夹中，创建一个 `data.json` 文件，包含硬编码的恐龙数据。
+在项目根目录创建一个名为 `api` 的新目录。在该目录下创建一个名为 `data.json` 的文件，并复制 [恐龙数据](https://github.com/denoland/tutorial-with-react/blob/main/api/data.json)。
 
-复制并粘贴
-[这个 JSON 文件](https://github.com/denoland/tutorial-with-react/blob/main/api/data.json)
-到 `api/data.json` 文件中。（如果您是在构建一个真实的应用，您可能会从数据库或外部 API 中获取这些数据。）
+然后在 `api` 目录中创建一个名为 `main.ts` 的文件。该文件包含用于处理 API 请求的 Oak 服务器代码。首先设置导入，创建 Oak 应用和路由器：
 
-我们将构建一些返回恐龙信息的 API 路由到模板附带的服务器中，我们需要 [`cors` 中间件](https://jsr.io/@tajpouria/cors) 来启用 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)。
-
-使用 `deno install` 命令向项目添加 cors 依赖：
-
-```shell
-deno install jsr:@tajpouria/cors
-```
-
-接下来，更新 `server/main.ts` 导入所需模块并创建一个新的 `Router` 实例以定义一些路由：
-
-```ts title="main.ts"
-import { Application } from "jsr:@oak/oak/application";
-import { Router } from "jsr:@oak/oak/router";
+```ts title="api/main.ts"
+import { Application, Router } from "@oak/oak";
 import { oakCors } from "@tajpouria/cors";
 import routeStaticFilesFrom from "./util/routeStaticFilesFrom.ts";
-import data from "./api/data.json" with { type: "json" };
+import data from "./data.json" with { type: "json" };
 
 export const app = new Application();
 const router = new Router();
 ```
 
-之后，在同一文件中，我们将定义两个路由。一个在 `/api/dinosaurs` 用于返回所有恐龙，另一个在 `/api/dinosaurs/:dinosaur` 用于根据 URL 中的名称返回特定恐龙：
+接着定义两个主要的 API 路由：
 
-```ts title="main.ts"
+```ts title="api/main.ts"
 router.get("/api/dinosaurs", (context) => {
   context.response.body = data;
 });
@@ -106,15 +124,15 @@ router.get("/api/dinosaurs/:dinosaur", (context) => {
 });
 ```
 
-在同一文件的底部，将我们刚刚定义的路由附加到应用中。我们还必须包括模板中的静态文件服务器，最后我们将启动服务器并监听 8000 端口：
+最后，配置服务器中间件并启动监听：
 
-```ts title="main.ts"
+```ts title="api/main.ts"
 app.use(oakCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 app.use(routeStaticFilesFrom([
-  `${Deno.cwd()}/client/dist`,
-  `${Deno.cwd()}/client/public`,
+  `${Deno.cwd()}/dist`,
+  `${Deno.cwd()}/public`,
 ]));
 
 if (import.meta.main) {
@@ -123,28 +141,42 @@ if (import.meta.main) {
 }
 ```
 
-您可以使用以下命令运行 API 服务器：`deno run --allow-env --allow-net --allow-read server/main.ts`。我们将创建一个任务在后台运行此命令，并更新开发任务以同时运行 React 应用程序和 API 服务器。
+服务器处理 CORS，提供 API 路由，也从 `dist`（构建后的应用）和 `public` 目录提供静态文件。
 
-在您的 `deno.json` 文件中，更新 `tasks` 字段以包含以下内容：
+## 提供静态文件
 
-```diff title="deno.json"
-{
-  "tasks": {
-+   "dev": "deno run -A npm:vite & deno run server:start",
-    "build": "deno run -A npm:vite build",
-    "server:start": "deno run -A --node-modules-dir --watch ./server/main.ts",
-    "serve": "deno run build && deno run server:start"
-},
-+ "nodeModulesDir": "auto",
+Oak 服务器还将提供构建好的 React 应用。为此我们需要配置它从 Vite 输出构建文件的 `dist` 目录提供静态文件。我们使用 `routeStaticFilesFrom` 工具函数来实现。在 `api` 目录下新建 `util/routeStaticFilesFrom.ts` 文件，内容如下：
+
+```ts title="api/util/routeStaticFilesFrom.ts"
+import { Context, Next } from "jsr:@oak/oak";
+
+export default function routeStaticFilesFrom(staticPaths: string[]) {
+  return async (context: Context<Record<string, object>>, next: Next) => {
+    for (const path of staticPaths) {
+      try {
+        await context.send({ root: path, index: "index.html" });
+        return;
+      } catch {
+        continue;
+      }
+    }
+
+    await next();
+  };
+}
 ```
 
-如果您现在运行 `deno run dev` 并访问 `localhost:8000/api/dinosaurs`，在您的浏览器中，您应该会看到所有恐龙的 JSON 响应。
+该工具函数尝试从指定路径们中提供静态文件，找不到时调用下一个中间件。它会提供 `dist` 目录中的 `index.html`，即 React 应用的入口文件。
 
-## 更新入口点
+你可以通过运行 `deno run dev`，然后在浏览器访问 `localhost:8000/api/dinosaurs` 来测试 API，查看返回的所有恐龙 JSON 数据。
 
-React 应用的入口点在 `client/src/main.tsx` 文件中。我们的将非常简单：
+## React 应用设置
 
-```tsx title="main.tsx"
+### 入口文件
+
+React 应用的入口在 `src/main.tsx`。这里不需要做任何更改，但值得注意的是，这里是 React 应用渲染入 DOM 的地方。`react-dom/client` 中的 `createRoot` 函数用于将 `App` 组件渲染入 `index.html` 中的 `root` 元素。以下是 `src/main.tsx` 中的代码：
+
+```tsx title="src/main.tsx"
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
@@ -161,21 +193,12 @@ createRoot(document.getElementById("root")!).render(
 
 该应用将有两个路由：`/` 和 `/:dinosaur`。
 
-我们将使用 [`react-router-dom`](https://reactrouter.com/en/main) 来构建一些路由逻辑，因此我们需要将 `react-router-dom` 依赖添加到项目中。在项目根目录下运行：
+我们将在 `src/App.tsx` 中设置路由：
 
-```shell
-deno install npm:react-router-dom
-```
-
-更新 `/src/App.tsx` 文件以导入并使用
-[`BrowserRouter`](https://reactrouter.com/en/main/router-components/browser-router)
-组件，并定义这两个路由：
-
-```tsx title="App.tsx"
+```tsx title="src/App.tsx"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "./pages/index.tsx";
 import Dinosaur from "./pages/Dinosaur.tsx";
-import "./App.css";
 
 function App() {
   return (
@@ -193,60 +216,58 @@ export default App;
 
 ## 代理以转发 API 请求
 
-Vite 将在端口 `3000` 上提供应用，而我们的 API 在端口 `8000` 上运行。因此，我们需要设置一个代理以使 `api/` 路径可以通过路由访问。在 `vite.config.ts` 添加一个代理设置：
+Vite 在端口 `3000` 提供 React 应用，API 在端口 `8000` 运行。我们需要在 `vite.config.ts` 中设置代理配置，将 API 请求转发：
 
-```diff title="vite.config.ts"
+```ts title="vite.config.ts"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import deno from "@deno/vite-plugin";
+
 export default defineConfig({
-  root: "./client",
   server: {
     port: 3000,
-+   proxy: {
-+     "/api": {
-+       target: "http://localhost:8000",
-+       changeOrigin: true,
-+     },
-+   },
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+      },
+    },
+  },
+  plugins: [react(), deno()],
+  optimizeDeps: {
+    include: ["react/jsx-runtime"],
+  },
+});
 ```
 
 ## 创建页面
 
-我们将创建两个页面：`Index` 和 `Dinosaur`。`Index` 页面将列出所有恐龙，而 `Dinosaur` 页面将显示特定恐龙的详细信息。
-
-在 `src` 目录中创建一个 `pages` 文件夹，并在其中创建两个文件：`index.tsx` 和 `Dinosaur.tsx`。
-
-### 类型
-
-这两个页面将使用 `Dino` 类型来描述它们期望从 API 中获取的数据形状，因此我们在 `src` 目录中创建一个 `types.ts` 文件：
-
-```ts title="types.ts"
-export type Dino = { name: string; description: string };
-```
+创建一个新目录 `pages`，在其中创建两个新文件 `src/pages/index.tsx` 和 `src/pages/Dinosaur.tsx`。`Index` 页面列出所有恐龙，`Dinosaur` 页面显示特定恐龙详情。
 
 ### index.tsx
 
-此页面将从 API 获取恐龙列表并将其呈现为链接：
+该页面从 API 获取恐龙列表，并以链接形式渲染：
 
-```tsx title="index.tsx"
+```tsx title="src/pages/index.tsx"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Dino } from "../types.ts";
 
 export default function Index() {
-  const [dinosaurs, setDinosaurs] = useState<Dino[]>([]);
+  const [dinosaurs, setDinosaurs] = useState([]);
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`/api/dinosaurs/`);
-      const allDinosaurs = await response.json() as Dino[];
+      const allDinosaurs = await response.json();
       setDinosaurs(allDinosaurs);
     })();
   }, []);
 
   return (
     <main>
-      <h1>欢迎来到恐龙应用</h1>
-      <p>点击下方的恐龙以了解更多信息。</p>
-      {dinosaurs.map((dinosaur: Dino) => {
+      <h1>🦕 Dinosaur app</h1>
+      <p>Click on a dinosaur below to learn more.</p>
+      {dinosaurs.map((dinosaur: { name: string; description: string }) => {
         return (
           <Link
             to={`/${dinosaur.name.toLowerCase()}`}
@@ -264,21 +285,20 @@ export default function Index() {
 
 ### Dinosaur.tsx
 
-此页面将从 API 获取特定恐龙的详细信息并在段落中呈现：
+该页面从 API 获取特定恐龙的详细信息，并在段落中显示：
 
-```tsx title="Dinosaur.tsx"
+```tsx title="src/pages/Dinosaur.tsx"
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Dino } from "../types";
 
 export default function Dinosaur() {
   const { selectedDinosaur } = useParams();
-  const [dinosaur, setDino] = useState<Dino>({ name: "", description: "" });
+  const [dinosaur, setDino] = useState({ name: "", description: "" });
 
   useEffect(() => {
     (async () => {
       const resp = await fetch(`/api/dinosaurs/${selectedDinosaur}`);
-      const dino = await resp.json() as Dino;
+      const dino = await resp.json();
       setDino(dino);
     })();
   }, [selectedDinosaur]);
@@ -293,45 +313,98 @@ export default function Dinosaur() {
 }
 ```
 
-### 对恐龙列表进行样式设置
+### 美化你的应用
 
-由于我们在主页上显示恐龙列表，因此让我们进行一些基本的格式化。将以下内容添加到 `src/App.css` 的底部，以有序显示我们的恐龙列表：
-
-```css title="src/App.css"
-.dinosaur {
-  display: block;
-}
-```
+我们为你编写了 [一些基础样式](https://raw.githubusercontent.com/denoland/tutorial-with-react/refs/heads/main/src/index.css)，可以复制到 `src/index.css`。
 
 ## 运行应用
 
-要运行应用，请使用您之前设置的任务
+要运行应用，使用在 `deno.json` 中定义的开发任务：
 
 ```sh
 deno run dev
 ```
 
-在浏览器中导航到本地 Vite 服务器 (`localhost:3000`)，您应该会看到列出的恐龙，您可以单击以了解每个恐龙的详细信息。
+该命令将执行：
 
-![应用演示](./images/how-to/react/react-dinosaur-app-demo.gif)
+1. 在端口 3000 启动 Vite 开发服务器
+2. 在端口 8000 启动 API 服务器
+3. 配置代理，将前端的 `/api` 请求转发到后端
+
+在浏览器中访问 `localhost:3000`，你应该能看到恐龙应用，恐龙列表可以点击查看详情。
+
+## 理解项目结构
+
+让我们浏览项目中的关键文件和文件夹：
+
+```text
+tutorial-with-react/
+├── api/                    # 后端 API
+│   ├── data.json          # 恐龙数据（700+ 种）
+│   ├── main.ts            # 带 API 路由的 Oak 服务器
+│   └── util/
+│       └── routeStaticFilesFrom.ts
+├── src/                    # React 前端
+│   ├── main.tsx           # React 应用入口
+│   ├── App.tsx            # 主应用及路由
+│   ├── index.css          # 全局样式
+│   └── pages/
+│       ├── index.tsx      # 含恐龙列表的首页
+│       └── Dinosaur.tsx   # 单个恐龙页面
+├── public/                 # 静态资源
+├── deno.json              # Deno 配置和任务
+├── package.json           # Vite 的 npm 依赖
+├── vite.config.ts         # 带代理的 Vite 配置
+└── index.html             # HTML 模板
+```
+
+### 关键概念
+
+1. **混合依赖管理**：项目同时使用 Deno 和 npm 依赖。服务器端依赖如 Oak 使用 Deno，前端依赖通过 Vite 由 npm 管理。
+
+2. **开发与生产环境**：开发时，Vite 在 3000 端口提供 React 应用，并代理 API 请求到 8000 端口的 Oak 服务器。生产时，Oak 服务器在 8000 端口同时提供构建好的 React 应用和 API。
+
+3. **现代 React 模式**：应用使用 React 19，函数组件，Hooks 和 React Router 进行导航。
+
+4. **类型安全**：尽管示例未使用独立的类型文件，在大型应用中你通常会为数据结构创建 TypeScript 接口。
+
+你可以在 [Deno Deploy 上运行的应用版本](https://tutorial-with-react.deno.deno.net/) 看到样例。
 
 ## 构建和部署
 
-您克隆的模板自带一个 `serve` 任务，该任务构建应用并使用后端服务器提供它。运行以下命令以构建和提供应用：
+我们设置了一个 `serve` 任务，构建 React 应用并通过 Oak 后端服务它。运行以下命令以生产模式构建和提供应用：
 
 ```sh
+deno run build
 deno run serve
 ```
 
-如果您在浏览器中访问 `localhost:8000`，您应该会看到该应用正在运行！
+这会：
 
-您可以将此应用部署到您喜欢的云提供商。我们推荐使用 [Deno Deploy](https://deno.com/deploy) 以简单和轻松的部署体验。
+1. 使用 Vite 构建 React 应用（输出到 `dist/`）
+2. 启动 Oak 服务器，提供 API 和已构建的 React 应用
 
-要部署到 Deno Deploy，请访问
-[Deno Deploy 仪表板](https://dash.deno.com) 并创建一个新项目。然后，您可以通过连接您的 GitHub 仓库并选择要部署的分支来部署该应用。
+在浏览器中访问 `localhost:8000` 以查看生产版本的应用！
 
-为项目命名，并确保 `build step` 设置为 `deno run build`，`Entrypoint` 为 `server/main.ts`。
+你可以将此应用部署到你喜欢的云服务。我们推荐使用 [Deno Deploy](https://deno.com/deploy) 以获得简单便捷的部署体验。你可以直接从 GitHub 部署应用，只需创建 GitHub 仓库并推送代码，然后连接到 Deno Deploy。
 
-点击 `Deploy Project` 按钮，您的应用将上线！
+### 创建 GitHub 仓库
 
-🦕 现在您可以使用 Vite 和 Deno 搭建和开发一个 React 应用！您准备好构建快速的 Web 应用程序了。我们希望您喜欢探索这些前沿工具，我们期待看到您创造的作品！
+[创建一个新的 GitHub 仓库](https://github.com/new)，然后初始化并推送你的应用到 GitHub：
+
+```sh
+git init -b main
+git remote add origin https://github.com/<your_github_username>/<your_repo_name>.git
+git add .
+git commit -am 'my react app'
+git push -u origin main
+```
+
+### 部署到 Deno Deploy
+
+应用上传到 GitHub 后，你可以在 Deno Deploy<sup>EA</sup> 仪表盘中部署它。
+<a href="https://app.deno.com/" class="docs-cta deploy-cta deploy-button">部署我的应用</a>
+
+有关部署应用的完整流程，请查看 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
+
+🦕 现在你已准备好使用 Vite 和 Deno 脚手架搭建和开发 React 应用！你可以构建超高速的 Web 应用。我们希望你喜欢探索这些前沿工具，期待看到你的杰作！

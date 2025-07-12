@@ -116,7 +116,7 @@ Deno.serve({ port: 8000 }, (req) => {
 使用以下命令行标志运行服务器以启用 OpenTelemetry：
 
 ```sh
-OTEL_DENO=true OTEL_SERVICE_NAME=my-server deno run --unstable-otel --allow-net server.ts
+OTEL_DENO=true OTEL_SERVICE_NAME=my-server deno run --allow-net server.ts
 ```
 
 ## 第三步：创建测试客户端
@@ -204,28 +204,28 @@ docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
 
 ### 日志（Logs）
 
-在 Logs 视图中，您将看到应用的所有控制台日志，且带有正确的跟踪上下文。
+在 Logs 视图中，您将看到应用程序的所有控制台日志，且带有正确的跟踪上下文。
 
-## 故障排查
+## 故障排除
 
-如果在 collector 中未看到数据：
+如果您在 Collector 中看不到数据：
 
-1. 确认已设置 `OTEL_DENO=true` 并使用了 `--unstable-otel` 标志
-2. 确认 collector 正在运行且可访问默认端点
+1. 检查是否设置了 `OTEL_DENO=true`
+2. 确认 Collector 正在运行且在默认端点可访问
 3. 检查是否需要将 `OTEL_EXPORTER_OTLP_ENDPOINT` 设置为其他 URL
-4. 查看 Deno 控制台输出是否有错误
+4. 查看 Deno 控制台输出中是否有错误信息
 
-请记住，Deno 中的 OpenTelemetry 支持仍处于不稳定状态，未来版本可能会有所变动。
+请记住，Deno 中的 OpenTelemetry 支持仍处于不稳定阶段，未来版本可能会有所变动。
 
-🦕 本教程为想要在 Deno 中尝试 OpenTelemetry 的用户提供了一个简单的起点，无需立即深入复杂概念。
+🦕 本教程为希望在 Deno 中尝试 OpenTelemetry 的用户提供了一个简单的起点，无需立即深入复杂概念。
 
-此基础示例可在多方面扩展：
+此基础示例可以通过多种方式扩展：
 
 - 为业务逻辑添加更多自定义指标
-- 为重要操作创建更多 span
+- 为重要操作创建额外的 span
 - 使用 baggage 在服务间传递上下文属性
-- 根据指标阈值设置告警
+- 基于指标阈值设置告警
 
-有关更高级的用法，请参考我们的
+欲了解更高级的用法，请参阅我们的
 [分布式跟踪与上下文传播](/examples/otel_span_propagation_tutorial/)
 教程。

@@ -1,6 +1,6 @@
 ---
-title: "How to create a RESTful API with Prisma and Oak"
-description: "Guide to building a RESTful API using Prisma and Oak with Deno. Learn how to set up database schemas, generate clients, implement CRUD operations, and deploy your API with proper type safety."
+title: "如何使用 Prisma 和 Oak 创建 RESTful API"
+description: "使用 Prisma 和 Oak 以及 Deno 构建 RESTful API 的指南。学习如何设置数据库模式、生成客户端、实现 CRUD 操作，并以合适的类型安全性部署您的 API。"
 url: /examples/prisma_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/prisma/
@@ -29,16 +29,25 @@ cd rest-api-with-prisma-oak
 然后，使用 Deno 运行 `prisma init`：
 
 ```shell
-deno run --allow-read --allow-env --allow-write npm:prisma@latest init
+npx prisma@latest init --generator-provider prisma-client --output ./generated
 ```
 
-这将生成 [`prisma/schema.prisma`](https://www.prisma.io/docs/concepts/components/prisma-schema)。接下来我们用以下内容更新它：
+让我们了解关键参数：
+
+- `--generator-provider prisma-client`：定义提供程序为 "prisma-client"，而非默认的 "prisma-client-js"。该提供程序针对 Deno 进行了优化，并生成与 Deno 运行时兼容的 TypeScript 代码。
+
+- `--output`：指定 Prisma 保存生成客户端文件的目录，包括类型定义和数据库访问工具。
+
+这将生成 [`prisma/schema.prisma`](https://www.prisma.io/docs/orm/prisma-schema)。让我们用以下内容更新它：
+
+> [!TIP]
+> 别忘了在您的 schema.prisma 文件中的 generator 块添加 `runtime = "deno"`。这是 Prisma 正确地与 Deno 配合工作的必要条件。
 
 ```ts
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["deno"]
-  output = "../generated/client"
+  provider = "prisma-client"
+  output   = "./generated"
+  runtime = "deno"
 }
 
 datasource db {
@@ -53,7 +62,7 @@ model Dinosaur {
 }
 ```
 
-Prisma 还会生成一个 `.env` 文件，其中包含 `DATABASE_URL` 环境变量。让我们将 `DATABASE_URL` 分配为 PostgreSQL 连接字符串。在这个示例中，我们将使用免费的 [Supabase PostgreSQL 数据库](https://supabase.com/database)。
+Prisma 还会生成一个 `.env` 文件，其中包含 `DATABASE_URL` 环境变量。让我们将 `DATABASE_URL` 设置为 PostgreSQL 连接字符串。在本例中，我们将使用免费的 [Supabase PostgreSQL 数据库](https://supabase.com/database)。
 
 接下来，创建数据库模式：
 
@@ -64,26 +73,28 @@ deno run -A npm:prisma@latest db push
 完成后，我们需要生成 Prisma Client：
 
 ```shell
-deno run -A --unstable-detect-cjs npm:prisma@latest generate --no-engine
+deno run -A npm:prisma@latest generate
 ```
 
-## 在 Prisma 数据平台上设置 Accelerate
+## 在 Prisma 数据平台中设置 Accelerate
 
-要开始使用 Prisma 数据平台，请执行以下步骤：
+> 注意：此步骤为可选。Prisma Accelerate 并非基础功能所必需。
 
-1. 注册一个免费的 [Prisma 数据平台账户](https://console.prisma.io)。
+开始使用 Prisma 数据平台：
+
+1. 注册免费 [Prisma 数据平台账户](https://console.prisma.io)。
 2. 创建一个项目。
-3. 导航到您创建的项目。
-4. 通过提供您的数据库连接字符串来启用 Accelerate。
-5. 生成 Accelerate 连接字符串并将其复制到剪贴板。
+3. 进入您创建的项目。
+4. 通过提供数据库的连接字符串启用 Accelerate。
+5. 生成 Accelerate 连接字符串并复制到剪贴板。
 
-将以 `prisma://` 开头的 Accelerate 连接字符串分配给 `.env` 文件中的 `DATABASE_URL`，以替换现有的连接字符串。
+将以 `prisma://` 开头的 Accelerate 连接字符串赋值给 `.env` 文件中的 `DATABASE_URL`，替换现有连接字符串。
 
-接下来，创建一个种子脚本来初始化数据库。
+接着，让我们创建一个种子脚本来初始化数据库。
 
-## 给你的数据库加种子
+## 为数据库添加种子数据
 
-创建 `./prisma/seed.ts`：
+创建 `./prisma/seed.ts` 文件：
 
 ```shell
 touch prisma/seed.ts
@@ -92,10 +103,10 @@ touch prisma/seed.ts
 在 `./prisma/seed.ts` 中：
 
 ```ts
-import { Prisma, PrismaClient } from "../generated/client/deno/edge.ts";
+import { Prisma, PrismaClient } from "./generated/client.ts";
 
 const prisma = new PrismaClient({
-  datasourceUrl: envVars.DATABASE_URL,
+  datasourceUrl: Deno.env.get("DATABASE_URL"),
 });
 
 const dinosaurData: Prisma.DinosaurCreateInput[] = [
@@ -161,7 +172,7 @@ touch main.ts
 然后在您的 `main.ts` 文件中：
 
 ```ts
-import { PrismaClient } from "./generated/client/deno/edge.ts";
+import { PrismaClient } from "./prisma/generated/client.ts";
 import { Application, Router } from "jsr:@oak/oak";
 
 /**
@@ -171,7 +182,7 @@ import { Application, Router } from "jsr:@oak/oak";
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: envVars.DATABASE_URL,
+      url: Deno.env.get("DATABASE_URL")!,
     },
   },
 });
@@ -202,8 +213,8 @@ router
     context.response.body = dinosaur;
   })
   .post("/dinosaur", async (context) => {
-    // 创建一只新恐龙。
-    const { name, description } = await context.request.body("json").value;
+    // 创建一只新的恐龙。
+    const { name, description } = await context.request.body.json();
     const result = await prisma.dinosaur.create({
       data: {
         name,

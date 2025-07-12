@@ -6,6 +6,9 @@ export default function Layout(data: Lume.Data) {
   const section = data.url.split("/").filter(Boolean)[0];
   const description = data.description ||
     "深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。";
+  const isServicesPage = data.url.startsWith("/deploy") ||
+    data.url.startsWith("/subhosting") ||
+    data.url.startsWith("/services");
 
   return (
     <html lang="zh-CN">
@@ -70,7 +73,9 @@ export default function Layout(data: Lume.Data) {
         </script>
         <link rel="preconnect" href="https://www.googletagmanager.com"></link>
       </head>
-      <body>
+      <body
+        data-services-page={Boolean(isServicesPage)}
+      >
         <data.comp.Header currentSection={section} />
         <data.comp.RefHeader currentUrl={data.url} />
         <data.comp.SubNav

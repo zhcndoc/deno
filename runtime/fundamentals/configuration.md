@@ -51,7 +51,7 @@ console.log(chalk.yellow("Hello world"));
 ```json title="package.json"
 {
   "dependencies": {
-    "express": "express@^1.0.0"
+    "express": "^1.0.0"
   }
 }
 ```

@@ -29,6 +29,11 @@ Deploy 早期访问版使用了特定术语。请使用本参考指南了解平�
 
 了解构建流程、构建配置和部署管道。
 
+### [Timelines](/deploy/early-access/reference/timelines)
+
+Visualizing the history of builds in your application, and how domains are
+routed to different versions of your application.
+
 ### [Playgrounds](/deploy/early-access/reference/playgrounds)
 
 编写并部署代码，无需创建 git 仓库。
@@ -40,6 +45,11 @@ Deploy 早期访问版使用了特定术语。请使用本参考指南了解平�
 ### [Environments](/deploy/early-access/reference/env-vars-and-contexts/)
 
 管理不同的部署环境，包括开发、预发布和生产。
+
+### [Cloud Connections](/deploy/early-access/reference/cloud-connections/)
+
+Managing cloud connections for your applications, including AWS and Google
+Cloud.
 
 ### [Custom Domains](/deploy/early-access/reference/domains)
 

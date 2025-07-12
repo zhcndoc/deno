@@ -1,6 +1,6 @@
 ---
-title: "Debugging"
-description: "Complete guide to debugging Deno applications. Learn to use Chrome DevTools, VS Code debugger, and other debugging techniques for TypeScript/JavaScript code in Deno."
+title: "调试"
+description: "Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器及其他调试技巧来调试 Deno 中的 TypeScript/JavaScript 代码。"
 oldUrl:
 - /runtime/manual/getting_started/debugging_your_code/
 - /runtime/manual/basics/debugging_your_code/
@@ -126,21 +126,19 @@ Deno ops 是一个 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) �
 deno run --strace-ops your_script.ts
 ```
 
-每个 op 应该具有一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间是执行 op 所需的时间。此标志对于性能分析、调试挂起的程序或理解 Deno 背后的工作原理可能非常有用。
+每个 op 都应包含一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间即为执行该 op 所花费的时间。此标志对于性能分析、调试挂起的程序或了解 Deno 的底层工作原理非常有用。
 
 ## OpenTelemetry 集成
 
-对于生产应用程序或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方法。Deno 内置支持 OpenTelemetry，允许您：
+对于生产环境应用或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方案。Deno 内置支持 OpenTelemetry，允许您：
 
-- 跟踪请求通过您的应用程序
-- 监控应用程序性能指标
+- 跟踪应用中的请求
+- 监测应用性能指标
 - 收集结构化日志
 - 将遥测数据导出到监控系统
 
-要启用 OpenTelemetry，请使用 `--unstable-otel` 标志运行您的应用程序：
-
 ```sh
-OTEL_DENO=true deno run --unstable-otel your_script.ts
+OTEL_DENO=true deno run your_script.ts
 ```
 
 这将自动收集和导出运行时可观察性数据，包括：

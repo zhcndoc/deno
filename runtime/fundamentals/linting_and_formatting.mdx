@@ -73,7 +73,22 @@ jobs:
       - run: deno fmt --check
 ```
 
-这确保在合并之前，任何代码更改都符合项目的格式标准。
+This ensures that any code changes adhere to the project's formatting standards
+before being merged.
+
+### 在 VS Code 中集成
+
+要在 VS Code 中启用 Deno 作为您的格式化工具，您需要在设置中将它设为默认格式化器，然后在项目根目录添加 `.vscode/settings.json` 文件，内容如下：
+
+```json
+{
+  "deno.enablePaths": [
+    "./deno.json"
+  ]
+}
+```
+
+如果您的 `deno.json(c)` 文件位于项目的子目录中，请提供正确的相对路径。
 
 ### 可用选项
 

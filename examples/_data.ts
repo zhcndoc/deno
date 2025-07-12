@@ -102,6 +102,11 @@ export const sidebar = [
         externalURL: "https://www.youtube.com/watch?v=IVde_GTN6TM",
         type: "video",
       },
+      {
+        title: "Generating documentation with deno doc",
+        href: "/examples/deno_doc_tutorial/",
+        type: "tutorial",
+      },
     ],
   },
   {
@@ -202,11 +207,6 @@ export const sidebar = [
       {
         title: "构建一个 React 应用",
         href: "/examples/react_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 create-vite 构建 React 应用",
-        href: "/examples/create_react_tutorial/",
         type: "tutorial",
       },
       {
@@ -535,6 +535,18 @@ export const sidebar = [
         title: "导入 JSON",
         href: "/examples/importing_json/",
         type: "example",
+      },
+      {
+        title: "字节和文本导入",
+        href: "/examples/byte_and_text_imports/",
+        externalURL: "https://www.youtube.com/watch?v=PAEI6mdlXwc",
+        type: "video",
+      },
+      {
+        title: "使用 deno compile 进行图像打包",
+        href: "/examples/image_bundling_deno_compile/",
+        externalURL: "https://www.youtube.com/watch?v=qg_M0deBlfQ",
+        type: "video",
       },
       {
         title: "解析和序列化 CSV",

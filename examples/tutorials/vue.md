@@ -11,7 +11,7 @@ oldUrl:
 
 在本教程中，我们将使用 Vite 和 Deno 构建一个简单的 Vue.js 应用。该应用将显示恐龙列表。当你点击其中一个时，它将带你到一个包含更多详细信息的恐龙页面。你可以在 [GitHub 上查看完成的应用](https://github.com/denoland/tutorial-with-vue)。
 
-![Vue.js 应用运行中](./images/how-to/vue/vue.gif)
+你可以在 [Deno Deploy](https://tutorial-with-vue.deno.deno.net/) 上查看该应用的实时版本。
 
 ## 使用 Vite 和 Deno 创建 Vue.js 应用
 
@@ -53,85 +53,147 @@ deno fmt --unstable-component
 "unstable": ["fmt-component"]
 ```
 
-## 添加后端
+## 添加后端 API
 
-下一步是添加一个后端 API。我们将创建一个非常简单的 API，返回关于恐龙的信息。
+我们将使用 Deno 和 Oak 构建一个 API 服务器。这里将提供我们的恐龙数据。
 
-在你的新 vite 项目的根目录中，创建一个 `api` 文件夹。在该文件夹内，创建一个 `main.ts` 文件用来运行服务器，以及一个 `data.json` 文件来存放硬编码的数据。
+在项目的根目录下创建一个 `api` 文件夹。在该文件夹中，创建一个 `data.json`，它将包含硬编码的恐龙数据。
 
 复制并粘贴
-[此 json 文件](https://raw.githubusercontent.com/denoland/tutorial-with-vue/refs/heads/main/api/data.json)
-到 `api/data.json`。
+[此 JSON 文件](https://github.com/denoland/tutorial-with-react/blob/main/api/data.json)
+到 `api/data.json` 文件中。（如果你构建的是一个真实应用，你可能会从数据库或外部 API 获取这些数据。）
 
-我们将构建一个简单的 API 服务器，包含返回恐龙信息的路由。我们会使用 [`oak` 中间件框架](https://jsr.io/@oak/oak)
-和 [`cors` 中间件](https://jsr.io/@tajpouria/cors) 来启用
+我们接下来将构建一些返回恐龙信息的 API 路由。我们需要 Oak 作为 HTTP 服务器以及
+[CORS 中间件](https://jsr.io/@tajpouria/cors) 来启用
 [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)。
 
-使用 `deno add` 命令将所需依赖添加到项目中：
+通过更新 `deno.json` 文件的 imports 部分添加依赖：
 
-```shell
-deno add jsr:@oak/oak jsr:@tajpouria/cors
+```json title="deno.json"
+{
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17.1.5",
+    "@tajpouria/cors": "jsr:@tajpouria/cors@^1.2.1",
+    "vue-router": "npm:vue-router@^4.5.1"
+  }
+}
 ```
 
-接下来，更新 `api/main.ts` 文件，引入所需模块并创建一个新的 `Router` 实例来定义路由：
+接下来，创建 `api/main.ts`，导入所需模块并创建一个新的 `Router` 实例以定义一些路由：
 
-```ts title="main.ts"
+```ts title="api/main.ts"
 import { Application, Router } from "@oak/oak";
 import { oakCors } from "@tajpouria/cors";
+import routeStaticFilesFrom from "./util/routeStaticFilesFrom.ts";
 import data from "./data.json" with { type: "json" };
 
+export const app = new Application();
 const router = new Router();
 ```
 
-随后，在同一文件中定义三个路由。第一个路由在 `/` 路径下返回字符串 `Welcome to the dinosaur API`，接着设置 `/dinosaurs` 返回所有恐龙数据，最后 `/dinosaurs/:dinosaur` 根据 URL 中的名称返回特定恐龙：
+随后，在同一文件中，我们将定义两个路由。一个是 `/api/dinosaurs` 返回所有恐龙，另一个是 `/api/dinosaurs/:dinosaur`，根据 URL 中的名称返回特定恐龙：
 
-```ts title="main.ts"
-router
-  .get("/", (context) => {
-    context.response.body = "Welcome to dinosaur API!";
-  })
-  .get("/dinosaurs", (context) => {
-    context.response.body = data;
-  })
-  .get("/dinosaurs/:dinosaur", (context) => {
-    if (!context?.params?.dinosaur) {
-      context.response.body = "No dinosaur name provided.";
-    }
+```ts title="api/main.ts"
+router.get("/api/dinosaurs", (context) => {
+  context.response.body = data;
+});
 
-    const dinosaur = data.find((item) =>
-      item.name.toLowerCase() === context.params.dinosaur.toLowerCase()
-    );
+router.get("/api/dinosaurs/:dinosaur", (context) => {
+  if (!context?.params?.dinosaur) {
+    context.response.body = "未提供恐龙名称。";
+  }
 
-    context.response.body = dinosaur ? dinosaur : "No dinosaur found.";
-  });
+  const dinosaur = data.find((item) =>
+    item.name.toLowerCase() === context.params.dinosaur.toLowerCase()
+  );
+
+  context.response.body = dinosaur ?? "未找到该恐龙。";
+});
 ```
 
-最后，在同一文件底部，创建一个新的 `Application` 实例，使用 `app.use(router.routes())` 加载刚才定义的路由，并启动服务器监听 8000 端口：
+在同一文件底部，将我们刚定义的路由挂载到应用程序。我们还必须包括静态文件服务器，最后启动服务器监听 8000 端口：
 
-```ts title="main.ts"
-const app = new Application();
+```ts title="api/main.ts"
 app.use(oakCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
+app.use(routeStaticFilesFrom([
+  `${Deno.cwd()}/dist`,
+  `${Deno.cwd()}/public`,
+]));
 
-await app.listen({ port: 8000 });
+if (import.meta.main) {
+  console.log("服务器监听端口 http://localhost:8000");
+  await app.listen({ port: 8000 });
+}
 ```
 
-你可以通过运行 `deno run --allow-env --allow-net api/main.ts` 来启动 API 服务器。我们将创建一个任务来运行此命令，并更新开发任务，确保 Vue.js 应用和 API 服务器同时运行。
+你还需要创建 `api/util/routeStaticFilesFrom.ts` 文件来服务静态文件：
 
-在你的 `package.json` 文件中，更新 `scripts` 字段如下：
+```ts title="api/util/routeStaticFilesFrom.ts"
+import { Context, Next } from "@oak/oak";
 
-```jsonc
+// 配置静态站点路由，以便我们可以服务
+// Vite 构建输出和 public 文件夹
+export default function routeStaticFilesFrom(staticPaths: string[]) {
+  return async (context: Context<Record<string, object>>, next: Next) => {
+    for (const path of staticPaths) {
+      try {
+        await context.send({ root: path, index: "index.html" });
+        return;
+      } catch {
+        continue;
+      }
+    }
+
+    await next();
+  };
+}
+```
+
+你可以使用命令 `deno run --allow-env --allow-net --allow-read api/main.ts` 运行 API 服务器。我们将创建一个任务来在后台运行此命令，并更新 dev 任务以同时运行 Vue 应用和 API 服务器。
+
+更新你的 `package.json` 脚本如下：
+
+```json title="package.json"
 {
   "scripts": {
     "dev": "deno task dev:api & deno task dev:vite",
     "dev:api": "deno run --allow-env --allow-net api/main.ts",
     "dev:vite": "deno run -A npm:vite",
-    // ...
+    "build": "deno run -A npm:vite build",
+    "server:start": "deno run -A --watch ./api/main.ts",
+    "serve": "deno run build && deno run server:start",
+    "preview": "vite preview"
+  }
 }
 ```
 
-现在，如果运行 `deno task dev` 并访问 `localhost:8000`，浏览器中会显示文本 `Welcome to dinosaur API!`，访问 `localhost:8000/dinosaurs` 时，则可以看到所有恐龙的 JSON 响应。
+确保你的 `vite.config.ts` 包含 Deno 插件和开发代理配置：
+
+```ts title="vite.config.ts"
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import deno from "@deno/vite-plugin";
+
+export default defineConfig({
+  server: {
+    port: 3000,
+    proxy: {
+      "/api": {
+        target: "http://localhost:8000",
+        changeOrigin: true,
+      },
+    },
+  },
+  plugins: [vue(), deno()],
+  optimizeDeps: {
+    include: ["react/jsx-runtime"],
+  },
+});
+```
+
+如果你现在运行 `npm run dev` 并访问浏览器的 `localhost:8000/api/dinosaurs`，应该能看到所有恐龙的 JSON 响应。
 
 ## 构建前端
 
@@ -153,10 +215,16 @@ createApp(App)
   .mount("#app");
 ```
 
-通过 `deno add` 将 Vue Router 模块添加到项目中：
+通过更新 `deno.json` 中的导入路径，将 Vue Router 模块添加到项目中：
 
-```shell
-deno add npm:vue-router
+```json title="deno.json"
+{
+  "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17.1.5",
+    "@tajpouria/cors": "jsr:@tajpouria/cors@^1.2.1",
+    "vue-router": "npm:vue-router@^4.5.1"
+  }
+}
 ```
 
 接着，在 `src` 目录中创建 `router` 文件夹，并在其中创建 `index.ts` 文件，内容如下：
@@ -184,9 +252,9 @@ export default createRouter({
 });
 ```
 
-这会创建一个包含两个路由的路由器：`/` 和 `/:dinosaur`。`HomePage` 组件在 `/` 路径渲染，`Dinosaur` 组件在 `/:dinosaur` 渲染。
+这将创建一个包含两个路由的路由器：`/` 和 `/:dinosaur`。`HomePage` 组件渲染于 `/` 路径，`Dinosaur` 组件渲染于 `/:dinosaur` 路径。
 
-最后，删除 `src/App.vue` 文件中全部内容，更新为仅包含 `<RouterView>` 组件：
+最后，删除 `src/App.vue` 文件中的全部内容，仅保留 `<RouterView>` 组件：
 
 ```html title="App.vue"
 <template>
@@ -216,7 +284,7 @@ Vue.js 将前端 UI 分解为多个组件。每个组件是一个可复用的代
 
   export default defineComponent({
     async setup() {
-      const res = await fetch("http://localhost:8000/dinosaurs");
+      const res = await fetch("/api/dinosaurs");
       const dinosaurs = await res.json() as Dinosaur[];
       return { dinosaurs };
     },
@@ -224,13 +292,13 @@ Vue.js 将前端 UI 分解为多个组件。每个组件是一个可复用的代
 </script>
 
 <template>
-  <div v-for="dinosaur in dinosaurs" :key="dinosaur.name">
+  <span v-for="dinosaur in dinosaurs" :key="dinosaur.name">
     <RouterLink
       :to="{ name: 'Dinosaur', params: { dinosaur: `${dinosaur.name.toLowerCase()}` } }"
     >
       {{ dinosaur.name }}
     </RouterLink>
-  </div>
+  </span>
 </template>
 ```
 
@@ -294,7 +362,7 @@ type ComponentData = {
     },
     async mounted() {
       const res = await fetch(
-        `http://localhost:8000/dinosaurs/${this.dinosaur}`,
+        `/api/dinosaurs/${this.dinosaur}`,
       );
       this.dinosaurDetails = await res.json();
     },
@@ -315,12 +383,60 @@ type ComponentData = {
 现在我们已经配置好了前端和后端，可以运行应用。在终端执行：
 
 ```shell
-deno task dev
+npm run dev
 ```
 
-访问输出的本地主机链接，在浏览器中查看应用。点击任何一个恐龙以查看更多详情！
+这将同时启动端口 8000 上的 Deno API 服务器和端口 3000 上的 Vite 开发服务器。Vite 服务器将代理 API 请求到 Deno 服务器。
 
-![Vue 应用运行中](./images/how-to/vue/vue.gif)
+在浏览器中访问 `http://localhost:3000` 查看应用。点击某个恐龙以查看它的详情！
 
-🦕 现在你已经学会了如何在 Deno 中使用 Vite 运行 Vue 应用，准备好构建真实项目了！如果想拓展本演示，可以考虑搭建一个后端服务器来构建后提供静态应用，然后
-[将恐龙应用部署至云端](https://docs.deno.com/deploy/manual/)。
+你也可以在 [Deno Deploy](https://tutorial-with-vue.deno.deno.net/) 查看应用的实时版本。
+
+[Vue 应用演示](./images/how-to/vue/vue.gif)
+
+```shell
+deno run serve
+```
+
+此命令将构建 Vue 应用，并通过 Deno 服务器在端口 8000 提供服务。
+
+## 构建与部署
+
+我们已设置了 `serve` 任务，使用 Oak 后端服务器构建并提供 Vue 应用。运行以下命令以生产模式构建并提供应用：
+
+```sh
+deno run build
+deno run serve
+```
+
+这将：
+
+1. 使用 Vite 构建 Vue 应用（输出到 `dist/` 目录）
+2. 启动 Oak 服务器，同时提供 API 和已构建的 Vue 应用
+
+在浏览器中访问 `localhost:8000` 查看生产版本的应用！
+
+你可以将此应用部署到你喜欢的云服务。我们推荐使用
+[Deno Deploy](https://deno.com/deploy) 以获得简单便捷的部署体验。你可以直接从 GitHub 部署，只需创建 GitHub 仓库并推送代码，然后连接到 Deno Deploy。
+
+### 创建 GitHub 仓库
+
+[创建一个新的 GitHub 仓库](https://github.com/new)，然后初始化并推送你的应用代码：
+
+```sh
+git init -b main
+git remote add origin https://github.com/<你的_github_用户名>/<你的仓库名>.git
+git add .
+git commit -am '我的 Vue 应用'
+git push -u origin main
+```
+
+### 部署到 Deno Deploy
+
+当你的应用已上传至 GitHub，即可通过 Deno Deploy<sup>EA</sup> 仪表盘部署你的应用。
+<a href="https://app.deno.com/" class="docs-cta deploy-cta deploy-button">部署我的应用</a>
+
+有关部署应用的详细步骤，请参阅
+[Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
+
+🦕 现在你已经可以使用 Vite 在 Deno 中运行 Vue 应用，准备好构建真实世界的应用了！
