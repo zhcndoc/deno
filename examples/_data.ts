@@ -220,6 +220,11 @@ export const sidebar = [
         type: "tutorial",
       },
       {
+        title: "构建一个 Svelte 应用",
+        href: "/examples/svelte_tutorial/",
+        type: "tutorial",
+      },
+      {
         title: "构建一个 Vue 应用",
         href: "/examples/vue_tutorial/",
         type: "tutorial",

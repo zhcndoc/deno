@@ -62,16 +62,16 @@ console.log(`服务器正在运行在 http://localhost:8000`);
 
 当你初始化项目时，Deno 设置了一个任务来运行 `main.ts` 文件，你可以在 `deno.json` 文件中看到它。更新 `dev` 任务以包含 [`--allow-net`](/runtime/fundamentals/security/#network-access) 标志：
 
-````jsonc
+```jsonc
 {
   "scripts": {
     "dev": "deno run --allow-net main.ts"
   }, 
   ...
 }
-````
+```
 
-这将允许该项目进行网络请求。你可以 [阅读更多关于权限标志的信息](/runtime/fundamentals/security/)。
+这将允许项目进行网络请求。你可以 [阅读更多关于权限标志的信息](/runtime/fundamentals/security/)。
 
 现在你可以使用以下命令运行服务器：
 
