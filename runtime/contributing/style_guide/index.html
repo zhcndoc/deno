@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Deno 风格指南 - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="Deno 风格指南"/><meta name="twitter:description" content="为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。"/><meta name="twitter:image" content="https://docs.deno.com/runtime/contributing/style_guide/index.png"/><meta name="twitter:image:alt" content="为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="Deno 风格指南"/><meta property="og:description" content="为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。"/><meta property="og:image" content="https://docs.deno.com/runtime/contributing/style_guide/index.png"/><meta property="og:image:alt" content="为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body data-services-page="false"><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink " data-active="true" aria-current="location">手册</a><a href="/api/deno/" class="header-nav-link blocklink ">API 参考</a><a href="/examples/" class="header-nav-link blocklink ">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span><span class="sr-only">Toggle navigation menu</span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink">deno bench</a></li><li><a href="/runtime/reference/cli/bundle/" class="sub-nav-link blocklink">deno bundle</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/update/" class="sub-nav-link blocklink">deno update</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/bundling/" class="sub-nav-link blocklink">捆绑</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink" data-active="true">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/contributing/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">贡献和支持</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">Deno 风格指南</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#%E7%89%88%E6%9D%83%E5%A4%B4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">版权头 </a></li><li class="m-2 leading-4"><a href="#%E6%96%87%E4%BB%B6%E5%90%8D%E4%BD%BF%E7%94%A8%E4%B8%8B%E5%88%92%E7%BA%BF%E8%80%8C%E9%9D%9E%E7%A0%B4%E6%8A%98%E5%8F%B7" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">文件名使用下划线而非破折号 </a></li><li class="m-2 leading-4"><a href="#%E4%B8%BA%E6%96%B0%E5%8A%9F%E8%83%BD%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">为新功能添加测试 </a></li><li class="m-2 leading-4"><a href="#todo-%E6%B3%A8%E9%87%8A" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">TODO 注释 </a></li><li class="m-2 leading-4"><a href="#%E4%B8%8D%E9%BC%93%E5%8A%B1%E5%85%83%E7%BC%96%E7%A8%8B%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%BD%BF%E7%94%A8-proxy" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">不鼓励元编程，包括使用 Proxy </a></li><li class="m-2 leading-4"><a href="#%E5%8C%85%E5%AE%B9%E6%80%A7%E4%BB%A3%E7%A0%81" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">包容性代码 </a></li><li class="m-2 leading-4"><a href="#rust" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Rust </a></li><li class="m-2 leading-4"><a href="#typescript" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">TypeScript </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8-typescript-%E8%80%8C%E4%B8%8D%E6%98%AF-javascript" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用 TypeScript 而不是 JavaScript </a></li><li class="m-2 leading-4"><a href="#%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E5%90%8D-index.ts%2Findex.js" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">不要使用文件名 index.ts/index.js </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%87%BA%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A%E6%9C%80%E5%A4%9A-2-%E4%B8%AA%E5%8F%82%E6%95%B0%EF%BC%8C%E5%B0%86%E5%85%B6%E4%BD%99%E5%8F%82%E6%95%B0%E6%94%BE%E5%85%A5%E9%80%89%E9%A1%B9%E5%AF%B9%E8%B1%A1%E4%B8%AD" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导出的函数：最多 2 个参数，将其余参数放入选项对象中 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%87%BA%E6%89%80%E6%9C%89%E8%A2%AB%E7%94%A8%E4%BD%9C%E5%AF%BC%E5%87%BA%E6%88%90%E5%91%98%E5%8F%82%E6%95%B0%E7%9A%84%E6%8E%A5%E5%8F%A3" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导出所有被用作导出成员参数的接口 </a></li><li class="m-2 leading-4"><a href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E4%BE%9D%E8%B5%96%EF%BC%9B%E4%B8%8D%E5%BA%94%E4%BA%A7%E7%94%9F%E5%BE%AA%E7%8E%AF%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">最小化依赖；不应产生循环导入 </a></li><li class="m-2 leading-4"><a href="#%E5%A6%82%E6%9E%9C%E6%96%87%E4%BB%B6%E5%90%8D%E4%BB%A5%E4%B8%8B%E5%88%92%E7%BA%BF%E5%BC%80%E5%A4%B4%EF%BC%9A_foo.ts%EF%BC%8C%E8%AF%B7%E5%8B%BF%E9%93%BE%E6%8E%A5%E8%87%B3%E6%AD%A4%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">如果文件名以下划线开头：_foo.ts，请勿链接至此文件 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%B9%E5%AF%BC%E5%87%BA%E7%9A%84%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8-jsdoc" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">对导出的符号使用 JSDoc </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E8%A7%A3%E5%86%B3-lint-%E9%97%AE%E9%A2%98" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用指令解决 lint 问题 </a></li><li class="m-2 leading-4"><a href="#%E6%AF%8F%E4%B8%AA%E6%A8%A1%E5%9D%97%E5%BA%94%E9%85%8D%E6%9C%89%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">每个模块应配有测试模块 </a></li><li class="m-2 leading-4"><a href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BA%94%E6%98%8E%E7%A1%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">单元测试应明确 </a></li><li class="m-2 leading-4"><a href="#%E9%A1%B6%E7%BA%A7%E5%87%BD%E6%95%B0%E5%BA%94%E4%BD%BF%E7%94%A8-function-%E8%AF%AD%E6%B3%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E7%AE%AD%E5%A4%B4%E8%AF%AD%E6%B3%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">顶级函数应使用 function 语法，而不是箭头语法 </a></li><li class="m-2 leading-4"><a href="#%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">错误消息 </a></li></ul></li><li class="m-2 leading-4"><a href="#std" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">std </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%B8%8D%E8%A6%81%E4%BE%9D%E8%B5%96%E5%A4%96%E9%83%A8%E4%BB%A3%E7%A0%81%E3%80%82" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">不要依赖外部代码。 </a></li><li class="m-2 leading-4"><a href="#%E8%AE%B0%E5%BD%95%E5%B9%B6%E7%BB%B4%E6%8A%A4%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E3%80%82" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">记录并维护浏览器兼容性。 </a></li><li class="m-2 leading-4"><a href="#%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8-%23-%E8%80%8C%E4%B8%8D%E6%98%AF-private-%E5%85%B3%E9%94%AE%E5%AD%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">优先使用 # 而不是 private 关键字 </a></li><li class="m-2 leading-4"><a href="#%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">命名约定 </a></li></ul></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>Deno 风格指南</h1><div><p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>请注意，这是 Deno 运行时和 Deno 标准库中<strong>内部运行时代码</strong>的风格指南。这并不是面向 Deno 用户的一般风格指南。</p>
+<p>
+</div>
+</p>
+<h3 id="%E7%89%88%E6%9D%83%E5%A4%B4" tabindex="-1">版权头 <a class="header-anchor" href="#%E7%89%88%E6%9D%83%E5%A4%B4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>大多数模块应包含以下版权头：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 版权 2018-2024 Deno 作者。保留所有权利。MIT 许可证。</span>
+</code></pre>
+
+      <button id="copy-button-15" class="copyButton" data-copy="// 版权 2018-2024 Deno 作者。保留所有权利。MIT 许可证。
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果代码来源于其他地方，请确保文件包含适当的版权头。我们仅允许 MIT、BSD 和 Apache 许可代码。</p>
+<h3 id="%E6%96%87%E4%BB%B6%E5%90%8D%E4%BD%BF%E7%94%A8%E4%B8%8B%E5%88%92%E7%BA%BF%E8%80%8C%E9%9D%9E%E7%A0%B4%E6%8A%98%E5%8F%B7" tabindex="-1">文件名使用下划线而非破折号 <a class="header-anchor" href="#%E6%96%87%E4%BB%B6%E5%90%8D%E4%BD%BF%E7%94%A8%E4%B8%8B%E5%88%92%E7%BA%BF%E8%80%8C%E9%9D%9E%E7%A0%B4%E6%8A%98%E5%8F%B7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>示例：使用 <code>file_server.ts</code> 而不是 <code>file-server.ts</code>。</p>
+<h3 id="%E4%B8%BA%E6%96%B0%E5%8A%9F%E8%83%BD%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95" tabindex="-1">为新功能添加测试 <a class="header-anchor" href="#%E4%B8%BA%E6%96%B0%E5%8A%9F%E8%83%BD%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>每个模块应包含或伴随有其公共功能的测试。</p>
+<h3 id="todo-%E6%B3%A8%E9%87%8A" tabindex="-1">TODO 注释 <a class="header-anchor" href="#todo-%E6%B3%A8%E9%87%8A"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>TODO 注释通常应包含一个问题或作者的 GitHub 用户名在括号中。示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// TODO(ry): 添加测试。</span>
+<span class="token comment">// TODO(#123): 支持 Windows。</span>
+<span class="token comment">// FIXME(#349): 有时会崩溃。</span>
+</code></pre>
+
+      <button id="copy-button-37" class="copyButton" data-copy="// TODO(ry): 添加测试。
+// TODO(#123): 支持 Windows。
+// FIXME(#349): 有时会崩溃。
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E4%B8%8D%E9%BC%93%E5%8A%B1%E5%85%83%E7%BC%96%E7%A8%8B%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%BD%BF%E7%94%A8-proxy" tabindex="-1">不鼓励元编程，包括使用 Proxy <a class="header-anchor" href="#%E4%B8%8D%E9%BC%93%E5%8A%B1%E5%85%83%E7%BC%96%E7%A8%8B%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%BD%BF%E7%94%A8-proxy"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要明确，即使这意味着更多的代码。</p>
+<p>在某些情况下，使用这种技术可能是合情合理的，但在绝大多数情况下并非如此。</p>
+<h3 id="%E5%8C%85%E5%AE%B9%E6%80%A7%E4%BB%A3%E7%A0%81" tabindex="-1">包容性代码 <a class="header-anchor" href="#%E5%8C%85%E5%AE%B9%E6%80%A7%E4%BB%A3%E7%A0%81"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>请遵循在 <a href="https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/inclusive_code.md">https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/inclusive_code.md</a> 中概述的包容性代码指南。</p>
+<h3 id="rust" tabindex="-1">Rust <a class="header-anchor" href="#rust"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>遵循 Rust 约定，并与现有代码保持一致。</p>
+<h3 id="typescript" tabindex="-1">TypeScript <a class="header-anchor" href="#typescript"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>代码库的 TypeScript 部分为标准库 <code>std</code>。</p>
+<h4 id="%E4%BD%BF%E7%94%A8-typescript-%E8%80%8C%E4%B8%8D%E6%98%AF-javascript" tabindex="-1">使用 TypeScript 而不是 JavaScript <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8-typescript-%E8%80%8C%E4%B8%8D%E6%98%AF-javascript"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<h4 id="%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E5%90%8D-index.ts%2Findex.js" tabindex="-1">不要使用文件名 <code>index.ts</code>/<code>index.js</code> <a class="header-anchor" href="#%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E5%90%8D-index.ts%2Findex.js"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>Deno 并不会以特殊方式处理 &quot;index.js&quot; 或 &quot;index.ts&quot;。使用这些文件名会暗示可以在模块说明符中省略它们，而实际上并不能。这是困惑的。</p>
+<p>如果代码目录需要一个默认入口点，请使用文件名 <code>mod.ts</code>。文件名 <code>mod.ts</code> 遵循 Rust 的约定，比 <code>index.ts</code> 短，并且没有关于它工作方式的任何先入之见。</p>
+<h4 id="%E5%AF%BC%E5%87%BA%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A%E6%9C%80%E5%A4%9A-2-%E4%B8%AA%E5%8F%82%E6%95%B0%EF%BC%8C%E5%B0%86%E5%85%B6%E4%BD%99%E5%8F%82%E6%95%B0%E6%94%BE%E5%85%A5%E9%80%89%E9%A1%B9%E5%AF%B9%E8%B1%A1%E4%B8%AD" tabindex="-1">导出的函数：最多 2 个参数，将其余参数放入选项对象中 <a class="header-anchor" href="#%E5%AF%BC%E5%87%BA%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A%E6%9C%80%E5%A4%9A-2-%E4%B8%AA%E5%8F%82%E6%95%B0%EF%BC%8C%E5%B0%86%E5%85%B6%E4%BD%99%E5%8F%82%E6%95%B0%E6%94%BE%E5%85%A5%E9%80%89%E9%A1%B9%E5%AF%B9%E8%B1%A1%E4%B8%AD"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>设计函数接口时，遵循以下规则。</p>
+<ol>
+<li>
+<p>作为公共 API 一部分的函数接受 0-2 个必需参数，另外（如果需要）一个选项对象（所以最多 3 个）。</p>
+</li>
+<li>
+<p>可选参数通常应放入选项对象中。</p>
+<p>如果可选参数不在选项对象中并且只有一个，且似乎不可能在未来添加更多可选参数，可能是可以接受的。</p>
+</li>
+<li>
+<p>&quot;options&quot; 参数是唯一的常规 &quot;Object&quot; 参数。</p>
+<p>其他参数可以是对象，但它们必须通过以下方式可与 &quot;plain&quot; 对象运行时区分开：</p>
+<ul>
+<li>区分原型（例如 <code>Array</code>、<code>Map</code>、<code>Date</code>、<code>class MyThing</code>）。</li>
+<li>一个知名的符号属性（例如可迭代的 <code>Symbol.iterator</code>）。</li>
+</ul>
+<p>这允许 API 以向后兼容的方式演变，即使选项对象的位置发生变化。</p>
+</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 不好：可选参数不在选项对象中。（#2）</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">resolve</span><span class="token punctuation">(</span>
+  hostname<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  family<span class="token operator">?</span><span class="token operator">:</span> <span class="token string">"ipv4"</span> <span class="token operator">|</span> <span class="token string">"ipv6"</span><span class="token punctuation">,</span>
+  timeout<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token operator">:</span> IPAddress<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-121" class="copyButton" data-copy="// 不好：可选参数不在选项对象中。（#2）
+export function resolve(
+  hostname: string,
+  family?: &quot;ipv4&quot; | &quot;ipv6&quot;,
+  timeout?: number,
+): IPAddress[] {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 好。</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">ResolveOptions</span> <span class="token punctuation">{</span>
+  family<span class="token operator">?</span><span class="token operator">:</span> <span class="token string">"ipv4"</span> <span class="token operator">|</span> <span class="token string">"ipv6"</span><span class="token punctuation">;</span>
+  timeout<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">resolve</span><span class="token punctuation">(</span>
+  hostname<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  options<span class="token operator">:</span> ResolveOptions <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token operator">:</span> IPAddress<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-122" class="copyButton" data-copy="// 好。
+export interface ResolveOptions {
+  family?: &quot;ipv4&quot; | &quot;ipv6&quot;;
+  timeout?: number;
+}
+export function resolve(
+  hostname: string,
+  options: ResolveOptions = {},
+): IPAddress[] {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">Environment</span> <span class="token punctuation">{</span>
+  <span class="token punctuation">[</span>key<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">]</span><span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 不好：`env` 可能是一个常规对象，因此无法区分</span>
+<span class="token comment">// 与选项对象。（#3）</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">runShellWithEnv</span><span class="token punctuation">(</span>cmdline<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> env<span class="token operator">:</span> Environment<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token comment">// 好。</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">RunShellOptions</span> <span class="token punctuation">{</span>
+  env<span class="token operator">:</span> Environment<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">runShellWithEnv</span><span class="token punctuation">(</span>
+  cmdline<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  options<span class="token operator">:</span> RunShellOptions<span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-123" class="copyButton" data-copy="export interface Environment {
+  [key: string]: string;
+}
+
+// 不好：`env` 可能是一个常规对象，因此无法区分
+// 与选项对象。（#3）
+export function runShellWithEnv(cmdline: string, env: Environment): string {}
+
+// 好。
+export interface RunShellOptions {
+  env: Environment;
+}
+export function runShellWithEnv(
+  cmdline: string,
+  options: RunShellOptions,
+): string {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 不好：超过 3 个参数。（#1），多个可选参数。（#2）。</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">renameSync</span><span class="token punctuation">(</span>
+  oldname<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  newname<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  replaceExisting<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span>
+  followLinks<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-124" class="copyButton" data-copy="// 不好：超过 3 个参数。（#1），多个可选参数。（#2）。
+export function renameSync(
+  oldname: string,
+  newname: string,
+  replaceExisting?: boolean,
+  followLinks?: boolean,
+) {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 好。</span>
+<span class="token keyword">interface</span> <span class="token class-name">RenameOptions</span> <span class="token punctuation">{</span>
+  replaceExisting<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+  followLinks<span class="token operator">?</span><span class="token operator">:</span> <span class="token builtin">boolean</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">renameSync</span><span class="token punctuation">(</span>
+  oldname<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  newname<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span>
+  options<span class="token operator">:</span> RenameOptions <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-125" class="copyButton" data-copy="// 好。
+interface RenameOptions {
+  replaceExisting?: boolean;
+  followLinks?: boolean;
+}
+export function renameSync(
+  oldname: string,
+  newname: string,
+  options: RenameOptions = {},
+) {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 不好：参数过多。（#1）</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">pwrite</span><span class="token punctuation">(</span>
+  fd<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span>
+  buffer<span class="token operator">:</span> ArrayBuffer<span class="token punctuation">,</span>
+  offset<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span>
+  length<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span>
+  position<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-126" class="copyButton" data-copy="// 不好：参数过多。（#1）
+export function pwrite(
+  fd: number,
+  buffer: ArrayBuffer,
+  offset: number,
+  length: number,
+  position: number,
+) {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 更好。</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">PWrite</span> <span class="token punctuation">{</span>
+  fd<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+  buffer<span class="token operator">:</span> ArrayBuffer<span class="token punctuation">;</span>
+  offset<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+  length<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+  position<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">pwrite</span><span class="token punctuation">(</span>options<span class="token operator">:</span> PWrite<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-127" class="copyButton" data-copy="// 更好。
+export interface PWrite {
+  fd: number;
+  buffer: ArrayBuffer;
+  offset: number;
+  length: number;
+  position: number;
+}
+export function pwrite(options: PWrite) {}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>注意：当一个参数是函数时，您可以灵活调整顺序。请参见<a href="https://docs.deno.com/api/deno/~/Deno.serve">Deno.serve</a>、<a href="https://docs.deno.com/api/deno/~/Deno.test">Deno.test</a>、<a href="https://docs.deno.com/api/deno/~/Deno.addSignalListener">Deno.addSignalListener</a>等示例。另见<a href="https://twitter.com/jaffathecake/status/1646798390355697664">this post</a>。</p>
+<h4 id="%E5%AF%BC%E5%87%BA%E6%89%80%E6%9C%89%E8%A2%AB%E7%94%A8%E4%BD%9C%E5%AF%BC%E5%87%BA%E6%88%90%E5%91%98%E5%8F%82%E6%95%B0%E7%9A%84%E6%8E%A5%E5%8F%A3" tabindex="-1">导出所有被用作导出成员参数的接口 <a class="header-anchor" href="#%E5%AF%BC%E5%87%BA%E6%89%80%E6%9C%89%E8%A2%AB%E7%94%A8%E4%BD%9C%E5%AF%BC%E5%87%BA%E6%88%90%E5%91%98%E5%8F%82%E6%95%B0%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>每当您使用的接口包含在导出成员的参数或返回类型中时，您应该导出该接口。以下是一个示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// my_file.ts</span>
+<span class="token keyword">export</span> <span class="token keyword">interface</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">createPerson</span><span class="token punctuation">(</span>name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> age<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span><span class="token operator">:</span> Person <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span> name<span class="token punctuation">,</span> age <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// mod.ts</span>
+<span class="token keyword">export</span> <span class="token punctuation">{</span> createPerson <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./my_file.ts"</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">type</span> <span class="token punctuation">{</span> Person <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./my_file.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-137" class="copyButton" data-copy="// my_file.ts
+export interface Person {
+  name: string;
+  age: number;
+}
+
+export function createPerson(name: string, age: number): Person {
+  return { name, age };
+}
+
+// mod.ts
+export { createPerson } from &quot;./my_file.ts&quot;;
+export type { Person } from &quot;./my_file.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E6%9C%80%E5%B0%8F%E5%8C%96%E4%BE%9D%E8%B5%96%EF%BC%9B%E4%B8%8D%E5%BA%94%E4%BA%A7%E7%94%9F%E5%BE%AA%E7%8E%AF%E5%AF%BC%E5%85%A5" tabindex="-1">最小化依赖；不应产生循环导入 <a class="header-anchor" href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E4%BE%9D%E8%B5%96%EF%BC%9B%E4%B8%8D%E5%BA%94%E4%BA%A7%E7%94%9F%E5%BE%AA%E7%8E%AF%E5%AF%BC%E5%85%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>尽管 <code>std</code> 没有外部依赖，但我们仍然必须小心保持内部依赖关系简单且可管理。特别要小心不要引入循环导入。</p>
+<h4 id="%E5%A6%82%E6%9E%9C%E6%96%87%E4%BB%B6%E5%90%8D%E4%BB%A5%E4%B8%8B%E5%88%92%E7%BA%BF%E5%BC%80%E5%A4%B4%EF%BC%9A_foo.ts%EF%BC%8C%E8%AF%B7%E5%8B%BF%E9%93%BE%E6%8E%A5%E8%87%B3%E6%AD%A4%E6%96%87%E4%BB%B6" tabindex="-1">如果文件名以下划线开头：<code>_foo.ts</code>，请勿链接至此文件 <a class="header-anchor" href="#%E5%A6%82%E6%9E%9C%E6%96%87%E4%BB%B6%E5%90%8D%E4%BB%A5%E4%B8%8B%E5%88%92%E7%BA%BF%E5%BC%80%E5%A4%B4%EF%BC%9A_foo.ts%EF%BC%8C%E8%AF%B7%E5%8B%BF%E9%93%BE%E6%8E%A5%E8%87%B3%E6%AD%A4%E6%96%87%E4%BB%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>在某些情况下，内部模块是必要的，但其 API 并不打算稳定或链接。在这种情况下，请以下划线作为前缀。按照约定，只有它自己目录中的文件应导入它。</p>
+<h4 id="%E5%AF%B9%E5%AF%BC%E5%87%BA%E7%9A%84%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8-jsdoc" tabindex="-1">对导出的符号使用 JSDoc <a class="header-anchor" href="#%E5%AF%B9%E5%AF%BC%E5%87%BA%E7%9A%84%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8-jsdoc"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>我们追求完整的文档。每个导出的符号理想上都应有一个文档行。</p>
+<p>如果可能，使用单行 JSDoc。示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/** foo 做 bar。 */</span>
+<span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment">// ...</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-159" class="copyButton" data-copy="/** foo 做 bar。 */
+export function foo() {
+  // ...
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>重要的是文档易于人们阅读，但也需要提供附加的样式信息，以确保生成的文档更丰富。因此 JSDoc 通常应遵循 markdown 标记以增强文本。</p>
+<p>虽然 markdown 支持 HTML 标签，但在 JSDoc 块中是禁止使用的。</p>
+<p>代码字符串文字应使用反引号 (`) 括起来，而不是引号。
+例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/** 从 `deno` 模块导入某些内容。 */</span>
+</code></pre>
+
+      <button id="copy-button-169" class="copyButton" data-copy="/** 从 `deno` 模块导入某些内容。 */
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>除非参数的意图不是很明显，否则请勿对函数参数进行文档化（尽管如果它们的意图不明显，则应考虑 API）。因此，<code>@param</code> 通常不应使用。如果使用 <code>@param</code>，则不应包含 <code>type</code>，因为 TypeScript 已经是强类型的。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/**
+ * 带有不明显参数的函数。
+ * @param foo 不明显参数的描述。
+ */</span>
+</code></pre>
+
+      <button id="copy-button-173" class="copyButton" data-copy="/**
+ * 带有不明显参数的函数。
+ * @param foo 不明显参数的描述。
+ */
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在任何可能的情况下，垂直间距应最小化。因此，单行注释应写成：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/** 这是一个好的单行 JSDoc。 */</span>
+</code></pre>
+
+      <button id="copy-button-177" class="copyButton" data-copy="/** 这是一个好的单行 JSDoc。 */
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>而不是：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/**
+ * 这是一个坏的单行 JSDoc。
+ */</span>
+</code></pre>
+
+      <button id="copy-button-181" class="copyButton" data-copy="/**
+ * 这是一个坏的单行 JSDoc。
+ */
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>代码示例应使用 markdown 格式，如下所示：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">/** 一个简单的注释和示例：
+ * ```ts
+ * import { foo } from "deno";
+ * foo("bar");
+ * ```
+ */</span>
+</code></pre>
+
+      <button id="copy-button-185" class="copyButton" data-copy="/** 一个简单的注释和示例：
+ * ```ts
+ * import { foo } from &quot;deno&quot;;
+ * foo(&quot;bar&quot;);
+ * ```
+ */
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>代码示例不应包含额外的注释，并且必须没有缩进。
+它已经在注释内。如果需要进一步的注释，它就不是一个好的示例。</p>
+<h4 id="%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E8%A7%A3%E5%86%B3-lint-%E9%97%AE%E9%A2%98" tabindex="-1">使用指令解决 lint 问题 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E8%A7%A3%E5%86%B3-lint-%E9%97%AE%E9%A2%98"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>目前，构建过程使用 <code>dlint</code> 来检查代码中的 lint 问题。如果任务需要不符合 linter 的代码，请使用 <code>deno-lint-ignore &lt;code&gt;</code> 指令来抑制警告。</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token comment">// deno-lint-ignore no-explicit-any</span>
+<span class="token keyword">let</span> x<span class="token operator">:</span> <span class="token builtin">any</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-195" class="copyButton" data-copy="// deno-lint-ignore no-explicit-any
+let x: any;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这确保持续集成过程不会因 lint 问题而失败，但它应该被稀少使用。</p>
+<h4 id="%E6%AF%8F%E4%B8%AA%E6%A8%A1%E5%9D%97%E5%BA%94%E9%85%8D%E6%9C%89%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9D%97" tabindex="-1">每个模块应配有测试模块 <a class="header-anchor" href="#%E6%AF%8F%E4%B8%AA%E6%A8%A1%E5%9D%97%E5%BA%94%E9%85%8D%E6%9C%89%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9D%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>每个具有公共功能的模块 <code>foo.ts</code> 应配有测试模块 <code>foo_test.ts</code>。对于 <code>std</code> 模块的测试，应该放在 <code>std/tests</code> 中，由于它们的上下文不同；否则，它应与被测试模块同级。</p>
+<h4 id="%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BA%94%E6%98%8E%E7%A1%AE" tabindex="-1">单元测试应明确 <a class="header-anchor" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BA%94%E6%98%8E%E7%A1%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>为了更好地理解测试，函数应被正确命名，因为它在测试命令中已提示。像是：</p>
+<div class="relative"><pre><code class="highlight notranslate language-console">foo() 返回 bar 对象 ... ok
+</code></pre>
+
+      <button id="copy-button-211" class="copyButton" data-copy="foo() 返回 bar 对象 ... ok
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>测试示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> foo <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./mod.ts"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"foo() 返回 bar 对象"</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> bar<span class="token operator">:</span> <span class="token string">"bar"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-215" class="copyButton" data-copy="import { assertEquals } from &quot;@std/assert&quot;;
+import { foo } from &quot;./mod.ts&quot;;
+
+Deno.test(&quot;foo() 返回 bar 对象&quot;, function () {
+  assertEquals(foo(), { bar: &quot;bar&quot; });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>注意：有关更多信息，请参见 <a href="https://github.com/denoland/deno_std/issues/3754">跟踪问题</a>。</p>
+<h4 id="%E9%A1%B6%E7%BA%A7%E5%87%BD%E6%95%B0%E5%BA%94%E4%BD%BF%E7%94%A8-function-%E8%AF%AD%E6%B3%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E7%AE%AD%E5%A4%B4%E8%AF%AD%E6%B3%95" tabindex="-1">顶级函数应使用 function 语法，而不是箭头语法 <a class="header-anchor" href="#%E9%A1%B6%E7%BA%A7%E5%87%BD%E6%95%B0%E5%BA%94%E4%BD%BF%E7%94%A8-function-%E8%AF%AD%E6%B3%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E7%AE%AD%E5%A4%B4%E8%AF%AD%E6%B3%95"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>顶级函数应使用 <code>function</code> 关键字。箭头语法应限于闭包。</p>
+<p>不好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">const</span> foo <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">"bar"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-228" class="copyButton" data-copy="export const foo = (): string => {
+  return &quot;bar&quot;;
+};
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token string">"bar"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-232" class="copyButton" data-copy="export function foo(): string {
+  return &quot;bar&quot;;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>常规函数和箭头函数在提升、绑定、参数和构造等方面的行为不同。<code>function</code> 关键字清楚地表明了定义函数的意图，提高了可读性和调试追踪能力。</p>
+<h4 id="%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF" tabindex="-1">错误消息 <a class="header-anchor" href="#%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>从 JavaScript / TypeScript 抛出的面向用户的错误消息应清晰、简洁且一致。错误消息应采用句首字母大写的形式，但不应以句号结束。错误消息应避免语法错误和拼写错误，并应使用美式英语书写。</p>
+<p>
+<div class="admonition note">
+  <div class="title">Note</div>
+
+</p>
+<p>请注意，错误消息风格指南仍在进行中，并非所有错误消息都已更新以符合当前风格。</p>
+<p>
+</div>
+</p>
+<p>应遵循的错误消息风格：</p>
+<ol>
+<li>消息应以大写字母开头：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无法解析输入
+好的：无法解析输入
+</code></pre>
+
+      <button id="copy-button-261" class="copyButton" data-copy="不好的：无法解析输入
+好的：无法解析输入
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="2">
+<li>消息不应以句号结束：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无法解析输入。
+好的：无法解析输入
+</code></pre>
+
+      <button id="copy-button-269" class="copyButton" data-copy="不好的：无法解析输入。
+好的：无法解析输入
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="3">
+<li>消息应使用引号包裹字符串值：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无法解析输入 hello, world
+好的：无法解析输入 <span class="token string">"hello, world"</span>
+</code></pre>
+
+      <button id="copy-button-277" class="copyButton" data-copy="不好的：无法解析输入 hello, world
+好的：无法解析输入 &quot;hello, world&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="4">
+<li>消息应说明导致错误的操作：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无效输入 x
+好的：无法解析输入 x
+</code></pre>
+
+      <button id="copy-button-285" class="copyButton" data-copy="不好的：无效输入 x
+好的：无法解析输入 x
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="5">
+<li>应使用主动语态：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：输入 x 无法被解析
+好的：无法解析输入 x
+</code></pre>
+
+      <button id="copy-button-293" class="copyButton" data-copy="不好的：输入 x 无法被解析
+好的：无法解析输入 x
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="6">
+<li>消息不应使用缩写：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无法解析输入 x
+好的：无法解析输入 x
+</code></pre>
+
+      <button id="copy-button-301" class="copyButton" data-copy="不好的：无法解析输入 x
+好的：无法解析输入 x
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="7">
+<li>消息在提供额外信息时应使用冒号。绝不要使用句号。可根据需要使用其他标点：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无法解析输入 x。值为空
+好的：无法解析输入 x：值为空
+</code></pre>
+
+      <button id="copy-button-309" class="copyButton" data-copy="不好的：无法解析输入 x。值为空
+好的：无法解析输入 x：值为空
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><ol start="8">
+<li>附加信息应描述当前状态，尽可能地，也应描述以肯定的声音所需的状态：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-sh">不好的：无法计算 x 的平方根：值不得为负
+好的：无法计算 x 的平方根：当前值为 <span class="token variable">${x}</span>
+更好：无法计算 x 的平方根，因为 x 必须 <span class="token operator">>=</span> <span class="token number">0</span>：当前值为 <span class="token variable">${x}</span>
+</code></pre>
+
+      <button id="copy-button-317" class="copyButton" data-copy="不好的：无法计算 x 的平方根：值不得为负
+好的：无法计算 x 的平方根：当前值为 ${x}
+更好：无法计算 x 的平方根，因为 x 必须 >= 0：当前值为 ${x}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="std" tabindex="-1">std <a class="header-anchor" href="#std"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<h4 id="%E4%B8%8D%E8%A6%81%E4%BE%9D%E8%B5%96%E5%A4%96%E9%83%A8%E4%BB%A3%E7%A0%81%E3%80%82" tabindex="-1">不要依赖外部代码。 <a class="header-anchor" href="#%E4%B8%8D%E8%A6%81%E4%BE%9D%E8%B5%96%E5%A4%96%E9%83%A8%E4%BB%A3%E7%A0%81%E3%80%82"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p><code>https://jsr.io/@std</code> 旨在成为所有 Deno 程序可以依赖的基础功能。我们希望向用户保证，这段代码不包括潜在未经审查的第三方代码。</p>
+<h4 id="%E8%AE%B0%E5%BD%95%E5%B9%B6%E7%BB%B4%E6%8A%A4%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E3%80%82" tabindex="-1">记录并维护浏览器兼容性。 <a class="header-anchor" href="#%E8%AE%B0%E5%BD%95%E5%B9%B6%E7%BB%B4%E6%8A%A4%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E3%80%82"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>如果模块与浏览器兼容，请在模块顶部的 JSDoc 中包含以下内容：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 此模块与浏览器兼容。</span>
+</code></pre>
+
+      <button id="copy-button-333" class="copyButton" data-copy="// 此模块与浏览器兼容。
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>通过不使用全局的 <code>Deno</code> 命名空间或针对其进行特性检测来维护此类模块的浏览器兼容性。确保任何新的依赖项也与浏览器兼容。</p>
+<h4 id="%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8-%23-%E8%80%8C%E4%B8%8D%E6%98%AF-private-%E5%85%B3%E9%94%AE%E5%AD%97" tabindex="-1">优先使用 # 而不是 private 关键字 <a class="header-anchor" href="#%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8-%23-%E8%80%8C%E4%B8%8D%E6%98%AF-private-%E5%85%B3%E9%94%AE%E5%AD%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>我们更喜欢在标准模块代码库中使用私有字段（<code>#</code>）语法，而不是 TypeScript 的 <code>private</code> 关键字。私有字段使得属性和方法在运行时也保持私有。而 TypeScript 的 <code>private</code> 关键字仅保证在编译时私有，并且这些字段在运行时是可公开访问的。</p>
+<p>好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">{</span>
+  #foo <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token function">#bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-346" class="copyButton" data-copy="class MyClass {
+  #foo = 1;
+  #bar() {}
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>不好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> foo <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> <span class="token function">bar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-350" class="copyButton" data-copy="class MyClass {
+  private foo = 1;
+  private bar() {}
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A" tabindex="-1">命名约定 <a class="header-anchor" href="#%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>函数、方法、字段和局部变量使用 <code>camelCase</code>。类、类型、接口和枚举使用 <code>PascalCase</code>。静态顶级项目如 <code>string</code>、<code>number</code>、<code>bigint</code>、<code>boolean</code>、<code>RegExp</code>、静态项目数组、静态键值记录等使用 <code>UPPER_SNAKE_CASE</code>。</p>
+<p>好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">function</span> <span class="token function">generateKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">let</span> currentValue <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">KeyObject</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">SharedKey</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">enum</span> KeyType <span class="token punctuation">{</span>
+  PublicKey<span class="token punctuation">,</span>
+  PrivateKey<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> <span class="token constant">KEY_VERSION</span> <span class="token operator">=</span> <span class="token string">"1.0.0"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token constant">KEY_MAX_LENGTH</span> <span class="token operator">=</span> <span class="token number">4294967295</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token constant">KEY_PATTERN</span> <span class="token operator">=</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">^[0-9a-f]+$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-360" class="copyButton" data-copy="function generateKey() {}
+
+let currentValue = 0;
+
+class KeyObject {}
+
+type SharedKey = {};
+
+enum KeyType {
+  PublicKey,
+  PrivateKey,
+}
+
+const KEY_VERSION = &quot;1.0.0&quot;;
+
+const KEY_MAX_LENGTH = 4294967295;
+
+const KEY_PATTERN = /^[0-9a-f]+$/;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>不好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">function</span> <span class="token function">generate_key</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">let</span> current_value <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">GenerateKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">keyObject</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">sharedKey</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">enum</span> keyType <span class="token punctuation">{</span>
+  publicKey<span class="token punctuation">,</span>
+  privateKey<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> key_version <span class="token operator">=</span> <span class="token string">"1.0.0"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> key_maxLength <span class="token operator">=</span> <span class="token number">4294967295</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> KeyPattern <span class="token operator">=</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">^[0-9a-f]+$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-364" class="copyButton" data-copy="function generate_key() {}
+
+let current_value = 0;
+
+function GenerateKey() {}
+
+class keyObject {}
+
+type sharedKey = {};
+
+enum keyType {
+  publicKey,
+  privateKey,
+}
+
+const key_version = &quot;1.0.0&quot;;
+
+const key_maxLength = 4294967295;
+
+const KeyPattern = /^[0-9a-f]+$/;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>当名称为 <code>camelCase</code> 或 <code>PascalCase</code> 时，请始终遵循它们的规则，即使它们的部分是首字母缩略词。</p>
+<p>注意：Web API 使用大写缩略词（<code>JSON</code>、<code>URL</code>、<code>URL.createObjectURL()</code> 等）。Deno 标准库不遵循此约定。</p>
+<p>好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">class</span> <span class="token class-name">HttpObject</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-374" class="copyButton" data-copy="class HttpObject {
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>不好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">class</span> <span class="token class-name">HTTPObject</span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-378" class="copyButton" data-copy="class HTTPObject {
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">function</span> <span class="token function">convertUrl</span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token constant">URL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> url<span class="token punctuation">.</span>href<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-382" class="copyButton" data-copy="function convertUrl(url: URL) {
+  return url.href;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>不好的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">function</span> <span class="token function">convertURL</span><span class="token punctuation">(</span>url<span class="token operator">:</span> <span class="token constant">URL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> url<span class="token punctuation">.</span>href<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-386" class="copyButton" data-copy="function convertURL(url: URL) {
+  return url.href;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-foreground-tertiary bg-background-primary rounded mx-auto"><h2 class="text-xl border-b border-foreground-tertiary dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/contributing/style_guide.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#%E7%89%88%E6%9D%83%E5%A4%B4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">版权头 </a></li><li class="m-2 leading-4"><a href="#%E6%96%87%E4%BB%B6%E5%90%8D%E4%BD%BF%E7%94%A8%E4%B8%8B%E5%88%92%E7%BA%BF%E8%80%8C%E9%9D%9E%E7%A0%B4%E6%8A%98%E5%8F%B7" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">文件名使用下划线而非破折号 </a></li><li class="m-2 leading-4"><a href="#%E4%B8%BA%E6%96%B0%E5%8A%9F%E8%83%BD%E6%B7%BB%E5%8A%A0%E6%B5%8B%E8%AF%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">为新功能添加测试 </a></li><li class="m-2 leading-4"><a href="#todo-%E6%B3%A8%E9%87%8A" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">TODO 注释 </a></li><li class="m-2 leading-4"><a href="#%E4%B8%8D%E9%BC%93%E5%8A%B1%E5%85%83%E7%BC%96%E7%A8%8B%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%BD%BF%E7%94%A8-proxy" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">不鼓励元编程，包括使用 Proxy </a></li><li class="m-2 leading-4"><a href="#%E5%8C%85%E5%AE%B9%E6%80%A7%E4%BB%A3%E7%A0%81" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">包容性代码 </a></li><li class="m-2 leading-4"><a href="#rust" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Rust </a></li><li class="m-2 leading-4"><a href="#typescript" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">TypeScript </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8-typescript-%E8%80%8C%E4%B8%8D%E6%98%AF-javascript" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用 TypeScript 而不是 JavaScript </a></li><li class="m-2 leading-4"><a href="#%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E6%96%87%E4%BB%B6%E5%90%8D-index.ts%2Findex.js" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">不要使用文件名 index.ts/index.js </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%87%BA%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%9A%E6%9C%80%E5%A4%9A-2-%E4%B8%AA%E5%8F%82%E6%95%B0%EF%BC%8C%E5%B0%86%E5%85%B6%E4%BD%99%E5%8F%82%E6%95%B0%E6%94%BE%E5%85%A5%E9%80%89%E9%A1%B9%E5%AF%B9%E8%B1%A1%E4%B8%AD" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导出的函数：最多 2 个参数，将其余参数放入选项对象中 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%BC%E5%87%BA%E6%89%80%E6%9C%89%E8%A2%AB%E7%94%A8%E4%BD%9C%E5%AF%BC%E5%87%BA%E6%88%90%E5%91%98%E5%8F%82%E6%95%B0%E7%9A%84%E6%8E%A5%E5%8F%A3" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">导出所有被用作导出成员参数的接口 </a></li><li class="m-2 leading-4"><a href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E4%BE%9D%E8%B5%96%EF%BC%9B%E4%B8%8D%E5%BA%94%E4%BA%A7%E7%94%9F%E5%BE%AA%E7%8E%AF%E5%AF%BC%E5%85%A5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">最小化依赖；不应产生循环导入 </a></li><li class="m-2 leading-4"><a href="#%E5%A6%82%E6%9E%9C%E6%96%87%E4%BB%B6%E5%90%8D%E4%BB%A5%E4%B8%8B%E5%88%92%E7%BA%BF%E5%BC%80%E5%A4%B4%EF%BC%9A_foo.ts%EF%BC%8C%E8%AF%B7%E5%8B%BF%E9%93%BE%E6%8E%A5%E8%87%B3%E6%AD%A4%E6%96%87%E4%BB%B6" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">如果文件名以下划线开头：_foo.ts，请勿链接至此文件 </a></li><li class="m-2 leading-4"><a href="#%E5%AF%B9%E5%AF%BC%E5%87%BA%E7%9A%84%E7%AC%A6%E5%8F%B7%E4%BD%BF%E7%94%A8-jsdoc" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">对导出的符号使用 JSDoc </a></li><li class="m-2 leading-4"><a href="#%E4%BD%BF%E7%94%A8%E6%8C%87%E4%BB%A4%E8%A7%A3%E5%86%B3-lint-%E9%97%AE%E9%A2%98" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">使用指令解决 lint 问题 </a></li><li class="m-2 leading-4"><a href="#%E6%AF%8F%E4%B8%AA%E6%A8%A1%E5%9D%97%E5%BA%94%E9%85%8D%E6%9C%89%E6%B5%8B%E8%AF%95%E6%A8%A1%E5%9D%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">每个模块应配有测试模块 </a></li><li class="m-2 leading-4"><a href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E5%BA%94%E6%98%8E%E7%A1%AE" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">单元测试应明确 </a></li><li class="m-2 leading-4"><a href="#%E9%A1%B6%E7%BA%A7%E5%87%BD%E6%95%B0%E5%BA%94%E4%BD%BF%E7%94%A8-function-%E8%AF%AD%E6%B3%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E7%AE%AD%E5%A4%B4%E8%AF%AD%E6%B3%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">顶级函数应使用 function 语法，而不是箭头语法 </a></li><li class="m-2 leading-4"><a href="#%E9%94%99%E8%AF%AF%E6%B6%88%E6%81%AF" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">错误消息 </a></li></ul></li><li class="m-2 leading-4"><a href="#std" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">std </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E4%B8%8D%E8%A6%81%E4%BE%9D%E8%B5%96%E5%A4%96%E9%83%A8%E4%BB%A3%E7%A0%81%E3%80%82" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">不要依赖外部代码。 </a></li><li class="m-2 leading-4"><a href="#%E8%AE%B0%E5%BD%95%E5%B9%B6%E7%BB%B4%E6%8A%A4%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E3%80%82" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">记录并维护浏览器兼容性。 </a></li><li class="m-2 leading-4"><a href="#%E4%BC%98%E5%85%88%E4%BD%BF%E7%94%A8-%23-%E8%80%8C%E4%B8%8D%E6%98%AF-private-%E5%85%B3%E9%94%AE%E5%AD%97" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">优先使用 # 而不是 private 关键字 </a></li><li class="m-2 leading-4"><a href="#%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">命名约定 </a></li></ul></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>

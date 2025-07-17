@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>deno bench，基准测试工具 - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="`deno bench`，基准测试工具"/><meta name="twitter:description" content="Run benchmarks using Deno's built-in bench tool."/><meta name="twitter:image" content="https://docs.deno.com/runtime/reference/cli/bench/index.png"/><meta name="twitter:image:alt" content="Run benchmarks using Deno's built-in bench tool."/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="`deno bench`，基准测试工具"/><meta property="og:description" content="Run benchmarks using Deno's built-in bench tool."/><meta property="og:image" content="https://docs.deno.com/runtime/reference/cli/bench/index.png"/><meta property="og:image:alt" content="Run benchmarks using Deno's built-in bench tool."/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script>
+            (function() {
+              const theme = localStorage.getItem('denoDocsTheme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+              document.documentElement.classList.add(theme);
+            })();
+          </script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="stylesheet" href="/components.css"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body data-services-page="false"><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 1025 332" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="background" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M28.829,227.937C19.958,208.794 15.007,187.472 15.007,165.002C15.007,159.187 15.339,153.448 15.984,147.805C16.639,142.102 17.61,136.506 18.877,131.032C25.997,100.328 42.557,73.224 65.329,52.95C84.456,35.944 107.887,23.81 133.573,18.31C143.71,16.145 154.224,15.006 165.003,15.006C168.781,15.01 172.586,15.155 176.414,15.447C194.568,16.833 211.723,21.403 227.373,28.568C239.998,34.354 251.683,41.842 262.135,50.737C288.388,73.101 306.697,104.254 312.786,139.213C314.241,147.592 314.999,156.209 314.999,165.002C314.996,168.786 314.85,172.597 314.557,176.431C313.451,190.92 310.316,204.773 305.453,217.733C298.665,235.784 288.494,252.185 275.715,266.161C259.094,283.132 237.972,290.684 220.331,290.37C207.503,290.141 194.952,285.037 186.279,277.569C173.889,266.9 168.885,254.704 167.169,241.095C166.743,237.712 166.993,228.494 168.754,222.111C170.066,217.353 173.394,208.165 178.261,204.146C172.568,201.694 165.24,196.354 162.93,193.791C162.362,193.161 162.436,192.174 162.944,191.495C163.453,190.817 164.344,190.549 165.143,190.836C170.038,192.516 175.999,194.173 182.285,195.225C190.552,196.607 200.833,198.347 211.248,198.859C236.643,200.106 263.169,188.708 271.402,166.029C279.634,143.35 276.44,120.918 246.906,107.463C217.371,94.007 203.728,78.008 179.865,68.359C164.278,62.056 146.93,65.798 129.119,75.641C81.145,102.153 38.164,185.92 57.977,263.528C58.26,264.59 57.782,265.708 56.819,266.237C55.916,266.732 54.806,266.591 54.058,265.906C48.292,259.57 43.06,252.74 38.435,245.485C34.857,239.871 31.645,234.01 28.829,227.937Z" class="fill-black dark:fill-transparent"></path></g><g id="outline" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M172.67,0.181C263.638,4.413 334.056,81.702 329.825,172.67C325.593,263.638 248.303,334.055 157.336,329.823C66.368,325.592 -4.05,248.303 0.181,157.336C4.413,66.368 81.702,-4.05 172.67,0.181ZM211.248,198.859C200.833,198.347 190.552,196.607 182.285,195.225C175.999,194.173 170.038,192.516 165.143,190.836C164.344,190.549 163.453,190.817 162.944,191.495C162.436,192.174 162.362,193.161 162.93,193.791C165.24,196.354 172.568,201.694 178.261,204.146C173.394,208.165 170.066,217.353 168.754,222.111C166.993,228.494 166.743,237.712 167.169,241.095C168.885,254.704 173.889,266.9 186.279,277.569C194.952,285.037 207.503,290.141 220.331,290.37C238.033,290.685 259.24,283.08 275.887,265.985C297.652,242.124 311.91,211.098 314.557,176.431C320.86,93.885 258.961,21.75 176.414,15.447C93.869,9.144 21.734,71.044 15.431,153.59C12.167,196.339 27.195,236.296 53.912,265.76C54.656,266.569 55.856,266.766 56.819,266.237C57.782,265.708 58.26,264.59 57.977,263.528C38.164,185.92 81.145,102.153 129.119,75.641C146.93,65.798 164.278,62.056 179.865,68.359C203.728,78.008 217.371,94.007 246.906,107.463C276.44,120.918 279.634,143.35 271.402,166.029C263.169,188.708 236.643,200.106 211.248,198.859Z" class="fill-transparent dark:fill-white"></path></g><g id="eye" transform="matrix(1,0,0,1,0.000105977,0.000105977)"><path d="M159.634,78.772C167.726,78.138 174.786,85.044 176.003,94.229C177.627,106.464 173.136,119.103 158.37,119.394C145.756,119.646 141.934,106.925 142.77,99.219C143.6,91.513 149.952,79.532 159.634,78.772Z" class="fill-black"></path></g><g transform="matrix(12.6005,0,0,12.6005,-6934.5,-3216.05)"><path d="M600.234,274.47C596.514,274.47 594.018,271.926 594.018,268.422C594.018,264.918 596.514,262.374 600.234,262.374C603.882,262.374 606.474,264.822 606.474,268.422C606.474,272.022 603.882,274.47 600.234,274.47ZM600.234,271.662C601.938,271.662 603.282,270.318 603.282,268.422C603.282,266.502 601.986,265.182 600.234,265.182C598.41,265.182 597.186,266.574 597.186,268.422C597.186,270.246 598.458,271.662 600.234,271.662ZM613.662,274.47C610.182,274.47 607.638,272.022 607.638,268.422C607.638,264.822 610.182,262.374 613.806,262.374C615.678,262.374 617.598,263.118 618.774,264.606L616.662,266.43C616.038,265.71 615.126,265.182 613.926,265.182C612.054,265.182 610.806,266.502 610.806,268.398C610.806,270.318 612.102,271.662 613.95,271.662C615.198,271.662 616.134,271.086 616.686,270.462L618.822,272.358C617.814,273.534 616.014,274.47 613.662,274.47ZM624.615,274.47C622.743,274.47 621.159,273.87 619.863,272.766L621.399,270.582C622.359,271.494 623.367,271.95 624.639,271.95C625.551,271.95 626.079,271.566 626.079,270.99C626.079,270.438 625.479,270.174 623.943,269.694C622.023,269.046 620.343,268.134 620.343,265.878C620.343,263.766 622.167,262.374 624.567,262.374C626.199,262.374 627.519,262.806 628.839,263.838L627.327,266.142C626.415,265.278 625.383,264.894 624.519,264.894C624.015,264.894 623.367,265.158 623.367,265.782C623.367,266.262 623.991,266.598 625.143,267.03C627.687,267.966 629.175,268.518 629.175,270.822C629.175,272.91 627.687,274.47 624.615,274.47ZM582.487,274.278L582.487,262.374L586.791,262.374C590.556,262.374 592.977,264.822 592.977,268.342C592.977,271.847 590.708,274.278 586.841,274.278L582.487,274.278ZM585.58,271.444L586.623,271.444C588.438,271.444 589.632,270.053 589.632,268.342C589.632,266.565 588.421,265.207 586.858,265.207L585.58,265.207L585.58,271.444Z" class="fill-black dark:fill-white"></path></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink " data-active="true" aria-current="location">手册</a><a href="/api/deno/" class="header-nav-link blocklink ">API 参考</a><a href="/examples/" class="header-nav-link blocklink ">示例</a><a href="/services/" class="header-nav-link blocklink services">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span><span class="sr-only">Toggle navigation menu</span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="runtime" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link" data-active="true">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/" class="sub-nav-heading-link">入门</a></h2><ul class="sub-nav"><li><a href="/runtime/getting_started/installation/" class="sub-nav-link blocklink">安装</a></li><li><a href="/runtime/getting_started/first_project/" class="sub-nav-link blocklink">第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="sub-nav-link blocklink">设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="sub-nav-link blocklink">命令行界面</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/fundamentals/" class="sub-nav-heading-link">基础知识</a></h2><ul class="sub-nav"><li><a href="/runtime/fundamentals/typescript/" class="sub-nav-link blocklink">TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/runtime/fundamentals/security/" class="sub-nav-link blocklink">安全</a></li><li><a href="/runtime/fundamentals/modules/" class="sub-nav-link blocklink">模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="sub-nav-link blocklink">配置</a></li><li><a href="/runtime/fundamentals/standard_library/" class="sub-nav-link blocklink">标准库</a></li><li><a href="/runtime/fundamentals/web_dev/" class="sub-nav-link blocklink">Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="sub-nav-link blocklink">测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="sub-nav-link blocklink">调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="sub-nav-link blocklink">工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="sub-nav-link blocklink">代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="sub-nav-link blocklink">FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="sub-nav-link blocklink">OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="sub-nav-link blocklink">稳定性和发布</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/reference/" class="sub-nav-heading-link">参考指南</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-CLI" class="sub-nav-toggle blocklink">CLI</label><input type="checkbox" id="sub-nav-toggle-CLI" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/reference/cli/add/" class="sub-nav-link blocklink">deno add</a></li><li><a href="/runtime/reference/cli/bench/" class="sub-nav-link blocklink" data-active="true">deno bench</a></li><li><a href="/runtime/reference/cli/bundle/" class="sub-nav-link blocklink">deno bundle</a></li><li><a href="/runtime/reference/cli/check/" class="sub-nav-link blocklink">deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="sub-nav-link blocklink">deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="sub-nav-link blocklink">deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="sub-nav-link blocklink">deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="sub-nav-link blocklink">deno coverage</a></li><li><a href="/runtime/reference/cli/doc/" class="sub-nav-link blocklink">deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="sub-nav-link blocklink">deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="sub-nav-link blocklink">deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="sub-nav-link blocklink">deno info</a></li><li><a href="/runtime/reference/cli/init/" class="sub-nav-link blocklink">deno init</a></li><li><a href="/runtime/reference/cli/install/" class="sub-nav-link blocklink">deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="sub-nav-link blocklink">deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="sub-nav-link blocklink">deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="sub-nav-link blocklink">deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="sub-nav-link blocklink">deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="sub-nav-link blocklink">deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="sub-nav-link blocklink">deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="sub-nav-link blocklink">deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="sub-nav-link blocklink">deno run</a></li><li><a href="/runtime/reference/cli/serve/" class="sub-nav-link blocklink">deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="sub-nav-link blocklink">deno task</a></li><li><a href="/runtime/reference/cli/test/" class="sub-nav-link blocklink">deno test</a></li><li><a href="/runtime/reference/cli/types/" class="sub-nav-link blocklink">deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="sub-nav-link blocklink">deno uninstall</a></li><li><a href="/runtime/reference/cli/update/" class="sub-nav-link blocklink">deno update</a></li><li><a href="/runtime/reference/cli/upgrade/" class="sub-nav-link blocklink">deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="sub-nav-link blocklink">deno unstable flags</a></li></ul></li><li><a href="/runtime/reference/deno_namespace_apis/" class="sub-nav-link blocklink">Deno API</a></li><li><a href="/runtime/reference/web_platform_apis/" class="sub-nav-link blocklink">Web API</a></li><li><a href="/runtime/reference/node_apis/" class="sub-nav-link blocklink">Node API</a></li><li><a href="/runtime/reference/ts_config_migration/" class="sub-nav-link blocklink">TS 配置迁移</a></li><li><a href="/runtime/reference/continuous_integration/" class="sub-nav-link blocklink">持续集成</a></li><li><a href="/runtime/reference/env_variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/runtime/reference/vscode/" class="sub-nav-link blocklink">Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="sub-nav-link blocklink">使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="sub-nav-link blocklink">在文档中测试代码</a></li><li><a href="/runtime/reference/bundling/" class="sub-nav-link blocklink">捆绑</a></li><li><a href="/runtime/reference/lint_plugins/" class="sub-nav-link blocklink">Lint 插件</a></li><li><a href="/runtime/reference/wasm/" class="sub-nav-link blocklink">WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="sub-nav-link blocklink">迁移指南</a></li><li><a href="/runtime/reference/lsp_integration/" class="sub-nav-link blocklink">语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="sub-nav-link blocklink">Docker</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><a href="/runtime/contributing/" class="sub-nav-heading-link">贡献和支持</a></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle blocklink">为 Deno 做出贡献</label><input type="checkbox" id="sub-nav-toggle-为Deno做出贡献" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/runtime/contributing/architecture/" class="sub-nav-link blocklink">内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="sub-nav-link blocklink">分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="sub-nav-link blocklink">发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="sub-nav-link blocklink">风格指南</a></li><li><a href="/runtime/contributing/docs/" class="sub-nav-link blocklink">文档</a></li><li><a href="/runtime/contributing/examples/" class="sub-nav-link blocklink">示例</a></li></ul></li><li><a href="/runtime/help/" class="sub-nav-link blocklink">帮助</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/runtime/"><span itemprop="name">运行时</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/reference/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">参考指南</span></a><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/runtime/reference/cli/" itemprop="item" class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm"><span itemprop="name">CLI</span></a><meta itemprop="position" content="3"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm"><code>deno bench</code>，基准测试工具</span><meta itemprop="position" content="4"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#type-checking-options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Type checking options</a></li><li class="m-2 leading-4"><a href="#dependency-management-options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Dependency management options</a></li><li class="m-2 leading-4"><a href="#options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Options</a></li><li class="m-2 leading-4"><a href="#file-watching-options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">File watching options</a></li><li class="m-2 leading-4"><a href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">快速开始 </a></li><li class="m-2 leading-4"><a href="#%E7%BC%96%E5%86%99%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">编写基准测试 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">异步函数 </a></li><li class="m-2 leading-4"><a href="#%E5%85%B3%E9%94%AE%E9%83%A8%E5%88%86" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">关键部分 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E5%88%86%E7%BB%84%E4%B8%8E%E5%9F%BA%E5%87%86%E7%BA%BF" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">分组与基准线 </a></li><li class="m-2 leading-4"><a href="#%E8%BF%90%E8%A1%8C%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">运行基准测试 </a></li><li class="m-2 leading-4"><a href="#%E8%BF%87%E6%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">过滤 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%87%E6%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">命令行过滤 </a></li><li class="m-2 leading-4"><a href="#%E5%9F%BA%E5%87%86%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">基准定义过滤 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%BF%87%E6%BB%A4%E6%8E%89%EF%BC%88%E5%BF%BD%E7%95%A5%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">过滤掉（忽略这些基准测试） </a></li><li class="m-2 leading-4"><a href="#%E8%BF%87%E6%BB%A4%E8%BF%9B%EF%BC%88%E4%BB%85%E8%BF%90%E8%A1%8C%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">过滤进（仅运行这些基准测试） </a></li></ul></li></ul></li><li class="m-2 leading-4"><a href="#json-%E8%BE%93%E5%87%BA" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">JSON 输出 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1><code>deno bench</code>，基准测试工具</h1><div><div class="p-4 bg-stone-100 dark:bg-transparent rounded border border-gray-300 dark:border-background-tertiary mt-6 mb-6 relative"><h3 class="!text-xs !m-0 -top-2.5 bg-background-primary border border-gray-600/25 px-2 py-0.5 rounded absolute !font-normal">Command line usage</h3><div><pre class="!mb-0 !px-3 !py-2"><code>deno bench [OPTIONS] [files]... [-- [SCRIPT_ARG]...]</code></pre></div></div><div><p>Run benchmarks using Deno's built-in bench tool.</p>
+<p>Evaluate the given files, run all benches declared with 'Deno.bench()' and report results to standard output:</p>
+<div class="relative"><pre><code>deno bench src/fetch_bench.ts src/signal_bench.ts
+</code></pre>
+
+      <button id="copy-button-6" class="copyButton" data-copy="deno bench src/fetch_bench.ts src/signal_bench.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>If you specify a directory instead of a file, the path is expanded to all contained files matching the glob <code>{*_,*.,}bench.{js,mjs,ts,mts,jsx,tsx}</code>:</p>
+<div class="relative"><pre><code>deno bench src/
+</code></pre>
+
+      <button id="copy-button-10" class="copyButton" data-copy="deno bench src/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><br/><h2 id="type-checking-options">Type checking options <a class="header-anchor" href="#type-checking-options"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2><h3 id="type-checking-options-check"><code>--check</code> <a class="header-anchor" href="#type-checking-options-check"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Set type-checking behavior. This subcommand type-checks local modules by default, so adding<code> --check</code> is redundant
+If the value of &quot;all&quot; is supplied, remote modules will be included.
+Alternatively, the 'deno check' subcommand can be used.</p></p><h3 id="type-checking-options-no-check"><code>--no-check</code> <a class="header-anchor" href="#type-checking-options-no-check"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Skip type-checking. If the value of &quot;remote&quot; is supplied, diagnostic errors from remote modules will be ignored.</p></p><h2 id="dependency-management-options">Dependency management options <a class="header-anchor" href="#dependency-management-options"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2><h3 id="dependency-management-options-cached-only"><code>--cached-only</code> <a class="header-anchor" href="#dependency-management-options-cached-only"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Require that remote dependencies are already cached.</p></p><h3 id="dependency-management-options-frozen"><code>--frozen</code> <a class="header-anchor" href="#dependency-management-options-frozen"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Error out if lockfile is out of date.</p></p><h3 id="dependency-management-options-import-map"><code><a href=" https://docs.deno.com/runtime/manual/basics/import_maps">--import-map</a></code> <a class="header-anchor" href="#dependency-management-options-import-map"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Load import map file from local file or remote URL.</p></p><h3 id="dependency-management-options-lock"><code>--lock</code> <a class="header-anchor" href="#dependency-management-options-lock"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Check the specified lock file. (If value is not provided, defaults to &quot;./deno.lock&quot;).</p></p><h3 id="dependency-management-options-no-lock"><code>--no-lock</code> <a class="header-anchor" href="#dependency-management-options-no-lock"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Disable auto discovery of the lock file.</p></p><h3 id="dependency-management-options-no-npm"><code>--no-npm</code> <a class="header-anchor" href="#dependency-management-options-no-npm"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Do not resolve npm modules.</p></p><h3 id="dependency-management-options-no-remote"><code>--no-remote</code> <a class="header-anchor" href="#dependency-management-options-no-remote"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Do not resolve remote modules.</p></p><h3 id="dependency-management-options-node-modules-dir"><code>--node-modules-dir</code> <a class="header-anchor" href="#dependency-management-options-node-modules-dir"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Sets the node modules management mode for npm packages.</p></p><h3 id="dependency-management-options-reload"><code>--reload</code> <a class="header-anchor" href="#dependency-management-options-reload"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p>Short flag: <code>-r</code></p><p class="block !whitespace-pre-line"><p>Reload source code cache (recompile TypeScript)
+no value                                                 Reload everything
+jsr:@std/http/file-server,jsr:@std/assert/assert-equals  Reloads specific modules
+npm:                                                     Reload all npm modules
+npm:chalk                                                Reload specific npm module.</p></p><h3 id="dependency-management-options-vendor"><code>--vendor</code> <a class="header-anchor" href="#dependency-management-options-vendor"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Toggles local vendor folder usage for remote modules and a node_modules folder for npm packages.</p></p><h2 id="options">Options <a class="header-anchor" href="#options"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2><h3 id="options-allow-scripts"><code>--allow-scripts</code> <a class="header-anchor" href="#options-allow-scripts"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Allow running npm lifecycle scripts for the given packages
+Note: Scripts will only be executed when using a node_modules directory (<code>--node-modules-dir</code>).</p></p><h3 id="options-cert"><code>--cert</code> <a class="header-anchor" href="#options-cert"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Load certificate authority from PEM encoded file.</p></p><h3 id="options-conditions"><code><a href=" https://docs.deno.com/go/conditional-exports">--conditions</a></code> <a class="header-anchor" href="#options-conditions"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Use this argument to specify custom conditions for npm package exports. You can also use DENO_CONDITIONS env var.
+.</p></p><h3 id="options-config"><code><a href=" https://docs.deno.com/go/config">--config</a></code> <a class="header-anchor" href="#options-config"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p>Short flag: <code>-c</code></p><p class="block !whitespace-pre-line"><p>Configure different aspects of deno including TypeScript, linting, and code formatting.
+Typically the configuration file will be called <code>deno.json</code> or <code>deno.jsonc</code> and
+automatically detected; in that case this flag is not necessary.</p></p><h3 id="options-env-file"><code>--env-file</code> <a class="header-anchor" href="#options-env-file"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Load environment variables from local file
+Only the first environment variable with a given key is used.
+Existing process environment variables are not overwritten, so if variables with the same names already exist in the environment, their values will be preserved.
+Where multiple declarations for the same environment variable exist in your .env file, the first one encountered is applied. This is determined by the order of the files you pass as arguments.</p></p><h3 id="options-ext"><code>--ext</code> <a class="header-anchor" href="#options-ext"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Set content type of the supplied file.</p></p><h3 id="options-filter"><code>--filter</code> <a class="header-anchor" href="#options-filter"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Run benchmarks with this string or regexp pattern in the bench name.</p></p><h3 id="options-ignore"><code>--ignore</code> <a class="header-anchor" href="#options-ignore"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Ignore files.</p></p><h3 id="options-json"><code>--json</code> <a class="header-anchor" href="#options-json"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>UNSTABLE: Output benchmark result in JSON format.</p></p><h3 id="options-location"><code>--location</code> <a class="header-anchor" href="#options-location"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Value of globalThis.location used by some web APIs.</p></p><h3 id="options-no-config"><code>--no-config</code> <a class="header-anchor" href="#options-no-config"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Disable automatic loading of the configuration file.</p></p><h3 id="options-no-run"><code>--no-run</code> <a class="header-anchor" href="#options-no-run"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Cache bench modules, but don't run benchmarks.</p></p><h3 id="options-permit-no-files"><code>--permit-no-files</code> <a class="header-anchor" href="#options-permit-no-files"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Don't return an error code if no files were found.</p></p><h3 id="options-preload"><code>--preload</code> <a class="header-anchor" href="#options-preload"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>A list of files that will be executed before the main module.</p></p><h3 id="options-seed"><code>--seed</code> <a class="header-anchor" href="#options-seed"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Set the random number generator seed.</p></p><h3 id="options-v8-flags"><code>--v8-flags</code> <a class="header-anchor" href="#options-v8-flags"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>To see a list of all available flags use<code> --v8-flags=--help</code>
+Flags can also be set via the DENO_V8_FLAGS environment variable.
+Any flags set with this flag are appended after the DENO_V8_FLAGS environment variable.</p></p><h2 id="file-watching-options">File watching options <a class="header-anchor" href="#file-watching-options"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2><h3 id="file-watching-options-no-clear-screen"><code>--no-clear-screen</code> <a class="header-anchor" href="#file-watching-options-no-clear-screen"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Do not clear terminal screen when under watch mode.</p></p><h3 id="file-watching-options-watch"><code>--watch</code> <a class="header-anchor" href="#file-watching-options-watch"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Watch for file changes and restart process automatically.
+Only local files from entry point module graph are watched.</p></p><h3 id="file-watching-options-watch-exclude"><code>--watch-exclude</code> <a class="header-anchor" href="#file-watching-options-watch-exclude"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3><p class="block !whitespace-pre-line"><p>Exclude provided files/patterns from watch mode.</p></p></div><div><h2 id="%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B" tabindex="-1">快速开始 <a class="header-anchor" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>首先，创建一个文件 <code>url_bench.ts</code> 并使用 <code>Deno.bench()</code> 函数注册一个基准测试。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// url_bench.ts</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"URL 解析"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-6" class="copyButton" data-copy="// url_bench.ts
+Deno.bench(&quot;URL 解析&quot;, () => {
+  new URL(&quot;https://deno.land&quot;);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>其次，使用 <code>deno bench</code> 子命令运行基准测试。</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">deno bench url_bench.ts
+cpu: Apple M1 Max
+runtime: deno <span class="token number">1.21</span>.0 <span class="token punctuation">(</span>aarch64-apple-darwin<span class="token punctuation">)</span>
+
+file:///dev/deno/url_bench.ts
+benchmark        <span class="token function">time</span> <span class="token punctuation">(</span>avg<span class="token punctuation">)</span>             <span class="token punctuation">(</span>min … max<span class="token punctuation">)</span>       p75       p99      p995
+--------------------------------------------------- -----------------------------
+URL 解析       <span class="token number">17.29</span> µs/iter  <span class="token punctuation">(</span><span class="token number">16.67</span> µs … <span class="token number">153.62</span> µs<span class="token punctuation">)</span>  <span class="token number">17.25</span> µs  <span class="token number">18.92</span> µs  <span class="token number">22.25</span> µs
+</code></pre>
+
+      <button id="copy-button-10" class="copyButton" data-copy="deno bench url_bench.ts
+cpu: Apple M1 Max
+runtime: deno 1.21.0 (aarch64-apple-darwin)
+
+file:///dev/deno/url_bench.ts
+benchmark        time (avg)             (min … max)       p75       p99      p995
+--------------------------------------------------- -----------------------------
+URL 解析       17.29 µs/iter  (16.67 µs … 153.62 µs)  17.25 µs  18.92 µs  22.25 µs
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E7%BC%96%E5%86%99%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95" tabindex="-1">编写基准测试 <a class="header-anchor" href="#%E7%BC%96%E5%86%99%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>要定义一个基准测试，你需要通过调用 <code>Deno.bench</code> API 来注册它。这个 API 有多个重载，可以提供最大的灵活性，并在不同形式之间轻松切换（例如，当需要快速关注单个基准进行调试时，使用 <code>only: true</code> 选项）：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 紧凑形式：名称和函数</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"你好，世界 #1"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 紧凑形式：命名函数。</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token function">helloWorld3</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 较长形式：基准定义。</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"你好，世界 #2"</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 与紧凑形式相似，第二个参数是额外配置。</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"你好，世界 #4"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> permissions<span class="token operator">:</span> <span class="token punctuation">{</span> read<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 与较长形式相似，第二个参数是基准函数。</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"你好，世界 #5"</span><span class="token punctuation">,</span> permissions<span class="token operator">:</span> <span class="token punctuation">{</span> read<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 与较长形式相似，第二个参数是命名基准函数。</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span> permissions<span class="token operator">:</span> <span class="token punctuation">{</span> read<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token function">helloWorld6</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-17" class="copyButton" data-copy="// 紧凑形式：名称和函数
+Deno.bench(&quot;你好，世界 #1&quot;, () => {
+  new URL(&quot;https://deno.land&quot;);
+});
+
+// 紧凑形式：命名函数。
+Deno.bench(function helloWorld3() {
+  new URL(&quot;https://deno.land&quot;);
+});
+
+// 较长形式：基准定义。
+Deno.bench({
+  name: &quot;你好，世界 #2&quot;,
+  fn: () => {
+    new URL(&quot;https://deno.land&quot;);
+  },
+});
+
+// 与紧凑形式相似，第二个参数是额外配置。
+Deno.bench(&quot;你好，世界 #4&quot;, { permissions: { read: true } }, () => {
+  new URL(&quot;https://deno.land&quot;);
+});
+
+// 与较长形式相似，第二个参数是基准函数。
+Deno.bench(
+  { name: &quot;你好，世界 #5&quot;, permissions: { read: true } },
+  () => {
+    new URL(&quot;https://deno.land&quot;);
+  },
+);
+
+// 与较长形式相似，第二个参数是命名基准函数。
+Deno.bench({ permissions: { read: true } }, function helloWorld6() {
+  new URL(&quot;https://deno.land&quot;);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0" tabindex="-1">异步函数 <a class="header-anchor" href="#%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>你还可以通过传递一个返回 Promise 的基准函数来基准化异步代码。为此，可以在定义函数时使用 <code>async</code> 关键字：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"异步你好，世界"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">await</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-24" class="copyButton" data-copy="Deno.bench(&quot;异步你好，世界&quot;, async () => {
+  await 1;
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%85%B3%E9%94%AE%E9%83%A8%E5%88%86" tabindex="-1">关键部分 <a class="header-anchor" href="#%E5%85%B3%E9%94%AE%E9%83%A8%E5%88%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>有时基准测试用例需要包括设置和拆卸代码，这可能会影响基准结果。例如，如果你想测量读取小文件的时间，你需要打开文件、读取它，然后关闭它。如果文件足够小，打开和关闭文件所需的时间可能会超过读取文件本身所需的时间。</p>
+<p>为帮助处理此类情况，你可以使用 <code>Deno.BenchContext.start</code> 和 <code>Deno.BenchContext.end</code> 来告诉基准测试工具你想要测量的关键部分。在这两个调用之间的所有部分将被排除在测量之外。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"foo"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 打开一个我们将要操作的文件。</span>
+  using file <span class="token operator">=</span> <span class="token keyword">await</span> Deno<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"a_big_data_file.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 告诉基准测试工具这是你想测量的唯一部分。</span>
+  b<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 现在让我们测量从文件中读取所有数据需要多长时间。</span>
+  <span class="token keyword">await</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span>readable<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">arrayBuffer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 在这里结束测量。</span>
+  b<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-34" class="copyButton" data-copy="Deno.bench(&quot;foo&quot;, async (b) => {
+  // 打开一个我们将要操作的文件。
+  using file = await Deno.open(&quot;a_big_data_file.txt&quot;);
+
+  // 告诉基准测试工具这是你想测量的唯一部分。
+  b.start();
+
+  // 现在让我们测量从文件中读取所有数据需要多长时间。
+  await new Response(file.readable).arrayBuffer();
+
+  // 在这里结束测量。
+  b.end();
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>上述示例需要 <code>--allow-read</code> 标志来运行基准测试：
+<code>deno bench --allow-read file_reading.ts</code>。</p>
+<h2 id="%E5%88%86%E7%BB%84%E4%B8%8E%E5%9F%BA%E5%87%86%E7%BA%BF" tabindex="-1">分组与基准线 <a class="header-anchor" href="#%E5%88%86%E7%BB%84%E4%B8%8E%E5%9F%BA%E5%87%86%E7%BA%BF"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在注册基准测试用例时，可以使用 <code>Deno.BenchDefinition.group</code> 选项将其分配到一个组中：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// url_bench.ts</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"url 解析"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> group<span class="token operator">:</span> <span class="token string">"url"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">new</span> <span class="token class-name"><span class="token constant">URL</span></span><span class="token punctuation">(</span><span class="token string">"https://deno.land"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-44" class="copyButton" data-copy="// url_bench.ts
+Deno.bench(&quot;url 解析&quot;, { group: &quot;url&quot; }, () => {
+  new URL(&quot;https://deno.land&quot;);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>将多个用例分配到单个组中并比较它们的表现相对于“基准线”用例是非常有用的。</p>
+<p>在这个示例中，我们将检查 <code>Date.now()</code> 相对于 <code>performance.now()</code> 的性能如何，为此，我们将第一个用例标记为“基准线”，使用 <code>Deno.BenchDefinition.baseline</code> 选项：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// time_bench.ts</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"Date.now()"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> group<span class="token operator">:</span> <span class="token string">"timing"</span><span class="token punctuation">,</span> baseline<span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token string">"performance.now()"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> group<span class="token operator">:</span> <span class="token string">"timing"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  performance<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-51" class="copyButton" data-copy="// time_bench.ts
+Deno.bench(&quot;Date.now()&quot;, { group: &quot;timing&quot;, baseline: true }, () => {
+  Date.now();
+});
+
+Deno.bench(&quot;performance.now()&quot;, { group: &quot;timing&quot; }, () => {
+  performance.now();
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><div class="relative"><pre><code class="highlight notranslate language-shell">$ deno bench time_bench.ts
+cpu: Apple M1 Max
+runtime: deno <span class="token number">1.21</span>.0 <span class="token punctuation">(</span>aarch64-apple-darwin<span class="token punctuation">)</span>
+
+file:///dev/deno/time_bench.ts
+benchmark              <span class="token function">time</span> <span class="token punctuation">(</span>avg<span class="token punctuation">)</span>             <span class="token punctuation">(</span>min … max<span class="token punctuation">)</span>       p75       p99      p995
+--------------------------------------------------------- -----------------------------
+Date.now<span class="token punctuation">(</span><span class="token punctuation">)</span>         <span class="token number">125.24</span> ns/iter <span class="token punctuation">(</span><span class="token number">118.98</span> ns … <span class="token number">559.95</span> ns<span class="token punctuation">)</span> <span class="token number">123.62</span> ns <span class="token number">150.69</span> ns <span class="token number">156.63</span> ns
+performance.now<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token number">2.67</span> µs/iter     <span class="token punctuation">(</span><span class="token number">2.64</span> µs … <span class="token number">2.82</span> µs<span class="token punctuation">)</span>   <span class="token number">2.67</span> µs   <span class="token number">2.82</span> µs   <span class="token number">2.82</span> µs
+
+summary
+  Date.now<span class="token punctuation">(</span><span class="token punctuation">)</span>
+   比 performance.now<span class="token punctuation">(</span><span class="token punctuation">)</span> 快 <span class="token number">21.29</span> 倍
+</code></pre>
+
+      <button id="copy-button-52" class="copyButton" data-copy="$ deno bench time_bench.ts
+cpu: Apple M1 Max
+runtime: deno 1.21.0 (aarch64-apple-darwin)
+
+file:///dev/deno/time_bench.ts
+benchmark              time (avg)             (min … max)       p75       p99      p995
+--------------------------------------------------------- -----------------------------
+Date.now()         125.24 ns/iter (118.98 ns … 559.95 ns) 123.62 ns 150.69 ns 156.63 ns
+performance.now()    2.67 µs/iter     (2.64 µs … 2.82 µs)   2.67 µs   2.82 µs   2.82 µs
+
+summary
+  Date.now()
+   比 performance.now() 快 21.29 倍
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你可以在同一个文件中指定多个组。</p>
+<h2 id="%E8%BF%90%E8%A1%8C%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95" tabindex="-1">运行基准测试 <a class="header-anchor" href="#%E8%BF%90%E8%A1%8C%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>要运行基准测试，调用 <code>deno bench</code> 并指定包含你的基准函数的文件。你也可以省略文件名，在这种情况下，将运行当前目录中（递归）与 glob <code>{*_,*.,}bench.{ts, tsx, mts, js, mjs, jsx}</code> 匹配的所有基准测试。如果你传递一个目录，将运行该目录中与此 glob 匹配的所有文件。</p>
+<p>该 glob 扩展为：</p>
+<ul>
+<li>文件名为 <code>bench.{ts, tsx, mts, js, mjs, jsx}</code>，</li>
+<li>或以 <code>.bench.{ts, tsx, mts, js, mjs, jsx}</code> 结尾的文件，</li>
+<li>或以 <code>_bench.{ts, tsx, mts, js, mjs, jsx}</code> 结尾的文件。</li>
+</ul>
+<div class="relative"><pre><code class="highlight notranslate language-shell"><span class="token comment"># 运行当前目录及所有子目录中的所有基准测试</span>
+deno bench
+
+<span class="token comment"># 运行 util 目录中的所有基准测试</span>
+deno bench util/
+
+<span class="token comment"># 仅运行 my_bench.ts</span>
+deno bench my_bench.ts
+</code></pre>
+
+      <button id="copy-button-82" class="copyButton" data-copy="# 运行当前目录及所有子目录中的所有基准测试
+deno bench
+
+# 运行 util 目录中的所有基准测试
+deno bench util/
+
+# 仅运行 my_bench.ts
+deno bench my_bench.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><blockquote>
+<p>⚠️ 如果您想向基准测试文件传递其他 CLI 参数，请使用 <code>--</code> 来告知 Deno 剩余的参数是脚本参数。</p>
+</blockquote>
+<div class="relative"><pre><code class="highlight notranslate language-shell"><span class="token comment"># 将额外参数传递给基准测试文件</span>
+deno bench my_bench.ts -- <span class="token parameter variable">-e</span> <span class="token parameter variable">--foo</span> <span class="token parameter variable">--bar</span>
+</code></pre>
+
+      <button id="copy-button-88" class="copyButton" data-copy="# 将额外参数传递给基准测试文件
+deno bench my_bench.ts -- -e --foo --bar
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><code>deno bench</code> 使用与 <code>deno run</code> 相同的权限模型，因此，例如，在基准测试期间写入文件系统时将需要 <code>--allow-write</code>。</p>
+<p>要查看与 <code>deno bench</code> 的所有运行时选项，可以参考命令行帮助：</p>
+<div class="relative"><pre><code class="highlight notranslate language-shell">deno <span class="token builtin class-name">help</span> bench
+</code></pre>
+
+      <button id="copy-button-95" class="copyButton" data-copy="deno help bench
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E8%BF%87%E6%BB%A4" tabindex="-1">过滤 <a class="header-anchor" href="#%E8%BF%87%E6%BB%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>有多种选项可以过滤你正在运行的基准测试。</p>
+<h3 id="%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%87%E6%BB%A4" tabindex="-1">命令行过滤 <a class="header-anchor" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%87%E6%BB%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>基准测试可以单独运行或按组运行，使用命令行 <code>--filter</code> 选项。</p>
+<p>过滤器标志接受一个字符串或一个模式作为值。</p>
+<p>假设有以下基准测试：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"my-bench"</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><span class="token comment">/* 基准函数零 */</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"bench-1"</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><span class="token comment">/* 基准函数一 */</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"bench2"</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">fn</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><span class="token comment">/* 基准函数二 */</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-114" class="copyButton" data-copy="Deno.bench({
+  name: &quot;my-bench&quot;,
+  fn: () => {/* 基准函数零 */},
+});
+Deno.bench({
+  name: &quot;bench-1&quot;,
+  fn: () => {/* 基准函数一 */},
+});
+Deno.bench({
+  name: &quot;bench2&quot;,
+  fn: () => {/* 基准函数二 */},
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>此命令将运行所有这些基准测试，因为它们都包含单词“bench”。</p>
+<div class="relative"><pre><code class="highlight notranslate language-shell">deno bench <span class="token parameter variable">--filter</span> <span class="token string">"bench"</span> benchmarks/
+</code></pre>
+
+      <button id="copy-button-118" class="copyButton" data-copy="deno bench --filter &quot;bench&quot; benchmarks/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>反过来，以下命令使用模式，将运行第二个和第三个基准测试。</p>
+<div class="relative"><pre><code class="highlight notranslate language-shell">deno bench <span class="token parameter variable">--filter</span> <span class="token string">"/bench-*\d/"</span> benchmarks/
+</code></pre>
+
+      <button id="copy-button-122" class="copyButton" data-copy="deno bench --filter &quot;/bench-*\d/&quot; benchmarks/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><em>为了让 Deno 知道你想使用模式，请用正斜杠将你的过滤器括起来，就像 JavaScript 的正则表达式语法糖一样。</em></p>
+<h3 id="%E5%9F%BA%E5%87%86%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4" tabindex="-1">基准定义过滤 <a class="header-anchor" href="#%E5%9F%BA%E5%87%86%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>在基准测试本身内，你有两个过滤选项。</p>
+<h4 id="%E8%BF%87%E6%BB%A4%E6%8E%89%EF%BC%88%E5%BF%BD%E7%95%A5%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89" tabindex="-1">过滤掉（忽略这些基准测试） <a class="header-anchor" href="#%E8%BF%87%E6%BB%A4%E6%8E%89%EF%BC%88%E5%BF%BD%E7%95%A5%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>有时你想根据某种条件忽略基准测试（例如，你只想在 Windows 上运行基准）。为此，你可以在基准定义中使用 <code>ignore</code> 布尔值。如果设置为 true，该基准将被跳过。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"基准 Windows 特性"</span><span class="token punctuation">,</span>
+  ignore<span class="token operator">:</span> Deno<span class="token punctuation">.</span>build<span class="token punctuation">.</span>os <span class="token operator">!==</span> <span class="token string">"windows"</span><span class="token punctuation">,</span>
+  <span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 执行 Windows 特性</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-138" class="copyButton" data-copy="Deno.bench({
+  name: &quot;基准 Windows 特性&quot;,
+  ignore: Deno.build.os !== &quot;windows&quot;,
+  fn() {
+    // 执行 Windows 特性
+  },
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E8%BF%87%E6%BB%A4%E8%BF%9B%EF%BC%88%E4%BB%85%E8%BF%90%E8%A1%8C%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89" tabindex="-1">过滤进（仅运行这些基准测试） <a class="header-anchor" href="#%E8%BF%87%E6%BB%A4%E8%BF%9B%EF%BC%88%E4%BB%85%E8%BF%90%E8%A1%8C%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>有时你可能在一个大型基准测试类中遇到性能问题，并希望专注于仅该单个基准，并暂时忽略其余基准。为此，你可以使用 <code>only</code> 选项来告诉基准测试工具仅运行设置为 true 的基准。多个基准可以设置此选项。虽然基准测试运行会报告每个基准的成功或失败，但如果任何基准标记为 <code>only</code>，则整体基准测试运行将始终失败，因为这只是一个临时措施，它几乎禁用所有基准测试。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">bench</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token string">"仅关注此基准"</span><span class="token punctuation">,</span>
+  only<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token function">fn</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 基准复杂内容</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-145" class="copyButton" data-copy="Deno.bench({
+  name: &quot;仅关注此基准&quot;,
+  only: true,
+  fn() {
+    // 基准复杂内容
+  },
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="json-%E8%BE%93%E5%87%BA" tabindex="-1">JSON 输出 <a class="header-anchor" href="#json-%E8%BE%93%E5%87%BA"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>要将输出作为 JSON 进行检索，请使用 <code>--json</code> 标志：</p>
+<div class="relative"><pre><code>$ deno bench --json bench_me.js
+{
+  "runtime": "Deno/1.31.0 x86_64-apple-darwin",
+  "cpu": "Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz",
+  "benches": [
+    "origin": "file:///dev/bench_me.js",
+    "group": null,
+    "name": "Deno.UnsafePointerView#getUint32",
+    "baseline": false,
+    "result": {
+      "ok": {
+        "n": 49,
+        "min": 1251.9348,
+        "max": 1441.2696,
+        "avg": 1308.7523755102038,
+        "p75": 1324.1055,
+        "p99": 1441.2696,
+        "p995": 1441.2696,
+        "p999": 1441.2696
+      }
+    }
+  ]
+}
+</code></pre>
+
+      <button id="copy-button-152" class="copyButton" data-copy="$ deno bench --json bench_me.js
+{
+  &quot;runtime&quot;: &quot;Deno/1.31.0 x86_64-apple-darwin&quot;,
+  &quot;cpu&quot;: &quot;Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz&quot;,
+  &quot;benches&quot;: [
+    &quot;origin&quot;: &quot;file:///dev/bench_me.js&quot;,
+    &quot;group&quot;: null,
+    &quot;name&quot;: &quot;Deno.UnsafePointerView#getUint32&quot;,
+    &quot;baseline&quot;: false,
+    &quot;result&quot;: {
+      &quot;ok&quot;: {
+        &quot;n&quot;: 49,
+        &quot;min&quot;: 1251.9348,
+        &quot;max&quot;: 1441.2696,
+        &quot;avg&quot;: 1308.7523755102038,
+        &quot;p75&quot;: 1324.1055,
+        &quot;p99&quot;: 1441.2696,
+        &quot;p995&quot;: 1441.2696,
+        &quot;p999&quot;: 1441.2696
+      }
+    }
+  ]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-foreground-tertiary bg-background-primary rounded mx-auto"><h2 class="text-xl border-b border-foreground-tertiary dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/reference/cli/bench.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#type-checking-options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Type checking options</a></li><li class="m-2 leading-4"><a href="#dependency-management-options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Dependency management options</a></li><li class="m-2 leading-4"><a href="#options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Options</a></li><li class="m-2 leading-4"><a href="#file-watching-options" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">File watching options</a></li><li class="m-2 leading-4"><a href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">快速开始 </a></li><li class="m-2 leading-4"><a href="#%E7%BC%96%E5%86%99%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">编写基准测试 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%BC%82%E6%AD%A5%E5%87%BD%E6%95%B0" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">异步函数 </a></li><li class="m-2 leading-4"><a href="#%E5%85%B3%E9%94%AE%E9%83%A8%E5%88%86" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">关键部分 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E5%88%86%E7%BB%84%E4%B8%8E%E5%9F%BA%E5%87%86%E7%BA%BF" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">分组与基准线 </a></li><li class="m-2 leading-4"><a href="#%E8%BF%90%E8%A1%8C%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">运行基准测试 </a></li><li class="m-2 leading-4"><a href="#%E8%BF%87%E6%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">过滤 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%87%E6%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">命令行过滤 </a></li><li class="m-2 leading-4"><a href="#%E5%9F%BA%E5%87%86%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">基准定义过滤 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E8%BF%87%E6%BB%A4%E6%8E%89%EF%BC%88%E5%BF%BD%E7%95%A5%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">过滤掉（忽略这些基准测试） </a></li><li class="m-2 leading-4"><a href="#%E8%BF%87%E6%BB%A4%E8%BF%9B%EF%BC%88%E4%BB%85%E8%BF%90%E8%A1%8C%E8%BF%99%E4%BA%9B%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%EF%BC%89" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">过滤进（仅运行这些基准测试） </a></li></ul></li></ul></li><li class="m-2 leading-4"><a href="#json-%E8%BE%93%E5%87%BA" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">JSON 输出 </a></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>
