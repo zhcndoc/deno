@@ -21,7 +21,7 @@ Deploy 早期访问版使用了特定术语。请使用本参考指南了解平�
 
 了解如何创建和管理组织、团队成员、角色和权限。
 
-### [Applications](/deploy/early-access/reference/apps)
+### [应用程序](/deploy/early-access/reference/apps)
 
 有关应用创建、配置和生命周期管理的详细信息。
 
@@ -29,12 +29,11 @@ Deploy 早期访问版使用了特定术语。请使用本参考指南了解平�
 
 了解构建流程、构建配置和部署管道。
 
-### [Timelines](/deploy/early-access/reference/timelines)
+### [时间轴](/deploy/early-access/reference/timelines)
 
-Visualizing the history of builds in your application, and how domains are
-routed to different versions of your application.
+可视化应用程序中构建的历史记录，以及域如何路由到应用程序的不同版本。
 
-### [Playgrounds](/deploy/early-access/reference/playgrounds)
+### [沙盒](/deploy/early-access/reference/playgrounds)
 
 编写并部署代码，无需创建 git 仓库。
 
@@ -42,15 +41,18 @@ routed to different versions of your application.
 
 监控应用，访问日志、指标和性能洞察。
 
-### [Environments](/deploy/early-access/reference/env-vars-and-contexts/)
+### [环境](/deploy/early-access/reference/env-vars-and-contexts/)
 
 管理不同的部署环境，包括开发、预发布和生产。
 
-### [Cloud Connections](/deploy/early-access/reference/cloud-connections/)
+### [数据库](/deploy/early-access/reference/databases/)
 
-Managing cloud connections for your applications, including AWS and Google
-Cloud.
+连接到外部数据库实例，无缝集成您的应用程序及其环境。
 
-### [Custom Domains](/deploy/early-access/reference/domains)
+### [云连接](/deploy/early-access/reference/cloud-connections/)
+
+管理应用程序的云连接，包括 AWS 和 Google Cloud。
+
+### [自定义域名](/deploy/early-access/reference/domains)
 
 为您的应用设置和配置自定义域名。

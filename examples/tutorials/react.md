@@ -47,13 +47,13 @@ deno run dev
 安装 Vite 的 deno 插件、React 类型和 Vite React 插件：
 
 ```sh
-deno add npm:deno-vite-plugin@latest npm:@types/react@latest npm:@vitejs/plugin-react@latest
+deno add npm:@deno/vite-plugin@latest npm:@types/react@latest npm:@vitejs/plugin-react@latest
 ```
 
 还需要安装 Deno 的 Oak Web 框架来处理我们的 API 请求，以及 CORS 中间件允许来自 React 应用的跨域请求：
 
 ```sh
-deno add jsr:@oak/oak@ jsr:@tajpouria/cors
+deno add jsr:@oak/oak jsr:@tajpouria/cors
 ```
 
 这会将这些依赖添加到新的 `deno.json` 文件中。

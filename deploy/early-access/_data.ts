@@ -2,85 +2,89 @@ import { SecondaryNav, Sidebar } from "../../types.ts";
 
 export const sidebar = [
   {
-    title: "About Early Access",
+    title: "关于早期访问",
     href: "/deploy/early-access/",
   },
   {
-    title: "Getting started",
+    title: "入门",
     href: "/deploy/early-access/getting_started/",
   },
   {
-    title: "Reference",
+    title: "参考",
     href: "/deploy/early-access/reference/",
     items: [
       {
-        title: "Accounts",
+        title: "账户",
         href: "/deploy/early-access/reference/accounts/",
       },
       {
-        title: "Organizations",
+        title: "组织",
         href: "/deploy/early-access/reference/organizations/",
       },
       {
-        title: "Apps",
+        title: "应用程序",
         href: "/deploy/early-access/reference/apps/",
       },
       {
-        title: "Builds",
+        title: "构建",
         href: "/deploy/early-access/reference/builds/",
       },
       {
-        title: "Environment Variables and Contexts",
+        title: "环境变量和上下文",
         href: "/deploy/early-access/reference/env-vars-and-contexts/",
       },
       {
-        title: "Timelines",
+        title: "时间线",
         href: "/deploy/early-access/reference/timelines/",
       },
       {
-        title: "Observability",
+        title: "可观测性",
         href: "/deploy/early-access/reference/observability/",
       },
       {
-        title: "Domains",
+        title: "自定义域名",
         href: "/deploy/early-access/reference/domains/",
       },
       {
-        title: "Cloud Connections",
+        title: "数据库",
+        href: "/deploy/early-access/reference/databases/",
+      },
+      {
+        title: "云连接",
         href: "/deploy/early-access/reference/cloud-connections/",
       },
       {
-        title: "Runtime",
+        title: "运行时",
         href: "/deploy/early-access/reference/runtime/",
       },
       {
-        title: "Framework support",
+        title: "框架支持",
         href: "/deploy/early-access/reference/frameworks/",
       },
       {
-        title: "CDN and caching",
+        title: "CDN 和缓存",
         href: "/deploy/early-access/reference/caching/",
       },
       {
-        title: "Deploy Button",
+        title: "Deploy 按钮",
         href: "/deploy/early-access/reference/button/",
       },
       {
-        title: "Usage and Limitations",
+        title: "使用和限制",
         href: "/deploy/early-access/usage/",
       },
       {
-        title: "Support",
+        title: "支持",
         href: "/deploy/early-access/support/",
       },
     ],
   },
   {
-    title: "Changelog",
+    title: "更新日志",
     href: "/deploy/early-access/changelog/",
   },
   {
-    title: "Support and Feedback",
+    title: "支持与反馈",
     href: "/deploy/early-access/support/",
   },
 ] satisfies Sidebar;
@@ -97,7 +101,7 @@ export const secondaryNav = [
     href: "/deploy/manual/",
   },
   {
-    title: "Subhosting",
+    title: "子托管",
     href: "/subhosting/manual/",
   },
 ] satisfies SecondaryNav;
