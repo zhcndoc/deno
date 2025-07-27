@@ -168,7 +168,7 @@ console.log("This   line  will  not be    formatted");
     "useTabs": true,
     "lineWidth": 80,
     "indentWidth": 2,
-    "semiColon": false,
+    "semiColons": false,
     "singleQuote": true,
     "proseWrap": "always",
     "exclude": ["**/logs.json"]
