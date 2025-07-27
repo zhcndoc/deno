@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>用 Firestore (Firebase) 构建 API 服务器 - Deno 中文文档</title><link rel="icon" href="/favicon.ico"/><link rel="apple-touch-icon" href="/apple-touch-icon.png"/><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/gfm.css"/><link rel="stylesheet" href="/styles.css"/><link rel="stylesheet" href="/components.css"/><link rel="stylesheet" href="/overrides.css"/><link rel="stylesheet" href="/style.css"/><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossorigin="true"/><link rel="me" href="https://fosstodon.org/@deno_land"/><meta name="twitter:title" content="用 Firestore (Firebase) 构建 API 服务器"/><meta name="twitter:description" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta name="twitter:image" content="https://docs.deno.com/deploy/tutorials/tutorial-firebase/index.png"/><meta name="twitter:image:alt" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:site" content="@deno_land"/><meta property="og:title" content="用 Firestore (Firebase) 构建 API 服务器"/><meta property="og:description" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta property="og:image" content="https://docs.deno.com/deploy/tutorials/tutorial-firebase/index.png"/><meta property="og:image:alt" content="深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。"/><meta property="og:type" content="article"/><meta property="og:site_name" content="Deno"/><meta property="og:locale" content="en_US"/><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"/><script type="module" defer src="/components.js"></script><script type="module" defer src="/lint_rules.client.js"></script><script type="module" defer src="/copy.client.js"></script><script type="module" defer src="/tabs.client.js"></script><script type="module" defer src="/feedback.client.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"/></head><body data-services-page="true"><header><a href="/" title="Deno docs home" class="logo-link"><svg width="100%" height="100%" viewBox="0 0 713 248" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><path d="M438.948,181.807c-35.156,-0 -58.744,-24.042 -58.744,-57.156c0,-33.114 23.588,-57.156 58.744,-57.156c34.475,0 58.97,23.135 58.97,57.156c-0,34.021 -24.495,57.156 -58.97,57.156Zm-0,-26.537c16.103,0 28.804,-12.701 28.804,-30.619c0,-18.145 -12.247,-30.619 -28.804,-30.619c-17.238,-0 -28.805,13.155 -28.805,30.619c-0,17.238 12.021,30.619 28.805,30.619Zm126.899,26.537c-32.887,-0 -56.929,-23.135 -56.929,-57.156c0,-34.021 24.042,-57.156 58.29,-57.156c17.691,0 35.836,7.031 46.95,21.093l-19.96,17.238c-5.897,-6.804 -14.515,-11.794 -25.856,-11.794c-17.691,-0 -29.485,12.474 -29.485,30.392c-0,18.145 12.248,30.846 29.712,30.846c11.794,0 20.64,-5.443 25.856,-11.34l20.186,17.918c-9.526,11.113 -26.537,19.959 -48.764,19.959Zm103.51,-0c-17.691,-0 -32.66,-5.67 -44.908,-16.104l14.516,-20.639c9.072,8.619 18.598,12.928 30.619,12.928c8.619,-0 13.609,-3.629 13.609,-9.072c-0,-5.217 -5.671,-7.712 -20.186,-12.248c-18.145,-6.124 -34.022,-14.743 -34.022,-36.063c0,-19.959 17.238,-33.114 39.919,-33.114c15.423,0 27.897,4.083 40.372,13.836l-14.289,21.773c-8.619,-8.165 -18.372,-11.794 -26.537,-11.794c-4.763,0 -10.887,2.495 -10.887,8.392c0,4.536 5.897,7.712 16.784,11.794c24.042,8.846 38.104,14.062 38.104,35.836c-0,19.732 -14.062,34.475 -43.094,34.475Zm-398.125,-1.815l-0,-112.497l40.674,0c35.581,0 58.46,23.135 58.46,56.4c0,33.124 -21.443,56.097 -57.987,56.097l-41.147,0Zm29.23,-26.782l9.857,0c17.152,0 28.436,-13.145 28.436,-29.315c-0,-16.793 -11.445,-29.627 -26.216,-29.627l-12.077,0l-0,58.942Z" class="fill-[#002633] dark:fill-white"></path><clipPath id="_clip1"><rect x="0" y="0" width="214.503" height="247.503"></rect></clipPath><g clip-path="url(#_clip1)"><g id="mark"><g><path d="M17.522,87.556c9.379,-41.421 34.99,-70.904 64.577,-82.113c42.759,-16.153 81.084,5.645 87.537,38.177c15.896,14.559 33.709,37.922 39.726,71.014c5.538,30.419 1.641,65.962 -19.268,92.884c6.254,1.274 11.277,2.83 14.47,4.654c1.386,0.788 2.541,1.631 3.477,2.485l2.13,2.503l1.373,2.81l0.579,3.342l-0.18,2.21l-0.586,2.094l-1.944,3.373c-1.502,1.869 -3.977,3.784 -7.49,5.435c-14.581,6.762 -54.385,10.688 -85.482,10.648c-7.554,0.002 -14.258,-0.441 -20.058,-1.286l-0.052,0.002c-43.668,-5.548 -77.789,-40.036 -88.307,-67.522c-12.674,-33.132 -7.781,-71.643 -2.746,-84.688l0.156,-0.412c3.428,-12.294 6.595,-10.109 12.088,-5.61Z" class="fill-[#f8f9fc]"></path></g><g><path d="M97.421,237.604c-40.364,-5.077 -71.976,-36.899 -81.694,-62.312c-11.786,-30.794 -7.436,-66.628 -2.756,-78.713c0.291,-0.597 0.83,-0.983 1.457,-1.103c0.628,-0.119 1.271,0.074 1.749,0.501c2.176,1.783 4.667,3.371 7.301,4.772c6.303,-44.284 31.512,-76.219 61.534,-87.584c38.291,-14.456 73.015,4.953 76.967,34.685c15.36,13.417 33.372,35.871 39.265,68.25c5.94,32.647 0.523,71.767 -27.866,97.34c17.285,1.689 30.38,4.881 30.493,10.042c0.219,10.053 -50.166,15.338 -87.428,15.369c-7.169,-0.017 -13.531,-0.476 -19.022,-1.247Z" style="fill:#002633;"></path></g><g><path d="M81.589,80.343c-0.154,-0.003 -0.299,0.045 -0.428,0.115c-12.53,7.72 -16.169,40.036 -16.383,52.873c0.001,0.455 -0.181,0.891 -0.506,1.214c-0.331,0.297 -0.77,0.469 -1.227,0.433c-11.191,-0.904 -31.195,-7.28 -37.87,-12.845c-0.191,-0.205 -0.459,-0.251 -0.707,-0.168c-0.247,0.081 -0.421,0.3 -0.44,0.575c-1.066,11.939 0.427,33.596 9.611,49.701c9.543,16.737 40.051,47.309 88.435,39.023c48.386,-8.288 64.759,-52.361 63.108,-81.502c-1.587,-27.956 -13.028,-47.979 -22.925,-57.92c-0.238,-0.216 -0.597,-0.312 -0.908,-0.182c-0.319,0.106 -0.543,0.394 -0.582,0.729c-2.169,12.412 -15.742,35.953 -25.275,39.112c-0.649,0.135 -1.318,-0.126 -1.695,-0.672c-9.113,-12.775 -33.42,-31.35 -52.208,-30.486Z" style="fill:#fefdf0;"></path></g><g><ellipse cx="99.565" cy="44.087" rx="7.621" ry="9.543" style="fill:#fff;"></ellipse></g><g><ellipse cx="134.716" cy="44.087" rx="7.621" ry="9.543" style="fill:#fff;"></ellipse></g></g></g></svg></a><nav><a href="/runtime/" class="header-nav-link blocklink ">手册</a><a href="/api/deno/" class="header-nav-link blocklink ">API 参考</a><a href="/examples/" class="header-nav-link blocklink ">示例</a><a href="/services/" class="header-nav-link blocklink services" data-active="true" aria-current="location">服务</a></nav><a href="https://www.zhcndoc.com" class="external blocklink" target="_blank">简中文档</a><form action="https://www.google.com/search" method="get" class="search" target="_blank"><input type="search" name="q" id="search-str" placeholder="Search" class="search-input"/><input type="hidden" name="q" id="q" value="site:deno.com"/></form><button type="button" aria-label="toggle theme" class="theme-toggle" id="theme-toggle">Toggle Theme</button></header><nav class="refheader"><ul class="flex"><li><a class="blocklink refheader-link" data-active="false" href="/deploy/early-access/"><span>Deno Deploy<sup>EA</sup></span></a></li><li><a class="blocklink refheader-link" data-active="false" href="/deploy/manual/"><span>Deploy Classic</span></a></li><li><a class="blocklink refheader-link" data-active="false" href="/subhosting/manual/"><span>Subhosting</span></a></li></ul></nav><div class="layout"><label for="hamburger" class="hamburger-label"><span class="hamburger-bar hamburger-bar--top"></span><span class="hamburger-bar hamburger-bar--middle"></span><span class="hamburger-bar hamburger-bar--bottom"></span><span class="sr-only">Toggle navigation menu</span></label><input type="checkbox" id="hamburger" class="hamburger-checkbox"/><div class="nav" data-section="deploy" id="nav"><nav aria-labelledby="primary-navigation"><ul class="main-nav"><li><a href="/runtime/" class="main-nav-link">手册</a></li><li><a href="/api/deno/" class="main-nav-link">API 参考</a></li><li><a href="/examples/" class="main-nav-link">示例</a></li><li><a href="/services/" class="main-nav-link">服务</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">入门</span></h2><ul class="sub-nav"><li><a href="/deploy/manual/" class="sub-nav-link blocklink">快速开始</a></li><li><label for="sub-nav-toggle-Deploy基础知识" class="sub-nav-toggle blocklink">Deploy 基础知识</label><input type="checkbox" id="sub-nav-toggle-Deploy基础知识" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/manual/use-cases/" class="sub-nav-link blocklink">用例</a></li><li><a href="/deploy/manual/playgrounds/" class="sub-nav-link blocklink">游乐场</a></li><li><a href="/deploy/manual/how-to-deploy/" class="sub-nav-link blocklink">如何部署</a></li><li><a href="/deploy/manual/ci_github/" class="sub-nav-link blocklink">GitHub CI</a></li><li><a href="/deploy/manual/deployctl/" class="sub-nav-link blocklink">deployctl</a></li><li><a href="/deploy/manual/regions/" class="sub-nav-link blocklink">地区</a></li><li><a href="/deploy/manual/pricing-and-limits/" class="sub-nav-link blocklink">定价和限制</a></li></ul></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">Deploy 平台</span></h2><ul class="sub-nav"><li><a href="/deploy/manual/deployments/" class="sub-nav-link blocklink">部署</a></li><li><a href="/deploy/manual/custom-domains/" class="sub-nav-link blocklink">绑定域名</a></li><li><a href="/deploy/manual/environment-variables/" class="sub-nav-link blocklink">环境变量</a></li><li><a href="/deploy/manual/organizations/" class="sub-nav-link blocklink">组织</a></li><li><a href="/deploy/manual/logs/" class="sub-nav-link blocklink">日志</a></li><li><label for="sub-nav-toggle-KV" class="sub-nav-toggle blocklink">KV</label><input type="checkbox" id="sub-nav-toggle-KV" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/kv/manual/" class="sub-nav-link blocklink">概述</a></li><li><a href="/deploy/kv/manual/key_space/" class="sub-nav-link blocklink">键空间</a></li><li><a href="/deploy/kv/manual/operations/" class="sub-nav-link blocklink">操作</a></li><li><a href="/deploy/kv/manual/key_expiration/" class="sub-nav-link blocklink">键过期</a></li><li><a href="/deploy/kv/manual/secondary_indexes/" class="sub-nav-link blocklink">辅助索引</a></li><li><a href="/deploy/kv/manual/transactions/" class="sub-nav-link blocklink">交易</a></li><li><a href="/deploy/kv/manual/node/" class="sub-nav-link blocklink">Node</a></li><li><a href="/deploy/kv/manual/data_modeling_typescript/" class="sub-nav-link blocklink">数据建模</a></li><li><a href="/deploy/kv/manual/backup/" class="sub-nav-link blocklink">备份</a></li></ul></li><li><a href="/deploy/kv/manual/queue_overview/" class="sub-nav-link blocklink">队列</a></li><li><a href="/deploy/kv/manual/cron/" class="sub-nav-link blocklink">定时任务</a></li><li><a href="/deploy/manual/edge-cache/" class="sub-nav-link blocklink">边缘缓存</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">连接到数据库</span></h2><ul class="sub-nav"><li><a href="/deploy/kv/manual/on_deploy/" class="sub-nav-link blocklink">Deno KV</a></li><li><label for="sub-nav-toggle-第三方数据库" class="sub-nav-toggle blocklink">第三方数据库</label><input type="checkbox" id="sub-nav-toggle-第三方数据库" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/manual/dynamodb/" class="sub-nav-link blocklink">DynamoDB</a></li><li><a href="/deploy/manual/faunadb/" class="sub-nav-link blocklink">FaunaDB</a></li><li><a href="/deploy/manual/firebase/" class="sub-nav-link blocklink">Firebase</a></li><li><a href="/deploy/manual/postgres/" class="sub-nav-link blocklink">Postgres</a></li><li><a href="/deploy/manual/neon-postgres/" class="sub-nav-link blocklink">Neon Postgres</a></li></ul></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">政策和限制</span></h2><ul class="sub-nav"><li><a href="/deploy/manual/acceptable-use-policy/" class="sub-nav-link blocklink">可接受使用政策</a></li><li><a href="/deploy/manual/fulfillment-policy/" class="sub-nav-link blocklink">履行政策</a></li><li><a href="/deploy/manual/privacy-policy/" class="sub-nav-link blocklink">隐私政策</a></li><li><a href="/deploy/manual/security/" class="sub-nav-link blocklink">Security</a></li><li><a href="/deploy/manual/terms-and-conditions/" class="sub-nav-link blocklink">条款和条件</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">教程与示例</span></h2><ul class="sub-nav"><li><label for="sub-nav-toggle-部署教程" class="sub-nav-toggle blocklink">部署教程</label><input type="checkbox" id="sub-nav-toggle-部署教程" class="sub-nav-toggle-checkbox"/><ul class="sub-nav tertiary-nav"><li><a href="/deploy/tutorials/" class="sub-nav-link blocklink">概述</a></li><li><a href="/deploy/tutorials/discord-slash/" class="sub-nav-link blocklink">Discord 斜杠命令</a></li><li><a href="/deploy/tutorials/fresh/" class="sub-nav-link blocklink">Fresh 框架</a></li><li><a href="/deploy/tutorials/simple-api/" class="sub-nav-link blocklink">简单 API</a></li><li><a href="/deploy/tutorials/static-site/" class="sub-nav-link blocklink">静态站点</a></li><li><a href="/deploy/tutorials/tutorial-blog-fresh/" class="sub-nav-link blocklink">Fresh 博客教程</a></li><li><a href="/deploy/tutorials/tutorial-dynamodb/" class="sub-nav-link blocklink">DynamoDB 集成</a></li><li><a href="/deploy/tutorials/tutorial-faunadb/" class="sub-nav-link blocklink">FaunaDB 集成</a></li><li><a href="/deploy/tutorials/tutorial-firebase/" class="sub-nav-link blocklink" data-active="true">Firebase 集成</a></li><li><a href="/deploy/tutorials/tutorial-http-server/" class="sub-nav-link blocklink">HTTP 服务器</a></li><li><a href="/deploy/tutorials/tutorial-hugo-blog/" class="sub-nav-link blocklink">Hugo 博客</a></li><li><a href="/deploy/tutorials/tutorial-postgres/" class="sub-nav-link blocklink">Postgres 集成</a></li><li><a href="/deploy/tutorials/tutorial-wordpress-frontend/" class="sub-nav-link blocklink">WordPress 前端</a></li><li><a href="/deploy/tutorials/vite/" class="sub-nav-link blocklink">Vite</a></li><li><a href="/deploy/kv/tutorials/schedule_notification/" class="sub-nav-link blocklink">日程通知</a></li><li><a href="/deploy/kv/tutorials/webhook_processor/" class="sub-nav-link blocklink">Webhook 处理器</a></li></ul></li><li><a href="/deploy/kv/tutorials/" class="sub-nav-link blocklink">KV 教程</a></li><li><a href="/examples/" class="sub-nav-link blocklink">更多关于 Deno 的示例</a></li></ul></nav><nav aria-labelledby="section-navigation"><h2 class="sub-nav-heading"><span class="sub-nav-heading-text">参考</span></h2><ul class="sub-nav"><li><a href="/deploy/api" class="sub-nav-link blocklink">运行时 API</a></li><li><a href="/deploy/api/runtime-fs/" class="sub-nav-link blocklink">运行时 FS</a></li><li><a href="/deploy/api/runtime-node/" class="sub-nav-link blocklink">运行时 Node</a></li><li><a href="/deploy/api/compression/" class="sub-nav-link blocklink">压缩</a></li><li><a href="/deploy/api/runtime-sockets/" class="sub-nav-link blocklink">运行时 Sockets</a></li><li><a href="/deploy/api/runtime-broadcast-channel/" class="sub-nav-link blocklink">运行时广播频道</a></li><li><a href="/deploy/api/runtime-fetch/" class="sub-nav-link blocklink">运行时 Fetch</a></li><li><a href="/deploy/api/runtime-request/" class="sub-nav-link blocklink">运行时 Request</a></li><li><a href="/deploy/api/runtime-response/" class="sub-nav-link blocklink">运行时 Response</a></li><li><a href="/deploy/api/runtime-headers/" class="sub-nav-link blocklink">运行时 Headers</a></li><li><a href="/deploy/api/dynamic-import/" class="sub-nav-link blocklink">动态导入</a></li></ul></nav></div><div id="content" class="content"><div class="px-4 sm:px-5 md:px-6 w-full mx-auto 2xl:px-0 max-w-[40rem]"><article class="mx-auto"><nav><ul class="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a class="crumb-link pl-3 py-1.5 underline underline-offset-4 decoration-foreground-tertiary hover:text-foreground-secondary hover:underline-medium hover:bg-foreground-tertiary dark:hover:bg-background-secondary dark:hover:text-foreground-primary rounded transition duration-100 text-sm" itemprop="item" href="/deploy/manual/"><span itemprop="name">Deno Deploy</span></a><meta itemprop="position" content="1"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">教程与示例</span><meta itemprop="position" content="2"/></li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><span itemprop="name" class="block px-3 py-1.5 text-sm">用 Firestore (Firebase) 构建 API 服务器</span><meta itemprop="position" content="3"/></li></ul></nav><details class="toc-mobile block xl:hidden my-4 bg-background-secondary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-foreground-tertiary">On this page</summary><ul class="toc-list"><li class="m-2 leading-4"><a href="#%E6%A6%82%E8%BF%B0" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">概述 </a></li><li class="m-2 leading-4"><a href="#%E6%A6%82%E5%BF%B5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">概念 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E9%83%A8%E7%BD%B2%E7%B1%BB%E6%B5%8F%E8%A7%88%E5%99%A8" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">部署类浏览器 </a></li><li class="m-2 leading-4"><a href="#firebase-%E4%BD%BF%E7%94%A8-xhr" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Firebase 使用 XHR </a></li><li class="m-2 leading-4"><a href="#firebase-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Firebase 身份验证 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E8%AE%BE%E7%BD%AE-firebase" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">设置 Firebase </a></li><li class="m-2 leading-4"><a href="#%E7%BC%96%E5%86%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">编写应用程序 </a></li><li class="m-2 leading-4"><a href="#%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">部署应用程序 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-4 rounded-lg"><h1>用 Firestore (Firebase) 构建 API 服务器</h1><div><p>Firebase 是 Google 开发的平台，用于创建移动和 web 应用程序。您可以使用 Firestore 在该平台上持久化数据。在本教程中，让我们看看如何使用它构建一个小型 API，该 API 具有插入和检索信息的端点。</p>
+<ul>
+<li><a href="#overview">概述</a></li>
+<li><a href="#concepts">概念</a></li>
+<li><a href="#setup-firebase">设置 Firebase</a></li>
+<li><a href="#write-the-application">编写应用程序</a></li>
+<li><a href="#deploy-the-application">部署应用程序</a></li>
+</ul>
+<h2 id="%E6%A6%82%E8%BF%B0" tabindex="-1">概述 <a class="header-anchor" href="#%E6%A6%82%E8%BF%B0"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>我们将构建一个只有一个端点的 API，该端点接受 <code>GET</code> 和 <code>POST</code> 请求，并返回一个 JSON 有效负载的信息：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token comment"># 对没有任何子路径的端点进行 GET 请求应该返回商店中所有歌曲的详细信息：</span>
+GET /songs
+<span class="token comment"># 响应</span>
+<span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>
+    title: <span class="token string">"歌曲标题"</span>,
+    artist: <span class="token string">"某人"</span>,
+    album: <span class="token string">"某事"</span>,
+    released: <span class="token string">"1970"</span>,
+    genres: <span class="token string">"乡村说唱"</span>,
+  <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+
+<span class="token comment"># 对带有子路径的标题的端点进行 GET 请求应该返回</span>
+<span class="token comment"># 基于其标题的歌曲的详细信息。</span>
+GET /songs/歌曲标题 <span class="token comment"># '%20' == 空格</span>
+<span class="token comment"># 响应</span>
+<span class="token punctuation">{</span>
+  title: <span class="token string">"歌曲标题"</span>
+  artist: <span class="token string">"某人"</span>
+  album: <span class="token string">"某事"</span>,
+  released: <span class="token string">"1970"</span>,
+  genres: <span class="token string">"乡村说唱"</span>,
+<span class="token punctuation">}</span>
+
+<span class="token comment"># 对端点发起 POST 请求应该插入歌曲的详细信息。</span>
+POST /songs
+<span class="token comment"># POST 请求正文</span>
+<span class="token punctuation">{</span>
+  title: <span class="token string">"新的标题"</span>
+  artist: <span class="token string">"新某人"</span>
+  album: <span class="token string">"新的某事"</span>,
+  released: <span class="token string">"2020"</span>,
+  genres: <span class="token string">"乡村说唱"</span>,
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-36" class="copyButton" data-copy="# 对没有任何子路径的端点进行 GET 请求应该返回商店中所有歌曲的详细信息：
+GET /songs
+# 响应
+[
+  {
+    title: &quot;歌曲标题&quot;,
+    artist: &quot;某人&quot;,
+    album: &quot;某事&quot;,
+    released: &quot;1970&quot;,
+    genres: &quot;乡村说唱&quot;,
+  }
+]
+
+# 对带有子路径的标题的端点进行 GET 请求应该返回
+# 基于其标题的歌曲的详细信息。
+GET /songs/歌曲标题 # &apos;%20&apos; == 空格
+# 响应
+{
+  title: &quot;歌曲标题&quot;
+  artist: &quot;某人&quot;
+  album: &quot;某事&quot;,
+  released: &quot;1970&quot;,
+  genres: &quot;乡村说唱&quot;,
+}
+
+# 对端点发起 POST 请求应该插入歌曲的详细信息。
+POST /songs
+# POST 请求正文
+{
+  title: &quot;新的标题&quot;
+  artist: &quot;新某人&quot;
+  album: &quot;新的某事&quot;,
+  released: &quot;2020&quot;,
+  genres: &quot;乡村说唱&quot;,
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在本教程中，我们将：</p>
+<ul>
+<li>创建并设置一个
+<a href="https://console.firebase.google.com/">Firebase 项目</a>。</li>
+<li>使用文本编辑器创建我们的应用程序。</li>
+<li>创建一个 <a href="https://gist.github.com/">gist</a> 来“托管”我们的应用程序。</li>
+<li>在 <a href="https://dash.deno.com/">Deno Deploy</a> 上部署我们的应用程序。</li>
+<li>使用 <a href="https://curl.se/">cURL</a> 测试我们的应用程序。</li>
+</ul>
+<h2 id="%E6%A6%82%E5%BF%B5" tabindex="-1">概念 <a class="header-anchor" href="#%E6%A6%82%E5%BF%B5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>有几个概念有助于理解我们在本教程其余部分采取特定方法的原因，也可以帮助扩展应用程序。如果您愿意，可以跳到 <a href="#setup-firebase">设置 Firebase</a>。</p>
+<h3 id="%E9%83%A8%E7%BD%B2%E7%B1%BB%E6%B5%8F%E8%A7%88%E5%99%A8" tabindex="-1">部署类浏览器 <a class="header-anchor" href="#%E9%83%A8%E7%BD%B2%E7%B1%BB%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>尽管 Deploy 在云中运行，但它提供的 APIs 在许多方面都基于 Web 标准。因此，当使用 Firebase 时，Firebase APIs 与为服务器运行时设计的 APIs 更加兼容。这意味着我们将在本教程中使用 Firebase 的 Web 库。</p>
+<h3 id="firebase-%E4%BD%BF%E7%94%A8-xhr" tabindex="-1">Firebase 使用 XHR <a class="header-anchor" href="#firebase-%E4%BD%BF%E7%94%A8-xhr"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Firebase 使用一个封装器，围绕 Closure 的
+<a href="https://google.github.io/closure-library/api/goog.net.WebChannel.html">WebChannel</a>
+构建，WebChannel 最初是围绕 <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest"><code>XMLHttpRequest</code></a> 构建的。
+虽然 WebChannel 支持更现代的 <code>fetch()</code> API，但当前版本的 Firebase Web 并不统一使用支持 <code>fetch()</code> 的 WebChannel，而是使用 <code>XMLHttpRequest</code>。</p>
+<p>虽然 Deploy 类似于浏览器，但不支持 <code>XMLHttpRequest</code>。
+<code>XMLHttpRequest</code> 是一个“遗留”浏览器 API，存在多个限制，且在 Deploy 中实现某些特性将会很困难，这意味着 Deploy 不太可能实现该 API。</p>
+<p>因此，在本教程中，我们将使用一个有限的 <em>polyfill</em>，该 polyfill 提供了足够的 <code>XMLHttpRequest</code> 功能集，以允许 Firebase/WebChannel 与服务器进行通信。</p>
+<h3 id="firebase-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81" tabindex="-1">Firebase 身份验证 <a class="header-anchor" href="#firebase-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Firebase 提供了相当多的 <a href="https://firebase.google.com/docs/auth">选项</a> 进行身份验证。在本教程中，我们将使用电子邮件和密码身份验证。</p>
+<p>当用户登录时，Firebase 可以持久化该身份验证。因为我们使用 Firebase 的 Web 库，持久化身份验证使得用户在离开页面后返回时无需重新登录。Firebase 允许在本地存储、会话存储中持久化身份验证，或者不进行持久化。</p>
+<p>在 Deploy 上下文中，这略有不同。Deploy 部署将保持“活动”状态，这意味着某些请求将在请求之间保持内存状态，但在各种条件下可以启动或关闭新部署。目前，Deploy 没有提供任何持久性，除了内存分配。此外，它目前不提供全局的 <code>localStorage</code> 或 <code>sessionStorage</code>，这是 Firebase 用于存储身份验证信息的方式。</p>
+<p>为了减少重新身份验证的需要，同时确保我们可以支持单一部署的多个用户，我们将使用一个 polyfill，允许我们提供一个 <code>localStorage</code> 接口给 Firebase，但将信息作为客户端的 cookie 存储。</p>
+<h2 id="%E8%AE%BE%E7%BD%AE-firebase" tabindex="-1">设置 Firebase <a class="header-anchor" href="#%E8%AE%BE%E7%BD%AE-firebase"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><a href="https://firebase.google.com/">Firebase</a> 是一个功能丰富的平台。Firebase 管理的所有详细信息超出了本教程的范围。我们将涵盖本教程所需的内容。</p>
+<ol>
+<li>
+<p>在 <a href="https://console.firebase.google.com/">Firebase 控制台</a> 中创建一个新项目。</p>
+</li>
+<li>
+<p>向您的项目添加一个 Web 应用程序。请记录在设置向导中提供的 <code>firebaseConfig</code>。它看起来应该类似于以下内容。我们稍后会使用这个：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">var</span> firebaseConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">apiKey</span><span class="token operator">:</span> <span class="token string">"APIKEY"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">authDomain</span><span class="token operator">:</span> <span class="token string">"example-12345.firebaseapp.com"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">projectId</span><span class="token operator">:</span> <span class="token string">"example-12345"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">storageBucket</span><span class="token operator">:</span> <span class="token string">"example-12345.appspot.com"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">messagingSenderId</span><span class="token operator">:</span> <span class="token string">"1234567890"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">appId</span><span class="token operator">:</span> <span class="token string">"APPID"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-122" class="copyButton" data-copy="var firebaseConfig = {
+  apiKey: &quot;APIKEY&quot;,
+  authDomain: &quot;example-12345.firebaseapp.com&quot;,
+  projectId: &quot;example-12345&quot;,
+  storageBucket: &quot;example-12345.appspot.com&quot;,
+  messagingSenderId: &quot;1234567890&quot;,
+  appId: &quot;APPID&quot;,
+};
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></li>
+<li>
+<p>在管理控制台的 <code>身份验证</code> 下，您将想要启用 <code>电子邮件/密码</code> 登录方法。</p>
+</li>
+<li>
+<p>您将想要在 <code>身份验证</code> 下的 <code>用户</code> 部分添加用户和密码，并记录所用值，以备后用。</p>
+</li>
+<li>
+<p>向您的项目添加 <code>Firestore 数据库</code>。控制台将允许您设置 <em>生产模式</em> 或 <em>测试模式</em>。您将根据配置的内容自行决定，但 <em>生产模式</em> 将要求您设置进一步的安全规则。</p>
+</li>
+<li>
+<p>向数据库添加一个名为 <code>songs</code> 的集合。这将要求您至少添加一个文档。只需将文档设置为 <em>自动 ID</em>。</p>
+</li>
+</ol>
+<p><em>注意</em> 根据您的 Google 账户状态，可能需要进行其他设置和管理步骤。</p>
+<h2 id="%E7%BC%96%E5%86%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" tabindex="-1">编写应用程序 <a class="header-anchor" href="#%E7%BC%96%E5%86%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>我们想将应用程序创建为我们喜欢的编辑器中的 JavaScript 文件。</p>
+<p>我们要做的第一件事是导入 Firebase 在 Deploy 下工作所需的 <code>XMLHttpRequest</code> polyfill 以及一个 <code>localStorage</code> 的 polyfill，以允许 Firebase 身份验证持久化已登录用户：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> <span class="token string">"https://deno.land/x/xhr@0.1.1/mod.ts"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> installGlobals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/virtualstorage@0.1.0/mod.ts"</span><span class="token punctuation">;</span>
+<span class="token function">installGlobals</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-157" class="copyButton" data-copy="import &quot;https://deno.land/x/xhr@0.1.1/mod.ts&quot;;
+import { installGlobals } from &quot;https://deno.land/x/virtualstorage@0.1.0/mod.ts&quot;;
+installGlobals();
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><blockquote>
+<p>ℹ️ 我们使用的是在编写本教程时当前版本的包。它们可能不是最新的，您可能想要双重检查当前版本。</p>
+</blockquote>
+<p>因为 Deploy 具有大量 Web 标准 API，最好在部署下使用 Firebase 的 Web 库。目前 v9 仍处于 beta 阶段，所以我们在本教程中将使用 v8：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> firebase <span class="token keyword">from</span> <span class="token string">"https://esm.sh/firebase@8.7.0/app"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">"https://esm.sh/firebase@8.7.0/auth"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">"https://esm.sh/firebase@8.7.0/firestore"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-166" class="copyButton" data-copy="import firebase from &quot;https://esm.sh/firebase@8.7.0/app&quot;;
+import &quot;https://esm.sh/firebase@8.7.0/auth&quot;;
+import &quot;https://esm.sh/firebase@8.7.0/firestore&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>我们还将使用 <a href="https://deno.land/x/oak">oak</a> 作为创建 API 的中间件框架，包括用于将 <code>localStorage</code> 值设置为客户端 cookies 的中间件：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span>
+  Application<span class="token punctuation">,</span>
+  Router<span class="token punctuation">,</span>
+  Status<span class="token punctuation">,</span>
+<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/oak@v7.7.0/mod.ts"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> virtualStorage <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"https://deno.land/x/virtualstorage@0.1.0/middleware.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-170" class="copyButton" data-copy="import {
+  Application,
+  Router,
+  Status,
+} from &quot;https://deno.land/x/oak@v7.7.0/mod.ts&quot;;
+import { virtualStorage } from &quot;https://deno.land/x/virtualstorage@0.1.0/middleware.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>现在我们需要设置我们的 Firebase 应用程序。我们将从稍后在 <code>FIREBASE_CONFIG</code> 关键字下设置的环境变量中获取配置，并获取我们将要使用的 Firebase 各部分的引用：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">const</span> firebaseConfig <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>Deno<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"FIREBASE_CONFIG"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> firebaseApp <span class="token operator">=</span> firebase<span class="token punctuation">.</span><span class="token function">initializeApp</span><span class="token punctuation">(</span>firebaseConfig<span class="token punctuation">,</span> <span class="token string">"example"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> auth <span class="token operator">=</span> firebase<span class="token punctuation">.</span><span class="token function">auth</span><span class="token punctuation">(</span>firebaseApp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> db <span class="token operator">=</span> firebase<span class="token punctuation">.</span><span class="token function">firestore</span><span class="token punctuation">(</span>firebaseApp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-174" class="copyButton" data-copy="const firebaseConfig = JSON.parse(Deno.env.get(&quot;FIREBASE_CONFIG&quot;));
+const firebaseApp = firebase.initializeApp(firebaseConfig, &quot;example&quot;);
+const auth = firebase.auth(firebaseApp);
+const db = firebase.firestore(firebaseApp);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>我们还将设置应用程序以处理每个请求的登录用户。所以我们将创建一个我们之前在此部署中登录过的用户的映射。虽然在本教程中，我们只会有一个登录用户，但代码可以很容易地适应允许客户端单独登录：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">const</span> users <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Map</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-178" class="copyButton" data-copy="const users = new Map();
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>让我们创建我们的中间件路由器，并创建三个不同的中间件处理程序，以支持 <code>/songs</code> 的 <code>GET</code> 和 <code>POST</code> 以及对 <code>/songs/{title}</code> 的 <code>GET</code>：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">const</span> router <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 返回集合中的任何歌曲</span>
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/songs"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">ctx</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> querySnapshot <span class="token operator">=</span> <span class="token keyword">await</span> db<span class="token punctuation">.</span><span class="token function">collection</span><span class="token punctuation">(</span><span class="token string">"songs"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>body <span class="token operator">=</span> querySnapshot<span class="token punctuation">.</span>docs<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">doc</span><span class="token punctuation">)</span> <span class="token operator">=></span> doc<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>type <span class="token operator">=</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 返回第一个与标题匹配的文档</span>
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/songs/:title"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">ctx</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> <span class="token punctuation">{</span> title <span class="token punctuation">}</span> <span class="token operator">=</span> ctx<span class="token punctuation">.</span>params<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> querySnapshot <span class="token operator">=</span> <span class="token keyword">await</span> db<span class="token punctuation">.</span><span class="token function">collection</span><span class="token punctuation">(</span><span class="token string">"songs"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">where</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"=="</span><span class="token punctuation">,</span> title<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> song <span class="token operator">=</span> querySnapshot<span class="token punctuation">.</span>docs<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">doc</span><span class="token punctuation">)</span> <span class="token operator">=></span> doc<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>song<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>status <span class="token operator">=</span> <span class="token number">404</span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>body <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">未找到标题为 "</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>ctx<span class="token punctuation">.</span>params<span class="token punctuation">.</span>title<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">" 的歌曲。</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>type <span class="token operator">=</span> <span class="token string">"text"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>body <span class="token operator">=</span> querySnapshot<span class="token punctuation">.</span>docs<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">doc</span><span class="token punctuation">)</span> <span class="token operator">=></span> doc<span class="token punctuation">.</span><span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>type <span class="token operator">=</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">isSong</span><span class="token punctuation">(</span><span class="token parameter">value</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">typeof</span> value <span class="token operator">===</span> <span class="token string">"object"</span> <span class="token operator">&amp;&amp;</span> value <span class="token operator">!==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token string">"title"</span> <span class="token keyword">in</span> value<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 移除任何具有相同标题的歌曲并添加新歌曲</span>
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/songs"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">ctx</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> body <span class="token operator">=</span> ctx<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">body</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>body<span class="token punctuation">.</span>type <span class="token operator">!==</span> <span class="token string">"json"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span><span class="token function">throw</span><span class="token punctuation">(</span>Status<span class="token punctuation">.</span>BadRequest<span class="token punctuation">,</span> <span class="token string">"必须是 JSON 文档"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">const</span> song <span class="token operator">=</span> <span class="token keyword">await</span> body<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isSong</span><span class="token punctuation">(</span>song<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    ctx<span class="token punctuation">.</span><span class="token function">throw</span><span class="token punctuation">(</span>Status<span class="token punctuation">.</span>BadRequest<span class="token punctuation">,</span> <span class="token string">"有效负载格式不正确"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">const</span> querySnapshot <span class="token operator">=</span> <span class="token keyword">await</span> db
+    <span class="token punctuation">.</span><span class="token function">collection</span><span class="token punctuation">(</span><span class="token string">"songs"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">where</span><span class="token punctuation">(</span><span class="token string">"title"</span><span class="token punctuation">,</span> <span class="token string">"=="</span><span class="token punctuation">,</span> song<span class="token punctuation">.</span>title<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> Promise<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span>querySnapshot<span class="token punctuation">.</span>docs<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">doc</span><span class="token punctuation">)</span> <span class="token operator">=></span> doc<span class="token punctuation">.</span>ref<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> songsRef <span class="token operator">=</span> db<span class="token punctuation">.</span><span class="token function">collection</span><span class="token punctuation">(</span><span class="token string">"songs"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">await</span> songsRef<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>song<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ctx<span class="token punctuation">.</span>response<span class="token punctuation">.</span>status <span class="token operator">=</span> Status<span class="token punctuation">.</span>NoContent<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-182" class="copyButton" data-copy="const router = new Router();
+
+// 返回集合中的任何歌曲
+router.get(&quot;/songs&quot;, async (ctx) => {
+  const querySnapshot = await db.collection(&quot;songs&quot;).get();
+  ctx.response.body = querySnapshot.docs.map((doc) => doc.data());
+  ctx.response.type = &quot;json&quot;;
+});
+
+// 返回第一个与标题匹配的文档
+router.get(&quot;/songs/:title&quot;, async (ctx) => {
+  const { title } = ctx.params;
+  const querySnapshot = await db.collection(&quot;songs&quot;).where(&quot;title&quot;, &quot;==&quot;, title)
+    .get();
+  const song = querySnapshot.docs.map((doc) => doc.data())[0];
+  if (!song) {
+    ctx.response.status = 404;
+    ctx.response.body = `未找到标题为 &quot;${ctx.params.title}&quot; 的歌曲。`;
+    ctx.response.type = &quot;text&quot;;
+  } else {
+    ctx.response.body = querySnapshot.docs.map((doc) => doc.data())[0];
+    ctx.response.type = &quot;json&quot;;
+  }
+});
+
+function isSong(value) {
+  return typeof value === &quot;object&quot; && value !== null && &quot;title&quot; in value;
+}
+
+// 移除任何具有相同标题的歌曲并添加新歌曲
+router.post(&quot;/songs&quot;, async (ctx) => {
+  const body = ctx.request.body();
+  if (body.type !== &quot;json&quot;) {
+    ctx.throw(Status.BadRequest, &quot;必须是 JSON 文档&quot;);
+  }
+  const song = await body.value;
+  if (!isSong(song)) {
+    ctx.throw(Status.BadRequest, &quot;有效负载格式不正确&quot;);
+  }
+  const querySnapshot = await db
+    .collection(&quot;songs&quot;)
+    .where(&quot;title&quot;, &quot;==&quot;, song.title)
+    .get();
+  await Promise.all(querySnapshot.docs.map((doc) => doc.ref.delete()));
+  const songsRef = db.collection(&quot;songs&quot;);
+  await songsRef.add(song);
+  ctx.response.status = Status.NoContent;
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>好的，我们快要完成了。我们只需创建我们的中间件应用程序，并添加我们导入的 <code>localStorage</code> 中间件：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Application</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">virtualStorage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-186" class="copyButton" data-copy="const app = new Application();
+app.use(virtualStorage());
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>然后我们需要添加中间件来验证用户。在本教程中，我们只是从我们将要设置的环境变量中获取用户名和密码，但如果用户未登录，这可以很容易地调整为将用户重定向到登录页面：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">ctx<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> signedInUid <span class="token operator">=</span> ctx<span class="token punctuation">.</span>cookies<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"LOGGED_IN_UID"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> signedInUser <span class="token operator">=</span> signedInUid <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">?</span> users<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>signedInUid<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">undefined</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>signedInUid <span class="token operator">||</span> <span class="token operator">!</span>signedInUser <span class="token operator">||</span> <span class="token operator">!</span>auth<span class="token punctuation">.</span>currentUser<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> creds <span class="token operator">=</span> <span class="token keyword">await</span> auth<span class="token punctuation">.</span><span class="token function">signInWithEmailAndPassword</span><span class="token punctuation">(</span>
+      Deno<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"FIREBASE_USERNAME"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      Deno<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"FIREBASE_PASSWORD"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> <span class="token punctuation">{</span> user <span class="token punctuation">}</span> <span class="token operator">=</span> creds<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      users<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>uid<span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      ctx<span class="token punctuation">.</span>cookies<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"LOGGED_IN_UID"</span><span class="token punctuation">,</span> user<span class="token punctuation">.</span>uid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>signedInUser <span class="token operator">&amp;&amp;</span> signedInUid<span class="token punctuation">.</span>uid <span class="token operator">!==</span> auth<span class="token punctuation">.</span>currentUser<span class="token operator">?.</span>uid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">await</span> auth<span class="token punctuation">.</span><span class="token function">updateCurrentUser</span><span class="token punctuation">(</span>signedInUser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-190" class="copyButton" data-copy="app.use(async (ctx, next) => {
+  const signedInUid = ctx.cookies.get(&quot;LOGGED_IN_UID&quot;);
+  const signedInUser = signedInUid != null ? users.get(signedInUid) : undefined;
+  if (!signedInUid || !signedInUser || !auth.currentUser) {
+    const creds = await auth.signInWithEmailAndPassword(
+      Deno.env.get(&quot;FIREBASE_USERNAME&quot;),
+      Deno.env.get(&quot;FIREBASE_PASSWORD&quot;),
+    );
+    const { user } = creds;
+    if (user) {
+      users.set(user.uid, user);
+      ctx.cookies.set(&quot;LOGGED_IN_UID&quot;, user.uid);
+    } else if (signedInUser && signedInUid.uid !== auth.currentUser?.uid) {
+      await auth.updateCurrentUser(signedInUser);
+    }
+  }
+  return next();
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>现在让我们将路由器添加到中间件应用程序，并将应用程序设置为监听 8000 端口：</p>
+<div><div class="markdownBlockTitle">firebase.js</div><div class="relative"><pre><code class="highlight notranslate language-js">app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+app<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span>router<span class="token punctuation">.</span><span class="token function">allowedMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> app<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token literal-property property">port</span><span class="token operator">:</span> <span class="token number">8000</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-194" class="copyButton" data-copy="app.use(router.routes());
+app.use(router.allowedMethods());
+await app.listen({ port: 8000 });
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>现在我们有一个应该提供我们 API 的应用程序。</p>
+<h2 id="%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" tabindex="-1">部署应用程序 <a class="header-anchor" href="#%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>现在我们一切就绪，让我们部署您的新应用程序！</p>
+<ol>
+<li>在浏览器中访问 <a href="https://dash.deno.com/new_project">Deno Deploy</a> 并将您的 GitHub 账户链接起来。</li>
+<li>选择包含您新应用程序的仓库。</li>
+<li>您可以为项目命名，或者让 Deno 为您生成一个名称</li>
+<li>在入口点下拉菜单中选择 <code>firebase.js</code></li>
+<li>点击 <strong>部署项目</strong></li>
+</ol>
+<p>为了使您的应用程序正常工作，我们需要配置其环境变量。</p>
+<p>在您项目的成功页面或项目仪表板中，点击 <strong>添加环境变量</strong>。在环境变量下，点击 <strong>+ 添加变量</strong>。创建以下变量：</p>
+<ol>
+<li><code>FIREBASE_USERNAME</code> - 上述添加的 Firebase 用户（电子邮件地址）</li>
+<li><code>FIREBASE_PASSWORD</code> - 上述添加的 Firebase 用户密码</li>
+<li><code>FIREBASE_CONFIG</code> - Firebase 应用程序的配置，作为 JSON 字符串</li>
+</ol>
+<p>配置需要是有效的 JSON 字符串，以便应用程序可以读取。如果设置时给出的代码片段看起来是这样的：</p>
+<div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">var</span> firebaseConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">apiKey</span><span class="token operator">:</span> <span class="token string">"APIKEY"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">authDomain</span><span class="token operator">:</span> <span class="token string">"example-12345.firebaseapp.com"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">projectId</span><span class="token operator">:</span> <span class="token string">"example-12345"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">storageBucket</span><span class="token operator">:</span> <span class="token string">"example-12345.appspot.com"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">messagingSenderId</span><span class="token operator">:</span> <span class="token string">"1234567890"</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">appId</span><span class="token operator">:</span> <span class="token string">"APPID"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-257" class="copyButton" data-copy="var firebaseConfig = {
+  apiKey: &quot;APIKEY&quot;,
+  authDomain: &quot;example-12345.firebaseapp.com&quot;,
+  projectId: &quot;example-12345&quot;,
+  storageBucket: &quot;example-12345.appspot.com&quot;,
+  messagingSenderId: &quot;1234567890&quot;,
+  appId: &quot;APPID&quot;,
+};
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>您需要将字符串的值设置为这个（注意空格和换行不是必需的）：</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"apiKey"</span><span class="token operator">:</span> <span class="token string">"APIKEY"</span><span class="token punctuation">,</span>
+  <span class="token property">"authDomain"</span><span class="token operator">:</span> <span class="token string">"example-12345.firebaseapp.com"</span><span class="token punctuation">,</span>
+  <span class="token property">"projectId"</span><span class="token operator">:</span> <span class="token string">"example-12345"</span><span class="token punctuation">,</span>
+  <span class="token property">"storageBucket"</span><span class="token operator">:</span> <span class="token string">"example-12345.appspot.com"</span><span class="token punctuation">,</span>
+  <span class="token property">"messagingSenderId"</span><span class="token operator">:</span> <span class="token string">"1234567890"</span><span class="token punctuation">,</span>
+  <span class="token property">"appId"</span><span class="token operator">:</span> <span class="token string">"APPID"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-261" class="copyButton" data-copy="{
+  &quot;apiKey&quot;: &quot;APIKEY&quot;,
+  &quot;authDomain&quot;: &quot;example-12345.firebaseapp.com&quot;,
+  &quot;projectId&quot;: &quot;example-12345&quot;,
+  &quot;storageBucket&quot;: &quot;example-12345.appspot.com&quot;,
+  &quot;messagingSenderId&quot;: &quot;1234567890&quot;,
+  &quot;appId&quot;: &quot;APPID&quot;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>点击保存变量。</p>
+<p>现在让我们来体验一下我们的 API。</p>
+<p>我们可以创建一个新歌曲：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token function">curl</span> <span class="token parameter variable">--request</span> POST <span class="token punctuation">\</span>
+  <span class="token parameter variable">--header</span> <span class="token string">"Content-Type: application/json"</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">--data</span> <span class="token string">'{"title": "Old Town Road", "artist": "Lil Nas X", "album": "7", "released": "2019", "genres": "乡村说唱, 流行"}'</span> <span class="token punctuation">\</span>
+  --dump-header <span class="token punctuation">\</span>
+  - https://<span class="token operator">&lt;</span>project_name<span class="token operator">></span>.deno.dev/songs
+</code></pre>
+
+      <button id="copy-button-271" class="copyButton" data-copy="curl --request POST \
+  --header &quot;Content-Type: application/json&quot; \
+  --data &apos;{&quot;title&quot;: &quot;Old Town Road&quot;, &quot;artist&quot;: &quot;Lil Nas X&quot;, &quot;album&quot;: &quot;7&quot;, &quot;released&quot;: &quot;2019&quot;, &quot;genres&quot;: &quot;乡村说唱, 流行&quot;}&apos; \
+  --dump-header \
+  - https://<project_name>.deno.dev/songs
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>我们可以获取我们集合中的所有歌曲：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token function">curl</span> https://<span class="token operator">&lt;</span>project_name<span class="token operator">></span>.deno.dev/songs
+</code></pre>
+
+      <button id="copy-button-275" class="copyButton" data-copy="curl https://<project_name>.deno.dev/songs
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>我们可以获取关于我们创建的标题的特定信息：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh"><span class="token function">curl</span> https://<span class="token operator">&lt;</span>project_name<span class="token operator">></span>.deno.dev/songs/Old%20Town%20Road
+</code></pre>
+
+      <button id="copy-button-279" class="copyButton" data-copy="curl https://<project_name>.deno.dev/songs/Old%20Town%20Road
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></div></article><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 border border-foreground-tertiary bg-background-primary rounded mx-auto"><h2 class="text-xl border-b border-foreground-tertiary dark:border-background-tertiary mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" aria-labelledby="feedback-title" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required/><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required/><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/deploy/tutorials/tutorial-firebase.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value/><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn bg-green-400 dark:bg-green-600 mt-4">发送反馈给我们</button></div></div><a rel class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/manual/privacy-policy">隐私政策</a></form></div></div></section></div><ul class="toc-list toc-desktop" id="toc"><li class="m-2 leading-4"><a href="#%E6%A6%82%E8%BF%B0" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">概述 </a></li><li class="m-2 leading-4"><a href="#%E6%A6%82%E5%BF%B5" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">概念 </a><ul class="ml-2"><li class="m-2 leading-4"><a href="#%E9%83%A8%E7%BD%B2%E7%B1%BB%E6%B5%8F%E8%A7%88%E5%99%A8" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">部署类浏览器 </a></li><li class="m-2 leading-4"><a href="#firebase-%E4%BD%BF%E7%94%A8-xhr" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Firebase 使用 XHR </a></li><li class="m-2 leading-4"><a href="#firebase-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">Firebase 身份验证 </a></li></ul></li><li class="m-2 leading-4"><a href="#%E8%AE%BE%E7%BD%AE-firebase" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">设置 Firebase </a></li><li class="m-2 leading-4"><a href="#%E7%BC%96%E5%86%99%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">编写应用程序 </a></li><li class="m-2 leading-4"><a href="#%E9%83%A8%E7%BD%B2%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F" class="text-[13px] text-foreground-secondary hover:text-indigo-600 transition-colors duration-200 ease-in-out select-none toc-link">部署应用程序 </a></li></ul></div><footer><nav aria-labelledby="footer-navigation" class="footer-nav"><section class="footer-section"><h3 class="footer-section-heading">Deno 文档</h3><ul class="footer-list"><li><a class="footer-link" href="/runtime/">Deno 运行时</a></li><li><a class="footer-link" href="/deploy/manual/">Deno 部署</a></li><li><a class="footer-link" href="/subhosting/manual/">Deno 子托管</a></li><li><a class="footer-link" href="/examples/">示例</a></li><li><a class="footer-link" href="https://jsr.io/@std">标准库</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">社区</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">Discord</a></li><li><a class="footer-link" href="https://github.com/denoland">GitHub</a></li><li><a class="footer-link" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="footer-link" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="footer-link" href="https://deno.news/">新闻通讯</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">帮助与反馈</h3><ul class="footer-list"><li><a class="footer-link" href="https://discord.gg/deno">社区支持</a></li><li><a class="footer-link" href="https://denostatus.com">部署系统状态</a></li><li><a class="footer-link" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="footer-link" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="footer-section"><h3 class="footer-section-heading">公司</h3><ul class="footer-list"><li><a class="footer-link" href="https://deno.com/blog">博客</a></li><li><a class="footer-link" href="https://deno.com/jobs">招聘</a></li><li><a class="footer-link" href="https://merch.deno.com/">周边商品</a></li><li><a class="footer-link" href="/deploy/manual/privacy-policy">隐私政策</a></li></ul></section></nav><p class="copyright"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></div></body></html>
