@@ -6,13 +6,21 @@ oldUrl:
   - /runtime/tutorials/how_to_with_npm/next/
 ---
 
-[Next.js](https://nextjs.org/) 是一个流行的构建服务器端渲染应用的框架。它基于 React 构建，开箱即用地提供了许多功能。
+[Next.js](https://nextjs.org/) 是一个流行的用于构建服务器端渲染应用的框架。它基于 React 构建，并开箱即用提供了很多功能。
 
 在本教程中，我们将构建一个
-[简单的 Next.js 应用](https://tutorial-with-next.deno.deno.net/) 并使用 Deno 运行它。该应用会展示恐龙列表。点击其中某个恐龙，会跳转到显示该恐龙详细信息的页面。你可以查看
-[完整的应用代码 GitHub](https://github.com/denoland/tutorial-with-next/tree/main)。
+[简单的 Next.js 应用](https://tutorial-with-next.deno.deno.net/) 并使用 Deno 运行它。该应用会显示一个恐龙列表。当你点击其中一个时，会跳转到对应恐龙的详情页面。
 
-![应用演示](./images/how-to/next/dinoapp.gif)
+你可以查看
+[GitHub 上的完整应用代码](https://github.com/denoland/tutorial-with-next/tree/main)。
+
+:::info 部署你自己的应用
+
+想跳过教程，立即部署完成的应用？点击下面按钮，立刻将完整的 SvelteKit 恐龙应用副本部署到 Deno Deploy。你将获得一个可运行、可自定义、可修改的实时代码！
+
+[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/tutorial-with-next)
+
+:::
 
 ## 使用 Deno 创建一个 Next.js 应用
 
@@ -188,9 +196,9 @@ useEffect(() => {
 
 ```tsx title="page.tsx"
 return (
-  <main>
-    <h1>欢迎来到恐龙应用</h1>
-    <p>点击下面的恐龙以了解更多。</p>
+  <main id="content">
+    <h1>Welcome to the Dinosaur app</h1>
+    <p>Click on a dinosaur below to learn more.</p>
     <ul>
       {dinosaurs.map((dinosaur: Dino) => {
         return (
@@ -244,7 +252,7 @@ useEffect(() => {
 
 ```tsx title="[dinosaur]/page.tsx"
 return (
-  <main>
+  <main id="content">
     <h1>{dinosaur.name}</h1>
     <p>{dinosaur.description}</p>
     <Link href="/">🠠 返回所有恐龙</Link>
@@ -277,8 +285,8 @@ git commit -am 'my next app'
 git push -u origin main
 ```
 
-应用上线 GitHub 后，可在 Deno Deploy<sup>EA</sup> 控制台部署。
-<a href="https://app.deno.com/" class="docs-cta deploy-cta deploy-button">部署我的应用</a>
+Once your app is on GitHub, you can
+[deploy it to Deno Deploy<sup>EA</sup>](https://app.deno.com/).
 
 想了解部署详情，请查看 
 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。

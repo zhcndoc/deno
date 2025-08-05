@@ -1,5 +1,5 @@
 ---
-title: "关于 Early Access"
+title: "关于 Deno Deploy Early Access"
 description: "Deno Deploy Early Access 功能指南、与 Deploy Classic 的比较及部署入门说明。"
 ---
 
@@ -16,14 +16,8 @@ Deno Deploy Early Access（Deno Deploy<sup>EA</sup>）是对原始 Deploy 的彻
 - 集成的构建系统
 - 显著增强的基础设施
 
-<a href="https://dash.deno.com/account#early-access" class="docs-cta runtime-cta">加入 Early Access 计划</a>
-<a href="https://app.deno.com" class="docs-cta deploy-cta">前往您的 Deno Deploy<sup>EA</sup> 仪表板</a>
-
-:::note
-
-Deno Deploy<sup>EA</sup> 处于私密测试阶段。要使用 Deno Deploy<sup>EA</sup>，您必须通过 [Deploy Classic 账户设置页面](https://dash.deno.com/account#early-access) 加入 Early Access 计划。
-
-:::
+<a href="https://app.deno.com" class="docs-cta deploy-cta">Go to the Deno
+Deploy<sup>EA</sup> dashboard</a>
 
 Deno Deploy<sup>EA</sup> 带来了全新的仪表板，地址为 [app.deno.com](https://app.deno.com)。在此仪表板中，您可以创建包含 Deno Deploy<sup>EA</sup> 应用的新组织。
 

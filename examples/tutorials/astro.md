@@ -4,127 +4,122 @@ description: "逐步教程：使用 Astro 和 Deno 构建 Web 应用程序。学
 url: /examples/astro_tutorial/
 ---
 
-[Astro](https://astro.build/) 是一个专注于内容中心网站的现代网页框架，它采用岛屿架构，并默认不向客户端发送任何 JavaScript。随着最近 [Deno 2](https://deno.com/2) 的发布，现在
-[与 Node 和 npm 向后兼容](https://deno.com/blog/v2.0#backwards-compatible-forward-thinking)，使用 Astro 和 Deno 的体验得到了提升。
+[Astro](https://astro.build/) 是一个专注于内容驱动型网站的现代 Web 框架，采用 Islands 架构，默认情况下不会向客户端发送任何 JavaScript。你可以查看[GitHub 上的完整应用](https://github.com/denoland/tutorial-with-astro)。
 
-我们将介绍如何使用 Deno 构建一个简单的 Astro 项目：
+你可以在 [Deno Deploy](https://tutorial-with-astro.deno.deno.net/) 上看到该应用的在线版本。
 
-- [创建一个 Astro 项目](#scaffold-an-astro-project)
-- [更新索引页面](#update-index-page-to-list-all-dinosaurs)
-- [添加动态 SSR 页面](#add-a-dynamic-ssr-page)
-- [接下来是什么？](#whats-next)
+:::info 部署你自己的应用
 
-可以直接跳转到 [源代码](https://github.com/denoland/examples/tree/main/with-astro) 或在下面继续阅读！
+想跳过教程，立即部署完整的 Astro 恐龙应用？点击以下按钮，立即将完整的 Astro 恐龙应用副本部署到 Deno Deploy。你将获得一个可在线运行、可自定义并修改的应用，边学边用！
+
+[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/tutorial-with-astro)
+
+:::
 
 ## 创建一个 Astro 项目
 
-Astro 提供了一个 CLI 工具，可以快速创建一个新的 Astro 项目。在终端中运行命令 `deno init --npm astro@latest` 来使用 Deno 创建一个新的 Astro 项目。对于本教程，我们将选择“空”模板，以便从头开始，并跳过安装依赖项，以便稍后使用 Deno 安装它们：
-
-```jsx
-deno init --npm astro@latest
-
- astro   启动序列已启动。
-
-   dir   我们应该在哪里创建您的新项目？
-         ./dino-app
-
-  tmpl   您希望如何开始您的新项目？
-         空
-
-    ts   您打算编写 TypeScript 吗？
-         是
-
-   use   TypeScript 的严格程度应该是多少？
-         严格
-
-  deps   安装依赖项？
-         否
-      ◼  没问题！
-         请记得在设置后安装依赖项。
-
-   git   初始化一个新的 git 代码库？
-         是
-
-      ✔  项目已初始化！
-         ■ 模板已复制
-         ■ TypeScript 已自定义
-         ■ Git 已初始化
-
-  next   起飞确认。探索您的项目！
-
-  使用 cd ./dino-app 进入您的项目目录
-  运行 npm run dev 启动开发服务器。CTRL+C 停止。
-  使用 astro add 添加像 react 或 tailwind 这样的框架。
-
- 有问题？加入我们 https://astro.build/chat
-
-╭─────╮  休斯顿：
-│ ◠ ◡ ◠  祝你好运，宇航员！ 🚀
-╰──🍫─╯
-```
-
-从 Deno 2 开始，[Deno 还可以使用新的 `deno install` 命令安装包](https://deno.com/blog/v2.0#deno-is-now-a-package-manager-with-deno-install)。所以我们执行
-[`deno install`](https://docs.deno.com/runtime/reference/cli/install/) 并使用 `--allow-scripts` 标志来执行任何 npm 生命周期脚本：
-
-```bash
-deno install --allow-scripts
-```
-
-要查看我们有哪些命令，请运行 `deno task`：
-
-```bash
-deno task
-可用任务：
-- dev (package.json)
-    astro dev
-- start (package.json)
-    astro dev
-- build (package.json)
-    astro check && astro build
-- preview (package.json)
-    astro preview
-- astro (package.json)
-    astro
-```
-
-我们可以用 `deno task dev` 启动 Astro 服务器：
-
-![Getting the Astro app to work](./images/how-to/astro/hello-astro.png)
-
-## 配置代码格式化工具
-
-`deno fmt` 通过
-[`--unstable-component`](https://docs.deno.com/runtime/reference/cli/fmt/#formatting-options-unstable-component)
-标志支持 Astro 文件。要使用它，请运行以下命令：
+Astro 提供了一个 CLI 工具，可快速生成新的 Astro 项目。在你的终端运行以下命令，使用 Deno 创建一个新的 Astro 项目。
 
 ```sh
-deno fmt --unstable-component
+deno init --npm astro@latest
 ```
 
-要配置 `deno fmt` 始终格式化你的 Astro 文件，请在你的 `deno.json` 文件顶层添加以下内容：
+本教程中，我们选择“Empty”模板，方便从零开始搭建，然后安装依赖。
 
-```json
-"unstable": ["fmt-component"]
+此操作将为我们搭建一个基础的 Astro 项目结构，包括一个 `package.json` 文件，以及存放应用代码的 `src` 目录。
+
+## 启动 Astro 服务器
+
+我们可以使用 `dev` 任务启动本地 Astro 开发服务器。在终端切换到新项目目录，运行：
+
+```sh
+deno task dev
 ```
 
-## 更新索引页面以列出所有恐龙
+这将启动 Astro 开发服务器，监视文件改动并自动刷新浏览器页面。你会看到服务器运行在 `http://localhost:4321` 的提示信息。
 
-我们的应用将显示有关各种恐龙的事实。我们要创建的第一页是索引页面，它将列出我们“数据库”中所有恐龙的链接。
+在浏览器访问该 URL，你应该看到一个非常基础的 Astro 欢迎页面。
 
-首先，让我们创建将用于应用中的数据。在本示例中，我们将在一个 json 文件中硬编码数据，但您可以在实践中使用任何数据存储。我们将在项目根目录下创建一个 `data` 文件夹，然后创建一个 `dinosaurs.json` 文件，内容为
-[此文本](https://github.com/denoland/tutorial-with-react/blob/main/api/data.json)。
+## 构建应用架构
 
-> ⚠️️ 在本教程中，我们硬编码了数据。但您可以连接到
-> [各种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)
-> 以及
-> [甚至使用 Prisma 等 ORM](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/)
-> 与 Deno。
+现在我们已搭建好基础 Astro 项目，接下来构建应用架构。我们将创建几个目录以组织代码，并设置基础路由。创建以下目录结构：
 
-一旦我们有了数据，就让我们创建一个列出所有恐龙的索引页面。在 `./src/pages/index.astro` 页面中，写入以下内容：
+```text
+src/
+    ├── data/
+    ├── lib/
+    └── pages/
+        └── index.astro
+```
 
-```jsx
+## 添加恐龙数据
+
+在 `data` 目录下新建一个名为 `data.json` 的文件，用于存放硬编码的恐龙数据。
+
+复制以下[这个 json 文件](https://raw.githubusercontent.com/denoland/tutorial-with-astro/refs/heads/main/src/data/data.json)内容，粘贴到 `data.json` 文件中。（如果是实际项目，你可能会从数据库或外部 API 拉取这些数据。）
+
+## 设置业务逻辑
+
+接着，我们创建一个 `lib` 目录，放置业务逻辑代码。在这里我们创建 `dinosaur-service.ts` 文件，包含用于获取恐龙数据的函数。新建 `src/lib/dinosaur-service.ts` 并写入如下代码：
+
+```ts title="src/lib/dinosaur-service.ts"
+// 简单的恐龙数据处理工具函数
+import dinosaursData from "../data/data.json";
+
+export interface Dinosaur {
+  name?: string;
+  description: string;
+}
+
+export class DinosaurService {
+  private static dinosaurs: Dinosaur[] = dinosaursData;
+
+  // 获取所有有名称的恐龙（过滤掉无名恐龙）
+  static getNamedDinosaurs(): Dinosaur[] {
+    return this.dinosaurs.filter((dino) => dino.name);
+  }
+
+  // 根据恐龙名称创建 URL 友好的 slug
+  static createSlug(name: string): string {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  // 根据 slug 获取恐龙数据
+  static getDinosaurBySlug(slug: string): Dinosaur | undefined {
+    return this.dinosaurs.find((dino) => {
+      if (!dino.name) return false;
+      return this.createSlug(dino.name) === slug;
+    });
+  }
+
+  // 获取带 slug 的恐龙数据列表以用作链接
+  static getDinosaursWithSlugs() {
+    return this.getNamedDinosaurs().map((dino) => ({
+      ...dino,
+      slug: this.createSlug(dino.name!),
+    }));
+  }
+}
+
+export default DinosaurService;
+```
+
+该文件定义了一个 `DinosaurService` 类，包含获取所有恐龙、创建 URL 友好 slug 和根据 slug 获取恐龙数据的方法。
+
+## 更新首页使用服务
+
+现在可以更新 `index.astro` 页面，调用 `DinosaurService` 获取恐龙数据并渲染为链接列表。更新 `src/pages/index.astro` 文件内容如下：
+
+```jsx title="src/pages/index.astro"
 ---
-import data from "../../data/dinosaurs.json";
+import DinosaurService from '../lib/dinosaur-service';
+import '../../styles/index.css';
+
+// 获取带 slug 的所有恐龙，用于创建链接
+const dinosaursWithSlugs = DinosaurService.getDinosaursWithSlugs();
 ---
 
 <html lang="en">
@@ -133,69 +128,107 @@ import data from "../../data/dinosaurs.json";
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>恐龙</title>
+		<title>恐龙目录</title>
 	</head>
 	<body>
-		<h1>恐龙</h1>
-		<ul>
-			{data.map((dinosaur) => (
-				<li>
-					<a href={`/${dinosaur.name.toLowerCase()}`}>{ dinosaur.name }</a>
-				</li>
+		<h1>🦕 恐龙目录</h1>
+		<p>点击任意恐龙名称了解更多信息！</p>
+		
+		<div class="dinosaur-list">
+			{dinosaursWithSlugs.map((dinosaur) => (
+				<a href={`/dinosaur/${dinosaur.slug}`} class="dinosaur-link">
+					{dinosaur.name}
+				</a>
 			))}
-		</ul>
+		</div>
 	</body>
 </html>
 ```
 
-让我们使用 `deno task dev` 启动服务器，并将浏览器指向 `localhost:4321`：
+我们导入了 `DinosaurService`，然后遍历恐龙数据，创建指向单个恐龙页面的链接。
 
-![列出所有恐龙的索引页面](./images/how-to/astro/index-page.webp)
+## 创建单个恐龙详情页
 
-太棒了！但是当您点击一个恐龙时，它会出现 404 错误。让我们修复它。
+接下来为每只恐龙创建独立页面。在 `src/pages` 目录中创建一个 `dinosaurs` 文件夹，在该文件夹内创建名为 `[slug].astro` 的文件，内容如下：
 
-## 添加动态 SSR 页面
-
-我们的应用将显示有关各种恐龙的事实。为此，我们将创建一个动态服务器端渲染（“SSR”）页面，
-[这为最终用户提供了更好的性能，同时改善了您的页面 SEO](https://deno.com/blog/the-future-and-past-is-server-side-rendering)。
-
-接下来，让我们在 `/src/pages/` 下创建一个名为 `[dinosaur].astro` 的新文件。在文件顶部，我们将添加一些逻辑，以从我们的硬编码数据源中提取数据，并将其与从 URL 路径中设置的 `dinosaur` 参数进行过滤。
-在文件底部，我们将渲染数据。您的文件应该如下所示：
-
-```jsx
+```jsx title="src/pages/dinosaurs/[slug].astro"
 ---
-import data from "../../data/dinosaurs.json";
-const { dinosaur } = Astro.params;
-const dinosaurObj = data.find((item) => item.name.toLowerCase() === dinosaur);
-if (!dinosaurObj) return Astro.redirect("/404");
-const { name, description } = dinosaurObj;
+import DinosaurService from '../../lib/dinosaur-service';
+import '../../styles/index.css';
+
+export async function getStaticPaths() {
+    const dinosaursWithSlugs = DinosaurService.getDinosaursWithSlugs();
+    
+    return dinosaursWithSlugs.map((dinosaur) => ({
+        params: { slug: dinosaur.slug },
+        props: { dinosaur }
+    }));
+}
+
+const { dinosaur } = Astro.props;
 ---
 
-<h1>{ name }</h1>
-
-<p>
-    { description }
-</p>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{dinosaur.name} - 恐龙目录</title>
+        <meta name="description" content={dinosaur.description} />
+		<link rel="stylesheet" href="https://demo-styles.deno.deno.net/styles.css">
+    </head>
+    <body class="dinosaur">
+        <main>
+            <h1>🦕 {dinosaur.name}</h1>
+            
+            <div class="info-card">
+                <p>{dinosaur.description}</p>
+            </div>
+            
+            <a href="/" class="btn-secondary">返回目录</a>
+        </main>
+    </body>
+</html>
 ```
 
-> ⚠️️ 当前
-> [Deno 语言服务器](https://docs.deno.com/runtime/reference/lsp_integration/)
-> 不支持 `.astro` 文件，因此您可能会遇到虚假的红色波浪线。我们正在努力改进这个体验。
+该文件使用 `getStaticPaths` 生成所有恐龙的静态路由路径，`Astro.props` 会携带当前 slug 对应的恐龙数据，我们在页面中进行渲染。
 
-让我们使用 `deno task dev` 运行它，并将浏览器指向 `localhost:4321/abrictosaurus`：
+## 添加样式
 
-![渲染 abrictosaurus 的动态页面](./images/how-to/astro/dynamic-page.webp)
+你可以在 `src/styles/index.css` 文件中为应用添加个性化样式。该文件在 `index.astro` 和 `[slug].astro` 文件中都被导入，因此所添加的样式会应用于这两个页面。
 
-它工作正常！
+## 构建和部署
 
-## 接下来是什么
+Astro 内置了用于生产构建的命令：
 
-我们希望这个教程能让您对如何开始使用 Astro 和 Deno 构建有一个良好的了解。您可以了解更多关于 Astro 的信息，以及
-[他们渐进式的网站构建方法](https://docs.astro.build/en/getting-started/)。如果您有兴趣更换我们硬编码的数据存储，这里有一些关于
-[使用 Deno 连接数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 的资源，包括
-[Planetscale](https://docs.deno.com/runtime/tutorials/how_to_with_npm/planetscale/),
-[Redis](https://docs.deno.com/runtime/tutorials/how_to_with_npm/redis/)等资源。或者您可以学习如何
-[将您的 Astro 项目部署到 Deno Deploy](https://deno.com/blog/astro-on-deno)，或者按照这些指南了解如何将 Deno 自托管到
-[AWS](https://docs.deno.com/runtime/tutorials/aws_lightsail/),
-[Digital Ocean](https://docs.deno.com/runtime/tutorials/digital_ocean/)，以及
-[Google Cloud Run](https://docs.deno.com/runtime/tutorials/google_cloud_run/)。
+```sh
+deno run build
+```
+
+此命令将：
+
+- 在 `dist` 目录中生成每个页面对应的静态 HTML 文件。
+- 优化你的资源文件（CSS、JavaScript、图片等），适配生产环境。
+
+你可以将该应用部署到你喜欢的云提供商。我们推荐使用 [Deno Deploy](https://deno.com/deploy)，体验简单便捷。你可以直接从 GitHub 部署，只需新建一个 GitHub 仓库，推送代码后连接到 Deno Deploy 即可。
+
+### 创建 GitHub 仓库
+
+[创建一个新的 GitHub 仓库](https://github.com/new)，然后初始化并推送你的项目：
+
+```sh
+git init -b main
+git remote add origin https://github.com/<你的_github_用户名>/<你的仓库名>.git
+git add .
+git commit -am 'initial commit'
+git push -u origin main
+```
+
+### 部署到 Deno Deploy
+
+代码托管至 GitHub 后，你可以在 [Deno Deploy<sup>EA</sup> 控制面板](https://app.deno.com/) 上进行部署。
+
+如果想了解部署流程，请查看 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
+
+🦕 现在，你可以使用 Deno 搭建并开发一个 Astro 应用！你可以继续扩展该应用，比如添加用户认证、数据库、甚至 CMS。我们期待看到你基于 Astro 和 Deno 创造的精彩项目！

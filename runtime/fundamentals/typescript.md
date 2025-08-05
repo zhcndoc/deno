@@ -8,6 +8,7 @@ oldUrl:
   - /runtime/manual/getting_started/typescript/
   - /manual/advanced/typescript
   - /runtime/manual/advanced/typescript/overview/
+  - /runtime/fundamentals/
 ---
 
 TypeScript 是 Deno 中的一种一流语言，就像 JavaScript 或 WebAssembly 一样。您只需安装 Deno CLI，就可以运行或导入 TypeScript，而无需安装其他任何东西。凭借其内置的 TypeScript 编译器，Deno 将直接把您的 TypeScript 代码编译为 JavaScript，无需额外配置。Deno 还可以对您的 TypeScript 代码进行类型检查，无需像 `tsc` 这样的单独类型检查工具。

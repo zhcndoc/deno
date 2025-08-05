@@ -159,6 +159,3 @@ Deno Deploy<sup>EA</sup> 提供完整的可观测性工具：
 3. 学习如何使用 [缓存策略](/deploy/early-access/reference/caching/) 提升性能
 4. 为开发和生产环境设置不同的
    [环境变量和上下文](/deploy/early-access/reference/env-vars-and-contexts/)
-
-更多信息，请查阅
-[Deno Deploy<sup>EA</sup> 参考文档](/deploy/early-access/reference/)。

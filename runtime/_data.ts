@@ -1,12 +1,15 @@
-import { Sidebar } from "../types.ts";
 import { walk } from "jsr:@std/fs";
 import { parse as yamlParse } from "jsr:@std/yaml";
+import { Sidebar } from "../types.ts";
 
 export const sidebar = [
   {
     title: "入门",
-    href: "/runtime/",
     items: [
+      {
+        title: "欢迎使用 Deno",
+        href: "/runtime/",
+      },
       {
         title: "安装",
         href: "/runtime/getting_started/installation/",
@@ -27,7 +30,6 @@ export const sidebar = [
   },
   {
     title: "基础知识",
-    href: "/runtime/fundamentals/",
     items: [
       {
         title: "TypeScript",
@@ -93,7 +95,6 @@ export const sidebar = [
   },
   {
     title: "参考指南",
-    href: "/runtime/reference/",
     items: [
       {
         title: "CLI",
@@ -284,12 +285,15 @@ export const sidebar = [
     ],
   },
   {
-    title: "贡献和支持",
-    href: "/runtime/contributing/",
+    title: "贡献与支持",
     items: [
       {
         title: "为 Deno 做出贡献",
         items: [
+          {
+            title: "贡献概述",
+            href: "/runtime/contributing/",
+          },
           {
             title: "内部细节",
             href: "/runtime/contributing/architecture/",
@@ -369,15 +373,20 @@ export async function generateDescriptions(): Promise<Descriptions> {
 
     if (parsed.symbols) {
       parsed.symbols = Object.fromEntries(
-        Object.entries(parsed.symbols).map((
-          [key, value],
-        ) => [key, handleDescription(value)]),
+        Object.entries(parsed.symbols).map(([key, value]) => [
+          key,
+          handleDescription(value),
+        ]),
       );
     }
 
     if (
-      !(parsed.status === "good" || parsed.status === "partial" ||
-        parsed.status === "stubs" || parsed.status === "unsupported")
+      !(
+        parsed.status === "good" ||
+        parsed.status === "partial" ||
+        parsed.status === "stubs" ||
+        parsed.status === "unsupported"
+      )
     ) {
       throw `Invalid status provided in '${dirEntry.name}': ${parsed.status}`;
     }
@@ -426,33 +435,44 @@ export async function generateNodeCompatibility() {
     grouped[item[1].status].items.push(item);
   }
 
-  return Object.entries(grouped).map(([_status, entries]) => {
-    let content =
-      `<div class="module-info">\n\n## ${entries.icon} ${entries.label} (${entries.items.length}/${
-        Object.keys(descriptions).length
-      })\n\n`;
+  return Object.entries(grouped)
+    .map(([_status, entries]) => {
+      let content =
+        `<div class="module-info">\n\n## ${entries.icon} ${entries.label} (${entries.items.length}/${
+          Object.keys(descriptions).length
+        })\n\n`;
 
-    content += entries.items.map(([key, content]) => {
-      let out = `\n\n### <a href="/api/node/${key}">node:${
-        key.replaceAll("--", "/")
-      }</a>\n\n<div class="item-content">\n\n`;
+      content += entries.items
+        .map(([key, content]) => {
+          let out = `\n\n### <a href="/api/node/${key}">node:${
+            key.replaceAll(
+              "--",
+              "/",
+            )
+          }</a>\n\n<div class="item-content">\n\n`;
 
-      if (content) {
-        if (content.description) {
-          out += `${content.description.description}\n\n`;
-        }
-        if (content.symbols) {
-          for (const [symbol, description] of Object.entries(content.symbols)) {
-            out += `**${
-              symbol === "*" ? "All symbols" : symbol
-            }**: ${description.description}\n\n`;
+          if (content) {
+            if (content.description) {
+              out += `${content.description.description}\n\n`;
+            }
+            if (content.symbols) {
+              for (
+                const [symbol, description] of Object.entries(
+                  content.symbols,
+                )
+              ) {
+                out += `**${
+                  symbol === "*" ? "All symbols" : symbol
+                }**: ${description.description}\n\n`;
+              }
+            }
           }
-        }
-      }
 
-      return out + "</div>";
-    }).join("\n\n");
+          return out + "</div>";
+        })
+        .join("\n\n");
 
-    return content;
-  }).join("\n\n");
+      return content;
+    })
+    .join("\n\n");
 }

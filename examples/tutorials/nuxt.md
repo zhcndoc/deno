@@ -4,86 +4,88 @@ description: "逐步指南，教你如何使用 Deno 构建 Nuxt 应用。学习
 url: /examples/nuxt_tutorial/
 ---
 
-[Nuxt](https://nuxt.com/) 是一个框架，提供了一种直观的方式来基于 [Vue](https://vuejs.org/) 创建全栈应用。它开箱即用地提供了基于文件的路由、各种渲染选项和自动代码分割。凭借其模块化架构，Nuxt 简化了开发过程，为构建 Vue 应用提供了结构化的方法。
+[Nuxt](https://nuxt.com/) 是一个基于 [Vue](https://vuejs.org/) 的直观框架，
+提供了文件路由、多种渲染选项和开箱即用的自动代码拆分。凭借其模块化架构，Nuxt 通过提供结构化的开发方式简化了 Vue 应用的构建流程。
 
-在本教程中，我们将使用 Deno 构建一个简单的 Nuxt 应用，展示恐龙列表，并允许您点击名称来了解每一种恐龙的更多信息：
+在本教程中，我们将使用 Deno 构建一个简单的 Nuxt 应用，显示恐龙列表，并允许你点击名字查看更多恐龙信息。
 
-- [搭建 Nuxt 应用](#搭建-nuxt-应用)
-- [设置服务器 API 路由](#设置服务器-api-路由)
-- [设置 Vue 前端](#设置-vue-前端)
-- [添加 Tailwind](#添加-tailwind)
-- [后续步骤](#后续步骤)
+你可以在
+[GitHub 上查看完整示例](https://github.com/denoland/tutorial-with-nuxt)。
 
-您可以在这个 [仓库](https://github.com/denoland/examples/tree/main/with-nuxt) 中找到该项目的代码。
+也可以体验
+[Deno Deploy 上的在线示例](https://tutorial-with-nuxt.deno.deno.net/)。
 
-## Scaffold a Nuxt app with Deno
+:::info 部署你的应用
 
-我们可以使用 Deno 这样创建一个新的 Nuxt 项目：
+想跳过教程，立即部署完整的 Nuxt 恐龙应用？点击下面按钮，瞬间将应用部署到 Deno Deploy。
+你将获得一个可用的实时应用，可在学习时自由定制和修改！
+
+[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/tutorial-with-nuxt)
+
+:::
+
+## 使用 Deno 脚手架 Nuxt 应用
+
+通过 Deno 创建新的 Nuxt 项目：
 
 ```bash
 deno -A npm:nuxi@latest init
 ```
 
-我们将使用 Deno 来管理我们的包依赖，并可以从 npm 获取 Nuxt 包。这将创建一个具有以下项目结构的 nuxt-app：
+选择创建项目的目录，并选择 `deno` 作为依赖管理方式。你也可以选择初始化 git 仓库，也可以之后再做。
 
+然后进入新项目目录，运行 `deno task` 查看 Nuxt 可用任务：
+
+```bash
+cd nuxt-app
+deno task
 ```
+
+这会显示可用任务，如 `dev`、`build` 和 `preview`。`dev` 用于启动开发服务器。
+
+## 启动开发服务器
+
+启动开发服务器：
+
+```bash
+deno task dev
+```
+
+这会启动 Nuxt 开发服务器，在浏览器访问
+[http://localhost:3000](http://localhost:3000) 查看默认 Nuxt 欢迎页面。
+
+## 构建应用架构
+
+基础 Nuxt 应用搭建完成后，开始建立应用架构。我们创建几个目录以组织代码，并为后续功能做准备。项目内创建如下目录：
+
+```bash
 NUXT-APP/
-├── .nuxt/                   # Nuxt 构建目录
-├── node_modules/            # Node.js 依赖
-├── public/                  # 静态文件
-│   ├── favicon.ico        
-│   └── robots.txt         
-├── server/                  # 服务器端代码
-│   └── tsconfig.json     
-├── .gitignore            
-├── app.vue                  # 根 Vue 组件
-├── nuxt.config.ts           # Nuxt 配置
-├── package-lock.json        # NPM 锁文件
-├── package.json             # 项目清单
-├── README.md            
-└── tsconfig.json            # TypeScript 配置
+├── pages/                 # Vue 页面
+│   └── dinosaurs/         # 恐龙页面
+├── public/                # 静态文件
+├── server/                # 服务器端代码
+│   └── api/               # API 路由
 ```
 
-## 设置服务器 API 路由
+## 添加恐龙数据
 
-让我们首先开始创建提供恐龙数据的 API 路由。
+在 `api` 目录下创建 `data.json` 文件，用于存储硬编码的恐龙数据。
 
-首先，我们的
-[恐龙数据](https://github.com/denoland/examples/blob/main/with-nuxt/server/api/data.json)
-将存放在服务器目录中，位置为 `server/api/data.json`：
+复制粘贴
+[此 JSON 文件](https://raw.githubusercontent.com/denoland/tutorial-with-nuxt/refs/heads/main/src/data/data.json)
+到 `data.json` 文件中。（实际应用中，通常从数据库或外部 API 获取数据。）
 
-```json title="server/api/data.json"
-[
-  {
-    "name": "Aardonyx",
-    "description": "在巨龙类的早期进化阶段。"
-  },
-  {
-    "name": "Abelisaurus",
-    "description": "\"阿贝尔的蜥蜴\" 是根据一具单独的头骨重建的。"
-  },
-  {
-    "name": "Abrictosaurus",
-    "description": "异齿龙的早期亲属。"
-  },
-  ...etc
-]
-```
+## 设置 API 路由
 
-这是我们数据来源的位置。在完整的应用程序中，这些数据将来自于数据库。
+应用将包含两个 API 路由，分别提供：
 
-> ⚠️️ 在本教程中，我们硬编码了数据。但您可以连接
-> [多种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 并且 [甚至使用诸如 Prisma 的 ORM](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) 与 Deno。
+- 供索引页面使用的完整恐龙列表
+- 单个恐龙页面的详细恐龙信息
 
-该应用将有两个 API 路由。它们将提供以下内容：
+路由均为 `*.get.ts` 文件，Nuxt 会自动根据文件生成响应 `GET` 请求的 API 端点。
+[文件命名决定 HTTP 方法及路由路径](https://nuxt.com/docs/guide/directory-structure/server#matching-http-method)。
 
-- 一个用于索引页面的完整恐龙列表
-- 一个用于单个恐龙页面的单个恐龙信息
-
-它们均为 `*.get.ts` 文件，Nuxt 会自动将其转换为响应 `GET` 请求的 API 端点。
-[文件命名规则决定 HTTP 方法及路由路径](https://nuxt.com/docs/guide/directory-structure/server#matching-http-method)。
-
-初始的 `dinosaurs.get.ts` 非常简单，使用 [`defineCachedEventHandler`](https://nitro.build/guide/cache) 创建一个缓存的端点以提高性能。该处理函数简单返回我们的完整恐龙数据数组，无任何过滤：
+初始的 `dinosaurs.get.ts` 十分简单，使用 [`defineCachedEventHandler`](https://nitro.build/guide/cache) 创建缓存端点提升性能。该函数直接返回完整恐龙数据数组，无任何过滤：
 
 ```tsx title="server/api/dinosaurs.get.ts"
 import data from "./data.json" with { type: "json" };
@@ -93,7 +95,7 @@ export default defineCachedEventHandler(() => {
 });
 ```
 
-单个恐龙的 `GET` 路由则包含更多逻辑。它从事件上下文中提取名称参数，执行不区分大小写的匹配来查找请求的恐龙，并对缺少或无效的恐龙名称进行适当的错误处理。我们将创建一个 `dinosaurs` 目录，然后为传递名称参数，创建一个名为 `[name].get.ts` 的新文件：
+单个恐龙的 `GET` 路由逻辑较多。它从事件上下文中取出名称参数，以不区分大小写方式匹配请求恐龙，缺少或错误时返回相应错误。我们创建 `dinosaurs` 文件夹，并新建 `[name].get.ts`：
 
 ```tsx title="server/api/dinosaurs/[name].get.ts"
 import data from "../data.json";
@@ -123,29 +125,29 @@ export default defineCachedEventHandler((event) => {
 });
 ```
 
-使用 `deno task dev` 启动服务器，然后在浏览器访问
-[http://localhost:3000/api/dinosaurs](http://localhost:3000/api/dinosaurs)，你应该能看到显示所有恐龙的原始 JSON 响应！
+启动服务器 `deno task dev`，在浏览器访问
+[http://localhost:3000/api/dinosaurs](http://localhost:3000/api/dinosaurs)，你应能看到包含所有恐龙的原始 JSON 响应！
 
 ![设置 API](./images/how-to/nuxt/nuxt-1.webp)
 
-你也可以通过访问特定的恐龙名称来获取单个恐龙的数据，例如：
-[http://localhost:3000/api/dinosaurs/aardonyx](http://localhost:3000/api/dinosaurs/aardonyx)。
+访问某个恐龙的特定 URL，如：
+[http://localhost:3000/api/dinosaurs/aardonyx](http://localhost:3000/api/dinosaurs/aardonyx)，查看单个恐龙数据。
 
 ![设置 API](./images/how-to/nuxt/nuxt-2.webp)
 
-接下来，我们将设置 Vue 前端以显示索引页面及每个单独的恐龙页面。
+接下来，设置 Vue 前端以显示索引页面和单个恐龙页面。
 
 ## 设置 Vue 前端
 
-我们想在应用中设置两个页面：
+我们需要两个页面：
 
-- 一个索引页面，列出所有恐龙
-- 一个单个恐龙页面，展示所选恐龙的详细信息。
+- 一个索引页，列出全部恐龙
+- 一个单独页，展示指定恐龙详情
 
 首先，创建索引页面。Nuxt 使用
-[基于文件系统的路由](https://nuxt.com/docs/getting-started/routing)，所以我们将在根目录创建一个 `pages` 文件夹，内置一个名为 `index.vue` 的索引页面。
+[文件系统路由](https://nuxt.com/docs/getting-started/routing)，我们在根目录创建 `pages` 文件夹，并新建 `index.vue` 作为索引页。
 
-为了获取数据，我们将用 `useFetch` 组合函数来请求之前创建的 API 端点：
+利用 `useFetch` 组合函数请求先前创建的 API 端点：
 
 ```tsx title="pages/index.vue"
 <script setup lang="ts">
@@ -153,9 +155,9 @@ const { data: dinosaurs } = await useFetch("/api/dinosaurs");
 </script>
 
 <template>
-  <main>
-    <h1 class="text-2xl font-bold mb-4">欢迎来到恐龙应用</h1>
-    <p class="mb-4">点击下面的恐龙以了解更多信息。</p>
+  <main id="content">
+    <h1 class="text-2xl font-bold mb-4">Welcome to the Dinosaur app</h1>
+    <p class="mb-4">Click on a dinosaur below to learn more.</p>
     <ul class="space-y-2">
       <li v-for="dinosaur in dinosaurs" :key="dinosaur.name">
         <NuxtLink
@@ -170,8 +172,8 @@ const { data: dinosaurs } = await useFetch("/api/dinosaurs");
 </template>
 ```
 
-针对显示每个恐龙信息的页面，我们将创建一个新的动态页面，名为 `[name].vue`。该页面使用 Nuxt 的
-[动态路由参数](https://nuxt.com/docs/getting-started/routing#route-parameters)，文件名中的 `[name]` 可在 JavaScript 中通过 `route.params.name` 访问。我们将使用 `useRoute` 组合函数来访问路由参数，并用 `useFetch` 根据名称参数获取特定恐龙的数据：
+然后，为显示单个恐龙信息，创建动态页面 `[name].vue`。该页面使用 Nuxt 的
+[动态路由参数](https://nuxt.com/docs/getting-started/routing#route-parameters)，文件名中的 `[name]` 在 JavaScript 中通过 `route.params.name` 访问。我们用 `useRoute` 访问参数，并用 `useFetch` 根据名称获取指定恐龙数据：
 
 ```tsx title="pages/[name].vue"
 <script setup lang="ts">
@@ -192,8 +194,8 @@ const { data: dinosaur } = await useFetch(
 </template>
 ```
 
-接下来，我们需要将这些 Vue 组件连接在一起，以便在我们访问域根目录时能够正确渲染。让我们更新目录根部的 `app.vue` 以提供我们应用程序的根组件。我们将使用
-[`NuxtLayout`](https://nuxt.com/docs/api/components/nuxt-layout) 来保持页面结构的一致性，并使用 [`NuxtPage`](https://nuxt.com/docs/api/components/nuxt-page) 用于动态页面渲染：
+接下来，将这些 Vue 组件串联起来，使访问根目录时能正确渲染。更新根目录的 `app.vue`，提供应用根组件。使用
+[`NuxtLayout`](https://nuxt.com/docs/api/components/nuxt-layout) 保持一致结构，`NuxtPage` 用于动态页面渲染：
 
 ```tsx title="app.vue"
 <template>
@@ -213,37 +215,15 @@ const { data: dinosaur } = await useFetch(
 </template>;
 ```
 
-使用 `deno task dev` 启动服务器，并访问
-[http://localhost:3000](http://localhost:3000) 查看页面效果：
+运行 `deno task dev`，在 [http://localhost:3000](http://localhost:3000) 查看效果：
 
-<figure>
-
-<video class="w-full" alt="使用 Deno 构建 Nuxt 应用。" autoplay muted loop playsinline src="./images/how-to/nuxt/nuxt-3.mp4"></video>
-
-</figure>
-
-看起来不错！
-
-## 添加 Tailwind
-
-正如我们所说的，我们将为这个应用程序添加一点样式。首先，我们将设置一个布局，通过 Nuxt 的布局系统提供跨所有页面的一致结构，使用
-[基于插槽](https://vuejs.org/guide/components/slots) 的内容注入：
-
-```tsx title="layouts/default.vue"
-<template>
-  <div>
-    <slot />
-  </div>
-</template>;
-```
-
-在这个项目中，我们还将使用 [tailwind](https://tailwindcss.com/) 来进行一些基础设计，因此我们需要安装这些依赖：
+效果很棒！
 
 ```bash
 deno install -D npm:tailwindcss npm:@tailwindcss/vite
 ```
 
-接着，我们将更新 `nuxt.config.ts`。导入 Tailwind 依赖并配置 Nuxt 应用以兼容 Deno，启用开发工具，并设置 Tailwind CSS：
+随后，更新 `nuxt.config.ts`。导入 Tailwind 依赖并配置 Nuxt 应用以支持 Deno，启用开发工具，设置 Tailwind CSS：
 
 ```tsx title="nuxt.config.ts"
 import tailwindcss from "@tailwindcss/vite";
@@ -268,7 +248,7 @@ export default defineNuxtConfig({
 });
 ```
 
-接下来，创建一个新的 CSS 文件 `assets/css/main.css`，添加一个导入语句 `@import`，导入 tailwind 及其工具类：
+然后，创建新的 CSS 文件 `assets/css/main.css`，添加导入语句引入 tailwind 及其实用类：
 
 ```tsx title="assets/css/main.css"
 @import "tailwindcss";
@@ -280,13 +260,13 @@ export default defineNuxtConfig({
 
 ## 运行应用
 
-然后，我们可以通过以下命令运行应用：
+最后，通过以下命令运行应用：
 
 ```bash
 deno task dev
 ```
 
-这将在 localhost:3000 启动应用：
+应用将在 localhost:3000 启动：
 
 <figure>
 
@@ -294,6 +274,6 @@ deno task dev
 
 </figure>
 
-我们完成了！
+完成了！
 
-🦕 Nuxt 应用的下一步可能是使用 [Nuxt Auth](https://auth.nuxtjs.org/) 模块添加认证，实现 [Pinia](https://pinia.vuejs.org/) 状态管理，添加服务器端数据持久化如 [Prisma](https://docs.deno.com/examples/prisma_tutorial/) 或 [MongoDB](https://docs.deno.com/examples/mongoose_tutorial/)，以及搭建 Vitest 的自动化测试。这些功能将使应用更适合生产和大型项目。
+🦕 Nuxt 应用的下一步可以是使用 [Nuxt Auth](https://auth.nuxtjs.org/) 模块添加认证，集成 [Pinia](https://pinia.vuejs.org/) 状态管理，添加服务器端数据持久化（例如 [Prisma](https://docs.deno.com/examples/prisma_tutorial/) 或 [MongoDB](https://docs.deno.com/examples/mongoose_tutorial/)），以及搭建 Vitest 自动化测试，这些都将使应用更适合生产环境和大型项目。

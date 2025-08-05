@@ -3,12 +3,15 @@ export function deleteBackticks(str?: string) {
 }
 
 export default function Layout(data: Lume.Data) {
+  const isReference = data.url.startsWith("/api/");
   const section = data.url.split("/").filter(Boolean)[0];
   const description = data.description ||
     "深入的文档、指南和参考材料，用于构建安全、高性能的 JavaScript 和 TypeScript 应用程序，使用 Deno。";
   const isServicesPage = data.url.startsWith("/deploy") ||
     data.url.startsWith("/subhosting") ||
     data.url.startsWith("/services");
+  const hasSubNav = data.page?.data?.SidebarNav?.length ||
+    data.url.startsWith("/api");
 
   return (
     <html lang="zh-CN">
@@ -28,7 +31,6 @@ export default function Layout(data: Lume.Data) {
         <link rel="stylesheet" href="/styles.css" />
         <link rel="stylesheet" href="/components.css" />
         <link rel="stylesheet" href="/overrides.css" />
-        <link rel="stylesheet" href="/style.css" />
         <link
           rel="preload"
           href="/fonts/inter/Inter-Regular.woff2"
@@ -55,6 +57,7 @@ export default function Layout(data: Lume.Data) {
           content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"
         />
         <script type="module" defer src="/components.js"></script>
+        <script type="module" defer src="/main.client.js"></script>
         <script type="module" defer src="/lint_rules.client.js"></script>
         <script type="module" defer src="/copy.client.js"></script>
         <script type="module" defer src="/tabs.client.js"></script>
@@ -69,21 +72,39 @@ export default function Layout(data: Lume.Data) {
       <body
         data-services-page={Boolean(isServicesPage)}
       >
-        <data.comp.Header currentSection={section} />
-        <data.comp.RefHeader currentUrl={data.url} />
-        <data.comp.SubNav
-          data={data}
+        <a
+          href="#content"
+          class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]"
+        >
+          Skip to main content
+        </a>
+        <data.comp.Header
+          currentSection={section}
           currentUrl={data.url}
+          data={data}
+          hasSubNav={hasSubNav}
         />
-        <div className="layout">
+        <div
+          class={`layout ${
+            data.toc?.length ? "layout--three-column" : "layout--two-column"
+          }`}
+        >
           <data.comp.Navigation
             data={data}
             currentSection={section}
             currentUrl={data.url}
+            hasSubNav={hasSubNav}
           />
           {data.children}
-          <data.comp.Footer />
+          {!isReference && (
+            <data.comp.TableOfContents
+              toc={data.toc}
+              data={data}
+              hasSubNav={hasSubNav}
+            />
+          )}
         </div>
+        <data.comp.Footer />
       </body>
     </html>
   );

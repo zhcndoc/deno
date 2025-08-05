@@ -219,7 +219,7 @@ export default function Index() {
   });
 
   return (
-    <main>
+    <main id="content">
       <h1>欢迎来到恐龙应用</h1>
       <p>点击下面的恐龙以了解更多信息。</p>
       <For each={dinosaurs()}>

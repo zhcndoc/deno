@@ -1,17 +1,18 @@
-import { SecondaryNav, Sidebar } from "../../types.ts";
+import { Sidebar, SidebarNav } from "../../types.ts";
 
 export const sidebar = [
   {
-    title: "关于早期访问",
-    href: "/deploy/early-access/",
-  },
-  {
-    title: "入门",
-    href: "/deploy/early-access/getting_started/",
+    title: "Deno Deploy 早期访问",
+    items: [
+      { title: "关于早期访问", href: "/deploy/early-access/" },
+      {
+        title: "开始使用",
+        href: "/deploy/early-access/getting_started",
+      },
+    ],
   },
   {
     title: "参考",
-    href: "/deploy/early-access/reference/",
     items: [
       {
         title: "账户",
@@ -73,25 +74,23 @@ export const sidebar = [
         title: "使用和限制",
         href: "/deploy/early-access/usage/",
       },
-      {
-        title: "支持",
-        href: "/deploy/early-access/support/",
-      },
     ],
   },
   {
-    title: "更新日志",
-    href: "/deploy/early-access/changelog/",
-  },
-  {
     title: "支持与反馈",
-    href: "/deploy/early-access/support/",
+    items: [
+      {
+        title: "更新日志",
+        href: "/deploy/early-access/changelog/",
+      },
+      { title: "支持", href: "/deploy/early-access/support/" },
+    ],
   },
 ] satisfies Sidebar;
 
 export const sectionTitle = "Deno Deploy<sup>EA</sup>";
 export const sectionHref = "/deploy/early-access/";
-export const secondaryNav = [
+export const SidebarNav = [
   {
     title: "Deno Deploy<sup>EA</sup>",
     href: "/deploy/early-access/",
@@ -104,4 +103,4 @@ export const secondaryNav = [
     title: "子托管",
     href: "/subhosting/manual/",
   },
-] satisfies SecondaryNav;
+] satisfies SidebarNav;

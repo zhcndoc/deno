@@ -73,7 +73,7 @@ description: "Deno Deploy 早期访问中的域管理完整指南，包括组织
 
 > 注意：当前 Deno Deploy<sup>EA</sup> 不支持 IPv6。使用 `ANAME/ALIAS` 或 `CNAME` 方法时，当支持 IPv6 时，您的域名将自动使用 IPv6。使用 `A` 方法时，将在需要添加 `AAAA` 记录时通过邮件通知您。
 
-:::warning
+:::caution
 
 当您使用 Cloudflare 作为 DNS 提供商时，**必须**禁用 `_acme-challenge` CNAME 记录的代理功能（即关闭橙色云图标），否则验证和证书发放会失败。
 

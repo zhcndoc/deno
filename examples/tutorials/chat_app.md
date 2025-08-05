@@ -166,7 +166,7 @@ export default class ChatServer {
       <h2>在线用户</h2>
       <ul id="users"></ul>
     </aside>
-    <main>
+    <main id="content">
       <div id="conversation"></div>
       <form id="form">
         <input

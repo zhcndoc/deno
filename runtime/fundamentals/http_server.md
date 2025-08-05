@@ -183,7 +183,7 @@ Deno 可以将传入的 HTTP 请求升级为 WebSocket。这使您能够在 HTTP
 ```ts title="server.ts"
 Deno.serve((req) => {
   if (req.headers.get("upgrade") != "websocket") {
-    return new Response(null, { status: 501 });
+    return new Response(null, { status: 426 });
   }
 
   const { socket, response } = Deno.upgradeWebSocket(req);

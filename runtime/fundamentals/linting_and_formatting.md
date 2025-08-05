@@ -9,7 +9,7 @@ description: "Deno 内置代码质量工具的指南。学习如何使用 deno l
 
 ## 代码检查
 
-<comp.CTA href="/lint/" type="runtime">浏览所有代码检查规则</comp.CTA>
+<a href="/lint/" type="docs-cta runtime-cta">查看所有 lint 规则</a>
 
 代码检查是分析代码以寻找潜在错误、bug 和风格问题的过程。Deno 内置的代码检查工具 [`deno lint`](/runtime/reference/cli/linter/) 支持来自 [ESLint](https://eslint.org/) 的推荐规则集，为您的代码提供全面的反馈。这包括识别语法错误、强制编码规范以及突出可能导致 bug 的潜在问题。
 
@@ -27,7 +27,7 @@ deno lint src/
 
 此命令将对 `src/` 目录中的所有文件进行代码检查。
 
-代码检查器可以在 [`deno.json`](/runtime/fundamentals/configuration/#linting) 文件中进行配置。您可以指定自定义规则、插件和设置，以根据您的需求定制代码检查过程。
+代码检查工具可以在 [`deno.json`](/runtime/fundamentals/configuration/#linting) 文件中进行配置。您可以指定自定义规则、插件和设置，以根据需要调整代码检查过程。
 
 ### 代码检查规则
 
@@ -73,12 +73,11 @@ jobs:
       - run: deno fmt --check
 ```
 
-This ensures that any code changes adhere to the project's formatting standards
-before being merged.
+这确保任何代码更改在合并之前都符合项目的格式化标准。
 
 ### 在 VS Code 中集成
 
-要在 VS Code 中启用 Deno 作为您的格式化工具，您需要在设置中将它设为默认格式化器，然后在项目根目录添加 `.vscode/settings.json` 文件，内容如下：
+要在 VS Code 中启用 Deno 作为格式化器，您需要将其设置为默认格式化工具，然后在项目根目录添加 `.vscode/settings.json` 文件，内容如下：
 
 ```json
 {
@@ -88,115 +87,157 @@ before being merged.
 }
 ```
 
-如果您的 `deno.json(c)` 文件位于项目的子目录中，请提供正确的相对路径。
+如果您的 `deno.json(c)` 文件位于项目的子目录，请提供相应的相对路径。
 
 ### 可用选项
 
 #### `bracePosition`
-定义代码块的括号位置
-- **默认值:** `sameLine`
-- **可能值:** `maintain`, `sameLine`, `nextLine`, `sameLineUnlessHanging`
+
+定义代码块中大括号的位置
+
+- **默认值：** `sameLine`
+- **可选值：** `maintain`，`sameLine`，`nextLine`，`sameLineUnlessHanging`
 
 #### `jsx.bracketPosition`
-定义 JSX 的括号位置
-- **默认值:** `nextLine`
-- **可能值:** `maintain`, `sameLine`, `nextLine`
+
+定义 JSX 中括号的位置
+
+- **默认值：** `nextLine`
+- **可选值：** `maintain`，`sameLine`，`nextLine`
 
 #### `jsx.forceNewLinesSurroundingContent`
-强制在 JSX 元素内容周围加上换行
-- **默认值:** `false`
-- **可能值:** `true`, `false`
+
+强制在 JSX 元素内容周围使用换行符
+
+- **默认值：** `false`
+- **可选值：** `true`，`false`
 
 #### `jsx.multiLineParens`
-当顶部 JSX 元素或片段跨越多行时，在其周围加上括号
-- **默认值:** `prefer`
-- **可能值:** `never`, `prefer`, `always`
+
+当 JSX 元素或片段跨多行时，是否用括号包围最外层元素或片段
+
+- **默认值：** `prefer`
+- **可选值：** `never`，`prefer`，`always`
 
 #### `indentWidth`
-定义缩进的宽度
-- **默认值:** `2`
-- **可能值:** `number`
+
+定义缩进宽度
+
+- **默认值：** `2`
+- **可选值：** 数字
 
 #### `lineWidth`
-定义最大行宽
-- **默认值:** `80`
-- **可能值:** `number`
+
+定义最大行宽度
+
+- **默认值：** `80`
+- **可选值：** 数字
 
 #### `newLineKind`
-使用的换行符
-- **默认值:** `lf`
-- **可能值:** `auto`, `crlf`, `lf`, `system`
+
+使用的换行符类型
+
+- **默认值：** `lf`
+- **可选值：** `auto`，`crlf`，`lf`，`system`
 
 #### `nextControlFlowPosition`
-定义下一个控制流的位置
-- **默认值:** `sameLine`
-- **可能值:** `sameLine`, `nextLine`, `maintain`
+
+定义后续控制流语句的位置
+
+- **默认值：** `sameLine`
+- **可选值：** `sameLine`，`nextLine`，`maintain`
 
 #### `semiColons`
-是否优先使用分号。
-- **默认值:** `true`
-- **可能值:** `true`, `false`
+
+是否偏好使用分号
+
+- **默认值：** `true`
+- **可选值：** `true`，`false`
 
 #### `operatorPosition`
-对于跨越多行的表达式，运算符的位置
-- **默认值:** `sameLine`
-- **可能值:** `sameLine`, `nextLine`, `maintain`
+
+多行表达式中运算符的位置
+
+- **默认值：** `sameLine`
+- **可选值：** `sameLine`，`nextLine`，`maintain`
 
 #### `proseWrap`
-定义文本如何换行
-- **默认值:** `always`
-- **可能值:** `always`, `never`, `preserve`
+
+定义如何换行文本内容
+
+- **默认值：** `always`
+- **可选值：** `always`，`never`，`preserve`
 
 #### `quoteProps`
-控制对象属性的引号
-- **默认值:** `asNeeded`
-- **可能值:** `asNeeded`, `consistent`, `preserve`
+
+控制对象属性的引号使用
+
+- **默认值：** `asNeeded`
+- **可选值：** `asNeeded`，`consistent`，`preserve`
 
 #### `singleBodyPosition`
-单体代码块中主体的位置
-- **默认值:** `sameLineUnlessHanging`
-- **可能值:** `sameLine`, `nextLine`, `maintain`, `sameLineUnlessHanging`
+
+单语句代码块中主体的位置
+
+- **默认值：** `sameLineUnlessHanging`
+- **可选值：** `sameLine`，`nextLine`，`maintain`，`sameLineUnlessHanging`
 
 #### `singleQuote`
-使用单引号
-- **默认值:** `false`
-- **可能值:** `true`, `false`
+
+是否使用单引号
+
+- **默认值：** `false`
+- **可选值：** `true`，`false`
 
 #### `spaceAround`
+
 控制包围表达式的空格
-- **默认值:** `false`
-- **可能值:** `true`, `false`
+
+- **默认值：** `false`
+- **可选值：** `true`，`false`
 
 #### `spaceSurroundingProperties`
-控制单行对象样节点周围的空格
-- **默认值:** `true`
-- **可能值:** `true`, `false`
+
+控制单行对象属性周围的空白
+
+- **默认值：** `true`
+- **可选值：** `true`，`false`
 
 #### `trailingCommas`
-控制多行数组/对象中的末尾逗号
-- **默认值:** `always`
-- **可能值:** `always`, `never`
+
+控制多行数组/对象中的尾随逗号
+
+- **默认值：** `always`
+- **可选值：** `always`，`never`
 
 #### `typeLiteral.separatorKind`
+
 定义类型字面量的分隔符类型
-- **默认值:** `semiColon`
-- **可能值:** `comma`, `semiColon`
+
+- **默认值：** `semiColon`
+- **可选值：** `comma`，`semiColon`
 
 #### unstable-component
+
 启用格式化 Svelte、Vue、Astro 和 Angular 文件
 
 #### `unstable-sql`
+
 启用格式化 SQL 文件
 
 #### `useTabs`
-使用制表符而不是空格进行缩进
-- **默认值:** `false`
-- **可能值:** `true`, `false`
+
+使用制表符代替空格进行缩进
+
+- **默认值：** `false`
+- **可选值：** `true`，`false`
 
 #### `useBraces`
+
 是否为 if 语句、for 语句和 while 语句使用大括号
-- **默认值:** `whenNotSingleLine`
-- **可能值:** `maintain`, `whenNotSingleLine`, `always`, `preferNone`
+
+- **默认值：** `whenNotSingleLine`
+- **可选值：** `maintain`，`whenNotSingleLine`，`always`，`preferNone`
 
 ### 配置
 
