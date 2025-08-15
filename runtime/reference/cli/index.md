@@ -31,6 +31,7 @@ Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运
 - [deno completions](/runtime/reference/cli/completions/) - 生成 shell 补全
 - [deno coverage](/runtime/reference/cli/coverage/) - 生成测试覆盖率报告
 - [deno doc](/runtime/reference/cli/doc/) - 为一个模块生成文档
+- [deno deploy](/runtime/reference/cli/deploy) - 管理和发布您的项目到网络
 - [deno fmt](/runtime/reference/cli/fmt/) - 格式化你的代码
 - [deno info](/runtime/reference/cli/info/) - 检查一个 ES 模块及其所有依赖
 - [deno init](/runtime/reference/cli/init/) - 创建一个新项目

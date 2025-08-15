@@ -113,7 +113,7 @@ export const sidebar = [
     title: "模块和包管理",
     items: [
       {
-        title: "使用 Node.js 的内置模块",
+        title: "Use Node.js built-in modules",
         href: "/examples/node_built_in/",
         type: "example",
       },
@@ -878,6 +878,11 @@ export const sidebar = [
       {
         title: "使用 WebSockets 构建聊天应用",
         href: "/examples/chat_app_tutorial/",
+        type: "tutorial",
+      },
+      {
+        title: "LLM 聊天应用",
+        href: "/examples/llm_tutorial/",
         type: "tutorial",
       },
       {

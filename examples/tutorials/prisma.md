@@ -40,8 +40,11 @@ npx prisma@latest init --generator-provider prisma-client --output ./generated
 
 这将生成 [`prisma/schema.prisma`](https://www.prisma.io/docs/orm/prisma-schema)。让我们用以下内容更新它：
 
-> [!TIP]
-> 别忘了在您的 schema.prisma 文件中的 generator 块添加 `runtime = "deno"`。这是 Prisma 正确地与 Deno 配合工作的必要条件。
+:::tip
+
+不要忘记在你的 schema.prisma 文件中的生成器块中添加 `runtime = "deno"`。这是 Prisma 正确与 Deno 一起工作所必需的。
+
+:::
 
 ```ts
 generator client {
@@ -145,9 +148,11 @@ await prisma.$disconnect();
 deno run -A --env prisma/seed.ts
 ```
 
-> [!TIP]
->
-> `--env` 标志用于告知 Deno 从 `.env` 文件加载环境变量。
+:::tip
+
+`--env` 标志用于告诉 Deno 从 `.env` 文件加载环境变量。
+
+:::
 
 完成后，您应该能够通过运行以下命令在 Prisma Studio 中看到您的数据：
 

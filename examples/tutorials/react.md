@@ -32,7 +32,7 @@ Vite 是现代 Web 项目的构建工具和开发服务器。它与 React 和 De
 在终端中运行下面命令，使用 TypeScript 模板创建新的 React 应用：
 
 ```sh
-deno run -A npm:create-vite@latest --template react-ts
+$ deno init --npm vite my-react-app --template react-ts
 ```
 
 ## 运行开发服务器

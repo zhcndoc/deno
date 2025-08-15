@@ -16,8 +16,6 @@ Deno Deploy<sup>EA</sup> 是一个早期访问产品，因此目前不受我们�
 
 :::
 
-Deno 公司目前正在使用 Deno Deploy<sup>EA</sup> 来托管我们自己的官方网站，并正投入大量精力以确保服务的可靠性。然而，由于这是一个新系统，偶尔可能会出现服务中断。
+Deno 公司现在正在使用 Deno Deploy<sup>EA</sup> 来托管我们自己的网站，并且正在投入大量精力确保服务的可靠性。然而，由于这是一个新系统，偶尔可能会发生服务中断。
 
-在 Deno Deploy<sup>EA</sup> 处于封闭测试阶段期间，我们不会对平台的使用收费。但
-[可接受使用政策](/deploy/manual/acceptable-use-policy/) 和
-[条款与条件](/deploy/manual/terms-and-conditions/) 依然有效，我们保留终止任何违反这些条款的用户、组织或应用的权利。
+在 Deno Deploy<sup>EA</sup> 处于封闭测试阶段时，我们不会对平台的使用收费。然而，[可接受使用政策](/deploy/manual/acceptable-use-policy/) 和 [条款与条件](/deploy/manual/terms-and-conditions/) 仍然适用，我们保留终止任何我们发现违反这些条款的用户、组织或应用的权利。

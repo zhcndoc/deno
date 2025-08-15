@@ -10,17 +10,17 @@ url: /examples/nuxt_tutorial/
 在本教程中，我们将使用 Deno 构建一个简单的 Nuxt 应用，显示恐龙列表，并允许你点击名字查看更多恐龙信息。
 
 你可以在
-[GitHub 上查看完整示例](https://github.com/denoland/tutorial-with-nuxt)。
+[GitHub 上查看完整示例](https://github.com/denoland/examples/tree/main/with-nuxt)。
 
 也可以体验
-[Deno Deploy 上的在线示例](https://tutorial-with-nuxt.deno.deno.net/)。
+[Deno Deploy 上的在线示例](https://example-with-nuxt.deno.deno.net/)。
 
 :::info 部署你的应用
 
 想跳过教程，立即部署完整的 Nuxt 恐龙应用？点击下面按钮，瞬间将应用部署到 Deno Deploy。
 你将获得一个可用的实时应用，可在学习时自由定制和修改！
 
-[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/tutorial-with-nuxt)
+[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/examples&path=with-nuxt)
 
 :::
 

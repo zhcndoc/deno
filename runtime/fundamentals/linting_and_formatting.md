@@ -217,7 +217,7 @@ jobs:
 - **默认值：** `semiColon`
 - **可选值：** `comma`，`semiColon`
 
-#### unstable-component
+#### `unstable-component`
 
 启用格式化 Svelte、Vue、Astro 和 Angular 文件
 

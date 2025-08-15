@@ -54,7 +54,7 @@ Deno 提供了一种使用 `Streams API` 进行数据流式传输的方法。我
 
 我们将使用 `fetch` API 来检索一个文件。然后我们将使用 [`Deno.open`](/api/deno/Deno.open) 方法来创建和打开一个可写文件，并使用 Streams API 的 [`pipeTo`](/api/web/~/ReadableStream.pipeTo) 方法将字节流发送到创建的文件。
 
-接下来，我们将使用 `POST` 请求上的 `readable` 属性将文件的字节流发送到服务器。
+接下来，我们将使用 `readable` 属性在 `POST` 请求中将文件的字节流发送到服务器。
 
 ```ts title="stream.js"
 // 接收文件

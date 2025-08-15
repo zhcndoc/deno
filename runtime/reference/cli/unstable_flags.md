@@ -172,13 +172,15 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 - [`WebSocketStream`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream)
 - [`Deno.DatagramConn`](https://docs.deno.com/api/deno/~/Deno.DatagramConn)
 
-## ``
+## `--unstable-otel`
 
-启用 [Deno 的 OpenTelemetry 集成](/runtime/fundamentals/open_telemetry)。
+启用 [OpenTelemetry 集成用于 Deno](/runtime/fundamentals/open_telemetry)。此功能现在已稳定，因此在 [Deno 2.4](https://deno.com/blog/v2.4)+ 中不再需要此标志。
 
 ## `--unstable`
 
-:::caution --unstable 已被弃用 - 请改用更细粒度的标志
+:::caution
+
+**`--unstable` 已被弃用 - 请改用更细粒度的标志。**
 
 `--unstable` 标志不再用于新功能，并将在未来的版本中移除。通过此标志可以使用的所有不稳定功能现在都作为独立的不稳定标志可用，特别是：
 
