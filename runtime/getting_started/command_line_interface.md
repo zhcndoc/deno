@@ -2,10 +2,10 @@
 title: Command line interface
 description: "A comprehensive guide to using Deno's command-line interface (CLI). Learn about running scripts, managing permissions, using watch mode, and configuring Deno's runtime behavior through command-line flags and options."
 oldUrl:
- - /manual/getting_started/command_line_interface
- - /runtime/manual/getting_started/command_line_interface/
- - /runtime/fundamentals/command_line_interface/
- - /runtime/manual/tools/
+  - /manual/getting_started/command_line_interface
+  - /runtime/manual/getting_started/command_line_interface/
+  - /runtime/fundamentals/command_line_interface/
+  - /runtime/manual/tools/
 ---
 
 Deno 是一个命令行程序。Deno 的命令行接口（CLI）可以用于运行脚本、管理依赖关系，甚至将你的代码编译成独立的可执行文件。到目前为止，经过这些示例，你可能已经熟悉了一些简单的命令。此页面将提供 Deno CLI 更详细的概述。

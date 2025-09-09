@@ -286,11 +286,12 @@ span.setStatus({
 });
 ```
 
-跨度还可添加
-[事件](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addEvent)
-和
-[链接](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api.Span.html#addLink)。
-事件是在某时间点与跨度关联的标记。链接则是对其它跨度的引用。
+Spans can also have
+[events](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.Span.html#addevent)
+and
+[links](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.Span.html#addlink)
+added to them. Events are points in time that are associated with the span.
+Links are references to other spans.
 
 ```ts
 // 向跨度添加事件
@@ -309,20 +310,21 @@ span.addEvent("process_completed", { status: "success" }, Date.now());
 
 `tracer.startActiveSpan` 和 `tracer.startSpan` 可接受含以下任意属性的选项参数：
 
-- `kind`：跨度类型。可为 `SpanKind.CLIENT`、`SpanKind.SERVER`、`SpanKind.PRODUCER`、`SpanKind.CONSUMER` 或 `SpanKind.INTERNAL`。默认 `SpanKind.INTERNAL`。
-- `startTime`：代表跨度开始的时间，可是 `Date` 对象或 unix 毫秒数。不提供则默认为当前时间。
-- `attributes`：要添加的属性对象。
-- `links`：要添加的链接数组。
-- `root`：布尔值，若为 `true`，跨度即为根跨度（无父跨度），即使存在活动跨度。
+- `kind`: 跨度类型。可为 `SpanKind.CLIENT`、`SpanKind.SERVER`、`SpanKind.PRODUCER`、`SpanKind.CONSUMER` 或 `SpanKind.INTERNAL`。默认值为 `SpanKind.INTERNAL`。
+- `startTime`：表示跨度开始时间的 `Date` 对象，或自 Unix 纪元起的毫秒数。如果未提供，则使用当前时间。
+- `attributes`: 要添加到跨度的属性对象。
+- `links`: 要添加到跨度的链接数组。
+- `root`: 布尔值，表示跨度是否为根跨度。如果为 `true`，则该跨度没有父跨度（即使存在活动跨度）。
 
-另外，两者在选项参数后还能接受 [上下文传播 API](#上下文传播) 的 `context` 参数。
+在选项参数之后，`tracer.startActiveSpan` 和 `tracer.startSpan` 还可以接收来自
+[上下文传播 API](#上下文传播) 的 `context` 对象。
 
-完整追踪 API 请查阅
-[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html)。
+了解完整追踪 API 请参考
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api._opentelemetry_api.TraceAPI.html)。
 
 ### 指标
 
-创建指标时，先从 `npm:@opentelemetry/api` 导入 `metrics`，并获取指标仪表：
+要创建指标，首先从 `npm:@opentelemetry/api` 导入 `metrics` 对象并创建一个仪表：
 
 ```ts
 import { metrics } from "npm:@opentelemetry/api@1";
@@ -376,37 +378,37 @@ counter.addCallback((res) => {
 });
 ```
 
-可观察仪器包含：
+存在三种可观察仪器类型：
 
-- **可观察计数器**：异步观察的单调递增计数器。
-- **可观察上下计数器**：异步观察的可增可减计数器。
-- **可观察仪表**：异步观察的可任意设置值仪表。
+- **ObservableCounter**：异步可观察的计数器。用于常增值，如处理的请求数。
+- **ObservableUpDownCounter**：异步可观察的上下计数器。值能增减，如活动连接数或进行中请求数。
+- **ObservableGauge**：异步可观察的仪表。用于任意值，如当前温度。
 
-完整指标 API 请参阅
-[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.MetricsAPI.html)。
+了解完整指标 API 请参考
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api._opentelemetry_api.MetricsAPI.html)。
 
-### 实用示例
+### 实际示例
 
-欲了解在 Deno 应用中实现 OpenTelemetry 的示例教程，请参考：
+有关在 Deno 应用中实现 OpenTelemetry 的实际示例，请参见教程：
 
-- [基本 OpenTelemetry 教程](/examples/basic_opentelemetry_tutorial/) - 简单 HTTP 服务器，实现自定义指标与追踪
-- [分布式追踪教程](/examples/otel_span_propagation_tutorial/) - 展示跨服务边界追踪技术
+- [基础 OpenTelemetry 教程](/examples/basic_opentelemetry_tutorial/) - 一个带有自定义指标和追踪的简单 HTTP 服务器
+- [分布式追踪教程](/examples/otel_span_propagation_tutorial/) - 跨服务边界追踪的高级技巧
 
 ## 上下文传播
 
-OpenTelemetry 中，上下文传播是将上下文信息（如当前跨度）从程序一部分无须显式参数传递到另一部分的机制。
+在 OpenTelemetry 中，上下文传播是指将一些上下文信息（如当前跨度）从应用的一个部分传递到另一个部分，而无需手动将其作为参数传递给每个函数。
 
-Deno 依据 TC39 关于异步上下文传播的提议，使用 `AsyncContext` 规则实现上下文传播。`AsyncContext` API 当前尚未面向 Deno 用户公开，但内部用于跨异步边界传播活跃跨度及其他上下文。
+在 Deno 中，上下文传播遵循 TC39 提案的 `AsyncContext` 规则。`AsyncContext` API 尚未向用户公开，但内部用于在异步边界上传播活动跨度和其他上下文信息。
 
-简要介绍传播机制：
+简要说明 AsyncContext 传播工作方式：
 
-- 新异步任务启动（如 Promise、定时器）时保存当前上下文。
-- 其它代码可并发运行在不同上下文中。
-- 当异步任务完成时恢复保存的上下文。
+- 当启动一个新的异步任务（例如 Promise 或定时器）时，当前上下文会被保存。
+- 其他代码可以在不同上下文中并发执行。
+- 当异步任务完成时，保存的上下文被恢复。
 
-该机制本质上表现为：异步任务范围内的全局变量自动复制到后续启动的异步任务。
+这意味着异步上下文传播类似于一个全局变量，其作用域限定于当前异步任务，并自动拷贝到由当前任务启动的新异步任务中。
 
-用户可通过 `npm:@opentelemetry/api@1` 的 `context` API 访问此功能：
+来自 `npm:@opentelemetry/api@1` 的 `context` API 向用户暴露此功能。用法如下：
 
 ```ts
 import { context } from "npm:@opentelemetry/api@1";
@@ -457,8 +459,8 @@ context.with(contextWithSpan, () => {
 span.end();
 ```
 
-完整上下文 API 请参阅
-[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.ContextAPI.html)。
+了解完整上下文 API 请参考
+[OpenTelemetry JS API 文档](https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api._opentelemetry_api.ContextAPI.html)。
 
 ## 配置
 

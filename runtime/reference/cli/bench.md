@@ -1,12 +1,12 @@
 ---
 title: "`deno bench`，基准测试工具"
 oldUrl:
- - /runtime/manual/tools/benchmarker/
- - /runtime/reference/cli/benchmarker/
+  - /runtime/manual/tools/benchmarker/
+  - /runtime/reference/cli/benchmarker/
 command: bench
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno bench"
-description: "Run benchmarks using Deno's built-in bench tool."
+description: "使用 Deno 内置的 bench 工具运行基准测试。"
 ---
 
 ## 快速开始
@@ -22,15 +22,17 @@ Deno.bench("URL 解析", () => {
 
 其次，使用 `deno bench` 子命令运行基准测试。
 
-```sh
-deno bench url_bench.ts
-cpu: Apple M1 Max
-runtime: deno 1.21.0 (aarch64-apple-darwin)
+```shell
+$ deno bench url_bench.ts
+Check file:///path/to/url_bench.ts
+    CPU | 12th Gen Intel(R) Core(TM) i3-12100
+Runtime | Deno 2.4.2 (x86_64-unknown-linux-gnu)
 
-file:///dev/deno/url_bench.ts
-benchmark        time (avg)             (min … max)       p75       p99      p995
---------------------------------------------------- -----------------------------
-URL 解析       17.29 µs/iter  (16.67 µs … 153.62 µs)  17.25 µs  18.92 µs  22.25 µs
+file:///path/to/url_bench.ts
+
+| benchmark     | time/iter (avg) |        iter/s |      (min … max)      |      p75 |      p99 |     p995 |
+| ------------- | --------------- | ------------- | --------------------- | -------- | -------- | -------- |
+| URL parsing   |        345.8 ns |     2,892,000 | (325.4 ns … 497.2 ns) | 346.9 ns | 443.2 ns | 497.2 ns |
 ```
 
 ## 编写基准测试
@@ -138,33 +140,36 @@ Deno.bench("performance.now()", { group: "timing" }, () => {
 
 ```shell
 $ deno bench time_bench.ts
-cpu: Apple M1 Max
-runtime: deno 1.21.0 (aarch64-apple-darwin)
+    CPU | 12th Gen Intel(R) Core(TM) i3-12100
+Runtime | Deno 2.4.2 (x86_64-unknown-linux-gnu)
 
-file:///dev/deno/time_bench.ts
-benchmark              time (avg)             (min … max)       p75       p99      p995
---------------------------------------------------------- -----------------------------
-Date.now()         125.24 ns/iter (118.98 ns … 559.95 ns) 123.62 ns 150.69 ns 156.63 ns
-performance.now()    2.67 µs/iter     (2.64 µs … 2.82 µs)   2.67 µs   2.82 µs   2.82 µs
+file:///path/to/time_bench.ts
+
+| benchmark           | time/iter (avg) |        iter/s |      (min … max)      |      p75 |      p99 |     p995 |
+| ------------------- | --------------- | ------------- | --------------------- | -------- | -------- | -------- |
+
+group timing
+| Date.now()          |         44.2 ns |    22,630,000 | ( 42.3 ns …  73.4 ns) |  44.0 ns |  54.1 ns |  55.1 ns |
+| performance.now()   |         59.9 ns |    16,700,000 | ( 56.0 ns …  94.8 ns) |  60.7 ns |  76.6 ns |  79.5 ns |
 
 summary
   Date.now()
-   比 performance.now() 快 21.29 倍
+     1.35x faster than performance.now()
 ```
 
 你可以在同一个文件中指定多个组。
 
 ## 运行基准测试
 
-要运行基准测试，调用 `deno bench` 并指定包含你的基准函数的文件。你也可以省略文件名，在这种情况下，将运行当前目录中（递归）与 glob `{*_,*.,}bench.{ts, tsx, mts, js, mjs, jsx}` 匹配的所有基准测试。如果你传递一个目录，将运行该目录中与此 glob 匹配的所有文件。
+要运行基准测试，请使用包含基准函数的文件作为参数调用 `deno bench`。你也可以省略文件名，这时会运行当前目录（递归）下所有匹配通配符 `{*_,*.,}bench.{ts, tsx, mts, js, mjs, jsx}` 的基准测试。如果你传入一个目录，则该目录中所有匹配该通配符的文件都会被运行。
 
-该 glob 扩展为：
+该通配符匹配：
 
-- 文件名为 `bench.{ts, tsx, mts, js, mjs, jsx}`，
+- 名称为 `bench.{ts, tsx, mts, js, mjs, jsx}` 的文件，
 - 或以 `.bench.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件，
-- 或以 `_bench.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件。
+- 或以 `_bench.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件
 
-```shell
+```bash
 # 运行当前目录及所有子目录中的所有基准测试
 deno bench
 
@@ -175,30 +180,30 @@ deno bench util/
 deno bench my_bench.ts
 ```
 
-> ⚠️ 如果您想向基准测试文件传递其他 CLI 参数，请使用 `--` 来告知 Deno 剩余的参数是脚本参数。
+> ⚠️ 如果你想向基准测试文件传递其他 CLI 参数，请使用 `--` 来告知 Deno 剩余的参数是脚本参数。
 
-```shell
-# 将额外参数传递给基准测试文件
+```bash
+# 向基准测试文件传递额外参数
 deno bench my_bench.ts -- -e --foo --bar
 ```
 
-`deno bench` 使用与 `deno run` 相同的权限模型，因此，例如，在基准测试期间写入文件系统时将需要 `--allow-write`。
+`deno bench` 使用与 `deno run` 相同的权限模型，例如，在基准测试期间写入文件系统时，将需要 `--allow-write`。
 
-要查看与 `deno bench` 的所有运行时选项，可以参考命令行帮助：
+要查看与 `deno bench` 相关的所有运行时选项，可以参考命令行帮助：
 
-```shell
+```bash
 deno help bench
 ```
 
 ## 过滤
 
-有多种选项可以过滤你正在运行的基准测试。
+有多种方式可以过滤你正在运行的基准测试。
 
 ### 命令行过滤
 
-基准测试可以单独运行或按组运行，使用命令行 `--filter` 选项。
+基准测试可以单独运行或按组运行，通过命令行的 `--filter` 选项实现。
 
-过滤器标志接受一个字符串或一个模式作为值。
+`--filter` 接受字符串或模式作为值。
 
 假设有以下基准测试：
 
@@ -219,25 +224,25 @@ Deno.bench({
 
 此命令将运行所有这些基准测试，因为它们都包含单词“bench”。
 
-```shell
+```bash
 deno bench --filter "bench" benchmarks/
 ```
 
-反过来，以下命令使用模式，将运行第二个和第三个基准测试。
+反之，以下命令使用模式，会运行第二个和第三个基准测试。
 
-```shell
+```bash
 deno bench --filter "/bench-*\d/" benchmarks/
 ```
 
-_为了让 Deno 知道你想使用模式，请用正斜杠将你的过滤器括起来，就像 JavaScript 的正则表达式语法糖一样。_
+_为了让 Deno 知道你想使用正则表达式模式，请用斜杠将你的过滤器括起来，就像 JavaScript 的正则表达式字面量语法一样。_
 
 ### 基准定义过滤
 
-在基准测试本身内，你有两个过滤选项。
+在基准测试本身内，有两种过滤选项。
 
 #### 过滤掉（忽略这些基准测试）
 
-有时你想根据某种条件忽略基准测试（例如，你只想在 Windows 上运行基准）。为此，你可以在基准定义中使用 `ignore` 布尔值。如果设置为 true，该基准将被跳过。
+有时你想根据某种条件跳过基准测试（例如，只想在 Windows 上运行基准）。为此，可以在基准定义中设置 `ignore` 布尔值。如果为 true，该基准测试将被跳过。
 
 ```ts
 Deno.bench({
@@ -251,7 +256,7 @@ Deno.bench({
 
 #### 过滤进（仅运行这些基准测试）
 
-有时你可能在一个大型基准测试类中遇到性能问题，并希望专注于仅该单个基准，并暂时忽略其余基准。为此，你可以使用 `only` 选项来告诉基准测试工具仅运行设置为 true 的基准。多个基准可以设置此选项。虽然基准测试运行会报告每个基准的成功或失败，但如果任何基准标记为 `only`，则整体基准测试运行将始终失败，因为这只是一个临时措施，它几乎禁用所有基准测试。
+有时你可能遇到性能问题，只想聚焦于单个基准测试，暂时忽略其余基准。为此，可以使用 `only` 选项，让基准测试工具仅运行设置为 true 的基准。多个基准可以设置此选项。虽然基准测试运行会报告每个基准的成功或失败，但如果任何基准标记为 `only`，则整体基准测试运行将始终以失败告终，因为这是一个临时措施，几乎禁用所有其他基准测试。
 
 ```ts
 Deno.bench({
@@ -265,29 +270,36 @@ Deno.bench({
 
 ## JSON 输出
 
-要将输出作为 JSON 进行检索，请使用 `--json` 标志：
+要以 JSON 格式检索输出，请使用 `--json` 标志：
 
-```
-$ deno bench --json bench_me.js
+```shell
+$ deno bench my_bench.ts --json
 {
-  "runtime": "Deno/1.31.0 x86_64-apple-darwin",
-  "cpu": "Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz",
+  "version": 1,
+  "runtime": "Deno/2.4.2 x86_64-unknown-linux-gnu",
+  "cpu": "12th Gen Intel(R) Core(TM) i3-12100",
   "benches": [
-    "origin": "file:///dev/bench_me.js",
-    "group": null,
-    "name": "Deno.UnsafePointerView#getUint32",
-    "baseline": false,
-    "result": {
-      "ok": {
-        "n": 49,
-        "min": 1251.9348,
-        "max": 1441.2696,
-        "avg": 1308.7523755102038,
-        "p75": 1324.1055,
-        "p99": 1441.2696,
-        "p995": 1441.2696,
-        "p999": 1441.2696
-      }
+    {
+      "origin": "file:///path/to/my_bench.ts",
+      "group": null,
+      "name": "Test",
+      "baseline": false,
+      "results": [
+        {
+          "ok": {
+            "n": 51,
+            "min": 946.7129,
+            "max": 3024.3281,
+            "avg": 1241.3926823529412,
+            "p75": 1174.9718,
+            "p99": 3024.3281,
+            "p995": 3024.3281,
+            "p999": 3024.3281,
+            "highPrecision": false,
+            "usedExplicitTimers": false
+          }
+        }
+      ]
     }
   ]
 }

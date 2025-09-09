@@ -3,7 +3,7 @@ title: "如何将 Deno 部署到 AWS Lambda"
 description: "Step-by-step tutorial on deploying Deno applications to AWS Lambda. Learn about Docker containerization, ECR repositories, function configuration, and how to set up serverless Deno apps on AWS."
 url: /examples/aws_lambda_tutorial/
 oldUrl:
-- /runtime/tutorials/aws_lambda/
+  - /runtime/tutorials/aws_lambda/
 ---
 
 AWS Lambda 是由亚马逊网络服务提供的一种无服务器计算服务。它允许您在无需配置或管理服务器的情况下运行代码。

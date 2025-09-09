@@ -3,8 +3,8 @@ title: 基于文件的路由
 description: "Tutorial on implementing file-based routing in Deno. Learn how to create a dynamic routing system similar to Next.js, handle HTTP methods, manage nested routes, and build a flexible server architecture."
 url: /examples/file_based_routing_tutorial/
 oldUrl:
-- /examples/http-server-file-router/
-- /runtime/tutorials/file_based_routing/
+  - /examples/http-server-file-router/
+  - /runtime/tutorials/file_based_routing/
 ---
 
 如果您使用过像 [Next.js](https://nextjs.org/) 这样的框架，您可能对基于文件的路由已不陌生 - 您在特定目录中添加一个文件，它会自动成为一个路由。本教程演示如何创建一个使用基于文件的路由的简单 HTTP 服务器。

@@ -2,8 +2,8 @@
 title: "环境变量"
 description: "Deno 中使用环境变量的指南。了解 Deno.env API、.env 文件支持、CLI 配置以及控制 Deno 行为的特殊环境变量。"
 oldUrl:
-- /runtime/manual/basics/env_variables/
-- /runtime/reference/cli/env_variables/
+  - /runtime/manual/basics/env_variables/
+  - /runtime/reference/cli/env_variables/
 ---
 
 在 Deno 中使用环境变量有几种方式：

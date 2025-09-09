@@ -2,8 +2,8 @@
 title: "调试"
 description: "Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器及其他调试技巧来调试 Deno 中的 TypeScript/JavaScript 代码。"
 oldUrl:
-- /runtime/manual/getting_started/debugging_your_code/
-- /runtime/manual/basics/debugging_your_code/
+  - /runtime/manual/getting_started/debugging_your_code/
+  - /runtime/manual/basics/debugging_your_code/
 ---
 
 Deno 支持 [V8 Inspector Protocol](https://v8.dev/docs/inspector)，这是 Chrome、Edge 和 Node.js 使用的协议。这使得可以使用 Chrome DevTools 或其他支持该协议的客户端（例如 VSCode）调试 Deno 程序。

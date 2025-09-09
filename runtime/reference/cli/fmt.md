@@ -1,10 +1,10 @@
 ---
 title: "`deno fmt`, 代码格式化"
 oldUrl:
- - /runtime/tools/formatter/
- - /runtime/manual/tools/formatter/
- - /runtime/manual/tools/fmt/
- - /runtime/reference/cli/formatter/
+  - /runtime/tools/formatter/
+  - /runtime/manual/tools/formatter/
+  - /runtime/manual/tools/fmt/
+  - /runtime/reference/cli/formatter/
 command: fmt
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno fmt"

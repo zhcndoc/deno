@@ -2,19 +2,19 @@
 title: "Node 和 npm 兼容性"
 description: "关于在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包以及 Node.js 和 Deno 环境之间的差异。"
 oldUrl:
-- /runtime/reference/node/
-- /runtime/manual/npm_nodejs/std_node/
-- /runtime/manual/node/
-- /runtime/manual/npm_nodejs/cdns/
-- /runtime/manual/using_deno_with_other_technologies/node/cdns/
-- /runtime/manual/node/node_specifiers
-- /runtime/manual/node/package_json
-- /runtime/manual/node/migrate/
-- /runtime/manual/references/cheatsheet/
-- /runtime/manual/node/cheatsheet/
-- /runtime/manual/node/faqs
-- /runtime/manual/node/npm_specifiers
-- /runtime/manual/node/private_registries
+  - /runtime/reference/node/
+  - /runtime/manual/npm_nodejs/std_node/
+  - /runtime/manual/node/
+  - /runtime/manual/npm_nodejs/cdns/
+  - /runtime/manual/using_deno_with_other_technologies/node/cdns/
+  - /runtime/manual/node/node_specifiers
+  - /runtime/manual/node/package_json
+  - /runtime/manual/node/migrate/
+  - /runtime/manual/references/cheatsheet/
+  - /runtime/manual/node/cheatsheet/
+  - /runtime/manual/node/faqs
+  - /runtime/manual/node/npm_specifiers
+  - /runtime/manual/node/private_registries
 ---
 
 - **Deno 兼容 Node**。大多数 Node 项目可以在 Deno 中运行，几乎不需要更改！

@@ -1,6 +1,6 @@
 ---
-title: "Security and permissions"
-description: "A guide to Deno's security model and permissions system. Learn about secure defaults, permission flags, runtime prompts, and how to safely execute code with granular access controls."
+title: "安全性与权限"
+description: "Deno 安全模型和权限系统指南。了解安全默认设置、权限标志、运行时提示以及如何使用细粒度访问控制安全执行代码。"
 oldUrl:
   - /runtime/manual/basics/permissionsDeno/
   - /manual/basics/permissions
@@ -44,7 +44,18 @@ deno run -A script.ts
 deno run --allow-all script.ts
 ```
 
-默认情况下，Deno 不会为权限请求生成堆栈跟踪，因为这对性能有一定影响。用户可以通过 `DENO_TRACE_PERMISSIONS` 环境变量启用堆栈跟踪。
+默认情况下，Deno 不会为权限请求生成堆栈跟踪，因为这会影响性能。用户可以通过将环境变量 `DENO_TRACE_PERMISSIONS` 设置为 `1` 来启用堆栈跟踪。
+
+Deno 还可以生成对所有被访问权限的审计日志；这可以通过将环境变量 `DENO_AUDIT_PERMISSIONS` 设置为路径来实现。无论权限是否被允许，此功能均可工作。输出格式为 JSONL，每行都是一个包含以下键的对象：
+
+- `v`: 格式版本
+- `datetime`: 权限访问的时间，RFC 3339 格式
+- `permission`: 权限名称
+- `value`: 权限访问的值，如果无值则为 `null`
+
+该格式的模式文件可在 [这里](https://deno.land/x/deno/cli/schemas/permission-audit.v1.json) 查阅。
+
+此外，该环境变量可与上述的 `DENO_TRACE_PERMISSIONS` 结合使用，此时条目中会新增一个 `stack` 字段，包含所有堆栈跟踪帧的数组。
 
 ### 文件系统访问
 
@@ -63,7 +74,7 @@ deno run --allow-read script.ts
 # 仅允许读取文件 foo.txt 和 bar.txt
 deno run --allow-read=foo.txt,bar.txt script.ts
 
-# Allow reads from any file in any subdirectory of ./node_modules
+# 允许读取 ./node_modules 所有子目录中的任何文件
 deno run --allow-read=node_modules script.ts
 ```
 
@@ -100,7 +111,7 @@ deno run --allow-write=./ --deny-write=./secrets script.ts
 deno run --deny-write script.ts
 ```
 
-一些 Deno 中的 API 是在后台使用文件系统操作实现的，即使它们并不直接提供对特定文件的读/写访问。这些 API 会读取和写入磁盘，但不需要任何明确的读/写权限。这些 API 的一些例子包括：
+Deno 中的一些 API 在后台使用文件系统操作实现，即使它们并不直接提供对特定文件的读/写访问。这些 API 会读取和写入磁盘，但不需要任何明确的读/写权限。这些 API 的一些例子包括：
 
 - `localStorage`
 - Deno KV
@@ -163,7 +174,7 @@ deno run --deny-net script.ts
 - `https://raw.githubusercontent.com`
 - `https://gist.githubusercontent.com`
 
-这些位置是受信任的“公共良好”注册表，不被期望通过 URL 路径启用数据外泄。你可以使用 `--allow-imports` 标志添加更多受信任的注册表。
+这些位置是受信任的「公益」注册表，预期不会通过 URL 路径启用数据外泄。你可以使用 `--allow-import` 标志添加更多受信任的注册表。
 
 此外，Deno 允许通过 `npm:` 说明符导入任何 NPM 包。
 
@@ -279,10 +290,10 @@ deno run --deny-run script.ts
 
 ### FFI（外部函数接口）
 
-Deno provides an
-[FFI mechanism for executing code written in other languages](/runtime/fundamentals/ffi/),
-such as Rust, C, or C++, from within a Deno runtime. This is done using the
-`Deno.dlopen` API, which can load shared libraries and call functions from them.
+Deno 提供了一个
+[用于执行其他语言编写代码的 FFI 机制](/runtime/fundamentals/ffi/)，
+例如 Rust、C 或 C++，可以在 Deno 运行时内调用。这是通过
+`Deno.dlopen` API 完成的，该 API 可以加载共享库并调用其中的函数。
 
 默认情况下，执行的代码不能使用 `Deno.dlopen` API，因为这违反了代码不能在未获得用户同意的情况下提升其特权的原则。
 

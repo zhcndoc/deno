@@ -20,7 +20,7 @@ url: /examples/nuxt_tutorial/
 想跳过教程，立即部署完整的 Nuxt 恐龙应用？点击下面按钮，瞬间将应用部署到 Deno Deploy。
 你将获得一个可用的实时应用，可在学习时自由定制和修改！
 
-[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/examples&path=with-nuxt)
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/examples&path=with-nuxt)
 
 :::
 

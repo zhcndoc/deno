@@ -2,8 +2,8 @@
 title: "Stability and releases"
 description: "Guide to Deno's stability guarantees and release process. Covering release channels, long-term support (LTS), unstable features, versioning policy, and how Deno maintains backward compatibility."
 oldUrl:
-    - /runtime/manual/runtime/stability/
-    - /runtime/fundamentals/stability/
+  - /runtime/manual/runtime/stability/
+  - /runtime/fundamentals/stability/
 ---
 
 截至 Deno 1.0.0，`Deno` 命名空间 API 是稳定的。这意味着我们将努力使在 1.0.0 下工作的代码在未来的版本中继续正常运行。

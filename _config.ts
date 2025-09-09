@@ -29,10 +29,43 @@ import replacerPlugin from "./markdown-it/replacer.ts";
 import apiDocumentContentTypeMiddleware from "./middleware/apiDocContentType.ts";
 import createRoutingMiddleware from "./middleware/functionRoutes.ts";
 import createGAMiddleware from "./middleware/googleAnalytics.ts";
-import redirectsMiddleware, {
-  toFileAndInMemory,
-} from "./middleware/redirects.ts";
+import redirectsMiddleware from "./middleware/redirects.ts";
+import { toFileAndInMemory } from "./utils/redirects.ts";
 import { cliNow } from "./timeUtils.ts";
+
+// Check if reference docs are available when building
+function ensureReferenceDocsExist() {
+  const requiredFiles = [
+    "reference_gen/gen/deno.json",
+    "reference_gen/gen/web.json",
+    "reference_gen/gen/node.json",
+  ];
+
+  const missingFiles = [];
+  for (const file of requiredFiles) {
+    try {
+      Deno.statSync(file);
+    } catch {
+      missingFiles.push(file);
+    }
+  }
+
+  if (missingFiles.length > 0) {
+    console.error(
+      `❌ Missing reference documentation files: ${missingFiles.join(", ")}`,
+    );
+    console.error(
+      `   Run 'deno task generate:reference' to generate them before building`,
+    );
+    console.error(`   Or set SKIP_REFERENCE=1 to skip reference documentation`);
+    Deno.exit(1);
+  }
+}
+
+// Ensure reference docs exist at startup for full builds
+if (Deno.env.get("BUILD_TYPE") === "FULL" && !Deno.env.has("SKIP_REFERENCE")) {
+  ensureReferenceDocsExist();
+}
 
 const site = lume(
   {
@@ -114,13 +147,7 @@ site.copy("runtime/contributing/images");
 site.copy("examples/tutorials/images");
 site.copy("deploy/manual/images");
 site.copy("deploy/early-access/images");
-site.copy("deno.json");
-site.copy("go.json");
-site.copy("oldurls.json");
-site.copy("server.ts");
-site.copy("middleware");
 site.copy("examples/scripts");
-site.copy(".env");
 
 site.use(
   redirects({
@@ -215,6 +242,52 @@ site.ignore(
 // the default layout if no other layout is specified
 site.data("layout", "doc.tsx");
 
+// Load API categories data globally
+import denoCategories from "./reference_gen/deno-categories.json" with {
+  type: "json",
+};
+import webCategories from "./reference_gen/web-categories.json" with {
+  type: "json",
+};
+import nodeRewriteMap from "./reference_gen/node-rewrite-map.json" with {
+  type: "json",
+};
+
+const nodeCategories = Object.keys(nodeRewriteMap);
+
+site.data("apiCategories", {
+  deno: {
+    title: "Deno APIs",
+    categories: Object.keys(denoCategories),
+    descriptions: denoCategories,
+    getCategoryHref: (categoryName: string) => {
+      // Special case for I/O -> io
+      if (categoryName === "I/O") {
+        return `/api/deno/io`;
+      }
+      return `/api/deno/${categoryName.toLowerCase().replace(/\s+/g, "-")}`;
+    },
+  },
+  web: {
+    title: "Web APIs",
+    categories: Object.keys(webCategories),
+    descriptions: webCategories,
+    getCategoryHref: (categoryName: string) => {
+      // Special case for I/O -> io
+      if (categoryName === "I/O") {
+        return `/api/web/io`;
+      }
+      return `/api/web/${categoryName.toLowerCase().replace(/\s+/g, "-")}`;
+    },
+  },
+  node: {
+    title: "Node APIs",
+    categories: nodeCategories,
+    descriptions: {} as Record<string, string>,
+    getCategoryHref: (categoryName: string) => `/api/node/${categoryName}/`,
+  },
+});
+
 // Do more expensive operations if we're building the full site
 if (Deno.env.get("BUILD_TYPE") == "FULL") {
   // Use Lume's built in date function to get the last modified date of the file
@@ -231,25 +304,25 @@ if (Deno.env.get("BUILD_TYPE") == "FULL") {
           {
             name: "Courier",
             style: "normal",
-            data: await Deno.readFile(
+            data: (await Deno.readFile(
               "./static/fonts/courier/CourierPrime-Regular.ttf",
-            ),
+            )).buffer,
           },
           {
             name: "Inter",
             weight: 400,
             style: "normal",
-            data: await Deno.readFile(
+            data: (await Deno.readFile(
               "./static/fonts/inter/hacked/Inter-Regular-hacked.woff",
-            ),
+            )).buffer,
           },
           {
             name: "Inter",
             weight: 700,
             style: "normal",
-            data: await Deno.readFile(
+            data: (await Deno.readFile(
               "./static/fonts/inter/hacked/Inter-SemiBold-hacked.woff",
-            ),
+            )).buffer,
           },
         ],
       },

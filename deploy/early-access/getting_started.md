@@ -5,24 +5,18 @@ description: "逐步指南，帮助您创建和配置您的第一个 Deno Deploy
 
 :::info
 
-您正在查看 Deno Deploy<sup>EA</sup> 的文档。想要查看 Deploy Classic 文档吗？[在这里查看](/deploy/)。
-
-:::
-
-:::note
-
-Deno Deploy<sup>EA</sup> 处于私测阶段。要使用 Deno Deploy
-<sup>EA</sup>，您必须通过
-[Deploy Classic 账户设置页面](https://dash.deno.com/account#early-access)加入早期访问计划。
+您正在查看 Deno Deploy<sup>EA</sup> 的文档。寻找 Deploy Classic 文档？[点击这里查看](/deploy/)。
 
 :::
 
 ## 创建组织
 
+Deno Deploy<sup>EA</sup> 终将取代 Deno Deploy Classic。在此之前，两个系统将同时可用。通过为 Deploy<sup>EA</sup> 创建组织，您可以在不干扰已经使用 Deploy Classic 的项目的情况下，探索 Deploy<sup>EA</sup>。
+
 开始使用 Deno Deploy<sup>EA</sup>：
 
-1. 访问 [app.deno.com](http://app.deno.com)
-2. 创建一个组织：
+1. 访问 [console.deno.com](http://console.deno.com)
+2. 创建组织：
 
 ![Deno Deploy<sup>EA</sup> 组织创建屏幕。](./images/create_org.png)
 
@@ -30,7 +24,7 @@ Deno Deploy<sup>EA</sup> 处于私测阶段。要使用 Deno Deploy
 
 ## 创建应用
 
-创建组织后，系统会跳转至组织应用页面，展示您所有的应用并可访问组织设置及自定义域名。
+创建组织后，系统会跳转至组织应用页面，展示您所有的应用，并可访问组织设置及自定义域名。
 
 要创建应用，请点击 `+ New App` 按钮：
 

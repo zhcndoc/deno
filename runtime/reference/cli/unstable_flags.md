@@ -1,8 +1,8 @@
 ---
 title: "不稳定功能标志"
 oldUrl:
- - /runtime/tools/unstable_flags/
- - /runtime/manual/tools/unstable_flags/
+  - /runtime/tools/unstable_flags/
+  - /runtime/manual/tools/unstable_flags/
 ---
 
 Deno 运行时的新功能通常会在功能标志后发布，因此用户可以在功能最终确定之前尝试新的 API 和功能。当前的不稳定功能标志列在此页面上，也可以通过运行以下命令在 CLI 帮助文本中找到：

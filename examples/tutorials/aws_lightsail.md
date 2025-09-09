@@ -3,8 +3,8 @@ title: 将 Deno 部署到 Amazon Lightsail
 description: "Step-by-step tutorial on deploying Deno applications to AWS Lightsail. Learn about Docker containers, GitHub Actions automation, continuous deployment, and how to set up cost-effective cloud hosting for Deno apps."
 url: /examples/aws_lightsail_tutorial/
 oldUrl:
-- /runtime/manual/advanced/deploying_deno/aws_lightsail/
-- /runtime/tutorials/aws_lightsail/
+  - /runtime/manual/advanced/deploying_deno/aws_lightsail/
+  - /runtime/tutorials/aws_lightsail/
 ---
 
 [Amazon Lightsail](https://aws.amazon.com/lightsail/) 是开始使用 Amazon Web Services 最简单和最便宜的方式。它允许您托管虚拟机甚至整个容器服务。

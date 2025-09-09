@@ -1,7 +1,7 @@
 ---
 title: 子托管快速入门
 oldUrl:
-- /deploy/manual/subhosting/projects_and_deployments/
+  - /deploy/manual/subhosting/projects_and_deployments/
 ---
 
 想要寻找一个尽可能小的示例，展示如何将代码部署到 Deno 的隔离云吗？我们在下面为您提供了相关信息，或者您可以跳到[更详细的入门指南](#getting-started-with-subhosting)。

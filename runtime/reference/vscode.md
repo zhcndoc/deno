@@ -2,9 +2,9 @@
 title: "Deno & Visual Studio Code"
 description: "Complete guide to using Deno with Visual Studio Code. Learn about extension setup, workspace configuration, debugging, testing, task automation, and advanced IDE features for Deno development."
 oldUrl:
-- /runtime/manual/vscode_deno/
-- /runtime/manual/references/vscode_deno/
-- /runtime/manual/references/vscode_deno/testing_api/
+  - /runtime/manual/vscode_deno/
+  - /runtime/manual/references/vscode_deno/
+  - /runtime/manual/references/vscode_deno/testing_api/
 ---
 
 该页面介绍了如何使用 [Visual Studio Code](https://code.visualstudio.com/) 和官方的 [vscode_deno](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno) 扩展来开发 Deno 应用程序。

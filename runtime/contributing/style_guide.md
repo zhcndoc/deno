@@ -2,8 +2,8 @@
 title: "Deno 风格指南"
 description: "为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。"
 oldUrl:
-- /runtime/manual/contributing/style_guide/
-- /runtime/manual/references/contributing/style_guide/
+  - /runtime/manual/contributing/style_guide/
+  - /runtime/manual/references/contributing/style_guide/
 ---
 
 :::note

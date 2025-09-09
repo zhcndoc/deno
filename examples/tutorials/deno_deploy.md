@@ -68,7 +68,7 @@ git push -u origin main
 
 ## 创建 Deno Deploy 组织
 
-1. 访问 [app.deno.com](https://app.deno.com)
+1. 访问 [console.deno.com](https://console.deno.com)
 2. 点击“+ 新建组织”
 3. 选择“标准部署”组织类型
 4. 输入组织名称和标识（slug，后续不可更改）

@@ -63,7 +63,7 @@ asdf set -u deno latest
 asdf set deno latest
 ```
 
-使用 [vfox](https://vfox.lhan.me/):
+使用 [vfox](https://vfox.dev/):
 
 ```shell
 vfox add deno
@@ -110,7 +110,7 @@ choco install deno
 winget install DenoLand.Deno
 ```
 
-使用 [vfox](https://vfox.lhan.me/):
+使用 [vfox](https://vfox.dev/):
 
 ```shell
 vfox add deno
@@ -160,7 +160,7 @@ asdf set -u deno latest
 asdf set deno latest
 ```
 
-使用 [vfox](https://vfox.lhan.me/):
+使用 [vfox](https://vfox.dev/):
 
 ```shell
 vfox add deno

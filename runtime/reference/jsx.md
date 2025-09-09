@@ -1,6 +1,6 @@
 ---
 title: "JSX"
-description: "Complete guide to using JSX in Deno. Learn about JSX configuration options, automatic runtime features, development transforms, and Deno's optimized precompile transform for server-side rendering."
+description: "Deno 中使用 JSX 的完整指南。了解 JSX 配置选项、自动运行时功能、开发转换，以及 Deno 为服务器端渲染优化的预编译转换。"
 oldUrl:
   - /deploy/manual/using-jsx/
   - /runtime/manual/advanced/jsx_dom/jsx/
@@ -54,12 +54,21 @@ const jsx = React.createElement(
     "jsxImportSource": "react"
   },
   "imports": {
-    "react": "npm:react"
+    "react": "npm:react",
+    "@types/react": "npm:@types/react"
   }
 }
 ```
 
-在后台，`jsxImportSource` 设置将始终在导入说明符后附加 `/jsx-runtime`。
+:::note install dependencies
+
+当您手动向 `deno.json` 文件添加导入时，请记得运行
+`deno install` 来下载安装和缓存依赖。
+
+:::
+
+幕后的 `jsxImportSource` 设置总是会向导入说明符追加一个
+`/jsx-runtime`。
 
 ```js
 // 此导入将被自动插入
@@ -154,7 +163,7 @@ const jsx = _jsxDEV(
 
 :::caution
 
-仅在开发期间使用 `"react-jsxdev"` 信息，而不是在生产中。
+仅在开发期间使用 `"react-jsxdev"`，不要在生产环境中使用。
 
 :::
 

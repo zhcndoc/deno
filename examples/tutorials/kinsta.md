@@ -3,8 +3,8 @@ title: "如何在 Kinsta 上部署 Deno"
 description: "Step-by-step guide to deploying Deno applications on Kinsta. Learn how to configure package.json, handle environment variables, set up Git deployments, and use Kinsta's application hosting platform."
 url: /examples/kinsta_tutorial/
 oldUrl:
-- /runtime/manual/advanced/deploying_deno/kinsta/
-- runtime/tutorials/kinsta
+  - /runtime/manual/advanced/deploying_deno/kinsta/
+  - runtime/tutorials/kinsta
 ---
 
 [Kinsta 应用托管](https://kinsta.com/application-hosting)是一项服务，让您可以直接从 Git 仓库构建和部署您的 Web 应用。

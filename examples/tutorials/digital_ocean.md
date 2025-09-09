@@ -3,8 +3,8 @@ title: "如何将 Deno 部署到 Digital Ocean"
 description: "A step-by-step guide to deploying Deno applications on Digital Ocean. Learn about Docker containerization, GitHub Actions automation, container registries, and how to set up continuous deployment workflows."
 url: /examples/digital_ocean_tutorial/
 oldUrl:
-- /runtime/manual/advanced/deploying_deno/digital_ocean/
-- /runtime/tutorials/digital_ocean/
+  - /runtime/manual/advanced/deploying_deno/digital_ocean/
+  - /runtime/tutorials/digital_ocean/
 ---
 
 Digital Ocean 是一个受欢迎的云基础设施提供商，提供多种托管服务，从网络到计算再到存储。

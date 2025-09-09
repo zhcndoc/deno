@@ -47,6 +47,10 @@ export const sidebar = [
         href: "/deploy/early-access/reference/domains/",
       },
       {
+        title: "Deno KV",
+        href: "/deploy/early-access/reference/deno-kv/",
+      },
+      {
         title: "数据库",
         href: "/deploy/early-access/reference/databases/",
       },

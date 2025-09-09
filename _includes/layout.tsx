@@ -3,6 +3,7 @@ export function deleteBackticks(str?: string) {
 }
 
 export default function Layout(data: Lume.Data) {
+  const fingerprint = Deno.env.get("DENO_DEPLOY_BUILD_ID") || null;
   const isReference = data.url.startsWith("/api/");
   const section = data.url.split("/").filter(Boolean)[0];
   const description = data.description ||
@@ -10,8 +11,7 @@ export default function Layout(data: Lume.Data) {
   const isServicesPage = data.url.startsWith("/deploy") ||
     data.url.startsWith("/subhosting") ||
     data.url.startsWith("/services");
-  const hasSubNav = data.page?.data?.SidebarNav?.length ||
-    data.url.startsWith("/api");
+  const hasSubNav = isServicesPage;
 
   return (
     <html lang="zh-CN">
@@ -29,7 +29,11 @@ export default function Layout(data: Lume.Data) {
           'light'); document.documentElement.classList.add(theme);
         </script>
 
-        <link rel="stylesheet" href="/styles.css" />
+        <link
+          rel="stylesheet"
+          href={`/styles.css${fingerprint ? `?v=${fingerprint}` : ""}`}
+        />
+
         <link
           rel="preload"
           href="/fonts/inter/Inter-Regular.woff2"
@@ -61,6 +65,7 @@ export default function Layout(data: Lume.Data) {
         <script type="module" defer src="/copy.client.js"></script>
         <script type="module" defer src="/tabs.client.js"></script>
         <script type="module" defer src="/feedback.client.js"></script>
+        <script type="module" defer src="/search.client.js"></script>
         <script
           async
           src="https://www.zhcndoc.com/js/common.js"
@@ -85,7 +90,9 @@ export default function Layout(data: Lume.Data) {
         />
         <div
           class={`layout ${
-            data.toc?.length ? "layout--three-column" : "layout--two-column"
+            data.toc?.length || isReference
+              ? "layout--three-column"
+              : "layout--two-column"
           }`}
         >
           <data.comp.Navigation

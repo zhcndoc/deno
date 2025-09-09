@@ -79,14 +79,63 @@ Deno Deploy<sup>EA</sup> 中的环境变量允许您使用静态值配置应用�
 const myEnvVar = Deno.env.get("MY_ENV_VAR");
 ```
 
+<!--
+## 以文件形式暴露环境变量
+
+环境变量可以通过切换“以文件形式暴露”选项，而不是作为普通环境变量暴露。
+
+启用该选项后，环境变量的值会存储在应用文件系统的一个临时文件中。环境变量的值则变为该临时文件的路径。
+
+要读取该值，可以结合使用 `Deno.readTextFile` 与 `Deno.env.get` API：
+
+```ts
+// 假设 MY_ENV_VAR 已设置为以文件形式暴露
+const value = await Deno.readTextFile(Deno.env.get("MY_ENV_VAR"));
+```
+
+这对于值过大而不适合放入环境变量，或希望避免在环境变量列表中暴露敏感数据非常有用。
+
+此外，对于预先存在的应用程序，期望某些环境变量指向文件（如 Postgres CA 证书的 `PGSSLROOTCERT`）也很有帮助。
+-->
+
+## 限制
+
+环境变量有以下限制：
+
+- 环境变量键最大长度为 128 字节。\
+- 环境变量键不能以以下前缀开头：
+  - `DENO_`，但允许以下除外：`DENO_AUTH_TOKENS`、`DENO_COMPAT`、`DENO_CONDITIONS`、
+    `DENO_DEPLOY_ENDPOINT` 或 `DENO_DEPLOY_TOKEN`
+  - `LD_`
+  - `OTEL_`
+- 环境变量值最大长度为 16 KB（16,384 字节）。
+- 环境变量键不能为以下任一键。请改用
+  [云连接](/deploy/early-access/reference/cloud-connections)
+  - `AWS_ROLE_ARN`
+  - `AWS_WEB_IDENTITY_TOKEN_FILE`
+  - `GCP_WORKLOAD_PROVIDER_ID`
+  - `GCP_SERVICE_ACCOUNT_EMAIL`
+  - `GCP_PROJECT_ID`
+  - `AZURE_CLIENT_ID`
+  - `AZURE_TENANT_ID`
+  - `AZURE_FEDERATED_TOKEN_FILE`
+
 ## 预定义环境变量
 
 Deno Deploy<sup>EA</sup> 在所有上下文中提供以下预定义环境变量：
 
-- `DENO_DEPLOYMENT_ID`：表示整个配置集（应用 ID、修订 ID、上下文及环境变量）的唯一标识符。任一组件改变时该值都会改变。
+- `DENO_DEPLOY=1`：表示应用正在 Deno Deploy 环境中运行。
 
-- `DENO_REVISION_ID`：当前正在运行的修订 ID。
+- `DENO_DEPLOYMENT_ID`：表示整个配置集（应用 ID、修订 ID、上下文和环境变量）的唯一标识符。当其中任何组件更改时此值也会变化。
 
-未来还会添加更多预定义变量。
+- `DENO_DEPLOY_ORG_ID`：应用所属组织的 ID。
 
-注意：您不能手动设置任何以 `DENO_*` 开头的环境变量，因为这些是保留的系统变量。
+- `DENO_DEPLOY_ORG_SLUG`：应用所属组织的标识符。
+
+- `DENO_DEPLOY_APP_ID`：应用的 ID。
+
+- `DENO_DEPLOY_APP_SLUG`：应用的标识符。
+
+- `DENO_DEPLOY_BUILD_ID`：当前运行的修订版本 ID。
+
+构建期间，环境变量中还会额外设置 `CI=1`。

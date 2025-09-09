@@ -10,6 +10,33 @@ Deploy Classic 文档？[请点击这里查看](/deploy/)。
 
 :::
 
+## 2025年8月27日
+
+### 新功能
+
+- 现在可以将 Deno KV 用于数据库集成：
+  - 通过“数据库”标签页配置 Deno KV 数据库，并将其链接到应用或 playground。
+  - 通过 `Deno.openKv()` 从代码访问 Deno KV 数据库。
+  - 当前不支持 KV 队列、读复制、手动备份及选择主区域。
+- playground 现在支持拖拽单个文件和文件夹。
+- playground 文件浏览器现在支持文件的内联重命名和删除。
+- 新增内置环境变量，用于检测 Deno Deploy EA、运行的应用和所属组织：
+  `DENO_DEPLOY=1`、`DENO_DEPLOY_ORG_ID`、`DENO_DEPLOY_ORG_SLUG`、
+  `DENO_DEPLOY_APP_ID`、`DENO_DEPLOY_APP_SLUG`、`DENO_DEPLOY_REVISION_ID`。
+- 用户现在可以从账户页面创建个人访问令牌。
+- Deno Deploy EA 仪表板已从 https://app.deno.com 迁移至 https://console.deno.com。所有现有 URL 会自动重定向至新地址。
+
+### Bug 修复
+
+- 在允许数据库实例链接到组织前，检查 Postgres 数据库实例是否支持数据库动态配置。
+- 确保已删除的 Deno Deploy 应用在推送至之前关联的仓库时不会触发 GitHub 状态检查。
+- playground HTTP 探索器在发送请求时正确带上设置的请求头。
+- playground 不再因为顶层 `await` 报错。
+- 现在可以向 Deno Deploy 应用添加名为 `GOOGLE_APPLICATION_CREDENTIALS` 的环境变量。
+- 批量导入环境变量时，正确将它们导入到对应应用，而非错误地导入组织环境变量。
+- 一些不支持 `using` 声明的 Next.js 版本现能正确构建。
+- 构建步骤中的 `npm install` 现在更稳定，不会再因证书问题失败。
+
 ## 2025年7月23日
 
 ### 新功能
@@ -137,15 +164,15 @@ Deploy Classic 文档？[请点击这里查看](/deploy/)。
 
 ### 新功能
 
-- 应用创建时可批量导入环境变量：将 `.env` 文件内容粘贴到环境变量抽屉
-- SvelteKit 开箱即用，无需手动安装 Deno 适配器
-- 提供 Lume 静态站点生成器预设
+- 现在可以在创建应用时通过粘贴 `.env` 文件批量导入环境变量，位于环境变量抽屉中
+- SvelteKit 现可开箱即用，无需手动安装 Deno 适配器
+- 新增针对 Lume 静态站点生成器的预设
 
 ### Bug 修复
 
-- 环境变量在时间线页正确显示
-- 生产时间线页显示所有构建
-- app.deno.com 现支持旧版 Firefox
-- app.deno.com 的各页面标题反映当前所在页面
-- DNS 验证失败后，“Provision certificate”按钮不再卡死
-- 曾经有证书或附加应用的域名现在可以删除
+- 环境变量在时间线页面现正确显示
+- 生产时间线页面现在正确显示所有构建历史
+- console.deno.com 在旧版 Firefox 上能正常使用
+- console.deno.com 各页面标题现反映当前所在页面
+- “申请证书”按钮在 DNS 验证失败后不会再卡死
+- 曾申请证书或绑定过应用的域名现在可以删除

@@ -2,9 +2,9 @@
 title: "Writing an HTTP Server"
 description: "A guide to creating HTTP servers in Deno. Learn about the Deno.serve API, request handling, WebSocket support, response streaming, and how to build production-ready HTTP/HTTPS servers with automatic compression."
 oldUrl:
-- /runtime/manual/runtime/http_server_apis/
-- /runtime/manual/examples/http_server/
-- /runtime/tutorials/http_server/
+  - /runtime/manual/runtime/http_server_apis/
+  - /runtime/manual/examples/http_server/
+  - /runtime/tutorials/http_server/
 ---
 
 HTTP 服务器是网络的支柱，使您能够访问网站、下载文件和与网络服务交互。它们监听来自客户端（例如网页浏览器）的传入请求并发送响应。

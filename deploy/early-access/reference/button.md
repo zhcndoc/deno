@@ -19,28 +19,28 @@ description: "帮助用户快速轻松地克隆代码并通过点击按钮将其
 
 下面的部署按钮演示了基于一个简单入门项目创建新应用程序的过程
 
-[![部署到 Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/examples&path=hello-world)
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/examples&path=hello-world)
 
-### 创建并部署新应用程序
+## 创建并部署新应用程序
 
 使用以下代码提供一个创建并部署新应用程序的按钮：
 
 **Markdown**
 
 ```bash
-[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=REPOSITORY_URL)
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=REPOSITORY_URL)
 ```
 
 **HTML**
 
 ```bash
-<a href="https://app.deno.com/new?clone=REPOSITORY_URL"><img src="https://deno.com/button" alt="Deploy on Deno"/></a>
+<a href="https://console.deno.com/new?clone=REPOSITORY_URL"><img src="https://deno.com/button" alt="Deploy on Deno"/></a>
 ```
 
 **URL**
 
 ```bash
-https://app.deno.com/new?clone=REPOSITORY_URL
+https://console.deno.com/new?clone=REPOSITORY_URL
 ```
 
 ### 参数

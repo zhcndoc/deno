@@ -280,7 +280,7 @@ git push -u origin main
 
 ## 部署到 Deno Deploy 早期体验
 
-1. 访问 [app.deno.com](https://app.deno.com)
+1. 访问 [console.deno.com](https://console.deno.com)
 2. 选择您的组织，或根据需要新建一个
 3. 点击 "+ New App"
 4. 选择您之前创建的 GitHub 仓库

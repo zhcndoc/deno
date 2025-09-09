@@ -3,8 +3,8 @@ title: "如何部署到 Google Cloud Run"
 description: "Step-by-step guide to deploying Deno applications on Google Cloud Run. Learn about Docker containerization, Artifact Registry configuration, GitHub Actions automation, and how to set up continuous deployment to Google Cloud."
 url: /examples/google_cloud_run_tutorial/
 oldUrl:
-- /runtime/manual/advanced/deploying_deno/google_cloud_run/
-- /runtime/tutorials/google_cloud_run
+  - /runtime/manual/advanced/deploying_deno/google_cloud_run/
+  - /runtime/tutorials/google_cloud_run
 ---
 
 [Google Cloud Run](https://cloud.google.com/run) 是一个托管计算平台，允许您在 Google 可扩展的基础设施上运行容器。

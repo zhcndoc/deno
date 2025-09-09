@@ -1,7 +1,7 @@
 ---
 title: "CI 和 GitHub Actions"
 oldUrl:
- - /deploy/docs/project/
+  - /deploy/docs/project/
 ---
 
 Deno Deploy 的 Git 集成功能允许部署推送到 GitHub 仓库的代码更改。在生产分支上的提交将作为生产部署进行部署。所有其他分支上的提交将作为预览部署进行部署。

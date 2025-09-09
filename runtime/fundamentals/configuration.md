@@ -2,11 +2,11 @@
 title: "deno.json 和 package.json"
 description: "配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"
 oldUrl:
-- /runtime/manual/getting_started/configuration_file/
-- /runtime/manual/basics/modules/import_maps/
-- /runtime/basics/import_maps/
-- /runtime/manual/linking_to_external_code/import_maps
-- /manual/linking_to_external_code/proxies
+  - /runtime/manual/getting_started/configuration_file/
+  - /runtime/manual/basics/modules/import_maps/
+  - /runtime/basics/import_maps/
+  - /runtime/manual/linking_to_external_code/import_maps
+  - /manual/linking_to_external_code/proxies
 ---
 
 您可以使用 `deno.json` 文件来配置 Deno。该文件可用于配置 TypeScript 编译器、代码检查器、格式化工具以及其他 Deno 工具。
@@ -417,7 +417,46 @@ dist/
 }
 ```
 
-## 一个示例 `deno.json` 文件
+## Exports
+
+The `exports` field in the `deno.json` file allows you to define which paths of
+your package should be publicly accessible. This is particularly useful for
+controlling the API surface of your package and ensuring that only the intended
+parts of your code are exposed to users.
+
+```jsonc title="deno.json"
+{
+  "exports": "./src/mod.ts" // A default entry point
+}
+```
+
+You can also define multiple entry points:
+
+```json title="deno.json"
+{
+  "exports": {
+    "./module1": "./src/module1.ts",
+    "./module2": "./src/module2.ts",
+    ".": "./src/mod.ts" // Default entry point
+  }
+}
+```
+
+This configuration will:
+
+- expose `module1` and `module2` as entry points for your package,
+- allow importing any file from the `utils` directory using a wildcard. This
+  means users can import these modules using the specified paths, while other
+  files in your package remain private.
+
+To use the exports in your code, you can import them like this:
+
+```ts title="example.ts"
+import * as module_1 from "@example/my-package/module1";
+import * as module_2 from "@example/my-package/module2";
+```
+
+## An example `deno.json` file
 
 ```json
 {

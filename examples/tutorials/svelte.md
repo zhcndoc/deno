@@ -20,7 +20,7 @@ oldUrl:
 
 想跳过教程，立即部署完整的应用吗？点击下方按钮，即可瞬间将完整的 SvelteKit 恐龙应用部署到 Deno Deploy。你将获得一个可运行的在线应用，可以在学习过程中自定义和修改！
 
-[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/tutorial-with-svelte)
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-svelte)
 
 :::
 
@@ -253,7 +253,7 @@ git push -u origin main
 ### 部署到 Deno Deploy
 
 当你的应用托管在 GitHub 后，你可以访问
-[Deno Deploy<sup>EA</sup>](https://app.deno.com/) 仪表盘进行
+[Deno Deploy<sup>EA</sup>](https://console.deno.com/) 仪表盘进行
 部署。
 
 想了解完整部署流程，请查看 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。

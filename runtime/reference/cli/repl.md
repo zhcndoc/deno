@@ -4,7 +4,7 @@ oldUrl: /runtime/manual/tools/repl/
 command: repl
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno repl"
-description: "Interact with Deno's runtime in a REPL environment"
+description: "在 REPL 环境中与 Deno 运行时交互"
 ---
 
 ## 特殊变量
@@ -101,45 +101,45 @@ readTextFileSync  readFileSync      readDir           readLink          readAllS
 
 ## 快捷键
 
-| 按键组合             | 操作                                                                                         |
-| ------------------- | ---------------------------------------------------------------------------------------------- |
-| Ctrl-A, Home        | 将光标移动到行首                                                                              |
-| Ctrl-B, Left        | 将光标向左移动一个字符                                                                        |
-| Ctrl-C              | 中断并取消当前编辑                                                                             |
-| Ctrl-D              | 如果当前行为空，表示行的结束                                                                   |
-| Ctrl-D, Del         | 如果当前行不为空，删除光标下的字符                                                           |
-| Ctrl-E, End         | 将光标移动到行尾                                                                              |
-| Ctrl-F, Right       | 将光标向右移动一个字符                                                                        |
-| Ctrl-H, Backspace   | 删除光标前的字符                                                                              |
-| Ctrl-I, Tab         | 下一个补全                                                                                     |
-| Ctrl-J, Ctrl-M, Enter | 完成行输入                                                                                   |
-| Ctrl-K              | 删除光标到行尾的内容                                                                          |
-| Ctrl-L              | 清除屏幕                                                                                      |
-| Ctrl-N, Down        | 历史记录中的下一个匹配                                                                        |
-| Ctrl-P, Up          | 历史记录中的上一个匹配                                                                        |
-| Ctrl-R              | 反向搜索历史记录 (Ctrl-S 向前，Ctrl-G 取消)                                                  |
-| Ctrl-T              | 交换前一个字符与当前字符                                                                      |
-| Ctrl-U              | 从行首删除到光标的内容                                                                        |
-| Ctrl-V              | 插入任何特殊字符而不执行其关联的操作                                                          |
-| Ctrl-W              | 删除光标前的一个单词（以空格为字边界）                                                      |
-| Ctrl-X Ctrl-U       | 撤销                                                                                          |
-| Ctrl-Y              | 从 Yank 缓冲区粘贴                                                                            |
-| Ctrl-Y              | 从 Yank 缓冲区粘贴 (Meta-Y 粘贴下一个 yank)                                                   |
-| Ctrl-Z              | 暂停 (仅限 Unix)                                                                              |
-| Ctrl-_              | 撤销                                                                                          |
-| Meta-0, 1, ..., -   | 指定数字参数。`–` 代表一个负数参数。                                                         |
-| Meta &lt;           | 移动到历史记录的第一个条目                                                                    |
-| Meta &gt;           | 移动到历史记录的最后一个条目                                                                   |
-| Meta-B, Alt-Left    | 将光标移动到前一个单词                                                                        |
-| Meta-Backspace      | 从当前单词的开始删除，或者如果在单词之间，则删除到前一个单词的开始                                   |
-| Meta-C              | 将当前单词的首字母大写                                                                        |
-| Meta-D              | 向前删除一个单词                                                                              |
-| Meta-F, Alt-Right   | 将光标移动到下一个单词                                                                        |
-| Meta-L              | 将下一个单词转换为小写                                                                        |
-| Meta-T              | 交换单词                                                                                      |
-| Meta-U              | 将下一个单词转换为大写                                                                        |
-| Meta-Y              | 参见 Ctrl-Y                                                                                   |
-| Ctrl-S              | 插入新行                                                                                      |
+| 按键                 | 操作                                                                                                                                                                                                                                                |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ctrl-A, Home          | 将光标移动到行首                                                                                                                                                                                                                                     |
+| Ctrl-B, Left          | 将光标向左移动一个字符                                                                                                                                                                                                                               |
+| Ctrl-C                | 中断并取消当前编辑                                                                                                                                                                                                                                   |
+| Ctrl-D                | 如果当前行为空，发送结束信号                                                                                                                                                                                                                         |
+| Ctrl-D, Del           | 如果当前行非空，删除光标下的字符                                                                                                                                                                                                                     |
+| Ctrl-E, End           | 将光标移动到行尾                                                                                                                                                                                                                                     |
+| Ctrl-F, Right         | 将光标向右移动一个字符                                                                                                                                                                                                                               |
+| Ctrl-H, Backspace     | 删除光标前的字符                                                                                                                                                                                                                                     |
+| Ctrl-I, Tab           | 下一个补全选项                                                                                                                                                                                                                                       |
+| Ctrl-J, Ctrl-M, Enter | 完成当前行输入                                                                                                                                                                                                                                       |
+| Ctrl-K                | 删除从光标到行尾的内容                                                                                                                                                                                                                               |
+| Ctrl-L                | 清屏                                                                                                                                                                                                                                                |
+| Ctrl-N, Down          | 历史记录中下一个匹配项                                                                                                                                                                                                                               |
+| Ctrl-P, Up            | 历史记录中上一个匹配项                                                                                                                                                                                                                               |
+| Ctrl-R                | 反向搜索历史记录（Ctrl-S 向前搜索，Ctrl-G 取消）                                                                                                                                                                                                    |
+| Ctrl-T                | 交换光标前后两个字符                                                                                                                                                                                                                                 |
+| Ctrl-U                | 删除从行首到光标的内容                                                                                                                                                                                                                               |
+| Ctrl-V, Ctrl-Q        | 逐字插入后续字符而非执行其快捷操作。例如，编辑多行历史记录时插入换行，先按 Ctrl-V 再按 Ctrl-J （Ctrl-J 为 ASCII 控制字符“换行”）                                                                                                                   |
+| Ctrl-W                | 删除光标前的单词（以空白符作为单词边界）                                                                                                                                                                                                             |
+| Ctrl-X Ctrl-U         | 撤销操作                                                                                                                                                                                                                                            |
+| Ctrl-Y                | 从剪切缓冲区粘贴                                                                                                                                                                                                                                    |
+| Ctrl-Y                | 从剪切缓冲区粘贴（Meta-Y 粘贴下一个剪切内容）                                                                                                                                                                                                        |
+| Ctrl-Z                | 挂起（仅限 Unix）                                                                                                                                                                                                                                     |
+| Ctrl-_                | 撤销操作                                                                                                                                                                                                                                            |
+| Meta-0, 1, ..., -     | 指定参数数字。`–` 表示负数参数。                                                                                                                                                                                                                    |
+| Meta &lt;             | 移动到历史记录的第一个条目                                                                                                                                                                                                                             |
+| Meta &gt;             | 移动到历史记录的最后一个条目                                                                                                                                                                                                                           |
+| Meta-B, Alt-Left      | 将光标移动到前一个单词                                                                                                                                                                                                                               |
+| Meta-Backspace        | 删除当前单词起始到光标位置的内容，或在单词间时删除到上一个单词的起始                                                                                                                                                                                |
+| Meta-C                | 将当前单词首字母大写                                                                                                                                                                                                                                 |
+| Meta-D                | 向前删除一个单词                                                                                                                                                                                                                                     |
+| Meta-F, Alt-Right     | 将光标移动到下一个单词                                                                                                                                                                                                                               |
+| Meta-L                | 将接下来的单词改为小写                                                                                                                                                                                                                               |
+| Meta-T                | 交换相邻单词位置                                                                                                                                                                                                                                     |
+| Meta-U                | 将接下来的单词改为大写                                                                                                                                                                                                                               |
+| Meta-Y                | 同 Ctrl-Y                                                                                                                                                                                                                                            |
+| Ctrl-S                | 插入换行符                                                                                                                                                                                                                                          |
 
 ## `DENO_REPL_HISTORY`
 

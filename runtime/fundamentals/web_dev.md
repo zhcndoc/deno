@@ -2,8 +2,8 @@
 title: "Web 开发"
 description: "Deno 的 Web 开发指南。了解支持的框架如 Fresh、Next.js 和 Astro，以及用于构建现代 Web 应用的内置功能。"
 oldUrl:
- - /runtime/manual/getting_started/web_frameworks/
- - /runtime/fundamentals/web_frameworks/
+  - /runtime/manual/getting_started/web_frameworks/
+  - /runtime/fundamentals/web_frameworks/
 ---
 
 Deno 提供了一个安全且友好的开发环境来构建 web 应用程序，让你的网页开发体验愉悦。

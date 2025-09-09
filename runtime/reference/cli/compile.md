@@ -1,9 +1,9 @@
 ---
 title: "`deno compile`，独立可执行文件"
 oldUrl:
- - /runtime/manual/tools/compile/
- - /runtime/manual/tools/compiler/
- - /runtime/reference/cli/compiler/
+  - /runtime/manual/tools/compile/
+  - /runtime/manual/tools/compiler/
+  - /runtime/reference/cli/compiler/
 command: compile
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno compile"

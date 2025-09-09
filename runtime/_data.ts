@@ -227,18 +227,6 @@ export const sidebar = [
         ],
       },
       {
-        title: "Deno API",
-        href: "/runtime/reference/deno_namespace_apis/",
-      },
-      {
-        title: "Web API",
-        href: "/runtime/reference/web_platform_apis/",
-      },
-      {
-        title: "Node API",
-        href: "/runtime/reference/node_apis/",
-      },
-      {
         title: "TS 配置迁移",
         href: "/runtime/reference/ts_config_migration/",
       },
@@ -367,7 +355,10 @@ export async function generateDescriptions(): Promise<Descriptions> {
     )
   ) {
     const file = await Deno.readTextFile(dirEntry.path);
-    const parsed = yamlParse(file);
+    const parsed = yamlParse(file) as Partial<DescriptionItem> & {
+      description?: Description | string;
+      symbols?: Record<string, Description | string>;
+    };
     if (!parsed) {
       throw `Invalid or empty file: ${dirEntry.path}`;
     }
@@ -379,7 +370,7 @@ export async function generateDescriptions(): Promise<Descriptions> {
       parsed.symbols = Object.fromEntries(
         Object.entries(parsed.symbols).map(([key, value]) => [
           key,
-          handleDescription(value),
+          handleDescription(value as Description | string),
         ]),
       );
     }
@@ -395,7 +386,7 @@ export async function generateDescriptions(): Promise<Descriptions> {
       throw `Invalid status provided in '${dirEntry.name}': ${parsed.status}`;
     }
 
-    descriptions[dirEntry.name.slice(0, -5)] = parsed;
+    descriptions[dirEntry.name.slice(0, -5)] = parsed as DescriptionItem;
   }
 
   return descriptions;
@@ -448,12 +439,9 @@ export async function generateNodeCompatibility() {
 
       content += entries.items
         .map(([key, content]) => {
-          let out = `\n\n### <a href="/api/node/${key}">node:${
-            key.replaceAll(
-              "--",
-              "/",
-            )
-          }</a>\n\n<div class="item-content">\n\n`;
+          const link = key.replaceAll("--", "/");
+          let out =
+            `\n\n### <a href="/api/node/${link}">node:${link}</a>\n\n<div class="item-content">\n\n`;
 
           if (content) {
             if (content.description) {

@@ -12,7 +12,7 @@ url: /examples/astro_tutorial/
 
 想跳过教程，立即部署完整的 Astro 恐龙应用？点击以下按钮，立即将完整的 Astro 恐龙应用副本部署到 Deno Deploy。你将获得一个可在线运行、可自定义并修改的应用，边学边用！
 
-[![Deploy on Deno](https://deno.com/button)](https://app.deno.com/new?clone=https://github.com/denoland/tutorial-with-astro)
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-astro)
 
 :::
 
@@ -227,7 +227,7 @@ git push -u origin main
 
 ### 部署到 Deno Deploy
 
-代码托管至 GitHub 后，你可以在 [Deno Deploy<sup>EA</sup> 控制面板](https://app.deno.com/) 上进行部署。
+代码托管至 GitHub 后，你可以在 [Deno Deploy<sup>EA</sup> 控制面板](https://console.deno.com/) 上进行部署。
 
 如果想了解部署流程，请查看 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
 
