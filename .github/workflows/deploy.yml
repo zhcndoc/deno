@@ -13,12 +13,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: denoland/setup-deno@v2
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.x
+          cache: true
+
+      - name: "Reference: install"
+        working-directory: "reference_gen"
+        run: deno install
+
+      - name: "Reference: generate types"
+        working-directory: "reference_gen"
+        run: deno task types
+
+      - name: "Reference: generate docs"
+        working-directory: "reference_gen"
+        run: deno task doc
 
       - run: |
-          deno task reference
           deno task build
           cd _site && zip -r ../build-artifact.zip .
 
