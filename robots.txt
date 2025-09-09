@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://docs.deno.com/sitemap.xml
+
+Sitemap: https://deno.zhcndoc.com/sitemap.xml
