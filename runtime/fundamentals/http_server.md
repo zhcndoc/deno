@@ -1,6 +1,6 @@
 ---
-title: "Writing an HTTP Server"
-description: "A guide to creating HTTP servers in Deno. Learn about the Deno.serve API, request handling, WebSocket support, response streaming, and how to build production-ready HTTP/HTTPS servers with automatic compression."
+title: "编写 HTTP 服务器"
+description: "一份在 Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流以及如何构建具备自动压缩功能的生产级 HTTP/HTTPS 服务器。"
 oldUrl:
   - /runtime/manual/runtime/http_server_apis/
   - /runtime/manual/examples/http_server/
@@ -35,7 +35,10 @@ Deno.serve((_req) => {
 deno run --allow-net server.ts
 ```
 
-### 在特定端口上监听
+还有更多关于使用 `Deno.serve` 的示例，见
+[示例集合](/examples/#network)。
+
+### 监听特定端口
 
 默认情况下，`Deno.serve` 将在端口 `8000` 上监听，但可以通过将端口号作为选项包的第一个或第二个参数传入来更改此行为：
 
@@ -49,7 +52,7 @@ Deno.serve({ port: 4242, hostname: "0.0.0.0" }, handler);
 
 ### 检查传入请求
 
-大多数服务器不会对每个请求都返回相同的响应。相反，它们会根据请求的各个方面（HTTP 方法、头部、路径或主体内容）来更改其答案。
+大多数服务器不会对每个请求都返回相同的响应。相反，它们会根据请求的各个方面（HTTP 方法、头部、路径或主体内容）来更改其回答。
 
 请求作为处理函数的第一个参数传递。以下是一个示例，演示如何提取请求的各个部分：
 

@@ -46,22 +46,27 @@ deno run --allow-all script.ts
 
 默认情况下，Deno 不会为权限请求生成堆栈跟踪，因为这会影响性能。用户可以通过将环境变量 `DENO_TRACE_PERMISSIONS` 设置为 `1` 来启用堆栈跟踪。
 
-Deno 还可以生成对所有被访问权限的审计日志；这可以通过将环境变量 `DENO_AUDIT_PERMISSIONS` 设置为路径来实现。无论权限是否被允许，此功能均可工作。输出格式为 JSONL，每行都是一个包含以下键的对象：
+Deno 还可以生成所有访问权限的审计日志；这可以通过将环境变量 `DENO_AUDIT_PERMISSIONS` 设置为路径来实现。无论权限是否被允许，该功能都有效。输出格式为 JSONL，其中每行是一个包含以下键的对象：
 
-- `v`: 格式版本
-- `datetime`: 权限访问的时间，RFC 3339 格式
-- `permission`: 权限名称
-- `value`: 权限访问的值，如果无值则为 `null`
+- `v`：格式的版本号
+- `datetime`：权限访问的时间，使用 RFC 3339 格式
+- `permission`：权限的名称
+- `value`：访问权限时使用的值，如果无值则为 `null`
 
-该格式的模式文件可在 [这里](https://deno.land/x/deno/cli/schemas/permission-audit.v1.json) 查阅。
+该模式可参考  
+[这里](https://deno.land/x/deno/cli/schemas/permission-audit.v1.json)。
 
-此外，该环境变量可与上述的 `DENO_TRACE_PERMISSIONS` 结合使用，此时条目中会新增一个 `stack` 字段，包含所有堆栈跟踪帧的数组。
+此外，该环境变量可以与上述的 `DENO_TRACE_PERMISSIONS` 结合使用，这样每条记录将多一个 `stack` 字段，该字段为包含所有堆栈帧的数组。
+
+### 配置文件
+
+Deno 支持在 `deno.json` / `deno.jsonc` 文件中存储权限配置。更多信息请参见 [配置](/runtime/fundamentals/configuration/#Permissions)。
 
 ### 文件系统访问
 
-默认情况下，执行的代码无法读取或写入文件系统上的任意文件。这包括列出目录内容，检查指定文件的存在性，以及打开或连接 Unix 套接字。
+默认情况下，执行的代码不能读取或写入任意文件系统上的文件。这包括列出目录内容、检查文件是否存在以及打开或连接 Unix 套接字。
 
-通过使用 `--allow-read`（或 `-R`）标志授予读取文件的权限，通过使用 `--allow-write`（或 `-W`）标志授予写入文件的权限。这些标志可以通过指定路径列表来允许访问特定文件或目录。
+读取文件的权限通过 `--allow-read`（或 `-R`）标志授予，写入权限通过 `--allow-write`（或 `-W`）标志授予。这些标志可以指定路径列表，以允许访问特定文件或目录及其所有子目录。
 
 定义：`--allow-read[=<PATH>...]` 或 `-R[=<PATH>...]`
 
@@ -74,7 +79,7 @@ deno run --allow-read script.ts
 # 仅允许读取文件 foo.txt 和 bar.txt
 deno run --allow-read=foo.txt,bar.txt script.ts
 
-# 允许读取 ./node_modules 所有子目录中的任何文件
+# 允许读取 ./node_modules 及其所有子目录中的任意文件
 deno run --allow-read=node_modules script.ts
 ```
 
@@ -84,7 +89,7 @@ deno run --allow-read=node_modules script.ts
 # 允许读取 /etc 中的文件，但不允许读取 /etc/hosts
 deno run --allow-read=/etc --deny-read=/etc/hosts script.ts
 
-# 拒绝所有对磁盘的读取访问，禁用读取的权限提示。
+# 拒绝所有对磁盘的读取访问，禁用读取权限提示。
 deno run --deny-read script.ts
 ```
 
@@ -103,11 +108,11 @@ deno run --allow-write=foo.txt,bar.txt script.ts
 定义：`--deny-write[=<PATH>...]`
 
 ```sh
-# 允许读取当前工作目录中的文件 
+# 允许写入当前工作目录中的文件 
 # 但不允许写入 ./secrets 目录。
 deno run --allow-write=./ --deny-write=./secrets script.ts
 
-# 拒绝所有对磁盘的写入访问，禁用写入的权限提示。
+# 拒绝所有对磁盘的写入访问，禁用写入权限提示。
 deno run --deny-write script.ts
 ```
 

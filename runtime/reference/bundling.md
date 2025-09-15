@@ -11,19 +11,20 @@ description: "`deno bundle` 子命令的概述，可用于生成一个单文件�
 
 `deno bundle` 命令输出一个包含所有依赖的单个 JavaScript 文件。
 
-`deno bundle` 在底层由 [ESBuild](https://esbuild.github.io/) 驱动。
+`deno bundle` 在内部由 [ESBuild](https://esbuild.github.io/) 提供支持。
 
-这个工具适合将项目部署或分发为单个优化后的 JS 文件。
+该工具适用于将项目打包或分发成单个优化的 JS 文件。
 
 ## 支持的功能
 
 - 解析并内联所有依赖
 - 支持 JSX/TSX、TypeScript 和现代 JavaScript，包括
-  [import 属性](/runtime/fundamentals/modules/#import-attributes) 和 CSS
-- 可选的代码压缩（`--minify`）和源映射（`--sourcemap`）
+  [导入属性](/runtime/fundamentals/modules/#import-attributes) 和 CSS
+- 支持 HTML 入口点（Deno 2.5 及以上）
+- 可选的代码压缩（`--minify`）和源码映射（`--sourcemap`）
 - 代码拆分
-- 平台目标（`--platform`，支持 Deno 和浏览器）
-- 配置后支持 JSX
+- 平台目标设置（`--platform`，支持 Deno 和浏览器）
+- 配置时支持 JSX
 
 ## 基本示例
 
@@ -53,22 +54,139 @@ Hello from `deno bundle`!
 
 ## 选项概览
 
-| 标志                     | 描述                                                |
+| 标志                     | 描述                                                  |
 | ----------------------- | ---------------------------------------------------- |
-| `-o`, `--output <file>` | 将捆绑输出写入文件                                  |
-| `--minify`              | 生产环境压缩输出                                    |
-| `--format <format>`     | 输出格式（默认 `esm`）                              |
-| `--code-splitting`      | 启用代码拆分                                      |
-| `--platform <platform>` | 针对 `browser` 或 `deno` 进行打包（默认：`deno`） |
-| `--sourcemap`           | 包含源映射（`linked`，`inline`，`external`）     |
-| `--watch`               | 监听文件更改自动重建                                 |
-| `--inline-imports`      | 内联导入模块（`true` 或 `false`）                   |
+| `-o`, `--output <file>` | 将打包输出写入文件                                   |
+| `--outdir <dir>`        | 将打包输出写入指定目录                               |
+| `--minify`              | 进行生产环境代码压缩                                 |
+| `--format <format>`     | 输出格式（默认 `esm`）                               |
+| `--code-splitting`      | 启用代码拆分                                        |
+| `--platform <platform>` | 为 `browser` 或 `deno` 打包（默认: `deno`）         |
+| `--sourcemap`           | 包含源码映射（支持 `linked`、`inline`、`external`） |
+| `--watch`               | 文件更改时自动重建                                  |
+| `--inline-imports`      | 内联导入模块（`true` 或 `false`）                    |
+
+---
+
+## 运行时 API
+
+除了命令行工具外，您还可以使用 `Deno.bundle()` 来以编程方式打包您的 JavaScript 或 TypeScript 文件。这使得您能够将打包过程集成到构建流程和工作流中。
+
+:::note
+
+该 API 从 Deno v2.5 开始提供，属于实验性功能，使用时必须添加 `--unstable-bundle` 标志。
+
+:::
+
+### 基本用法
+
+```ts
+const result = await Deno.bundle({
+  entrypoints: ["./index.tsx"],
+  outputDir: "dist",
+  platform: "browser",
+  minify: true,
+});
+console.log(result);
+```
+
+### 在内存中处理输出
+
+你也可以选择不将输出写入磁盘，而是在内存中处理打包结果：
+
+```ts
+const result = await Deno.bundle({
+  entrypoints: ["./index.tsx"],
+  output: "dist",
+  platform: "browser",
+  minify: true,
+  write: false,
+});
+
+for (const file of result.outputFiles!) {
+  console.log(file.text());
+}
+```
+
+这种方式为将打包过程集成到各种工作流中提供了更大灵活性，比如直接从内存中提供打包文件，或对输出执行额外处理。
+
+---
+
+## 支持 HTML 入口点
+
+从 Deno 2.5 起，`deno bundle` 支持以 HTML 文件作为入口点。之前仅支持 `.js`、`.ts`、`.jsx` 和 `.tsx` 文件作为入口点。
+
+```bash
+deno bundle --outdir dist index.html
+```
+
+当你使用 HTML 文件作为入口点时，`deno bundle` 会：
+
+1. 查找 HTML 文件中的所有脚本引用
+2. 打包这些脚本及其依赖
+3. 更新 HTML 文件中的路径指向打包后的脚本文件
+4. 打包并注入所有导入的 CSS 文件到 HTML 输出中
+
+### 示例
+
+假设有如下 `index.tsx` 文件：
+
+```tsx title="index.tsx"
+import { render } from "npm:preact";
+import "./styles.css";
+
+const app = (
+  <div>
+    <p>Hello World!</p>
+  </div>
+);
+
+render(app, document.body);
+```
+
+以及一个引用该文件的 HTML 文件：
+
+```html title="index.html"
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Example</title>
+    <script src="./index.tsx" type="module"></script>
+  </head>
+</html>
+```
+
+执行 `deno bundle --outdir dist index.html` 后输出：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Example</title>
+    <script src="./index-2TFDJWLF.js" type="module" crossorigin></script>
+    <link rel="stylesheet" crossorigin href="./index-EWSJYQGA.css">
+  </head>
+</html>
+```
+
+打包输出文件名包含基于内容的哈希，用于缓存破坏和指纹识别。
+
+HTML 入口点在以上命令行工具和运行时 API 中均得到完整支持。
+
+### 何时使用 HTML 打包
+
+- **`deno bundle index.html`** — 非常适合对小型静态应用进行快速打包构建
+- **Vite** — 适合需要更复杂生态支持的项目
+
+两种方式在 Deno 上均可无缝使用，您可以根据工作流选择适合的方案。
 
 ---
 
 ## 为网页打包 React 页面
 
-以 `app.jsx` 和 `index.html` 文件开始：
+从 `app.jsx` 和 `index.html` 文件开始：
 
 ```jsx
 import React from "npm:react";

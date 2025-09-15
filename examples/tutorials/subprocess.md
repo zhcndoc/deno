@@ -1,6 +1,6 @@
 ---
 title: "创建子进程"
-description: "A guide to working with subprocesses in Deno. Learn how to spawn processes, handle input/output streams, manage process lifecycles, and implement inter-process communication patterns safely."
+description: "在 Deno 中使用子进程的指南。学习如何启动进程、处理输入/输出流、管理进程生命周期，以及安全实现进程间通信模式。"
 url: /examples/subprocess_tutorial/
 oldUrl:
   - /runtime/manual/examples/subprocess/
@@ -92,4 +92,54 @@ setTimeout(() => {
 
 ```shell
 $ deno run --allow-run=yes --allow-read=. --allow-write=. ./subprocess_piping_to_file.ts
+```
+
+## 使用便捷方法读取子进程输出
+
+在使用启动的子进程时，您可以对 `stdout` 和 `stderr` 流使用便捷方法，轻松收集和解析输出。这些方法类似于 `Response` 对象上可用的方法：
+
+```ts title="subprocess_convenience_methods.ts"
+const command = new Deno.Command("deno", {
+  args: [
+    "eval",
+    "console.log(JSON.stringify({message: 'Hello from subprocess'}))",
+  ],
+  stdout: "piped",
+  stderr: "piped",
+});
+
+const process = command.spawn();
+
+// 使用便捷方法收集输出
+const stdoutText = await process.stdout.text();
+const stderrText = await process.stderr.text();
+
+console.log("stdout:", stdoutText);
+console.log("stderr:", stderrText);
+
+// 等待进程完成
+const status = await process.status;
+console.log("退出码:", status.code);
+```
+
+可用的便捷方法包括：
+
+- `.text()` - 返回 UTF-8 编码的字符串输出
+- `.bytes()` - 返回 `Uint8Array` 类型的输出
+- `.arrayBuffer()` - 返回 `ArrayBuffer` 类型的输出
+- `.json()` - 解析输出为 JSON 并返回该对象
+
+```ts title="subprocess_json_parsing.ts"
+const command = new Deno.Command("deno", {
+  args: ["eval", "console.log(JSON.stringify({name: 'Deno', version: '2.0'}))"],
+  stdout: "piped",
+});
+
+const process = command.spawn();
+
+// 直接解析 JSON 输出
+const jsonOutput = await process.stdout.json();
+console.log("解析后的 JSON:", jsonOutput); // { name: "Deno", version: "2.0" }
+
+await process.status;
 ```

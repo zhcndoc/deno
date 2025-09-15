@@ -30,13 +30,7 @@ Next 提供了一个 CLI 工具，可以快速创建新的 Next.js 应用。在�
 deno run -A npm:create-next-app@latest
 ```
 
-当提示时，选择默认选项以使用 TypeScript 创建新的 Next.js 应用。
-
-然后，`cd` 进入新创建的项目文件夹，运行以下命令以允许脚本执行来安装依赖：
-
-```sh
-deno install --allow-scripts
-```
+当提示时，选择默认选项以创建带有 TypeScript 的新 Next.js 应用。
 
 Next.js 有些依赖仍然依赖于 `Object.prototype.__proto__`，并且需要 CommonJS 模块支持。为让 Deno 兼容 Next.js，更新你的 `deno.json` 文件，使用以下配置：
 
@@ -285,8 +279,8 @@ git commit -am 'my next app'
 git push -u origin main
 ```
 
-Once your app is on GitHub, you can
-[deploy it to Deno Deploy<sup>EA</sup>](https://console.deno.com/).
+一旦你的应用上线到 GitHub，你就可以
+[部署到 Deno Deploy<sup>EA</sup>](https://console.deno.com/)。
 
 想了解部署详情，请查看 
 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。

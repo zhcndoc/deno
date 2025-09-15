@@ -1,6 +1,6 @@
 ---
-title: "Testing"
-description: "A guide to Deno's testing capabilities. Learn about the built-in test runner, assertions, mocking, coverage reporting, snapshot testing, and how to write effective tests for your Deno applications."
+title: "测试"
+description: "Deno 测试功能指南。了解内置测试运行器、断言、模拟、覆盖率报告、快照测试，以及如何为您的 Deno 应用程序编写有效测试。"
 oldUrl:
   - /runtime/manual/advanced/language_server/testing_api/
   - /runtime/manual/basics/testing/
@@ -102,9 +102,104 @@ Deno.test("数据库操作", async (t) => {
 });
 ```
 
-## 命令行过滤
+## 测试钩子
 
-Deno 允许您使用命令行上的 `--filter` 选项运行特定的测试或测试组。此选项接受字符串或模式以匹配测试名称。过滤不会影响步骤；如果测试名称匹配过滤器，则将执行它的所有步骤。
+Deno 提供了测试钩子，允许您在测试运行之前和之后运行设置和拆卸代码。这些钩子对于初始化资源、测试后清理以及确保测试环境一致非常有用。
+
+### 可用的钩子
+
+- `Deno.test.beforeAll(fn)` - 在当前范围内的所有测试之前运行一次
+- `Deno.test.beforeEach(fn)` - 在每个单独测试之前运行
+- `Deno.test.afterEach(fn)` - 在每个单独测试之后运行
+- `Deno.test.afterAll(fn)` - 在当前范围内的所有测试之后运行一次
+
+### 钩子执行顺序
+
+- **beforeAll/beforeEach**: 按先进先出（FIFO）顺序执行
+- **afterEach/afterAll**: 按后进先出（LIFO）顺序执行
+
+如果任何钩子中抛出异常，同类型的剩余钩子将不会被执行，且当前测试将被标记为失败。
+
+### 示例
+
+```ts
+import { DatabaseSync } from "node:sqlite";
+import { assertEquals } from "jsr:@std/assert";
+
+let db: DatabaseSync;
+
+Deno.test.beforeAll(() => {
+  console.log("Setting up test database...");
+  db = new DatabaseSync(":memory:");
+  db.exec(`
+    CREATE TABLE users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE
+    ) STRICT
+  `);
+});
+
+Deno.test.beforeEach(() => {
+  console.log("Clearing database for clean test state...");
+  db.exec("DELETE FROM users");
+});
+
+Deno.test.afterEach(() => {
+  console.log("Test completed, cleaning up resources...");
+  // 每个测试后的额外清理
+});
+
+Deno.test.afterAll(() => {
+  console.log("Tearing down test database...");
+  db.close();
+});
+
+Deno.test("user creation", () => {
+  const stmt = db.prepare(
+    "INSERT INTO users (name, email) VALUES (?, ?) RETURNING *",
+  );
+  const user = stmt.get("alice", "alice@example.com");
+  assertEquals(user!.name, "alice");
+});
+
+Deno.test("user deletion", () => {
+  const insertStmt = db.prepare(
+    "INSERT INTO users (name, email) VALUES (?, ?) RETURNING *",
+  );
+  const user = insertStmt.get("bob", "bob@example.com");
+
+  const deleteStmt = db.prepare("DELETE FROM users WHERE id = ?");
+  deleteStmt.run(user!.id);
+
+  const selectStmt = db.prepare("SELECT * FROM users WHERE id = ?");
+  const deletedUser = selectStmt.get(user!.id);
+  assertEquals(deletedUser, undefined);
+});
+```
+
+### 多个钩子
+
+您可以注册多个相同类型的钩子，它们将按照上述顺序依次执行：
+
+```ts
+Deno.test.beforeEach(() => {
+  console.log("First beforeEach hook");
+});
+
+Deno.test.beforeEach(() => {
+  console.log("Second beforeEach hook");
+});
+
+// 输出：
+// First beforeEach hook
+// Second beforeEach hook
+// （测试执行）
+```
+
+## 命令行筛选
+
+Deno 允许您使用命令行上的 `--filter` 选项运行特定的测试或测试组。该选项接受字符串或模式用于匹配测试名称。筛选不会影响步骤；如果测试名称匹配筛选条件，则其所有步骤将被执行。
 
 考虑以下测试：
 
@@ -122,7 +217,7 @@ Deno.test("test-2", () => {});
 deno test --filter "my" tests/
 ```
 
-这个命令将执行 `my-test`，因为它包含了单词“my”。
+该命令将执行 `my-test`，因为它包含单词“my”。
 
 ### 通过模式过滤
 
@@ -132,9 +227,9 @@ deno test --filter "my" tests/
 deno test --filter "/test-*\d/" tests/
 ```
 
-这个命令将运行 `test-1` 和 `test-2`，因为它们匹配模式 `test-*` 后跟数字。
+该命令将运行 `test-1` 和 `test-2`，因为它们匹配模式 `test-*` 后跟数字。
 
-要指示您使用的是模式（正则表达式），请用正斜杠 `/` 将过滤值括起来，就像 JavaScript 的正则表达式语法一样。
+要表示您使用的是正则表达式模式，请使用斜杠 `/` 将过滤值括起来，就像 JavaScript 的正则表达式语法一样。
 
 ### 在配置文件中包含和排除测试文件
 
@@ -153,7 +248,7 @@ deno test --filter "/test-*\d/" tests/
 }
 ```
 
-或者更可能的：
+或者更常见的配置是：
 
 ```json
 {
@@ -169,7 +264,7 @@ Deno 提供了两种选择测试的方法：忽略测试和专注于特定测试
 
 ### 忽略/跳过测试
 
-您可以根据特定条件使用测试定义中的 `ignore` 布尔值来忽略某些测试。如果 `ignore` 设置为 `true`，测试将被跳过。这在您希望测试仅在特定操作系统上运行时非常有用。
+您可以根据特定条件使用测试定义中的 `ignore` 布尔值来忽略某些测试。如果 `ignore` 设置为 `true`，该测试将被跳过。这在您希望测试仅在特定操作系统上运行时非常有用。
 
 ```ts
 Deno.test({
@@ -181,7 +276,7 @@ Deno.test({
 });
 ```
 
-如果您想要在没有传递任何条件的情况下忽略测试，可以使用 `Deno.test` 对象中的 `ignore()` 函数：
+如果您想要在没有条件的情况下忽略测试，可以使用 `Deno.test` 对象中的 `ignore()` 函数：
 
 ```ts
 Deno.test.ignore("我的测试", () => {
@@ -250,7 +345,7 @@ deno test --junit-path=./report.xml
 
 ## 监视、模拟（测试替身）、存根和时间伪造
 
-[Deno 标准库](/runtime/fundamentals/standard_library/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些工具的更多信息，请查看 [JSR 上的 @std/testing 文档](https://jsr.io/@std/testing) 或我们的 [关于使用 deno 进行测试的模拟和监视的教程](/examples/mocking_tutorial/)。
+[Deno 标准库](/runtime/fundamentals/standard_library/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些工具的更多信息，请查看 [JSR 上的 @std/testing 文档](https://jsr.io/@std/testing) 或我们的 [使用 deno 进行测试的模拟和监视教程](/examples/mocking_tutorial/)。
 
 ## 覆盖率
 
@@ -260,7 +355,7 @@ deno test --junit-path=./report.xml
 
 ## 行为驱动开发
 
-使用 [@std/testing/bdd](https://jsr.io/@std/testing/doc/bdd/~) 模块，您可以以化简的格式编写测试，以便分组测试和添加其他 JavaScript 测试框架（如 Jasmine、Jest 和 Mocha）使用的设置/拆卸钩子。
+使用 [@std/testing/bdd](https://jsr.io/@std/testing/doc/bdd/~) 模块，您可以以简化的格式编写测试，以分组测试和添加其他 JavaScript 测试框架（如 Jasmine、Jest 和 Mocha）使用的设置/拆卸钩子。
 
 `describe` 函数创建一个块，以将多个相关测试分组。`it` 函数注册一个单个测试用例。例如：
 
@@ -542,7 +637,7 @@ Deno.test({
 ```
 
 ```sh
-# Run the tests with read permission
+# 运行带有读取权限的测试
 deno test --allow-read
 ```
 
@@ -551,19 +646,19 @@ deno test --allow-read
 ```ts
 Deno.test({
   name: "permission configuration example",
-  // permissions: { read: true } // Grant all read permissions and deny all others
+  // permissions: { read: true } // 授予所有读取权限，拒绝其他所有权限
   // OR
   permissions: {
-    read: ["./data", "./config"], // Grant read to specific paths only
-    write: false, // Explicitly deny write permissions
-    net: ["example.com:443"], // Allow specific host:port combinations
-    env: ["API_KEY"], // Allow access to specific env variables
-    run: false, // Deny subprocess execution
-    ffi: false, // Deny loading dynamic libraries
-    hrtime: false, // Deny high-resolution time
+    read: ["./data", "./config"], // 仅授予对特定路径的读取权限
+    write: false, // 明确拒绝写权限
+    net: ["example.com:443"], // 允许特定的 host:port 组合
+    env: ["API_KEY"], // 允许访问特定的环境变量
+    run: false, // 拒绝子进程执行权限
+    ffi: false, // 拒绝加载动态库
+    hrtime: false, // 拒绝高分辨率时间权限
   },
   fn() {
-    // Test code that respects these permission boundaries
+    // 遵守这些权限边界的测试代码
   },
 });
 ```

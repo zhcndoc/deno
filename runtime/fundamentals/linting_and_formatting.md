@@ -81,9 +81,7 @@ jobs:
 
 ```json
 {
-  "deno.enablePaths": [
-    "./deno.json"
-  ]
+  "deno.enablePaths": ["./deno.json"]
 }
 ```
 
@@ -241,4 +239,79 @@ jobs:
 
 ### 配置
 
-格式化器可以在 [`deno.json`](/runtime/fundamentals/configuration/#formatting) 文件中进行配置。您可以指定自定义设置，以根据您的需求定制格式化过程。
+格式化器可以在 [`deno.json`](/runtime/fundamentals/configuration/#formatting) 文件中进行配置。您可以指定自定义设置，以根据您的需求调整格式化过程。
+
+## Deno 对其他 linter 和格式化工具的支持
+
+### ESLint
+
+要在您的 Deno 项目中使用 VSCode 的 ESLint 扩展，您的项目目录需要有一个 `node_modules` 文件夹，供 VSCode 扩展识别。
+
+在您的 `deno.json` 中确保创建 `node_modules` 文件夹，以便编辑器能解析包：
+
+```jsonc
+{
+  "nodeModulesDir": "auto"
+}
+```
+
+（可选）运行 ESLint 命令下载它：
+
+```sh
+deno run -A npm:eslint --version
+# 或者
+deno run -A npm:eslint --init
+```
+
+创建一个 `eslint.config.js`：
+
+```js
+// eslint.config.js
+import js from "@eslint/js";
+import importPlugin from "eslint-plugin-import"; // 示例插件
+
+export default [
+  js.configs.recommended,
+  {
+    files: ["**/*.ts", "**/*.js"],
+    languageOptions: { globals: { Deno: "readonly" } },
+    plugins: { import: importPlugin },
+    rules: {
+      // 例如 "import/order": "warn"
+    },
+  },
+];
+```
+
+运行 ESLint：
+
+```sh
+deno run -A npm:eslint .
+```
+
+您也可以在 `deno.json` 中添加任务来运行 ESLint：
+
+```json
+{
+  "tasks": { "eslint": "eslint . --ext .ts,.js" }
+}
+```
+
+然后通过以下命令运行：
+
+```sh
+deno task eslint
+```
+
+### Prettier
+
+要在您的 Deno 项目中使用 Prettier，您的项目目录需要有一个 `node_modules` 文件夹，供 VSCode 扩展识别。
+
+然后安装 VSCode 的 Prettier 扩展，并将其配置为您的默认格式化工具：
+
+在 VSCode 中：
+
+1. 打开命令面板（使用 <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>）
+2. 选择 **使用其他格式化工具格式化文档...**
+3. 选择 **配置默认格式化程序...**
+4. 选择 **Prettier - Code formatter**
