@@ -1,6 +1,6 @@
 ---
-title: "使用起始模板构建 React 应用"
-description: "使用 Deno 和 Vite 构建 React 应用的完整指南。学习如何从模板设置项目，实现路由，添加 API 端点，并部署你的全栈 TypeScript 应用。"
+title: "使用 Vite 构建 React 应用"
+description: "Deno 和 Vite 构建 React 应用的完整指南。学习如何搭建项目、实现路由、添加 API 接口以及部署你的全栈 TypeScript 应用。"
 url: /examples/react_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/react/
@@ -9,7 +9,7 @@ oldUrl:
   - /runtime/tutorials/create_react_tutorial/
 ---
 
-[React](https://reactjs.org) 是使用最广泛的 JavaScript 前端库。
+[React](https://reactjs.org) 是最广泛使用的 JavaScript 前端库。
 
 在本教程中，我们将使用 Deno 构建一个简单的 React 应用。该应用会展示一列恐龙列表。点击其中一个时，会跳转到该恐龙详情页面。你可以查看
 [完成版应用的 GitHub 仓库](https://github.com/denoland/tutorial-with-react)
@@ -26,7 +26,7 @@ oldUrl:
 
 ## 使用 Vite 创建基础 React 应用
 
-本教程将使用 [Vite](https://vitejs.dev/) 在本地提供服务。
+本教程将使用 [Vite](https://vitejs.dev/) 在本地提供服务。  
 Vite 是现代 Web 项目的构建工具和开发服务器。它与 React 和 Deno 配合良好，利用 ES 模块，允许你直接导入 React 组件。
 
 在终端中运行下面命令，使用 TypeScript 模板创建新的 React 应用：
@@ -254,7 +254,7 @@ export default defineConfig({
 
 ## 创建页面
 
-创建新目录 `pages`，再创建两个文件 `src/pages/index.tsx` 和 `src/pages/Dinosaur.tsx`。
+创建新目录 `pages`，再创建两个文件 `src/pages/index.tsx` 和 `src/pages/Dinosaur.tsx`。  
 `Index` 页面列出所有恐龙，`Dinosaur` 页面展示单个恐龙详情。
 
 ### index.tsx
@@ -340,9 +340,9 @@ deno run dev
 
 此命令将：
 
-1. 在 3000 端口启动 Vite 开发服务器
-2. 在 8000 端口启动 API 服务器
-3. 配置代理，将前端 `/api` 请求转发给后端
+1. 在 3000 端口启动 Vite 开发服务器  
+2. 在 8000 端口启动 API 服务器  
+3. 配置代理，将前端 `/api` 请求转发给后端  
 
 在浏览器访问 `localhost:3000`，你应能看到恐龙应用，点击列表查看详情。
 
@@ -394,8 +394,8 @@ deno run serve
 
 此操作会：
 
-1. 使用 Vite 构建 React 应用（输出到 `dist/`）
-2. 启动 Oak 服务器，提供 API 及构建后的 React 应用
+1. 使用 Vite 构建 React 应用（输出到 `dist/`）  
+2. 启动 Oak 服务器，提供 API 及构建后的 React 应用  
 
 浏览器访问 `localhost:8000` 查看生产版本！
 

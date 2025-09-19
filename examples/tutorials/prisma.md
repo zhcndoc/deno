@@ -34,9 +34,9 @@ npx prisma@latest init --generator-provider prisma-client --output ./generated
 
 让我们了解关键参数：
 
-- `--generator-provider prisma-client`：定义提供程序为 "prisma-client"，而非默认的 "prisma-client-js"。该提供程序针对 Deno 进行了优化，并生成与 Deno 运行时兼容的 TypeScript 代码。
+- `--generator-provider prisma-client`: 定义生成器提供者为 `"prisma-client"`，而非默认的 `"prisma-client-js"`。该 `"prisma-client"` 提供者针对 Deno 进行了优化，会生成兼容 Deno 运行时的 TypeScript 代码。
 
-- `--output`：指定 Prisma 保存生成客户端文件的目录，包括类型定义和数据库访问工具。
+- `--output`: 定义 Prisma 将保存生成客户端文件的目录，包括类型定义和数据库访问工具。
 
 这将生成 [`prisma/schema.prisma`](https://www.prisma.io/docs/orm/prisma-schema)。让我们用以下内容更新它：
 

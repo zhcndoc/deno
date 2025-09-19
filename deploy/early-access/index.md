@@ -34,28 +34,28 @@ Deno Deploy<sup>EA</sup> 是对 Deploy Classic 的完全重新设计。它拥有
 
 | 功能                            | Deno Deploy<sup>EA</sup>       | Deploy Classic                                                                                                                          |
 | ------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Web 界面                        | console.deno.com               | dash.deno.com                                                                                                                           |
-| 暗色模式                       | ✅ 支持                       | ❌ 不支持                                                                                                                              |
-| 构建                           | ✅ 完全集成                   | 🟠 在 GitHub Actions 中运行，仪表板无实时日志流，缓存需手动设置，修改配置需编辑 YAML                                                    |
-| 运行 Deno 应用                  | ✅ 完全支持                   | 🟠 有限（无 FFI、子进程、写权限）                                                                                                       |
-| 运行 Node 应用                  | ✅ 完全支持                   | 🟠 有限（无 FFI、本地插件、子进程、写权限，NPM 兼容性降级）                                                                             |
-| 运行 Next.js/Astro/SvelteKit   | ✅ 一流支持                   | 🟠 取决于框架，需手动设置                                                                                                               |
-| 一流静态站点                   | ✅ 支持                       | ❌ 不支持                                                                                                                              |
-| 环境变量                      | ✅ 开发/生产环境变量不同       | 🟠 统一一套环境变量                                                                                                                     |
-| CDN 缓存                      | ✅ 支持                       | ❌ 不支持                                                                                                                              |
-| Web Cache API                 | ✅ 支持                       | ✅ 支持                                                                                                                                |
-| 数据库                        | ✅ 支持                       | 🟠 Deno KV                                                                                                                             |
-| 队列                          | ❌ 不支持                     | ✅ 支持                                                                                                                                |
-| 定时任务                      | ❌ 不支持                     | ✅ 支持                                                                                                                                |
-| 从 GitHub 部署                | ✅ 支持                       | ✅ 支持                                                                                                                                |
-| 使用命令行部署                | ⏳ 即将到来                   | ✅ 支持                                                                                                                                |
-| 即时回滚                      | ✅ 支持                       | ✅ 支持                                                                                                                                |
-| 日志                          | ✅ 支持                       | ✅ 支持                                                                                                                                |
-| 分布式追踪                    | ✅ 支持                       | ❌ 不支持                                                                                                                              |
-| 指标                          | ✅ 支持                       | ❌ 不支持                                                                                                                              |
-| OpenTelemetry 导出           | ⏳ 进行中                     | ❌ 不支持                                                                                                                              |
-| 区域数量                      | 2                              | 6                                                                                                                                      |
-| 自托管区域                    | ✅ 支持                       | ❌ 不支持                                                                                                                              |
+| Web interface                   | console.deno.com               | dash.deno.com                                                                                                                           |
+| Dark mode                       | ✅ 支持                       | ❌ 不支持                                                                                                                              |
+| Builds                          | ✅ 完全集成                   | 🟠 运行于 GitHub Actions，无仪表盘实时日志，缓存需手动配置，修改配置需编辑 YAML 文件                                                     |
+| Can run Deno apps               | ✅ 完全支持                   | 🟠 有限支持（无 FFI、子进程、写权限）                                                                                                  |
+| Can run Node apps               | ✅ 完全支持                   | 🟠 有限支持（无 FFI、本地插件、子进程、写权限，且 NPM 兼容性较差）                                                                       |
+| Can run Next.js/Astro/SvelteKit | ✅ 一流支持                   | 🟠 依赖框架，需手动配置                                                                                                                  |
+| First class static sites        | ✅ 支持                       | ❌ 不支持                                                                                                                              |
+| Environment Variables           | ✅ 不同的开发/生产环境变量    | 🟠 所有部署共用一套环境变量                                                                                                             |
+| CDN caching                     | ✅ 支持                       | ❌ 不支持                                                                                                                              |
+| Web Cache API                   | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| Databases                       | ✅ 支持                       | 🟠 仅 Deno KV                                                                                                                           |
+| Queues                          | ❌ 不支持                    | ✅ 支持                                                                                                                                |
+| Cron                            | ❌ 不支持                    | ✅ 支持                                                                                                                                |
+| Deploy from GitHub              | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| Deploy from CLI                 | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| Instant Rollback                | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| Logs                            | ✅ 支持                       | ✅ 支持                                                                                                                                |
+| Tracing                         | ✅ 支持                       | ❌ 不支持                                                                                                                              |
+| Metrics                         | ✅ 支持                       | ❌ 不支持                                                                                                                              |
+| OpenTelemetry export            | ⏳ 进行中                     | ❌ 不支持                                                                                                                              |
+| Regions                         | 2                              | 6                                                                                                                                       |
+| Self hostable regions           | ✅ 支持                       | ❌ 不支持                                                                                                                              |
 
 ## 如何访问 EA
 

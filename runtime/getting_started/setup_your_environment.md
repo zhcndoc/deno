@@ -66,17 +66,16 @@ Deno 在 [Vim](https://www.vim.org/) 和 [Neovim](https://neovim.io/) 上有良�
 请注意，如果你同时使用 `ts_ls` 作为 LSP 客户端，可能会出现 `ts_ls` 和 `denols` 同时附加到当前缓冲区的问题。为解决此问题，请确保为 `ts_ls` 和 `denols` 设置不同的 `root_dir`。你可能还需将 `ts_ls` 的 `single_file_support` 设置为 `false`，以防其在单文件模式下运行。以下是示例配置：
 
 ```lua
-local nvim_lsp = require('lspconfig')
-nvim_lsp.denols.setup {
-  on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern("deno.json", "deno.jsonc"),
-}
+vim.lsp.config('denols', {
+    on_attach = on_attach,
+    root_markers = {"deno.json", "deno.jsonc"},
+})
 
-nvim_lsp.ts_ls.setup {
-  on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern("package.json"),
-  single_file_support = false
-}
+vim.lsp.config('ts_ls', {
+    on_attach = on_attach,
+    root_markers = {"package.json"},
+    single_file_support = false,
+})
 ```
 
 对于 Deno，上述示例假设项目根目录下存在 `deno.json` 或 `deno.jsonc` 文件。

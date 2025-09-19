@@ -167,7 +167,7 @@ export const sidebar = [
             title: "WordPress 前端",
             href: "/deploy/tutorials/tutorial-wordpress-frontend/",
           },
-          { title: "Vite", href: "/deploy/tutorials/vite/" },
+          { title: "Vite", href: "/examples/react_tutorial/" },
           {
             title: "日程通知",
             href: "/deploy/kv/tutorials/schedule_notification/",

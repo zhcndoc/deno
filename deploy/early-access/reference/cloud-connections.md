@@ -14,11 +14,11 @@ Deno Deploy<sup>EA</sup> 允许您连接到诸如 AWS 和 Google Cloud Platform�
 
 ## 工作原理
 
-Deno Deploy<sup>EA</sup> 是一个 OIDC 提供者。Deno Deploy<sup>EA</sup> 的每个正在运行的应用都可以颁发由 Deno Deploy<sup>EA</sup> 签名的短期 JWT 令牌。这些令牌包含有关应用程序的信息，例如组织和应用的 ID 及别名、应用程序执行的上下文以及正在运行的修订 ID。
+Deno Deploy<sup>EA</sup> 是一个 OIDC 提供者。每个运行中的 Deno Deploy<sup>EA</sup> 应用都可以被签发由 Deno Deploy<sup>EA</sup> 签名的短期有效 JWT 令牌。这些令牌包含关于该应用的信息，例如组织和应用的 ID 和别名、应用执行的上下文，以及运行的修订版本 ID。了解更多关于 [Deno Deploy<sup>EA</sup> 中的 OIDC](./oidc) 。
 
-通过将这些令牌发送到 AWS 或 GCP，可以将它们交换为可用于访问云资源（如 AWS S3 存储桶或 Google Cloud Spanner 实例）的短期 AWS 或 GCP 凭据。将令牌发送到 AWS 或 GCP 时，云提供商会验证该令牌，检查其是否由 Deno Deploy<sup>EA</sup> 颁发，并且其对应该被允许访问云资源的应用和上下文有效。
+通过将这些令牌发送到 AWS 或 GCP，可以将它们兑换为短期有效的 AWS 或 GCP 凭据，从而访问云资源，例如 AWS S3 存储桶或 Google Cloud Spanner 实例。向 AWS 或 GCP 发送令牌时，云提供商会验证该令牌，检查它是否由 Deno Deploy<sup>EA</sup> 签发，且是否有效且允许特定应用和上下文访问云资源。
 
-为了使 AWS 或 GCP 能够用 OIDC 令牌交换凭据，需要将云提供商配置为信任 Deno Deploy<sup>EA</sup> 作为 OIDC 身份提供者，并且需要为特定的 Deno Deploy<sup>EA</sup> 应用创建一个允许使用令牌交换凭据的 AWS IAM 角色或 GCP 服务账号。
+为了使 AWS 或 GCP 能够将 OIDC 令牌兑换为凭据，云提供商需要配置为信任 Deno Deploy<sup>EA</sup> 作为 OIDC 身份提供者，并需要创建 AWS IAM 角色或 GCP 服务账号，使其允许特定 Deno Deploy<sup>EA</sup> 应用将令牌兑换为凭据的操作。
 
 ## 设置 AWS
 

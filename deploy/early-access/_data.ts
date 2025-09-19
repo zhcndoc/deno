@@ -59,6 +59,10 @@ export const sidebar = [
         href: "/deploy/early-access/reference/cloud-connections/",
       },
       {
+        title: "OIDC",
+        href: "/deploy/early-access/reference/oidc/",
+      },
+      {
         title: "运行时",
         href: "/deploy/early-access/reference/runtime/",
       },
