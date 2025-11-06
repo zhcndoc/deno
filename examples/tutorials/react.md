@@ -7,6 +7,7 @@ oldUrl:
   - /runtime/manual/basics/react/
   - /runtime/tutorials/how_to_with_npm/react/
   - /runtime/tutorials/create_react_tutorial/
+  - /deploy/tutorials/vite/
 ---
 
 [React](https://reactjs.org) 是最广泛使用的 JavaScript 前端库。
@@ -416,7 +417,7 @@ git push -u origin main
 ### 部署到 Deno Deploy
 
 代码上传 GitHub 后，你可以
-[将其部署至 Deno Deploy<sup>EA</sup>](https://console.deno.com/)。
+[将其部署至 Deno Deploy](https://console.deno.com/)。
 
 完整部署流程请参考 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
 

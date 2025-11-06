@@ -1,6 +1,6 @@
 ---
-title: "TypeScript support"
-description: "Learn how to use TypeScript with Deno. Covers configuration options, type checking, and best practices for writing type-safe Deno applications."
+title: "TypeScript 支持"
+description: "了解如何在 Deno 中使用 TypeScript。涵盖配置选项、类型检查以及编写类型安全 Deno 应用的最佳实践。"
 oldUrl:
   - /runtime/manual/advanced/typescript/
   - /runtime/manual/typescript/
@@ -27,19 +27,19 @@ TypeScript 的主要优势之一是它可以使您的代码类型安全，捕获
 Deno 允许您使用 [`deno check`](/runtime/reference/cli/check/) 子命令对代码进行类型检查（而不执行它）：
 
 ```shell
-# Check the current directory/module
+# 检查当前目录/模块
 deno check
 
-# Check a specific TypeScript file
+# 检查特定的 TypeScript 文件
 deno check module.ts
 
-# Include remote modules and npm packages in the check
+# 在检查中包含远程模块和 npm 包
 deno check --all module.ts
 
-# Check code snippets in JSDoc comments
+# 检查 JSDoc 注释中的代码片段
 deno check --doc module.ts
 
-# Check code snippets in markdown files
+# 检查 markdown 文件中的代码片段
 deno check --doc-only markdown.md
 ```
 

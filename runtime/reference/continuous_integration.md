@@ -1,12 +1,21 @@
 ---
-title: "Continuous integration"
-description: "Guide to setting up continuous integration (CI) pipelines for Deno projects. Learn how to configure GitHub Actions workflows, run tests and linting in CI, handle cross-platform builds, and optimize pipeline performance with caching."
+title: "持续集成"
+description: "为 Deno 项目设置持续集成（CI）管道的指南。学习如何配置 GitHub Actions 工作流程，在 CI 中运行测试和代码检查，处理跨平台构建，并通过缓存优化管道性能。"
 oldUrl: /runtime/manual/advanced/continuous_integration
 ---
 
 Deno 的内置工具使得为您的项目设置持续集成（CI）管道变得简单。您可以使用相应的命令 `deno test`、`deno lint` 和 `deno fmt` 对您的代码进行 [测试](/runtime/fundamentals/testing)、[代码检查和格式化](/runtime/fundamentals/linting_and_formatting/)。此外，您还可以在管道中使用 `deno coverage` 从测试结果中生成代码覆盖率报告。
 
 ## 设置基本管道
+
+:::tip
+
+想要现成的 GitHub Actions 工作流程？GitHub 提供了官方的 Deno 起始工作流程，您可以将其添加到您的仓库中：
+<https://github.com/actions/starter-workflows/blob/main/ci/deno.yml>。
+
+在 GitHub 中打开 Actions 标签页，选择“New workflow”，搜索“Deno”即可使用该模板。
+
+:::
 
 您可以在 GitHub Actions 中为 Deno 项目设置基本管道。本页面上解释的概念在其他 CI 提供商中也适用，例如 Azure Pipelines、CircleCI 或 GitLab。
 
@@ -136,7 +145,7 @@ steps:
 }
 ```
 
-为了增加这个版本，您可以更新依赖项，然后重新加载缓存并在本地更新锁定文件：
+为了升级这个版本，您可以更新依赖项，然后重新加载缓存并在本地更新锁定文件：
 
 ```console
 deno install --reload --frozen=false
@@ -155,7 +164,7 @@ deno install --reload --frozen=false
 ```yaml
 - uses: denoland/setup-deno@v2
   with:
-    # setting `cache-hash` implies `cache: true` and will replace
-    # the default cache-hash of `${{ hashFiles('**/deno.lock') }}`
+    # 设置 `cache-hash` 意味着启用 `cache: true`，并替换
+    # 默认的缓存哈希 `${{ hashFiles('**/deno.lock') }}`
     cache-hash: ${{ hashFiles('**/deno.json') }}
 ```

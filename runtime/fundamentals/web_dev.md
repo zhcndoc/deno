@@ -12,7 +12,7 @@ Deno 提供了一个安全且友好的开发环境来构建 web 应用程序，�
    需要明确的权限才能访问文件、网络和环境，降低了安全漏洞的风险。
 2. Deno 内置了[TypeScript 支持](/runtime/fundamentals/typescript/)，
    允许你无需额外配置或工具即可书写 TypeScript 代码。
-3. Deno 附带了[标准库](/runtime/fundamentals/standard_library/)，
+3. Deno 附带了[标准库](/runtime/reference/std/)，
    包含了处理 HTTP 服务器、文件系统操作等常见任务的模块。
 
 对于你的原生 TypeScript 或 JavaScript web 应用，你可以使用内置的 Deno [HTTP 服务器](/runtime/fundamentals/http_server/)。这是一种很好上手 Deno 并构建简单 web 应用的方式，无需任何额外依赖。
@@ -159,4 +159,4 @@ deno run --allow-net server.ts
 
 ## Node 项目
 
-Deno 可以直接运行你的 Node.js 项目。请查看我们关于[将你的 Node.js 项目迁移到 Deno]( /runtime/fundamentals/node/#migrating-from-node.js-to-deno)的指南。
+Deno 可以直接运行你的 Node.js 项目。请查看我们关于[将你的 Node.js 项目迁移到 Deno](/runtime/fundamentals/node/#migrating-from-node.js-to-deno)的指南。

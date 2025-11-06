@@ -345,7 +345,7 @@ deno test --junit-path=./report.xml
 
 ## 监视、模拟（测试替身）、存根和时间伪造
 
-[Deno 标准库](/runtime/fundamentals/standard_library/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些工具的更多信息，请查看 [JSR 上的 @std/testing 文档](https://jsr.io/@std/testing) 或我们的 [使用 deno 进行测试的模拟和监视教程](/examples/mocking_tutorial/)。
+[Deno 标准库](/runtime/reference/std/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些工具的更多信息，请查看 [JSR 上的 @std/testing 文档](https://jsr.io/@std/testing) 或我们的 [使用 deno 进行测试的模拟和监视教程](/examples/mocking_tutorial/)。
 
 ## 覆盖率
 
@@ -473,7 +473,8 @@ export default function getTwo() {
 
 ```ts title="example.ts$4-10.ts" ignore
 import { assertEquals } from "jsr:@std/assert/equals";
-import { add, ONE }, getTwo from "file:///path/to/example.ts";
+import { add, ONE } from "file:///path/to/example.ts";
+import getTwo from "file:///path/to/example.ts";
 
 Deno.test("example.ts$4-10.ts", async () => {
   const sum = add(ONE, getTwo());
@@ -600,9 +601,10 @@ Deno.test({
 
 ## 快照测试
 
-[Deno 标准库](/runtime/fundamentals/standard_library/) 包含一个 [快照模块](https://jsr.io/@std/testing/doc/snapshot/~)，允许开发者通过将值与参考快照进行比较来编写测试。这些快照是原始值的序列化表示，存储在测试文件旁边。
+[Deno 标准库](/runtime/reference/std/) 包含一个 [快照模块](https://jsr.io/@std/testing/doc/snapshot/~)，允许开发者通过将值与参考快照进行比较来编写测试。这些快照是原始值的序列化表示，存储在测试文件旁边。
 
 快照测试能够通过极少的代码捕捉到广泛的错误。在难以准确表达应该断言什么的情况下非常有用，而不需要过多的代码，或者在预期测试所做的断言经常变化的情况下也特别有帮助。
+
 - [快照测试教程](/examples/snapshot_tutorial/)
 
 ## 测试和权限

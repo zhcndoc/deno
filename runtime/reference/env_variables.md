@@ -43,7 +43,9 @@ deno run --env-file main.ts
 
 :::
 
-另外，标准库中的 `dotenv` 包也将从 `.env` 加载环境变量。
+## `@std/dotenv`
+
+标准库中的 `dotenv` 包也可以用于从 `.env` 加载环境变量。
 
 假设您有一个 `.env` 文件，如下所示：
 
@@ -54,10 +56,20 @@ GREETING="Hello, world."
 导入 `load` 模块以自动从 `.env` 文件导入到进程环境中。
 
 ```ts
-import "jsr:@std/dotenv/load";
+import { load } from "jsr:@std/dotenv";
 
-console.log(Deno.env.get("GREETING")); // "Hello, world."
+const env = await load({
+  // 可选：选择特定路径（默认为 ".env"）
+  envPath: ".env.local",
+  // 可选：也导出到进程环境（这样 Deno.env 可以读取它）
+  export: true,
+});
+
+console.log(env.GREETING);
+console.log(Deno.env.get("GREETING"));
 ```
+
+运行此命令时使用 `deno run --allow-read --allow-env app.ts`。
 
 有关 `.env` 处理的更多文档可以在
 [@std/dotenv](https://jsr.io/@std/dotenv/doc) 文档中找到。
@@ -80,11 +92,11 @@ MY_VAR="my value" deno run main.ts
   
   "tasks": {
     "build:full": {
-      "description": "Build the site with all features",
+      "description": "使用所有功能构建站点",
       "command": "BUILD_TYPE=FULL deno run main.ts"
     },
     "build:light": {
-      "description": "Build the site without expensive operations",
+      "description": "构建不包含昂贵操作的站点",
       "command": "BUILD_TYPE=LIGHT deno run main.ts"
     }
   }

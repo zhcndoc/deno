@@ -124,9 +124,13 @@ console.log(greet("world"));
 ```markdown
 :::note 重要补充信息。:::
 
-:::tip 有助于更好使用的建议。:::
+:::info Informational content (styled like note). :::
 
-:::caution 警示潜在问题或陷阱。:::
+:::tip Helpful advice for better usage. :::
+
+:::caution Warn about potential issues or gotchas. :::
+
+:::warning Critical warnings that require immediate attention. :::
 ```
 
 ### 表格

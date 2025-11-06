@@ -1,6 +1,6 @@
 ---
-title: "Configuring TypeScript"
-description: "A guide to TypeScript configuration in Deno. Learn about compiler options, type checking JavaScript, JSDoc support, type declarations, and configuring TypeScript for cross-platform compatibility."
+title: "配置 TypeScript"
+description: "Deno 中 TypeScript 配置指南。了解编译器选项、JavaScript 的类型检查、JSDoc 支持、类型声明以及跨平台兼容性的 TypeScript 配置。"
 oldUrl:
   - /runtime/manual/advanced/typescript/faqs/
   - /runtime/manual/advanced/typescript/migration/
@@ -66,35 +66,64 @@ TypeScript 文件受益于 TypeScript 编译器能够对您的代码进行更彻
 
 ## 在 Deno 中配置 TypeScript
 
-TypeScript 提供了许多配置选项，对于刚刚开始使用 TS 的人来说可能会觉得令人生畏。Deno 旨在简化 TypeScript 的使用，而不是让您淹没在无数设置中。Deno 配置 TypeScript 以 **开箱即用**。无需额外的配置麻烦！
+Deno 致力于基于以下设计原则简化 TypeScript 配置：
 
-但是，如果您确实想更改 TypeScript 编译器选项，Deno 允许您在 `deno.json` 文件中进行更改。在命令行中提供路径，或使用默认路径。例如：
+- 对类型检查规则采用严格且现代的默认值。
+- 允许省略涉及目标运行时或兼容性的设置，利用与执行环境的直接集成。
+- 使用 `deno.json` 目录作用域支持项目引用。
 
-```console
-deno run --config ./deno.json main.ts
+最后一点提供了比 `tsconfig.json` 的 [`references`](https://www.typescriptlang.org/tsconfig/#references) 和 [`extends`](https://www.typescriptlang.org/tsconfig/#extends) 字段更简洁的格式，使用 `deno.json` 工作区和根成员继承。详见关于[工作区中的类型检查](/runtime/fundamentals/workspaces/#type-checking)章节。
+
+## `tsconfig.json` 兼容性
+
+虽然不推荐在以 Deno 为主的项目中使用 [`tsconfig.json`](https://www.typescriptlang.org/tsconfig/) 文件，但现有的 Node.js + TypeScript 工作区仍可在 Deno 的类型检查器和语言服务器协议中开箱即用。
+
+对包含 `deno.json` 或 `package.json` 的每个工作区目录，Deno 都会查找 `tsconfig.json` 文件。如果存在，它将被添加为“根”项目引用，并递归包含其中的引用。
+
+与 `tsc` 类似，TSConfig 的作用域由其[根字段](https://www.typescriptlang.org/tsconfig/#root-fields)确定。如有重叠情况：
+
+- 被引用的项目优先于引用者。
+- 对于根引用，`foo/bar/tsconfig.json` 优先于 `foo/tsconfig.json`。
+- 如果父目录中的 `deno.json` 含有 `compilerOptions`，则优先于任何 TSConfig。
+
+支持以下字段：
+
+```json title="tsconfig.json"
+{
+  "extends": "...",
+  "files": ["..."],
+  "include": ["..."],
+  "exclude": ["..."],
+  "references": [
+    { "path": "..." }
+  ],
+  "compilerOptions": {
+    "...": "..."
+  }
+}
 ```
 
-:::note
+除 `compilerOptions` 外，这些字段不能在 `deno.json` 中指定。
 
-如果您正在创建需要配置文件的库，请记住，您的所有 TS 模块的消费者也需要该配置文件。此外，配置文件中可能有使其他 TypeScript 模块不兼容的设置。
-
-:::
+您可能在某些情况下被迫使用 `tsconfig.json`，例如当 [`include`](https://www.typescriptlang.org/tsconfig/#include) 所需的粒度无法通过 `deno.json` 工作区和目录作用域表示时。
 
 ## TS 编译器选项
 
-以下是可以更改的编译器选项的表格，它们在 Deno 中的默认值以及关于该选项的其他说明：
+以下是可更改的编译器选项列表，包括它们在 Deno 中的默认值和相关说明：
 
 | 选项                           | 默认值                 | 备注                                                                                                                                     |
 | ------------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `allowJs`                      | `true`                 | 这几乎永远不需要更改                                                                                                                   |
-| `allowUnreachableCode`         | `false`                |                                                                                                                                           |
+| `allowUnreachableCode`         | `false`                |                                                                                                                                        |
 | `allowUnusedLabels`            | `false`                |                                                                                                                                           |
-| `checkJs`                      | `false`                | 如果为 `true`，则会导致 TypeScript 对 JavaScript 进行类型检查                                                                              |
+| `baseUrl`                     | `"./"`                 | 用于解析 `paths` 和 `rootDirs` 中的裸模块描述符，但不会用于模块导入中的裸描述符。                                                           |
+| `checkJs`                      | `false`                |                                                                                                                                        |
 | `jsx`                          | `"react"`              |                                                                                                                                           |
 | `jsxFactory`                   | `"React.createElement"` |                                                                                                                                           |
 | `jsxFragmentFactory`           | `"React.Fragment"`      |                                                                                                                                           |
 | `keyofStringsOnly`             | `false`                |                                                                                                                                           |
-| `lib`                          | `[ "deno.window" ]`     | 该选项的默认值根据 Deno 中的其他设置而有所不同。如果提供，则会覆盖默认值。有关更多信息，请参见下文。                                             |
+| `lib`                         | `[ "deno.window" ]`     | 该选项的默认值根据 Deno 中的其他设置而异。若提供此选项，则会覆盖默认设置。详见下文。                                                        |
+| `module`                      | `"nodenext"`           | 支持的值包括：`["nodenext", "esnext", "preserve"]`。                                                                                    |
+| `moduleResolution`            | `"nodenext"`           | 支持的值包括：`["nodenext", "bundler"]`。                                                                                               |
 | `noErrorTruncation`            | `false`                |                                                                                                                                           |
 | `noFallthroughCasesInSwitch`   | `false`                |                                                                                                                                           |
 | `noImplicitAny`                | `true`                 |                                                                                                                                           |
@@ -106,44 +135,43 @@ deno run --config ./deno.json main.ts
 | `noUnusedLocals`               | `false`                |                                                                                                                                           |
 | `noUnusedParameters`           | `false`                |                                                                                                                                           |
 | `noUncheckedIndexedAccess`     | `false`                |                                                                                                                                           |
-| `reactNamespace`               | `React`                |                                                                                                                                           |
-| `strict`                       | `true`                 |                                                                                                                                           |
-| `strictBindCallApply`          | `true`                 |                                                                                                                                           |
-| `strictFunctionTypes`          | `true`                 |                                                                                                                                           |
-| `strictPropertyInitialization`  | `true`                 |                                                                                                                                           |
-| `strictNullChecks`             | `true`                 |                                                                                                                                           |
-| `suppressExcessPropertyErrors` | `false`                |                                                                                                                                           |
-| `suppressImplicitAnyIndexErrors` | `false`               |                                                                                                                                           |
-| `useUnknownInCatchVariables`   | `true`                 |                                                                                                                                           |
+| `paths`                      | `{}`                   |                                                                                                                                           |
+| `rootDirs`                   | `null`                  |                                                                                                                                           |
+| `strict`                     | `true`                  |                                                                                                                                           |
+| `strictBindCallApply`        | `true`                  |                                                                                                                                           |
+| `strictFunctionTypes`        | `true`                  |                                                                                                                                           |
+| `strictPropertyInitialization`| `true`                 |                                                                                                                                           |
+| `strictNullChecks`           | `true`                  |                                                                                                                                           |
+| `suppressExcessPropertyErrors`| `false`                 |                                                                                                                                           |
+| `suppressImplicitAnyIndexErrors` | `false`             |                                                                                                                                           |
+| `useUnknownInCatchVariables` | `true`                  |                                                                                                                                           |
 
-有关全系列编译器选项及其如何影响 TypeScript 的信息，请参阅
-[TypeScript 手册](https://www.typescriptlang.org/docs/handbook/compiler-options.html)。
+有关完整编译器选项及其对 TypeScript 的影响，请参阅[TypeScript 手册](https://www.typescriptlang.org/docs/handbook/compiler-options.html)。
 
 ## 使用 "lib" 属性
 
-如果您正在处理一个向多个运行时（如浏览器）发送代码的项目，您可以通过 `compilerOptions` 中的 "lib" 属性调整默认类型。
+如果您的项目需要向多个运行时（例如浏览器）发送代码，您可以通过 `compilerOptions` 中的 "lib" 属性调整默认类型。
 
-对用户感兴趣的内置库包括：
+常用内置库说明：
 
-- `"deno.ns"` - 包含所有自定义的 `Deno` 全局命名空间 API 以及 Deno 对 `import.meta` 的扩展。通常这不会与其他库或全局类型冲突。
-- `"deno.unstable"` - 包含额外的不稳定 `Deno` 全局命名空间 API。
-- `"deno.window"` - 这是在检查 Deno 主运行时脚本时使用的 "默认" 库。它包括 `"deno.ns"` 以及用于内置的扩展的其他类型库。此库会与标准 TypeScript 库（如 `"dom"` 和 `"dom.iterable"`）冲突。
-- `"deno.worker"` - 这是在检查 Deno 网络工作者脚本时使用的库。有关网络工作者的更多信息，请查阅
-  [Web 工作者的类型检查](/runtime/reference/ts_config_migration/#type-checking-web-workers)。
-- `"dom.asynciterable"` - TypeScript 当前不包括 Deno 实现的 DOM 异步可迭代对象（以及多个浏览器），因此我们自己实现了它，直到它在 TypeScript 中可用。
+- `"deno.ns"` — 包含所有自定义的 `Deno` 全局命名空间 API 以及 Deno 对 `import.meta` 的扩展。通常不会与其他库或全局类型冲突。
+- `"deno.unstable"` — 包含额外的不稳定 `Deno` 全局命名空间 API。
+- `"deno.window"` — 这是检查 Deno 主运行时脚本时使用的“默认”库，包含 `"deno.ns"` 以及内置扩展的其他类型库。此库会与标准 TypeScript 库（如 `"dom"` 和 `"dom.iterable"`）冲突。
+- `"deno.worker"` — 检查 Deno 网络工作者脚本时使用的库。更多信息见[Web 工作者的类型检查](/runtime/reference/ts_config_migration/#type-checking-web-workers)。
+- `"dom.asynciterable"` — TypeScript 当前不包含 Deno 实现的 DOM 异步可迭代对象（以及多个浏览器均支持），因此我们自行实现，直至 TypeScript 支持该特性。
 
-这些是不会默认启用但在编写计划在其他运行时中也能正常工作的代码时实用的公共库：
+以下公共库默认不启用，但当编写计划在多种运行时正常工作的代码时非常有用：
 
-- `"dom"` - 包含 TypeScript 的主要浏览器全局库。类型定义在许多方面与 `"deno.window"` 冲突，因此如果使用了 `"dom"`，则考虑仅使用 `"deno.ns"` 来暴露 Deno 特定的 API。
-- `"dom.iterable"` - 浏览器全局库的可迭代扩展。
-- `"scripthost"` - Microsoft Windows 脚本主机的库。
-- `"webworker"` - 浏览器中网络工作者的主要库。与 `"dom"` 一样，这会与 `"deno.window"` 或 `"deno.worker"` 冲突，因此考虑仅使用 `"deno.ns"` 来暴露 Deno 特定的 API。
-- `"webworker.importscripts"` - 使 `importScripts()` API 在网络工作者中可用的库。
-- `"webworker.iterable"` - 将可迭代添加到网络工作者中的对象的库。现代浏览器支持此功能。
+- `"dom"` — TypeScript 的主要浏览器全局库。该类型定义与 `"deno.window"` 在多方面冲突，若使用 `"dom"`，建议只利用 `"deno.ns"` 公开 Deno 特定 API。
+- `"dom.iterable"` — 浏览器全局库的可迭代扩展。
+- `"scripthost"` — Microsoft Windows 脚本主机的库。
+- `"webworker"` — 浏览器中 Web 工作者的主要库，类似 `"dom"`，它会与 `"deno.window"` 或 `"deno.worker"` 冲突，因此建议只使用 `"deno.ns"`。
+- `"webworker.importscripts"` — Web 工作者中可用的 `importScripts()` API 库。
+- `"webworker.iterable"` — 为 Web 工作者中的对象添加可迭代性，该特性受现代浏览器支持。
 
 ## 针对 Deno 和浏览器
 
-您可能希望编写可以无缝运行于 Deno 和浏览器中的代码。在这种情况下，您需要在使用任何独占于某一个环境的 API 之前有条件地检查执行环境。在这种情况下，典型的 `compilerOptions` 配置可能如下所示：
+若您希望编写可无缝运行于 Deno 和浏览器的代码，需在使用某环境独占的 API 之前条件性检查执行环境。典型的 `compilerOptions` 配置示例如下：
 
 ```json title="deno.json"
 {
@@ -153,9 +181,9 @@ deno run --config ./deno.json main.ts
 }
 ```
 
-这应该允许大多数代码在 Deno 中被正确地类型检查。
+这应允许大多数代码在 Deno 中被正确类型检查。
 
-如果您预计将在使用 `--unstable` 标志的 Deno 中运行代码，那么您还应该将该库添加到配置中：
+如果您预计会在启用 `--unstable` 标志的 Deno 中运行代码，还应将该库添加：
 
 ```json title="deno.json"
 {
@@ -171,64 +199,60 @@ deno run --config ./deno.json main.ts
 }
 ```
 
-通常情况下，当您在 TypeScript 中使用 `"lib"` 选项时，您还需要包括一个 "es" 库。在 `"deno.ns"` 和 `"deno.unstable"` 的情况下，它们在引入时会自动包含 `"esnext"`。
+常见情况下，使用 TypeScript 的 `"lib"` 选项时还需包含对应的 "es" 库。而 `"deno.ns"` 和 `"deno.unstable"` 在引入时会自动包含 `"esnext"`。
 
 :::note
 
-如果您遇到类型错误，例如 **找不到 `document` 或 `HTMLElement`**，则可能您使用的库依赖于 DOM。这在设计为在浏览器内和服务器端运行的包中很常见。默认情况下，Deno 仅包括直接支持的库。假设该包正确识别其在运行时所处的环境，那么使用 DOM 库进行类型检查是 "安全" 的。
+如果您遇到类型错误，如 **找不到 `document` 或 `HTMLElement`**，可能是因为所用库依赖 DOM。这在设计为可运行于浏览器和服务器端的包中很常见。默认情况下，Deno 仅包含直接支持的库。假设包正确识别其运行时环境，类型检查时包含 DOM 库是“安全”的。
 
 :::
 
 ## 类型和类型声明
 
-Deno 运用 _无非标准模块解析_ 的设计原则。当 TypeScript 检查一个文件时，它只关注其类型。相比之下，`tsc` 编译器使用复杂的逻辑来解析这些类型。默认情况下，`tsc` 期望带有扩展名的模糊模块描述符（例如 `.ts`、`.d.ts` 或 `.js`）。然而，Deno 处理的是明确的描述符。
+Deno 采用 _无非标准模块解析_ 设计原则。TypeScript 检查文件时只关心其类型；相比之下，`tsc` 通过复杂逻辑解析类型。默认情况下，`tsc` 期望模块带有扩展名（如 `.ts`、`.d.ts`、`.js` 等）。而 Deno 处理的模块描述符均为明确带扩展名。
 
-这里的有趣之处在于：假设您希望使用已经转译为 JavaScript 的 TypeScript 文件及其类型定义文件（`mod.js` 和 `mod.d.ts`）。如果您将 `mod.js` 导入到 Deno，它会严格遵循您的请求并导入 JavaScript 文件。但这里有个问题：您的代码不会像 TypeScript 考虑 `mod.d.ts` 文件和 `mod.js` 文件一样得到全面的类型检查。
+对于想使用已转译为 JavaScript 的 TypeScript 文件及其类型声明文件（例如 `mod.js` 和 `mod.d.ts`），Deno 会严格根据引入的请求加载 JavaScript 文件，但由于 TypeScript 还会考虑类型声明，Deno 的类型检查可能不如 TypeScript 完整。
 
-为了解决这个问题，Deno 提供了两种解决方案，分别适用于特定场景：
+为解决此问题，Deno 提供了两种解决方案，分别适用于不同场景：
 
-**作为导入者：** 如果您知道应该应用于 JavaScript 模块的类型，可以通过显式指定类型来增强类型检查。
+**作为导入者：** 若您知道应应用于 JavaScript 模块的类型，可通过显式指定类型提示增强类型检查。
 
-**作为提供者：** 如果您是模块的提供者或宿主，则所有使用该模块的人受益于不必担心类型解析。
+**作为提供者：** 若您是模块源代码或它的托管方，能够让使用此模块的人无需担心类型解析，享受类型服务。
 
 ## 导入时提供类型
 
-如果您正在使用一个 JavaScript 模块，并且您已经创建了类型（`.d.ts` 文件）或以其他方式获取了您想要使用的类型，您可以指示 Deno 在类型检查时使用该文件，而不是 JavaScript 文件，使用 `@ts-types` 编译提示。
-
-例如，如果您有一个 JavaScript 模块 `coolLib.js` 和一个单独的 `coolLib.d.ts` 文件，您可以这样导入它：
+当使用 JavaScript 模块，且已创建对应的类型定义（`.d.ts` 文件）或其他类型时，可以使用 `@ts-types` 注释指令指明类型文件：
 
 ```ts
 // @ts-types="./coolLib.d.ts"
 import * as coolLib from "./coolLib.js";
 ```
 
-在对 `coolLib` 进行类型检查并在文件中使用时，`coolLib.d.ts` 的 TypeScript 类型定义将优先于查看 JavaScript 文件。
+在此文件中使用 `coolLib` 时，`coolLib.d.ts` 中的 TypeScript 类型定义将优先于观察 JavaScript 文件。
 
 :::note
 
-在过去，`@ts-types` 指令被称为 `@deno-types`。这个别名仍然有效，但不再推荐使用。请使用 `@ts-types`。
+历史上，`@ts-types` 指令曾称为 `@deno-types`。该别名仍有效，但不推荐使用。请使用 `@ts-types`。
 
 :::
 
 ## 托管时提供类型
 
-如果您控制模块的源代码或其在 Web 服务器上的文件托管方式，有两种方式可以让 Deno 知道特定模块的类型（这无需导入者采取任何特别操作）。
+若您控制模块源代码或其在 Web 服务器上的托管方式，可通过两种方式告知 Deno 指定模块的类型（无需导入者额外操作）。
 
 ### @ts-self-types
 
-如果您提供一个 JavaScript 文件，并希望提供一个声明文件来包含此文件的类型，您可以在 JS 文件中指定一个 `@ts-self-types` 指令，指向声明文件。
-
-例如，如果您制作一个 `coolLib.js` 库，并在 `coolLib.d.ts` 中编写其类型定义，`ts-self-types` 指令将如下所示：
+若您提供 JavaScript 文件，且希望附带声明文件，可在 JS 文件中用 `@ts-self-types` 注释指明声明文件：
 
 ```js title="coolLib.js"
 // @ts-self-types="./coolLib.d.ts"
 
-// ... JavaScript 的其他部分 ...
+// ... JavaScript 代码 ...
 ```
 
-### X-TypeScript-Types
+### X-TypeScript-Types 头部
 
-Deno 支持用于远程模块的头部，它指示 Deno 在何处找到给定模块的类型。例如，对 `https://example.com/coolLib.js` 的响应可能如下所示：
+Deno 支持远程模块响应头，指明该模块类型定义所在位置。例如，`https://example.com/coolLib.js` 的响应头：
 
 ```console
 HTTP/1.1 200 OK
@@ -237,12 +261,11 @@ Content-Length: 648
 X-TypeScript-Types: ./coolLib.d.ts
 ```
 
-当看到这个头部时，Deno 会尝试检索 `https://example.com/coolLib.d.ts` 并在对原始模块进行类型检查时使用它。
+Deno 在看到此头部时，会尝试加载 `https://example.com/coolLib.d.ts` 并在类型检查原始模块时使用它。
 
 ## 使用环境或全局类型
 
-总体而言，最好在 Deno 中使用模块/UMD 类型定义，模块明确导入其依赖的类型。模块化类型定义可以通过类型定义中的 `declare global` 表达
-[全局作用域的增强](https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html)。例如：
+一般建议在 Deno 中使用模块化或 UMD 类型定义，即模块显式导入其所依赖类型。模块化类型定义可以通过类型定义中的 `declare global` 表达对[全局作用域的增强](https://www.typescriptlang.org/docs/handbook/declaration-files/templates/global-modifying-module-d-ts.html)，例如：
 
 ```ts
 declare global {
@@ -250,19 +273,19 @@ declare global {
 }
 ```
 
-这会使 `AGlobalString` 在导入类型定义时可用于全局命名空间。
+此举使得在导入类型定义后 `AGlobalString` 可在全局命名空间访问。
 
-在某些情况下，当利用其他现有类型库时，可能无法利用模块化类型定义。因此，在类型检查程序时，有一些方法可以包含任意类型定义。
+在某些情况下，使用第三方类型库时无法采用模块化类型定义。为此，类型检查程序提供以下包含任意类型定义的方法。
 
 ### 三斜杠指令
 
-此选项将类型定义与代码本身关联。通过在 TS 文件（非 JS 文件！）中的模块类型附近添加三斜杠的 `types` 指令，类型检查该文件将包括类型定义。例如：
+通过在 TS 文件（非 JS！）顶部添加三斜杠的 `types` 指令，将类型定义与代码关联，令类型检查包含该定义，例如：
 
 ```ts
 /// <reference types="./types.d.ts" />
 ```
 
-提供的描述符与 Deno 中的其他描述符一样进行解析，这意味着它需要一个扩展名，并且相对于引用它的模块。它也可以是一个完全合格的 URL：
+该引用的描述符与 Deno 中其他描述符一致解析，需带扩展名，且相对于引用模块。也可使用完整 URL：
 
 ```ts
 /// <reference types="https://deno.land/x/pkg@1.0.0/types.d.ts" />
@@ -270,7 +293,7 @@ declare global {
 
 ### 在 deno.json 中提供 "types"
 
-另一种选择是在您的 `deno.json` 中为 `"compilerOptions"` 提供一个 `"types"` 值。例如：
+另一种方式是在 `deno.json` 的 `"compilerOptions"` 中指定 `"types"` 数组，例如：
 
 ```json title="deno.json"
 {
@@ -284,28 +307,28 @@ declare global {
 }
 ```
 
-与上面的三斜杠引用类似，提供的 `"types"` 数组中的描述符将像 Deno 中的其他描述符一样进行解析。在相对描述符的情况下，它将相对于配置文件的路径进行解析。通过指定 `--config=path/to/file` 标志确保 Deno 使用该文件。
+这些类型描述符与三斜杠引用类似，按 Deno 规范解析；相对地址相对于配置文件位置。运行时传递 `--config=path/to/file`，确保 Deno 使用该配置。
 
 ## 对 Web 工作者进行类型检查
 
-当 Deno 在 Web 工作者中加载 TypeScript 模块时，它将自动对模块及其依赖项进行类型检查，以确保符合 Deno 网络工作者库。这在其他上下文中（如 `deno check` 或编辑器中）可能会带来挑战。您可以通过几种方式指示 Deno 使用网络工作者库，而不是标准 Deno 库。
+Deno 在加载 Web 工作者中的 TypeScript 模块时，会自动对模块及其依赖项使用网络工作者相关库类型检查。这可能在其他环境（如使用 `deno check` 或编辑器中）造成挑战。您可通过以下方式向 Deno 指定使用网络工作者库，而非标准 Deno 库。
 
 ### 三斜杠指令
 
-此选项将库设置与代码本身关联。通过在工作者脚本的入口文件顶部添加以下三斜杠指令，Deno 将会将其作为 Deno 网络工作者脚本进行类型检查，无论该模块如何分析：
+通过在工作者入口脚本顶部添加三斜杠库指令，将库设置与代码关联，例如：
 
 ```ts
 /// <reference no-default-lib="true" />
 /// <reference lib="deno.worker" />
 ```
 
-第一个指令确保不使用其他默认库。如果省略此项，您将收到一些冲突的类型定义，因为 Deno 会尝试应用标准 Deno 库。第二个指令则告诉 Deno 应用内置的 Deno 网络工作者类型定义及相关依赖库（如 `"esnext"`）。
+第一条指令禁止使用默认库，避免冲突；第二条指令告知使用内置 Deno 网络工作者类型定义及依赖（如 `"esnext"`）。
 
-这种方法的一个缺点是，代码在其他非 Deno 平台（如 `tsc`）上的可移植性较差，因为只有 Deno 内置了 `"deno.worker"` 库。
+此方案缺点是代码在非 Deno 平台（如 `tsc`）上可移植性差，因为 `"deno.worker"` 是 Deno 独有的库。
 
 ### 在 deno.json 中提供 "lib" 设置
 
-您可以在 `deno.json` 文件中提供 "lib" 选项来指示 Deno 使用库文件。例如：
+您也可在 `deno.json` 中为 `"compilerOptions"` 指定 `"lib"`，如：
 
 ```json title="deno.json"
 {
@@ -316,38 +339,38 @@ declare global {
 }
 ```
 
-然后在运行 deno 子命令时，您需要传递 `--config path/to/file` 参数，或者如果您正在使用利用 Deno 语言服务器的 IDE，则设置 `deno.config` 设置。
+运行相关命令时需传递 `--config path/to/file`，或在支持 Deno 语言服务器的 IDE 中设置 `deno.config`。
 
-如果您还有非工作者脚本，您要么需要省略 `--config` 参数，要么配置一个适合您的非工作者脚本的配置。
+如果项目兼含非工作者脚本，请相应决定是否省略 `--config` 参数或配置适用于非工作者模块的配置文件。
 
 ## 重要事项
 
 ### 类型声明语义
 
-类型声明文件（`.d.ts` 文件）遵循与 Deno 中其他文件相同的语义。这意味着声明文件被假定为模块声明（_UMD 声明_），而不是环境/全局声明。Deno 将如何处理环境/全局声明是不可预测的。
+类型声明文件（`.d.ts`）遵循与 Deno 其他文件相同的语义，即默认为模块声明（_UMD 声明_），非环境或全局声明。Deno 对环境/全局声明的处理不可预测。
 
-此外，如果类型声明导入了其他内容，例如另一个 `.d.ts` 文件，它的解析遵循 Deno 的正常导入规则。对于许多生成的并可在网上获得的 `.d.ts` 文件，它们可能与 Deno 不兼容。
+此外，若类型声明文件导入其他模块（例如另一个 `.d.ts` 文件），其解析遵循 Deno 的正常导入规则。许多生成的并在线可得的 `.d.ts` 文件可能与 Deno 不兼容。
 
-[esm.sh](https://esm.sh) 是一个提供默认类型声明的 CDN（通过 `X-TypeScript-Types` 头部）。通过在导入 URL 后附加 `?no-dts` 可以禁用它：
+[esm.sh](https://esm.sh) 是一个默认提供类型声明的 CDN（通过 `X-TypeScript-Types` 头部）。可通过在导入 URL 后加 `?no-dts` 参数禁用，例如：
 
 ```ts
 import React from "https://esm.sh/react?no-dts";
 ```
 
-## JavaScript 在类型检查时的行为
+## JavaScript 在类型检查时的表现
 
-当您在 Deno 中将 JavaScript 代码导入 TypeScript 时，即使您已将 `checkJs` 设置为 `false`（这是 Deno 的默认行为），TypeScript 编译器仍会分析 JavaScript 模块。它试图从该模块推断导出形状，以验证在您的 TypeScript 文件中的导入。
+当在 Deno 中将 JavaScript 代码导入 TypeScript 时，即使 `checkJs` 设置为 `false`（Deno 默认），TypeScript 编译器仍会分析 JavaScript 模块，尝试推断模块导出形状，以验证 TypeScript 文件中的导入有效性。
 
-通常，这在导入标准 ES 模块时不会出现问题。然而，在某些情况下，TypeScript 的分析可能会失败，例如，在具有特殊打包或全局 UMD（通用模块定义）模块的情况下。面对这种情况，最好的方法是使用前面提到的某种形式的类型信息。
+通常情况下，导入标准 ES 模块不会有问题。但在某些场景（如特殊打包方式或全局 UMD 模块）下，这种分析可能失败。遇到此类情况，最好采用前述的类型提示方案。
 
-### 内部逻辑
+### 内部工作原理
 
-虽然理解 Deno 如何在内部工作并不是使用 TypeScript 和 Deno 时的必要条件，但理解其工作原理是有帮助的。
+虽然理解 Deno 内部机制非使用 TypeScript 和 Deno 的必要，但有助于理解其运作。
 
-在执行或编译任何代码之前，Deno 通过解析根模块生成一个模块图，然后检测其所有依赖，并递归检索和解析这些模块，直到获取所有依赖。
+Deno 在执行或编译代码前，首先解析根模块生成模块图，检测所有依赖并递归获取和解析直到完整。
 
-对于每个依赖项，有两个潜在的 "插槽" 被使用。一个是代码插槽，一个是类型插槽。随着模块图的填充，如果模块是可以发射到 JavaScript 的内容，则填充代码插槽，而类型依赖项，如 `.d.ts` 文件，则填充类型插槽。
+针对每个依赖，存在两个“槽”：代码槽和类型槽。填充模块图时，若模块为可发射成 JavaScript 的内容，填充代码槽；类型依赖（如 `.d.ts` 文件）填充类型槽。
 
-当构建模块图并需要进行类型检查时，Deno 启动 TypeScript 编译器，并将需要作为 JavaScript 发射的模块的名称提供给它。在该过程中，TypeScript 编译器会请求额外的模块，而 Deno 将查看依赖的插槽，在填充类型插槽后再提供代码插槽。
+构建模块图并进行类型检查时，Deno 启动 TypeScript 编译器，将需要作为 JavaScript 发射的模块名提供给它。TypeScript 编译器请求额外模块时，Deno 会优先提供类型槽，再提供代码槽。
 
-这意味着当您导入一个 `.d.ts` 模块或使用上述某个解决方案为 JavaScript 代码提供替代类型模块时，提供给 TypeScript 的即是该类型模块，而不是解析模块时的代码。
+这意味着，导入 `.d.ts` 模块或采用前述解决方案为 JavaScript 代码提供替代类型模块时，TypeScript 获得的即为类型模块，而非解析时的代码模块。

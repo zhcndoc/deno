@@ -192,8 +192,8 @@ WebAssembly 是一种二进制数据格式，旨在不易于人类阅读，也�
 例如，编译成上述字节的 Rust 程序可能看起来像这样：
 
 ```rust
-#[no_mangle]
-pub fn main() -> u32 { // u32 代表使用 32 位内存的无符号整数。
+#[unsafe(no_mangle)]
+pub fn main() -> u32 { // u32 stands for an unsigned integer using 32 bits of memory.
   42
 }
 ```

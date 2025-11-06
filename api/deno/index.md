@@ -452,7 +452,7 @@ FFI（外部函数接口）API 允许用户调用支持 C ABI 的原生语言库
 
 ```rust
 // add.rs
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn add(a: isize, b: isize) -> isize {
     a + b
 }
@@ -520,7 +520,7 @@ console.log(`来自外部对 35 和 34 加法的结果: ${result}`);
 带 `--allow-ffi` 和 `--unstable` 标志运行：
 
 ```sh
-deno run --allow-ffi --unstable ffi.ts
+deno run --allow-ffi ffi.ts
 ```
 
 ### 非阻塞 FFI
@@ -574,7 +574,7 @@ console.log("Before");
 结果：
 
 ```sh
-$ deno run --allow-ffi --unstable unblocking_ffi.ts
+$ deno run --allow-ffi unblocking_ffi.ts
 Before
 After
 ```

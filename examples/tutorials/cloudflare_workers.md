@@ -23,7 +23,7 @@ Cloudflare Workers 允许您在 Cloudflare 的边缘网络上运行 JavaScript�
 [安装它](https://denoflare.dev/cli/#installation):
 
 ```shell
-deno install --unstable-worker-options --allow-read --allow-net --allow-env --allow-run --name denoflare --force \
+deno install --unstable-worker-options --allow-read --allow-net --global --allow-env --allow-run --name denoflare --force \
 https://raw.githubusercontent.com/skymethod/denoflare/v0.6.0/cli/cli.ts
 ```
 

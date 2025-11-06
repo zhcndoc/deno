@@ -500,6 +500,8 @@ Deno 支持 [Node-API 插件](https://nodejs.org/api/n-api.html)，这些插件�
 
 自 Deno 2.0 以来，使用 Node-API 插件的 npm 包 **仅在存在 `node_modules/` 目录时支持**。添加 `"nodeModulesDir": "auto"` 或 `"nodeModulesDir": "manual"` 设置到您的 `deno.json` 文件，或者使用 `--node-modules-dir=auto|manual` 标志运行，以确保这些包正常工作。在配置错误的情况下，Deno 会提供提示以说明如何解决此情况。
 
+与所有原生 FFI 一样，您还必须传递 `--allow-ffi` 标志以显式授权 Node-API 插件在运行时沙箱之外运行。有关详细信息，请查看[安全性和权限](/runtime/fundamentals/security/#ffi-(foreign-function-interface))文档。
+
 ## 从 Node 迁移到 Deno
 
 在 Deno 中运行您的 Node.js 项目是一个简单的过程。在大多数情况下，您可以期望几乎不需要更改，如果您的项目使用 ES 模块编写。

@@ -36,38 +36,20 @@ Next.js 有些依赖仍然依赖于 `Object.prototype.__proto__`，并且需要 
 
 ```json deno.json
 {
-  "nodeModulesDir": "auto",
   "unstable": [
+    "bare-node-builtins",
+    "detect-cjs",
+    "node-globals",
     "unsafe-proto",
     "sloppy-imports"
-  ],
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "strict": true,
-    "jsx": "preserve"
-  },
-  "tasks": {
-    "dev": "deno run -A --unstable-detect-cjs npm:next@latest dev",
-    "build": "deno run -A --unstable-detect-cjs npm:next@latest build",
-    "start": "deno run -A --unstable-detect-cjs npm:next@latest start"
-  }
+  ]
 }
 ```
-
-此配置包括：
-
-- `nodeModulesDir: "auto"` —— 启用 npm 包的生命周期脚本
-- `unstable: ["unsafe-proto", "sloppy-imports"]` —— Next.js 兼容性所需
-- `--unstable-detect-cjs` 标志 —— 启用 CommonJS 模块检测支持 Next.js 依赖
 
 现在你可以运行你的新的 Next.js 应用：
 
 ```sh
-deno run dev
+deno task dev
 ```
 
 这将使用 Deno 启动 Next.js 开发服务器。`deno task dev` 命令会带有必要标志启动支持 CommonJS 的 Next.js 开发服务器。

@@ -73,12 +73,12 @@ const data = [
     title: "服务文档",
     items: [
       {
-        label: "Deno Deploy <sup>公测版</sup>",
-        to: "/deploy/early-access/",
+        label: "Deno Deploy ",
+        to: "/deploy/",
       },
       {
-        label: "Deno Deploy 经典版",
-        to: "/deploy/manual/",
+        label: "Deno Deploy Classic",
+        to: "/deploy/classic/",
       },
       {
         label: "Deno 子托管",
@@ -152,16 +152,12 @@ const data = [
         href: "https://deno.com/blog",
       },
       {
-        label: "招聘",
-        href: "https://deno.com/jobs",
-      },
-      {
         label: "周边商品",
         href: "https://merch.deno.com/",
       },
       {
-        label: "隐私政策",
-        href: "/deploy/manual/privacy-policy",
+        label: "Privacy Policy",
+        href: "/deploy/privacy_policy",
       },
     ],
   },

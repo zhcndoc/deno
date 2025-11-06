@@ -3,7 +3,7 @@ title: "Deno 的 Jupyter 内核"
 oldUrl: /runtime/manual/tools/jupyter/
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno jupyter"
-description: "Write JavaScript and TypeScript in Jupyter notebooks thanks to Deno's built-in Jupyter kernel"
+description: "借助 Deno 内置的 Jupyter 内核，在 Jupyter 笔记本中编写 JavaScript 和 TypeScript"
 ---
 
 Deno 附带一个内置的 Jupyter 内核，允许你在交互式笔记本中编写 JavaScript 和 TypeScript；使用 Web 和 Deno API，并直接导入 `npm` 包。
@@ -16,9 +16,9 @@ Deno 附带一个内置的 Jupyter 内核，允许你在交互式笔记本中编
 
 ## 快速入门
 
-运行 `deno jupyter --unstable` 并按照说明操作。
+运行 `deno jupyter` 并按照说明操作。
 
-你可以运行 `deno jupyter --unstable --install` 来强制安装内核。Deno 假设 `jupyter` 命令在你的 `PATH` 中可用。
+你可以运行 `deno jupyter --install` 来强制安装内核。Deno 假设 `jupyter` 命令在你的 `PATH` 中可用。
 
 完成安装过程后，Deno 内核将在 JupyterLab 和经典笔记本的笔记本创建对话框中可用：
 

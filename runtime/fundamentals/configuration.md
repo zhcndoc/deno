@@ -36,7 +36,7 @@ Deno 还支持 `package.json` 文件，以兼容 Node.js 项目。如果您有�
 }
 ```
 
-然后，您的脚本可以使用简单的指定符 `std/assert`：
+然后，您的脚本可以使用简单的指定符 `@std/assert`：
 
 ```js title="script.ts"
 import { assertEquals } from "@std/assert";
@@ -90,22 +90,21 @@ import * as bar from "bar/file.ts";
 
 导入路径映射在较大的代码库中通常用于简化代码。
 
-要使用项目根目录进行绝对导入：
+例如：
 
 ```json title="deno.json"
 {
   "imports": {
-    "/": "./",
-    "./": "./"
+    "@/": "./"
   }
 }
 ```
 
 ```ts title="main.ts"
-import { MyUtil } from "/util.ts";
+import { MyUtil } from "@/util.ts";
 ```
 
-这会使以 `/` 开头的导入指定符相对于导入映射的 URL 或文件路径进行解析。
+这会使以 `@/` 开头的导入指定符相对于导入映射的 URL 或文件路径进行解析。
 
 ### 覆盖包
 
@@ -419,50 +418,45 @@ dist/
 
 ## Exports
 
-The `exports` field in the `deno.json` file allows you to define which paths of
-your package should be publicly accessible. This is particularly useful for
-controlling the API surface of your package and ensuring that only the intended
-parts of your code are exposed to users.
+`deno.json` 文件中的 `exports` 字段允许您定义包中应公开访问的路径。这在控制包的 API 表面以及确保只有预期的代码部分暴露给用户时特别有用。
 
 ```jsonc title="deno.json"
 {
-  "exports": "./src/mod.ts" // A default entry point
+  "exports": "./src/mod.ts" // 默认入口点
 }
 ```
 
-You can also define multiple entry points:
+您也可以定义多个入口点：
 
 ```json title="deno.json"
 {
   "exports": {
     "./module1": "./src/module1.ts",
     "./module2": "./src/module2.ts",
-    ".": "./src/mod.ts" // Default entry point
+    ".": "./src/mod.ts" // 默认入口点
   }
 }
 ```
 
-This configuration will:
+此配置将：
 
-- expose `module1` and `module2` as entry points for your package,
-- allow importing any file from the `utils` directory using a wildcard. This
-  means users can import these modules using the specified paths, while other
-  files in your package remain private.
+- 将 `module1` 和 `module2` 作为包的入口点公开，
+- 允许使用通配符从 `utils` 目录导入任何文件。这意味着用户可以使用指定路径导入这些模块，而包中其他文件保持私有。
 
-To use the exports in your code, you can import them like this:
+要在代码中使用 exports，可以这样导入：
 
 ```ts title="example.ts"
 import * as module_1 from "@example/my-package/module1";
 import * as module_2 from "@example/my-package/module2";
 ```
 
-## Permissions
+## 权限
 
-Deno 2.5+ supports storing permission sets in the config file.
+Deno 2.5+ 支持在配置文件中存储权限集。
 
-### Named permissions
+### 命名权限
 
-Permissions can be defined in key value pairs under the `"permissions"` key:
+权限可以在 `"permissions"` 键下以键值对形式定义：
 
 ```jsonc
 {
@@ -478,16 +472,15 @@ Permissions can be defined in key value pairs under the `"permissions"` key:
 }
 ```
 
-Then used by specifying the `--permission-set=<name>` or `-P=<name>` flag:
+然后通过 `--permission-set=<name>` 或 `-P=<name>` 标志使用：
 
 ```sh
 $ deno run -P=read-data main.ts
 ```
 
-### Default permission
+### 默认权限
 
-A special `"default"` permission key allows excluding the name when using the
-`--permission-set`/`-P` flag:
+特殊的 `"default"` 权限键允许在使用 `--permission-set`/`-P` 标志时省略名称：
 
 ```jsonc
 {
@@ -499,16 +492,15 @@ A special `"default"` permission key allows excluding the name when using the
 }
 ```
 
-Then run with just `-P`:
+然后只需使用 `-P` 运行：
 
 ```sh
 $ deno run -P main.ts
 ```
 
-### Test, bench, and compile permissions
+### 测试、基准和编译权限
 
-Permissions can be optionally specified within the `"test"`, `"bench"`, or
-`"compile"` keys.
+权限可以选择性地在 `"test"`、`"bench"` 或 `"compile"` 键中指定。
 
 ```jsonc
 {
@@ -520,7 +512,7 @@ Permissions can be optionally specified within the `"test"`, `"bench"`, or
 }
 ```
 
-Or reference a permission set:
+或者引用权限集：
 
 ```jsonc
 {
@@ -535,36 +527,31 @@ Or reference a permission set:
 }
 ```
 
-When this is defined, you must run `deno test` with `-P` or a permission flag:
+定义后，必须使用 `-P` 或权限标志运行 `deno test`：
 
 ```
 > deno test
 error: Test permissions were found in the config file. Did you mean to run with `-P`?
     at file:///Users/david/dev/example/deno.json
 > deno test -P
-...runs...
+...运行中...
 > deno test --allow-read
-...runs...
+...运行中...
 > deno test -A
-...runs...
+...运行中...
 ```
 
-This is to help prevent you waste your time wondering why something is not
-working when you forget to run without permissions.
+这是为了帮助您避免忘记使用权限运行测试时花费大量时间排查问题。
 
-Note that test and bench files in a workspace will use the closest `deno.json`
-for determining `test` and `bench` permissions. This allows giving different
-permissions to different workspace members.
+请注意，工作区中的测试和基准文件将使用最近的 `deno.json` 来确定 `test` 和 `bench` 权限。这允许为不同工作区成员分配不同的权限。
 
-### Security risk
+### 安全风险
 
-The threat model for permissions in the config file is similar to `deno task`,
-in that a script could modify the `deno.json` to elevate permissions. That's why
-this requires an explicit opt-in with `-P` and is not loaded by default.
+配置文件中的权限威胁模型类似于 `deno task`，因为脚本可能修改 `deno.json` 来提升权限。因此，这需要通过 `-P` 显式启用，并且默认情况下不加载。
 
-If you're ok with this risk, then this feature will be useful for you.
+如果您能接受这一风险，那么此功能将对您有所帮助。
 
-## An example `deno.json` file
+## 一个 `deno.json` 文件示例
 
 ```json
 {
@@ -615,9 +602,6 @@ If you're ok with this risk, then this feature will be useful for you.
   ]
 }
 ```
-
-这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、node_modules 目录等的 `deno.json` 文件示例。有关可用字段和配置的完整列表，请参阅
-[Deno 配置文件模式](#json-schema)。
 
 这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、node_modules 目录等的 `deno.json` 文件示例。有关可用字段和配置的完整列表，请参阅
 [Deno 配置文件模式](#json-schema)。

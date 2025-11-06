@@ -12,8 +12,7 @@ Deno Deploy 允许你在全球边缘网络上托管 Deno 应用，内置遥测�
 
 1. 一个 [GitHub](https://github.com) 账号
 2. 在本地机器上 [安装 Deno](https://docs.deno.com/runtime/manual/getting_started/installation)
-3. 访问
-   [Deno Deploy 早期访问计划](https://dash.deno.com/account#early-access)
+3. 访问 [Deno Deploy 早期访问计划](https://dash.deno.com/account#early-access)
 
 ## 用 Vite 创建一个简单的 Deno 应用
 
@@ -59,8 +58,7 @@ git push -u origin main
 
 ## 注册 Deno Deploy 早期访问
 
-1. 访问
-   [Deno Deploy 账户设置](https://dash.deno.com/account#early-access)
+1. 访问 [Deno Deploy 账户设置](https://dash.deno.com/account#early-access)
 2. 点击“加入早期访问计划”
 3. 审核通过后，你将收到含有访问说明的邮件
 

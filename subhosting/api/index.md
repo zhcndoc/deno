@@ -69,7 +69,7 @@ oldUrl:
 
 要在子托管中使用 KV：
 
-- [使用 API 创建数据库](https://docs.deno.com/deploy/kv/manual)
+- [使用 API 创建数据库](/deploy/kv/manual)
 - 使用子托管 API 创建部署时，指定你创建的数据库。
 
 > 注意：Deno Cron 和队列目前不适用于子托管。

@@ -1,6 +1,6 @@
 ---
 title: "如何将 Deno 部署到 Digital Ocean"
-description: "A step-by-step guide to deploying Deno applications on Digital Ocean. Learn about Docker containerization, GitHub Actions automation, container registries, and how to set up continuous deployment workflows."
+description: "在 Digital Ocean 上部署 Deno 应用的逐步指南。了解 Docker 容器化、GitHub Actions 自动化、容器注册表以及如何设置持续部署工作流。"
 url: /examples/digital_ocean_tutorial/
 oldUrl:
   - /runtime/manual/advanced/deploying_deno/digital_ocean/
@@ -95,6 +95,12 @@ docker compose -f docker-compose.yml build
 docker tag deno-image registry.digitalocean.com/deno-on-digital-ocean/deno-image:new
 ```
 
+在推送之前，请对 Docker 客户端进行 Digital Ocean 容器注册表的认证：
+
+```shell
+doctl registry login
+```
+
 现在我们可以将其推送到注册表。
 
 ```shell
@@ -147,7 +153,7 @@ docker run -d --restart always -it -p 8000:8000 --name deno-image registry.digit
 ssh-keygen
 ```
 
-当出现提醒输入电子邮件时，**确保使用你的 GitHub 电子邮件** 以便 GitHub Action 正确验证。最终输出应该类似于：
+当出现提示输入电子邮件时，**确保使用你的 GitHub 电子邮件** 以便 GitHub Action 正确验证。最终输出应该类似于：
 
 ```console
 Output

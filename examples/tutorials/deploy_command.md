@@ -4,19 +4,19 @@ description: "使用 deno deploy CLI 命令创建并部署第一个应用到 Den
 url: /examples/deploy_command_tutorial/
 ---
 
-`deno deploy` 命令为在 [Deno Deploy<sup>EA</sup>](https://deno.com/deploy) 上部署和管理应用提供了强大的 CLI 工具。
+`deno deploy` 命令为在 [Deno Deploy](https://deno.com/deploy) 上部署和管理应用提供了强大的 CLI 工具。
 
 如果你已经有应用准备部署，可以跳转到[部署你的应用](#deploy-your-application)，或者继续阅读制作并部署一个简单应用。
 
 ## 前提条件
 
-在使用 deploy 命令之前，你需要获得 Deno Deploy<sup>EA</sup> 的访问权限，并且需要一个 Deno Deploy<sup>EA</sup> 组织。
+在使用 deploy 命令之前，你需要获得 Deno Deploy 的访问权限，并且需要一个 Deno Deploy 组织。
 
 1. 访问
    [Deno Deploy 账号设置](https://dash.deno.com/account#early-access)
 2. 开启“启用早期访问”开关
 3. 在
-   [Deno Deploy<sup>EA</sup> 控制台](https://console.deno.com/) 中创建一个 Deno Deploy<sup>EA</sup> 组织。
+   [Deno Deploy 控制台](https://console.deno.com/) 中创建一个 Deno Deploy 组织。
 
 ## 创建一个简单的 Web 应用
 
@@ -255,4 +255,4 @@ deno deploy env load .env
 
 🦕 你已成功使用 `deno deploy` 命令部署了第一个应用！更多命令和选项，请查阅 [`deno deploy` 文档](/runtime/reference/cli/deploy/)。
 
-欲了解更多 Deno Deploy<sup>EA</sup> 相关信息，请参考 [Deno Deploy 早期访问文档](/deploy/early-access/)。
+欲了解更多 Deno Deploy 相关信息，请参考 [Deno Deploy 文档](/deploy/)。

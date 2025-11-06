@@ -18,6 +18,16 @@ Deno 支持工作区，也称为“单体仓库”，允许您同时管理多个
 
 :::info 命名
 
+每个工作区成员目录可以包含：
+
+- 仅有一个 `deno.json` 文件（以 Deno 为主的包）
+- 同时包含 `deno.json` 和 `package.json`（混合包 —— 在迁移过程中或当您需要同时具有 Node 元数据和 Deno 配置时非常有用）
+- 仅有一个 `package.json` 文件（以 Node 为主但仍参与 Deno 工作区的包）
+
+当成员仅包含 `package.json` 时，您仍然可以使用该 `package.json` 中 `name` 字段指定的名称从工作区的任何位置导入它（例如 `import { something } from "@scope/my-node-only-pkg";`）。只要该目录被列在根工作区配置中，Deno 就会解析该裸标识符。这让您能够渐进地采用 Deno 工具，而无需为每个现有的 Node 包一开始就添加 `deno.json`。
+
+:::info 命名
+
 Deno 使用 `workspace` 而不是 npm 的 `workspaces` 来表示一个包含多个成员的单一工作区。
 
 :::
@@ -111,11 +121,11 @@ export function subtract(a: number, b: number): number {
 
 1. 这个单体仓库由两个包组成，放置在 `./add` 和 `./subtract` 目录中。
 
-1. 通过在成员的 `deno.json` 文件中使用 `name` 和 `version` 选项，可以通过 “裸标识符” 在整个工作区中引用它们。在这种情况下，包的名称为 `@scope/add` 和 `@scope/subtract`，其中 `scope` 是您可以选择的“范围”名称。使用这两个选项后，无需在导入语句中使用长的和相对的文件路径。
+2. 通过在成员的 `deno.json` 文件中使用 `name` 和 `version` 选项，可以通过 “裸标识符” 在整个工作区中引用它们。在这种情况下，包的名称为 `@scope/add` 和 `@scope/subtract`，其中 `scope` 是您可以选择的“范围”名称。使用这两个选项后，无需在导入语句中使用长的和相对的文件路径。
 
-1. `npm:chalk@5` 包是整个工作区的共享依赖。工作区成员“继承”工作区根的 `imports`，可以轻松管理整个代码库中的单个版本的依赖。
+3. `npm:chalk@5` 包是整个工作区的共享依赖。工作区成员“继承”工作区根的 `imports`，可以轻松管理整个代码库中的单个版本的依赖。
 
-1. `add` 子目录在其 `deno.json` 中指定 `deno fmt` 应在格式化代码时不应用分号。这使得现有项目的过渡更加顺畅，无需一次性更改数十个或数百个文件。
+4. `add` 子目录在其 `deno.json` 中指定 `deno fmt` 应在格式化代码时不应用分号。这使得现有项目的过渡更加顺畅，无需一次性更改数十个或数百个文件。
 
 ---
 
@@ -413,6 +423,44 @@ Hi, friend!
 ## 跨工作区运行命令
 
 Deno 提供多种方式在所有或特定工作区成员中运行命令：
+
+### 类型检查
+
+工作区成员可以拥有不同的编译器选项集。这些选项在根和成员之间也会继承，类似于 [TSConfig 的 `extends`](https://www.typescriptlang.org/tsconfig/#extends)。例如：
+
+```json title="deno.json"
+{
+  "workspace": ["./web"],
+  "compilerOptions": {
+    "checkJs": true
+  }
+}
+```
+
+```json title="web/deno.json"
+{
+  "compilerOptions": {
+    "lib": ["esnext", "dom"]
+  }
+}
+```
+
+`web` 子目录中的文件将应用以下选项：
+
+```json
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "lib": ["esnext", "dom"]
+  }
+}
+```
+
+每个成员会被隔离且彼此独立地进行类型检查。只需在工作区根目录运行：
+
+```sh
+deno check
+```
 
 ### 运行测试
 

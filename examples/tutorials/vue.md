@@ -15,7 +15,7 @@ oldUrl:
 
 :::info 部署你自己的
 
-想跳过教程，立即部署完成的应用程序吗？点击下面的按钮，立即将您自己的完整 SvelteKit 恐龙应用程序部署到 Deno Deploy。您将获得一个实时的、可工作的应用程序，您可以在学习的过程中进行自定义和修改！
+想跳过教程，立即部署完成的应用程序吗？点击下面的按钮，立即将您自己的完整 Vue.js 恐龙应用程序部署到 Deno Deploy。您将获得一个实时的、可工作的应用程序，您可以在学习的过程中进行自定义和修改！
 
 [![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-vue&mode=dynamic&entrypoint=api/main.ts&build=deno+task+build&install=deno+install)
 

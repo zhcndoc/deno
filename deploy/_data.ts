@@ -2,223 +2,156 @@ import { Sidebar, SidebarNav } from "../types.ts";
 
 export const sidebar = [
   {
-    title: "入门",
+    title: "Deno Deploy",
     items: [
+      { title: "About", href: "/deploy/" },
       {
-        title: "快速开始",
-        href: "/deploy/manual/",
-      },
-      {
-        title: "Deploy 基础知识",
-        items: [
-          { title: "用例", href: "/deploy/manual/use-cases/" },
-          { title: "游乐场", href: "/deploy/manual/playgrounds/" },
-          { title: "如何部署", href: "/deploy/manual/how-to-deploy/" },
-          { title: "GitHub CI", href: "/deploy/manual/ci_github/" },
-          { title: "deployctl", href: "/deploy/manual/deployctl/" },
-          { title: "地区", href: "/deploy/manual/regions/" },
-          {
-            title: "定价和限制",
-            href: "/deploy/manual/pricing-and-limits/",
-          },
-        ],
+        title: "Getting started",
+        href: "/deploy/getting_started/",
       },
     ],
   },
   {
-    title: "Deploy 平台",
+    title: "Reference",
     items: [
       {
-        title: "部署",
-        href: "/deploy/manual/deployments/",
+        title: "Accounts",
+        href: "/deploy/reference/accounts/",
       },
       {
-        title: "绑定域名",
-        href: "/deploy/manual/custom-domains/",
+        title: "Organizations",
+        href: "/deploy/reference/organizations/",
       },
       {
-        title: "环境变量",
-        href: "/deploy/manual/environment-variables/",
+        title: "Apps",
+        href: "/deploy/reference/apps/",
       },
       {
-        title: "组织",
-        href: "/deploy/manual/organizations/",
+        title: "Builds",
+        href: "/deploy/reference/builds/",
       },
       {
-        title: "日志",
-        href: "/deploy/manual/logs/",
+        title: "Environment Variables and Contexts",
+        href: "/deploy/reference/env_vars_and_contexts/",
       },
       {
-        title: "KV",
-        items: [
-          { title: "概述", href: "/deploy/kv/manual/" },
-          { title: "键空间", href: "/deploy/kv/manual/key_space/" },
-          { title: "操作", href: "/deploy/kv/manual/operations/" },
-          {
-            title: "键过期",
-            href: "/deploy/kv/manual/key_expiration/",
-          },
-          {
-            title: "辅助索引",
-            href: "/deploy/kv/manual/secondary_indexes/",
-          },
-          { title: "交易", href: "/deploy/kv/manual/transactions/" },
-          { title: "Node", href: "/deploy/kv/manual/node/" },
-          {
-            title: "数据建模",
-            href: "/deploy/kv/manual/data_modeling_typescript/",
-          },
-          { title: "备份", href: "/deploy/kv/manual/backup/" },
-        ],
+        title: "Timelines",
+        href: "/deploy/reference/timelines/",
       },
       {
-        title: "队列",
-        href: "/deploy/kv/manual/queue_overview/",
+        title: "Observability",
+        href: "/deploy/reference/observability/",
       },
       {
-        title: "定时任务",
-        href: "/deploy/kv/manual/cron/",
+        title: "Domains",
+        href: "/deploy/reference/domains/",
       },
-      {
-        title: "边缘缓存",
-        href: "/deploy/manual/edge-cache/",
-      },
-    ],
-  },
-  {
-    title: "连接到数据库",
-    items: [
       {
         title: "Deno KV",
-        href: "/deploy/kv/manual/on_deploy/",
+        href: "/deploy/reference/deno_kv/",
       },
       {
-        title: "第三方数据库",
-        items: [
-          { title: "DynamoDB", href: "/deploy/manual/dynamodb/" },
-          { title: "FaunaDB", href: "/deploy/manual/faunadb/" },
-          { title: "Firebase", href: "/deploy/manual/firebase/" },
-          { title: "Postgres", href: "/deploy/manual/postgres/" },
-          { title: "Neon Postgres", href: "/deploy/manual/neon-postgres/" },
-          { title: "Prisma Postgres", href: "/deploy/manual/prisma-postgres/" },
-        ],
+        title: "Databases",
+        href: "/deploy/reference/databases/",
       },
+      {
+        title: "Cloud Connections",
+        href: "/deploy/reference/cloud_connections/",
+      },
+      {
+        title: "OIDC",
+        href: "/deploy/reference/oidc/",
+      },
+      {
+        title: "Runtime",
+        href: "/deploy/reference/runtime/",
+      },
+      {
+        title: "Framework support",
+        href: "/deploy/reference/frameworks/",
+      },
+      {
+        title: "CDN and caching",
+        href: "/deploy/reference/caching/",
+      },
+      {
+        title: "Playgrounds",
+        href: "/deploy/reference/playgrounds/",
+      },
+      {
+        title: "Deploy Button",
+        href: "/deploy/reference/button/",
+      },
+    ],
+  },
+  {
+    title: "KV",
+    items: [
+      { title: "Overview", href: "/deploy/kv/" },
+      { title: "Key space", href: "/deploy/kv/key_space/" },
+      { title: "Operations", href: "/deploy/kv/operations/" },
+      {
+        title: "Key expiration",
+        href: "/deploy/kv/key_expiration/",
+      },
+      {
+        title: "Secondary indexes",
+        href: "/deploy/kv/secondary_indexes/",
+      },
+      { title: "Transactions", href: "/deploy/kv/transactions/" },
+      { title: "Node", href: "/deploy/kv/node/" },
+      {
+        title: "Data modeling",
+        href: "/deploy/kv/data_modeling_typescript/",
+      },
+      { title: "Backup", href: "/deploy/kv/backup/" },
     ],
   },
   {
     title: "政策和限制",
     items: [
       {
-        title: "可接受使用政策",
-        href: "/deploy/manual/acceptable-use-policy/",
+        title: "Usage and Limitations",
+        href: "/deploy/usage/",
       },
       {
-        title: "履行政策",
-        href: "/deploy/manual/fulfillment-policy/",
+        title: "Acceptable Use Policy",
+        href: "/deploy/acceptable_use_policy/",
       },
-      { title: "隐私政策", href: "/deploy/manual/privacy-policy/" },
-      { title: "Security", href: "/deploy/manual/security/" },
       {
-        title: "条款和条件",
-        href: "/deploy/manual/terms-and-conditions/",
+        title: "Fulfillment Policy",
+        href: "/deploy/fulfillment_policy/",
+      },
+      { title: "Privacy Policy", href: "/deploy/privacy_policy/" },
+      { title: "Security", href: "/deploy/security/" },
+      {
+        title: "Terms and Conditions",
+        href: "/deploy/terms_and_conditions/",
       },
     ],
   },
   {
-    title: "教程与示例",
+    title: "Support and Feedback",
     items: [
       {
-        title: "部署教程",
-        items: [
-          { title: "概述", href: "/deploy/tutorials/" },
-          {
-            title: "Discord 斜杠命令",
-            href: "/deploy/tutorials/discord-slash/",
-          },
-          { title: "Fresh 框架", href: "/deploy/tutorials/fresh/" },
-          { title: "简单 API", href: "/deploy/tutorials/simple-api/" },
-          { title: "静态站点", href: "/deploy/tutorials/static-site/" },
-          {
-            title: "Fresh 博客教程",
-            href: "/deploy/tutorials/tutorial-blog-fresh/",
-          },
-          {
-            title: "DynamoDB 集成",
-            href: "/deploy/tutorials/tutorial-dynamodb/",
-          },
-          {
-            title: "FaunaDB 集成",
-            href: "/deploy/tutorials/tutorial-faunadb/",
-          },
-          {
-            title: "Firebase 集成",
-            href: "/deploy/tutorials/tutorial-firebase/",
-          },
-          {
-            title: "HTTP 服务器",
-            href: "/deploy/tutorials/tutorial-http-server/",
-          },
-          { title: "Hugo 博客", href: "/deploy/tutorials/tutorial-hugo-blog/" },
-          {
-            title: "Postgres 集成",
-            href: "/deploy/tutorials/tutorial-postgres/",
-          },
-          {
-            title: "WordPress 前端",
-            href: "/deploy/tutorials/tutorial-wordpress-frontend/",
-          },
-          { title: "Vite", href: "/examples/react_tutorial/" },
-          {
-            title: "日程通知",
-            href: "/deploy/kv/tutorials/schedule_notification/",
-          },
-          {
-            title: "Webhook 处理器",
-            href: "/deploy/kv/tutorials/webhook_processor/",
-          },
-        ],
+        title: "Changelog",
+        href: "/deploy/changelog/",
       },
-      {
-        title: "KV 教程",
-        href: "/deploy/kv/tutorials/",
-      },
-      {
-        title: "更多关于 Deno 的示例",
-        href: "/examples/",
-      },
-    ],
-  },
-  {
-    title: "参考",
-    items: [
-      { title: "运行时 API", href: "/deploy/api" },
-      { title: "运行时 FS", href: "/deploy/api/runtime-fs/" },
-      { title: "运行时 Node", href: "/deploy/api/runtime-node/" },
-      { title: "压缩", href: "/deploy/api/compression/" },
-      { title: "运行时 Sockets", href: "/deploy/api/runtime-sockets/" },
-      {
-        title: "运行时广播频道",
-        href: "/deploy/api/runtime-broadcast-channel/",
-      },
-      { title: "运行时 Fetch", href: "/deploy/api/runtime-fetch/" },
-      { title: "运行时 Request", href: "/deploy/api/runtime-request/" },
-      { title: "运行时 Response", href: "/deploy/api/runtime-response/" },
-      { title: "运行时 Headers", href: "/deploy/api/runtime-headers/" },
-      { title: "动态导入", href: "/deploy/api/dynamic-import/" },
+      { title: "Support", href: "/deploy/support/" },
     ],
   },
 ] satisfies Sidebar;
 
 export const sectionTitle = "Deno Deploy";
-export const sectionHref = "/deploy/manual/";
+export const sectionHref = "/deploy/";
 export const SidebarNav = [
   {
-    title: "Deno Deploy<sup>EA</sup>",
-    href: "/deploy/early-access/",
+    title: "Deno Deploy",
+    href: "/deploy/",
   },
   {
     title: "Deploy Classic",
-    href: "/deploy/manual/",
+    href: "/deploy/classic/",
   },
   {
     title: "Subhosting",

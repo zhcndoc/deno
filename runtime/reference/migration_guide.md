@@ -1,6 +1,6 @@
 ---
-title: "Deno 1.x to 2.x Migration Guide"
-description: "Comprehensive guide to migrating from Deno 1.x to 2.x. Learn about breaking changes, API updates, Node.js compatibility features, and how to update your codebase to work with Deno 2.x."
+title: "Deno 1.x 到 2.x 迁移指南"
+description: "从 Deno 1.x 迁移到 2.x 的全面指南。了解破坏性更改、API 更新、Node.js 兼容功能，以及如何更新代码库以适配 Deno 2.x。"
 oldUrl:
   - /runtime/manual/advanced/migrate_deprecations/
   - /runtime/reference/migrate_deprecations/

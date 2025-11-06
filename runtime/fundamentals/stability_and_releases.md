@@ -1,6 +1,6 @@
 ---
-title: "Stability and releases"
-description: "Guide to Deno's stability guarantees and release process. Covering release channels, long-term support (LTS), unstable features, versioning policy, and how Deno maintains backward compatibility."
+title: "稳定性和发布"
+description: "关于 Deno 稳定性保障和发布流程的指南。涵盖发布渠道、长期支持（LTS）、不稳定特性、版本控制策略，以及 Deno 如何维护向后兼容性。"
 oldUrl:
   - /runtime/manual/runtime/stability/
   - /runtime/fundamentals/stability/
@@ -25,19 +25,23 @@ Deno 提供 4 种发布渠道：
 
 ### 长期支持 (LTS)
 
-从 Deno v2.1.0（2024年11月发布）开始，Deno 提供 LTS（长期支持）渠道。
+:::warning
 
-LTS 渠道是一个小版本的语义化版本，我们只维护向后兼容的 bug 修复。
+LTS 支持将于 2026 年 4 月 30 日之后终止；该日期之后将不再发布 LTS 版本或维护。
 
-| LTS release version | LTS maintenance start | LTS maintenance end |
-| ------------------- | --------------------- | ------------------- |
-| v2.1                | Feb 1st, 2025         | Apr 30th, 2025      |
-| v2.2                | May 1st, 2025         | Oct 31st, 2025      |
-| v2.4                | Nov 1st, 2025         | Apr 30th, 2026      |
+:::
 
-在我们完善此过程的同时，我们最初保持 LTS 支持窗口较短。**LTS 发布每六个月进行一次**，根据需要提供补丁发布以修复bug。我们计划在将来将此支持窗口延长至一年。
+Deno 提供 LTS（长期支持）渠道。这是一个小版本的语义化版本，我们只维护向后兼容的错误修复。
 
-LTS 回溯包括：
+| LTS 版本 | LTS 维护开始日期 | LTS 维护结束日期 |
+| -------- | ---------------- | ---------------- |
+| v2.1     | 2025年2月1日     | 2025年4月30日    |
+| v2.2     | 2025年5月1日     | 2025年10月31日   |
+| v2.5     | 2025年11月1日    | 2026年4月30日    |
+
+LTS 支持窗口刚开始时较短，我们计划在将来将该支持窗口延长至一年。**LTS 发布每六个月进行一次**，根据需要提供补丁发布以修复 bug。
+
+LTS 覆盖范围包括：
 
 - 安全补丁
 - 关键bug修复（例如，崩溃、错误计算）
@@ -47,13 +51,13 @@ LTS 回溯包括：
 
 ## 不稳定的 API
 
-在引入新 API 时，这些 API 首先被标记为不稳定。这意味着该 API 未来可能会发生变化。在显式传递不稳定标志（如 `--unstable-kv`）之前，这些 API 并不可用。
+引入新 API 时，这些 API 首先被标记为不稳定。这意味着该 API 未来可能会发生变化。在显式传递不稳定标志（如 `--unstable-kv`）之前，这些 API 并不可用。
 [了解有关 `--unstable-*` 标志的更多信息](/runtime/reference/cli/unstable_flags)。
 
 还有一些被视为不稳定的非运行时功能，这些功能被锁定在不稳定标志后面。例如，`--unstable-sloppy-imports` 标志用于在不指定文件扩展名的情况下启用代码的 `import`。
 
 ## 标准库
 
-Deno 标准库 (https://jsr.io/@std) 基本上是稳定的。所有版本为 1.0.0 或更高的标准库模块被视为稳定。所有其他模块（0.x）被视为不稳定，未来可能会发生变化。
+Deno 标准库 ([https://jsr.io/@std](https://jsr.io/@std)) 基本上是稳定的。所有版本为 1.0.0 或更高的标准库模块被视为稳定。所有其他模块（0.x）被视为不稳定，未来可能会发生变化。
 
 不推荐在生产代码中使用不稳定的标准库模块，但这是实验新特性并向 Deno 团队提供反馈的好方法。使用不稳定标准库模块不需要使用任何不稳定标志。

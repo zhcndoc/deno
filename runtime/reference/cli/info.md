@@ -2,6 +2,7 @@
 title: "`deno info`, 依赖检查器"
 oldUrl:
   - /runtime/manual/tools/dependency_inspector/
+  - /runtime/manual/tools/info/
   - /runtime/reference/cli/dependency_inspector/
 command: info
 openGraphLayout: "/open_graph/cli-commands.jsx"
