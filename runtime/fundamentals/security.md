@@ -10,7 +10,7 @@ oldUrl:
 
 Deno 默认是安全的。除非你特意启用，否则在 Deno 中运行的程序没有访问敏感 API 的权限，例如文件系统访问、网络连接或环境访问。你必须通过命令行标志或运行时权限提示明确授予对这些资源的访问。这与 Node 的一个主要区别是，Node 中的依赖项会自动获得对所有系统 I/O 的完全访问权限，这可能会将隐藏的漏洞引入你的项目。
 
-在使用 Deno 运行完全不可信的代码之前，请阅读下面的 [执行不可信代码](#executing-untrusted-code) 部分。
+在使用 Deno 运行完全不可信的代码之前，请阅读下面的 [执行不可信代码](#执行不可信代码) 部分。
 
 ## 关键原则
 
@@ -332,11 +332,11 @@ deno run --deny-ffi script.ts
 
 允许从 Web 导入代码。默认情况下，Deno 限制可以从中导入代码的主机。这对于静态和动态导入都是如此。
 
-如果你想动态导入代码，无论是使用 `import()` 还是 `new Worker()` API，都需要授予额外的权限。从本地文件系统导入 [需要 `--allow-read`](#file-system-read-access)，但 Deno 也允许从 `http:` 和 `https:` URL 导入。在这种情况下，你需要指定一个明确的 `--allow-import` 标志：
+如果你想动态导入代码，无论是使用 `import()` 还是 `new Worker()` API，都需要授予额外的权限。从本地文件系统导入 [需要 `--allow-read`](#文件系统访问)，但 Deno 也允许从 `http:` 和 `https:` URL 导入。在这种情况下，你需要指定一个明确的 `--allow-import` 标志：
 
-```
+```sh
 # 允许从 `https://example.com` 导入代码
-$ deno run --allow-import=example.com main.ts
+deno run --allow-import=example.com main.ts
 ```
 
 默认情况下，Deno 允许从以下主机导入源：
@@ -352,9 +352,9 @@ $ deno run --allow-import=example.com main.ts
 
 此允许列表默认适用于静态导入，并在指定 `--allow-import` 标志时默认适用于动态导入。
 
-```
+```sh
 # 允许从 `https://deno.land` 动态导入代码
-$ deno run --allow-import main.ts
+deno run --allow-import main.ts
 ```
 
 请注意，为 `--allow-import` 指定允许列表将覆盖默认主机列表。
@@ -372,3 +372,48 @@ Deno 对同一特权级别下的代码执行没有限制。这意味着在 Deno 
 - 限制权限运行 `deno`，并预先确定实际需要运行的代码（并通过使用 `--frozen` 锁定文件和 `--cached-only` 防止更多代码被加载）。
 - 使用操作系统提供的沙箱机制，如 `chroot`、`cgroups`、`seccomp` 等。
 - 使用虚拟机或 MicroVM（gVisor、Firecracker 等）等沙箱环境。
+
+## 权限代理
+
+为了实现集中式和策略驱动的权限决策，Deno 可以将所有权限检查委托给外部代理进程。通过将环境变量 `DENO_PERMISSION_BROKER_PATH` 设置为一个路径来启用该功能，Deno 会用此路径连接代理：
+
+- 在类 Unix 系统上：使用 Unix 域套接字路径（例如，`/tmp/deno-perm.sock`）。
+- 在 Windows 上：使用命名管道（例如，`\\.\pipe\deno-perm-broker`）。
+
+当权限代理激活时：
+
+- 所有 `--allow-*` 和 `--deny-*` 标志将被忽略。
+- 不显示交互式权限提示（等同于非交互模式）。
+- 每次权限检查均发送给代理；代理必须对每个请求回复决策。
+
+如果代理过程中出现任何错误（例如：Deno 无法连接到套接字/管道，消息格式错误，消息顺序错乱，ID 不匹配，或连接意外关闭），Deno 会立即终止进程，以保障完整性并防止权限提升。
+
+请求和响应消息结构有版本控制，并由 JSON Schema 定义：
+
+- 请求模式：
+  [permission-broker-request.v1.json](https://github.com/denoland/deno/blob/main/cli/schemas/permission-broker-request.v1.json)
+- 响应模式：
+  [permission-broker-response.v1.json](https://github.com/denoland/deno/blob/main/cli/schemas/permission-broker-response.v1.json)
+
+每个请求包含版本号 (`v`)、Deno 进程 ID (`pid`)、唯一单调请求 ID (`id`)、时间戳 (`datetime`，RFC 3339 格式)、权限名称 (`permission`) 和根据权限类型的可选值 (`value`)。响应必须回显请求 ID 并包含一个 `result`，其值为 `"grant"` 或 `"deny"`。如果拒绝，可包含人类可读的 `reason`。
+
+示例消息流程：
+
+```text
+-> req {"v":1,"pid":10234,"id":1,"datetime":"2025-01-01T00:00:00.000Z","permission":"read","value":"./run/permission_broker/scratch.txt"}
+<- res {"id":1,"result":"grant"}
+-> req {"v":1,"pid":10234,"id":2,"datetime":"2025-01-01T00:00:01.000Z","permission":"read","value":"./run/permission_broker/scratch.txt"}
+<- res {"id":2,"result":"grant"}
+-> req {"v":1,"pid":10234,"id":3,"datetime":"2025-01-01T00:00:02.000Z","permission":"read","value":"./run/permission_broker/log.txt"}
+<- res {"id":3,"result":"grant"}
+-> req {"v":1,"pid":10234,"id":4,"datetime":"2025-01-01T00:00:03.000Z","permission":"write","value":"./run/permission_broker/log.txt"}
+<- res {"id":4,"result":"grant"}
+-> req {"v":1,"pid":10234,"id":5,"datetime":"2025-01-01T00:00:04.000Z","permission":"env","value":null}
+<- res {"id":5,"result":"deny","reason":"Environment access is denied."}
+```
+
+:::caution 高级用法
+
+使用权限代理会改变 Deno 的决策权威：CLI 标志和提示将失效。启用 `DENO_PERMISSION_BROKER_PATH` 前，确保你的代理进程健壮、经过审计且可用。
+
+:::

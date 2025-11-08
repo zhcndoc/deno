@@ -29,6 +29,39 @@ import { Hono } from "npm:hono";
 
 这就是你开始所需了解的全部！但是，在这两个运行时之间有一些关键差异，你可以利用这些差异在将你的 Node.js 项目迁移到 Deno 时使代码更简单、更小。
 
+## 快速开始
+
+### 导入一个 npm 包
+
+```ts title="main.ts"
+import chalk from "npm:chalk@5";
+console.log(chalk.green("Hello from npm in Deno"));
+```
+
+```sh
+deno run main.ts
+```
+
+### 执行 CommonJS
+
+使用 `.cjs` 扩展名告诉 Deno 该模块使用的是 CommonJS 系统。
+
+```js title="main.cjs"
+const chalk = require("chalk");
+console.log(chalk.green("Hello from npm in Deno"));
+```
+
+```sh
+deno run main.cjs
+```
+
+### 使用 Node API
+
+```js title="process.js"
+import path from "node:path";
+console.log(path.join("./foo", "../bar"));
+```
+
 ## 使用 Node 的内置模块
 
 Deno 提供了一个兼容层，允许在 Deno 程序中使用 Node.js 的内置 API。要使用它们，您需要在任何使用这些 API 的导入语句中添加 `node:` 前缀：
@@ -88,29 +121,51 @@ npm:<package-name>[@<version-requirement>][/<sub-path>]
 这也允许一些可能与 `npx` 命令相似的功能。
 
 ```console
-# npx allows remote execution of a package from npm or a URL
+# npx 允许从 npm 或 URL 远程执行包
 $ npx create-next-app@latest
 
-# deno run allows remote execution of a package from various locations,
-# and can scoped to npm via the `npm:` specifier.
+# deno run 允许从各种位置远程执行包，
+# 并可以通过 `npm:` 说明符限定为 npm。
 $ deno run -A npm:create-next-app@latest
 ```
 
 有关流行库的示例，请参考 [教程部分](/runtime/tutorials)。
 
+### 一流的 package.json 支持
+
+Deno 了解您项目中的 `package.json`。您可以：
+
+- 在那里声明依赖项（作为补充或替代内联的 `npm:` 说明符）。
+- 通过 `deno task` 使用 `package.json` 中的脚本（例如，`deno task start`）。
+- 在解析模块时依赖 `package.json` 字段，如 `type`（见下方的 CommonJS 支持）。
+
+默认情况下，依赖项存储在 Deno 的全局缓存中，不会在本地创建 `node_modules` 目录。如果您的工具需要 `node_modules`，可以通过在 `deno.json` 中设置 `nodeModulesDir` 选项启用。
+
+### 模块解析
+
+官方 TypeScript 编译器 `tsc` 支持不同的 [moduleResolution](https://www.typescriptlang.org/tsconfig#moduleResolution) 设置。Deno 仅支持现代的 `node16` 解析。不幸的是，许多 npm 包在 node16 模块解析下未能正确提供类型，可能会导致 `deno check` 报告类型错误，而 `tsc` 不报告这些错误。
+
+如果 `npm:` 导入的默认导出似乎具有错误类型（正确的类型似乎在 `.default` 属性下），很可能是该包在从 ESM 的 node16 模块解析下提供了错误的类型。您可以通过检查是否在 `tsc --module node16` 和 `package.json` 中 `"type": "module"` 时也发生错误来验证，或通过访问 [类型错误吗？](https://arethetypeswrong.github.io/) 网站（特别是在 “从 ESM 的 node16” 行）。
+
+如果您想使用不支持 TypeScript node16 模块解析的包，您可以：
+
+1. 在该包的问题跟踪器上打开一个问题报告。（或许可以贡献一个修复 :)）不幸的是，由于包需要支持 ESM 和 CJS 缺乏工具，默认导出需要不同的语法。参见 [microsoft/TypeScript#54593](https://github.com/microsoft/TypeScript/issues/54593)
+2. 使用一个 [CDN](/runtime/fundamentals/modules/#url_imports)，该 CDN 为 Deno 支持重建包，而不是使用 `npm:` 标识。
+3. 使用 `// @ts-expect-error` 或 `// @ts-ignore` 忽略您代码库中出现的类型错误。
+
+### 包含 Node 类型
+
+Node 附带许多内置类型，如 `Buffer`，这些类型可能在 npm 包的类型中引用。要加载这些类型，您必须向 `@types/node` 包添加类型引用指令：
+
+```ts
+/// <reference types="npm:@types/node" />
+```
+
+注意，在大多数情况下，不指定版本通常是可以的，因为 Deno 将尝试与其内部的 Node 代码保持同步，但如果必要，您可以始终覆盖使用的版本。
+
 ## CommonJS 支持
 
 CommonJS 是一种在[ES 模块](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)之前就存在的模块系统。尽管我们坚定地相信 ES 模块是 JavaScript 的未来，但依然存在数以百万计的使用 CommonJS 编写的 npm 库，而 Deno 提供了对它们的全面支持。Deno 将自动确定一个包是否使用 CommonJS，并在导入时无缝工作：
-
-```js title="main.js"
-import react from "npm:react";
-console.log(react);
-```
-
-```shell
-$ deno run -E main.js
-18.3.1
-```
 
 _`npm:react` 是一个 CommonJS 包。Deno 允许您像导入 ES 模块一样导入它。_
 
@@ -150,6 +205,12 @@ $ deno run -R -E main.cjs
 ```
 
 `-R` 和 `-E` 标志用于允许权限读取文件和环境变量。
+
+您也可以直接运行 `.cjs` 文件：
+
+```sh
+deno run -A main.cjs
+```
 
 ### package.json type 选项
 
@@ -239,33 +300,24 @@ $ deno run main.js
 }
 ```
 
-**提示和建议**
+### 提示和建议
 
 Deno 会提供有用的提示和建议，指导您在处理 CommonJS 模块时如何编写有效代码。
 
 例如，如果您尝试运行没有 `.cjs` 扩展名的 CommonJS 模块，或没有带有 `{ "type": "commonjs" }` 的 `package.json`，您可能会看到：
 
-```js title="main.js"
-module.exports = {
-  hello: "world",
-};
+```txt
+error ReferenceError: module is not defined
 ```
 
-```shell
-$ deno run main.js
-error: Uncaught (in promise) ReferenceError: module is not defined
-module.exports = {
-^
-    at file:///main.js:1:1
+解决方法包括：
 
-    info: Deno supports CommonJS modules in .cjs files, or when the closest
-          package.json has a "type": "commonjs" option.
-    hint: Rewrite this module to ESM,
-          or change the file extension to .cjs,
-          or add package.json next to the file with "type": "commonjs" option,
-          or pass --unstable-detect-cjs flag to detect CommonJS when loading.
-    docs: https://docs.deno.com/go/commonjs
-```
+- 重写为 ES 模块
+- 将文件扩展改为 `.cjs`
+- 添加带 `{ "type": "commonjs" }` 的相邻 `package.json`
+- 使用 `--unstable-detect-cjs` 标志运行
+
+详见文档：[CommonJS in Deno](https://docs.deno.com/go/commonjs)
 
 ## 条件导出（Conditional exports）
 
@@ -280,6 +332,8 @@ module.exports = {
 ```shell
 deno run --unstable-node-conditions development,react-server main.ts
 ```
+
+此时满足的条件列表变为：
 
 ```json
 ["development", "react-server", "deno", "node", "import", "default"]
@@ -300,31 +354,9 @@ import chalk from "npm:chalk@5";
 import express from "npm:express@^4.17";
 ```
 
-**模块解析**
+## 运行 npm CLI 工具
 
-官方 TypeScript 编译器 `tsc` 支持不同的 [moduleResolution](https://www.typescriptlang.org/tsconfig#moduleResolution) 设置。Deno 仅支持现代的 `node16` 解析。不幸的是，许多 npm 包在 node16 模块解析下未能正确提供类型，可能会导致 `deno check` 报告类型错误，而 `tsc` 不报告这些错误。
-
-如果 `npm:` 导入的默认导出似乎具有错误类型（正确的类型似乎在 `.default` 属性下），很可能是该包在从 ESM 的 node16 模块解析下提供了错误的类型。您可以通过检查是否在 `tsc --module node16` 和 `package.json` 中 `"type": "module"` 时也发生错误来验证，或通过访问 [类型错误吗？](https://arethetypeswrong.github.io/) 网站（特别是在 “从 ESM 的 node16” 行）。
-
-如果您想使用不支持 TypeScript node16 模块解析的包，您可以：
-
-1. 在该包的问题跟踪器上打开一个问题报告。（或许可以贡献一个修复 :)）不幸的是，由于包需要支持 ESM 和 CJS 缺乏工具，默认导出需要不同的语法。参见 [microsoft/TypeScript#54593](https://github.com/microsoft/TypeScript/issues/54593)
-2. 使用一个 [CDN](/runtime/fundamentals/modules/#url_imports)，该 CDN 为 Deno 支持重建包，而不是使用 `npm:` 标识。
-3. 使用 `// @ts-expect-error` 或 `// @ts-ignore` 忽略您代码库中出现的类型错误。
-
-## 包含 Node 类型
-
-Node 附带许多内置类型，如 `Buffer`，这些类型可能在 npm 包的类型中引用。要加载这些类型，您必须向 `@types/node` 包添加类型引用指令：
-
-```ts
-/// <reference types="npm:@types/node" />
-```
-
-注意，在大多数情况下，不指定版本通常是可以的，因为 Deno 将尝试与其内部的 Node 代码保持同步，但如果必要，您可以始终覆盖使用的版本。
-
-## 可执行的 npm 脚本
-
-具有 `bin` 条目的 npm 包可通过以下格式的标识从命令行执行，而无需进行 `npm install`：
+您可以直接运行带有 `bin` 条目的 npm 包的 CLI 工具，无需执行 `npm install`，只需使用 `npm:` 标识符：
 
 ```console
 npm:<package-name>[@<version-requirement>][/<binary-name>]
@@ -362,19 +394,31 @@ Deno 使用 [npm 指定符](/runtime/fundamentals/node/#using-npm-packages) 将 
 
 然而，可能会有一些情况下，即使您没有 `package.json`，也需要在 Deno 项目中有一个本地的 `node_modules` 目录（例如，当使用像 Next.js 或 Svelte 这样的框架或依赖于使用 Node-API 的 npm 包时）。
 
-#### 默认 Deno 依赖行为
+### 选择 node_modules 模式
 
-默认情况下，当您使用 `deno run` 命令时，Deno 不会创建 `node_modules` 目录，依赖项将安装到全局缓存中。这是针对新的 Deno 项目推荐的设置。
+- 默认无本地 node_modules (none)：大多数 Deno 项目使用，保持仓库整洁，无需设置。
+- 自动 (auto)：当某些工具需要 node_modules 或您依赖 Node-API 插件，且希望自动创建本地 node_modules。
+- 手动 (manual)：已有 package.json 且偏好明确安装步骤。
 
-#### 自动创建 node_modules
+| 模式   | 何时使用                                     | 如何启用                                        |
+| ------ | -------------------------------------------- | ----------------------------------------------- |
+| none   | 大多数 Deno 项目；保持仓库干净               | 默认；无需操作                                  |
+| auto   | 工具/打包器需要 node_modules；使用 Node-API  | `deno.json` 配置 `"nodeModulesDir": "auto"` 或 `--node-modules-dir=auto` |
+| manual | 已有 package.json，喜欢显式安装步骤          | `deno.json` 配置 `"nodeModulesDir": "manual"` + 运行安装命令 |
 
-如果您需要在项目中创建 `node_modules` 目录，您可以使用 `--node-modules-dir` 标志或在配置文件中使用 `nodeModulesDir: auto` 选项，告诉 Deno 在当前工作目录中创建一个 `node_modules` 目录：
+### 默认 Deno 依赖行为
+
+默认情况下，`deno run` 命令不会创建 `node_modules` 目录，依赖项安装到全局缓存。这是面向新建 Deno 项目的推荐设置。
+
+### 自动创建 node_modules
+
+若需要在项目创建本地 `node_modules`，可使用命令行 `--node-modules-dir=auto` 标志，或在配置文件中设置 `"nodeModulesDir": "auto"`。
 
 ```sh
 deno run --node-modules-dir=auto main.ts
 ```
 
-或通过配置文件：
+或
 
 ```json title="deno.json"
 {
@@ -382,50 +426,50 @@ deno run --node-modules-dir=auto main.ts
 }
 ```
 
-自动模式会自动将依赖项安装到全局缓存，并在项目根目录创建一个本地的 node_modules 目录。对于依赖于 node_modules 目录的 npm 依赖的项目（大多数使用打包器或有 npm 依赖的 postinstall 脚本的项目），这被推荐。
+自动模式将依赖安装到全局缓存，同时在当前目录创建本地的 `node_modules`。适用于依赖本地 `node_modules` 的工具和打包器。
 
-#### 手动创建 node_modules
+### 手动创建 node_modules
 
-如果您的项目中有 `package.json` 文件，您可以使用手动模式，该模式需要一个安装步骤来创建您的 `node_modules` 目录：
+当项目有 `package.json`，可启用手动模式，需执行安装步骤来创建本地 `node_modules`：
 
 ```sh
 deno install
 deno run --node-modules-dir=manual main.ts
 ```
 
-或通过配置文件：
+或
 
 ```json title="deno.json"
 { "nodeModulesDir": "manual" }
 ```
 
-然后您可以运行 `deno install/npm install/pnpm install` 或其他任何包管理器来创建 `node_modules` 目录。
-
-手动模式是使用 `package.json` 的项目的默认模式。您可能会从 Node.js 项目中识别出这种工作流。它对于使用像 Next.js、Remix、Svelte、Qwik 等框架的项目，或使用 Vite、Parcel 或 Rollup 等工具的项目推荐。
+手动模式默认适用于使用 `package.json` 的项目。适合 Next.js、Remix、Svelte、Qwik 等框架项目，或使用 Vite、Parcel、Rollup 工具的项目。
 
 :::note
 
-我们建议您使用默认的 `none` 模式，如果在 `node_modules` 目录中获取缺少包的错误，则回退到 `auto` 或 `manual` 模式。
+建议首选默认的 `none` 模式，若遇缺少包错误，再回退到 `auto` 或 `manual`。
 
 :::
 
-#### Deno 1.X 的 node_modules
+### node_modules 标志
 
-使用 `--node-modules-dir` 标志。
+可通过 `--node-modules-dir` 选项单次启用 `node_modules` 目录创建。
 
-例如，给定 `main.ts`：
+示例 `main.ts`：
 
-```ts
+```ts title="main.ts"
 import chalk from "npm:chalk@5";
 
 console.log(chalk.green("Hello"));
 ```
 
+运行：
+
 ```sh
 deno run --node-modules-dir main.ts
 ```
 
-运行上述命令时，加上 `--node-modules-dir` 标志，将在当前目录创建一个 `node_modules` 文件夹，具有类似 npm 的文件夹结构。
+运行时将于当前目录创建 `node_modules` 文件夹，结构类似 npm。
 
 ## Node.js 全局对象
 
@@ -490,7 +534,7 @@ Deno 支持 [Node-API 插件](https://nodejs.org/api/n-api.html)，这些插件�
 
 您可以期望所有使用公共和文档 Node-API 的包都能正常工作。
 
-:::info
+:::note
 
 大多数使用 Node-API 插件的包依赖于 npm “生命周期脚本”，如 `postinstall`。
 
@@ -532,7 +576,7 @@ import * as http from "node:http";
 import { Buffer } from "node:buffer";
 ```
 
-3. `require()` 仅在扩展名为 `.cjs` 的文件中可用，在其他文件中必须手动创建 `require()` 实例 [需要创建](#nodejs-global-objects)。 npm 依赖可以在不考虑文件扩展名的情况下使用 `require()`。
+3. `require()` 仅在扩展名为 `.cjs` 的文件中可用，在其他文件中必须手动创建 `require()` 实例。 npm 依赖可以在不考虑文件扩展名的情况下使用 `require()`。
 
 ### 运行脚本
 
@@ -555,13 +599,13 @@ deno task start
 
 ### 可选改进
 
-Deno 的核心优势之一是统一的工具链，开箱即用地支持 TypeScript，和包括 linter、格式化程序以及测试运行器等工具。切换到 Deno 使您能够简化工具链，减少项目中动移动的部件数量。
+Deno 的核心优势之一是统一的工具链，开箱即用地支持 TypeScript，和包括 linter、格式化程序以及测试运行器等工具。切换到 Deno 使您能够简化工具链，减少项目中移动的部件数量。
 
 **配置**
 
 Deno 有自己的配置文件 `deno.json` 或 `deno.jsonc`，可用于[配置您的项目](/runtime/fundamentals/configuration/)。
 
-您可以使用它来使用 `imports` 选项[定义依赖项](/runtime/fundamentals/configuration/) - 您可以逐个迁移 `package.json` 中的依赖项，或者选择在配置文件中完全不定义它们，而在代码中使用 `npm:` 前缀。
+您可以使用它来使用 `imports` 选项[定义依赖项](/runtime/fundamentals/configuration/) — 您可以逐个迁移 `package.json` 中的依赖项，或者选择在配置文件中完全不定义它们，而在代码中使用 `npm:` 前缀。
 
 除了指定依赖项，您还可以使用 `deno.json` 定义任务、lint 和格式选项、路径映射以及其他运行时配置。
 
@@ -575,7 +619,7 @@ Deno 可以在几毫秒内 lint 大型项目。您可以通过运行以下命令
 deno lint
 ```
 
-这将对您项目中的所有文件进行 lint。 当 linter 检测到问题时，它将在您的编辑器和终端输出中显示该行。如下所示的示例：
+这将对您项目中的所有文件进行 lint。当 linter 检测到问题时，它将在您的编辑器和终端输出中显示该行。如下所示的示例：
 
 ```sh
 error[no-constant-condition]: Use of a constant expressions as conditions is not allowed.

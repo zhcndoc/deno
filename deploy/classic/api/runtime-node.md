@@ -6,7 +6,7 @@ oldUrl:
   - /deploy/api/runtime-node/
 ---
 
-:::info Legacy Documentation
+:::info 旧版文档
 
 您正在查看 Deno Deploy Classic 的遗留文档。我们建议迁移到新的
 <a href="/deploy/">Deno Deploy</a> 平台。
