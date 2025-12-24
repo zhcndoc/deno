@@ -132,13 +132,22 @@ import { sing } from "jsr:@eveporcello/sing";
 console.log(sing("sun", 3));
 ```
 
-这个规则会使得，如果我在文件顶部加上这条注释，在项目中的预期行为是让 TypeScript 忽略该文件中的类型检查，不管是否符合类型规则。但是如果我再运行
+What this rule does is prevent you from silencing TypeScript errors by dropping
+a // @ts-ignore or similar comment at the top of a file. In other words, you
+can’t just tell TypeScript to ignore type checking in a file without explicitly
+justifying it. That’s the intended behavior: if you’re bypassing the type
+system, you should have to explain why.
+
+However, when you run
 
 ```sh
 deno task format
 ```
 
-它会告诉我：“嘿，你不能这样，你不能不带注释地忽略这些文件。” 这是规则的一部分。但我们知道有办法绕过这个限制，虽然有些人可能不想去避开规则，但我还是给大家演示一下。我们设置一个 `"exclude": ["ban-ts-comment"]`。
+Deno will enforce this rule and complain if it finds ignored TypeScript checks
+without an accompanying comment. If you really do want to allow this behavior
+anyway, you can opt out of the rule entirely by disabling it in your
+configuration. We’ll say `”exclude”: [“ban-ts-comment”]`.
 
 ```json title="deno.json"
 {

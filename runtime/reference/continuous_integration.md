@@ -137,7 +137,7 @@ steps:
 
 为了演示，假设你有一个使用来自 [`@std/log`](https://jsr.io/@std/log) 的日志记录器的项目：
 
-```json, title="deno.json"
+```json title="deno.json"
 {
   "imports": {
     "@std/log": "jsr:@std/log@0.224.5"

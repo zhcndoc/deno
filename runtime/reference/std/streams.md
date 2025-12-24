@@ -3,7 +3,7 @@ title: "@std/streams"
 description: "用于处理 Web Streams API 的工具"
 jsr: jsr:@std/streams
 pkg: streams
-version: 1.0.13
+version: 1.0.14
 generated: true
 stability: stable
 ---

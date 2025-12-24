@@ -3,7 +3,7 @@ title: "@std/cli"
 description: "用于创建交互式命令行工具的工具"
 jsr: jsr:@std/cli
 pkg: cli
-version: 1.0.23
+version: 1.0.24
 generated: true
 stability: stable
 ---

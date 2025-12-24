@@ -3,7 +3,7 @@ title: "@std/http"
 description: "用于构建 HTTP 服务器的实用工具"
 jsr: jsr:@std/http
 pkg: http
-version: 1.0.21
+version: 1.0.22
 generated: true
 stability: stable
 ---
@@ -41,7 +41,7 @@ HTTP 错误</h2>
 </blockquote>
 <h2 id="user-agent-handling">
 用户代理处理</h2>
-<p><a href="https://jsr.io/@std/http@1.0.21/doc/~/UserAgent" rel="nofollow"><code>UserAgent</code></a> 类提供用户代理字符串解析，允许语义化理解用户代理标志。</p>
+<p><a href="https://jsr.io/@std/http@1.0.22/doc/~/UserAgent" rel="nofollow"><code>UserAgent</code></a> 类提供用户代理字符串解析，允许语义化理解用户代理标志。</p>
 <p>例如，集成 HTTP 请求头中的 <code>User-Agent</code>，如下示例：</p>
 
 ```js

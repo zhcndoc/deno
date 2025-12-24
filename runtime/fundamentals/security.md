@@ -395,19 +395,19 @@ Deno 对同一特权级别下的代码执行没有限制。这意味着在 Deno 
 - 响应模式：
   [permission-broker-response.v1.json](https://github.com/denoland/deno/blob/main/cli/schemas/permission-broker-response.v1.json)
 
-每个请求包含版本号 (`v`)、Deno 进程 ID (`pid`)、唯一单调请求 ID (`id`)、时间戳 (`datetime`，RFC 3339 格式)、权限名称 (`permission`) 和根据权限类型的可选值 (`value`)。响应必须回显请求 ID 并包含一个 `result`，其值为 `"grant"` 或 `"deny"`。如果拒绝，可包含人类可读的 `reason`。
+每个请求包含版本号 (`v`)、Deno 进程 ID (`pid`)、唯一单调请求 ID (`id`)、时间戳 (`datetime`，RFC 3339 格式)、权限名称 (`permission`) 和根据权限类型的可选值 (`value`)。响应必须回显请求 ID 并包含一个 `result`，其值为 `"allow"` 或 `"deny"`。如果拒绝，可包含人类可读的 `reason`。
 
 示例消息流程：
 
 ```text
 -> req {"v":1,"pid":10234,"id":1,"datetime":"2025-01-01T00:00:00.000Z","permission":"read","value":"./run/permission_broker/scratch.txt"}
-<- res {"id":1,"result":"grant"}
+<- res {"id":1,"result":"allow"}
 -> req {"v":1,"pid":10234,"id":2,"datetime":"2025-01-01T00:00:01.000Z","permission":"read","value":"./run/permission_broker/scratch.txt"}
-<- res {"id":2,"result":"grant"}
+<- res {"id":2,"result":"allow"}
 -> req {"v":1,"pid":10234,"id":3,"datetime":"2025-01-01T00:00:02.000Z","permission":"read","value":"./run/permission_broker/log.txt"}
-<- res {"id":3,"result":"grant"}
+<- res {"id":3,"result":"allow"}
 -> req {"v":1,"pid":10234,"id":4,"datetime":"2025-01-01T00:00:03.000Z","permission":"write","value":"./run/permission_broker/log.txt"}
-<- res {"id":4,"result":"grant"}
+<- res {"id":4,"result":"allow"}
 -> req {"v":1,"pid":10234,"id":5,"datetime":"2025-01-01T00:00:04.000Z","permission":"env","value":null}
 <- res {"id":5,"result":"deny","reason":"Environment access is denied."}
 ```

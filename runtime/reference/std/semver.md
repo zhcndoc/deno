@@ -3,7 +3,7 @@ title: "@std/semver"
 description: "语义版本（SemVer）的解析和比较"
 jsr: jsr:@std/semver
 pkg: semver
-version: 1.0.6
+version: 1.0.7
 generated: true
 stability: stable
 ---

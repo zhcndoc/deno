@@ -1,5 +1,5 @@
 ---
-tags: []
+tags: [recommended]
 ---
 
 禁止修改声明为 `const` 的变量。

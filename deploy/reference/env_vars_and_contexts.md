@@ -102,7 +102,7 @@ const value = await Deno.readTextFile(Deno.env.get("MY_ENV_VAR"));
 
 环境变量有以下限制：
 
-- 环境变量键最大长度为 128 字节。\
+- 环境变量键最大长度为 128 字节。
 - 环境变量键不能以以下前缀开头：
   - `DENO_`，但允许以下除外：`DENO_AUTH_TOKENS`、`DENO_COMPAT`、`DENO_CONDITIONS`、
     `DENO_DEPLOY_ENDPOINT` 或 `DENO_DEPLOY_TOKEN`

@@ -31,6 +31,9 @@ import { Hono } from "npm:hono";
 
 ## 快速开始
 
+我们提供了一个 [受支持的 Node.js API 列表](/runtime/reference/node_apis/)
+，您可以在 Deno 中使用它们。
+
 ### 导入一个 npm 包
 
 ```ts title="main.ts"
@@ -330,7 +333,7 @@ error ReferenceError: module is not defined
 这意味着在包导出中键等于这些字符串中的任意一个时，将匹配第一个出现的条件。您可以使用 `--unstable-node-conditions` CLI 标志扩展此列表：
 
 ```shell
-deno run --unstable-node-conditions development,react-server main.ts
+deno run --conditions development,react-server main.ts
 ```
 
 此时满足的条件列表变为：

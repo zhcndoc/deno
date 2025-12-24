@@ -41,6 +41,7 @@ Deno 标准库中的许多包也兼容 Node.js、Cloudflare Workers 以及其他
 - [@std/json](./json/) – (流式) 解析和序列化 JSON 文件
 - [@std/jsonc](./jsonc/) – 解析和序列化 JSONC 文件
 - [@std/log](./log/) – 不稳定版：可定制的日志框架
+- [@std/math](./math/) – 基本数学工具
 - [@std/media-types](./media-types/) – 媒体类型（MIME 类型）工具函数
 - [@std/msgpack](./msgpack/) – msgpack 格式的编解码
 - [@std/net](./net/) – 网络相关工具

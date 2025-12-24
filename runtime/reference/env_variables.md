@@ -103,6 +103,17 @@ MY_VAR="my value" deno run main.ts
 }
 ```
 
+:::note Variables with spaces
+
+When setting environment variables that contain space characters in a `.env`
+file, ensure you enclose the value in quotes. For example:
+
+```shell
+MY_VAR="my value with spaces"
+```
+
+:::
+
 ## `std/cli`
 
 Deno 标准库具有 [`std/cli` 模块](https://jsr.io/@std/cli) 用于解析命令行参数。有关文档和示例，请参考该模块。
@@ -125,6 +136,7 @@ Deno 运行时具有以下特殊环境变量。
 | DENO_NO_UPDATE_CHECK | 设置以禁用检查是否有更新的 Deno 版本                                                                                                                                |
 | DENO_V8_FLAGS        | 设置 V8 命令行选项                                                                                                                                                    |
 | DENO_JOBS            | 用于 `--parallel` 标志与测试子命令的并行工作者数量.<br />默认为可用 CPU 的数量。                                                                                        |
+| DENO_KV_ACCESS_TOKEN | 连接到 Deno KV 数据库时使用的个人访问令牌（例如通过 `Deno.openKv` 或带有 KV Connect URL 的 `@deno/kv`）。                                                              |
 | DENO_WEBGPU_TRACE    | 使用 WebGPU API 时输出 [WGPU 追踪](https://github.com/gfx-rs/wgpu/pull/619) 的目录路径                                                                                 |
 | DENO_WEBGPU_BACKEND  | 选择 WebGPU 将使用的后端，或按优先顺序列出的逗号分隔的后端列表。可能的值为 `vulkan`，`dx12`，`metal` 或 `opengl`。                                                   |
 | HTTP_PROXY           | HTTP 请求的代理地址（模块下载，提取）                                                                                                                                  |

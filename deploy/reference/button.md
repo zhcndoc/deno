@@ -49,5 +49,7 @@ https://console.deno.com/new?clone=REPOSITORY_URL
 
 - `clone` — （必填）要克隆为新仓库并随后部署的源仓库 URL
 - `path` — （可选）在源仓库中需要克隆的路径。提供此参数将创建一个以该目录为根的新仓库
+- `app_directory` — （可选）新仓库中用作应用程序根目录的路径。当仓库采用 monorepo 结构时此参数非常有用。
 - `install` — （可选）构建前执行的命令，用于安装依赖
 - `build` — （可选）构建应用程序时执行的命令
+- `predeploy` — （可选）构建完成但部署之前执行的命令

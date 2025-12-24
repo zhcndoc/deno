@@ -3,7 +3,7 @@ title: "@std/cbor"
 description: "解析和序列化简明二进制对象表示法（CBOR）的实用工具"
 jsr: jsr:@std/cbor
 pkg: cbor
-version: 0.1.8
+version: 0.1.9
 generated: true
 stability: unstable
 ---
@@ -18,13 +18,11 @@ stability: unstable
 
 ## 概览
 
-<h2 id="overview">
-概览</h2>
 <p>简明二进制对象表示法（CBOR）是一种优化了紧凑性和效率的二进制数据序列化格式。它设计用以编码各种数据类型，包括整数、字符串、数组和映射，且空间效率高。
 <a href="https://datatracker.ietf.org/doc/html/rfc8949" rel="nofollow">RFC 8949 - 简明二进制对象表示法 (CBOR)</a>
 规范。</p>
-<h2 id="limitations">
-限制</h2>
+<h3 id="limitations">
+限制</h3>
 <ul>
 <li>此实现仅支持对“文本字符串”键的编码和解码。</li>
 <li>此实现采用 64 位编码十进制数，不会尝试判定十进制数是否可用 32 位或 16 位编码。</li>

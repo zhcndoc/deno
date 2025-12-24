@@ -8,14 +8,20 @@ oldUrl:
 command: fmt
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno fmt"
-description: "Format your code with Deno's built-in formatter"
+description: "使用 Deno 内置的格式化工具格式化你的代码"
 ---
+
+要查看 `deno fmt` 可用的 CLI 选项列表，请运行：
+
+```sh
+deno fmt --help
+```
 
 ## 支持的文件类型
 
 Deno 带有内置的代码格式化工具，可以自动格式化以下文件：
 
-<!-- 本列表需要与 https://github.com/denoland/deno/blob/main/cli/tools/fmt.rs 一起更新 -->
+<!-- This list needs to be updated along with https://github.com/denoland/deno/blob/main/cli/tools/fmt.rs -->
 
 | 文件类型            | 扩展名                                              | 备注                                                                                          |
 | -------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |

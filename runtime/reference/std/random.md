@@ -3,7 +3,7 @@ title: "@std/random"
 description: "使用随机数生成器的各种实用工具。该包还提供了带种子的伪随机数生成器。"
 jsr: jsr:@std/random
 pkg: random
-version: 0.1.3
+version: 0.1.4
 generated: true
 stability: unstable
 ---
@@ -19,6 +19,7 @@ stability: unstable
 ## 概览
 
 <p>用于生成随机数的实用工具。</p>
+<p>生成带固定种子数的随机整数示例：</p>
 
 ```js
 import { randomIntegerBetween } from "@std/random";
@@ -28,6 +29,17 @@ import { assertEquals } from "@std/assert";
 const prng = randomSeeded(1n);
 
 assertEquals(randomIntegerBetween(1, 10, { prng }), 3);
+```
+
+<p>生成两个值之间随机整数的示例：</p>
+
+```js
+import { randomIntegerBetween } from "@std/random";
+import { randomSeeded } from "@std/random";
+
+const prng = randomSeeded(BigInt(crypto.getRandomValues(new Uint32Array(1))[0]!));
+
+const randomInteger = randomIntegerBetween(1, 10, { prng });
 ```
 
 ### 添加到您的项目

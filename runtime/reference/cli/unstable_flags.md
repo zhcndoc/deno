@@ -47,7 +47,7 @@ export DENO_UNSTABLE_BARE_NODE_BUILTINS=true
 
 此标志允许您
 [导入 Node.js 内置模块](/runtime/fundamentals/node/#node-built-in-modules)
-而不使用 `node:` 说明符，如下面的示例所示。您还可以使用此标志在手动管理 Node.js 依赖项时启用 npm 包，而不使用 `npm:` 说明符（[参见 `byonm` 标志](#--unstable-byonm)）。
+而不使用 `node:` 说明符，如下面的示例所示。您还可以使用此标志在手动管理 Node.js 依赖项时启用 npm 包，而不使用 `npm:` 说明符。
 
 ```ts title="example.ts"
 import { readFileSync } from "fs";
