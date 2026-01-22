@@ -15,6 +15,7 @@ export default function TableOfContents({ data, toc, hasSubNav }: {
       className={`toc-list hidden sticky p-4 pr-0 h-screen-minus-header overflow-y-auto border-l border-l-foreground-tertiary lg:block lg:w-full ${topClasses}`}
       id="toc"
     >
+      <div class="wwads-cn wwads-vertical w-full my-4" data-id="354"></div>
       {toc.map((item: TableOfContentsItem_) => (
         <data.comp.TableOfContentsItem item={item} />
       ))}

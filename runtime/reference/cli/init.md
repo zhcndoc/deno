@@ -4,7 +4,7 @@ oldUrl: /runtime/manual/tools/init/
 command: init
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno init"
-description: "Scaffold a new Deno project with tests and configuration"
+description: "搭建一个带有测试和配置的全新 Deno 项目"
 ---
 
 ## 示例
@@ -134,6 +134,42 @@ $ deno task dev
 任务 dev deno serve --watch -R main.ts
 监视器进程已启动。
 deno serve: 正在监听 http://0.0.0.0:8000/
+```
+
+## 初始化一个空项目
+
+运行 `deno init --empty` 会搭建一个带有基础控制台日志的空项目。
+
+```sh
+$ deno init --empty
+✅ 项目初始化完成
+
+运行以下命令开始
+
+  # 运行程序
+  deno run main.ts
+
+  # 运行程序并监听文件变化
+  deno task dev
+```
+
+您的 [`deno.json`](/runtime/fundamentals/configuration/) 文件将如下所示：
+
+```json
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts"
+  }
+}
+```
+
+现在，您可以通过运行 `deno task dev` 启动项目，它将[监听变更](/runtime/getting_started/command_line_interface/#watch-mode)。
+
+```sh
+$ deno task dev
+任务 dev deno run --watch main.ts
+监视器进程已启动。
+Hello world!
 ```
 
 ## 生成一个库项目

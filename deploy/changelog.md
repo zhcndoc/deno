@@ -7,17 +7,31 @@ description: "列出 Deno Deploy 开发与演进过程中的显著进展"
 
 ### 新功能
 
-- 现在可以将 Deno KV 用于数据库集成：
-  - 通过“数据库”标签页配置 Deno KV 数据库，并将其链接到应用或 playground。
-  - 通过 `Deno.openKv()` 从代码访问 Deno KV 数据库。
-  - 当前不支持 KV 队列、读复制、手动备份及选择主区域。
-- playground 现在支持拖拽单个文件和文件夹。
-- playground 文件浏览器现在支持文件的内联重命名和删除。
-- 新增内置环境变量，用于检测 Deno Deploy EA、运行的应用和所属组织：
-  `DENO_DEPLOY=1`、`DENO_DEPLOY_ORG_ID`、`DENO_DEPLOY_ORG_SLUG`、
-  `DENO_DEPLOY_APP_ID`、`DENO_DEPLOY_APP_SLUG`、`DENO_DEPLOY_REVISION_ID`。
-- 用户现在可以从账户页面创建个人访问令牌。
-- Deno Deploy EA 仪表板已从 https://app.deno.com 迁移至 https://console.deno.com。所有现有 URL 会自动重定向至新地址。
+- Deno Deploy 现在可以检测 Deno 和 NPM 的工作区 / 单仓库配置，  
+  允许您部署位于大型仓库子目录中的应用。
+  - 在创建应用时，会扫描仓库中的工作区配置，允许您选择要部署的工作区成员。
+  - 构建期间，工作目录设置为工作区成员目录。
+  - 应用目录可在应用配置设置中自定义（创建后可修改）。
+- 构建日志新增专门的“Deploy”部分，取代之前的“Warmup”和“Routing”阶段，提升部署时的清晰度。
+  - “Deploy”部分包含每个时间线的子部分，包括生产环境、Git 分支和预览部署。
+  - “Warmup”子部分显示与应用预热相关的日志。
+  - “Pre-deploy”子部分显示运行用户定义的预部署命令（如执行迁移）的日志。
+  - “Database creation”子部分显示为时间线创建链接数据库的日志。
+- 顶部导航栏重新设计，新增当前仪表盘部分的面包屑下拉菜单，方便在应用和域名等间快速导航。
+- GitHub 集成中，提交信息包含 `[skip ci]` 或 `[skip deploy]` 字符串时，可跳过该提交的部署。
+- 超过30天未收到流量的修订版本将自动禁用，7天后无活动进一步删除。
+  - 禁用的修订版本可在删除前在修订页面重新启用。
+- `deno deploy` CLI 及 `deno run` 和 `deno task` 的 `--tunnel` 选项现支持使用组织令牌认证，除用户令牌外。
+  - 使用组织令牌时，将其按惯例传入 `DENO_DEPLOY_TOKEN` 环境变量。
+- 发布了多项运行时安全补丁，修复近期公开的 React 和 Next.js 漏洞：  
+  [CVE-2025-55182](https://deno.com/blog/react-server-functions-rce)（远程代码执行）及  
+  [CVE-2025-55184/CVE-2025-67779](https://deno.com/blog/cve-2025-55184)（拒绝服务）。
+- 另外，我们悄然为所有 Deno Deploy 用户启用了新的 Deno Sandbox 基础设施，欢迎体验。
+  - Deno Sandbox 提供完全隔离的 Linux 微型虚拟机，运行不受信任代码。
+  - 适合运行第三方代码（如插件、扩展、用户生成或大型语言模型生成代码），无需担心应用安全。
+  - 明年将公布更多关于 Deno Sandbox 的详情，敬请期待！
+  - 可从 Deno Deploy 控制台的“Sandboxes”标签页体验。
+  - [了解更多关于 Deno Sandbox。](https://deno.com/deploy/sandbox)
 
 ### Bug 修复
 

@@ -11,7 +11,7 @@ export default function Layout(data: Lume.Data) {
   const isServicesPage = data.url.startsWith("/deploy") ||
     data.url.startsWith("/subhosting") ||
     data.url.startsWith("/services") ||
-    data.url.startsWith("/sandboxes");
+    data.url.startsWith("/sandbox");
   const hasSubNav = isServicesPage;
 
   return (
@@ -25,15 +25,16 @@ export default function Layout(data: Lume.Data) {
           <meta name="description" content={data.description} />}
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <script>
-          const theme = localStorage.getItem('denoDocsTheme') ||
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
-          'light'); document.documentElement.classList.add(theme);
-        </script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              `const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);`,
+          }}
+        />
 
         <link
           rel="stylesheet"
-          href={`/styles.css${fingerprint ? `?v=${fingerprint}` : ""}`}
+          href={`/style.css${fingerprint ? `?v=${fingerprint}` : ""}`}
         />
 
         <link
@@ -61,13 +62,13 @@ export default function Layout(data: Lume.Data) {
           name="keywords"
           content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"
         />
-        <script type="module" defer src="/components.js"></script>
-        <script type="module" defer src="/main.client.js"></script>
-        <script type="module" defer src="/lint_rules.client.js"></script>
-        <script type="module" defer src="/copy.client.js"></script>
-        <script type="module" defer src="/tabs.client.js"></script>
-        <script type="module" defer src="/feedback.client.js"></script>
-        <script type="module" defer src="/search.client.js"></script>
+        <script type="module" defer src="/script.js"></script>
+        <script type="module" defer src="/js/main.js"></script>
+        <script type="module" defer src="/js/lint_rules.js"></script>
+        <script type="module" defer src="/js/copy.js"></script>
+        <script type="module" defer src="/js/tabs.js"></script>
+        <script type="module" defer src="/js/feedback.js"></script>
+        <script type="module" defer src="/js/search.js"></script>
         <script
           async
           src="https://www.zhcndoc.com/js/common.js"

@@ -28,22 +28,24 @@ export default function Doc(data: Lume.Data, helpers: Lume.Helpers) {
   }
 
   function getTocCtx(
-    d: unknown,
+    d: Lume.Data,
   ): { document_navigation: unknown; document_navigation_str: string } | null {
-    type Toc = {
-      document_navigation: unknown;
-      document_navigation_str: string;
-    };
-    const tocCtx: unknown = (d as {
-      children?: { props?: { data?: { toc_ctx?: unknown } } };
-    })?.children?.props?.data?.toc_ctx;
+    const tocCandidate =
+      (d.data as { toc_ctx?: unknown } | undefined)?.toc_ctx ??
+        (d as {
+          children?: { props?: { data?: { toc_ctx?: unknown } } };
+        })?.children?.props?.data?.toc_ctx;
+
     if (
-      tocCtx &&
-      typeof tocCtx === "object" &&
-      "document_navigation" in tocCtx &&
-      "document_navigation_str" in tocCtx
+      tocCandidate &&
+      typeof tocCandidate === "object" &&
+      "document_navigation" in tocCandidate &&
+      "document_navigation_str" in tocCandidate
     ) {
-      return tocCtx as Toc;
+      return tocCandidate as {
+        document_navigation: unknown;
+        document_navigation_str: string;
+      };
     }
     return null;
   }
@@ -94,6 +96,7 @@ export default function Doc(data: Lume.Data, helpers: Lume.Helpers) {
               {data.children}
             </div>
           </article>
+          <div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div>
           <data.comp.Feedback file={file} />
         </div>
       </main>

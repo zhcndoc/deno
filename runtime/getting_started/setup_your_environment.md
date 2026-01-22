@@ -45,8 +45,8 @@ Deno 附带许多在应用程序开发中常用的工具，包括完整的
 ![WebStorm 插件设置](./images/webstorm_setup.png)
 
 要配置插件，返回到 **File** > **Settings**，导航到
-**Languages & Frameworks** > **Deno**。勾选 **Enable Deno for your project**，
-并指定 Deno 可执行文件的路径（如果未自动检测）。
+**Languages & Frameworks** > **JavaScript Runtime**。将 **Preferred
+Runtime** 切换为 **Deno**。在 **Deno** 下面，指定 Deno 可执行文件的路径（如果未自动检测到）。
 
 查看
 [这篇博客文章](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)

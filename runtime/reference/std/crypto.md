@@ -67,12 +67,9 @@ console.log(new Uint8Array(hash));
 ```ts
 import { crypto } from "@std/crypto/crypto";
 
-const toHex = (bytes: Uint8Array) =>
-  Array.from(bytes).map((b) => b.toString(16).padStart(2, "0")).join("");
-
 const data = new TextEncoder().encode("hello");
 const buf = await crypto.subtle.digest("BLAKE3", data);
-console.log(toHex(new Uint8Array(buf))); // 例如 "ea..."
+console.log(new Uint8Array(buf).toHex()); // 例如 "ea..."
 ```
 
 ### 哈希文件（BLAKE3）

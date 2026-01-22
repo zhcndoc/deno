@@ -1,6 +1,6 @@
 ---
-title: Installation
-description: "A Guide to installing Deno on different operating systems. Includes instructions for Windows, macOS, and Linux using various package managers, manual installation methods, and Docker containers."
+title: 安装
+description: "关于在不同操作系统上安装 Deno 的指南。包含了 Windows、macOS 和 Linux 使用各种包管理器、手动安装方法及 Docker 容器的说明。"
 oldUrl:
   - /runtime/manual/fundamentals/installation
   - /runtime/manual/getting_started/installation
@@ -77,6 +77,9 @@ vfox use --global deno
 
 </deno-tab>
 <deno-tab value="windows" label="Windows">
+
+**注意：** Deno 需要 Windows 10 版本 1709 或更高版本，或 Windows Server 2016 版本 1709 及以上，因为它依赖于
+[IsWow64Process2](https://learn.microsoft.com/en-us/windows/win32/api/wow64apiset/nf-wow64apiset-iswow64process2) 函数。
 
 使用 PowerShell（Windows）:
 
@@ -181,7 +184,7 @@ vfox use --global deno
 cargo install deno --locked
 ```
 
-Deno 二进制文件也可以手动安装，通过在 [github.com/denoland/deno/releases](https://github.com/denoland/deno/releases) 下载 zip 文件。这些包仅包含一个可执行文件。您将需要在 macOS 和 Linux 上设置可执行位。
+Deno 二进制文件也可以手动安装，通过在 [github.com/denoland/deno/releases](https://github.com/denoland/deno/releases) 下载 zip 文件。这些包仅包含一个可执行文件。您将需要在 macOS 和 Linux 上设置可执行权限。
 
 ## Docker
 
