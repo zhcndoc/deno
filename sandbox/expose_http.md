@@ -7,6 +7,9 @@ description: "了解如何从 Deno 沙箱暴露 HTTP 端点，使您能够在边
 
 从 `@deno/sandbox` 模块导入 `Sandbox` 类，并向 `Sandbox.create()` 方法传递端口：
 
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
+
 ```tsx title="main.ts"
 import { Sandbox } from "@deno/sandbox";
 
@@ -24,6 +27,55 @@ console.log("deno now listening on", sandbox.url);
 
 await p.output();
 ```
+
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+from deno_sandbox import DenoDeploy
+
+sdk = DenoDeploy()
+
+with sdk.sandbox.create(port=8000) as sandbox:
+  print(sandbox.id)
+
+  sandbox.fs.write_text_file(
+    "main.ts",
+    "export default { fetch: () => new Response('hello from a sandbox!') }"
+  )
+
+  p = sandbox.spawn("deno", args=["serve", "--watch", "main.ts"])
+
+  print(f"deno now listening on {sandbox.url}")
+
+  p.wait()
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+from deno_sandbox import AsyncDenoDeploy
+
+sdk = AsyncDenoDeploy()
+
+async with sdk.sandbox.create(port=8000) as sandbox:
+  print(sandbox.id)
+
+  await sandbox.fs.write_text_file(
+    "main.ts",
+    "export default { fetch: () => new Response('hello from a sandbox!') }"
+  )
+
+  p = await sandbox.spawn("deno", args=["serve", "--watch", "main.ts"])
+
+  print(f"deno now listening on {sandbox.url}")
+
+  await p.wait()
+```
+
+</deno-tab>
+</deno-tabs>
 
 这可以通过设置您的 Deploy 令牌并执行以下命令来运行：
 
@@ -60,10 +112,32 @@ deno run -A --watch main.ts
 
 沙箱也支持通过 `exposeHttp()` 方法按需暴露 HTTP：
 
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
+
 ```ts
 const previewUrl = await sandbox.exposeHttp({ port: 8000 });
 console.log(`预览已准备好，访问地址为 ${previewUrl}`);
 ```
+
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+preview_url = sandbox.expose_http(port=8000)
+print(f"Preview ready at {preview_url}")
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+preview_url = await sandbox.expose_http(port=8000)
+print(f"Preview ready at {preview_url}")
+```
+
+</deno-tab>
+</deno-tabs>
 
 当您想先启动一个没有 HTTP 暴露的沙箱，之后再暴露它（例如，在某些初始化或构建步骤之后），这非常有用。
 
@@ -92,6 +166,9 @@ console.log(`预览已准备好，访问地址为 ${previewUrl}`);
 - 对于持久服务，应将代码升级为 Deploy 应用，而非依赖长时间运行的沙箱。
 
 ## 使用框架的完整示例
+
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
 
 ```tsx
 import { Sandbox } from "@deno/sandbox";
@@ -144,4 +221,104 @@ console.log(`预览已准备好，访问地址为 ${previewUrl}`);
 await server.status; // 保持运行直到进程退出
 ```
 
-此模式允许代理或开发者启动高保真预览，分享获取反馈，并通过单击 `Ctrl+C` 一键清理。
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+import json
+from deno_sandbox import DenoDeploy
+
+sdk = DenoDeploy()
+
+with sdk.sandbox.create() as sandbox:
+  # 安装依赖
+  sandbox.fs.write_text_file(
+    "package.json",
+    json.dumps({
+      "private": True,
+      "scripts": {"dev": "next dev"},
+      "dependencies": {
+        "next": "^15.0.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+      },
+    }, indent=2)
+  )
+  sandbox.fs.mkdir("pages", recursive=True)
+  sandbox.fs.write_text_file(
+    "pages/index.js",
+    """export default function Home() {
+  return (
+    <main style={{ fontFamily: "system-ui", padding: "2rem" }}>
+      <h1>Next.js sandbox</h1>
+      <p>Edit pages/index.js to get started.</p>
+    </main>
+  );
+}
+"""
+  )
+  sandbox.spawn("npm", args=["install"]).wait()
+
+  # 启动开发服务器
+  server = sandbox.spawn("npm", args=["run", "dev"], stdout="inherit", stderr="inherit")
+
+  # 发布它
+  preview_url = sandbox.expose_http(port=3000)
+  print(f"预览已准备好，访问地址为 {preview_url}")
+
+  server.wait()  # 保持运行直到进程退出
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+import json
+from deno_sandbox import AsyncDenoDeploy
+
+sdk = AsyncDenoDeploy()
+
+async with sdk.sandbox.create() as sandbox:
+  # 安装依赖
+  await sandbox.fs.write_text_file(
+    "package.json",
+    json.dumps({
+      "private": True,
+      "scripts": {"dev": "next dev"},
+      "dependencies": {
+        "next": "^15.0.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+      },
+    }, indent=2)
+  )
+  await sandbox.fs.mkdir("pages", recursive=True)
+  await sandbox.fs.write_text_file(
+    "pages/index.js",
+    """export default function Home() {
+  return (
+    <main style={{ fontFamily: "system-ui", padding: "2rem" }}>
+      <h1>Next.js sandbox</h1>
+      <p>Edit pages/index.js to get started.</p>
+    </main>
+  );
+}
+"""
+  )
+  proc = await sandbox.spawn("npm", args=["install"])
+  await proc.wait()
+
+  # 启动开发服务器
+  server = await sandbox.spawn("npm", args=["run", "dev"], stdout="inherit", stderr="inherit")
+
+  # 发布它
+  preview_url = await sandbox.expose_http(port=3000)
+  print(f"预览已准备好，访问地址为 {preview_url}")
+
+  await server.wait()  # 保持运行直到进程退出
+```
+
+</deno-tab>
+</deno-tabs>
+
+使用这种方式使用 Deno Sandbox，可以通过最少的代码启动完整的框架开发服务器，适合需要快速启动高保真预览、分享以收集反馈，并通过单击 `Ctrl+C` 一键清理的代理或开发者。

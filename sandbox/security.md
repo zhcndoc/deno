@@ -13,6 +13,9 @@ Deno Sandbox 专为不受信任或 AI 生成的工作负载设计。每个虚拟
 密钥永远不会进入沙箱环境变量。相反，Deno Deploy
 仅在沙箱发起对批准主机的出站请求时替换密钥。创建沙箱时配置密钥：
 
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
+
 ```ts
 await using sandbox = await Sandbox.create({
   secrets: {
@@ -28,6 +31,57 @@ await using sandbox = await Sandbox.create({
 });
 ```
 
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+import os
+from deno_sandbox import DenoDeploy
+
+sdk = DenoDeploy()
+
+with sdk.sandbox.create(
+  secrets={
+    "OPENAI_API_KEY": {
+      "hosts": ["api.openai.com"],
+      "value": os.environ.get("OPENAI_API_KEY"),
+    },
+    "ANTHROPIC_API_KEY": {
+      "hosts": ["api.anthropic.com"],
+      "value": os.environ.get("ANTHROPIC_API_KEY"),
+    },
+  }
+) as sandbox:
+  print(f"Sandbox {sandbox.id} is ready.")
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+import os
+from deno_sandbox import AsyncDenoDeploy
+
+sdk = AsyncDenoDeploy()
+
+async with sdk.sandbox.create(
+  secrets={
+    "OPENAI_API_KEY": {
+      "hosts": ["api.openai.com"],
+      "value": os.environ.get("OPENAI_API_KEY"),
+    },
+    "ANTHROPIC_API_KEY": {
+      "hosts": ["api.anthropic.com"],
+      "value": os.environ.get("ANTHROPIC_API_KEY"),
+    },
+  }
+) as sandbox:
+  print(f"Sandbox {sandbox.id} is ready.")
+```
+
+</deno-tab>
+</deno-tabs>
+
 在沙箱内部，环境变量保存的是占位符：
 
 ```bash
@@ -42,11 +96,41 @@ echo $ANTHROPIC_API_KEY
 默认情况下，Deno Sandbox 允许无限制的出站网络访问。使用
 `allowNet` 选项限制流量到特定主机：
 
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
+
 ```ts
 await using sandbox = await Sandbox.create({
   allowNet: ["api.openai.com", "*.anthropic.com"],
 });
 ```
+
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+sdk = DenoDeploy()
+
+with sdk.sandbox.create(
+  allow_net=["api.openai.com", "*.anthropic.com"]
+) as sandbox:
+  print(f"Sandbox {sandbox.id} is ready.")
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+sdk = AsyncDenoDeploy()
+
+async with sdk.sandbox.create(
+  allow_net=["api.openai.com", "*.anthropic.com"]
+) as sandbox:
+  print(f"Sandbox {sandbox.id} is ready.")
+```
+
+</deno-tab>
+</deno-tabs>
 
 支持的模式包括：
 

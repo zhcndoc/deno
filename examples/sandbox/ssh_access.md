@@ -5,7 +5,7 @@ url: /examples/sandbox_ssh_access/
 layout: sandbox-example.tsx
 ---
 
-`sandbox.exposeSsh()` 方法可以用来为沙箱提供 SSH 访问权限。
+SSH 访问允许您通过 SSH 协议安全地连接到沙箱环境。`sandbox.exposeSsh()` 方法可以用来为沙箱提供 SSH 访问权限。
 
 ```ts
 import { Sandbox } from "@deno/sandbox";

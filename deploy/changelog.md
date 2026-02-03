@@ -3,6 +3,29 @@ title: "Deno Deploy 更新日志"
 description: "列出 Deno Deploy 开发与演进过程中的显著进展"
 ---
 
+## 2026年1月27日
+
+### 新功能
+
+- Deno Deploy 应用现在可以通过 `deno.json` / `deno.jsonc` 文件配置，除了仪表盘设置之外。
+  - 仪表盘中可用的所有应用配置选项也可以在 `deno.json` 文件的 `deploy` 部分找到，包括安装和构建命令、运行时配置和框架预设。
+  - 当同时存在仪表盘和 `deno.json` 配置时，`deno.json` 的配置优先，完全覆盖仪表盘中的应用配置。
+  - 这使得以代码管理应用配置更加方便，并且可以将其与应用代码一同纳入版本控制。
+  - [在文档中了解更多。](/deploy/reference/builds/#editing-app-configuration-from-source-code)
+- 现在可以从组织设置页面重命名组织并更改其别名（slug）。
+  - [重命名组织](/deploy/reference/organizations/#rename-an-organization) 会更新仪表盘和邀请邮件中的显示名称。
+  - [更改组织别名](/deploy/reference/organizations/#update-the-organization-slug) 会更新该组织所有应用的默认域名，注意这将移除旧的默认域名。
+  - 详细信息请参见文档。
+- 现在可以从 Deno Deploy 仪表盘查看支持工单。
+  - 通过发送邮件到 support@deno.com 提交支持请求后，会收到一封自动回复邮件，包含认领工单的链接。
+  - 认领工单后，该工单会关联到您的 Deno Deploy 账户，您可以通过[tickets 仪表盘](https://console.deno.com/tickets)跟踪支持请求状态。
+- 运行时现可通过环境变量[`DENO_TIMELINE`](/deploy/reference/env-vars-and-contexts/#built-in-environment-variables)访问应用当前运行所在的时间线信息。
+
+### Bug 修复
+
+- 修复了有时链接的 Postgres 数据库的数据库浏览器无法加载的问题。
+- 修复了一些构建因无效构建缓存而卡住的问题，这需要通过支持手动干预解决。
+
 ## 2025年8月27日
 
 ### 新功能

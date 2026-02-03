@@ -39,7 +39,26 @@ description: "Deno Deploy 中构建流程的详细说明，涵盖构建触发方
 
 ## 构建配置
 
-构建配置定义了如何将源代码转换为可部署的产物。您可以在以下三处修改构建配置：
+App configuration defines how to convert source code into a deployable artifact.
+
+There are two places you can set app configuration:
+
+- **In source code**: Using a `deno.json` or `deno.jsonc` file in the
+  application directory.
+- **In the Deno Deploy dashboard**: Using the app configuration settings.
+
+If you specify both options, settings in the source code take precedence over
+those in the dashboard. You will be unable to edit any of the app configuration
+values in the dashboard if the most recent successful build used configuration
+from source code.
+
+The application directory must be configured through the dashboard. This setting
+is not configurable from source code, as it determines where to find the source
+code itself.
+
+### Editing app configuration in the dashboard
+
+You can modify app configuration in three places:
 
 - 创建应用时点击“编辑构建配置”
 - 在应用设置中点击构建配置部分的“编辑”
@@ -47,7 +66,7 @@ description: "Deno Deploy 中构建流程的详细说明，涵盖构建触发方
 
 在创建应用时，如果您使用已识别的框架或常见构建配置，构建配置可能会自动从仓库中检测。
 
-### 配置选项
+#### Configuration options
 
 - **应用目录**：仓库中用作应用根目录的文件夹。适用于 Monorepo。默认是仓库根目录。
 
@@ -67,6 +86,96 @@ description: "Deno Deploy 中构建流程的详细说明，涵盖构建触发方
   - **静态**：用于提供预渲染静态内容的静态网站
     - **目录**：包含静态资源的文件夹（如 `dist`、`.output`）
     - **单页应用模式**（可选）：对不匹配静态文件的路径返回 `index.html`，而不是 404 错误
+
+- **Build timeout**: Maximum time allowed for the build process. Defaults to 5
+  minutes, can be increased to 15 minutes on the Pro plan.
+
+- **Build memory**: Amount of memory allocated to the build process. Defaults to
+  3 GB, can be increased to 4 GB on the Pro plan.
+
+### Editing app configuration from source code
+
+To configure your application from source code, add a `deno.json` or
+`deno.jsonc` file to the root of your application directory with a `deploy` key.
+If any of the following app configuration options are specified under this key,
+the entire configuration will be sourced from the file instead of the dashboard
+(any configuration specified in the dashboard will be ignored).
+
+#### `deno.json` options
+
+- `deploy.framework` (required unless `deploy.runtime` is set): The framework
+  preset to use, such as `nextjs` or `fresh`. Setting this option automatically
+  configures defaults for the framework. Available presets are listed in the
+  [framework integrations docs](./frameworks/).
+- `deploy.install` (optional): Shell command to install dependencies.
+- `deploy.build` (optional): Shell command to build the project.
+- `deploy.predeploy` (optional): Shell command to run after the build is
+  complete but before deployment, typically for tasks like database migrations.
+- `deploy.runtime` (required unless `deploy.framework` is set): Configuration
+  for how the app serves traffic. The app can either be static or dynamic, as
+  defined below:
+  - For dynamic apps:
+    - `deploy.runtime.type`: Must be set to `"dynamic"`, or omitted (dynamic is
+      the default).
+    - `deploy.runtime.entrypoint`: The JavaScript or TypeScript file to execute.
+    - `deploy.runtime.args` (optional): Command-line arguments to pass to the
+      application.
+    - `deploy.runtime.cwd` (optional): The working directory for the application
+      at runtime.
+  - For static apps:
+    - `deploy.runtime.type`: Must be set to `"static"`.
+    - `deploy.runtime.cwd`: Folder containing static assets (e.g., `dist`,
+      `.output`).
+    - `deploy.runtime.spa` (optional): If `true`, serves `index.html` for paths
+      that don't match static files instead of returning 404 errors.
+
+#### Examples
+
+**Example dynamic app configuration from `deno.json`:**
+
+```jsonc
+{
+  "deploy": {
+    "install": "npm install",
+    "build": "npm run build",
+    "predeploy": "deno run --allow-net --allow-env migrate.ts",
+    "runtime": {
+      "type": "dynamic",
+      "entrypoint": "./app/server.js",
+      "args": ["--port", "8080"],
+      "cwd": "./app"
+    }
+  }
+}
+```
+
+**Example static app configuration from `deno.jsonc`:**
+
+```jsonc
+{
+  "deploy": {
+    "install": "npm install",
+    "build": "npm run build",
+    "runtime": {
+      "type": "static",
+      "cwd": "./public",
+      "spa": true
+    }
+  }
+}
+```
+
+**Example framework preset configuration with Next.js from `deno.json`:**
+
+```jsonc
+{
+  "deploy": {
+    "framework": "nextjs",
+    "install": "npm install",
+    "build": "npm run build"
+  }
+}
+```
 
 ## 构建环境
 

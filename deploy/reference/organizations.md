@@ -31,6 +31,26 @@ Deno Deploy 中的组织是在注册 Deno Deploy 账号时创建的。
 
 :::
 
+## 更新组织名称
+
+组织名称可以在 Deno Deploy 仪表盘的组织设置页面中更新。组织名称只是一个展示用的名称，修改它不会影响任何应用或域名。它会显示在仪表盘和邀请邮件中，作为组织的显示名称。
+
+## 更新组织 slug
+
+组织 slug 可以在 Deno Deploy 仪表盘的组织设置页面中更新。更改组织 slug 会更新该组织内所有应用的默认域名。例如，将 slug 从 `acme-inc` 改为 `acme-corp`，默认域名将从 `acme-inc.deno.net` 变为 `acme-corp.deno.net`。
+
+:::warning
+
+更改组织 slug 会立即影响使用默认域名的所有应用。任何使用旧域名的现有 URL 将停止工作。您需要更新所有使用旧域名的书签或链接。
+
+更改组织 slug 后，由于 TLS 证书的配置，新的默认域名生效可能需要数分钟。在此期间，应用将无法通过新默认域名访问。
+
+自定义域名不受组织 slug 更改的影响。
+
+:::
+
+这也会影响 Deno Deploy 仪表盘中组织内资源的 URL。例如，应用的 URL 会从 `https://console.deno.com/acme-inc/my-app` 变为 `https://console.deno.com/acme-corp/my-app`。
+
 ## 删除组织
 
 目前无法通过仪表盘删除组织。如需删除组织，请[联系 Deno 支持](/deploy/support/)。

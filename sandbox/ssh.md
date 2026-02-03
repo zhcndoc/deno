@@ -5,6 +5,9 @@ description: "如何打开安全的 SSH 访问沙箱，用于交互式调试、�
 
 沙箱可以提供 SSH 凭据，方便你检查文件系统、查看日志、运行编辑器或转发端口，同时 microVM 保持在 Deploy 边缘隔离状态。
 
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
+
 ```tsx
 import { Sandbox } from "@deno/sandbox";
 
@@ -16,6 +19,43 @@ console.log(`ssh ${username}@${hostname}`);
 // 保持进程存活，或通过 SSH 交互直到完成...
 await new Promise((resolve) => setTimeout(resolve, 10 * 60 * 1000));
 ```
+
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+import time
+from deno_sandbox import DenoDeploy
+
+sdk = DenoDeploy()
+
+with sdk.sandbox.create() as sandbox:
+  ssh = sandbox.expose_ssh()
+  print(f"ssh {ssh['username']}@{ssh['hostname']}")
+
+  # 保持进程存活，或通过 SSH 交互直到完成...
+  time.sleep(10 * 60)
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+import asyncio
+from deno_sandbox import AsyncDenoDeploy
+
+sdk = AsyncDenoDeploy()
+
+async with sdk.sandbox.create() as sandbox:
+  ssh = await sandbox.expose_ssh()
+  print(f"ssh {ssh['username']}@{ssh['hostname']}")
+
+  # 保持进程存活，或通过 SSH 交互直到完成...
+  await asyncio.sleep(10 * 60)
+```
+
+</deno-tab>
+</deno-tabs>
 
 沙箱在配置的生命周期内保持可访问。一旦你的脚本释放引用（例如 `await using` 块结束），沙箱即关闭，SSH 端点消失；如果需要立即终止，也可以调用 `sandbox.kill()`。
 
@@ -62,6 +102,9 @@ ssh -i ./sandbox-key ${username}@${hostname}
 
 ## 示例工作流程
 
+<deno-tabs group-id="sandbox-sdk">
+<deno-tab value="js" label="JavaScript" default>
+
 ```tsx
 import { Sandbox } from "@deno/sandbox";
 
@@ -82,5 +125,54 @@ console.log(`使用以下命令连接: ssh -i sandbox-key ${ssh.username}@${ssh.
 // 阻塞直到手动调试完成
 await new Promise((resolve) => setTimeout(resolve, 10 * 60 * 1000));
 ```
+
+</deno-tab>
+<deno-tab value="python" label="Python">
+
+```py
+import time
+from deno_sandbox import DenoDeploy
+
+sdk = DenoDeploy()
+
+with sdk.sandbox.create(timeout="10m") as sandbox:
+  # 准备应用
+  sandbox.fs.upload("./app", ".")
+  proc = sandbox.spawn("deno", args=["task", "dev"])
+  # 启动服务器；保持运行以便检查
+
+  # 获取 SSH 详情
+  ssh = sandbox.expose_ssh()
+  print(f"连接命令: ssh {ssh['username']}@{ssh['hostname']}")
+
+  # 阻塞直到手动调试完成
+  time.sleep(10 * 60)
+```
+
+</deno-tab>
+<deno-tab value="python-async" label="Python (Async)">
+
+```py
+import asyncio
+from deno_sandbox import AsyncDenoDeploy
+
+sdk = AsyncDenoDeploy()
+
+async with sdk.sandbox.create(timeout="10m") as sandbox:
+  # 准备应用
+  await sandbox.fs.upload("./app", ".")
+  proc = await sandbox.spawn("deno", args=["task", "dev"])
+  # 启动服务器；保持运行以便检查
+
+  # 获取 SSH 详情
+  ssh = await sandbox.expose_ssh()
+  print(f"连接命令: ssh {ssh['username']}@{ssh['hostname']}")
+
+  # 阻塞直到手动调试完成
+  await asyncio.sleep(10 * 60)
+```
+
+</deno-tab>
+</deno-tabs>
 
 使用此模式可调查不稳定的构建，运行交互式 REPL，或与团队成员配对，而无需将代码部署为完整的 Deploy 应用。

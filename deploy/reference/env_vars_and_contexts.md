@@ -138,4 +138,6 @@ Deno Deploy<sup>EA</sup> 在所有上下文中提供以下预定义环境变量�
 
 - `DENO_DEPLOY_BUILD_ID`：当前运行的修订版本 ID。
 
+- `DENO_TIMELINE`：应用当前运行的时间线。可能的值包括 `production`、`git-branch/<branch-name>` 和 `preview/<revision-id>`。构建期间不设置此变量，因为构建不针对特定时间线。
+
 构建期间，环境变量中还会额外设置 `CI=1`。

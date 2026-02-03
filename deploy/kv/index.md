@@ -9,7 +9,7 @@ oldUrl:
 
 **Deno KV** 是一个
 [键值数据库](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
-直接构建在 Deno 运行时中，提供在
+，直接构建在 Deno 运行时中，提供在
 [`Deno.Kv` 命名空间](https://docs.deno.com/api/deno/~/Deno.Kv) 中可用。它可以用于许多类型的数据存储用例，但在存储简单数据结构时表现出色，这些数据结构受益于非常快速的读取和写入。Deno KV 可在 Deno CLI 和 [Deno Deploy](./on_deploy) 上使用。
 
 :::caution
@@ -20,13 +20,18 @@ Deno KV 仍在开发中，可能会发生变化。要使用它，必须向 Deno 
 
 让我们来了解 Deno KV 的关键特性。
 
-## 打开数据库
+## 打开和关闭数据库
 
 在你的 Deno 程序中，可以使用
 [`Deno.openKv()`](https://docs.deno.com/api/deno/~/Deno.openKv) 获取对 KV 数据库的引用。你可以传入一个可选的文件系统路径，以确定你希望存储数据库的位置，否则将根据你的脚本的当前工作目录为你创建一个。
 
+要关闭数据库连接，请使用
+[`.close()`](https://docs.deno.com/api/deno/~/Deno.Kv#method_close_0) 方法。
+
 ```ts
 const kv = await Deno.openKv();
+// 执行一些查询 ...
+await kv.close();
 ```
 
 ## 创建、更新和读取键值对

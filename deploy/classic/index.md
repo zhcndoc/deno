@@ -1,11 +1,11 @@
 ---
-title: "Deploy Classic"
+title: "部署 Classic"
 oldUrl:
   - /deploy/docs/
   - /deploy/manual/hello-world/
 ---
 
-:::info Legacy Documentation
+:::info 旧版文档
 
 您正在查看 Deno Deploy Classic 的旧文档。我们建议您迁移至新的 <a href="/deploy/">Deno Deploy</a> 平台。
 

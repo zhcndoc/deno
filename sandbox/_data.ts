@@ -31,11 +31,11 @@ export const sidebar = [
         href: "/sandbox/ssh/",
       },
       {
-        title: "Manage Deploy apps",
-        href: "/sandbox/manage_apps/",
+        title: "Manage Deno Deploy apps",
+        href: "/sandbox/apps/",
       },
       {
-        title: "Volumes",
+        title: "Volumes & Snapshots",
         href: "/sandbox/volumes/",
       },
       {
@@ -52,8 +52,12 @@ export const sidebar = [
     title: "Reference",
     items: [
       {
-        title: "API Reference",
+        title: "SDK Reference",
         href: "https://jsr.io/@deno/sandbox/doc/~/Sandbox",
+      },
+      {
+        title: "REST API",
+        href: "https://console.deno.com/api/v2/docs",
       },
       {
         title: "CLI subcommand",
@@ -79,7 +83,7 @@ export const SidebarNav = [
     href: "/deploy/",
   },
   {
-    title: "Sandbox",
+    title: "Deno Sandbox",
     href: "/sandbox/",
   },
   {

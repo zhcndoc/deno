@@ -7,7 +7,7 @@ oldUrl:
 command: task
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno task"
-description: "A configurable task runner for Deno"
+description: "Deno 的可配置任务运行器"
 ---
 
 ## 描述
@@ -504,6 +504,38 @@ echo data[0-9].csv
 
 支持的 glob 字符包括 `*`、`?` 和 `[`/`]`。
 
+### Shell 选项
+
+从 Deno 2.6.6 及以上版本，`deno task` 支持 shell 选项以控制 glob 扩展和管道行为。默认情况下启用 `failglob` 和 `globstar`。
+
+- **failglob** - 启用时，glob 模式若不匹配任何文件将导致错误。可通过 `shopt -u failglob` 禁用。
+- **globstar** - 启用时，`**` 匹配零个或多个目录。可通过 `shopt -u globstar` 禁用。
+- **nullglob** - 启用时，未匹配任何文件的 glob 扩展为空字符串而非原样字符串。可通过 `shopt -s nullglob` 启用。
+- **pipefail** - 启用时，管道的退出码是最后一个非零退出码命令的退出码，若均成功则为零。可通过 `set -o pipefail` 启用。
+
+示例：
+
+```jsonc title="deno.jsonc"
+{
+  "tasks": {
+    // 禁用 failglob
+    "task1": "shopt -u failglob && rm -rf *.ts",
+    // 禁用 failglob 并启用 nullglob
+    "task2": "shopt -u failglob && shopt -s nullglob && rm -rf *.ts",
+    // 禁用 globstar
+    "task3": "shopt -u globstar && echo **/*.ts",
+    // 启用 pipefail
+    "task4": "set -o pipefail && cat missing.txt | echo 'hello'"
+  }
+}
+```
+
+:::note
+
+Shell 选项不会传递给 `deno task` 的子进程。每次调用 `deno task` 都从默认选项开始。
+
+:::
+
 ## 内置命令
 
 `deno task` 附带多个内置命令，在 Windows、Mac 和 Linux 上默认工作相同。
@@ -532,5 +564,5 @@ echo data[0-9].csv
 
 ## package.json 支持
 
-如果发现 `deno task` 将回退到读取 package.json 文件中的 `"scripts"` 条目。请注意，Deno 不尊重或支持任何 npm 生命周期事件，如 `preinstall` 或 `postinstall`——您必须显式运行您想要执行的脚本条目（例如：
+如果发现 `deno task` 没有在 `deno.json` 中找到任务，将回退到读取 package.json 文件中的 `"scripts"` 条目。请注意，Deno 不尊重或支持任何 npm 生命周期事件，如 `preinstall` 或 `postinstall`——您必须显式运行您想要执行的脚本条目（例如：
 `deno install --entrypoint main.ts && deno task postinstall`）。

@@ -108,6 +108,11 @@ export const sidebar = [
         type: "video",
       },
       {
+        title: "Sharing your local server with tunnel",
+        href: "/examples/tunnel_tutorial/",
+        type: "tutorial",
+      },
+      {
         title: "Generating documentation with deno doc",
         href: "/examples/deno_doc_tutorial/",
         type: "tutorial",
@@ -319,7 +324,7 @@ export const sidebar = [
         type: "example",
       },
       {
-        title: "Privide SSH access to a sandbox",
+        title: "Provide SSH access to a sandbox",
         href: "/examples/sandbox_ssh_access/",
         type: "example",
       },
@@ -461,6 +466,11 @@ export const sidebar = [
         type: "tutorial",
       },
       {
+        title: "View telemetry data for your local application",
+        href: "/examples/tunnel_telemetry_tutorial/",
+        type: "tutorial",
+      },
+      {
         title: "Export telemetry to Honeycomb",
         href: "/examples/honeycomb_tutorial/",
         type: "tutorial",
@@ -493,6 +503,11 @@ export const sidebar = [
       {
         title: "Migrating a custom domain to Deno Deploy",
         href: "/examples/migrate_custom_domain_tutorial/",
+        type: "tutorial",
+      },
+      {
+        title: "Connecting to a database both locally and on Deno Deploy",
+        href: "/examples/tunnel_database_tutorial/",
         type: "tutorial",
       },
       {

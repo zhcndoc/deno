@@ -83,49 +83,50 @@ deno sandbox create --copy ./app --cwd /app "npm install && npm test && npm run 
 
 ```bash
 $ deno sandbox list
-ID                                    CREATED                 STATUS   UPTIME
-550e8400-e29b-41d4-a716-446655440000  2024-01-15 10:30:00.00  running  5m
-6ba7b810-9dad-11d1-80b4-00c04fd430c8  2024-01-15 09:45:00.00  stopped  15m
+ID                             CREATED                  REGION   STATUS    UPTIME
+sbx_ord_1at5nn58e77rtd11e3k3   2026-01-30 18:33:40.79   ord      running   26.9s
+sbx_ord_fwnygdsnszfe5ghafyx8   2026-01-30 18:31:40.90   ord      stopped   5.1s
+sbx_ord_4xqcyahb8ye2r5a643de   2026-01-30 18:29:59.10   ord      stopped   9.4s
 ```
 
-这显示了每个沙箱的唯一 ID （你用它来配合其他命令），创建时间，当前状态，和运行时长。沙箱 ID 是唯一标识每个实例的 UUID。
+这显示了每个沙箱的唯一 ID（你用它来配合其他命令），创建时间，区域，当前状态，和运行时长。
 
 ## 远程运行命令
 
 `deno sandbox exec` 命令让你在任意运行中的沙箱里执行单条命令，而无需打开交互式会话。非常适合自动化、CI/CD 管道或快速一次性任务：
 
 ```bash
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 ls -la
+deno sandbox exec sbx_ord_abc123def456 ls -la
 ```
 
 大多数时候，你会想在你所复制文件所在的 `/app` 目录操作。用 `--cwd` 指定工作目录：
 
 ```bash
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 --cwd /app npm install
+deno sandbox exec sbx_ord_abc123def456 --cwd /app npm install
 ```
 
 用于脚本或自动化时，用 `--quiet` 抑制命令输出：
 
 ```bash
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 --quiet --cwd /app npm test
+deno sandbox exec sbx_ord_abc123def456 --quiet --cwd /app npm test
 ```
 
 你也可以通过引号把整条复杂命令链传入：
 
 ```bash
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 --cwd /app "npm install && npm test"
+deno sandbox exec sbx_ord_abc123def456 --cwd /app "npm install && npm test"
 ```
 
 exec 命令自然支持 Unix 管道及标准输入/输出。你可以将沙箱命令输出接入本地工具：
 
 ```bash
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 'ls -lh /' | wc -l
+deno sandbox exec sbx_ord_abc123def456 'ls -lh /' | wc -l
 ```
 
 或将本地数据通过管道输入沙箱进程用于处理：
 
 ```bash
-cat large-dataset.csv | deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 --cwd /app "deno run -A main.ts"
+cat large-dataset.csv | deno sandbox exec sbx_ord_abc123def456 --cwd /app "deno run -A main.ts"
 ```
 
 这样方便你将沙箱处理集成至更大规模的 Unix 工作流和数据管道中。
@@ -137,38 +138,38 @@ cat large-dataset.csv | deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 -
 将文件从本地复制到沙箱：
 
 ```bash
-deno sandbox copy ./app.js 550e8400-e29b-41d4-a716-446655440000:/app/
+deno sandbox copy ./app.js sbx_ord_abc123def456:/app/
 ```
 
 从沙箱检索文件到本地：
 
 ```bash
-deno sandbox copy 550e8400-e29b-41d4-a716-446655440000:/app/results.json ./output/
+deno sandbox copy sbx_ord_abc123def456:/app/results.json ./output/
 ```
 
 在不同沙箱间复制文件：
 
 ```bash
-deno sandbox copy 550e8400-e29b-41d4-a716-446655440000:/app/data.csv 6ba7b810-9dad-11d1-80b4-00c04fd430c8:/app/input/
+deno sandbox copy sbx_ord_abc123def456:/app/data.csv sbx_ord_xyz789uvw012:/app/input/
 ```
 
 你可以用通配符从沙箱复制多个文件：
 
 ```bash
-deno sandbox copy 550e8400-e29b-41d4-a716-446655440000:/app/*.json ./config/
-deno sandbox copy 550e8400-e29b-41d4-a716-446655440000:/app/logs/*.log ./logs/
+deno sandbox copy sbx_ord_abc123def456:/app/*.json ./config/
+deno sandbox copy sbx_ord_abc123def456:/app/logs/*.log ./logs/
 ```
 
 还能一次复制多个文件和目录：
 
 ```bash
-deno sandbox copy ./src/ ./package.json 550e8400-e29b-41d4-a716-446655440000:/app/
+deno sandbox copy ./src/ ./package.json sbx_ord_abc123def456:/app/
 ```
 
 目标路径可定制，用以在沙箱中合理安排文件：
 
 ```bash
-deno sandbox copy ./frontend 550e8400-e29b-41d4-a716-446655440000:/app/web/
+deno sandbox copy ./frontend sbx_ord_abc123def456:/app/web/
 ```
 
 ## 部署沙箱
@@ -176,25 +177,25 @@ deno sandbox copy ./frontend 550e8400-e29b-41d4-a716-446655440000:/app/web/
 你可以使用 `deno sandbox deploy` 命令，将正在运行的沙箱部署为 Deno Deploy 应用：
 
 ```bash
-deno sandbox deploy 550e8400-e29b-41d4-a716-446655440000 my-app
+deno sandbox deploy sbx_ord_abc123def456 my-app
 ```
 
 默认部署到预览版本。若要直接部署到生产：
 
 ```bash
-deno sandbox deploy --prod 550e8400-e29b-41d4-a716-446655440000 my-app
+deno sandbox deploy --prod sbx_ord_abc123def456 my-app
 ```
 
 可指定自定义工作目录和入口点：
 
 ```bash
-deno sandbox deploy --cwd /app --entrypoint main.ts 550e8400-e29b-41d4-a716-446655440000 my-app
+deno sandbox deploy --cwd /app --entrypoint main.ts sbx_ord_abc123def456 my-app
 ```
 
 给入口脚本传递参数：
 
 ```bash
-deno sandbox deploy --args --port 8080 550e8400-e29b-41d4-a716-446655440000 my-app
+deno sandbox deploy --args --port 8080 sbx_ord_abc123def456 my-app
 ```
 
 ## 管理卷
@@ -233,7 +234,7 @@ deno sandbox volumes delete my-volume
 
 ## 管理快照
 
-快照能保存卷的当前状态，作为时间点的备份。
+快照是从卷创建的只读镜像。你可以用它们预装软件一次，然后让新沙箱迅速启动并拥有准备好的环境。完整工作流请参考[卷与快照](./volumes/)。
 
 ### 创建快照
 
@@ -254,7 +255,9 @@ deno sandbox volumes snapshot my-volume my-snapshot
 列出组织内所有快照：
 
 ```bash
-deno sandbox snapshots list
+$ deno sandbox snapshots list
+ID                             SLUG          REGION   ALLOCATED    BOOTABLE
+snp_ord_spmbe47dysccpy277ma6   my-snapshot   ord      217.05 MiB   TRUE
 ```
 
 可以搜索特定快照：
@@ -286,7 +289,7 @@ deno sandbox switch
 当你需要在沙箱内交互式工作，比如编辑文件、调试问题或探索环境时，可以用 `deno sandbox ssh`：
 
 ```bash
-deno sandbox ssh 550e8400-e29b-41d4-a716-446655440000
+deno sandbox ssh sbx_ord_abc123def456
 ```
 
 这给你一个沙箱内部的完整 Linux shell，可以使用任何命令行工具，用 vim 或 nano 编辑文件，监视进程，安装额外软件等。断开连接后沙箱仍会继续运行，你可以稍后重新连接，或用其他命令远程操作。
@@ -298,7 +301,7 @@ deno sandbox ssh 550e8400-e29b-41d4-a716-446655440000
 有时你可能需要更多时间来完成当前沙箱中的工作。`deno sandbox extend` 命令允许你在不中断正在运行的进程的情况下延长沙箱超时：
 
 ```bash
-deno sandbox extend 550e8400-e29b-41d4-a716-446655440000 30m
+deno sandbox extend sbx_ord_abc123def456 30m
 ```
 
 extend 命令与沙箱的任何状态无缝配合；无论你是 SSH 登录中、运行远程命令，还是有后台进程，都能保证所有活动连接和进程不中断，同时更新沙箱的过期时间。
@@ -308,7 +311,7 @@ extend 命令与沙箱的任何状态无缝配合；无论你是 SSH 登录中�
 当完成沙箱工作时，使用 `deno sandbox kill`（或 `deno sandbox rm`）终止它并释放资源：
 
 ```bash
-deno sandbox kill 550e8400-e29b-41d4-a716-446655440000
+deno sandbox kill sbx_ord_abc123def456
 ```
 
 这会立即停止沙箱内所有进程并释放资源。务必在终止沙箱前保存所有重要工作，因为沙箱内的所有数据都会丢失。
@@ -326,16 +329,16 @@ deno sandbox create --copy ./my-app
 创建后，使用返回的沙箱 ID 来设置并测试项目：
 
 ```bash
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 --cwd /app npm install
-deno sandbox exec 550e8400-e29b-41d4-a716-446655440000 --cwd /app npm test
+deno sandbox exec sbx_ord_abc123def456 --cwd /app npm install
+deno sandbox exec sbx_ord_abc123def456 --cwd /app npm test
 ```
 
 当你在本地有修改时，可以更新沙箱，完成后再取回生成文件：
 
 ```bash
-deno sandbox copy ./src/ 550e8400-e29b-41d4-a716-446655440000:/app/src/
-deno sandbox copy 550e8400-e29b-41d4-a716-446655440000:/app/build/ ./dist/
-deno sandbox kill 550e8400-e29b-41d4-a716-446655440000
+deno sandbox copy ./src/ sbx_ord_abc123def456:/app/src/
+deno sandbox copy sbx_ord_abc123def456:/app/build/ ./dist/
+deno sandbox kill sbx_ord_abc123def456
 ```
 
 ### 数据处理

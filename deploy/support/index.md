@@ -2,6 +2,16 @@
 title: 支持与反馈
 ---
 
-如果您对 Deno Deploy 有任何问题或反馈，请通过 [Deno Discord](https://discord.gg/deno) 的 `#deploy` 频道联系我们，或通过 [联系我们](mailto:deploy@deno.com)。
+如果您对 Deno Deploy 有任何问题或反馈，请通过 [Deno Discord](https://discord.gg/deno) 的 `#deploy` 频道联系我们，或发送邮件至 support@deno.com。
 
 我们正在积极改进这个平台，非常期待听到您的想法！
+
+## 支持工单
+
+当您发送邮件至 support@deno.com 时，会收到一封自动回复邮件，其中包含支持工单编号和一个领取工单的链接。
+
+您可以通过该链接将工单关联到您的 Deno Deploy 账户，方便您使用 [工单仪表盘](https://console.deno.com/tickets) 来跟踪支持请求的状态。这也能让我们的支持团队知道您是通过哪个账户联系我们，从而提供更好的帮助。
+
+您可以直接在工单仪表盘中查看工单状态更新并回复支持团队的任何问题。当工单状态有变化时，您还会收到电子邮件通知，您可以通过回复这些邮件提供更多信息。
+
+如果您没有收到自动回复邮件，请检查您的垃圾邮件或广告邮件文件夹。

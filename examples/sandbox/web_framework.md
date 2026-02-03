@@ -5,7 +5,7 @@ url: /examples/sandbox_web_framework/
 layout: sandbox-example.tsx
 ---
 
-使用 Deno Sandbox，你可以创建一个 `package.json`，安装依赖，运行网页框架（Express），并通过 HTTP 对外公开它。
+使用 Deno Sandbox，你可以创建一个 `package.json`，安装依赖，运行网页框架（例如 Express），并通过 HTTP 公开它。
 
 此示例展示如何在沙箱内创建一个最简 Express 应用，运行在 3000 端口，并通过 `sandbox.exposeHttp()` 对外公开。
 

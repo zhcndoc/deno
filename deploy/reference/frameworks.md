@@ -19,7 +19,7 @@ Deno Deploy<sup>EA</sup> 开箱即支持多种 JavaScript 和 TypeScript 框架�
 
 ## 支持的框架
 
-### Next.js
+### Next.js (`nextjs`)
 
 Next.js 是用于构建全栈 Web 应用的 React 框架。您使用 React 组件构建用户界面，同时使用 Next.js 提供的额外功能和优化。
 
@@ -31,7 +31,7 @@ Deno Deploy<sup>EA</sup> 上的 Next.js 始终在独立模式下构建。
 
 支持开箱即用的追踪功能，Next.js 会自动为传入请求、路由、渲染及其他操作发出一些跨度（spans）。
 
-### Astro
+### Astro (`astro`)
 
 Astro 是一个用于构建内容驱动网站（如博客、营销和电商）的 Web 框架。Astro 尽可能多地利用服务器渲染而非浏览器端渲染。
 
@@ -60,36 +60,36 @@ $ deno add npm:@deno/astro-adapter
 
 支持 `astro:env` API。
 
-### Nuxt
+### Nuxt (`nuxt`)
 
 使用 Nuxt 轻松创建高质量 Web 应用，Nuxt 是一个开源框架，使基于 Vue.js 的全栈开发变得直观。
 
 Nuxt 无需额外设置。
 
-### SolidStart
+### SolidStart (`solidstart`)
 
 SolidStart 是一个开源元框架，旨在统一组成 Web 应用的组件。它建立于 Solid 之上。
 
 SolidStart 无需额外设置。
 
-### SvelteKit
+### SvelteKit (`sveltekit`)
 
 SvelteKit 是一个使用 Svelte 快速开发健壮且高性能 Web 应用的框架。
 
 SvelteKit 无需额外设置。
 
-### Fresh
+### Fresh (`fresh`)
 
 Fresh 是一个面向 JavaScript 和 TypeScript 开发者的全栈现代 Web 框架。Fresh 使用 Preact 作为 JSX 渲染引擎。
 
 Fresh 无需额外设置。
 
-### Lume
+### Lume (`lume`)
 
 Lume 是一个用于利用 Deno 构建快速且现代网站的静态站点生成器。
 
 Lume 无需额外设置。
 
-### Remix
+### Remix (`remix`)
 
 > ⚠️ **实验性质**：Remix 目前尚未完全支持。它正在被集成进 Deno Deploy<sup>EA</sup>，某些功能可能无法按预期工作。如遇任何问题，请向 Deno 团队反馈。
