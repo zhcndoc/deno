@@ -3,7 +3,7 @@ title: "@std/fs"
 description: "用于文件系统操作的辅助工具"
 jsr: jsr:@std/fs
 pkg: fs
-version: 1.0.20
+version: 1.0.22
 generated: true
 stability: stable
 ---

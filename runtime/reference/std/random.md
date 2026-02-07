@@ -3,7 +3,7 @@ title: "@std/random"
 description: "使用随机数生成器的各种实用工具。该包还提供了带种子的伪随机数生成器。"
 jsr: jsr:@std/random
 pkg: random
-version: 0.1.4
+version: 0.1.5
 generated: true
 stability: unstable
 ---

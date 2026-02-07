@@ -1,43 +1,35 @@
 ---
-title: "Deno Sandbox"
-description: "Overview of the Deno Sandbox microVM platform on Deploy, including capabilities, security model, and ideal use cases."
+title: "Deno 沙箱"
+description: "Deno Deploy 上 Deno 沙箱微虚拟机平台的概览，包括其功能、安全模型和理想使用场景。"
 ---
 
-Deno Sandbox brings instant Linux microVMs to Deno Deploy. Each sandbox boots in
-under a second, is API driven from the `@deno/sandbox` SDK, and is torn down as
-soon as you are done. The result is on-demand compute that feels like opening a
-terminal, yet ships with production-grade isolation and observability.
+Deno 沙箱为 Deno Deploy 带来了即时的 Linux 微虚拟机。每个沙箱启动时间不到一秒，且通过 `@deno/sandbox` SDK 完全由 API 驱动，并且一旦使用完毕立即销毁。结果是按需计算，感觉就像打开了一个终端，但拥有生产级的隔离和可观察性。
 
-## What is a Deno Sandbox?
+## 什么是 Deno 沙箱？
 
-- Individual Linux microVMs orchestrated by Deno Deploy
-- Designed for running untrusted code
-- Instantly available; boot times measured in milliseconds
-- Ephemeral by default but able to persist beyond the current connection
-  lifetime
-- Able to access durable storage via [volumes](./volumes/)
-- Fully API driven: create, run commands, and tear down from code
+- 由 Deno Deploy 编排的独立 Linux 微虚拟机
+- 设计用于运行不受信任的代码
+- 即时可用；启动时间以毫秒计
+- 默认是临时的，但可超出当前连接生命周期持续存在
+- 可通过[卷](./volumes/)访问持久存储
+- 完全由 API 驱动：可以通过代码创建、运行命令和销毁
 
-## Ideal use cases
+## 理想使用场景
 
-Deno Sandbox specializes in workloads where code needs to be generated,
-evaluated, or safely executed on behalf of an untrusted user. They are ideal
-for:
+Deno 沙箱专注于需要生成、评估或代表不受信任用户安全执行代码的工作负载。它们适合用于：
 
-- AI agents and copilots that need to run code as they reason
-- Secure plugin or extension systems
-- Vibe-coding and collaborative IDE experiences
-- Ephemeral CI runners and smoke tests
-- Customer supplied or user generated code paths
-- Instant dev servers and preview environments
+- 需要在推理过程中运行代码的 AI 代理和协同助手
+- 安全的插件或扩展系统
+- 氛围编程和协作 IDE 体验
+- 临时的 CI 运行器和冒烟测试
+- 客户提供或用户生成的代码路径
+- 即时开发服务器和预览环境
 
-This is compute built not just for developers, but for software that builds
-software.
+这不仅是为开发者构建的计算，更是为构建软件的软件而设。
 
-## Run real workloads
+## 运行真实工作负载
 
-Once the Deno Sandbox exists, you get a full Linux environment with files,
-processes, package managers, and background services:
+一旦 Deno 沙箱创建，就会获得完整的 Linux 环境，包括文件、进程、包管理器和后台服务：
 
 <deno-tabs group-id="sandbox-sdk">
 <deno-tab value="js" label="JavaScript" default>
@@ -63,7 +55,7 @@ def main():
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (Async)">
+<deno-tab value="python-async" label="Python (异步)">
 
 ```py
 from deno_sandbox import AsyncDenoDeploy
@@ -79,9 +71,9 @@ async def main():
 </deno-tab>
 </deno-tabs>
 
-## Security policies
+## 安全策略
 
-Provision a sandbox so that it can only talk to approved hosts:
+配置沙箱，使其只能与批准的主机通信：
 
 <deno-tabs group-id="sandbox-sdk">
 <deno-tab value="js" label="JavaScript" default>
@@ -93,13 +85,13 @@ await Sandbox.create({
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (Async)">
+<deno-tab value="python-async" label="Python (异步)">
 
 ```py
 sdk = AsyncDenoDeploy()
 
 async with sdk.sandboxes.create(allowNet=["google.com"]) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已准备好。")
 ```
 
 </deno-tab>
@@ -109,14 +101,13 @@ async with sdk.sandboxes.create(allowNet=["google.com"]) as sandbox:
 sdk = DenoDeploy()
 
 with sdk.sandboxes.create(allowNet=["google.com"]) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已准备好。")
 ```
 
 </deno-tab>
 </deno-tabs>
 
-Secrets never enter the sandbox environment. The real value is substituted only
-when the sandbox makes outbound requests to approved hosts.
+秘密信息绝不会进入沙箱环境。只有当沙箱向批准的主机发出外部请求时，才会替换为真实值。
 
 <deno-tabs group-id="sandbox-sdk">
 <deno-tab value="js" label="JavaScript" default>
@@ -134,7 +125,7 @@ await Sandbox.create({
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (Async)">
+<deno-tab value="python-async" label="Python (异步)">
 
 ```python
 sdk = AsyncDenoDeploy()
@@ -148,7 +139,7 @@ async with sdk.sandboxes.create(
     }
   },
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已准备好。")
 ```
 
 </deno-tab>
@@ -166,56 +157,44 @@ with sdk.sandboxes.create(
     }
   },
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已准备好。")
 ```
 
 </deno-tab>
 </deno-tabs>
 
-## Built for instant, safe compute
+## 为即时、安全计算而生
 
-Developers and AI systems now expect compute that is instant, safe, and globally
-accessible. Deno Sandbox delivers:
+开发者和 AI 系统现在期望计算即刻响应、安全且全球可访问。Deno 沙箱提供了：
 
-- Instant spin-up with no warm pool to manage
-- Dedicated isolation with strict network egress policies
-- Full observability alongside Deno Deploy logs and traces
-- Region selection, memory sizing, and lifetime controls per sandbox
-- Seamless hand-off to Deno Deploy apps when code is production ready
+- 即时启动，无需管理预热池
+- 专用隔离及严格的网络出口策略
+- 与 Deno Deploy 日志和跟踪并行的完整可观察性
+- 每个沙箱支持区域选择、内存大小和生命周期控制
+- 代码准备好生产后可无缝交接至 Deno Deploy 应用
 
-Together, Deno Deploy and Deno Sandbox form a single workflow: code is created,
-proved safe in a sandbox, and deployed globally without new infrastructure or
-orchestration layers.
+Deno Deploy 和 Deno 沙箱共同构成单一工作流：代码被创建，在沙箱中验证安全，然后无需新基础设施或编排层即能全球部署。
 
-## Runtime support
+## 运行时支持
 
-The Deno Sandbox SDK is tested and supported on:
+Deno 沙箱 SDK 已在以下环境测试并支持：
 
-- **Deno:** Latest stable version
-- **Node.js:** Version 24+
-- **Python:** >=3.10
+- **Deno:** 最新稳定版本
+- **Node.js:** 版本 24 及以上
+- **Python:** 3.10 及以上
 
-You can use Deno Sandbox from any environment that can make outbound HTTPS
-requests to the Deno Deploy API. The JavaScript SDK is available as
-`@deno/sandbox` on both [jsr](https://jsr.io/@deno/sandbox) and
-[npm](https://www.npmjs.com/package/@deno/sandbox) (the JSR package is optimized
-for Deno usage). The Python SDK is available as `deno-sandbox` on
-[PyPI](https://pypi.org/project/deno-sandbox/). For direct API access, see the
-[REST API documentation](https://console.deno.com/api/v2/docs).
+你可以从任何能够向 Deno Deploy API 发起 HTTPS 出站请求的环境中使用 Deno 沙箱。JavaScript SDK 可在 [jsr](https://jsr.io/@deno/sandbox) 和 [npm](https://www.npmjs.com/package/@deno/sandbox) 以 `@deno/sandbox` 名称获得（JSR 包针对 Deno 使用进行了优化）。Python SDK 可在 [PyPI](https://pypi.org/project/deno-sandbox/) 以 `deno-sandbox` 名称获得。有关直接 API 访问，请参阅 [REST API 文档](https://console.deno.com/api/v2/docs)。
 
-:::note await using support
+:::note await using 支持
 
-The
-[`await using`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/await_using)
-syntax requires Node.js 24+. If your project uses earlier Node.js versions, use
-try/finally blocks instead:
+[`await using`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/await_using) 语法要求 Node.js 24 及以上版本。如果项目使用较低版本的 Node.js，请改用 try/finally 块：
 
 ```ts
 import { Sandbox } from "@deno/sandbox";
 
 const sandbox = await Sandbox.create();
 try {
-  // ... use sandbox ...
+  // ... 使用 sandbox ...
 } finally {
   await sandbox.close();
 }
@@ -223,30 +202,26 @@ try {
 
 :::
 
-## Limits
+## 限制
 
-Deno Sandbox has the following limits:
+Deno 沙箱有以下限制：
 
-- **Memory:** 768 MB to 4096 MB (1GB default) configurable per sandbox
+- **内存：**768 MB 到 4096 MB（默认 1.2GB），每个沙箱可配置
 - **CPU:** 2 vCPU
-- **Lifetime:** Configurable per sandbox and bound to a session, up to 30
-  minutes
-- **Disk**: 10 GB of ephemeral storage
-- **Concurrency**: 5 concurrent sandboxes per organization (This is the default
-  concurrency limit during the pre-release phase of Deno Sandbox. Contact
-  [deploy@deno.com](mailto:deploy@deno.com) to request a higher limit.)
+- **生命周期：**每个沙箱可配置，绑定于会话，最长 30 分钟
+- **磁盘：**10 GB 临时存储
+- **并发数：**每个组织限制 5 个并发沙箱（这是 Deno 沙箱预发布阶段的默认并发限制。如需更高限制，请联系 [deploy@deno.com](mailto:deploy@deno.com)。）
 
-Exceeding these limits may result in throttling or termination of your sandbox.
+超出这些限制可能导致沙箱被限流或终止。
 
-## Regions
+## 区域
 
-Regions currently supported are:
+当前支持的区域有：
 
-- `ams` - Amsterdam, Netherlands
-- `ord` - Chicago, USA
+- `ams` - 荷兰阿姆斯特丹
+- `ord` - 美国芝加哥
 
-You can specify the region where the sandbox will be created when creating a new
-sandbox:
+创建新沙箱时，可以指定沙箱所在区域：
 
 <deno-tabs group-id="sandbox-sdk">
 <deno-tab value="js" label="JavaScript" default>
@@ -267,11 +242,11 @@ def main():
   sdk = DenoDeploy()
 
   with sdk.sandboxes.create(region="ams") as sandbox:
-    print(f"Sandbox {sandbox.id} is ready.")
+    print(f"沙箱 {sandbox.id} 已准备好。")
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (Async)">
+<deno-tab value="python-async" label="Python (异步)">
 
 ```py
 from deno_sandbox import AsyncDenoDeploy
@@ -280,15 +255,14 @@ async def main():
   sdk = AsyncDenoDeploy()
 
   async with sdk.sandboxes.create(region="ams") as sandbox:
-    print(f"Sandbox {sandbox.id} is ready.")
+    print(f"沙箱 {sandbox.id} 已准备好。")
 ```
 
 </deno-tab>
 </deno-tabs>
 
-If not specified, the sandbox will be created in the default region.
+若未指定，沙箱将创建在默认区域。
 
-## Learn more
+## 了解更多
 
-Ready to try it? Follow the [Getting started](./getting_started) guide to create
-your first sandbox, obtain an access token, and run code on the Deploy edge.
+准备试用吗？请跟随 [入门指南](./getting_started) 创建你的第一个沙箱，获取访问令牌，并在 Deploy 边缘运行代码。

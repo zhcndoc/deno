@@ -3,7 +3,7 @@ title: "标准断言 (@std/assert)"
 description: "常用断言函数，尤其适用于测试"
 jsr: jsr:@std/assert
 pkg: assert
-version: 1.0.16
+version: 1.0.17
 generated: true
 stability: stable
 ---

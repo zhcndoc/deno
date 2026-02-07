@@ -3,7 +3,7 @@ title: "@std/semver"
 description: "语义版本（SemVer）的解析和比较"
 jsr: jsr:@std/semver
 pkg: semver
-version: 1.0.7
+version: 1.0.8
 generated: true
 stability: stable
 ---
@@ -66,9 +66,9 @@ primary    │   │
 
 <h2 id="ranges">
 版本范围</h2>
-<p>版本 <a href="https://jsr.io/@std/semver@1.0.6/doc/~/Range" rel="nofollow"><code>Range</code></a> 是一组 <a href="https://jsr.io/@std/semver@1.0.6/doc/~/Comparator" rel="nofollow"><code>Comparator</code></a>，用于指定满足该范围的版本。</p>
-<p><a href="https://jsr.io/@std/semver@1.0.6/doc/~/Comparator" rel="nofollow"><code>Comparator</code></a> 由一个 <a href="https://jsr.io/@std/semver@1.0.6/doc/~/Operator" rel="nofollow"><code>Operator</code></a> 和一个 
-<a href="https://jsr.io/@std/semver@1.0.6/doc/~/SemVer" rel="nofollow">SemVer</a> 组成。基本的 <code>操作符</code> 集合如下：</p>
+<p>版本 <a href="https://jsr.io/@std/semver@1.0.8/doc/~/Range" rel="nofollow"><code>Range</code></a> 是一组 <a href="https://jsr.io/@std/semver@1.0.8/doc/~/Comparator" rel="nofollow"><code>Comparator</code></a>，用于指定满足该范围的版本。</p>
+<p><a href="https://jsr.io/@std/semver@1.0.8/doc/~/Comparator" rel="nofollow"><code>Comparator</code></a> 由一个 <a href="https://jsr.io/@std/semver@1.0.8/doc/~/Operator" rel="nofollow"><code>Operator</code></a> 和一个 
+<a href="https://jsr.io/@std/semver@1.0.8/doc/~/SemVer" rel="nofollow">SemVer</a> 组成。基本的 <code>操作符</code> 集合如下：</p>
 <ul>
 <li><code>&lt;</code> 小于</li>
 <li><code>&lt;=</code> 小于或等于</li>
@@ -97,7 +97,7 @@ primary    │   │
 <p>其次，选择使用预发布版本的用户明确表示其意图使用<em>特定的</em> alpha/beta/rc 版本。通过包含范围中的预发布标签，用户表示已知风险。然而，不应默认用户也已选择承担<em>下一个</em>预发布版本集的类似风险。</p>
 <h4 id="prerelease-identifiers">
 预发布标识符</h4>
-<p><a href="https://jsr.io/@std/semver@1.0.6/doc/~/increment" rel="nofollow"><code>increment</code></a> 方法接受额外的 <code>identifier</code> 字符串参数，用作预发布标识符附加值：</p>
+<p><a href="https://jsr.io/@std/semver@1.0.8/doc/~/increment" rel="nofollow"><code>increment</code></a> 方法接受额外的 <code>identifier</code> 字符串参数，用作预发布标识符附加值：</p>
 
 ```js
 import { increment, parse } from "@std/semver";
@@ -208,7 +208,7 @@ part       ::= nr | [-0-9A-Za-z]+
 <code>1.2 &lt;1.2.9 || &gt;2.0.0</code> 会在 <code>1.2.9</code> 到 <code>2.0.0</code> 之间有空隙，
 版本 <code>1.2.10</code> 既不大于范围（因为 <code>2.0.1</code> 满足，且更大），也不小于范围（因为 <code>1.2.8</code> 满足，且更小），
 同时也不满足该范围。</p>
-<p>如果您想判断版本是否满足某个范围，请使用 <a href="https://jsr.io/@std/semver@1.0.6/doc/~/satisfies" rel="nofollow"><code>satisfies</code></a> 函数。</p>
+<p>如果您想判断版本是否满足某个范围，请使用 <a href="https://jsr.io/@std/semver@1.0.8/doc/~/satisfies" rel="nofollow"><code>satisfies</code></a> 函数。</p>
 
 ### 添加到您的项目
 

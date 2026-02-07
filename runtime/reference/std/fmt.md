@@ -3,7 +3,7 @@ title: "@std/fmt"
 description: "用于格式化值的工具，例如为文本添加颜色、格式化持续时间、printf 工具、格式化字节数。"
 jsr: jsr:@std/fmt
 pkg: fmt
-version: 1.0.8
+version: 1.0.9
 generated: true
 stability: stable
 ---

@@ -3,7 +3,7 @@ title: "@std/dotenv"
 description: "从 `.env` 文件解析和加载环境变量"
 jsr: jsr:@std/dotenv
 pkg: dotenv
-version: 0.225.5
+version: 0.225.6
 generated: true
 stability: unstable
 ---

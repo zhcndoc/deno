@@ -3,7 +3,7 @@ title: "@std/data-structures"
 description: "常见的数据结构，如红黑树和二叉堆"
 jsr: jsr:@std/data-structures
 pkg: data-structures
-version: 1.0.9
+version: 1.0.10
 generated: true
 stability: stable
 ---

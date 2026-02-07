@@ -3,7 +3,7 @@ title: "@std/yaml"
 description: "YAML 文件的解析与序列化"
 jsr: jsr:@std/yaml
 pkg: yaml
-version: 1.0.10
+version: 1.0.11
 generated: true
 stability: stable
 ---
@@ -12,9 +12,9 @@ stability: stable
 
 ## 概述
 
-<p><a href="https://jsr.io/@std/yaml@1.0.10/doc/~/parse" rel="nofollow"><code>parse</code></a> 和 <a href="https://jsr.io/@std/yaml@1.0.10/doc/~/stringify" rel="nofollow"><code>stringify</code></a> 用于处理<a href="https://yaml.org/" rel="nofollow">YAML</a> 编码的数据。</p>
+<p><a href="https://jsr.io/@std/yaml@1.0.11/doc/~/parse" rel="nofollow"><code>parse</code></a> 和 <a href="https://jsr.io/@std/yaml@1.0.11/doc/~/stringify" rel="nofollow"><code>stringify</code></a> 用于处理<a href="https://yaml.org/" rel="nofollow">YAML</a> 编码的数据。</p>
 <p>移植自 <a href="https://github.com/nodeca/js-yaml/commit/665aadda42349dcae869f12040d9b10ef18d12da" rel="nofollow">js-yaml v3.13.1</a>。</p>
-<p>使用 <a href="https://jsr.io/@std/yaml@1.0.10/doc/~/parseAll" rel="nofollow"><code>parseAll</code></a> 来解析一个 YAML 字符串中的多个文档。</p>
+<p>使用 <a href="https://jsr.io/@std/yaml@1.0.11/doc/~/parseAll" rel="nofollow"><code>parseAll</code></a> 来解析一个 YAML 字符串中的多个文档。</p>
 <p>该包通常支持 <a href="https://yaml.org/spec/1.2.2/" rel="nofollow">YAML 1.2.x</a>（最新版本）以及一些在实际中常用的<a href="https://yaml.org/spec/1.1/current.html" rel="nofollow">YAML 1.1</a>特性。</p>
 <p>支持的 YAML 1.1 特性包括：</p>
 <ul>

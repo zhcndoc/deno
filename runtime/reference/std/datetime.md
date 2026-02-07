@@ -3,7 +3,7 @@ title: "@std/datetime"
 description: "处理 Date 对象的工具"
 jsr: jsr:@std/datetime
 pkg: datetime
-version: 0.225.5
+version: 0.225.7
 generated: true
 stability: unstable
 ---

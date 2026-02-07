@@ -3,7 +3,7 @@ title: "@std/testing"
 description: "用于测试 Deno 代码的工具，如快照测试、BDD 测试和时间模拟"
 jsr: jsr:@std/testing
 pkg: testing
-version: 1.0.16
+version: 1.0.17
 generated: true
 stability: stable
 ---

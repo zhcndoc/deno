@@ -3,7 +3,7 @@ title: "@std/async"
 description: "用于异步操作的工具，如延迟、防抖或池化"
 jsr: jsr:@std/async
 pkg: async
-version: 1.0.15
+version: 1.1.0
 generated: true
 stability: stable
 ---
@@ -12,9 +12,9 @@ stability: stable
 
 ## 概览
 
-<p>提供一些异步任务的辅助函数，比如 <a href="https://jsr.io/@std/async@1.0.15/doc/~/delay" rel="nofollow"><code>延迟（delay）</code></a>，
-<a href="https://jsr.io/@std/async@1.0.15/doc/~/debounce" rel="nofollow"><code>防抖（debouncing）</code></a>，<a href="https://jsr.io/@std/async@1.0.15/doc/~/retry" rel="nofollow"><code>重试（retrying）</code></a>，或者
-<a href="https://jsr.io/@std/async@1.0.15/doc/~/pooledMap" rel="nofollow"><code>池化（pooling）</code></a>。</p>
+<p>提供一些异步任务的辅助函数，比如 <a href="https://jsr.io/@std/async@1.1.0/doc/~/delay" rel="nofollow"><code>延迟（delay）</code></a>，
+<a href="https://jsr.io/@std/async@1.1.0/doc/~/debounce" rel="nofollow"><code>防抖（debounce）</code></a>，<a href="https://jsr.io/@std/async@1.1.0/doc/~/retry" rel="nofollow"><code>重试（retry）</code></a>，或者
+<a href="https://jsr.io/@std/async@1.1.0/doc/~/pooledMap" rel="nofollow"><code>池化（pooledMap）</code></a>。</p>
 
 ```js
 import { delay } from "@std/async/delay";

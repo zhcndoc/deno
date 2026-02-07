@@ -3,7 +3,7 @@ title: "@std/collections"
 description: "用于数组和对象等集合类型的常用任务的纯函数"
 jsr: jsr:@std/collections
 pkg: collections
-version: 1.1.3
+version: 1.1.4
 generated: true
 stability: stable
 ---

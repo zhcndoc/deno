@@ -15,7 +15,6 @@ Deno 标准库中的许多包也兼容 Node.js、Cloudflare Workers 以及其他
 ## 包
 
 <!-- packages:start -->
-
 - [@std/assert](./assert/) – 常用断言函数，特别适合测试
 - [@std/async](./async/) – 异步操作工具，如延迟、去抖动或池化
 - [@std/bytes](./bytes/) – 用于操作 Uint8Array 的工具，JavaScript 未内置
@@ -58,7 +57,6 @@ Deno 标准库中的许多包也兼容 Node.js、Cloudflare Workers 以及其他
 - [@std/uuid](./uuid/) – UUID 生成器和校验工具
 - [@std/webgpu](./webgpu/) – 不稳定版：Web GPU API 工作工具
 - [@std/yaml](./yaml/) – 解析和序列化 YAML 文件
-
 <!-- packages:end -->
 
 ## 版本控制和稳定性

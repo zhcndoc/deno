@@ -1,5 +1,5 @@
 ---
-title: "标题：将数据库连接到本地开发环境"
+title: "将数据库连接到您的本地开发环境"
 description: "使用 Deno Deploy 和 Deno 的隧道功能，将 Postgres 数据库连接到本地开发服务器"
 url: /examples/tunnel_database_tutorial/
 ---

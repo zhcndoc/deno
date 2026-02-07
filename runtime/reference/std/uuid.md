@@ -3,7 +3,7 @@ title: "@std/uuid"
 description: "UUID 的生成器和验证器"
 jsr: jsr:@std/uuid
 pkg: uuid
-version: 1.0.9
+version: 1.1.0
 generated: true
 stability: stable
 ---
