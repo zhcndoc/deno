@@ -1,0 +1,171 @@
+# Deno Documentation - Summary
+
+> A compact, LLM-friendly overview of the Deno docs. For a full index, use llms.txt. For full content, use llms-full.txt.
+
+## Runtime Documentation
+
+Documentation for the Deno CLI and runtime environment, including installation, configuration, and core concepts.
+
+- [欢迎使用 Deno](https://docs.deno.com/runtime/): 学习 Deno 的基础知识，一个安全的 JavaScript、TypeScript 和 WebAssembly 运行时。
+- [贡献与支持](https://docs.deno.com/runtime/contributing/): 关于如何为 Deno 项目和生态系统做出贡献的指南。了解不同的 Deno 仓库、贡献方针，以及如何提交高质量的拉取请求。
+- [Deno CLI 子命令](https://docs.deno.com/runtime/reference/cli/): Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运行时环境进行交互。CLI 具有一些子命令，可以用于执行不同的任务，下面的链接提供有关每个子命令的更多信息。
+- [标准库 (@std)](https://docs.deno.com/runtime/reference/std/): Deno 标准库简介。了解以 TypeScript 为首的模块、跨平台兼容性、版本控制、包管理以及如何在你的 Deno 项目中使用标准模块。
+- [Making a Deno project](https://docs.deno.com/runtime/getting_started/first_project): Step-by-step guide to creating your first Deno project. Learn how to initialize a project, understand the basic file structure, run TypeScript code, and execute tests using Deno's built-in test runner.
+- [命令行接口](https://docs.deno.com/runtime/getting_started/command_line_interface): 关于使用 Deno 命令行接口（CLI）的全面指南。学习如何运行脚本、管理权限、使用观察模式，以及通过命令行标志和选项配置 Deno 运行时行为。
+- [安装](https://docs.deno.com/runtime/getting_started/installation): 关于在不同操作系统上安装 Deno 的指南。包含了 Windows、macOS 和 Linux 使用各种包管理器、手动安装方法及 Docker 容器的说明。
+- [设置你的环境](https://docs.deno.com/runtime/getting_started/setup_your_environment): Deno 开发环境搭建指南。学习如何配置流行编辑器如 VS Code，设置语言服务器支持，并启用 shell 自动补全以提升工作效率。
+- [deno.json 和 package.json](https://docs.deno.com/runtime/fundamentals/configuration): 配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。
+- [Foreign Function Interface (FFI)](https://docs.deno.com/runtime/fundamentals/ffi): Learn how to use Deno's Foreign Function Interface (FFI) to call native libraries directly from JavaScript or TypeScript. Includes examples, best practices, and security considerations.
+- [Node 和 npm 兼容性](https://docs.deno.com/runtime/fundamentals/node): 关于在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包以及 Node.js 和 Deno 环境之间的差异。
+- [OpenTelemetry](https://docs.deno.com/runtime/fundamentals/open_telemetry): 学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。
+- [TypeScript 支持](https://docs.deno.com/runtime/fundamentals/typescript): 了解如何在 Deno 中使用 TypeScript。涵盖配置选项、类型检查以及编写类型安全 Deno 应用的最佳实践。
+- [Web 开发](https://docs.deno.com/runtime/fundamentals/web_dev): Deno 的 Web 开发指南。了解支持的框架如 Fresh、Next.js 和 Astro，以及用于构建现代 Web 应用的内置功能。
+- [代码检查与格式化](https://docs.deno.com/runtime/fundamentals/linting_and_formatting): Deno 内置代码质量工具的指南。学习如何使用 deno lint 和 deno fmt 命令，配置规则，集成 CI/CD 管道，并在您的项目中保持一致的代码风格。
+- [安全性与权限](https://docs.deno.com/runtime/fundamentals/security): Deno 安全模型和权限系统指南。了解安全默认设置、权限标志、运行时提示以及如何使用细粒度访问控制安全执行代码。
+- [工作区和单体仓库](https://docs.deno.com/runtime/fundamentals/workspaces): 关于在 Deno 中管理工作区和单体仓库的指南。了解工作区配置、包管理、依赖解析以及如何有效地构建多包项目结构。
+- [模块与依赖](https://docs.deno.com/runtime/fundamentals/modules): 管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。
+- [测试](https://docs.deno.com/runtime/fundamentals/testing): Deno 测试功能指南。了解内置测试运行器、断言、模拟、覆盖率报告、快照测试，以及如何为您的 Deno 应用程序编写有效测试。
+- [稳定性和发布](https://docs.deno.com/runtime/fundamentals/stability_and_releases): 关于 Deno 稳定性保障和发布流程的指南。涵盖发布渠道、长期支持（LTS）、不稳定特性、版本控制策略，以及 Deno 如何维护向后兼容性。
+- [编写 HTTP 服务器](https://docs.deno.com/runtime/fundamentals/http_server): 一份在 Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流以及如何构建具备自动压缩功能的生产级 HTTP/HTTPS 服务器。
+- [调试](https://docs.deno.com/runtime/fundamentals/debugging): Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器及其他调试技巧来调试 Deno 中的 TypeScript/JavaScript 代码。
+- [Where to get help](https://docs.deno.com/runtime/help): Guide to getting help with Deno. Find community resources, support channels, discussion forums, and how to engage with the Deno community for troubleshooting and assistance.
+- [Architecture Overview](https://docs.deno.com/runtime/contributing/architecture): Deep dive into Deno's internal architecture, explaining core components like the runtime, compiler, and security sandbox. Learn how Deno processes requests and executes JavaScript/TypeScript code.
+- [Deno 风格指南](https://docs.deno.com/runtime/contributing/style_guide): 为 Deno 的内部运行时代码和标准库贡献提供的全面风格指南。涵盖编码约定、文档标准、测试要求及 TypeScript 和 Rust 开发的最佳实践。
+- [Documentation guidelines](https://docs.deno.com/runtime/contributing/docs): Guide for contributing to Deno's documentation. Learn our documentation standards, writing style, and how to submit 文档 changes.
+
+## Deploy Documentation
+
+Documentation for Deno Deploy, a serverless platform for deploying JavaScript to a global edge network.
+
+- [About Deno Deploy](https://docs.deno.com/deploy/): Guide to Deno Deploy features, comparison with Deploy Classic, and getting started instructions for deployment.
+- [Deno KV 快速入门](https://docs.deno.com/deploy/kv/): **Deno KV** 是一个
+[键值数据库](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)
+，直接构建在 Deno 运行时中，提供在
+[`Deno.Kv` 命名空间](https://docs.deno.com/api/deno/~/Deno.Kv) 中可用。它可以用于许多类型的数据存储用例，但在存储简单数据结构时表现出色，这些数据结构受益于非常快速的读取和写入。Deno KV 可在 Deno CLI 和 [Deno Deploy](./on_deploy) 上使用。
+- [支持与反馈](https://docs.deno.com/deploy/support/): 如果您对 Deno Deploy 有任何问题或反馈，请通过 [Deno Discord](https://discord.gg/deno) 的 `#deploy` 频道联系我们，或发送邮件至 support@deno.com。
+- [部署 Classic](https://docs.deno.com/deploy/classic/): :::info 旧版文档
+- [API 参考](https://docs.deno.com/deploy/classic/api/): :::info 旧版本文档
+- [Deno Deploy 使用指南](https://docs.deno.com/deploy/usage): Deno Deploy 的重要限制、服务等级预期及使用条款。
+- [Deno Deploy 更新日志](https://docs.deno.com/deploy/changelog): 列出 Deno Deploy 开发与演进过程中的显著进展
+- [Privacy Policy](https://docs.deno.com/deploy/privacy_policy): Deno's Privacy Policy
+- [兑现政策](https://docs.deno.com/deploy/fulfillment_policy): 我们关于 Deno Deploy 的退款和取消政策。
+- [入门指南](https://docs.deno.com/deploy/getting_started): 逐步指南，帮助您创建和配置您的第一个 Deno Deploy 早期访问应用程序，包括组织设置、构建配置、环境变量和部署监控。
+- [可接受使用政策](https://docs.deno.com/deploy/acceptable_use_policy): Deno Deploy Classic 的可接受使用定义。
+- [安全与负责任的披露](https://docs.deno.com/deploy/security): 如何报告 Deno Deploy 中的安全漏洞。
+- [定价和限制](https://docs.deno.com/deploy/pricing_and_limits): Deno Deploy的重要限制、服务等级预期及使用条款。
+- [条款和条件](https://docs.deno.com/deploy/terms_and_conditions): Deno 条款和条件
+- [CI 和 GitHub Actions](https://docs.deno.com/deploy/classic/ci_github): :::info 旧版文档说明
+- [Connect to Prisma Postgres](https://docs.deno.com/deploy/classic/prisma-postgres): :::info Legacy Documentation
+- [Deno Deploy 上的 KV](https://docs.deno.com/deploy/classic/kv_on_deploy): :::info 旧版文档
+- [事务](https://docs.deno.com/deploy/kv/transactions): Deno KV 存储利用 _乐观并发控制事务_，而不是像 PostgreSQL 或 MySQL 等许多 SQL 系统那样使用 _交互式事务_。这种方法使用版本戳来表示给定键的值的当前版本，通过不使用锁的方式来管理对共享资源的并发访问。当发生读取操作时，系统除了返回相关键的值外，还会返回一个版本戳。
+- [二级索引](https://docs.deno.com/deploy/kv/secondary_indexes): 像 Deno KV 这样的键值存储将数据组织为键值对的集合，其中每个唯一的键都与单个值关联。这样的结构使得可以根据键轻松检索值，但不允许根据值本身进行查询。为了克服这一限制，您可以创建二级索引，它在包含（部分）该值的附加键下存储相同的值。
+- [使用 GitHub 集成进行部署](https://docs.deno.com/deploy/classic/how-to-deploy): :::info 旧文档
+- [使用队列](https://docs.deno.com/deploy/classic/queues): :::info 旧文档
+- [关键空间](https://docs.deno.com/deploy/kv/key_space): Deno KV 是一个键值存储。关键空间是一个扁平的命名空间，由键+值+版本戳对组成。键是键部分的序列，允许对分层数据进行建模。值是任意的 JavaScript 对象。版本戳表示值插入/修改的时间。
+- [区域](https://docs.deno.com/deploy/classic/regions): :::info 旧版文档
+- [反向代理中间件](https://docs.deno.com/deploy/classic/middleware): :::info 旧版文档
+- [在 Node.js 中使用 KV](https://docs.deno.com/deploy/kv/node): 在 Node.js 中连接 Deno KV 数据库可以通过我们的
+[官方客户端库在 npm 上](https://www.npmjs.com/package/@deno/kv)进行支持。您可以在下面找到此选项的使用说明。
+- [在 TypeScript 中的数据建模](https://docs.deno.com/deploy/kv/data_modeling_typescript): 在 TypeScript 应用程序中，通常希望创建强类型、良好文档化的对象，以包含应用程序操作的数据。使用 [接口](https://www.typescriptlang.org/docs/handbook/2/objects.html) 或 [类](https://www.typescriptlang.org/docs/handbook/2/classes.html)，您可以描述程序中对象的形状和行为。
+
+## Sandbox Documentation
+
+Documentation for Deno Sandbox, ephemeral Linux microVMs for running untrusted code safely.
+
+- [Deno 沙箱](https://docs.deno.com/sandbox/): Deno Deploy 上 Deno 沙箱微虚拟机平台的概览，包括其功能、安全模型和理想使用场景。
+- [Deno Deploy 应用的程序化管理](https://docs.deno.com/sandbox/apps): 使用 @deno/sandbox 客户端程序化地创建、列出、更新和删除 Deno Deploy 应用。
+- [Getting started](https://docs.deno.com/sandbox/getting_started): Step-by-step walkthrough for enabling Deno Sandbox, creating your first microVM, running commands, exposing services, and managing secrets.
+- [Promote Deno Sandbox to Deploy Apps](https://docs.deno.com/sandbox/promote): Learn how to promote a sandbox to a full Deno Deploy app for production use.
+- [创建沙箱](https://docs.deno.com/sandbox/create): 了解如何使用静态 Sandbox.create() 方法配置沙箱，并设置运行时、网络和生命周期选项。
+- [安全性](https://docs.deno.com/sandbox/security): 了解 Deno Sandbox 背后的纵深防御模型：隔离、密钥、网络控制和审计。
+- [持久卷](https://docs.deno.com/sandbox/volumes): 将块存储挂载到 Deno 沙盒中，以在会话之间保持状态
+- [暴露 HTTP](https://docs.deno.com/sandbox/expose_http): 了解如何从 Deno 沙箱暴露 HTTP 端点，使您能够在边缘运行 Web 服务器、API 以及预览环境。
+- [暴露 SSH](https://docs.deno.com/sandbox/ssh): 如何打开安全的 SSH 访问沙箱，用于交互式调试、编辑器会话或长时间运行的进程。
+- [沙盒生命周期](https://docs.deno.com/sandbox/timeouts): 了解沙盒存活的时间，如何延长或重新连接沙盒，以及什么时候将工作提升为 Deploy 应用。
+- [通过 CLI 管理](https://docs.deno.com/sandbox/cli): 如何使用 Deno CLI 管理 Deno Sandbox。
+
+## Examples Documentation
+
+Code examples and tutorials demonstrating how to build applications with Deno.
+
+- [Better debugging with the console API](https://docs.deno.com/examples/debugging_with_console_tutorial/): An in-depth guide to advanced console debugging in Deno. Learn about console.table, timers, counters, tracers, and how to leverage the full console API beyond basic logging for better debugging workflows.
+- [Build a Real-time LLM Chat App with Deno](https://docs.deno.com/examples/llm_tutorial/): Learn how to integrate Large Language Models (LLM) with Deno to create an interactive roleplay chat application with AI characters using OpenAI or Anthropic APIs.
+- [Build a Typesafe API with tRPC and Deno](https://docs.deno.com/examples/trpc_tutorial/): A guide to building type-safe APIs with tRPC and Deno. Learn how to set up endpoints, implement RPC procedures, handle data validation, and create efficient client-server applications.
+- [Build an app with Tanstack and Deno](https://docs.deno.com/examples/tanstack_tutorial/): Complete guide to building applications with Tanstack and Deno. Learn how to implement Query for data fetching, Router for navigation, manage server state, and create type-safe full-stack applications.
+- [Build Qwik with Deno](https://docs.deno.com/examples/qwik_tutorial/): Step-by-step guide to building Qwik applications with Deno. Learn about resumability, server-side rendering, route handling, and how to create fast, modern web applications with zero client-side JavaScript by default.
+- [Deno 沙箱卷教程](https://docs.deno.com/examples/volumes_tutorial/): 为你的 Deno 沙箱添加读写块存储。
+- [Deno 沙箱快照教程](https://docs.deno.com/examples/snapshots_tutorial/): 使用只读镜像创建隔离且可复现的环境。
+- [How to export telemetry data to Grafana](https://docs.deno.com/examples/grafana_tutorial/): Complete guide to exporting telemetry data with OpenTelemetry and Grafana. Learn how to configure collectors, visualize traces, and monitor application performance.
+- [How to export telemetry data to Honeycomb](https://docs.deno.com/examples/honeycomb_tutorial/): Complete guide to exporting telemetry data with OpenTelemetry and Honeycomb.io. Learn how to configure collectors, visualize traces, and monitor application performance.
+- [How to export telemetry data to HyperDX](https://docs.deno.com/examples/hyperdx_tutorial/): Complete guide to exporting telemetry data with OpenTelemetry and HyperDX. Learn how to configure collectors, visualize traces, logs, metrics, and debug distributed applications effectively.
+- [Run a script](https://docs.deno.com/examples/run_script_tutorial/): A guide to creating and running basic scripts with Deno. Learn how to write and execute JavaScript and TypeScript code, understand runtime environments, and get started with fundamental Deno concepts.
+- [Snapshot testing](https://docs.deno.com/examples/snapshot_test_tutorial/): Learn how to use snapshot testing in Deno to compare outputs against recorded references, making it easier to detect unintended changes in your code
+- [Stubbing in tests](https://docs.deno.com/examples/stubbing_tutorial/): Learn how to use stubs in Deno to isolate code during testing by replacing function implementations with controlled behavior
+- [Testing web apps](https://docs.deno.com/examples/web_testing_tutorial/): A comprehensive guide to testing web applications with Deno
+- [Writing tests](https://docs.deno.com/examples/testing_tutorial/): Learn key concepts like test setup and structure, assertions, async testing, mocking, test fixtures, and code coverage
+- [从 CommonJS 更新到 ESM](https://docs.deno.com/examples/cjs_to_esm_tutorial/): Step-by-step guide to migrating Node.js projects from CommonJS to ESM modules. Learn about import/export syntax changes, module resolution differences, and how to use modern JavaScript features in Deno.
+- [使用 deno deploy 命令部署应用](https://docs.deno.com/examples/deploy_command_tutorial/): 使用 deno deploy CLI 命令创建并部署第一个应用到 Deno Deploy 早期访问的分步教程。
+- [使用 Deno Deploy 部署应用](https://docs.deno.com/examples/deno_deploy_tutorial/): 一步步指导你将第一个 Deno 应用部署到 Deno Deploy 早期访问。
+- [使用 deno doc 生成文档](https://docs.deno.com/examples/deno_doc_tutorial/): 学习如何使用内置的 deno doc 命令为您的 Deno 项目生成专业文档。本教程涵盖 JSDoc 注释、HTML 输出、代码规范检查以及编写文档的最佳实践。
+- [使用 Deno 构建 Astro](https://docs.deno.com/examples/astro_tutorial/): 逐步教程：使用 Astro 和 Deno 构建 Web 应用程序。学习如何搭建项目、创建动态页面、实现服务器端渲染（SSR），以及使用 Deno 的 Node.js 兼容性部署你的 Astro 网站。
+- [使用 Deno 构建 Nuxt 应用](https://docs.deno.com/examples/nuxt_tutorial/): 逐步指南，教你如何使用 Deno 构建 Nuxt 应用。学习如何创建完整的 Vue.js 全栈应用，实现服务器端渲染，添加 Tailwind 样式，并部署你的应用。
+- [使用 Deno 构建 SolidJS 应用](https://docs.deno.com/examples/solidjs_tutorial/): Build a SolidJS application with Deno. Learn how to set up a project, implement reactive components, handle routing, create API endpoints with Hono, and build a full-stack TypeScript application.
+- [使用 Deno 构建字词查找应用](https://docs.deno.com/examples/word_finder_tutorial/): A tutorial on creating a word search application with Deno. Learn how to build a web server, implement pattern matching, handle HTTP requests, and create an interactive web interface using Oak framework.
+- [使用 Drizzle ORM 和 Deno 构建数据库应用](https://docs.deno.com/examples/drizzle_tutorial/): Step-by-step guide to building database applications with Drizzle ORM and Deno. Learn about schema management, type-safe queries, PostgreSQL integration, migrations, and how to implement CRUD operations.
+- [使用 Mock 进行隔离测试](https://docs.deno.com/examples/mocking_tutorial/): 掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度
+
+## Subhosting Documentation
+
+Documentation for Deno Subhosting, a platform for securely running code written by customers.
+
+- [subhosting/index.md](https://docs.deno.com/subhosting/)
+- [关于子托管](https://docs.deno.com/subhosting/manual/): Deno 子托管是一个强大的平台，旨在允许软件即服务（SaaS）提供商安全地运行客户编写的代码。子托管 API 允许您以编程方式和规模化地部署不受信任的代码。
+- [子托管资源](https://docs.deno.com/subhosting/api/): 要构建 Deno Deploy 的子托管，了解系统内的一些关键资源是很有帮助的。这些资源在
+[REST API](../api/index.md) 中也有体现。
+- [可接受使用政策](https://docs.deno.com/subhosting/manual/acceptable_use_policy): Deno 子托管服务包括受此可接受使用政策约束的资源（CPU 时间，请求计数）。本文件可以大致估计我们认为的“可接受使用”，以及我们不认可的内容。
+- [子托管快速入门](https://docs.deno.com/subhosting/manual/quick_start): 想要寻找一个尽可能小的示例，展示如何将代码部署到 Deno 的隔离云吗？我们在下面为您提供了相关信息，或者您可以跳到[更详细的入门指南](#getting-started-with-subhosting)。
+- [定价和限制](https://docs.deno.com/subhosting/manual/pricing_and_limits): Deno Subhosting 定价计划、资源限制、部署限制和应用性能约束的概述。
+- [规划你的实现](https://docs.deno.com/subhosting/manual/planning_your_implementation): 假设你正在构建一个类似于 Salesforce 的 SaaS CRM 平台。你希望让你的客户能够编写 JavaScript 代码，以便在每次捕获新客户时执行。
+- [部署事件](https://docs.deno.com/subhosting/manual/events): 在部署执行的生命周期中，多个事件被记录到其执行日志中。通过使用
+[部署日志 API](https://apidocs.deno.com/#get-/deployments/-deploymentId-/app_logs)，这些事件日志可以用来理解和监控您的部署行为。
+- [认证](https://docs.deno.com/subhosting/api/authentication): 开发者可以使用 Subhosting REST API 配置项目、域、KV 数据库和其他资源。
+
+## Lint Documentation
+
+Documentation for Deno's built-in linter and formatter, including available rules and configuration.
+
+- [lint/rules/adjacent-overload-signatures.md](https://docs.deno.com/lint/rules/adjacent-overload-signatures): 要求重载签名必须相邻。
+- [lint/rules/ban-ts-comment.md](https://docs.deno.com/lint/rules/ban-ts-comment): 不允许在没有注释的情况下使用 Typescript 指令。
+- [lint/rules/ban-types.md](https://docs.deno.com/lint/rules/ban-types): 禁止使用原始包装对象（例如 `String` 这个对象是 `string` 原始类型的包装），以及不明确的 `Function` 类型和误解的 `Object` 类型。
+- [lint/rules/ban-unknown-rule-code.md](https://docs.deno.com/lint/rules/ban-unknown-rule-code): 警告在忽略指令中使用未知规则代码。
+- [lint/rules/ban-untagged-ignore.md](https://docs.deno.com/lint/rules/ban-untagged-ignore): 需要将 `deno-lint-ignore` 注解与一个或多个规则名称。
+- [lint/rules/ban-untagged-todo.md](https://docs.deno.com/lint/rules/ban-untagged-todo): 要求 TODO 注释必须带有用户标签（`@user`）或问题引用（`#issue`）。
+- [lint/rules/ban-unused-ignore.md](https://docs.deno.com/lint/rules/ban-unused-ignore): 警告未使用的忽略指令。
+- [lint/rules/camelcase.md](https://docs.deno.com/lint/rules/camelcase): 强制在变量名中使用 camelCase。
+- [lint/rules/constructor-super.md](https://docs.deno.com/lint/rules/constructor-super): 验证构造函数和 `super()` 调用的正确使用。
+- [lint/rules/default-param-last.md](https://docs.deno.com/lint/rules/default-param-last): 强制默认参数在函数签名中位于最后。
+- [lint/rules/eqeqeq.md](https://docs.deno.com/lint/rules/eqeqeq): 强制使用类型安全的相等运算符 `===` 和 `!==` 代替更容易出错的 `==` 和 `!=` 运算符。
+- [lint/rules/explicit-function-return-type.md](https://docs.deno.com/lint/rules/explicit-function-return-type): 要求所有函数都有明确的返回类型。
+- [lint/rules/explicit-module-boundary-types.md](https://docs.deno.com/lint/rules/explicit-module-boundary-types): 要求所有模块导出具备完全类型声明。
+- [lint/rules/for-direction.md](https://docs.deno.com/lint/rules/for-direction): 需要 `for` 循环控制变量以正确的方向递增。
+- [lint/rules/fresh-handler-export.md](https://docs.deno.com/lint/rules/fresh-handler-export): 检查命名是否正确，适用于命名的 fresh 中间件导出。
+- [lint/rules/fresh-server-event-handlers.md](https://docs.deno.com/lint/rules/fresh-server-event-handlers): 不允许在 fresh 服务器组件中使用事件处理程序。
+- [lint/rules/getter-return.md](https://docs.deno.com/lint/rules/getter-return): 要求所有属性获取器函数返回一个值。
+- [lint/rules/guard-for-in.md](https://docs.deno.com/lint/rules/guard-for-in): 要求 `for-in` 循环包含 `if` 语句。
+- [lint/rules/jsx-boolean-value.md](https://docs.deno.com/lint/rules/jsx-boolean-value): 强制一致的 JSX 布尔值样式。传递 `true` 作为布尔值可以使用简写语法省略。
+- [lint/rules/jsx-button-has-type.md](https://docs.deno.com/lint/rules/jsx-button-has-type): Enforce `` elements to have a `type` attribute. If a `` is
+placed inside a `` element it will act as a submit button by default which
+can be unexpected.
+- [lint/rules/jsx-curly-braces.md](https://docs.deno.com/lint/rules/jsx-curly-braces): 确保在 JSX 表达式周围一致使用花括号。
+- [lint/rules/jsx-key.md](https://docs.deno.com/lint/rules/jsx-key): 确保在将可迭代对象传递给 JSX 时存在 `key` 属性。这允许框架优化元素顺序的检查。
+- [lint/rules/jsx-no-children-prop.md](https://docs.deno.com/lint/rules/jsx-no-children-prop): 将子元素作为 JSX 子元素传递，而不是作为属性。
+- [lint/rules/jsx-no-comment-text-nodes.md](https://docs.deno.com/lint/rules/jsx-no-comment-text-nodes): JavaScript comments inside text nodes are rendered as plain text in JSX. This is
+often unexpected.
+- [lint/rules/jsx-no-duplicate-props.md](https://docs.deno.com/lint/rules/jsx-no-duplicate-props): 不允许重复的 JSX 属性。后面的属性将始终覆盖前面的属性，这常常会导致意想不到的结果。
+
+## Optional
+
+- [Contribution Guidelines](https://docs.deno.com/runtime/contributing): How to contribute to Deno
+- [Style Guide](https://docs.deno.com/runtime/contributing/style_guide): Coding style guidelines for Deno
+- [Release Schedule](https://docs.deno.com/runtime/contributing/release_schedule): Deno's release cadence and versioning
+- [Deno LLM Skills](https://github.com/denoland/skills): Skills and playbooks for LLMs and AI agents working with Deno

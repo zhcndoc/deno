@@ -1,0 +1,1157 @@
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>deno.json 和 package.json - Deno 中文文档</title><meta name="description" content="配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/style.css"><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="me" href="https://fosstodon.org/@deno_land"><meta name="twitter:title" content="deno.json 和 package.json"><meta name="twitter:description" content="配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"><meta name="twitter:image" content="https://docs.deno.com/runtime/fundamentals/configuration/index.png"><meta name="twitter:image:alt" content="配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@deno_land"><meta property="og:title" content="deno.json 和 package.json"><meta property="og:description" content="配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"><meta property="og:image" content="https://docs.deno.com/runtime/fundamentals/configuration/index.png"><meta property="og:image:alt" content="配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"><meta property="og:type" content="article"><meta property="og:site_name" content="Deno"><meta property="og:locale" content="en_US"><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"><script type="module" defer src="/script.js"></script><script type="module" defer src="/js/main.js"></script><script type="module" defer src="/js/lint_rules.js"></script><script type="module" defer src="/js/copy.js"></script><script type="module" defer src="/js/tabs.js"></script><script type="module" defer src="/js/feedback.js"></script><script type="module" defer src="/js/search.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"></head><body ><a href="#content" class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]">Skip to main content</a><header class="w-full h-auto sticky top-0 z-[100] bg-background-raw border-b border-b-foreground-tertiary"><div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0"><a href="https://deno.com" title="Deno main website" class="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"><svg width="100%" height="100%" viewBox="0 0 1025 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" class="" data-component="logo"><path id="background" d="M28.829,227.937c-8.871,-19.143 -13.822,-40.465 -13.822,-62.935c-0,-5.815 0.332,-11.554 0.977,-17.197c0.655,-5.703 1.626,-11.299 2.893,-16.773c7.12,-30.704 23.68,-57.808 46.452,-78.082c19.127,-17.006 42.558,-29.14 68.244,-34.64c10.137,-2.165 20.651,-3.304 31.43,-3.304c3.778,0.004 7.583,0.149 11.411,0.441c18.154,1.386 35.309,5.956 50.959,13.121c12.625,5.786 24.31,13.274 34.762,22.169c26.253,22.364 44.562,53.517 50.651,88.476c1.455,8.379 2.213,16.996 2.213,25.789c-0.003,3.784 -0.149,7.595 -0.442,11.429c-1.106,14.489 -4.241,28.342 -9.104,41.302c-6.788,18.051 -16.959,34.452 -29.738,48.428c-16.621,16.971 -37.743,24.523 -55.384,24.209c-12.828,-0.229 -25.379,-5.333 -34.052,-12.801c-12.39,-10.669 -17.394,-22.865 -19.11,-36.474c-0.426,-3.383 -0.176,-12.601 1.585,-18.984c1.312,-4.758 4.64,-13.946 9.507,-17.965c-5.693,-2.452 -13.021,-7.792 -15.331,-10.355c-0.568,-0.63 -0.494,-1.617 0.014,-2.296c0.509,-0.678 1.4,-0.946 2.199,-0.659c4.895,1.68 10.856,3.337 17.142,4.389c8.267,1.382 18.548,3.122 28.963,3.634c25.395,1.247 51.921,-10.151 60.154,-32.83c8.232,-22.679 5.038,-45.111 -24.496,-58.566c-29.535,-13.456 -43.178,-29.455 -67.041,-39.104c-15.587,-6.303 -32.935,-2.561 -50.746,7.282c-47.974,26.512 -90.955,110.279 -71.142,187.887c0.283,1.062 -0.195,2.18 -1.158,2.709c-0.903,0.495 -2.013,0.354 -2.761,-0.331c-5.766,-6.336 -10.998,-13.166 -15.623,-20.421c-3.578,-5.614 -6.79,-11.475 -9.606,-17.548Z" style="fill: var(--logoColor);"></path><path id="outline" d="M172.67,0.181c90.968,4.232 161.386,81.521 157.155,172.489c-4.232,90.968 -81.522,161.385 -172.489,157.153c-90.968,-4.231 -161.386,-81.52 -157.155,-172.487c4.232,-90.968 81.521,-161.386 172.489,-157.155Zm38.578,198.678c-10.415,-0.512 -20.696,-2.252 -28.963,-3.634c-6.286,-1.052 -12.247,-2.709 -17.142,-4.389c-0.799,-0.287 -1.69,-0.019 -2.199,0.659c-0.508,0.679 -0.582,1.666 -0.014,2.296c2.31,2.563 9.638,7.903 15.331,10.355c-4.867,4.019 -8.195,13.207 -9.507,17.965c-1.761,6.383 -2.011,15.601 -1.585,18.984c1.716,13.609 6.72,25.805 19.11,36.474c8.673,7.468 21.224,12.572 34.052,12.801c17.702,0.315 38.909,-7.29 55.556,-24.385c21.765,-23.861 36.023,-54.887 38.67,-89.554c6.303,-82.546 -55.596,-154.681 -138.143,-160.984c-82.545,-6.303 -154.68,55.597 -160.983,138.143c-3.264,42.749 11.764,82.706 38.481,112.17c0.744,0.809 1.944,1.006 2.907,0.477c0.963,-0.529 1.441,-1.647 1.158,-2.709c-19.813,-77.608 23.168,-161.375 71.142,-187.887c17.811,-9.843 35.159,-13.585 50.746,-7.282c23.863,9.649 37.506,25.648 67.041,39.104c29.534,13.455 32.728,35.887 24.496,58.566c-8.233,22.679 -34.759,34.077 -60.154,32.83Z" style="fill: var(--outlineColor);"></path><path id="logotype" d="M694.596,164.68c-0,4.838 -0,11.794 -0.909,14.213l-103.727,0c4.837,17.542 18.749,28.431 37.8,28.431c15.728,0.302 27.219,-6.654 35.383,-16.636l25.705,23.894c-12.7,16.028 -34.171,27.822 -63.809,27.822c-43.243,-0 -75.904,-30.242 -75.904,-76.513c-0,-44.756 31.148,-75.907 73.184,-75.907c43.243,-0 72.277,31.453 72.277,74.696Zm-71.07,-39.918c-16.025,-0 -28.729,8.771 -33.265,25.706l65.02,-0c-3.932,-15.422 -14.515,-25.706 -31.755,-25.706Zm175.096,-34.778c31.758,-0 53.829,16.938 53.829,62.298l0,87.703l-39.615,-0l0,-77.724c0,-28.124 -9.976,-36.892 -28.427,-36.892c-19.953,0 -33.564,13.908 -33.564,40.221l-0,74.395l-39.617,-0l0,-147.582l39.617,-0l-0,19.055l0.602,0c12.095,-14.213 29.037,-21.474 47.175,-21.474Zm146.977,152.42c-46.871,-0 -78.324,-32.058 -78.324,-76.21c-0,-44.153 31.453,-76.21 78.324,-76.21c45.971,-0 78.628,30.849 78.628,76.21c0,45.36 -32.657,76.21 -78.628,76.21Zm-0,-35.386c21.469,0 38.411,-16.934 38.411,-40.824c-0,-24.192 -16.332,-40.825 -38.411,-40.825c-22.986,0 -38.404,17.539 -38.404,40.825c0,22.984 16.028,40.824 38.404,40.824Zm-540.473,32.967l0,-150.001l54.227,-0c47.449,-0 77.952,30.845 77.952,75.212c-0,44.154 -28.597,74.789 -77.316,74.789l-54.863,-0Zm38.976,-35.705l13.133,-0c22.878,-0 37.917,-17.535 37.917,-39.084c-0,-22.395 -15.251,-39.507 -34.952,-39.507l-16.098,-0l0,78.591Z" style="fill: var(--textColor);"></path><path id="eye" d="M159.634,78.772c8.092,-0.634 15.152,6.272 16.369,15.457c1.624,12.235 -2.867,24.874 -17.633,25.165c-12.614,0.252 -16.436,-12.469 -15.6,-20.175c0.83,-7.706 7.182,-19.687 16.864,-20.447Z" style="fill: var(--eyeColor);"></path><style>
+        [data-component="logo"] {
+          --logoColor: #000;
+          --textColor: #000;
+          --eyeColor: #000;
+          --outlineColor: transparent;
+
+          height: 100%;
+          width: auto;
+        }
+        .dark [data-component="logo"] {
+          --textColor: #fff;
+          --outlineColor: #fff;
+        }
+        @keyframes blink {
+          0%, 100% {
+            transform: scaleY(1);
+          }
+          50% {
+            transform: scaleY(0.15);
+          }
+        }
+        [data-component="logo"]:hover,
+        a:focus [data-component="logo"] {
+          #eye {
+            transform-origin: 50% 30%;
+            animation: blink 0.15s cubic-bezier(0.5, 0, 0.5, 1);
+          }
+        }
+        </style></svg></a><nav id="main-nav" class="flex h-full items-center row-start-2 col-span-2 md:row-auto md:col-auto -mx-4 md:mx-0 overflow-x-auto md:overflow-clip"><a href="/runtime/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200 font-bold text-gray-800 bg-header-highlight " data-active aria-current="location"><div id="current-nav-item" class="absolute inset-0 bg-header-highlight -z-10 transition-transform duration-200 easing-[cubic-bezier(0.5,0,0.5,1)] origin-left" style="--left: 0px; --scaleX: 1; transform: translateX(var(--left)) scaleX(var(--scaleX));"></div>文档</a><a href="/api/deno/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">API 参考</a><a href="/examples/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">示例</a><a href="/services/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  services">服务</a></nav><div class="flex items-center gap-x-2 sm:gap-x-4 ml-auto w-full max-w-80"><div class="md:relative w-full"><div class="relative"><input type="search" placeholder="Search" id="orama-search-input" class="w-full min-w-24 rounded-lg placeholder:text-sm text-base leading-normal p-1 pl-8 border transition-all duration-150 text-foreground-primary border-foreground-secondary hover:bg-background-secondary focus:bg-background-secondary focus:outline-offset-1" style="background: url(/img/search.svg) no-repeat 0.5em 50%; background-size: 1.25em; background-color: var(--color-background-raw);"><kbd id="search-key" class="hidden xs:flex pointer-events-none absolute font-sans rounded-sm top-1 right-1 bottom-1 w-auto border-1 border-foreground-tertiary border-b-2 border-r-2 bg-background-primary text-foreground-secondary text-center text-xs font-bold p-2 items-center justify-center dark:bg-background-secondary dark:border-gray-700">⌘K</kbd><div id="orama-search-loading" class="absolute left-2 top-1/2 transform -translate-y-1/2 hidden bg-background-raw"><div class="animate-spin rounded-full h-4 w-4 border-2 border-transparent border-r-foreground-primary bg-background-raw"></div></div><div class="sr-only" aria-live="polite" id="orama-results-announcer"></div></div><div id="orama-search-results" class="absolute inset-2 left-2 right-2 h-[calc(100vh-8rem)] top-10 md:top-full md:left-auto md:right-0 mt-2 bg-background-raw border border-foreground-tertiary rounded-xl shadow-2xl z-50 md:max-h-128 overflow-hidden hidden md:min-w-160 max-w-2xl"><div id="orama-search-results-content" class="overflow-y-auto h-full"></div><div class="border-t border-foreground-tertiary bg-background-secondary px-4 py-2 sticky bottom-0"><div class="flex items-center gap-6 text-xs text-foreground-secondary"><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↑↓</span><span class="sr-only">Up or down to</span></kbd>navigate</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↵</span><span class="sr-only">Enter to</span></kbd>select</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">ESC</span><span class="sr-only">Escape to</span></kbd>close</span></div></div></div></div><button type="button" aria-label="toggle theme" class="shrink-0 h-9 aspect-square p-1 cursor-pointer rounded border border-transparent transition-colors duration-200 ease-in-out text-foreground-secondary hover:decoration-none hover:bg-background-secondary hover:border-background-tertiary flex flex-col items-center justify-start overflow-hidden" id="theme-toggle"><img src="/img/light.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><img src="/img/dark.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><span class="sr-only">Toggle Theme</span></button><button type="button" id="hamburger-button" class="h-8 w-auto py-2 px-0 flex flex-col justify-between rounded md:hidden" aria-pressed="false"><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--top"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-opacity hamburger-bar--middle"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--bottom"></div><span class="sr-only">Toggle navigation menu</span></button></div></div></header><div class="layout layout--three-column"><aside class="fixed transition-all duration-200 md:duration-0 easing-[cubic-bezier(0.165,0.84,0.44,1)] -translate-x-full z-50 w-full bg-background-raw opacity-0 p-4 pb-8 overflow-auto text-smaller md:sticky md:overflow-y-auto md:[scrollbar-width:thin] md:z-10 md:!translate-x-0 md:!opacity-100 md:p-0 md:pb-16 lg:border-r lg:border-r-foreground-tertiary lg:w-full sidebar-open:translate-x-0 sidebar-open:opacity-100
+         top-header h-screen-minus-header" data-component="sidebar-nav" data-section="runtime" id="nav" style="scrollbar-width: none;" tabIndex="-1"><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">入门</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >欢迎使用 Deno</a></li><li><a href="/runtime/getting_started/installation/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >安装</a></li><li><a href="/runtime/getting_started/first_project/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >命令行界面</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">基础知识</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/fundamentals/typescript/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Node</a></li><li><a href="/runtime/fundamentals/security/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >安全</a></li><li><a href="/runtime/fundamentals/modules/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 bg-header-highlight border-foreground-secondary text-gray-800" data-active>配置</a></li><li><a href="/runtime/fundamentals/web_dev/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >稳定性和发布</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">参考指南</h2><ul class="p-0 list-none overflow-y-hidden "><li><button type="button" data-accordion-toggle="CLI" class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">CLI</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/reference/cli/add/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno add</a></li><li><a href="/runtime/reference/cli/approve_scripts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno approve-scripts</a></li><li><a href="/runtime/reference/cli/audit/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno audit</a></li><li><a href="/runtime/reference/cli/bench/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno bench</a></li><li><a href="/runtime/reference/cli/bundle/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno bundle</a></li><li><a href="/runtime/reference/cli/check/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno coverage</a></li><li><a href="/runtime/reference/cli/deploy/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno deploy</a></li><li><a href="/runtime/reference/cli/doc/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno info</a></li><li><a href="/runtime/reference/cli/init/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno init</a></li><li><a href="/runtime/reference/cli/install/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno run</a></li><li><a href="/runtime/reference/cli/sandbox/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno sandbox</a></li><li><a href="/runtime/reference/cli/serve/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno task</a></li><li><a href="/runtime/reference/cli/test/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno test</a></li><li><a href="/runtime/reference/cli/types/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno uninstall</a></li><li><a href="/runtime/reference/cli/update/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno update</a></li><li><a href="/runtime/reference/cli/upgrade/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno unstable flags</a></li><li><a href="/runtime/reference/cli/x/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno x</a></li></ul></li><li><button type="button" data-accordion-toggle="Standardlibrary" class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">Standard library</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/reference/std/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Overview</a></li><li><a href="/runtime/reference/std/assert/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >assert</a></li><li><a href="/runtime/reference/std/async/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >async</a></li><li><a href="/runtime/reference/std/bytes/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >bytes</a></li><li><a href="/runtime/reference/std/cache/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cache</a></li><li><a href="/runtime/reference/std/cbor/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cbor</a></li><li><a href="/runtime/reference/std/cli/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cli</a></li><li><a href="/runtime/reference/std/collections/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >collections</a></li><li><a href="/runtime/reference/std/crypto/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >crypto</a></li><li><a href="/runtime/reference/std/csv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >csv</a></li><li><a href="/runtime/reference/std/data-structures/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >data-structures</a></li><li><a href="/runtime/reference/std/datetime/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >datetime</a></li><li><a href="/runtime/reference/std/dotenv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >dotenv</a></li><li><a href="/runtime/reference/std/encoding/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >encoding</a></li><li><a href="/runtime/reference/std/expect/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >expect</a></li><li><a href="/runtime/reference/std/fmt/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >fmt</a></li><li><a href="/runtime/reference/std/front-matter/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >front-matter</a></li><li><a href="/runtime/reference/std/fs/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >fs</a></li><li><a href="/runtime/reference/std/html/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >html</a></li><li><a href="/runtime/reference/std/http/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >http</a></li><li><a href="/runtime/reference/std/ini/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >ini</a></li><li><a href="/runtime/reference/std/internal/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >internal</a></li><li><a href="/runtime/reference/std/io/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >io</a></li><li><a href="/runtime/reference/std/json/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >json</a></li><li><a href="/runtime/reference/std/jsonc/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >jsonc</a></li><li><a href="/runtime/reference/std/log/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >log</a></li><li><a href="/runtime/reference/std/media-types/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >media-types</a></li><li><a href="/runtime/reference/std/msgpack/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >msgpack</a></li><li><a href="/runtime/reference/std/net/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >net</a></li><li><a href="/runtime/reference/std/path/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >path</a></li><li><a href="/runtime/reference/std/random/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >random</a></li><li><a href="/runtime/reference/std/regexp/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >regexp</a></li><li><a href="/runtime/reference/std/semver/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >semver</a></li><li><a href="/runtime/reference/std/streams/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >streams</a></li><li><a href="/runtime/reference/std/tar/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >tar</a></li><li><a href="/runtime/reference/std/testing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >testing</a></li><li><a href="/runtime/reference/std/text/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >text</a></li><li><a href="/runtime/reference/std/toml/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >toml</a></li><li><a href="/runtime/reference/std/ulid/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >ulid</a></li><li><a href="/runtime/reference/std/uuid/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >uuid</a></li><li><a href="/runtime/reference/std/webgpu/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >webgpu</a></li><li><a href="/runtime/reference/std/yaml/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >yaml</a></li></ul></li><li><a href="/runtime/reference/ts_config_migration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Configuring TypeScript</a></li><li><a href="/runtime/reference/continuous_integration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Continuous integration</a></li><li><a href="/runtime/reference/env_variables/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >环境变量</a></li><li><a href="/runtime/reference/vscode/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在文档中测试代码</a></li><li><a href="/runtime/reference/bundling/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >捆绑</a></li><li><a href="/runtime/reference/lint_plugins/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Lint plugins</a></li><li><a href="/runtime/reference/wasm/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Migration guide</a></li><li><a href="/runtime/reference/lsp_integration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Docker</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">贡献与支持</h2><ul class="p-0 list-none overflow-y-hidden "><li><button type="button" data-accordion-toggle="为Deno做出贡献" class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">为 Deno 做出贡献</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/contributing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >贡献概述</a></li><li><a href="/runtime/contributing/architecture/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >风格指南</a></li><li><a href="/runtime/contributing/docs/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >文档</a></li><li><a href="/runtime/contributing/examples/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >示例</a></li></ul></li><li><a href="/runtime/help/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >帮助</a></li></ul></nav></aside><main id="content" class="content "><div class="w-full"><article class="mx-auto"><details class="block lg:hidden my-4 bg-foreground-quaternary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-background-tertiary">On this page</summary><ul class="p-4 pt-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#package.json-%E6%94%AF%E6%8C%81" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">package.json 支持 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BE%9D%E8%B5%96%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">依赖项 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B7%AF%E5%BE%84%E6%98%A0%E5%B0%84" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">自定义路径映射 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%A6%86%E7%9B%96%E5%8C%85" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">覆盖包 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%BB%E5%8A%A1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">任务 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">代码检查 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%A0%BC%E5%BC%8F%E5%8C%96" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">格式化 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%94%81%E5%AE%9A%E6%96%87%E4%BB%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">锁定文件 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#node-%E6%A8%A1%E5%9D%97%E7%9B%AE%E5%BD%95" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Node 模块目录 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#typescript-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">TypeScript 编译器选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%B8%8D%E7%A8%B3%E5%AE%9A%E7%89%B9%E6%80%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">不稳定特性 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#include-%E5%92%8C-exclude" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">include 和 exclude </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#include" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">include </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#exclude" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">exclude </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%A1%B6%E7%BA%A7%E6%8E%92%E9%99%A4" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">顶级排除 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%8F%91%E5%B8%83---%E8%A6%86%E7%9B%96-.gitignore" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">发布 - 覆盖 .gitignore </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#exports" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Exports </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">权限 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%91%BD%E5%90%8D%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">命名权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%BB%98%E8%AE%A4%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">默认权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B5%8B%E8%AF%95%E3%80%81%E5%9F%BA%E5%87%86%E5%92%8C%E7%BC%96%E8%AF%91%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">测试、基准和编译权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">安全风险 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%B8%80%E4%B8%AA-deno.json-%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">一个 deno.json 文件示例 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#json-%E6%A8%A1%E5%BC%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">JSON 模式 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%A3%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">代理 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-6 sm:mt-6"><h1>deno.json 和 package.json</h1><p>您可以使用 <code>deno.json</code> 文件来配置 Deno。该文件可用于配置 TypeScript 编译器、代码检查器、格式化工具以及其他 Deno 工具。</p>
+<p>该配置文件支持 <code>.json</code> 和 <a href="https://code.visualstudio.com/docs/languages/json#_json-with-comments"><code>.jsonc</code></a> 扩展名。</p>
+<p>如果在当前工作目录或父目录中检测到 <code>deno.json</code> 或 <code>deno.jsonc</code> 配置文件，Deno 将自动识别。可以使用 <code>--config</code> 标志指定不同的配置文件。</p>
+<h2 id="package.json-%E6%94%AF%E6%8C%81" tabindex="-1">package.json 支持 <a class="header-anchor" href="#package.json-%E6%94%AF%E6%8C%81"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 还支持 <code>package.json</code> 文件，以兼容 Node.js 项目。如果您有一个 Node.js 项目，则不必创建 <code>deno.json</code> 文件。Deno 将使用 <code>package.json</code> 文件来配置项目。</p>
+<p>如果在同一目录中同时存在 <code>deno.json</code> 和 <code>package.json</code> 文件，Deno 将理解两个文件中指定的依赖项；并使用 <code>deno.json</code> 文件进行 Deno 特定配置。有关更多信息，请阅读 <a href="/runtime/fundamentals/node/#node-compatibility">Deno 中的 Node 兼容性</a>。</p>
+<h2 id="%E4%BE%9D%E8%B5%96%E9%A1%B9" tabindex="-1">依赖项 <a class="header-anchor" href="#%E4%BE%9D%E8%B5%96%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>在您的 <code>deno.json</code> 文件中，<code>&quot;imports&quot;</code> 字段允许您指定项目中使用的依赖项。您可以使用它将简单的指定符映射到 URL 或文件路径，从而更轻松地管理依赖关系和模块解析。</p>
+<p>例如，如果您想在项目中使用标准库中的 <code>assert</code> 模块，可以使用以下导入映射：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@std/assert"</span><span class="token operator">:</span> <span class="token string">"jsr:@std/assert@^1.0.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"chalk"</span><span class="token operator">:</span> <span class="token string">"npm:chalk@5"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-27" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;@std/assert&quot;: &quot;jsr:@std/assert@^1.0.0&quot;,
+    &quot;chalk&quot;: &quot;npm:chalk@5&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>然后，您的脚本可以使用简单的指定符 <code>@std/assert</code>：</p>
+<div><div class="markdownBlockTitle">script.ts</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> chalk <span class="token keyword">from</span> <span class="token string">"chalk"</span><span class="token punctuation">;</span>
+
+<span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>chalk<span class="token punctuation">.</span><span class="token function">yellow</span><span class="token punctuation">(</span><span class="token string">"Hello world"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-31" class="copyButton" data-copy="import { assertEquals } from &quot;@std/assert&quot;;
+import chalk from &quot;chalk&quot;;
+
+assertEquals(1, 2);
+console.log(chalk.yellow(&quot;Hello world&quot;));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>您还可以在 <code>package.json</code> 中使用 <code>&quot;dependencies&quot;</code> 字段：</p>
+<div><div class="markdownBlockTitle">package.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"dependencies"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"express"</span><span class="token operator">:</span> <span class="token string">"^1.0.0"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-35" class="copyButton" data-copy="{
+  &quot;dependencies&quot;: {
+    &quot;express&quot;: &quot;^1.0.0&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">script.ts</div><div class="relative"><pre><code class="highlight notranslate language-js"><span class="token keyword">import</span> express <span class="token keyword">from</span> <span class="token string">"express"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-36" class="copyButton" data-copy="import express from &quot;express&quot;;
+
+const app = express();
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>请注意，这将要求您运行 <code>deno install</code>。</p>
+<p>有关更多信息，请阅读 <a href="/runtime/fundamentals/modules/">模块导入和依赖项</a>。</p>
+<h3 id="%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B7%AF%E5%BE%84%E6%98%A0%E5%B0%84" tabindex="-1">自定义路径映射 <a class="header-anchor" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B7%AF%E5%BE%84%E6%98%A0%E5%B0%84"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><code>deno.json</code> 中的导入映射可用于更一般的指定符路径映射。您可以将确切的指定符映射到第三方模块或文件，或将导入指定符的一部分映射到一个目录。</p>
+<div><div class="markdownBlockTitle">deno.jsonc</div><div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 映射到一个确切的文件</span>
+    <span class="token property">"foo"</span><span class="token operator">:</span> <span class="token string">"./some/long/path/foo.ts"</span><span class="token punctuation">,</span>
+    <span class="token comment">// 映射到一个目录，使用方法: "bar/file.ts"</span>
+    <span class="token property">"bar/"</span><span class="token operator">:</span> <span class="token string">"./some/folder/bar/"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-49" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    // 映射到一个确切的文件
+    &quot;foo&quot;: &quot;./some/long/path/foo.ts&quot;,
+    // 映射到一个目录，使用方法: &quot;bar/file.ts&quot;
+    &quot;bar/&quot;: &quot;./some/folder/bar/&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>用法：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> foo <span class="token keyword">from</span> <span class="token string">"foo"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> bar <span class="token keyword">from</span> <span class="token string">"bar/file.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-53" class="copyButton" data-copy="import * as foo from &quot;foo&quot;;
+import * as bar from &quot;bar/file.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>导入路径映射在较大的代码库中通常用于简化代码。</p>
+<p>例如：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"@/"</span><span class="token operator">:</span> <span class="token string">"./"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-60" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;@/&quot;: &quot;./&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> MyUtil <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"@/util.ts"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-61" class="copyButton" data-copy="import { MyUtil } from &quot;@/util.ts&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>这会使以 <code>@/</code> 开头的导入指定符相对于导入映射的 URL 或文件路径进行解析。</p>
+<h3 id="%E8%A6%86%E7%9B%96%E5%8C%85" tabindex="-1">覆盖包 <a class="header-anchor" href="#%E8%A6%86%E7%9B%96%E5%8C%85"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><code>deno.json</code> 中的 <code>links</code> 字段允许您用存储在磁盘上的本地包覆盖依赖项。这类似于 <code>npm link</code>。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"links"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"../some-package"</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-71" class="copyButton" data-copy="{
+  &quot;links&quot;: [
+    &quot;../some-package&quot;
+  ]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>此功能解决了几个常见的开发问题：</p>
+<ul>
+<li>依赖项错误修复</li>
+<li>私有本地库</li>
+<li>兼容性问题</li>
+</ul>
+<p>被引用的包不必发布。只需要在 <code>deno.json</code> 或 <code>package.json</code> 中具有正确的包名和元数据，Deno 就能识别它正在处理哪个包。这提供了更大的灵活性和模块化，保持主代码与外部包的清晰分离。</p>
+<h2 id="%E4%BB%BB%E5%8A%A1" tabindex="-1">任务 <a class="header-anchor" href="#%E4%BB%BB%E5%8A%A1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>您在 <code>deno.json</code> 文件中的 <code>tasks</code> 字段用于定义可以使用 <code>deno task</code> 命令执行的自定义命令，并允许您根据项目的具体需求调整命令和权限。</p>
+<p>这与 <code>package.json</code> 文件中的 <code>scripts</code> 字段类似，也受支持。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"start"</span><span class="token operator">:</span> <span class="token string">"deno run --allow-net --watch=static/,routes/,data/ dev.ts"</span><span class="token punctuation">,</span>
+    <span class="token property">"test"</span><span class="token operator">:</span> <span class="token string">"deno test --allow-net"</span><span class="token punctuation">,</span>
+    <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token string">"deno lint"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-104" class="copyButton" data-copy="{
+  &quot;tasks&quot;: {
+    &quot;start&quot;: &quot;deno run --allow-net --watch=static/,routes/,data/ dev.ts&quot;,
+    &quot;test&quot;: &quot;deno test --allow-net&quot;,
+    &quot;lint&quot;: &quot;deno lint&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">package.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"scripts"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"dev"</span><span class="token operator">:</span> <span class="token string">"vite dev"</span><span class="token punctuation">,</span>
+    <span class="token property">"build"</span><span class="token operator">:</span> <span class="token string">"vite build"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-105" class="copyButton" data-copy="{
+  &quot;scripts&quot;: {
+    &quot;dev&quot;: &quot;vite dev&quot;,
+    &quot;build&quot;: &quot;vite build&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>要执行任务，请使用 <code>deno task</code> 命令后跟任务名称。例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">deno task start
+deno task <span class="token builtin class-name">test</span>
+deno task lint
+deno task dev
+deno task build
+</code></pre>
+
+      <button id="copy-button-109" class="copyButton" data-copy="deno task start
+deno task test
+deno task lint
+deno task dev
+deno task build
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>有关更多信息，请阅读 <a href="/runtime/reference/cli/task_runner/"><code>deno task</code></a>。</p>
+<h2 id="%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5" tabindex="-1">代码检查 <a class="header-anchor" href="#%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno.json</code> 文件中的 <code>lint</code> 字段用于配置 Deno 内置代码检查器的行为。这允许您指定要包含或排除在哪些文件中进行代码检查，以及自定义代码检查规则以满足项目的需求。</p>
+<p>例如：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/testdata/"</span><span class="token punctuation">,</span> <span class="token string">"src/fixtures/**/*.ts"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"tags"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"recommended"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"ban-untagged-todo"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"no-unused-vars"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-122" class="copyButton" data-copy="{
+  &quot;lint&quot;: {
+    &quot;include&quot;: [&quot;src/&quot;],
+    &quot;exclude&quot;: [&quot;src/testdata/&quot;, &quot;src/fixtures/**/*.ts&quot;],
+    &quot;rules&quot;: {
+      &quot;tags&quot;: [&quot;recommended&quot;],
+      &quot;include&quot;: [&quot;ban-untagged-todo&quot;],
+      &quot;exclude&quot;: [&quot;no-unused-vars&quot;]
+    }
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>此配置将：</p>
+<ul>
+<li>仅检查 <code>src/</code> 目录中的文件，</li>
+<li>排除检查 <code>src/testdata/</code> 目录中的文件或 <code>src/fixtures/</code> 目录中的任何 TypeScript 文件。</li>
+<li>指定应应用推荐的代码检查规则，</li>
+<li>添加对 <code>ban-untagged-todo</code> 规则的启用，</li>
+<li>排除 <code>no-unused-vars</code> 规则。</li>
+</ul>
+<p>您可以在 <a href="/lint/">规则列表</a> 文档页面中找到所有可用的代码检查规则的完整列表。</p>
+<p>有关更多信息，请阅读 <a href="/runtime/reference/cli/linter/">使用 Deno 进行代码检查</a>。</p>
+<h2 id="%E6%A0%BC%E5%BC%8F%E5%8C%96" tabindex="-1">格式化 <a class="header-anchor" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno.json</code> 文件中的 <code>fmt</code> 字段用于配置 Deno 内置代码格式化程序的行为。这允许您自定义代码的格式，以确保项目的一致性，使其更易于阅读和协作。以下是您可以配置的关键选项：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"fmt"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"useTabs"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"lineWidth"</span><span class="token operator">:</span> <span class="token number">80</span><span class="token punctuation">,</span>
+    <span class="token property">"indentWidth"</span><span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+    <span class="token property">"semiColons"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"singleQuote"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"proseWrap"</span><span class="token operator">:</span> <span class="token string">"preserve"</span><span class="token punctuation">,</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/testdata/"</span><span class="token punctuation">,</span> <span class="token string">"src/fixtures/**/*.ts"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-165" class="copyButton" data-copy="{
+  &quot;fmt&quot;: {
+    &quot;useTabs&quot;: true,
+    &quot;lineWidth&quot;: 80,
+    &quot;indentWidth&quot;: 4,
+    &quot;semiColons&quot;: true,
+    &quot;singleQuote&quot;: true,
+    &quot;proseWrap&quot;: &quot;preserve&quot;,
+    &quot;include&quot;: [&quot;src/&quot;],
+    &quot;exclude&quot;: [&quot;src/testdata/&quot;, &quot;src/fixtures/**/*.ts&quot;]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>此配置将：</p>
+<ul>
+<li>使用制表符而不是空格进行缩进，</li>
+<li>将行限制为 80 个字符，</li>
+<li>使用 4 个空格的缩进宽度，</li>
+<li>在语句结束时添加分号，</li>
+<li>使用单引号包裹字符串，</li>
+<li>保留文本换行，</li>
+<li>格式化 <code>src/</code> 目录中的文件，</li>
+<li>排除 <code>src/testdata/</code> 目录中的文件和任何 TypeScript 文件。</li>
+</ul>
+<p>有关更多信息，请阅读 <a href="/runtime/fundamentals/linting_and_formatting/">使用 Deno 格式化代码</a>。</p>
+<h2 id="%E9%94%81%E5%AE%9A%E6%96%87%E4%BB%B6" tabindex="-1">锁定文件 <a class="header-anchor" href="#%E9%94%81%E5%AE%9A%E6%96%87%E4%BB%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno.json</code> 文件中的 <code>lock</code> 字段用于指定 Deno 使用的锁定文件的配置，以 <a href="/runtime/fundamentals/modules/#integrity-checking-and-lock-files">确保依赖项的完整性</a>。锁定文件记录了您的项目所依赖模块的确切版本和完整性哈希，确保在每次运行项目时使用相同的版本，即使依赖项被更新或远程更改。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"lock"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"./deno.lock"</span><span class="token punctuation">,</span>
+    <span class="token property">"frozen"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-220" class="copyButton" data-copy="{
+  &quot;lock&quot;: {
+    &quot;path&quot;: &quot;./deno.lock&quot;,
+    &quot;frozen&quot;: true
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>此配置将：</p>
+<ul>
+<li>指定锁定文件位置为 <code>./deno.lock</code>（这是默认值，可以省略）</li>
+<li>告诉 Deno 如果有任何依赖项更改则返回错误</li>
+</ul>
+<p>Deno 默认使用锁定文件，您可以使用以下配置禁用它：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"lock"</span><span class="token operator">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-239" class="copyButton" data-copy="{
+  &quot;lock&quot;: false
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><h2 id="node-%E6%A8%A1%E5%9D%97%E7%9B%AE%E5%BD%95" tabindex="-1">Node 模块目录 <a class="header-anchor" href="#node-%E6%A8%A1%E5%9D%97%E7%9B%AE%E5%BD%95"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>默认情况下，如果您的项目目录中有 <code>package.json</code> 文件，Deno 将使用本地 <code>node_modules</code> 目录。</p>
+<p>您可以使用 <code>deno.json</code> 文件中的 <code>nodeModulesDir</code> 字段来控制此行为。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"nodeModulesDir"</span><span class="token operator">:</span> <span class="token string">"auto"</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-249" class="copyButton" data-copy="{
+  &quot;nodeModulesDir&quot;: &quot;auto&quot;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>您可以将此字段设置为以下值：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;none&quot;</code></td>
+<td>不使用本地 <code>node_modules</code> 目录。改为使用 <code>$DENO_DIR</code> 中的全局缓存，Deno 会自动保持其最新。</td>
+</tr>
+<tr>
+<td><code>&quot;auto&quot;</code></td>
+<td>使用本地 <code>node_modules</code> 目录。Deno 会自动创建并保持此目录的最新状态。</td>
+</tr>
+<tr>
+<td><code>&quot;manual&quot;</code></td>
+<td>使用本地 <code>node_modules</code> 目录。用户必须手动保持此目录的最新状态，例如使用 <code>deno install</code> 或 <code>npm install</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>不需要指定此设置，以下默认值会被应用：</p>
+<ul>
+<li>如果您的项目目录中没有 <code>package.json</code> 文件，则为 <code>&quot;none&quot;</code></li>
+<li>如果您的项目目录中有 <code>package.json</code> 文件，则为 <code>&quot;manual&quot;</code></li>
+</ul>
+<p>使用工作区时，此设置只能在工作区根目录中使用。在任何成员中指定此设置都会导致警告。只有在工作区根目录中有 <code>package.json</code> 文件时，<code>&quot;manual&quot;</code> 设置才会被自动应用。</p>
+<h2 id="typescript-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9" tabindex="-1">TypeScript 编译器选项 <a class="header-anchor" href="#typescript-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno.json</code> 文件中的 <code>compilerOptions</code> 字段用于配置 <a href="https://www.typescriptlang.org/tsconfig">TypeScript 编译器设置</a> 以符合您的 Deno 项目。这允许您自定义 TypeScript 代码的编译方式，确保与项目的要求和编码标准一致。</p>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>Deno 推荐使用默认的 TypeScript 配置。这将有助于分享代码。</p>
+<p>
+</div>
+</p>
+<p>另请参见 <a href="/runtime/reference/ts_config_migration/">在 Deno 中配置 TypeScript</a>。</p>
+<h2 id="%E4%B8%8D%E7%A8%B3%E5%AE%9A%E7%89%B9%E6%80%A7" tabindex="-1">不稳定特性 <a class="header-anchor" href="#%E4%B8%8D%E7%A8%B3%E5%AE%9A%E7%89%B9%E6%80%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno.json</code> 文件中的 <code>unstable</code> 字段用于启用 Deno 项目的特定不稳定特性。</p>
+<p>这些特性仍在开发中，尚未成为稳定 API 的一部分。通过在 <code>unstable</code> 数组中列出特性，您可以在它们正式发布之前进行实验和使用这些新功能。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"unstable"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"cron"</span><span class="token punctuation">,</span> <span class="token string">"kv"</span><span class="token punctuation">,</span> <span class="token string">"webgpu"</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-336" class="copyButton" data-copy="{
+  &quot;unstable&quot;: [&quot;cron&quot;, &quot;kv&quot;, &quot;webgpu&quot;]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p><a href="/runtime/reference/cli/unstable_flags/">了解更多</a>。</p>
+<h2 id="include-%E5%92%8C-exclude" tabindex="-1">include 和 exclude <a class="header-anchor" href="#include-%E5%92%8C-exclude"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>许多配置（例如 <code>lint</code>, <code>fmt</code>）都有 <code>include</code> 和 <code>exclude</code> 属性来指定要包含的文件。</p>
+<h3 id="include" tabindex="-1">include <a class="header-anchor" href="#include"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>这里指定的路径或模式仅会被包含。</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 仅格式化 src/ 目录</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-352" class="copyButton" data-copy="{
+  &quot;lint&quot;: {
+    // 仅格式化 src/ 目录
+    &quot;include&quot;: [&quot;src/&quot;]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="exclude" tabindex="-1">exclude <a class="header-anchor" href="#exclude"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>这里指定的路径或模式将被排除。</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 不检查 dist/ 文件夹</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"dist/"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-359" class="copyButton" data-copy="{
+  &quot;lint&quot;: {
+    // 不检查 dist/ 文件夹
+    &quot;exclude&quot;: [&quot;dist/&quot;]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>此项优先级高于 <code>include</code>，如果在 <code>include</code> 和 <code>exclude</code> 中都匹配路径，则以 <code>exclude</code> 为准。</p>
+<p>您可能希望排除一个目录，但包含一个子目录。在 Deno 1.41.2 及更高版本中，可以通过在更一般的排除下指定否定通配符来取消排除更具体的路径：</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"fmt"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 不格式化 "fixtures" 目录，</span>
+    <span class="token comment">// 但格式化 "fixtures/scripts"</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"fixtures"</span><span class="token punctuation">,</span>
+      <span class="token string">"!fixtures/scripts"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-366" class="copyButton" data-copy="{
+  &quot;fmt&quot;: {
+    // 不格式化 &quot;fixtures&quot; 目录，
+    // 但格式化 &quot;fixtures/scripts&quot;
+    &quot;exclude&quot;: [
+      &quot;fixtures&quot;,
+      &quot;!fixtures/scripts&quot;
+    ]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E9%A1%B6%E7%BA%A7%E6%8E%92%E9%99%A4" tabindex="-1">顶级排除 <a class="header-anchor" href="#%E9%A1%B6%E7%BA%A7%E6%8E%92%E9%99%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>如果有一个目录您永远不希望 Deno 格式化、检查、类型检查、分析等，则在顶级排除数组中指定它：</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token comment">// 从所有子命令和 LSP 中排除 dist 文件夹</span>
+    <span class="token string">"dist/"</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-373" class="copyButton" data-copy="{
+  &quot;exclude&quot;: [
+    // 从所有子命令和 LSP 中排除 dist 文件夹
+    &quot;dist/&quot;
+  ]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>有时您可能会发现希望取消排除顶级排除中已排除的路径或模式。在 Deno 1.41.2 及更高版本中，可以在更具体的配置中通过指定否定通配符取消排除路径：</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"fmt"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token comment">// 格式化 dist 文件夹，即使在顶级被排除</span>
+      <span class="token string">"!dist"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"dist/"</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-377" class="copyButton" data-copy="{
+  &quot;fmt&quot;: {
+    &quot;exclude&quot;: [
+      // 格式化 dist 文件夹，即使在顶级被排除
+      &quot;!dist&quot;
+    ]
+  },
+  &quot;exclude&quot;: [
+    &quot;dist/&quot;
+  ]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%8F%91%E5%B8%83---%E8%A6%86%E7%9B%96-.gitignore" tabindex="-1">发布 - 覆盖 .gitignore <a class="header-anchor" href="#%E5%8F%91%E5%B8%83---%E8%A6%86%E7%9B%96-.gitignore"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><code>.gitignore</code> 会被考虑在 <code>deno publish</code> 命令中。在 Deno 1.41.2 及更高版本中，您可以使用否定的排除通配符来选择不包含在 <em>.gitignore</em> 中的排除文件：</p>
+<div><div class="markdownBlockTitle">.gitignore</div><div class="relative"><pre><code class="highlight notranslate language-title=&quot;.gitignore&quot;">dist/
+.env
+</code></pre>
+
+      <button id="copy-button-384" class="copyButton" data-copy="dist/
+.env
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"publish"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token comment">// 包含被 git 忽略的 dist 文件夹</span>
+      <span class="token string">"!dist/"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-385" class="copyButton" data-copy="{
+  &quot;publish&quot;: {
+    &quot;exclude&quot;: [
+      // 包含被 git 忽略的 dist 文件夹
+      &quot;!dist/&quot;
+    ]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>另一种方法是将 git 忽略的路径明确指定在 <code>&quot;include&quot;</code> 中：</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"publish"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"dist/"</span><span class="token punctuation">,</span>
+      <span class="token string">"README.md"</span><span class="token punctuation">,</span>
+      <span class="token string">"deno.json"</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-389" class="copyButton" data-copy="{
+  &quot;publish&quot;: {
+    &quot;include&quot;: [
+      &quot;dist/&quot;,
+      &quot;README.md&quot;,
+      &quot;deno.json&quot;
+    ]
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="exports" tabindex="-1">Exports <a class="header-anchor" href="#exports"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno.json</code> 文件中的 <code>exports</code> 字段允许您定义包中应公开访问的路径。这在控制包的 API 表面以及确保只有预期的代码部分暴露给用户时特别有用。</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"exports"</span><span class="token operator">:</span> <span class="token string">"./src/mod.ts"</span> <span class="token comment">// 默认入口点</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-396" class="copyButton" data-copy="{
+  &quot;exports&quot;: &quot;./src/mod.ts&quot; // 默认入口点
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>您也可以定义多个入口点：</p>
+<div><div class="markdownBlockTitle">deno.json</div><div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"exports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"./module1"</span><span class="token operator">:</span> <span class="token string">"./src/module1.ts"</span><span class="token punctuation">,</span>
+    <span class="token property">"./module2"</span><span class="token operator">:</span> <span class="token string">"./src/module2.ts"</span><span class="token punctuation">,</span>
+    <span class="token property">"."</span><span class="token operator">:</span> <span class="token string">"./src/mod.ts"</span> <span class="token comment">// 默认入口点</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-400" class="copyButton" data-copy="{
+  &quot;exports&quot;: {
+    &quot;./module1&quot;: &quot;./src/module1.ts&quot;,
+    &quot;./module2&quot;: &quot;./src/module2.ts&quot;,
+    &quot;.&quot;: &quot;./src/mod.ts&quot; // 默认入口点
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>此配置将：</p>
+<ul>
+<li>将 <code>module1</code> 和 <code>module2</code> 作为包的入口点公开，</li>
+<li>允许使用通配符从 <code>utils</code> 目录导入任何文件。这意味着用户可以使用指定路径导入这些模块，而包中其他文件保持私有。</li>
+</ul>
+<p>要在代码中使用 exports，可以这样导入：</p>
+<div><div class="markdownBlockTitle">example.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> module_1 <span class="token keyword">from</span> <span class="token string">"@example/my-package/module1"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> module_2 <span class="token keyword">from</span> <span class="token string">"@example/my-package/module2"</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-419" class="copyButton" data-copy="import * as module_1 from &quot;@example/my-package/module1&quot;;
+import * as module_2 from &quot;@example/my-package/module2&quot;;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><h2 id="%E6%9D%83%E9%99%90" tabindex="-1">权限 <a class="header-anchor" href="#%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 2.5+ 支持在配置文件中存储权限集。</p>
+<h3 id="%E5%91%BD%E5%90%8D%E6%9D%83%E9%99%90" tabindex="-1">命名权限 <a class="header-anchor" href="#%E5%91%BD%E5%90%8D%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>权限可以在 <code>&quot;permissions&quot;</code> 键下以键值对形式定义：</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"read-data"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"read"</span><span class="token operator">:</span> <span class="token string">"./data"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"read-and-write"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"read"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token property">"write"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"./data"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-432" class="copyButton" data-copy="{
+  &quot;permissions&quot;: {
+    &quot;read-data&quot;: {
+      &quot;read&quot;: &quot;./data&quot;
+    },
+    &quot;read-and-write&quot;: {
+      &quot;read&quot;: true,
+      &quot;write&quot;: [&quot;./data&quot;]
+    }
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后通过 <code>--permission-set=&lt;name&gt;</code> 或 <code>-P=&lt;name&gt;</code> 标志使用：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run <span class="token parameter variable">-P</span><span class="token operator">=</span>read-data main.ts
+</code></pre>
+
+      <button id="copy-button-436" class="copyButton" data-copy="$ deno run -P=read-data main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E9%BB%98%E8%AE%A4%E6%9D%83%E9%99%90" tabindex="-1">默认权限 <a class="header-anchor" href="#%E9%BB%98%E8%AE%A4%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>特殊的 <code>&quot;default&quot;</code> 权限键允许在使用 <code>--permission-set</code>/<code>-P</code> 标志时省略名称：</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"env"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-443" class="copyButton" data-copy="{
+  &quot;permissions&quot;: {
+    &quot;default&quot;: {
+      &quot;env&quot;: true
+    }
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后只需使用 <code>-P</code> 运行：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run <span class="token parameter variable">-P</span> main.ts
+</code></pre>
+
+      <button id="copy-button-447" class="copyButton" data-copy="$ deno run -P main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%B5%8B%E8%AF%95%E3%80%81%E5%9F%BA%E5%87%86%E5%92%8C%E7%BC%96%E8%AF%91%E6%9D%83%E9%99%90" tabindex="-1">测试、基准和编译权限 <a class="header-anchor" href="#%E6%B5%8B%E8%AF%95%E3%80%81%E5%9F%BA%E5%87%86%E5%92%8C%E7%BC%96%E8%AF%91%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>权限可以选择性地在 <code>&quot;test&quot;</code>、<code>&quot;bench&quot;</code> 或 <code>&quot;compile&quot;</code> 键中指定。</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"test"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"read"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"./data"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-454" class="copyButton" data-copy="{
+  &quot;test&quot;: {
+    &quot;permissions&quot;: {
+      &quot;read&quot;: [&quot;./data&quot;]
+    }
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>或者引用权限集：</p>
+<div class="relative"><pre><code class="highlight notranslate language-jsonc"><span class="token punctuation">{</span>
+  <span class="token property">"test"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token string">"read-data"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"read-data"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"read"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"./data"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-458" class="copyButton" data-copy="{
+  &quot;test&quot;: {
+    &quot;permissions&quot;: &quot;read-data&quot;
+  },
+  &quot;permissions&quot;: {
+    &quot;read-data&quot;: {
+      &quot;read&quot;: [&quot;./data&quot;]
+    }
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>定义后，必须使用 <code>-P</code> 或权限标志运行 <code>deno test</code>：</p>
+<div class="relative"><pre><code>> deno test
+error: Test permissions were found in the config file. Did you mean to run with `-P`?
+    at file:///Users/david/dev/example/deno.json
+> deno test -P
+...运行中...
+> deno test --allow-read
+...运行中...
+> deno test -A
+...运行中...
+</code></pre>
+
+      <button id="copy-button-462" class="copyButton" data-copy="> deno test
+error: Test permissions were found in the config file. Did you mean to run with `-P`?
+    at file:///Users/david/dev/example/deno.json
+> deno test -P
+...运行中...
+> deno test --allow-read
+...运行中...
+> deno test -A
+...运行中...
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这是为了帮助您避免忘记使用权限运行测试时花费大量时间排查问题。</p>
+<p>请注意，工作区中的测试和基准文件将使用最近的 <code>deno.json</code> 来确定 <code>test</code> 和 <code>bench</code> 权限。这允许为不同工作区成员分配不同的权限。</p>
+<h3 id="%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9" tabindex="-1">安全风险 <a class="header-anchor" href="#%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>配置文件中的权限威胁模型类似于 <code>deno task</code>，因为脚本可能修改 <code>deno.json</code> 来提升权限。因此，这需要通过 <code>-P</code> 显式启用，并且默认情况下不加载。</p>
+<p>如果您能接受这一风险，那么此功能将对您有所帮助。</p>
+<h2 id="%E4%B8%80%E4%B8%AA-deno.json-%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B" tabindex="-1">一个 <code>deno.json</code> 文件示例 <a class="header-anchor" href="#%E4%B8%80%E4%B8%AA-deno.json-%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"compilerOptions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"allowJs"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"lib"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"deno.window"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"strict"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"permissions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"read"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"./src/testdata/"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"lint"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/testdata/"</span><span class="token punctuation">,</span> <span class="token string">"src/fixtures/**/*.ts"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"rules"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"tags"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"recommended"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"ban-untagged-todo"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"no-unused-vars"</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"fmt"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"useTabs"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"lineWidth"</span><span class="token operator">:</span> <span class="token number">80</span><span class="token punctuation">,</span>
+    <span class="token property">"indentWidth"</span><span class="token operator">:</span> <span class="token number">4</span><span class="token punctuation">,</span>
+    <span class="token property">"semiColons"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">"singleQuote"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"proseWrap"</span><span class="token operator">:</span> <span class="token string">"preserve"</span><span class="token punctuation">,</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/testdata/"</span><span class="token punctuation">,</span> <span class="token string">"src/fixtures/**/*.ts"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"lock"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token property">"nodeModulesDir"</span><span class="token operator">:</span> <span class="token string">"auto"</span><span class="token punctuation">,</span>
+  <span class="token property">"unstable"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"webgpu"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"test"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"include"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"src/testdata/"</span><span class="token punctuation">,</span> <span class="token string">"src/fixtures/**/*.ts"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"start"</span><span class="token operator">:</span> <span class="token string">"deno run --allow-read main.ts"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"oak"</span><span class="token operator">:</span> <span class="token string">"jsr:@oak/oak"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"exclude"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">"dist/"</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-481" class="copyButton" data-copy="{
+  &quot;compilerOptions&quot;: {
+    &quot;allowJs&quot;: true,
+    &quot;lib&quot;: [&quot;deno.window&quot;],
+    &quot;strict&quot;: true
+  },
+  &quot;permissions&quot;: {
+    &quot;default&quot;: {
+      &quot;read&quot;: [&quot;./src/testdata/&quot;]
+    }
+  },
+  &quot;lint&quot;: {
+    &quot;include&quot;: [&quot;src/&quot;],
+    &quot;exclude&quot;: [&quot;src/testdata/&quot;, &quot;src/fixtures/**/*.ts&quot;],
+    &quot;rules&quot;: {
+      &quot;tags&quot;: [&quot;recommended&quot;],
+      &quot;include&quot;: [&quot;ban-untagged-todo&quot;],
+      &quot;exclude&quot;: [&quot;no-unused-vars&quot;]
+    }
+  },
+  &quot;fmt&quot;: {
+    &quot;useTabs&quot;: true,
+    &quot;lineWidth&quot;: 80,
+    &quot;indentWidth&quot;: 4,
+    &quot;semiColons&quot;: false,
+    &quot;singleQuote&quot;: true,
+    &quot;proseWrap&quot;: &quot;preserve&quot;,
+    &quot;include&quot;: [&quot;src/&quot;],
+    &quot;exclude&quot;: [&quot;src/testdata/&quot;, &quot;src/fixtures/**/*.ts&quot;]
+  },
+  &quot;lock&quot;: false,
+  &quot;nodeModulesDir&quot;: &quot;auto&quot;,
+  &quot;unstable&quot;: [&quot;webgpu&quot;],
+  &quot;test&quot;: {
+    &quot;include&quot;: [&quot;src/&quot;],
+    &quot;exclude&quot;: [&quot;src/testdata/&quot;, &quot;src/fixtures/**/*.ts&quot;]
+  },
+  &quot;tasks&quot;: {
+    &quot;start&quot;: &quot;deno run --allow-read main.ts&quot;
+  },
+  &quot;imports&quot;: {
+    &quot;oak&quot;: &quot;jsr:@oak/oak&quot;
+  },
+  &quot;exclude&quot;: [
+    &quot;dist/&quot;
+  ]
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、node_modules 目录等的 <code>deno.json</code> 文件示例。有关可用字段和配置的完整列表，请参阅
+<a href="#json-schema">Deno 配置文件模式</a>。</p>
+<h2 id="json-%E6%A8%A1%E5%BC%8F" tabindex="-1">JSON 模式 <a class="header-anchor" href="#json-%E6%A8%A1%E5%BC%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>可用于编辑器提供自动完成的 JSON Schema 文件可在以下位置获得： <a href="https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json">https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json</a></p>
+<h2 id="%E4%BB%A3%E7%90%86" tabindex="-1">代理 <a class="header-anchor" href="#%E4%BB%A3%E7%90%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 支持用于模块下载和 fetch API 的代理。代理配置从 <a href="https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables">环境变量</a> 中读取：HTTP_PROXY，HTTPS_PROXY 和 NO_PROXY。</p>
+<p>如果您使用的是 Windows - 如果未找到环境变量，Deno 将退回到从注册表读取代理。</p>
+</div></article><div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 sm:p-8 bg-blue-splash dark:bg-deploy-900 rounded-md mx-auto"><h2 class="text-xl mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/fundamentals/configuration.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value=""><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn  mt-4">发送反馈给我们</button></div></div><a rel="" class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/privacy_policy">隐私政策</a></form></div></div></section></div></main><ul class="toc-list hidden sticky p-4 pr-0 h-screen-minus-header overflow-y-auto border-l border-l-foreground-tertiary lg:block lg:w-full top-header" id="toc"><div class="wwads-cn wwads-vertical max-w-[200px] my-4" data-id="354"></div><li class="m-2 mr-0 leading-4 text-balance"><a href="#package.json-%E6%94%AF%E6%8C%81" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">package.json 支持 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BE%9D%E8%B5%96%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">依赖项 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B7%AF%E5%BE%84%E6%98%A0%E5%B0%84" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">自定义路径映射 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%A6%86%E7%9B%96%E5%8C%85" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">覆盖包 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%BB%E5%8A%A1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">任务 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%A3%E7%A0%81%E6%A3%80%E6%9F%A5" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">代码检查 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%A0%BC%E5%BC%8F%E5%8C%96" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">格式化 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%94%81%E5%AE%9A%E6%96%87%E4%BB%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">锁定文件 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#node-%E6%A8%A1%E5%9D%97%E7%9B%AE%E5%BD%95" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Node 模块目录 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#typescript-%E7%BC%96%E8%AF%91%E5%99%A8%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">TypeScript 编译器选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%B8%8D%E7%A8%B3%E5%AE%9A%E7%89%B9%E6%80%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">不稳定特性 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#include-%E5%92%8C-exclude" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">include 和 exclude </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#include" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">include </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#exclude" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">exclude </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%A1%B6%E7%BA%A7%E6%8E%92%E9%99%A4" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">顶级排除 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%8F%91%E5%B8%83---%E8%A6%86%E7%9B%96-.gitignore" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">发布 - 覆盖 .gitignore </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#exports" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Exports </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">权限 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%91%BD%E5%90%8D%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">命名权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%BB%98%E8%AE%A4%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">默认权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B5%8B%E8%AF%95%E3%80%81%E5%9F%BA%E5%87%86%E5%92%8C%E7%BC%96%E8%AF%91%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">测试、基准和编译权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%AE%89%E5%85%A8%E9%A3%8E%E9%99%A9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">安全风险 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%B8%80%E4%B8%AA-deno.json-%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">一个 deno.json 文件示例 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#json-%E6%A8%A1%E5%BC%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">JSON 模式 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%A3%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">代理 </a></li></ul></div><footer class="text-smaller bg-gray-50 dark:bg-gray-950 p-4 pt-12 sm:px-8 border-t border-t-foreground-tertiary"><nav class="flex flex-col gap-x-4 gap-y-12 max-w-7xl md:flex-row md:flex-wrap md:justify-between md:w-full md:gap-y-8 md:mx-auto"><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">Deno 文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/runtime/">Deno 运行时</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/examples/">示例</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://jsr.io/@std">标准库</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/api/deno/~/Deno">Deno API Reference</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">服务文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/">Deno Deploy </a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/classic/">Deno Deploy Classic</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/subhosting/manual/">Deno 子托管</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">社区</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">Discord</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland">GitHub</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://bsky.app/profile/deno.land">Bluesky</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://fosstodon.org/@deno_land">Mastodon</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.news/">Newsletter</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">帮助与反馈</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">社区支持</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://denostatus.com">部署系统状态</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">公司</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/">Deno Website</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/blog">Blog</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://merch.deno.com/">周边商品</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/privacy_policy">Privacy Policy</a></li></ul></section></nav><p class="m-0 mt-16 mx-auto text-center text-xs text-foreground-secondary"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></body></html>

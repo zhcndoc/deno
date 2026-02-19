@@ -1,0 +1,1613 @@
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Deno 命名空间 API - Deno 中文文档</title><meta name="description" content="Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间可用的文件系统操作、网络功能、权限管理以及其他核心功能。"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/style.css"><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="me" href="https://fosstodon.org/@deno_land"><meta name="twitter:title" content="Deno 命名空间 API"><meta name="twitter:description" content="Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间可用的文件系统操作、网络功能、权限管理以及其他核心功能。"><meta name="twitter:image" content="/img/og.webp"><meta name="twitter:image:alt" content="Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间可用的文件系统操作、网络功能、权限管理以及其他核心功能。"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@deno_land"><meta property="og:title" content="Deno 命名空间 API"><meta property="og:description" content="Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间可用的文件系统操作、网络功能、权限管理以及其他核心功能。"><meta property="og:image" content="/img/og.webp"><meta property="og:image:alt" content="Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间可用的文件系统操作、网络功能、权限管理以及其他核心功能。"><meta property="og:type" content="article"><meta property="og:site_name" content="Deno"><meta property="og:locale" content="en_US"><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"><script type="module" defer src="/script.js"></script><script type="module" defer src="/js/main.js"></script><script type="module" defer src="/js/lint_rules.js"></script><script type="module" defer src="/js/copy.js"></script><script type="module" defer src="/js/tabs.js"></script><script type="module" defer src="/js/feedback.js"></script><script type="module" defer src="/js/search.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"></head><body ><a href="#content" class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]">Skip to main content</a><header class="w-full h-auto sticky top-0 z-[100] bg-background-raw border-b border-b-foreground-tertiary"><div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0"><a href="https://deno.com" title="Deno main website" class="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"><svg width="100%" height="100%" viewBox="0 0 1025 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" class="" data-component="logo"><path id="background" d="M28.829,227.937c-8.871,-19.143 -13.822,-40.465 -13.822,-62.935c-0,-5.815 0.332,-11.554 0.977,-17.197c0.655,-5.703 1.626,-11.299 2.893,-16.773c7.12,-30.704 23.68,-57.808 46.452,-78.082c19.127,-17.006 42.558,-29.14 68.244,-34.64c10.137,-2.165 20.651,-3.304 31.43,-3.304c3.778,0.004 7.583,0.149 11.411,0.441c18.154,1.386 35.309,5.956 50.959,13.121c12.625,5.786 24.31,13.274 34.762,22.169c26.253,22.364 44.562,53.517 50.651,88.476c1.455,8.379 2.213,16.996 2.213,25.789c-0.003,3.784 -0.149,7.595 -0.442,11.429c-1.106,14.489 -4.241,28.342 -9.104,41.302c-6.788,18.051 -16.959,34.452 -29.738,48.428c-16.621,16.971 -37.743,24.523 -55.384,24.209c-12.828,-0.229 -25.379,-5.333 -34.052,-12.801c-12.39,-10.669 -17.394,-22.865 -19.11,-36.474c-0.426,-3.383 -0.176,-12.601 1.585,-18.984c1.312,-4.758 4.64,-13.946 9.507,-17.965c-5.693,-2.452 -13.021,-7.792 -15.331,-10.355c-0.568,-0.63 -0.494,-1.617 0.014,-2.296c0.509,-0.678 1.4,-0.946 2.199,-0.659c4.895,1.68 10.856,3.337 17.142,4.389c8.267,1.382 18.548,3.122 28.963,3.634c25.395,1.247 51.921,-10.151 60.154,-32.83c8.232,-22.679 5.038,-45.111 -24.496,-58.566c-29.535,-13.456 -43.178,-29.455 -67.041,-39.104c-15.587,-6.303 -32.935,-2.561 -50.746,7.282c-47.974,26.512 -90.955,110.279 -71.142,187.887c0.283,1.062 -0.195,2.18 -1.158,2.709c-0.903,0.495 -2.013,0.354 -2.761,-0.331c-5.766,-6.336 -10.998,-13.166 -15.623,-20.421c-3.578,-5.614 -6.79,-11.475 -9.606,-17.548Z" style="fill: var(--logoColor);"></path><path id="outline" d="M172.67,0.181c90.968,4.232 161.386,81.521 157.155,172.489c-4.232,90.968 -81.522,161.385 -172.489,157.153c-90.968,-4.231 -161.386,-81.52 -157.155,-172.487c4.232,-90.968 81.521,-161.386 172.489,-157.155Zm38.578,198.678c-10.415,-0.512 -20.696,-2.252 -28.963,-3.634c-6.286,-1.052 -12.247,-2.709 -17.142,-4.389c-0.799,-0.287 -1.69,-0.019 -2.199,0.659c-0.508,0.679 -0.582,1.666 -0.014,2.296c2.31,2.563 9.638,7.903 15.331,10.355c-4.867,4.019 -8.195,13.207 -9.507,17.965c-1.761,6.383 -2.011,15.601 -1.585,18.984c1.716,13.609 6.72,25.805 19.11,36.474c8.673,7.468 21.224,12.572 34.052,12.801c17.702,0.315 38.909,-7.29 55.556,-24.385c21.765,-23.861 36.023,-54.887 38.67,-89.554c6.303,-82.546 -55.596,-154.681 -138.143,-160.984c-82.545,-6.303 -154.68,55.597 -160.983,138.143c-3.264,42.749 11.764,82.706 38.481,112.17c0.744,0.809 1.944,1.006 2.907,0.477c0.963,-0.529 1.441,-1.647 1.158,-2.709c-19.813,-77.608 23.168,-161.375 71.142,-187.887c17.811,-9.843 35.159,-13.585 50.746,-7.282c23.863,9.649 37.506,25.648 67.041,39.104c29.534,13.455 32.728,35.887 24.496,58.566c-8.233,22.679 -34.759,34.077 -60.154,32.83Z" style="fill: var(--outlineColor);"></path><path id="logotype" d="M694.596,164.68c-0,4.838 -0,11.794 -0.909,14.213l-103.727,0c4.837,17.542 18.749,28.431 37.8,28.431c15.728,0.302 27.219,-6.654 35.383,-16.636l25.705,23.894c-12.7,16.028 -34.171,27.822 -63.809,27.822c-43.243,-0 -75.904,-30.242 -75.904,-76.513c-0,-44.756 31.148,-75.907 73.184,-75.907c43.243,-0 72.277,31.453 72.277,74.696Zm-71.07,-39.918c-16.025,-0 -28.729,8.771 -33.265,25.706l65.02,-0c-3.932,-15.422 -14.515,-25.706 -31.755,-25.706Zm175.096,-34.778c31.758,-0 53.829,16.938 53.829,62.298l0,87.703l-39.615,-0l0,-77.724c0,-28.124 -9.976,-36.892 -28.427,-36.892c-19.953,0 -33.564,13.908 -33.564,40.221l-0,74.395l-39.617,-0l0,-147.582l39.617,-0l-0,19.055l0.602,0c12.095,-14.213 29.037,-21.474 47.175,-21.474Zm146.977,152.42c-46.871,-0 -78.324,-32.058 -78.324,-76.21c-0,-44.153 31.453,-76.21 78.324,-76.21c45.971,-0 78.628,30.849 78.628,76.21c0,45.36 -32.657,76.21 -78.628,76.21Zm-0,-35.386c21.469,0 38.411,-16.934 38.411,-40.824c-0,-24.192 -16.332,-40.825 -38.411,-40.825c-22.986,0 -38.404,17.539 -38.404,40.825c0,22.984 16.028,40.824 38.404,40.824Zm-540.473,32.967l0,-150.001l54.227,-0c47.449,-0 77.952,30.845 77.952,75.212c-0,44.154 -28.597,74.789 -77.316,74.789l-54.863,-0Zm38.976,-35.705l13.133,-0c22.878,-0 37.917,-17.535 37.917,-39.084c-0,-22.395 -15.251,-39.507 -34.952,-39.507l-16.098,-0l0,78.591Z" style="fill: var(--textColor);"></path><path id="eye" d="M159.634,78.772c8.092,-0.634 15.152,6.272 16.369,15.457c1.624,12.235 -2.867,24.874 -17.633,25.165c-12.614,0.252 -16.436,-12.469 -15.6,-20.175c0.83,-7.706 7.182,-19.687 16.864,-20.447Z" style="fill: var(--eyeColor);"></path><style>
+        [data-component="logo"] {
+          --logoColor: #000;
+          --textColor: #000;
+          --eyeColor: #000;
+          --outlineColor: transparent;
+
+          height: 100%;
+          width: auto;
+        }
+        .dark [data-component="logo"] {
+          --textColor: #fff;
+          --outlineColor: #fff;
+        }
+        @keyframes blink {
+          0%, 100% {
+            transform: scaleY(1);
+          }
+          50% {
+            transform: scaleY(0.15);
+          }
+        }
+        [data-component="logo"]:hover,
+        a:focus [data-component="logo"] {
+          #eye {
+            transform-origin: 50% 30%;
+            animation: blink 0.15s cubic-bezier(0.5, 0, 0.5, 1);
+          }
+        }
+        </style></svg></a><nav id="main-nav" class="flex h-full items-center row-start-2 col-span-2 md:row-auto md:col-auto -mx-4 md:mx-0 overflow-x-auto md:overflow-clip"><a href="/runtime/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">文档</a><a href="/api/deno/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200 font-bold text-gray-800 bg-header-highlight " data-active aria-current="location"><div id="current-nav-item" class="absolute inset-0 bg-header-highlight -z-10 transition-transform duration-200 easing-[cubic-bezier(0.5,0,0.5,1)] origin-left" style="--left: 0px; --scaleX: 1; transform: translateX(var(--left)) scaleX(var(--scaleX));"></div>API 参考</a><a href="/examples/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">示例</a><a href="/services/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  services">服务</a></nav><div class="flex items-center gap-x-2 sm:gap-x-4 ml-auto w-full max-w-80"><div class="md:relative w-full"><div class="relative"><input type="search" placeholder="Search" id="orama-search-input" class="w-full min-w-24 rounded-lg placeholder:text-sm text-base leading-normal p-1 pl-8 border transition-all duration-150 text-foreground-primary border-foreground-secondary hover:bg-background-secondary focus:bg-background-secondary focus:outline-offset-1" style="background: url(/img/search.svg) no-repeat 0.5em 50%; background-size: 1.25em; background-color: var(--color-background-raw);"><kbd id="search-key" class="hidden xs:flex pointer-events-none absolute font-sans rounded-sm top-1 right-1 bottom-1 w-auto border-1 border-foreground-tertiary border-b-2 border-r-2 bg-background-primary text-foreground-secondary text-center text-xs font-bold p-2 items-center justify-center dark:bg-background-secondary dark:border-gray-700">⌘K</kbd><div id="orama-search-loading" class="absolute left-2 top-1/2 transform -translate-y-1/2 hidden bg-background-raw"><div class="animate-spin rounded-full h-4 w-4 border-2 border-transparent border-r-foreground-primary bg-background-raw"></div></div><div class="sr-only" aria-live="polite" id="orama-results-announcer"></div></div><div id="orama-search-results" class="absolute inset-2 left-2 right-2 h-[calc(100vh-8rem)] top-10 md:top-full md:left-auto md:right-0 mt-2 bg-background-raw border border-foreground-tertiary rounded-xl shadow-2xl z-50 md:max-h-128 overflow-hidden hidden md:min-w-160 max-w-2xl"><div id="orama-search-results-content" class="overflow-y-auto h-full"></div><div class="border-t border-foreground-tertiary bg-background-secondary px-4 py-2 sticky bottom-0"><div class="flex items-center gap-6 text-xs text-foreground-secondary"><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↑↓</span><span class="sr-only">Up or down to</span></kbd>navigate</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↵</span><span class="sr-only">Enter to</span></kbd>select</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">ESC</span><span class="sr-only">Escape to</span></kbd>close</span></div></div></div></div><button type="button" aria-label="toggle theme" class="shrink-0 h-9 aspect-square p-1 cursor-pointer rounded border border-transparent transition-colors duration-200 ease-in-out text-foreground-secondary hover:decoration-none hover:bg-background-secondary hover:border-background-tertiary flex flex-col items-center justify-start overflow-hidden" id="theme-toggle"><img src="/img/light.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><img src="/img/dark.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><span class="sr-only">Toggle Theme</span></button><button type="button" id="hamburger-button" class="h-8 w-auto py-2 px-0 flex flex-col justify-between rounded md:hidden" aria-pressed="false"><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--top"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-opacity hamburger-bar--middle"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--bottom"></div><span class="sr-only">Toggle navigation menu</span></button></div></div></header><div class="layout layout--three-column"><aside class="fixed transition-all duration-200 md:duration-0 easing-[cubic-bezier(0.165,0.84,0.44,1)] -translate-x-full z-50 w-full bg-background-raw opacity-0 p-4 pb-8 overflow-auto text-smaller md:sticky md:overflow-y-auto md:[scrollbar-width:thin] md:z-10 md:!translate-x-0 md:!opacity-100 md:p-0 md:pb-16 lg:border-r lg:border-r-foreground-tertiary lg:w-full sidebar-open:translate-x-0 sidebar-open:opacity-100
+         top-header h-screen-minus-header" data-component="sidebar-nav" data-section="api" id="nav" style="scrollbar-width: none;" tabIndex="-1"><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Deno APIs</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/api/deno" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 bg-header-highlight border-foreground-secondary text-gray-800" data-active>Deno specific APIs</a></li><li><button type="button" data-accordion-toggle="denoAPIs"  class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">Deno APIs by category</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/api/deno/cloud" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Cloud</a></li><li><a href="/api/deno/errors" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Errors</a></li><li><a href="/api/deno/fetch" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Fetch</a></li><li><a href="/api/deno/ffi" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >FFI</a></li><li><a href="/api/deno/file-system" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >File System</a></li><li><a href="/api/deno/gpu" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >GPU</a></li><li><a href="/api/deno/http-server" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP Server</a></li><li><a href="/api/deno/io" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >I/O</a></li><li><a href="/api/deno/jupyter" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Jupyter</a></li><li><a href="/api/deno/linter" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Linter</a></li><li><a href="/api/deno/network" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Network</a></li><li><a href="/api/deno/permissions" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Permissions</a></li><li><a href="/api/deno/runtime" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Runtime</a></li><li><a href="/api/deno/subprocess" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Subprocess</a></li><li><a href="/api/deno/telemetry" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Telemetry</a></li><li><a href="/api/deno/testing" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Testing</a></li><li><a href="/api/deno/websockets" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >WebSockets</a></li></ul></li><li><a href="/api/deno/all_symbols" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >All Deno symbols</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Web APIs</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/api/web" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Web Platform Support</a></li><li><button type="button" data-accordion-toggle="webAPIs"  class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">Web APIs by category</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/api/web/cache" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Cache</a></li><li><a href="/api/web/canvas" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Canvas</a></li><li><a href="/api/web/crypto" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Crypto</a></li><li><a href="/api/web/encoding" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Encoding</a></li><li><a href="/api/web/events" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Events</a></li><li><a href="/api/web/fetch" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Fetch</a></li><li><a href="/api/web/file" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >File</a></li><li><a href="/api/web/gpu" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >GPU</a></li><li><a href="/api/web/io" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >I/O</a></li><li><a href="/api/web/intl" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Intl</a></li><li><a href="/api/web/messaging" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Messaging</a></li><li><a href="/api/web/performance" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Performance</a></li><li><a href="/api/web/platform" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Platform</a></li><li><a href="/api/web/storage" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Storage</a></li><li><a href="/api/web/streams" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Streams</a></li><li><a href="/api/web/temporal" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Temporal</a></li><li><a href="/api/web/url" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >URL</a></li><li><a href="/api/web/wasm" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Wasm</a></li><li><a href="/api/web/websockets" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >WebSockets</a></li><li><a href="/api/web/workers" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Workers</a></li></ul></li><li><a href="/api/web/all_symbols" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >All web symbols</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Node APIs</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/api/node" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Node support in deno</a></li><li><button type="button" data-accordion-toggle="nodeAPIs"  class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">Node APIs by namespace</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/api/node/assert/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >assert</a></li><li><a href="/api/node/assert/strict/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >assert/strict</a></li><li><a href="/api/node/async_hooks/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >async_hooks</a></li><li><a href="/api/node/buffer/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >buffer</a></li><li><a href="/api/node/child_process/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >child_process</a></li><li><a href="/api/node/cluster/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cluster</a></li><li><a href="/api/node/console/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >console</a></li><li><a href="/api/node/constants/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >constants</a></li><li><a href="/api/node/crypto/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >crypto</a></li><li><a href="/api/node/dgram/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >dgram</a></li><li><a href="/api/node/diagnostics_channel/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >diagnostics_channel</a></li><li><a href="/api/node/dns/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >dns</a></li><li><a href="/api/node/dns/promises/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >dns/promises</a></li><li><a href="/api/node/domain/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >domain</a></li><li><a href="/api/node/events/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >events</a></li><li><a href="/api/node/fs/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >fs</a></li><li><a href="/api/node/fs/promises/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >fs/promises</a></li><li><a href="/api/node/http/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >http</a></li><li><a href="/api/node/http2/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >http2</a></li><li><a href="/api/node/https/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >https</a></li><li><a href="/api/node/inspector/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >inspector</a></li><li><a href="/api/node/inspector/promises/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >inspector/promises</a></li><li><a href="/api/node/module/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >module</a></li><li><a href="/api/node/net/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >net</a></li><li><a href="/api/node/os/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >os</a></li><li><a href="/api/node/path/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >path</a></li><li><a href="/api/node/perf_hooks/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >perf_hooks</a></li><li><a href="/api/node/process/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >process</a></li><li><a href="/api/node/punycode/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >punycode</a></li><li><a href="/api/node/querystring/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >querystring</a></li><li><a href="/api/node/readline/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >readline</a></li><li><a href="/api/node/readline/promises/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >readline/promises</a></li><li><a href="/api/node/repl/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >repl</a></li><li><a href="/api/node/sea/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >sea</a></li><li><a href="/api/node/sqlite/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >sqlite</a></li><li><a href="/api/node/stream/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >stream</a></li><li><a href="/api/node/stream/consumers/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >stream/consumers</a></li><li><a href="/api/node/stream/promises/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >stream/promises</a></li><li><a href="/api/node/stream/web/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >stream/web</a></li><li><a href="/api/node/string_decoder/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >string_decoder</a></li><li><a href="/api/node/test/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >test</a></li><li><a href="/api/node/test/reporters/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >test/reporters</a></li><li><a href="/api/node/timers/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >timers</a></li><li><a href="/api/node/timers/promises/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >timers/promises</a></li><li><a href="/api/node/tls/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >tls</a></li><li><a href="/api/node/trace_events/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >trace_events</a></li><li><a href="/api/node/tty/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >tty</a></li><li><a href="/api/node/url/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >url</a></li><li><a href="/api/node/util/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >util</a></li><li><a href="/api/node/util/types/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >util/types</a></li><li><a href="/api/node/v8/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >v8</a></li><li><a href="/api/node/vm/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >vm</a></li><li><a href="/api/node/wasi/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >wasi</a></li><li><a href="/api/node/worker_threads/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >worker_threads</a></li><li><a href="/api/node/zlib/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >zlib</a></li></ul></li><li><a href="/api/node/all_symbols" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >All node symbols</a></li></ul></nav></aside><main id="content" class="content "><div class="w-full"><article class="mx-auto"><details class="block lg:hidden my-4 bg-foreground-quaternary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-background-tertiary">On this page</summary><ul class="p-4 pt-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#api-%E6%96%87%E6%A1%A3" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">API 文档 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">文件系统 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BD%91%E7%BB%9C" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">网络 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%AD%90%E8%BF%9B%E7%A8%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">子进程 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%94%99%E8%AF%AF" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">错误 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#http-%E6%9C%8D%E5%8A%A1%E5%99%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">HTTP 服务器 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">权限 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9D%83%E9%99%90%E6%8F%8F%E8%BF%B0%E7%AC%A6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">权限描述符 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">查询权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9D%83%E9%99%90%E7%8A%B6%E6%80%81" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">权限状态 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9D%83%E9%99%90%E5%BC%BA%E5%BA%A6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">权限强度 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%AF%B7%E6%B1%82%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">请求权限 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%92%A4%E9%94%80%E6%9D%83%E9%99%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">撤销权限 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#import.meta" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">import.meta </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#import.meta.url" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">import.meta.url </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#import.meta.main" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">import.meta.main </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#import.meta.filename" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">import.meta.filename </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#import.meta.dirname" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">import.meta.dirname </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#import.meta.resolve" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">import.meta.resolve </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#ffi" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">FFI </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%9D%9E%E9%98%BB%E5%A1%9E-ffi" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">非阻塞 FFI </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">回调函数 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%94%AF%E6%8C%81%E7%9A%84%E7%B1%BB%E5%9E%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">支持的类型 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#deno_bindgen" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">deno_bindgen </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%A8%8B%E5%BA%8F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">程序生命周期 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#main.ts" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">main.ts </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#beforeunload" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">beforeunload </a></li></ul></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-6 sm:mt-6"><h1>Deno 命名空间 API</h1><p>全局的 <code>Deno</code> 命名空间包含非 Web 标准的 API，
+包括用于读取文件、打开 TCP 套接字、提供 HTTP 服务和执行子进程等 API。</p>
+<h2 id="api-%E6%96%87%E6%A1%A3" tabindex="-1">API 文档 <a class="header-anchor" href="#api-%E6%96%87%E6%A1%A3"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>本节提供通过全局 <code>Deno</code> 命名空间可用的所有 Deno 特定 API 的完整文档。
+你可以<a href="/api/deno/all_symbols">浏览所有符号</a>查看所有可用 API 列表，或根据类别进行搜索。
+点击任何函数或接口，将显示包含示例的详细文档。</p>
+<p>以下突出介绍了一些最重要的 Deno API。</p>
+<h2 id="%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F" tabindex="-1">文件系统 <a class="header-anchor" href="#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 运行时附带了
+<a href="/api/deno/file-system">多种用于操作文件和目录的函数</a>。
+你需要使用 <code>--allow-read</code> 和 <code>--allow-write</code> 权限以访问文件系统。</p>
+<p>请参阅以下链接，了解如何使用文件系统函数的代码示例。</p>
+<ul>
+<li><a href="/examples/file_server_tutorial/">通过流读取文件</a></li>
+<li><a href="/examples/reading_files/">读取文本文件（<code>Deno.readTextFile</code>）</a></li>
+<li><a href="/examples/writing_files/">写入文本文件（<code>Deno.writeTextFile</code>）</a></li>
+</ul>
+<h2 id="%E7%BD%91%E7%BB%9C" tabindex="-1">网络 <a class="header-anchor" href="#%E7%BD%91%E7%BB%9C"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 运行时附带了
+<a href="/api/deno/network">处理网络端口连接的内置函数</a>。</p>
+<p>请参阅以下链接，了解常用函数的代码示例。</p>
+<ul>
+<li><a href="/api/deno/~/Deno.connect">连接到主机名和端口（<code>Deno.connect</code>）</a></li>
+<li><a href="/api/deno/~/Deno.listen">在本地传输地址上监听（<code>Deno.listen</code>）</a></li>
+</ul>
+<p>实用网络功能示例：</p>
+<ul>
+<li><a href="/examples/http_server/">HTTP 服务器：Hello world</a></li>
+<li><a href="/examples/http_server_routing/">HTTP 服务器：路由</a></li>
+<li><a href="/examples/tcp_echo_server/">TCP 回显服务器</a></li>
+<li><a href="/examples/http_server_websocket/">WebSockets 示例</a></li>
+<li><a href="/examples/chat_app_tutorial/">使用 WebSockets 构建聊天应用教程</a></li>
+</ul>
+<h2 id="%E5%AD%90%E8%BF%9B%E7%A8%8B" tabindex="-1">子进程 <a class="header-anchor" href="#%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 运行时附带了
+<a href="/api/deno/subprocess">用于启动子进程的内置函数</a>。</p>
+<p>请参阅以下链接，了解如何创建子进程的代码示例。</p>
+<ul>
+<li><a href="/examples/subprocess_tutorial/">创建子进程（<code>Deno.Command</code>）</a></li>
+<li><a href="/examples/subprocesses_output/">收集子进程输出</a></li>
+</ul>
+<h2 id="%E9%94%99%E8%AF%AF" tabindex="-1">错误 <a class="header-anchor" href="#%E9%94%99%E8%AF%AF"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 运行时提供了 <a href="/api/deno/errors">20 个错误类</a>，
+可用于响应多种情况。</p>
+<p>例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">Deno.errors.NotFound<span class="token punctuation">;</span>
+Deno.errors.WriteZero<span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-119" class="copyButton" data-copy="Deno.errors.NotFound;
+Deno.errors.WriteZero;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>使用示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">try</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> file <span class="token operator">=</span> <span class="token keyword">await</span> Deno<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"./some/file.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>error <span class="token keyword">instanceof</span> <span class="token class-name">Deno</span><span class="token punctuation">.</span>errors<span class="token punctuation">.</span>NotFound<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"文件未找到"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 其他情况重新抛出</span>
+    <span class="token keyword">throw</span> error<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-123" class="copyButton" data-copy="try {
+  const file = await Deno.open(&quot;./some/file.txt&quot;);
+} catch (error) {
+  if (error instanceof Deno.errors.NotFound) {
+    console.error(&quot;文件未找到&quot;);
+  } else {
+    // 其他情况重新抛出
+    throw error;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="http-%E6%9C%8D%E5%8A%A1%E5%99%A8" tabindex="-1">HTTP 服务器 <a class="header-anchor" href="#http-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 提供两个 HTTP 服务器 API：</p>
+<ul>
+<li><a href="/api/deno/~/Deno.serve"><code>Deno.serve</code></a>：原生的、<em>高级</em>，支持 HTTP/1.1 和 HTTP/2，
+是在 Deno 中编写 HTTP 服务器的首选 API。</li>
+<li><a href="/api/deno/~/Deno.serveHttp"><code>Deno.serveHttp</code></a>：原生的、<em>低级</em>，支持 HTTP/1.1 和 HTTP/2。</li>
+</ul>
+<p>要在指定端口启动 HTTP 服务器，请使用 <code>Deno.serve</code> 函数。
+该函数接收一个处理函数，对每个传入请求调用，期望返回响应（或解析为响应的 Promise）。
+例如：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token punctuation">(</span>_req<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token string">"Hello, World!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-145" class="copyButton" data-copy="Deno.serve((_req) => {
+  return new Response(&quot;Hello, World!&quot;);
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>默认情况下，<code>Deno.serve</code> 监听端口 <code>8000</code>，但可通过选项对象的第一个或第二个参数传入端口号修改。</p>
+<p>你可以
+<a href="/runtime/fundamentals/http_server/">阅读更多 HTTP 服务器 API 的使用说明</a>。</p>
+<p>HTTP 服务器实用示例：</p>
+<ul>
+<li><a href="/examples/file_server_tutorial/">简单文件服务器教程</a></li>
+<li><a href="/examples/http_server_files/">HTTP 服务器提供文件服务</a></li>
+<li><a href="/examples/http_server_streaming/">带流式处理的 HTTP 服务器</a></li>
+<li><a href="/examples/http_server_websocket/">HTTP 服务器 WebSockets</a></li>
+</ul>
+<h2 id="%E6%9D%83%E9%99%90" tabindex="-1">权限 <a class="header-anchor" href="#%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>权限由 CLI 运行 <code>deno</code> 命令时授予。
+用户代码通常假设自身具备一套必需的权限，但执行时不能保证<strong>已授予</strong>的权限集与之匹配。</p>
+<p>某些情况下，确保容错程序需要在运行时与权限系统交互。</p>
+<h3 id="%E6%9D%83%E9%99%90%E6%8F%8F%E8%BF%B0%E7%AC%A6" tabindex="-1">权限描述符 <a class="header-anchor" href="#%E6%9D%83%E9%99%90%E6%8F%8F%E8%BF%B0%E7%AC%A6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>命令行中，<code>/foo/bar</code> 的读取权限表示为 <code>--allow-read=/foo/bar</code>。
+在运行时 JS 中表示为：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> desc <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-192" class="copyButton" data-copy="const desc = { name: &quot;read&quot;, path: &quot;/foo/bar&quot; } as const;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>其他示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// 全局写入权限。</span>
+<span class="token keyword">const</span> desc1 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"write"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 写入权限针对 `$PWD/foo/bar`。</span>
+<span class="token keyword">const</span> desc2 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"write"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"foo/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 全局网络权限。</span>
+<span class="token keyword">const</span> desc3 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"net"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 网络权限针对 127.0.0.1:8000。</span>
+<span class="token keyword">const</span> desc4 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"net"</span><span class="token punctuation">,</span> host<span class="token operator">:</span> <span class="token string">"127.0.0.1:8000"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 高精度时间权限。</span>
+<span class="token keyword">const</span> desc5 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"hrtime"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-196" class="copyButton" data-copy="// 全局写入权限。
+const desc1 = { name: &quot;write&quot; } as const;
+
+// 写入权限针对 `$PWD/foo/bar`。
+const desc2 = { name: &quot;write&quot;, path: &quot;foo/bar&quot; } as const;
+
+// 全局网络权限。
+const desc3 = { name: &quot;net&quot; } as const;
+
+// 网络权限针对 127.0.0.1:8000。
+const desc4 = { name: &quot;net&quot;, host: &quot;127.0.0.1:8000&quot; } as const;
+
+// 高精度时间权限。
+const desc5 = { name: &quot;hrtime&quot; } as const;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>更多细节参见 API 参考中的<a href="/api/deno/~/Deno.PermissionDescriptor"><code>PermissionDescriptor</code></a>。
+下面描述的所有 API 都有同步版本（如 <code>Deno.permissions.querySync</code>）。</p>
+<h3 id="%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90" tabindex="-1">查询权限 <a class="header-anchor" href="#%E6%9F%A5%E8%AF%A2%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>根据描述符检查权限是否被授予。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// deno run --allow-read=/foo main.ts</span>
+
+<span class="token keyword">const</span> desc1 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>desc1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "granted", partial: false }</span>
+
+<span class="token keyword">const</span> desc2 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>desc2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "granted", partial: false }</span>
+
+<span class="token keyword">const</span> desc3 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>desc3<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "prompt", partial: false }</span>
+</code></pre>
+
+      <button id="copy-button-206" class="copyButton" data-copy="// deno run --allow-read=/foo main.ts
+
+const desc1 = { name: &quot;read&quot;, path: &quot;/foo&quot; } as const;
+console.log(await Deno.permissions.query(desc1));
+// PermissionStatus { state: &quot;granted&quot;, partial: false }
+
+const desc2 = { name: &quot;read&quot;, path: &quot;/foo/bar&quot; } as const;
+console.log(await Deno.permissions.query(desc2));
+// PermissionStatus { state: &quot;granted&quot;, partial: false }
+
+const desc3 = { name: &quot;read&quot;, path: &quot;/bar&quot; } as const;
+console.log(await Deno.permissions.query(desc3));
+// PermissionStatus { state: &quot;prompt&quot;, partial: false }
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>使用 <code>--deny-read</code> 限制某些文件路径时，结果会包含 <code>partial: true</code>，
+表示未完全授予所有子路径权限：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// deno run --allow-read=/foo --deny-read=/foo/bar main.ts</span>
+
+<span class="token keyword">const</span> desc1 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>desc1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "granted", partial: true }</span>
+
+<span class="token keyword">const</span> desc2 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>desc2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "denied", partial: false }</span>
+
+<span class="token keyword">const</span> desc3 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>desc3<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "prompt", partial: false }</span>
+</code></pre>
+
+      <button id="copy-button-210" class="copyButton" data-copy="// deno run --allow-read=/foo --deny-read=/foo/bar main.ts
+
+const desc1 = { name: &quot;read&quot;, path: &quot;/foo&quot; } as const;
+console.log(await Deno.permissions.query(desc1));
+// PermissionStatus { state: &quot;granted&quot;, partial: true }
+
+const desc2 = { name: &quot;read&quot;, path: &quot;/foo/bar&quot; } as const;
+console.log(await Deno.permissions.query(desc2));
+// PermissionStatus { state: &quot;denied&quot;, partial: false }
+
+const desc3 = { name: &quot;read&quot;, path: &quot;/bar&quot; } as const;
+console.log(await Deno.permissions.query(desc3));
+// PermissionStatus { state: &quot;prompt&quot;, partial: false }
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%9D%83%E9%99%90%E7%8A%B6%E6%80%81" tabindex="-1">权限状态 <a class="header-anchor" href="#%E6%9D%83%E9%99%90%E7%8A%B6%E6%80%81"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>权限状态为 <code>&quot;granted&quot;</code>、<code>&quot;prompt&quot;</code> 或 <code>&quot;denied&quot;</code>。</p>
+<ul>
+<li>从 CLI 授予的权限查询结果是 <code>{ state: &quot;granted&quot; }</code>。</li>
+<li>未授予的默认查询为 <code>{ state: &quot;prompt&quot; }</code>。</li>
+<li>显式拒绝的权限状态为 <code>{ state: &quot;denied&quot; }</code>。
+后者将在<a href="#request-permissions">请求权限</a>部分详细介绍。</li>
+</ul>
+<h3 id="%E6%9D%83%E9%99%90%E5%BC%BA%E5%BA%A6" tabindex="-1">权限强度 <a class="header-anchor" href="#%E6%9D%83%E9%99%90%E5%BC%BA%E5%BA%A6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>第二个查询结果的直观理解是，读取访问权授予了 <code>/foo</code>，
+且 <code>/foo/bar</code> 位置于 <code>/foo</code> 之内，因此 <code>/foo/bar</code> 也允许读取。
+该原则成立，除非 CLI 授予的权限对于查询的权限是 <em>部分的</em>（使用 <code>--deny-*</code> 标志的结果）。</p>
+<p>我们也可以说 <code>desc1</code> 比 <code>desc2</code> <em><a href="https://www.w3.org/TR/permissions/#ref-for-permissiondescriptor-stronger-than">更强</a></em>。
+这意味着对于任何一组 CLI 授予的权限：</p>
+<ol>
+<li>如果 <code>desc1</code> 查询到 <code>{ state: &quot;granted&quot;, partial: false }</code>，
+则 <code>desc2</code> 也必须是。</li>
+<li>如果 <code>desc2</code> 查询到 <code>{ state: &quot;denied&quot;, partial: false }</code>，
+则 <code>desc1</code> 也必须是。</li>
+</ol>
+<p>更多示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> desc1 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"write"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token comment">// 比以下权限更强</span>
+<span class="token keyword">const</span> desc2 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"write"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> desc3 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"net"</span><span class="token punctuation">,</span> host<span class="token operator">:</span> <span class="token string">"127.0.0.1"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token comment">// 比以下权限更强</span>
+<span class="token keyword">const</span> desc4 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"net"</span><span class="token punctuation">,</span> host<span class="token operator">:</span> <span class="token string">"127.0.0.1:8000"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-258" class="copyButton" data-copy="const desc1 = { name: &quot;write&quot; } as const;
+// 比以下权限更强
+const desc2 = { name: &quot;write&quot;, path: &quot;/foo&quot; } as const;
+
+const desc3 = { name: &quot;net&quot;, host: &quot;127.0.0.1&quot; } as const;
+// 比以下权限更强
+const desc4 = { name: &quot;net&quot;, host: &quot;127.0.0.1:8000&quot; } as const;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E8%AF%B7%E6%B1%82%E6%9D%83%E9%99%90" tabindex="-1">请求权限 <a class="header-anchor" href="#%E8%AF%B7%E6%B1%82%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>通过 CLI 提示向用户请求未授予的权限。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// deno run main.ts</span>
+
+<span class="token keyword">const</span> desc1 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> status1 <span class="token operator">=</span> <span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">request</span><span class="token punctuation">(</span>desc1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// ⚠️ Deno 请求读取 "/foo" 权限。允许？[y/n (y = 允许, n = 拒绝)] y</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>status1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "granted", partial: false }</span>
+
+<span class="token keyword">const</span> desc2 <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> status2 <span class="token operator">=</span> <span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">request</span><span class="token punctuation">(</span>desc2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// ⚠️ Deno 请求读取 "/bar" 权限。允许？[y/n (y = 允许, n = 拒绝)] n</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>status2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "denied", partial: false }</span>
+</code></pre>
+
+      <button id="copy-button-265" class="copyButton" data-copy="// deno run main.ts
+
+const desc1 = { name: &quot;read&quot;, path: &quot;/foo&quot; } as const;
+const status1 = await Deno.permissions.request(desc1);
+// ⚠️ Deno 请求读取 &quot;/foo&quot; 权限。允许？[y/n (y = 允许, n = 拒绝)] y
+console.log(status1);
+// PermissionStatus { state: &quot;granted&quot;, partial: false }
+
+const desc2 = { name: &quot;read&quot;, path: &quot;/bar&quot; } as const;
+const status2 = await Deno.permissions.request(desc2);
+// ⚠️ Deno 请求读取 &quot;/bar&quot; 权限。允许？[y/n (y = 允许, n = 拒绝)] n
+console.log(status2);
+// PermissionStatus { state: &quot;denied&quot;, partial: false }
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果当前权限状态是 <code>&quot;prompt&quot;</code>，终端会出现提示，询问用户是否授予权限。
+<code>desc1</code> 的请求被授予，返回新的状态，执行继续，仿佛 CLI 中指定了 <code>--allow-read=/foo</code>。
+<code>desc2</code> 的请求被拒绝，状态从 <code>&quot;prompt&quot;</code> 降级为 <code>&quot;denied&quot;</code>。</p>
+<p>如果当前权限状态已经是 <code>&quot;granted&quot;</code> 或 <code>&quot;denied&quot;</code>，请求将表现为查询，直接返回当前状态。
+这避免了已授予或已拒绝的请求再次弹出提示。</p>
+<h3 id="%E6%92%A4%E9%94%80%E6%9D%83%E9%99%90" tabindex="-1">撤销权限 <a class="header-anchor" href="#%E6%92%A4%E9%94%80%E6%9D%83%E9%99%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>将权限状态从 <code>&quot;granted&quot;</code> 降级为 <code>&quot;prompt&quot;</code>。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// deno run --allow-read=/foo main.ts</span>
+
+<span class="token keyword">const</span> desc <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">revoke</span><span class="token punctuation">(</span>desc<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "prompt", partial: false }</span>
+</code></pre>
+
+      <button id="copy-button-278" class="copyButton" data-copy="// deno run --allow-read=/foo main.ts
+
+const desc = { name: &quot;read&quot;, path: &quot;/foo&quot; } as const;
+console.log(await Deno.permissions.revoke(desc));
+// PermissionStatus { state: &quot;prompt&quot;, partial: false }
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>尝试撤销 CLI 授予权限的 <em>部分</em> 权限时会发生什么？</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// deno run --allow-read=/foo main.ts</span>
+
+<span class="token keyword">const</span> desc <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo/bar"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">revoke</span><span class="token punctuation">(</span>desc<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "prompt", partial: false }</span>
+<span class="token keyword">const</span> cliDesc <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">await</span> Deno<span class="token punctuation">.</span>permissions<span class="token punctuation">.</span><span class="token function">revoke</span><span class="token punctuation">(</span>cliDesc<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// PermissionStatus { state: "prompt", partial: false }</span>
+</code></pre>
+
+      <button id="copy-button-282" class="copyButton" data-copy="// deno run --allow-read=/foo main.ts
+
+const desc = { name: &quot;read&quot;, path: &quot;/foo/bar&quot; } as const;
+console.log(await Deno.permissions.revoke(desc));
+// PermissionStatus { state: &quot;prompt&quot;, partial: false }
+const cliDesc = { name: &quot;read&quot;, path: &quot;/foo&quot; } as const;
+console.log(await Deno.permissions.revoke(cliDesc));
+// PermissionStatus { state: &quot;prompt&quot;, partial: false }
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>CLI 授予并暗示被撤销权限的权限也被撤销。</p>
+<p>理解该行为的方式是，Deno 内部存储了一组 <em>显式授予的权限描述符</em>。
+CLI 指定 <code>--allow-read=/foo,/bar</code> 初始化为：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/bar"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-289" class="copyButton" data-copy="[
+  { name: &quot;read&quot;, path: &quot;/foo&quot; },
+  { name: &quot;read&quot;, path: &quot;/bar&quot; },
+];
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>运行时授予 <code>{ name: &quot;write&quot;, path: &quot;/foo&quot; }</code> 更新为：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token punctuation">[</span>
+  <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"read"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/bar"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"write"</span><span class="token punctuation">,</span> path<span class="token operator">:</span> <span class="token string">"/foo"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-293" class="copyButton" data-copy="[
+  { name: &quot;read&quot;, path: &quot;/foo&quot; },
+  { name: &quot;read&quot;, path: &quot;/bar&quot; },
+  { name: &quot;write&quot;, path: &quot;/foo&quot; },
+];
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>Deno 的权限撤销算法会去除所有 <em>比传入权限描述符更强的</em> 元素。</p>
+<p>Deno 不允许存在“碎片权限”状态，即强权限授予时排除了其暗示的弱权限。
+随着更多用例和 <code>&quot;denied&quot;</code> 状态的加入，此系统将变得复杂且不可预测。
+这是为安全性权衡而牺牲的粒度。</p>
+<h2 id="import.meta" tabindex="-1">import.meta <a class="header-anchor" href="#import.meta"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 支持 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta"><code>import.meta</code></a> API 的多个属性和方法，
+可用于获取模块信息，如模块 URL。</p>
+<h3 id="import.meta.url" tabindex="-1">import.meta.url <a class="header-anchor" href="#import.meta.url"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>返回当前模块的 URL。</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-312" class="copyButton" data-copy="console.log(import.meta.url);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run main.ts
+file:///dev/main.ts
+
+$ deno run https:/example.com/main.ts
+https://example.com/main.ts
+</code></pre>
+
+      <button id="copy-button-313" class="copyButton" data-copy="$ deno run main.ts
+file:///dev/main.ts
+
+$ deno run https:/example.com/main.ts
+https://example.com/main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="import.meta.main" tabindex="-1">import.meta.main <a class="header-anchor" href="#import.meta.main"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>返回当前模块是否为程序入口点。</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token string">"./other.ts"</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">模块 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>url<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 是否为主模块？</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>main<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-320" class="copyButton" data-copy="import &quot;./other.ts&quot;;
+
+console.log(`模块 ${import.meta.url} 是否为主模块？`, import.meta.main);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">other.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">模块 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>url<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 是否为主模块？</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">,</span> <span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>main<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-321" class="copyButton" data-copy="console.log(`模块 ${import.meta.url} 是否为主模块？`, import.meta.main);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run main.ts
+模块 file:///dev/other.ts 是否为主模块？ <span class="token boolean">false</span>
+模块 file:///dev/main.ts 是否为主模块？ <span class="token boolean">true</span>
+</code></pre>
+
+      <button id="copy-button-322" class="copyButton" data-copy="$ deno run main.ts
+模块 file:///dev/other.ts 是否为主模块？ false
+模块 file:///dev/main.ts 是否为主模块？ true
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="import.meta.filename" tabindex="-1">import.meta.filename <a class="header-anchor" href="#import.meta.filename"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><em>此属性仅对本地模块（<code>file:///...</code> 指定符）有效，远程模块返回 <code>undefined</code>。</em></p>
+<p>返回当前模块的完整解析路径，包含操作系统特定的路径分隔符。</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-332" class="copyButton" data-copy="console.log(import.meta.filename);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>Unix 系统：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run main.ts
+/dev/main.ts
+
+$ deno run https://example.com/main.ts
+undefined
+</code></pre>
+
+      <button id="copy-button-336" class="copyButton" data-copy="$ deno run main.ts
+/dev/main.ts
+
+$ deno run https://example.com/main.ts
+undefined
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>Windows 系统：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run main.ts
+C:<span class="token punctuation">\</span>dev<span class="token punctuation">\</span>main.ts
+
+$ deno run https://example.com/main.ts
+undefined
+</code></pre>
+
+      <button id="copy-button-340" class="copyButton" data-copy="$ deno run main.ts
+C:\dev\main.ts
+
+$ deno run https://example.com/main.ts
+undefined
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="import.meta.dirname" tabindex="-1">import.meta.dirname <a class="header-anchor" href="#import.meta.dirname"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><em>此属性仅对本地模块（<code>file:///...</code> 指定符）有效，远程模块返回 <code>undefined</code>。</em></p>
+<p>返回包含当前模块目录的完整解析路径，包含操作系统特定的路径分隔符。</p>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span>dirname<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-350" class="copyButton" data-copy="console.log(import.meta.dirname);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>Unix 系统：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run main.ts
+/dev/
+
+$ deno run https://example.com/main.ts
+undefined
+</code></pre>
+
+      <button id="copy-button-354" class="copyButton" data-copy="$ deno run main.ts
+/dev/
+
+$ deno run https://example.com/main.ts
+undefined
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>Windows 系统：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run main.ts
+C:<span class="token punctuation">\</span>dev<span class="token punctuation">\</span>
+
+$ deno run https://example.com/main.ts
+undefined
+</code></pre>
+
+      <button id="copy-button-358" class="copyButton" data-copy="$ deno run main.ts
+C:\dev\
+
+$ deno run https://example.com/main.ts
+undefined
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="import.meta.resolve" tabindex="-1">import.meta.resolve <a class="header-anchor" href="#import.meta.resolve"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>相对于当前模块解析指定符。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> worker <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Worker</span><span class="token punctuation">(</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">"./worker.ts"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-365" class="copyButton" data-copy="const worker = new Worker(import.meta.resolve(&quot;./worker.ts&quot;));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><code>import.meta.resolve</code> API 会考虑当前应用的导入映射，使你能够解析“裸”指定符。</p>
+<p>假设加载了如下导入映射...</p>
+<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"imports"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"fresh"</span><span class="token operator">:</span> <span class="token string">"https://deno.land/x/fresh@1.0.1/dev.ts"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-372" class="copyButton" data-copy="{
+  &quot;imports&quot;: {
+    &quot;fresh&quot;: &quot;https://deno.land/x/fresh@1.0.1/dev.ts&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你现在可以解析：</p>
+<div><div class="markdownBlockTitle">resolve.js</div><div class="relative"><pre><code class="highlight notranslate language-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">import</span><span class="token punctuation">.</span>meta<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">"fresh"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-376" class="copyButton" data-copy="console.log(import.meta.resolve(&quot;fresh&quot;));
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run resolve.js
+https://deno.land/x/fresh@1.0.1/dev.ts
+</code></pre>
+
+      <button id="copy-button-377" class="copyButton" data-copy="$ deno run resolve.js
+https://deno.land/x/fresh@1.0.1/dev.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="ffi" tabindex="-1">FFI <a class="header-anchor" href="#ffi"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>FFI（外部函数接口）API 允许用户调用支持 C ABI 的原生语言库（如 C/C++、Rust、Zig、V 等），通过 <code>Deno.dlopen</code> 实现。</p>
+<p>以下示例展示如何从 Deno 调用 Rust 函数：</p>
+<div class="relative"><pre><code class="highlight notranslate language-rust">// add.rs
+#[unsafe(no_mangle)]
+pub extern "C" fn add(a: isize, b: isize) -> isize {
+    a + b
+}
+</code></pre>
+
+      <button id="copy-button-387" class="copyButton" data-copy="// add.rs
+#[unsafe(no_mangle)]
+pub extern &quot;C&quot; fn add(a: isize, b: isize) -> isize {
+    a + b
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>编译为 C 动态库（Linux 下为 <code>libadd.so</code>）：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">rustc --crate-type cdylib add.rs
+</code></pre>
+
+      <button id="copy-button-391" class="copyButton" data-copy="rustc --crate-type cdylib add.rs
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>用 C 语言代码实现：</p>
+<div class="relative"><pre><code class="highlight notranslate language-c">// add.c
+int add(int a, int b) {
+  return a + b;
+}
+</code></pre>
+
+      <button id="copy-button-395" class="copyButton" data-copy="// add.c
+int add(int a, int b) {
+  return a + b;
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>并编译：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">// unix
+cc <span class="token parameter variable">-c</span> <span class="token parameter variable">-o</span> add.o add.c
+cc <span class="token parameter variable">-shared</span> <span class="token parameter variable">-W</span> <span class="token parameter variable">-o</span> libadd.so add.o
+// Windows
+cl /LD add.c /link /EXPORT:add
+</code></pre>
+
+      <button id="copy-button-399" class="copyButton" data-copy="// unix
+cc -c -o add.o add.c
+cc -shared -W -o libadd.so add.o
+// Windows
+cl /LD add.c /link /EXPORT:add
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>从 Deno 调用库：</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token comment">// ffi.ts</span>
+
+<span class="token comment">// 根据操作系统确定库后缀名。</span>
+<span class="token keyword">let</span> libSuffix <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token keyword">switch</span> <span class="token punctuation">(</span>Deno<span class="token punctuation">.</span>build<span class="token punctuation">.</span>os<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> <span class="token string">"windows"</span><span class="token operator">:</span>
+    libSuffix <span class="token operator">=</span> <span class="token string">"dll"</span><span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+  <span class="token keyword">case</span> <span class="token string">"darwin"</span><span class="token operator">:</span>
+    libSuffix <span class="token operator">=</span> <span class="token string">"dylib"</span><span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+  <span class="token keyword">default</span><span class="token operator">:</span>
+    libSuffix <span class="token operator">=</span> <span class="token string">"so"</span><span class="token punctuation">;</span>
+    <span class="token keyword">break</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> libName <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">./libadd.</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>libSuffix<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+<span class="token comment">// 打开库并定义导出符号</span>
+<span class="token keyword">const</span> dylib <span class="token operator">=</span> Deno<span class="token punctuation">.</span><span class="token function">dlopen</span><span class="token punctuation">(</span>
+  libName<span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token string-property property">"add"</span><span class="token operator">:</span> <span class="token punctuation">{</span> parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"isize"</span><span class="token punctuation">,</span> <span class="token string">"isize"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> result<span class="token operator">:</span> <span class="token string">"isize"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 调用符号 `add`</span>
+<span class="token keyword">const</span> result <span class="token operator">=</span> dylib<span class="token punctuation">.</span>symbols<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">35</span><span class="token punctuation">,</span> <span class="token number">34</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 69</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">来自外部对 35 和 34 加法的结果: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>result<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-403" class="copyButton" data-copy="// ffi.ts
+
+// 根据操作系统确定库后缀名。
+let libSuffix = &quot;&quot;;
+switch (Deno.build.os) {
+  case &quot;windows&quot;:
+    libSuffix = &quot;dll&quot;;
+    break;
+  case &quot;darwin&quot;:
+    libSuffix = &quot;dylib&quot;;
+    break;
+  default:
+    libSuffix = &quot;so&quot;;
+    break;
+}
+
+const libName = `./libadd.${libSuffix}`;
+// 打开库并定义导出符号
+const dylib = Deno.dlopen(
+  libName,
+  {
+    &quot;add&quot;: { parameters: [&quot;isize&quot;, &quot;isize&quot;], result: &quot;isize&quot; },
+  } as const,
+);
+
+// 调用符号 `add`
+const result = dylib.symbols.add(35, 34); // 69
+
+console.log(`来自外部对 35 和 34 加法的结果: ${result}`);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>带 <code>--allow-ffi</code> 和 <code>--unstable</code> 标志运行：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">deno run --allow-ffi ffi.ts
+</code></pre>
+
+      <button id="copy-button-407" class="copyButton" data-copy="deno run --allow-ffi ffi.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E9%9D%9E%E9%98%BB%E5%A1%9E-ffi" tabindex="-1">非阻塞 FFI <a class="header-anchor" href="#%E9%9D%9E%E9%98%BB%E5%A1%9E-ffi"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>许多用例中，用户可能希望在后台运行 CPU 密集型 FFI 函数，而不阻塞主线程的其他任务。</p>
+<p>从 Deno 1.15 起，可在 <code>Deno.dlopen</code> 中标记符号为 <code>nonblocking</code>。
+此类函数调用将在专用阻塞线程上运行，并返回解析所需结果的 <code>Promise</code>。</p>
+<p>示例：用 Deno 执行耗时 FFI 调用：</p>
+<div class="relative"><pre><code class="highlight notranslate language-c">// sleep.c
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <time.h>
+#endif
+
+int sleep(unsigned int ms) {
+  #ifdef _WIN32
+  Sleep(ms);
+  #else
+  struct timespec ts;
+  ts.tv_sec = ms / 1000;
+  ts.tv_nsec = (ms % 1000) * 1000000;
+  nanosleep(&ts, NULL);
+  #endif
+}
+</code></pre>
+
+      <button id="copy-button-420" class="copyButton" data-copy="// sleep.c
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <time.h>
+#endif
+
+int sleep(unsigned int ms) {
+  #ifdef _WIN32
+  Sleep(ms);
+  #else
+  struct timespec ts;
+  ts.tv_sec = ms / 1000;
+  ts.tv_nsec = (ms % 1000) * 1000000;
+  nanosleep(&ts, NULL);
+  #endif
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>从 Deno 调用：</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token comment">// nonblocking_ffi.ts</span>
+<span class="token keyword">const</span> library <span class="token operator">=</span> Deno<span class="token punctuation">.</span><span class="token function">dlopen</span><span class="token punctuation">(</span>
+  <span class="token string">"./sleep.so"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    sleep<span class="token operator">:</span> <span class="token punctuation">{</span>
+      parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"usize"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      result<span class="token operator">:</span> <span class="token string">"void"</span><span class="token punctuation">,</span>
+      nonblocking<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+library<span class="token punctuation">.</span>symbols<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"After"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Before"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-424" class="copyButton" data-copy="// nonblocking_ffi.ts
+const library = Deno.dlopen(
+  &quot;./sleep.so&quot;,
+  {
+    sleep: {
+      parameters: [&quot;usize&quot;],
+      result: &quot;void&quot;,
+      nonblocking: true,
+    },
+  } as const,
+);
+
+library.symbols.sleep(500).then(() => console.log(&quot;After&quot;));
+console.log(&quot;Before&quot;);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>结果：</p>
+<div class="relative"><pre><code class="highlight notranslate language-sh">$ deno run --allow-ffi unblocking_ffi.ts
+Before
+After
+</code></pre>
+
+      <button id="copy-button-428" class="copyButton" data-copy="$ deno run --allow-ffi unblocking_ffi.ts
+Before
+After
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0" tabindex="-1">回调函数 <a class="header-anchor" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno FFI API 支持从 JavaScript 函数创建 C 回调，以供动态库回调调用 Deno。
+以下示例展示如何创建并使用回调：</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token comment">// callback_ffi.ts</span>
+<span class="token keyword">const</span> library <span class="token operator">=</span> Deno<span class="token punctuation">.</span><span class="token function">dlopen</span><span class="token punctuation">(</span>
+  <span class="token string">"./callback.so"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    set_status_callback<span class="token operator">:</span> <span class="token punctuation">{</span>
+      parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"function"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      result<span class="token operator">:</span> <span class="token string">"void"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    start_long_operation<span class="token operator">:</span> <span class="token punctuation">{</span>
+      parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      result<span class="token operator">:</span> <span class="token string">"void"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    check_status<span class="token operator">:</span> <span class="token punctuation">{</span>
+      parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      result<span class="token operator">:</span> <span class="token string">"void"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> callback <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Deno</span><span class="token punctuation">.</span><span class="token function">UnsafeCallback</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"u8"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    result<span class="token operator">:</span> <span class="token string">"void"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span>success<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 将回调指针传入动态库</span>
+library<span class="token punctuation">.</span>symbols<span class="token punctuation">.</span><span class="token function">set_status_callback</span><span class="token punctuation">(</span>callback<span class="token punctuation">.</span>pointer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 启动不会阻塞线程的长操作</span>
+library<span class="token punctuation">.</span>symbols<span class="token punctuation">.</span><span class="token function">start_long_operation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 稍后触发库检测操作是否完成。</span>
+<span class="token comment">// 若完成，该调用会触发回调。</span>
+library<span class="token punctuation">.</span>symbols<span class="token punctuation">.</span><span class="token function">check_status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-435" class="copyButton" data-copy="// callback_ffi.ts
+const library = Deno.dlopen(
+  &quot;./callback.so&quot;,
+  {
+    set_status_callback: {
+      parameters: [&quot;function&quot;],
+      result: &quot;void&quot;,
+    },
+    start_long_operation: {
+      parameters: [],
+      result: &quot;void&quot;,
+    },
+    check_status: {
+      parameters: [],
+      result: &quot;void&quot;,
+    },
+  } as const,
+);
+
+const callback = new Deno.UnsafeCallback(
+  {
+    parameters: [&quot;u8&quot;],
+    result: &quot;void&quot;,
+  } as const,
+  (success: number) => {},
+);
+
+// 将回调指针传入动态库
+library.symbols.set_status_callback(callback.pointer);
+// 启动不会阻塞线程的长操作
+library.symbols.start_long_operation();
+
+// 稍后触发库检测操作是否完成。
+// 若完成，该调用会触发回调。
+library.symbols.check_status();
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>若 <code>UnsafeCallback</code> 的回调函数抛出错误，该错误会传播回触发回调的函数（如上述的 <code>check_status()</code>），且可在那里捕获。
+若抛出错误的回调函数有返回值，Deno 将返回 0（指针类型为 null 指针）。</p>
+<p><code>UnsafeCallback</code> 默认不会被释放，以避免使用后释放（use-after-free）错误。
+正确释放 <code>UnsafeCallback</code> 应调用其 <code>close()</code> 方法。</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token keyword">const</span> callback <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Deno</span><span class="token punctuation">.</span><span class="token function">UnsafeCallback</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span> parameters<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> result<span class="token operator">:</span> <span class="token string">"void"</span> <span class="token punctuation">}</span> <span class="token keyword">as</span> <span class="token keyword">const</span><span class="token punctuation">,</span>
+  <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 当回调不再需要时</span>
+callback<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 此后不再安全将该回调作为参数传递。</span>
+</code></pre>
+
+      <button id="copy-button-442" class="copyButton" data-copy="const callback = new Deno.UnsafeCallback(
+  { parameters: [], result: &quot;void&quot; } as const,
+  () => {},
+);
+
+// 当回调不再需要时
+callback.close();
+// 此后不再安全将该回调作为参数传递。
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>本地库也可设置中断处理器，直接触发回调。
+但不推荐这样做，可能导致意外副作用和未定义行为。
+建议中断处理器仅设置标志，稍后使用轮询方式检测完成情况，类似上面 <code>check_status()</code> 的使用方法。</p>
+<h3 id="%E6%94%AF%E6%8C%81%E7%9A%84%E7%B1%BB%E5%9E%8B" tabindex="-1">支持的类型 <a class="header-anchor" href="#%E6%94%AF%E6%8C%81%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>下面列出了当前 Deno FFI API 支持的类型。</p>
+<table>
+<thead>
+<tr>
+<th>FFI 类型</th>
+<th>Deno 类型</th>
+<th>C 类型</th>
+<th>Rust 类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i8</code></td>
+<td><code>number</code></td>
+<td><code>char</code> / <code>signed char</code></td>
+<td><code>i8</code></td>
+</tr>
+<tr>
+<td><code>u8</code></td>
+<td><code>number</code></td>
+<td><code>unsigned char</code></td>
+<td><code>u8</code></td>
+</tr>
+<tr>
+<td><code>i16</code></td>
+<td><code>number</code></td>
+<td><code>short int</code></td>
+<td><code>i16</code></td>
+</tr>
+<tr>
+<td><code>u16</code></td>
+<td><code>number</code></td>
+<td><code>unsigned short int</code></td>
+<td><code>u16</code></td>
+</tr>
+<tr>
+<td><code>i32</code></td>
+<td><code>number</code></td>
+<td><code>int</code> / <code>signed int</code></td>
+<td><code>i32</code></td>
+</tr>
+<tr>
+<td><code>u32</code></td>
+<td><code>number</code></td>
+<td><code>unsigned int</code></td>
+<td><code>u32</code></td>
+</tr>
+<tr>
+<td><code>i64</code></td>
+<td><code>bigint</code></td>
+<td><code>long long int</code></td>
+<td><code>i64</code></td>
+</tr>
+<tr>
+<td><code>u64</code></td>
+<td><code>bigint</code></td>
+<td><code>unsigned long long int</code></td>
+<td><code>u64</code></td>
+</tr>
+<tr>
+<td><code>usize</code></td>
+<td><code>bigint</code></td>
+<td><code>size_t</code></td>
+<td><code>usize</code></td>
+</tr>
+<tr>
+<td><code>isize</code></td>
+<td><code>bigint</code></td>
+<td><code>size_t</code></td>
+<td><code>isize</code></td>
+</tr>
+<tr>
+<td><code>f32</code></td>
+<td><code>number</code></td>
+<td><code>float</code></td>
+<td><code>f32</code></td>
+</tr>
+<tr>
+<td><code>f64</code></td>
+<td><code>number</code></td>
+<td><code>double</code></td>
+<td><code>f64</code></td>
+</tr>
+<tr>
+<td><code>void</code>[1]</td>
+<td><code>undefined</code></td>
+<td><code>void</code></td>
+<td><code>()</code></td>
+</tr>
+<tr>
+<td><code>pointer</code></td>
+<td><code>{}</code> | <code>null</code></td>
+<td><code>void *</code></td>
+<td><code>*mut c_void</code></td>
+</tr>
+<tr>
+<td><code>buffer</code>[2]</td>
+<td><code>TypedArray | null</code></td>
+<td><code>uint8_t *</code></td>
+<td><code>*mut u8</code></td>
+</tr>
+<tr>
+<td><code>function</code>[3]</td>
+<td><code>{}</code> | <code>null</code></td>
+<td><code>void (*fun)()</code></td>
+<td><code>Option&lt;extern &quot;C&quot; fn()&gt;</code></td>
+</tr>
+<tr>
+<td><code>{ struct: [...] }</code>[4]</td>
+<td><code>TypedArray</code></td>
+<td><code>struct MyStruct</code></td>
+<td><code>MyStruct</code></td>
+</tr>
+</tbody>
+</table>
+<p>自 Deno 1.25 起，<code>pointer</code> 类型被拆分为 <code>pointer</code> 和 <code>buffer</code>，
+以保证用户利用 Typed Arrays 优化。
+自 Deno 1.31 起，JavaScript 表示的 <code>pointer</code> 改为不透明指针对象或 null 指针。</p>
+<ul>
+<li>[1] <code>void</code> 类型只能用作返回类型。</li>
+<li>[2] <code>buffer</code> 类型作为参数接受 TypedArrays，但作为返回值时总是返回指针对象或 null，类似 <code>pointer</code> 类型。</li>
+<li>[3] <code>function</code> 类型作为参数和返回值功能同 <code>pointer</code> 类型。</li>
+<li>[4] <code>struct</code> 类型用于按值传递和返回 C 结构体（复制）。
+<code>struct</code> 数组应依序枚举结构体各字段类型。
+结构体自动填充：可用适当数量的 <code>u8</code> 字段避免填充以定义-packed结构体。
+结构体只支持 TypedArrays，且总以 <code>Uint8Array</code> 返回。</li>
+</ul>
+<h3 id="deno_bindgen" tabindex="-1">deno_bindgen <a class="header-anchor" href="#deno_bindgen"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><a href="https://github.com/denoland/deno_bindgen"><code>deno_bindgen</code></a> 是官方工具，用于简化用 Rust 编写的 Deno FFI 库的胶水代码生成。</p>
+<p>它类似于 Rust Wasm 生态中的 <a href="https://github.com/rustwasm/wasm-bindgen"><code>wasm-bindgen</code></a>。</p>
+<p>示例用法：</p>
+<div class="relative"><pre><code class="highlight notranslate language-rust">// mul.rs
+use deno_bindgen::deno_bindgen;
+
+#[deno_bindgen]
+struct Input {
+  a: i32,
+  b: i32,
+}
+
+#[deno_bindgen]
+fn mul(input: Input) -> i32 {
+  input.a * input.b
+}
+</code></pre>
+
+      <button id="copy-button-747" class="copyButton" data-copy="// mul.rs
+use deno_bindgen::deno_bindgen;
+
+#[deno_bindgen]
+struct Input {
+  a: i32,
+  b: i32,
+}
+
+#[deno_bindgen]
+fn mul(input: Input) -> i32 {
+  input.a * input.b
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>运行 <code>deno_bindgen</code> 生成绑定。
+你现在可以直接在 Deno 中导入：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token comment">// mul.ts</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> mul <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"./bindings/bindings.ts"</span><span class="token punctuation">;</span>
+<span class="token function">mul</span><span class="token punctuation">(</span><span class="token punctuation">{</span> a<span class="token operator">:</span> <span class="token number">10</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token number">2</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 20</span>
+</code></pre>
+
+      <button id="copy-button-751" class="copyButton" data-copy="// mul.ts
+import { mul } from &quot;./bindings/bindings.ts&quot;;
+mul({ a: 10, b: 2 }); // 20
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>关于 <code>deno_bindgen</code> 的任何问题请在
+<a href="https://github.com/denoland/deno_bindgen/issues">https://github.com/denoland/deno_bindgen/issues</a> 反馈。</p>
+<h2 id="%E7%A8%8B%E5%BA%8F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" tabindex="-1">程序生命周期 <a class="header-anchor" href="#%E7%A8%8B%E5%BA%8F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno 支持浏览器兼容的生命周期事件：</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event#:~:text=The%20load%20event%20is%20fired,for%20resources%20to%20finish%20loading."><code>load</code></a>：
+当整个页面加载完毕，包括所有依赖资源（样式表和图像）时触发。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#:~:text=The%20beforeunload%20event%20is%20fired,want%20to%20leave%20the%20page."><code>beforeunload</code></a>：
+当事件循环没有更多工作要做且即将退出时触发。
+安排更多异步工作（如定时器或网络请求）将使程序继续运行。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event"><code>unload</code></a>：
+当文档或子资源被卸载时触发。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event"><code>unhandledrejection</code></a>：
+当没有拒绝处理程序的 Promise 被拒绝时触发，即没有 <code>.catch()</code> 处理程序或 <code>.then()</code> 的第二参数。</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/rejectionhandled_event"><code>rejectionhandled</code></a>：
+当给已拒绝的 Promise 添加 <code>.catch()</code> 处理器时触发。
+该事件仅在安装了 <code>unhandledrejection</code> 监听器且阻止事件传播（防止程序因错误终止）时触发。</li>
+</ul>
+<p>你可以利用这些事件编写程序初始化和清理代码。</p>
+<p><code>load</code> 事件监听器可异步，且会被等待，事件无法被取消。
+<code>beforeunload</code> 监听器必须同步，可取消以保持程序运行。
+<code>unload</code> 监听器必须同步，且无法取消。</p>
+<h2 id="main.ts" tabindex="-1">main.ts <a class="header-anchor" href="#main.ts"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<div><div class="markdownBlockTitle">main.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token string">"./imported.ts"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> handler <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">事件处理器（main）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"load"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"beforeunload"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"unload"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span>onload <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">onload 函数（main）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span>onbeforeunload <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">onbeforeunload 函数（main）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span>onunload <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">onunload 函数（main）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"主脚本日志"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-797" class="copyButton" data-copy="import &quot;./imported.ts&quot;;
+
+const handler = (e: Event): void => {
+  console.log(`事件处理器（main）收到 ${e.type} 事件`);
+};
+
+globalThis.addEventListener(&quot;load&quot;, handler);
+
+globalThis.addEventListener(&quot;beforeunload&quot;, handler);
+
+globalThis.addEventListener(&quot;unload&quot;, handler);
+
+globalThis.onload = (e: Event): void => {
+  console.log(`onload 函数（main）收到 ${e.type} 事件`);
+};
+
+globalThis.onbeforeunload = (e: Event): void => {
+  console.log(`onbeforeunload 函数（main）收到 ${e.type} 事件`);
+};
+
+globalThis.onunload = (e: Event): void => {
+  console.log(`onunload 函数（main）收到 ${e.type} 事件`);
+};
+
+console.log(&quot;主脚本日志&quot;);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><div><div class="markdownBlockTitle">imported.ts</div><div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">const</span> handler <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">事件处理器（imported）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"load"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"beforeunload"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"unload"</span><span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span>onload <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">onload 函数（imported）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span>onbeforeunload <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">onbeforeunload 函数（imported）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span>onunload <span class="token operator">=</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Event<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">onunload 函数（imported）收到 </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>e<span class="token punctuation">.</span><span class="token keyword">type</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> 事件</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"导入脚本日志"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-798" class="copyButton" data-copy="const handler = (e: Event): void => {
+  console.log(`事件处理器（imported）收到 ${e.type} 事件`);
+};
+
+globalThis.addEventListener(&quot;load&quot;, handler);
+globalThis.addEventListener(&quot;beforeunload&quot;, handler);
+globalThis.addEventListener(&quot;unload&quot;, handler);
+
+globalThis.onload = (e: Event): void => {
+  console.log(`onload 函数（imported）收到 ${e.type} 事件`);
+};
+
+globalThis.onbeforeunload = (e: Event): void => {
+  console.log(`onbeforeunload 函数（imported）收到 ${e.type} 事件`);
+};
+
+globalThis.onunload = (e: Event): void => {
+  console.log(`onunload 函数（imported）收到 ${e.type} 事件`);
+};
+
+console.log(&quot;导入脚本日志&quot;);
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div><p>关于此示例的几点说明：</p>
+<ul>
+<li><code>addEventListener</code> 和 <code>onload</code>/<code>onunload</code> 带有 <code>globalThis</code> 前缀，但也可以使用 <code>self</code> 或不加前缀。
+<a href="https://docs.deno.com/lint/rules/no-window-prefix">不建议使用 <code>window</code> 作为前缀</a>。</li>
+<li>可以使用 <code>addEventListener</code> 和/或 <code>onload</code>/<code>onunload</code> 定义事件处理器。
+二者有重大区别，运行示例如下：</li>
+</ul>
+<div class="relative"><pre><code class="highlight notranslate language-shell">$ deno run main.ts
+导入脚本日志
+主脚本日志
+事件处理器（imported）收到 load 事件
+事件处理器（main）收到 load 事件
+onload 函数（main）收到 load 事件
+事件处理器（imported）收到 onbeforeunload 事件
+事件处理器（main）收到 onbeforeunload 事件
+onbeforeunload 函数（main）收到 onbeforeunload 事件
+事件处理器（imported）收到 unload 事件
+事件处理器（main）收到 unload 事件
+onunload 函数（main）收到 unload 事件
+</code></pre>
+
+      <button id="copy-button-814" class="copyButton" data-copy="$ deno run main.ts
+导入脚本日志
+主脚本日志
+事件处理器（imported）收到 load 事件
+事件处理器（main）收到 load 事件
+onload 函数（main）收到 load 事件
+事件处理器（imported）收到 onbeforeunload 事件
+事件处理器（main）收到 onbeforeunload 事件
+onbeforeunload 函数（main）收到 onbeforeunload 事件
+事件处理器（imported）收到 unload 事件
+事件处理器（main）收到 unload 事件
+onunload 函数（main）收到 unload 事件
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>通过 <code>addEventListener</code> 添加的所有监听器都会执行，但 <code>main.ts</code> 中定义的 <code>onload</code>、
+<code>onbeforeunload</code> 和 <code>onunload</code> 会覆盖 <code>imported.ts</code> 中的。</p>
+<p>换言之，<code>addEventListener</code> 可以注册多个 <code>&quot;load&quot;</code> 或 <code>&quot;unload&quot;</code> 事件处理器，
+但 <code>&lt;last_defined_onload&gt;</code>、<code>onbeforeunload</code> 和 <code>onunload</code> 事件处理器只会执行最后一个定义的。
+出于此原因，建议优先使用 <code>addEventListener</code>。</p>
+<h3 id="beforeunload" tabindex="-1">beforeunload <a class="header-anchor" href="#beforeunload"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-js"><span class="token comment">// beforeunload.js</span>
+<span class="token keyword">let</span> count <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"beforeunload"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"即将退出..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  count<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+globalThis<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">"unload"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">e</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"退出中"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+count<span class="token operator">++</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-824" class="copyButton" data-copy="// beforeunload.js
+let count = 0;
+
+console.log(count);
+
+globalThis.addEventListener(&quot;beforeunload&quot;, (e) => {
+  console.log(&quot;即将退出...&quot;);
+  count++;
+});
+
+globalThis.addEventListener(&quot;unload&quot;, (e) => {
+  console.log(&quot;退出中&quot;);
+});
+
+count++;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></article><div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 sm:p-8 bg-blue-splash dark:bg-deploy-900 rounded-md mx-auto"><h2 class="text-xl mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/api/deno/index.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value=""><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn  mt-4">发送反馈给我们</button></div></div><a rel="" class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/privacy_policy">隐私政策</a></form></div></div></section></div></main></div><footer class="text-smaller bg-gray-50 dark:bg-gray-950 p-4 pt-12 sm:px-8 border-t border-t-foreground-tertiary"><nav class="flex flex-col gap-x-4 gap-y-12 max-w-7xl md:flex-row md:flex-wrap md:justify-between md:w-full md:gap-y-8 md:mx-auto"><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">Deno 文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/runtime/">Deno 运行时</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/examples/">示例</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://jsr.io/@std">标准库</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/api/deno/~/Deno">Deno API Reference</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">服务文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/">Deno Deploy </a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/classic/">Deno Deploy Classic</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/subhosting/manual/">Deno 子托管</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">社区</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">Discord</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland">GitHub</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://bsky.app/profile/deno.land">Bluesky</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://fosstodon.org/@deno_land">Mastodon</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.news/">Newsletter</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">帮助与反馈</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">社区支持</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://denostatus.com">部署系统状态</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">公司</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/">Deno Website</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/blog">Blog</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://merch.deno.com/">周边商品</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/privacy_policy">Privacy Policy</a></li></ul></section></nav><p class="m-0 mt-16 mx-auto text-center text-xs text-foreground-secondary"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></body></html>

@@ -1,0 +1,810 @@
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>通过 CLI 管理 - Deno 中文文档</title><meta name="description" content="如何使用 Deno CLI 管理 Deno Sandbox。"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/style.css"><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="me" href="https://fosstodon.org/@deno_land"><meta name="twitter:title" content="通过 CLI 管理"><meta name="twitter:description" content="如何使用 Deno CLI 管理 Deno Sandbox。"><meta name="twitter:image" content="https://docs.deno.com/sandbox/cli/index.png"><meta name="twitter:image:alt" content="如何使用 Deno CLI 管理 Deno Sandbox。"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@deno_land"><meta property="og:title" content="通过 CLI 管理"><meta property="og:description" content="如何使用 Deno CLI 管理 Deno Sandbox。"><meta property="og:image" content="https://docs.deno.com/sandbox/cli/index.png"><meta property="og:image:alt" content="如何使用 Deno CLI 管理 Deno Sandbox。"><meta property="og:type" content="article"><meta property="og:site_name" content="Deno"><meta property="og:locale" content="en_US"><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"><script type="module" defer src="/script.js"></script><script type="module" defer src="/js/main.js"></script><script type="module" defer src="/js/lint_rules.js"></script><script type="module" defer src="/js/copy.js"></script><script type="module" defer src="/js/tabs.js"></script><script type="module" defer src="/js/feedback.js"></script><script type="module" defer src="/js/search.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"></head><body data-services-page><a href="#content" class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]">Skip to main content</a><header class="w-full h-auto sticky top-0 z-[100] bg-background-raw "><div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0"><a href="https://deno.com" title="Deno main website" class="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"><svg width="100%" height="100%" viewBox="0 0 1025 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" class="" data-component="logo"><path id="background" d="M28.829,227.937c-8.871,-19.143 -13.822,-40.465 -13.822,-62.935c-0,-5.815 0.332,-11.554 0.977,-17.197c0.655,-5.703 1.626,-11.299 2.893,-16.773c7.12,-30.704 23.68,-57.808 46.452,-78.082c19.127,-17.006 42.558,-29.14 68.244,-34.64c10.137,-2.165 20.651,-3.304 31.43,-3.304c3.778,0.004 7.583,0.149 11.411,0.441c18.154,1.386 35.309,5.956 50.959,13.121c12.625,5.786 24.31,13.274 34.762,22.169c26.253,22.364 44.562,53.517 50.651,88.476c1.455,8.379 2.213,16.996 2.213,25.789c-0.003,3.784 -0.149,7.595 -0.442,11.429c-1.106,14.489 -4.241,28.342 -9.104,41.302c-6.788,18.051 -16.959,34.452 -29.738,48.428c-16.621,16.971 -37.743,24.523 -55.384,24.209c-12.828,-0.229 -25.379,-5.333 -34.052,-12.801c-12.39,-10.669 -17.394,-22.865 -19.11,-36.474c-0.426,-3.383 -0.176,-12.601 1.585,-18.984c1.312,-4.758 4.64,-13.946 9.507,-17.965c-5.693,-2.452 -13.021,-7.792 -15.331,-10.355c-0.568,-0.63 -0.494,-1.617 0.014,-2.296c0.509,-0.678 1.4,-0.946 2.199,-0.659c4.895,1.68 10.856,3.337 17.142,4.389c8.267,1.382 18.548,3.122 28.963,3.634c25.395,1.247 51.921,-10.151 60.154,-32.83c8.232,-22.679 5.038,-45.111 -24.496,-58.566c-29.535,-13.456 -43.178,-29.455 -67.041,-39.104c-15.587,-6.303 -32.935,-2.561 -50.746,7.282c-47.974,26.512 -90.955,110.279 -71.142,187.887c0.283,1.062 -0.195,2.18 -1.158,2.709c-0.903,0.495 -2.013,0.354 -2.761,-0.331c-5.766,-6.336 -10.998,-13.166 -15.623,-20.421c-3.578,-5.614 -6.79,-11.475 -9.606,-17.548Z" style="fill: var(--logoColor);"></path><path id="outline" d="M172.67,0.181c90.968,4.232 161.386,81.521 157.155,172.489c-4.232,90.968 -81.522,161.385 -172.489,157.153c-90.968,-4.231 -161.386,-81.52 -157.155,-172.487c4.232,-90.968 81.521,-161.386 172.489,-157.155Zm38.578,198.678c-10.415,-0.512 -20.696,-2.252 -28.963,-3.634c-6.286,-1.052 -12.247,-2.709 -17.142,-4.389c-0.799,-0.287 -1.69,-0.019 -2.199,0.659c-0.508,0.679 -0.582,1.666 -0.014,2.296c2.31,2.563 9.638,7.903 15.331,10.355c-4.867,4.019 -8.195,13.207 -9.507,17.965c-1.761,6.383 -2.011,15.601 -1.585,18.984c1.716,13.609 6.72,25.805 19.11,36.474c8.673,7.468 21.224,12.572 34.052,12.801c17.702,0.315 38.909,-7.29 55.556,-24.385c21.765,-23.861 36.023,-54.887 38.67,-89.554c6.303,-82.546 -55.596,-154.681 -138.143,-160.984c-82.545,-6.303 -154.68,55.597 -160.983,138.143c-3.264,42.749 11.764,82.706 38.481,112.17c0.744,0.809 1.944,1.006 2.907,0.477c0.963,-0.529 1.441,-1.647 1.158,-2.709c-19.813,-77.608 23.168,-161.375 71.142,-187.887c17.811,-9.843 35.159,-13.585 50.746,-7.282c23.863,9.649 37.506,25.648 67.041,39.104c29.534,13.455 32.728,35.887 24.496,58.566c-8.233,22.679 -34.759,34.077 -60.154,32.83Z" style="fill: var(--outlineColor);"></path><path id="logotype" d="M694.596,164.68c-0,4.838 -0,11.794 -0.909,14.213l-103.727,0c4.837,17.542 18.749,28.431 37.8,28.431c15.728,0.302 27.219,-6.654 35.383,-16.636l25.705,23.894c-12.7,16.028 -34.171,27.822 -63.809,27.822c-43.243,-0 -75.904,-30.242 -75.904,-76.513c-0,-44.756 31.148,-75.907 73.184,-75.907c43.243,-0 72.277,31.453 72.277,74.696Zm-71.07,-39.918c-16.025,-0 -28.729,8.771 -33.265,25.706l65.02,-0c-3.932,-15.422 -14.515,-25.706 -31.755,-25.706Zm175.096,-34.778c31.758,-0 53.829,16.938 53.829,62.298l0,87.703l-39.615,-0l0,-77.724c0,-28.124 -9.976,-36.892 -28.427,-36.892c-19.953,0 -33.564,13.908 -33.564,40.221l-0,74.395l-39.617,-0l0,-147.582l39.617,-0l-0,19.055l0.602,0c12.095,-14.213 29.037,-21.474 47.175,-21.474Zm146.977,152.42c-46.871,-0 -78.324,-32.058 -78.324,-76.21c-0,-44.153 31.453,-76.21 78.324,-76.21c45.971,-0 78.628,30.849 78.628,76.21c0,45.36 -32.657,76.21 -78.628,76.21Zm-0,-35.386c21.469,0 38.411,-16.934 38.411,-40.824c-0,-24.192 -16.332,-40.825 -38.411,-40.825c-22.986,0 -38.404,17.539 -38.404,40.825c0,22.984 16.028,40.824 38.404,40.824Zm-540.473,32.967l0,-150.001l54.227,-0c47.449,-0 77.952,30.845 77.952,75.212c-0,44.154 -28.597,74.789 -77.316,74.789l-54.863,-0Zm38.976,-35.705l13.133,-0c22.878,-0 37.917,-17.535 37.917,-39.084c-0,-22.395 -15.251,-39.507 -34.952,-39.507l-16.098,-0l0,78.591Z" style="fill: var(--textColor);"></path><path id="eye" d="M159.634,78.772c8.092,-0.634 15.152,6.272 16.369,15.457c1.624,12.235 -2.867,24.874 -17.633,25.165c-12.614,0.252 -16.436,-12.469 -15.6,-20.175c0.83,-7.706 7.182,-19.687 16.864,-20.447Z" style="fill: var(--eyeColor);"></path><style>
+        [data-component="logo"] {
+          --logoColor: #000;
+          --textColor: #000;
+          --eyeColor: #000;
+          --outlineColor: transparent;
+
+          height: 100%;
+          width: auto;
+        }
+        .dark [data-component="logo"] {
+          --textColor: #fff;
+          --outlineColor: #fff;
+        }
+        @keyframes blink {
+          0%, 100% {
+            transform: scaleY(1);
+          }
+          50% {
+            transform: scaleY(0.15);
+          }
+        }
+        [data-component="logo"]:hover,
+        a:focus [data-component="logo"] {
+          #eye {
+            transform-origin: 50% 30%;
+            animation: blink 0.15s cubic-bezier(0.5, 0, 0.5, 1);
+          }
+        }
+        </style></svg></a><nav id="main-nav" class="flex h-full items-center row-start-2 col-span-2 md:row-auto md:col-auto -mx-4 md:mx-0 overflow-x-auto md:overflow-clip"><a href="/runtime/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">文档</a><a href="/api/deno/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">API 参考</a><a href="/examples/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">示例</a><a href="/services/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200 font-bold text-gray-800 bg-header-highlight services" data-active aria-current="location"><div id="current-nav-item" class="absolute inset-0 bg-header-highlight -z-10 transition-transform duration-200 easing-[cubic-bezier(0.5,0,0.5,1)] origin-left" style="--left: 0px; --scaleX: 1; transform: translateX(var(--left)) scaleX(var(--scaleX));"></div>服务</a></nav><div class="flex items-center gap-x-2 sm:gap-x-4 ml-auto w-full max-w-80"><div class="md:relative w-full"><div class="relative"><input type="search" placeholder="Search" id="orama-search-input" class="w-full min-w-24 rounded-lg placeholder:text-sm text-base leading-normal p-1 pl-8 border transition-all duration-150 text-foreground-primary border-foreground-secondary hover:bg-background-secondary focus:bg-background-secondary focus:outline-offset-1" style="background: url(/img/search.svg) no-repeat 0.5em 50%; background-size: 1.25em; background-color: var(--color-background-raw);"><kbd id="search-key" class="hidden xs:flex pointer-events-none absolute font-sans rounded-sm top-1 right-1 bottom-1 w-auto border-1 border-foreground-tertiary border-b-2 border-r-2 bg-background-primary text-foreground-secondary text-center text-xs font-bold p-2 items-center justify-center dark:bg-background-secondary dark:border-gray-700">⌘K</kbd><div id="orama-search-loading" class="absolute left-2 top-1/2 transform -translate-y-1/2 hidden bg-background-raw"><div class="animate-spin rounded-full h-4 w-4 border-2 border-transparent border-r-foreground-primary bg-background-raw"></div></div><div class="sr-only" aria-live="polite" id="orama-results-announcer"></div></div><div id="orama-search-results" class="absolute inset-2 left-2 right-2 h-[calc(100vh-8rem)] top-10 md:top-full md:left-auto md:right-0 mt-2 bg-background-raw border border-foreground-tertiary rounded-xl shadow-2xl z-50 md:max-h-128 overflow-hidden hidden md:min-w-160 max-w-2xl"><div id="orama-search-results-content" class="overflow-y-auto h-full"></div><div class="border-t border-foreground-tertiary bg-background-secondary px-4 py-2 sticky bottom-0"><div class="flex items-center gap-6 text-xs text-foreground-secondary"><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↑↓</span><span class="sr-only">Up or down to</span></kbd>navigate</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↵</span><span class="sr-only">Enter to</span></kbd>select</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">ESC</span><span class="sr-only">Escape to</span></kbd>close</span></div></div></div></div><button type="button" aria-label="toggle theme" class="shrink-0 h-9 aspect-square p-1 cursor-pointer rounded border border-transparent transition-colors duration-200 ease-in-out text-foreground-secondary hover:decoration-none hover:bg-background-secondary hover:border-background-tertiary flex flex-col items-center justify-start overflow-hidden" id="theme-toggle"><img src="/img/light.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><img src="/img/dark.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><span class="sr-only">Toggle Theme</span></button><button type="button" id="hamburger-button" class="h-8 w-auto py-2 px-0 flex flex-col justify-between rounded md:hidden" aria-pressed="false"><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--top"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-opacity hamburger-bar--middle"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--bottom"></div><span class="sr-only">Toggle navigation menu</span></button></div></div><nav class="flex items-center pl-4 bg-header-highlight z-10 h-[var(--subnav-height)] overflow-x-auto xlplus:pl-0"><ul class="flex w-full max-w-7xl mx-auto items-center gap-6"><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left "  href="/deploy/"><span>Deno Deploy</span></a></li><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left font-bold" data-active aria-current="location" href="/sandbox/"><span>Deno Sandbox</span></a></li><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left "  href="/deploy/classic/"><span>Deploy Classic</span></a></li><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left "  href="/subhosting/manual/"><span>Subhosting</span></a></li></ul></nav></header><div class="layout layout--three-column"><aside class="fixed transition-all duration-200 md:duration-0 easing-[cubic-bezier(0.165,0.84,0.44,1)] -translate-x-full z-50 w-full bg-background-raw opacity-0 p-4 pb-8 overflow-auto text-smaller md:sticky md:overflow-y-auto md:[scrollbar-width:thin] md:z-10 md:!translate-x-0 md:!opacity-100 md:p-0 md:pb-16 lg:border-r lg:border-r-foreground-tertiary lg:w-full sidebar-open:translate-x-0 sidebar-open:opacity-100
+         top-header-plus-subnav h-screen-minus-both" data-component="sidebar-nav" data-section="sandbox" id="nav" style="scrollbar-width: none;" tabIndex="-1"><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Sandbox</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/sandbox/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >About</a></li><li><a href="/sandbox/getting_started/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Getting started</a></li><li><a href="/sandbox/create/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Create a sandbox</a></li><li><a href="/sandbox/cli/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 bg-header-highlight border-foreground-secondary text-gray-800" data-active>Management via CLI</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Concepts</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/sandbox/expose_http/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Expose HTTP</a></li><li><a href="/sandbox/ssh/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >SSH</a></li><li><a href="/sandbox/apps/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Manage Deno Deploy apps</a></li><li><a href="/sandbox/volumes/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Volumes &amp; Snapshots</a></li><li><a href="/sandbox/timeouts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Timeouts</a></li><li><a href="/sandbox/security/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Security</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Reference</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="https://jsr.io/@deno/sandbox/doc/~/Sandbox" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >SDK Reference</a></li><li><a href="https://console.deno.com/api/v2/docs" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >REST API</a></li><li><a href="/runtime/reference/cli/sandbox/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Sandbox CLI commands</a></li><li><a href="/examples/#sandbox" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Examples</a></li><li><a href="https://deno.com/deploy/sandbox#sandbox-pricing" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Pricing</a></li></ul></nav></aside><main id="content" class="content "><div class="w-full"><article class="mx-auto"><details class="block lg:hidden my-4 bg-foreground-quaternary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-background-tertiary">On this page</summary><ul class="p-4 pt-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建你的第一个沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9F%A5%E7%9C%8B%E4%BD%A0%E7%9A%84-deno-sandbox" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">查看你的 Deno Sandbox </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">远程运行命令 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">传输文件 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%83%A8%E7%BD%B2%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">部署沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%AE%A1%E7%90%86%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">管理卷 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建卷 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出卷 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除卷 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%AE%A1%E7%90%86%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">管理快照 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建快照 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出快照 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除快照 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">切换组织 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%AE%BF%E9%97%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">交互式访问 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%AE%A1%E7%90%86%E6%B2%99%E7%AE%B1%E8%B6%85%E6%97%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">管理沙箱超时 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BB%B6%E9%95%BF%E6%B2%99%E7%AE%B1%E6%97%B6%E9%95%BF" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">延长沙箱时长 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B8%85%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">清理与终止 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%B8%B8%E8%A7%81%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">常见工作流程 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">开发与测试 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据处理 </a></li></ul></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-6 sm:mt-6"><h1>通过 CLI 管理</h1><p>Deno CLI 包含了内置命令用于管理你的 Deno Sandbox 实例，允许你从终端创建、控制并与它们交互。</p>
+<p>这种集成使 Deno Sandbox 的管理在你现有的 Deno 工作流程中显得自然流畅。</p>
+<h2 id="%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%B2%99%E7%AE%B1" tabindex="-1">创建你的第一个沙箱 <a class="header-anchor" href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%B2%99%E7%AE%B1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>最简单的入门方法是使用 <code>deno sandbox create</code>。默认情况下，这会创建一个交互式会话沙箱，准备好时会自动打开 SSH 连接：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create
+</code></pre>
+
+      <button id="copy-button-12" class="copyButton" data-copy="deno sandbox create
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果你的系统没有可用的 SSH，则会显示连接信息。退出会话时，沙箱会自动清理自身。</p>
+<p>在开发工作中，你通常会想把项目文件复制到沙箱里。<code>--copy</code> 选项会上传文件到沙箱内部的 <code>/app</code> 目录：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--copy</span> ./my-project
+</code></pre>
+
+      <button id="copy-button-19" class="copyButton" data-copy="deno sandbox create --copy ./my-project
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你可以在创建时复制多个目录：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--copy</span> ./src <span class="token parameter variable">--copy</span> ./config
+</code></pre>
+
+      <button id="copy-button-23" class="copyButton" data-copy="deno sandbox create --copy ./src --copy ./config
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果你需要沙箱运行时间超过单次会话，可以用 <code>--timeout</code> 指定超时时间：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--timeout</span> 2m
+</code></pre>
+
+      <button id="copy-button-27" class="copyButton" data-copy="deno sandbox create --timeout 2m
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你也可以用自定义的内存限制创建沙箱：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--memory</span> 2gib
+</code></pre>
+
+      <button id="copy-button-31" class="copyButton" data-copy="deno sandbox create --memory 2gib
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>若要公开 HTTP 端口以供 Web 应用访问：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create --expose-http <span class="token number">3000</span>
+</code></pre>
+
+      <button id="copy-button-35" class="copyButton" data-copy="deno sandbox create --expose-http 3000
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你可以使用 <code>--volume</code> 标志挂载持久卷到沙箱：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--volume</span> my-volume:/data
+</code></pre>
+
+      <button id="copy-button-39" class="copyButton" data-copy="deno sandbox create --volume my-volume:/data
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>创建沙箱并立即运行命令：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token function">ls</span> /
+</code></pre>
+
+      <button id="copy-button-43" class="copyButton" data-copy="deno sandbox create ls /
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这在构建和测试项目时非常有用。你可以一条命令复制文件并运行构建流程：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--copy</span> ./app <span class="token parameter variable">--cwd</span> /app <span class="token string">"npm i &amp;&amp; npm start"</span>
+</code></pre>
+
+      <button id="copy-button-47" class="copyButton" data-copy="deno sandbox create --copy ./app --cwd /app &quot;npm i && npm start&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>对于网页应用，你可以公开端口以访问运行服务：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create --expose-http <span class="token number">3000</span> <span class="token parameter variable">--copy</span> ./web-app <span class="token parameter variable">--cwd</span> /app <span class="token string">"npm i &amp;&amp; npm run dev"</span>
+</code></pre>
+
+      <button id="copy-button-51" class="copyButton" data-copy="deno sandbox create --expose-http 3000 --copy ./web-app --cwd /app &quot;npm i && npm run dev&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>复杂的工作流可以写成带引号的命令链：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--copy</span> ./app <span class="token parameter variable">--cwd</span> /app <span class="token string">"npm install &amp;&amp; npm test &amp;&amp; npm run build"</span>
+</code></pre>
+
+      <button id="copy-button-55" class="copyButton" data-copy="deno sandbox create --copy ./app --cwd /app &quot;npm install && npm test && npm run build&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E6%9F%A5%E7%9C%8B%E4%BD%A0%E7%9A%84-deno-sandbox" tabindex="-1">查看你的 Deno Sandbox <a class="header-anchor" href="#%E6%9F%A5%E7%9C%8B%E4%BD%A0%E7%9A%84-deno-sandbox"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>使用 <code>deno sandbox list</code>（或 <code>deno sandbox ls</code>）查看组织中所有的沙箱：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">$ deno sandbox list
+ID                             CREATED                  REGION   STATUS    UPTIME
+sbx_ord_1at5nn58e77rtd11e3k3   <span class="token number">2026</span>-01-30 <span class="token number">18</span>:33:40.79   ord      running   <span class="token number">26</span>.9s
+sbx_ord_fwnygdsnszfe5ghafyx8   <span class="token number">2026</span>-01-30 <span class="token number">18</span>:31:40.90   ord      stopped   <span class="token number">5</span>.1s
+sbx_ord_4xqcyahb8ye2r5a643de   <span class="token number">2026</span>-01-30 <span class="token number">18</span>:29:59.10   ord      stopped   <span class="token number">9</span>.4s
+</code></pre>
+
+      <button id="copy-button-62" class="copyButton" data-copy="$ deno sandbox list
+ID                             CREATED                  REGION   STATUS    UPTIME
+sbx_ord_1at5nn58e77rtd11e3k3   2026-01-30 18:33:40.79   ord      running   26.9s
+sbx_ord_fwnygdsnszfe5ghafyx8   2026-01-30 18:31:40.90   ord      stopped   5.1s
+sbx_ord_4xqcyahb8ye2r5a643de   2026-01-30 18:29:59.10   ord      stopped   9.4s
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这显示了每个沙箱的唯一 ID（你用它来配合其他命令），创建时间，区域，当前状态，和运行时长。</p>
+<h2 id="%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4" tabindex="-1">远程运行命令 <a class="header-anchor" href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno sandbox exec</code> 命令让你在任意运行中的沙箱里执行单条命令，而无需打开交互式会话。非常适合自动化、CI/CD 管道或快速一次性任务：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token function">ls</span> <span class="token parameter variable">-la</span>
+</code></pre>
+
+      <button id="copy-button-72" class="copyButton" data-copy="deno sandbox exec sbx_ord_abc123def456 ls -la
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>大多数时候，你会想在你所复制文件所在的 <code>/app</code> 目录操作。用 <code>--cwd</code> 指定工作目录：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token parameter variable">--cwd</span> /app <span class="token function">npm</span> <span class="token function">install</span>
+</code></pre>
+
+      <button id="copy-button-76" class="copyButton" data-copy="deno sandbox exec sbx_ord_abc123def456 --cwd /app npm install
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>用于脚本或自动化时，用 <code>--quiet</code> 抑制命令输出：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token parameter variable">--quiet</span> <span class="token parameter variable">--cwd</span> /app <span class="token function">npm</span> <span class="token builtin class-name">test</span>
+</code></pre>
+
+      <button id="copy-button-80" class="copyButton" data-copy="deno sandbox exec sbx_ord_abc123def456 --quiet --cwd /app npm test
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你也可以通过引号把整条复杂命令链传入：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token parameter variable">--cwd</span> /app <span class="token string">"npm install &amp;&amp; npm test"</span>
+</code></pre>
+
+      <button id="copy-button-84" class="copyButton" data-copy="deno sandbox exec sbx_ord_abc123def456 --cwd /app &quot;npm install && npm test&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>exec 命令自然支持 Unix 管道及标准输入/输出。你可以将沙箱命令输出接入本地工具：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token string">'ls -lh /'</span> <span class="token operator">|</span> <span class="token function">wc</span> <span class="token parameter variable">-l</span>
+</code></pre>
+
+      <button id="copy-button-88" class="copyButton" data-copy="deno sandbox exec sbx_ord_abc123def456 &apos;ls -lh /&apos; | wc -l
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>或将本地数据通过管道输入沙箱进程用于处理：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token function">cat</span> large-dataset.csv <span class="token operator">|</span> deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token parameter variable">--cwd</span> /app <span class="token string">"deno run -A main.ts"</span>
+</code></pre>
+
+      <button id="copy-button-92" class="copyButton" data-copy="cat large-dataset.csv | deno sandbox exec sbx_ord_abc123def456 --cwd /app &quot;deno run -A main.ts&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这样方便你将沙箱处理集成至更大规模的 Unix 工作流和数据管道中。</p>
+<h2 id="%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6" tabindex="-1">传输文件 <a class="header-anchor" href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>虽然你可以在创建沙箱时复制文件，但后续你可能需要更新或检索文件。<code>deno sandbox copy</code> 命令（也能用 <code>deno sandbox cp</code>）支持双向文件传输：从本机到沙箱，从沙箱到本机，甚至沙箱之间。</p>
+<p>将文件从本地复制到沙箱：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy ./app.js sbx_ord_abc123def456:/app/
+</code></pre>
+
+      <button id="copy-button-105" class="copyButton" data-copy="deno sandbox copy ./app.js sbx_ord_abc123def456:/app/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>从沙箱检索文件到本地：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy sbx_ord_abc123def456:/app/results.json ./output/
+</code></pre>
+
+      <button id="copy-button-109" class="copyButton" data-copy="deno sandbox copy sbx_ord_abc123def456:/app/results.json ./output/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在不同沙箱间复制文件：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy sbx_ord_abc123def456:/app/data.csv sbx_ord_xyz789uvw012:/app/input/
+</code></pre>
+
+      <button id="copy-button-113" class="copyButton" data-copy="deno sandbox copy sbx_ord_abc123def456:/app/data.csv sbx_ord_xyz789uvw012:/app/input/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你可以用通配符从沙箱复制多个文件：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy sbx_ord_abc123def456:/app/*.json ./config/
+deno sandbox copy sbx_ord_abc123def456:/app/logs/*.log ./logs/
+</code></pre>
+
+      <button id="copy-button-117" class="copyButton" data-copy="deno sandbox copy sbx_ord_abc123def456:/app/*.json ./config/
+deno sandbox copy sbx_ord_abc123def456:/app/logs/*.log ./logs/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>还能一次复制多个文件和目录：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy ./src/ ./package.json sbx_ord_abc123def456:/app/
+</code></pre>
+
+      <button id="copy-button-121" class="copyButton" data-copy="deno sandbox copy ./src/ ./package.json sbx_ord_abc123def456:/app/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>目标路径可定制，用以在沙箱中合理安排文件：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy ./frontend sbx_ord_abc123def456:/app/web/
+</code></pre>
+
+      <button id="copy-button-125" class="copyButton" data-copy="deno sandbox copy ./frontend sbx_ord_abc123def456:/app/web/
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E9%83%A8%E7%BD%B2%E6%B2%99%E7%AE%B1" tabindex="-1">部署沙箱 <a class="header-anchor" href="#%E9%83%A8%E7%BD%B2%E6%B2%99%E7%AE%B1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>你可以使用 <code>deno sandbox deploy</code> 命令，将正在运行的沙箱部署为 Deno Deploy 应用：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox deploy sbx_ord_abc123def456 my-app
+</code></pre>
+
+      <button id="copy-button-132" class="copyButton" data-copy="deno sandbox deploy sbx_ord_abc123def456 my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>默认部署到预览版本。若要直接部署到生产：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox deploy <span class="token parameter variable">--prod</span> sbx_ord_abc123def456 my-app
+</code></pre>
+
+      <button id="copy-button-136" class="copyButton" data-copy="deno sandbox deploy --prod sbx_ord_abc123def456 my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>可指定自定义工作目录和入口点：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox deploy <span class="token parameter variable">--cwd</span> /app <span class="token parameter variable">--entrypoint</span> main.ts sbx_ord_abc123def456 my-app
+</code></pre>
+
+      <button id="copy-button-140" class="copyButton" data-copy="deno sandbox deploy --cwd /app --entrypoint main.ts sbx_ord_abc123def456 my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>给入口脚本传递参数：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox deploy <span class="token parameter variable">--args</span> <span class="token parameter variable">--port</span> <span class="token number">8080</span> sbx_ord_abc123def456 my-app
+</code></pre>
+
+      <button id="copy-button-144" class="copyButton" data-copy="deno sandbox deploy --args --port 8080 sbx_ord_abc123def456 my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E7%AE%A1%E7%90%86%E5%8D%B7" tabindex="-1">管理卷 <a class="header-anchor" href="#%E7%AE%A1%E7%90%86%E5%8D%B7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>沙箱系统支持持久卷，用于存储需要跨沙箱实例保存的数据。使用 <code>deno sandbox volumes</code> 命令进行管理。</p>
+<h3 id="%E5%88%9B%E5%BB%BA%E5%8D%B7" tabindex="-1">创建卷 <a class="header-anchor" href="#%E5%88%9B%E5%BB%BA%E5%8D%B7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>创建带有名称、容量及区域的卷：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox volumes create my-volume <span class="token parameter variable">--capacity</span> 10gb <span class="token parameter variable">--region</span> ord
+</code></pre>
+
+      <button id="copy-button-157" class="copyButton" data-copy="deno sandbox volumes create my-volume --capacity 10gb --region ord
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%97%E5%87%BA%E5%8D%B7" tabindex="-1">列出卷 <a class="header-anchor" href="#%E5%88%97%E5%87%BA%E5%8D%B7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>列出组织内所有卷：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox volumes list
+</code></pre>
+
+      <button id="copy-button-164" class="copyButton" data-copy="deno sandbox volumes list
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你也可以搜索特定的卷：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox volumes list my-volume
+</code></pre>
+
+      <button id="copy-button-168" class="copyButton" data-copy="deno sandbox volumes list my-volume
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%A0%E9%99%A4%E5%8D%B7" tabindex="-1">删除卷 <a class="header-anchor" href="#%E5%88%A0%E9%99%A4%E5%8D%B7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>不再需要某卷时删除它：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox volumes delete my-volume
+</code></pre>
+
+      <button id="copy-button-175" class="copyButton" data-copy="deno sandbox volumes delete my-volume
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E7%AE%A1%E7%90%86%E5%BF%AB%E7%85%A7" tabindex="-1">管理快照 <a class="header-anchor" href="#%E7%AE%A1%E7%90%86%E5%BF%AB%E7%85%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>快照是从卷创建的只读镜像。你可以用它们预装软件一次，然后让新沙箱迅速启动并拥有准备好的环境。完整工作流请参考<a href="/sandbox/volumes/">卷与快照</a>。</p>
+<h3 id="%E5%88%9B%E5%BB%BA%E5%BF%AB%E7%85%A7" tabindex="-1">创建快照 <a class="header-anchor" href="#%E5%88%9B%E5%BB%BA%E5%BF%AB%E7%85%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>从已有卷创建快照：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox snapshots create my-volume my-snapshot
+</code></pre>
+
+      <button id="copy-button-188" class="copyButton" data-copy="deno sandbox snapshots create my-volume my-snapshot
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你也可以用 <code>volumes snapshot</code> 命令：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox volumes snapshot my-volume my-snapshot
+</code></pre>
+
+      <button id="copy-button-192" class="copyButton" data-copy="deno sandbox volumes snapshot my-volume my-snapshot
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%97%E5%87%BA%E5%BF%AB%E7%85%A7" tabindex="-1">列出快照 <a class="header-anchor" href="#%E5%88%97%E5%87%BA%E5%BF%AB%E7%85%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>列出组织内所有快照：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">$ deno sandbox snapshots list
+ID                             SLUG          REGION   ALLOCATED    BOOTABLE
+snp_ord_spmbe47dysccpy277ma6   my-snapshot   ord      <span class="token number">217.05</span> MiB   TRUE
+</code></pre>
+
+      <button id="copy-button-199" class="copyButton" data-copy="$ deno sandbox snapshots list
+ID                             SLUG          REGION   ALLOCATED    BOOTABLE
+snp_ord_spmbe47dysccpy277ma6   my-snapshot   ord      217.05 MiB   TRUE
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>可以搜索特定快照：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox snapshots list my-snapshot
+</code></pre>
+
+      <button id="copy-button-203" class="copyButton" data-copy="deno sandbox snapshots list my-snapshot
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%A0%E9%99%A4%E5%BF%AB%E7%85%A7" tabindex="-1">删除快照 <a class="header-anchor" href="#%E5%88%A0%E9%99%A4%E5%BF%AB%E7%85%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>不再需要快照时删除它：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox snapshots delete my-snapshot
+</code></pre>
+
+      <button id="copy-button-210" class="copyButton" data-copy="deno sandbox snapshots delete my-snapshot
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87" tabindex="-1">切换组织 <a class="header-anchor" href="#%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><code>deno sandbox switch</code> 命令允许你在配置中切换不同的组织：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox switch
+</code></pre>
+
+      <button id="copy-button-217" class="copyButton" data-copy="deno sandbox switch
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这在管理多个组织时非常实用。</p>
+<h2 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%AE%BF%E9%97%AE" tabindex="-1">交互式访问 <a class="header-anchor" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%AE%BF%E9%97%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>当你需要在沙箱内交互式工作，比如编辑文件、调试问题或探索环境时，可以用 <code>deno sandbox ssh</code>：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token function">ssh</span> sbx_ord_abc123def456
+</code></pre>
+
+      <button id="copy-button-227" class="copyButton" data-copy="deno sandbox ssh sbx_ord_abc123def456
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这给你一个沙箱内部的完整 Linux shell，可以使用任何命令行工具，用 vim 或 nano 编辑文件，监视进程，安装额外软件等。断开连接后沙箱仍会继续运行，你可以稍后重新连接，或用其他命令远程操作。</p>
+<h2 id="%E7%AE%A1%E7%90%86%E6%B2%99%E7%AE%B1%E8%B6%85%E6%97%B6" tabindex="-1">管理沙箱超时 <a class="header-anchor" href="#%E7%AE%A1%E7%90%86%E6%B2%99%E7%AE%B1%E8%B6%85%E6%97%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E5%BB%B6%E9%95%BF%E6%B2%99%E7%AE%B1%E6%97%B6%E9%95%BF" tabindex="-1">延长沙箱时长 <a class="header-anchor" href="#%E5%BB%B6%E9%95%BF%E6%B2%99%E7%AE%B1%E6%97%B6%E9%95%BF"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>有时你可能需要更多时间来完成当前沙箱中的工作。<code>deno sandbox extend</code> 命令允许你在不中断正在运行的进程的情况下延长沙箱超时：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox extend sbx_ord_abc123def456 30m
+</code></pre>
+
+      <button id="copy-button-240" class="copyButton" data-copy="deno sandbox extend sbx_ord_abc123def456 30m
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>extend 命令与沙箱的任何状态无缝配合；无论你是 SSH 登录中、运行远程命令，还是有后台进程，都能保证所有活动连接和进程不中断，同时更新沙箱的过期时间。</p>
+<h3 id="%E6%B8%85%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2" tabindex="-1">清理与终止 <a class="header-anchor" href="#%E6%B8%85%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>当完成沙箱工作时，使用 <code>deno sandbox kill</code>（或 <code>deno sandbox rm</code>）终止它并释放资源：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token function">kill</span> sbx_ord_abc123def456
+</code></pre>
+
+      <button id="copy-button-250" class="copyButton" data-copy="deno sandbox kill sbx_ord_abc123def456
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这会立即停止沙箱内所有进程并释放资源。务必在终止沙箱前保存所有重要工作，因为沙箱内的所有数据都会丢失。</p>
+<h2 id="%E5%B8%B8%E8%A7%81%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" tabindex="-1">常见工作流程 <a class="header-anchor" href="#%E5%B8%B8%E8%A7%81%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95" tabindex="-1">开发与测试 <a class="header-anchor" href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>典型的开发流程是创建一个包含你的代码的沙箱，设置依赖，然后运行测试：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox create <span class="token parameter variable">--copy</span> ./my-app
+</code></pre>
+
+      <button id="copy-button-263" class="copyButton" data-copy="deno sandbox create --copy ./my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>创建后，使用返回的沙箱 ID 来设置并测试项目：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token parameter variable">--cwd</span> /app <span class="token function">npm</span> <span class="token function">install</span>
+deno sandbox <span class="token builtin class-name">exec</span> sbx_ord_abc123def456 <span class="token parameter variable">--cwd</span> /app <span class="token function">npm</span> <span class="token builtin class-name">test</span>
+</code></pre>
+
+      <button id="copy-button-267" class="copyButton" data-copy="deno sandbox exec sbx_ord_abc123def456 --cwd /app npm install
+deno sandbox exec sbx_ord_abc123def456 --cwd /app npm test
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>当你在本地有修改时，可以更新沙箱，完成后再取回生成文件：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy ./src/ sbx_ord_abc123def456:/app/src/
+deno sandbox copy sbx_ord_abc123def456:/app/build/ ./dist/
+deno sandbox <span class="token function">kill</span> sbx_ord_abc123def456
+</code></pre>
+
+      <button id="copy-button-271" class="copyButton" data-copy="deno sandbox copy ./src/ sbx_ord_abc123def456:/app/src/
+deno sandbox copy sbx_ord_abc123def456:/app/build/ ./dist/
+deno sandbox kill sbx_ord_abc123def456
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86" tabindex="-1">数据处理 <a class="header-anchor" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>针对需要获取结果的数据处理工作流，结合远程执行和 SSH 访问使用：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token assign-left variable">SANDBOX_ID</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>deno sandbox create <span class="token parameter variable">--timeout</span> 20m <span class="token parameter variable">--copy</span> ./data<span class="token variable">)</span></span>
+deno sandbox <span class="token builtin class-name">exec</span> <span class="token variable">$SANDBOX_ID</span> <span class="token parameter variable">--cwd</span> /app <span class="token string">"deno run -A main.ts"</span>
+</code></pre>
+
+      <button id="copy-button-278" class="copyButton" data-copy="SANDBOX_ID=$(deno sandbox create --timeout 20m --copy ./data)
+deno sandbox exec $SANDBOX_ID --cwd /app &quot;deno run -A main.ts&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>你也可以利用管道直接将数据流输入沙箱进程，适合大数据集或实时处理：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token assign-left variable">SANDBOX_ID</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>deno sandbox create <span class="token parameter variable">--timeout</span> 20m <span class="token parameter variable">--copy</span> ./processing-scripts<span class="token variable">)</span></span>
+<span class="token function">curl</span> <span class="token parameter variable">-s</span> https://api.example.com/data.json <span class="token operator">|</span> deno sandbox <span class="token builtin class-name">exec</span> <span class="token variable">$SANDBOX_ID</span> <span class="token parameter variable">--cwd</span> /app jq <span class="token string">'.items[] | select(.active)'</span>
+</code></pre>
+
+      <button id="copy-button-282" class="copyButton" data-copy="SANDBOX_ID=$(deno sandbox create --timeout 20m --copy ./processing-scripts)
+curl -s https://api.example.com/data.json | deno sandbox exec $SANDBOX_ID --cwd /app jq &apos;.items[] | select(.active)&apos;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>或者在管道中结合本地和远程处理：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token function">grep</span> <span class="token string">"ERROR"</span> /var/log/app.log <span class="token operator">|</span> deno sandbox <span class="token builtin class-name">exec</span> <span class="token variable">$SANDBOX_ID</span> <span class="token parameter variable">--cwd</span> /app <span class="token string">"deno run -A main.ts"</span> <span class="token operator">|</span> <span class="token function">sort</span> <span class="token operator">|</span> <span class="token function">uniq</span> <span class="token parameter variable">-c</span>
+</code></pre>
+
+      <button id="copy-button-286" class="copyButton" data-copy="grep &quot;ERROR&quot; /var/log/app.log | deno sandbox exec $SANDBOX_ID --cwd /app &quot;deno run -A main.ts&quot; | sort | uniq -c
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>要获取结果，复制生成文件回本地，再清理沙箱：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno sandbox copy <span class="token variable">$SANDBOX_ID</span>:/app/results/*.csv ./output/
+deno sandbox <span class="token function">kill</span> <span class="token variable">$SANDBOX_ID</span>
+</code></pre>
+
+      <button id="copy-button-290" class="copyButton" data-copy="deno sandbox copy $SANDBOX_ID:/app/results/*.csv ./output/
+deno sandbox kill $SANDBOX_ID
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></div></article><div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 sm:p-8 bg-blue-splash dark:bg-deploy-900 rounded-md mx-auto"><h2 class="text-xl mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/sandbox/cli.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value=""><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn  mt-4">发送反馈给我们</button></div></div><a rel="" class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/privacy_policy">隐私政策</a></form></div></div></section></div></main><ul class="toc-list hidden sticky p-4 pr-0 h-screen-minus-header overflow-y-auto border-l border-l-foreground-tertiary lg:block lg:w-full top-header-plus-subnav" id="toc"><div class="wwads-cn wwads-vertical max-w-[200px] my-4" data-id="354"></div><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建你的第一个沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9F%A5%E7%9C%8B%E4%BD%A0%E7%9A%84-deno-sandbox" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">查看你的 Deno Sandbox </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%BF%9C%E7%A8%8B%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">远程运行命令 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">传输文件 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%83%A8%E7%BD%B2%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">部署沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%AE%A1%E7%90%86%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">管理卷 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建卷 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出卷 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E5%8D%B7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除卷 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%AE%A1%E7%90%86%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">管理快照 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建快照 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出快照 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E5%BF%AB%E7%85%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除快照 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">切换组织 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E8%AE%BF%E9%97%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">交互式访问 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%AE%A1%E7%90%86%E6%B2%99%E7%AE%B1%E8%B6%85%E6%97%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">管理沙箱超时 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BB%B6%E9%95%BF%E6%B2%99%E7%AE%B1%E6%97%B6%E9%95%BF" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">延长沙箱时长 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B8%85%E7%90%86%E4%B8%8E%E7%BB%88%E6%AD%A2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">清理与终止 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%B8%B8%E8%A7%81%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">常见工作流程 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BC%80%E5%8F%91%E4%B8%8E%E6%B5%8B%E8%AF%95" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">开发与测试 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据处理 </a></li></ul></li></ul></div><footer class="text-smaller bg-gray-50 dark:bg-gray-950 p-4 pt-12 sm:px-8 border-t border-t-foreground-tertiary"><nav class="flex flex-col gap-x-4 gap-y-12 max-w-7xl md:flex-row md:flex-wrap md:justify-between md:w-full md:gap-y-8 md:mx-auto"><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">Deno 文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/runtime/">Deno 运行时</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/examples/">示例</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://jsr.io/@std">标准库</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/api/deno/~/Deno">Deno API Reference</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">服务文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/">Deno Deploy </a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/classic/">Deno Deploy Classic</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/subhosting/manual/">Deno 子托管</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">社区</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">Discord</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland">GitHub</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://bsky.app/profile/deno.land">Bluesky</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://fosstodon.org/@deno_land">Mastodon</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.news/">Newsletter</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">帮助与反馈</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">社区支持</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://denostatus.com">部署系统状态</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">公司</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/">Deno Website</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/blog">Blog</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://merch.deno.com/">周边商品</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/privacy_policy">Privacy Policy</a></li></ul></section></nav><p class="m-0 mt-16 mx-auto text-center text-xs text-foreground-secondary"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></body></html>

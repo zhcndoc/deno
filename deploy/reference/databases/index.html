@@ -1,0 +1,476 @@
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>数据库 - Deno 中文文档</title><meta name="description" content="连接到外部数据库实例，实现您的应用及其环境无缝集成。"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/style.css"><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="me" href="https://fosstodon.org/@deno_land"><meta name="twitter:title" content="数据库"><meta name="twitter:description" content="连接到外部数据库实例，实现您的应用及其环境无缝集成。"><meta name="twitter:image" content="https://docs.deno.com/deploy/reference/databases/index.png"><meta name="twitter:image:alt" content="连接到外部数据库实例，实现您的应用及其环境无缝集成。"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@deno_land"><meta property="og:title" content="数据库"><meta property="og:description" content="连接到外部数据库实例，实现您的应用及其环境无缝集成。"><meta property="og:image" content="https://docs.deno.com/deploy/reference/databases/index.png"><meta property="og:image:alt" content="连接到外部数据库实例，实现您的应用及其环境无缝集成。"><meta property="og:type" content="article"><meta property="og:site_name" content="Deno"><meta property="og:locale" content="en_US"><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"><script type="module" defer src="/script.js"></script><script type="module" defer src="/js/main.js"></script><script type="module" defer src="/js/lint_rules.js"></script><script type="module" defer src="/js/copy.js"></script><script type="module" defer src="/js/tabs.js"></script><script type="module" defer src="/js/feedback.js"></script><script type="module" defer src="/js/search.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"></head><body data-services-page><a href="#content" class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]">Skip to main content</a><header class="w-full h-auto sticky top-0 z-[100] bg-background-raw "><div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0"><a href="https://deno.com" title="Deno main website" class="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"><svg width="100%" height="100%" viewBox="0 0 1025 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" class="" data-component="logo"><path id="background" d="M28.829,227.937c-8.871,-19.143 -13.822,-40.465 -13.822,-62.935c-0,-5.815 0.332,-11.554 0.977,-17.197c0.655,-5.703 1.626,-11.299 2.893,-16.773c7.12,-30.704 23.68,-57.808 46.452,-78.082c19.127,-17.006 42.558,-29.14 68.244,-34.64c10.137,-2.165 20.651,-3.304 31.43,-3.304c3.778,0.004 7.583,0.149 11.411,0.441c18.154,1.386 35.309,5.956 50.959,13.121c12.625,5.786 24.31,13.274 34.762,22.169c26.253,22.364 44.562,53.517 50.651,88.476c1.455,8.379 2.213,16.996 2.213,25.789c-0.003,3.784 -0.149,7.595 -0.442,11.429c-1.106,14.489 -4.241,28.342 -9.104,41.302c-6.788,18.051 -16.959,34.452 -29.738,48.428c-16.621,16.971 -37.743,24.523 -55.384,24.209c-12.828,-0.229 -25.379,-5.333 -34.052,-12.801c-12.39,-10.669 -17.394,-22.865 -19.11,-36.474c-0.426,-3.383 -0.176,-12.601 1.585,-18.984c1.312,-4.758 4.64,-13.946 9.507,-17.965c-5.693,-2.452 -13.021,-7.792 -15.331,-10.355c-0.568,-0.63 -0.494,-1.617 0.014,-2.296c0.509,-0.678 1.4,-0.946 2.199,-0.659c4.895,1.68 10.856,3.337 17.142,4.389c8.267,1.382 18.548,3.122 28.963,3.634c25.395,1.247 51.921,-10.151 60.154,-32.83c8.232,-22.679 5.038,-45.111 -24.496,-58.566c-29.535,-13.456 -43.178,-29.455 -67.041,-39.104c-15.587,-6.303 -32.935,-2.561 -50.746,7.282c-47.974,26.512 -90.955,110.279 -71.142,187.887c0.283,1.062 -0.195,2.18 -1.158,2.709c-0.903,0.495 -2.013,0.354 -2.761,-0.331c-5.766,-6.336 -10.998,-13.166 -15.623,-20.421c-3.578,-5.614 -6.79,-11.475 -9.606,-17.548Z" style="fill: var(--logoColor);"></path><path id="outline" d="M172.67,0.181c90.968,4.232 161.386,81.521 157.155,172.489c-4.232,90.968 -81.522,161.385 -172.489,157.153c-90.968,-4.231 -161.386,-81.52 -157.155,-172.487c4.232,-90.968 81.521,-161.386 172.489,-157.155Zm38.578,198.678c-10.415,-0.512 -20.696,-2.252 -28.963,-3.634c-6.286,-1.052 -12.247,-2.709 -17.142,-4.389c-0.799,-0.287 -1.69,-0.019 -2.199,0.659c-0.508,0.679 -0.582,1.666 -0.014,2.296c2.31,2.563 9.638,7.903 15.331,10.355c-4.867,4.019 -8.195,13.207 -9.507,17.965c-1.761,6.383 -2.011,15.601 -1.585,18.984c1.716,13.609 6.72,25.805 19.11,36.474c8.673,7.468 21.224,12.572 34.052,12.801c17.702,0.315 38.909,-7.29 55.556,-24.385c21.765,-23.861 36.023,-54.887 38.67,-89.554c6.303,-82.546 -55.596,-154.681 -138.143,-160.984c-82.545,-6.303 -154.68,55.597 -160.983,138.143c-3.264,42.749 11.764,82.706 38.481,112.17c0.744,0.809 1.944,1.006 2.907,0.477c0.963,-0.529 1.441,-1.647 1.158,-2.709c-19.813,-77.608 23.168,-161.375 71.142,-187.887c17.811,-9.843 35.159,-13.585 50.746,-7.282c23.863,9.649 37.506,25.648 67.041,39.104c29.534,13.455 32.728,35.887 24.496,58.566c-8.233,22.679 -34.759,34.077 -60.154,32.83Z" style="fill: var(--outlineColor);"></path><path id="logotype" d="M694.596,164.68c-0,4.838 -0,11.794 -0.909,14.213l-103.727,0c4.837,17.542 18.749,28.431 37.8,28.431c15.728,0.302 27.219,-6.654 35.383,-16.636l25.705,23.894c-12.7,16.028 -34.171,27.822 -63.809,27.822c-43.243,-0 -75.904,-30.242 -75.904,-76.513c-0,-44.756 31.148,-75.907 73.184,-75.907c43.243,-0 72.277,31.453 72.277,74.696Zm-71.07,-39.918c-16.025,-0 -28.729,8.771 -33.265,25.706l65.02,-0c-3.932,-15.422 -14.515,-25.706 -31.755,-25.706Zm175.096,-34.778c31.758,-0 53.829,16.938 53.829,62.298l0,87.703l-39.615,-0l0,-77.724c0,-28.124 -9.976,-36.892 -28.427,-36.892c-19.953,0 -33.564,13.908 -33.564,40.221l-0,74.395l-39.617,-0l0,-147.582l39.617,-0l-0,19.055l0.602,0c12.095,-14.213 29.037,-21.474 47.175,-21.474Zm146.977,152.42c-46.871,-0 -78.324,-32.058 -78.324,-76.21c-0,-44.153 31.453,-76.21 78.324,-76.21c45.971,-0 78.628,30.849 78.628,76.21c0,45.36 -32.657,76.21 -78.628,76.21Zm-0,-35.386c21.469,0 38.411,-16.934 38.411,-40.824c-0,-24.192 -16.332,-40.825 -38.411,-40.825c-22.986,0 -38.404,17.539 -38.404,40.825c0,22.984 16.028,40.824 38.404,40.824Zm-540.473,32.967l0,-150.001l54.227,-0c47.449,-0 77.952,30.845 77.952,75.212c-0,44.154 -28.597,74.789 -77.316,74.789l-54.863,-0Zm38.976,-35.705l13.133,-0c22.878,-0 37.917,-17.535 37.917,-39.084c-0,-22.395 -15.251,-39.507 -34.952,-39.507l-16.098,-0l0,78.591Z" style="fill: var(--textColor);"></path><path id="eye" d="M159.634,78.772c8.092,-0.634 15.152,6.272 16.369,15.457c1.624,12.235 -2.867,24.874 -17.633,25.165c-12.614,0.252 -16.436,-12.469 -15.6,-20.175c0.83,-7.706 7.182,-19.687 16.864,-20.447Z" style="fill: var(--eyeColor);"></path><style>
+        [data-component="logo"] {
+          --logoColor: #000;
+          --textColor: #000;
+          --eyeColor: #000;
+          --outlineColor: transparent;
+
+          height: 100%;
+          width: auto;
+        }
+        .dark [data-component="logo"] {
+          --textColor: #fff;
+          --outlineColor: #fff;
+        }
+        @keyframes blink {
+          0%, 100% {
+            transform: scaleY(1);
+          }
+          50% {
+            transform: scaleY(0.15);
+          }
+        }
+        [data-component="logo"]:hover,
+        a:focus [data-component="logo"] {
+          #eye {
+            transform-origin: 50% 30%;
+            animation: blink 0.15s cubic-bezier(0.5, 0, 0.5, 1);
+          }
+        }
+        </style></svg></a><nav id="main-nav" class="flex h-full items-center row-start-2 col-span-2 md:row-auto md:col-auto -mx-4 md:mx-0 overflow-x-auto md:overflow-clip"><a href="/runtime/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">文档</a><a href="/api/deno/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">API 参考</a><a href="/examples/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">示例</a><a href="/services/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200 font-bold text-gray-800 bg-header-highlight services" data-active aria-current="location"><div id="current-nav-item" class="absolute inset-0 bg-header-highlight -z-10 transition-transform duration-200 easing-[cubic-bezier(0.5,0,0.5,1)] origin-left" style="--left: 0px; --scaleX: 1; transform: translateX(var(--left)) scaleX(var(--scaleX));"></div>服务</a></nav><div class="flex items-center gap-x-2 sm:gap-x-4 ml-auto w-full max-w-80"><div class="md:relative w-full"><div class="relative"><input type="search" placeholder="Search" id="orama-search-input" class="w-full min-w-24 rounded-lg placeholder:text-sm text-base leading-normal p-1 pl-8 border transition-all duration-150 text-foreground-primary border-foreground-secondary hover:bg-background-secondary focus:bg-background-secondary focus:outline-offset-1" style="background: url(/img/search.svg) no-repeat 0.5em 50%; background-size: 1.25em; background-color: var(--color-background-raw);"><kbd id="search-key" class="hidden xs:flex pointer-events-none absolute font-sans rounded-sm top-1 right-1 bottom-1 w-auto border-1 border-foreground-tertiary border-b-2 border-r-2 bg-background-primary text-foreground-secondary text-center text-xs font-bold p-2 items-center justify-center dark:bg-background-secondary dark:border-gray-700">⌘K</kbd><div id="orama-search-loading" class="absolute left-2 top-1/2 transform -translate-y-1/2 hidden bg-background-raw"><div class="animate-spin rounded-full h-4 w-4 border-2 border-transparent border-r-foreground-primary bg-background-raw"></div></div><div class="sr-only" aria-live="polite" id="orama-results-announcer"></div></div><div id="orama-search-results" class="absolute inset-2 left-2 right-2 h-[calc(100vh-8rem)] top-10 md:top-full md:left-auto md:right-0 mt-2 bg-background-raw border border-foreground-tertiary rounded-xl shadow-2xl z-50 md:max-h-128 overflow-hidden hidden md:min-w-160 max-w-2xl"><div id="orama-search-results-content" class="overflow-y-auto h-full"></div><div class="border-t border-foreground-tertiary bg-background-secondary px-4 py-2 sticky bottom-0"><div class="flex items-center gap-6 text-xs text-foreground-secondary"><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↑↓</span><span class="sr-only">Up or down to</span></kbd>navigate</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↵</span><span class="sr-only">Enter to</span></kbd>select</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">ESC</span><span class="sr-only">Escape to</span></kbd>close</span></div></div></div></div><button type="button" aria-label="toggle theme" class="shrink-0 h-9 aspect-square p-1 cursor-pointer rounded border border-transparent transition-colors duration-200 ease-in-out text-foreground-secondary hover:decoration-none hover:bg-background-secondary hover:border-background-tertiary flex flex-col items-center justify-start overflow-hidden" id="theme-toggle"><img src="/img/light.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><img src="/img/dark.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><span class="sr-only">Toggle Theme</span></button><button type="button" id="hamburger-button" class="h-8 w-auto py-2 px-0 flex flex-col justify-between rounded md:hidden" aria-pressed="false"><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--top"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-opacity hamburger-bar--middle"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--bottom"></div><span class="sr-only">Toggle navigation menu</span></button></div></div><nav class="flex items-center pl-4 bg-header-highlight z-10 h-[var(--subnav-height)] overflow-x-auto xlplus:pl-0"><ul class="flex w-full max-w-7xl mx-auto items-center gap-6"><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left font-bold" data-active aria-current="location" href="/deploy/"><span>Deno Deploy</span></a></li><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left "  href="/sandbox/"><span>Deno Sandbox</span></a></li><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left "  href="/deploy/classic/"><span>Deploy Classic</span></a></li><li><a class="whitespace-nowrap text-sm md:text-base p-0 text-gray-800 block relative after:absolute after:bottom-0 after:left-0 after:origin-right after:transition-transform after:scale-x-0 after:block after:w-full after:h-px after:bg-gray-800 hover:after:scale-x-100 hover:after:origin-left "  href="/subhosting/manual/"><span>Subhosting</span></a></li></ul></nav></header><div class="layout layout--three-column"><aside class="fixed transition-all duration-200 md:duration-0 easing-[cubic-bezier(0.165,0.84,0.44,1)] -translate-x-full z-50 w-full bg-background-raw opacity-0 p-4 pb-8 overflow-auto text-smaller md:sticky md:overflow-y-auto md:[scrollbar-width:thin] md:z-10 md:!translate-x-0 md:!opacity-100 md:p-0 md:pb-16 lg:border-r lg:border-r-foreground-tertiary lg:w-full sidebar-open:translate-x-0 sidebar-open:opacity-100
+         top-header-plus-subnav h-screen-minus-both" data-component="sidebar-nav" data-section="deploy" id="nav" style="scrollbar-width: none;" tabIndex="-1"><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Deno Deploy</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/deploy/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >About</a></li><li><a href="/deploy/getting_started/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Getting started</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Reference</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="https://console.deno.com/api/v2/docs" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >REST API</a></li><li><a href="/deploy/reference/accounts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Accounts</a></li><li><a href="/deploy/reference/organizations/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Organizations</a></li><li><a href="/deploy/reference/apps/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Apps</a></li><li><a href="/deploy/reference/builds/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Builds</a></li><li><a href="/deploy/reference/env_vars_and_contexts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Environment Variables and Contexts</a></li><li><a href="/deploy/reference/timelines/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Timelines</a></li><li><a href="/deploy/reference/tunnel/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Tunnel</a></li><li><a href="/deploy/reference/observability/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Observability</a></li><li><a href="/deploy/reference/domains/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Domains</a></li><li><a href="/deploy/reference/deno_kv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno KV</a></li><li><a href="/deploy/reference/databases/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 bg-header-highlight border-foreground-secondary text-gray-800" data-active>Databases</a></li><li><a href="/deploy/reference/cloud_connections/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Cloud Connections</a></li><li><a href="/deploy/reference/oidc/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >OIDC</a></li><li><a href="/deploy/reference/runtime/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Runtime</a></li><li><a href="/deploy/reference/frameworks/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Framework support</a></li><li><a href="/deploy/reference/caching/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >CDN and caching</a></li><li><a href="/deploy/reference/playgrounds/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Playgrounds</a></li><li><a href="/deploy/reference/button/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deploy Button</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">KV</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/deploy/kv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Overview</a></li><li><a href="/deploy/kv/key_space/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Key space</a></li><li><a href="/deploy/kv/operations/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Operations</a></li><li><a href="/deploy/kv/key_expiration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Key expiration</a></li><li><a href="/deploy/kv/secondary_indexes/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Secondary indexes</a></li><li><a href="/deploy/kv/transactions/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Transactions</a></li><li><a href="/deploy/kv/node/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Node</a></li><li><a href="/deploy/kv/data_modeling_typescript/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Data modeling</a></li><li><a href="/deploy/kv/backup/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Backup</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">政策和限制</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/deploy/usage/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Usage and Limitations</a></li><li><a href="/deploy/acceptable_use_policy/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Acceptable Use Policy</a></li><li><a href="/deploy/fulfillment_policy/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Fulfillment Policy</a></li><li><a href="/deploy/privacy_policy/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Privacy Policy</a></li><li><a href="/deploy/security/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Security</a></li><li><a href="/deploy/terms_and_conditions/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Terms and Conditions</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Support and Feedback</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/deploy/changelog/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Changelog</a></li><li><a href="/deploy/support/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Support</a></li></ul></nav></aside><main id="content" class="content "><div class="w-full"><article class="mx-auto"><details class="block lg:hidden my-4 bg-foreground-quaternary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-background-tertiary">On this page</summary><ul class="p-4 pt-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建数据库实例 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%93%BE%E6%8E%A5%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">链接外部数据库 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#tls%2Fssl-%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">TLS/SSL 配置 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BE%9B%E5%BA%94%E6%89%98%E7%AE%A1%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">供应托管数据库 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E8%81%94%E5%88%B0%E5%BA%94%E7%94%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">将数据库关联到应用 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%8E%E4%BB%A3%E7%A0%81%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">从代码连接数据库 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#deno-kv" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Deno KV </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#postgresql" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">PostgreSQL </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%89%A7%E8%A1%8C%E8%BF%81%E7%A7%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%A1%AB%E5%85%85%EF%BC%88seeding%EF%BC%89" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">执行迁移和数据填充（seeding） </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">本地开发 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">使用本地数据库实例 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#deno-kv-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Deno KV </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#postgresql-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">PostgreSQL </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BD%BF%E7%94%A8%E6%89%98%E7%AE%A1%E9%9A%94%E7%A6%BB%E7%9A%84%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E5%AE%9E%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">使用托管隔离的本地开发实例 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BB%84%E7%BB%87%E5%B1%82%E9%9D%A2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">组织层面 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BA%94%E7%94%A8%E5%B1%82%E9%9D%A2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">应用层面 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8F%E8%A7%88%E5%99%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库浏览器 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#prisma-postgres-%E5%AE%9E%E4%BE%8B%E5%8F%8A%E2%80%9C%E8%AE%A4%E9%A2%86%E2%80%9D%E6%93%8D%E4%BD%9C" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Prisma Postgres 实例及“认领”操作 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%99%90%E5%88%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">限制 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">常见问题 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-6 sm:mt-6"><h1>数据库</h1><p>Deno Deploy 的数据库功能让您的应用轻松连接多种数据库，实现应用状态的无缝管理。目前支持 PostgreSQL 和 Deno KV。</p>
+<p>创建或链接数据库实例后，Deno Deploy 会在该实例内自动为每个部署环境创建隔离的（逻辑）数据库，包括生产环境、Git 分支和预览时间线。您的应用代码根据当前环境，使用自动注入的环境变量连接到相应的数据库。这确保了数据在不同的开发和部署阶段保持一致且隔离。</p>
+<p>Deno Deploy 当前支持两种数据库引擎：</p>
+<ul>
+<li><strong>PostgreSQL</strong> — 连接已有的外部托管 PostgreSQL 实例，或者通过 Deno Deploy 由 Prisma 托管的托管 PostgreSQL 数据库。</li>
+<li><strong>Deno KV</strong> — 一个快速的、全球分布的面向边缘计算的键值存储。</li>
+</ul>
+<h2 id="%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B" tabindex="-1">创建数据库实例 <a class="header-anchor" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>有两种方式将数据库实例添加到您的 Deno Deploy 组织：</p>
+<ul>
+<li><strong>链接数据库</strong>：连接已有的外部数据库实例（例如您自行运行的 PostgreSQL 服务器或云服务商托管的实例）。</li>
+<li><strong>供应数据库</strong>：创建并附加 Deno Deploy 提供的托管数据存储（Deno KV 或 Prisma Postgres）。</li>
+</ul>
+<h3 id="%E9%93%BE%E6%8E%A5%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">链接外部数据库 <a class="header-anchor" href="#%E9%93%BE%E6%8E%A5%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要链接已有的外部数据库实例，可以：</p>
+<ul>
+<li>访问组织仪表盘中的“Databases”页面，点击“Link Database”按钮；</li>
+<li>进入应用设置的“Databases”标签页，点击“Attach Database”，然后在数据库实例选择下拉菜单中选择“Link Database”。</li>
+</ul>
+<p>接下来，填写外部数据库实例的连接详情。您需要提供：</p>
+<ul>
+<li><strong>引擎</strong>：选择数据库引擎（当前仅支持 PostgreSQL）。</li>
+<li><strong>连接详情</strong>：输入主机名、端口、用户名、密码，必要时提供 CA 证书。您也可以粘贴连接字符串，自动填充以上字段。</li>
+<li><strong>Slug</strong>：给数据库实例起一个描述性名称，在仪表盘中识别此实例。该名称仅供 Deno Deploy 内部使用，不影响实际数据库服务器。</li>
+</ul>
+<p>填写完成后，点击“Test Connection”验证设置。连接成功后，点击“Save”将实例添加到组织。</p>
+<p>如果连接失败，请核对连接详情，确认数据库服务器能从 Deno Deploy 网络访问。目前无法提供 Deno Deploy 的 IP 地址列表，请确保数据库服务器允许所有 IP 连接。如有困难，可<a href="/deploy/support/">联系客服</a>寻求帮助。</p>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>由于 Deno Deploy 会为每个环境（生产、Git 分支和预览）创建隔离数据库，请确保您提供的数据库用户拥有在服务器上创建新数据库的足够权限。</p>
+<p>
+</div>
+</p>
+<h4 id="tls%2Fssl-%E9%85%8D%E7%BD%AE" tabindex="-1">TLS/SSL 配置 <a class="header-anchor" href="#tls%2Fssl-%E9%85%8D%E7%BD%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>链接外部数据库时，Deno Deploy 支持安全的 SSL/TLS 连接。根据您的数据库提供商，您可能需要上传 CA 证书以验证服务器身份。</p>
+<p>如果数据库提供商使用受信任的根 CA （如 Let's Encrypt），则无需上传证书，SSL 连接会自动生效。</p>
+<p>使用 AWS RDS 的用户，Deno Deploy 会自动检测 RDS 实例，并提供“使用 AWS 证书包”的选项，无需手动下载证书。</p>
+<p>Google Cloud SQL 用户需从 Google Cloud 控制台下载 Google Cloud SQL CA 证书，并在链接数据库时上传。</p>
+<p>其他使用自签名证书或私有 CA 的提供商，您需上传用于签署数据库证书的具体 CA 证书。通常可从提供商的文档或控制台获得。</p>
+<h3 id="%E4%BE%9B%E5%BA%94%E6%89%98%E7%AE%A1%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">供应托管数据库 <a class="header-anchor" href="#%E4%BE%9B%E5%BA%94%E6%89%98%E7%AE%A1%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要创建并附加 Deno Deploy 托管的数据库实例，您可以：</p>
+<ul>
+<li>在组织仪表盘的“Databases”页面点击“Provision Database”按钮；</li>
+<li>进入应用设置的“Databases”标签页，点击“Attach Database”，然后在下拉菜单中选择“Provision Database”。</li>
+</ul>
+<p>然后选择要供应的数据库引擎。当前可用：</p>
+<ul>
+<li><strong>Deno KV</strong> — 一个快速的、全球分布的边缘键值存储，由 Deno 代表您托管。</li>
+<li><strong>Prisma Postgres</strong> — 世界上最先进的开源关系型数据库，由 <a href="https://www.prisma.io/">Prisma</a> 托管。</li>
+</ul>
+<p>您需要提供一个 <strong>Slug</strong>，用于在仪表盘中标识数据库实例。该名称仅供 Deno Deploy 内部使用，不影响实际数据库服务器。</p>
+<p>根据所选引擎，可能还会有额外配置选项，比如选择区域。选择靠近应用用户的区域有助于降低延迟，提升查询性能。</p>
+<p>准备好后，点击“Provision”创建数据库实例。Deno Deploy 会处理配置过程并为您搭建必要基础设施。</p>
+<h2 id="%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E8%81%94%E5%88%B0%E5%BA%94%E7%94%A8" tabindex="-1">将数据库关联到应用 <a class="header-anchor" href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E8%81%94%E5%88%B0%E5%BA%94%E7%94%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>创建或链接数据库实例后，您可以将它们分配给应用。每个数据库实例可分配给多个应用。每个应用在实例中对应环境（生产、Git 分支、预览时间线）会拥有自己的隔离数据库。</p>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>当前单个应用不能关联多个数据库实例。因此暂不支持同时关联 Deno KV 和 PostgreSQL 数据库到同一应用。</p>
+<p>
+</div>
+</p>
+<p>分配后，Deno Deploy 会为应用中的每个时间线自动创建隔离数据库，命名规则如下：</p>
+<ul>
+<li>生产环境数据库格式为 <code>{app-id}-production</code></li>
+<li>每个 Git 分支数据库格式为 <code>{app-id}--{branch-name}</code></li>
+<li>单个预览数据库格式为 <code>{app-id}-preview</code></li>
+</ul>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>当前每个应用仅创建一个预览数据库，所有预览部署共享该数据库。未来版本将为每个预览部署创建独立数据库。</p>
+<p>
+</div>
+</p>
+<p>要分配数据库给应用，您可以：</p>
+<ul>
+<li>在组织仪表盘“Databases”页面找到数据库实例，点击“Assign”，然后从下拉菜单选择应用。</li>
+<li>进入应用设置的“Databases”标签页，点击“Attach Database”，然后选择数据库实例。</li>
+</ul>
+<p>分配后，Deno Deploy 会自动为应用每个环境创建所需的隔离数据库。</p>
+<h2 id="%E4%BB%8E%E4%BB%A3%E7%A0%81%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">从代码连接数据库 <a class="header-anchor" href="#%E4%BB%8E%E4%BB%A3%E7%A0%81%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>分配数据库给应用后，连接数据库非常简单。Deno Deploy 会自动处理连接详情、凭证和环境变量。</p>
+<h3 id="deno-kv" tabindex="-1">Deno KV <a class="header-anchor" href="#deno-kv"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>对于 Deno KV，您可以使用内置的 <code>Deno.openKv()</code> API 连接分配的 Deno KV 实例。无需额外配置，Deno Deploy 会根据当前环境自动连接到正确的实例。</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token comment">// 无需参数，Deno Deploy 自动处理</span>
+<span class="token keyword">const</span> kv <span class="token operator">=</span> <span class="token keyword">await</span> Deno<span class="token punctuation">.</span><span class="token function">openKv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 使用 Deno KV 实例</span>
+  <span class="token keyword">await</span> kv<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"123"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Alice"</span><span class="token punctuation">,</span> age<span class="token operator">:</span> <span class="token number">30</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword">await</span> kv<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"123"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    headers<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token string-property property">"content-type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-226" class="copyButton" data-copy="// 无需参数，Deno Deploy 自动处理
+const kv = await Deno.openKv();
+
+Deno.serve(async () => {
+  // 使用 Deno KV 实例
+  await kv.set([&quot;user&quot;, &quot;123&quot;], { name: &quot;Alice&quot;, age: 30 });
+  const user = await kv.get([&quot;user&quot;, &quot;123&quot;]);
+
+  return new Response(JSON.stringify(user.value), {
+    headers: { &quot;content-type&quot;: &quot;application/json&quot; },
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="postgresql" tabindex="-1">PostgreSQL <a class="header-anchor" href="#postgresql"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>针对 PostgreSQL 数据库（包括外部和供应的），Deno Deploy 会自动将标准数据库环境变量注入应用运行环境：</p>
+<ul>
+<li><code>DATABASE_URL</code>：当前环境的完整连接字符串，格式为 <code>postgresql://username:password@hostname:port/database</code>。</li>
+<li><code>PGHOST</code>：数据库服务器主机名。</li>
+<li><code>PGPORT</code>：数据库服务器端口。</li>
+<li><code>PGDATABASE</code>：当前环境数据库名。</li>
+<li><code>PGUSER</code>：数据库用户名。</li>
+<li><code>PGPASSWORD</code>：数据库密码。</li>
+</ul>
+<p>若您的数据库需要自定义 SSL/TLS 证书，Deno Deploy 也会将该证书注入默认证书存储，确保 SSL 连接自动生效。</p>
+<p>您可以使用喜欢的 PostgreSQL 客户端库（如 npm 包 <code>pg</code>）通过这些环境变量连接数据库。大多数库都会自动识别并使用这些标准环境变量，无需额外配置。</p>
+<p>以下是示例代码，展示在 Deno Deploy 应用中如何连接 PostgreSQL：</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token keyword">import</span> <span class="token punctuation">{</span> Pool <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"npm:pg"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 无需参数，库自动从环境变量读取连接信息</span>
+<span class="token keyword">const</span> pool <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Pool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 使用数据库</span>
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> pool<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span><span class="token string">"SELECT * FROM users WHERE id = $1"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">123</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span>rows<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    headers<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token string-property property">"content-type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-274" class="copyButton" data-copy="import { Pool } from &quot;npm:pg&quot;;
+
+// 无需参数，库自动从环境变量读取连接信息
+const pool = new Pool();
+
+Deno.serve(async () => {
+  // 使用数据库
+  const result = await pool.query(&quot;SELECT * FROM users WHERE id = $1&quot;, [123]);
+
+  return new Response(JSON.stringify(result.rows), {
+    headers: { &quot;content-type&quot;: &quot;application/json&quot; },
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E6%89%A7%E8%A1%8C%E8%BF%81%E7%A7%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%A1%AB%E5%85%85%EF%BC%88seeding%EF%BC%89" tabindex="-1">执行迁移和数据填充（seeding） <a class="header-anchor" href="#%E6%89%A7%E8%A1%8C%E8%BF%81%E7%A7%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%A1%AB%E5%85%85%EF%BC%88seeding%EF%BC%89"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>由于每个环境都有自己的隔离数据库，通常每个应用都会涉及多个独立数据库。每次部署新版本时，手动对每个数据库执行迁移或插入种子数据不现实。</p>
+<p>为简化该过程，Deno Deploy 允许您配置自动化预部署命令，每当版本发布到时间线时，在部署开始前运行该命令。</p>
+<p>该命令拥有与应用相同的环境变量可用，包括 <code>PGHOST</code>、<code>PGPORT</code>、<code>PGDATABASE</code> 等，便于使用现有迁移工具执行迁移或填充数据。</p>
+<p>要设置自动化迁移命令，前往应用设置页面的“App Config”部分，在“Pre-Deploy Command”字段编辑预部署命令（例如 <code>deno task migrate</code> 或 <code>npm run migrate</code>）。</p>
+<p>您可以在修订构建日志的“Deployment”部分查看预部署命令执行的详细日志。</p>
+<p>例如，您可以使用 <a href="https://github.com/salsita/node-pg-migrate"><code>node-pg-migrate</code></a> 设置迁移脚本：</p>
+<ol>
+<li>在 <code>deno.json</code> 中添加任务：<div class="relative"><pre><code class="highlight notranslate language-json"><span class="token punctuation">{</span>
+  <span class="token property">"tasks"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"migrate"</span><span class="token operator">:</span> <span class="token string">"deno run --allow-net --allow-env --allow-read --allow-write npm:node-pg-migrate up"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+      <button id="copy-button-301" class="copyButton" data-copy="{
+  &quot;tasks&quot;: {
+    &quot;migrate&quot;: &quot;deno run --allow-net --allow-env --allow-read --allow-write npm:node-pg-migrate up&quot;
+  }
+}
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></li>
+<li>创建 migrations 目录并添加迁移文件，如 <code>migrations/1234567890_create-users-table.js</code>：<div class="relative"><pre><code class="highlight notranslate language-javascript">exports<span class="token punctuation">.</span><span class="token function-variable function">up</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">pgm</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  pgm<span class="token punctuation">.</span><span class="token function">createTable</span><span class="token punctuation">(</span><span class="token string">"users"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">id</span><span class="token operator">:</span> <span class="token string">"id"</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">"varchar(100)"</span><span class="token punctuation">,</span> <span class="token literal-property property">notNull</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">email</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">"varchar(100)"</span><span class="token punctuation">,</span> <span class="token literal-property property">notNull</span><span class="token operator">:</span> <span class="token boolean">true</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">created_at</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">"timestamp"</span><span class="token punctuation">,</span>
+      <span class="token literal-property property">notNull</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+      <span class="token keyword">default</span><span class="token operator">:</span> pgm<span class="token punctuation">.</span><span class="token function">func</span><span class="token punctuation">(</span><span class="token string">"current_timestamp"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+exports<span class="token punctuation">.</span><span class="token function-variable function">down</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">pgm</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  pgm<span class="token punctuation">.</span><span class="token function">dropTable</span><span class="token punctuation">(</span><span class="token string">"users"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-307" class="copyButton" data-copy="exports.up = (pgm) => {
+  pgm.createTable(&quot;users&quot;, {
+    id: &quot;id&quot;,
+    name: { type: &quot;varchar(100)&quot;, notNull: true },
+    email: { type: &quot;varchar(100)&quot;, notNull: true },
+    created_at: {
+      type: &quot;timestamp&quot;,
+      notNull: true,
+      default: pgm.func(&quot;current_timestamp&quot;),
+    },
+  });
+};
+exports.down = (pgm) => {
+  pgm.dropTable(&quot;users&quot;);
+};
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div></li>
+<li>在应用设置中将预部署命令设置为 <code>deno task migrate</code>。</li>
+</ol>
+<p>Deno Deploy 会在每次部署之前自动运行该命令，确保您的环境特定数据库保持最新。</p>
+<p>其他迁移工具，如 Prisma Migrate、Drizzle 或 Kysely，也可以用类似方式配置。</p>
+<h2 id="%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91" tabindex="-1">本地开发 <a class="header-anchor" href="#%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>本地开发时，您有两种方案配置数据库：</p>
+<ul>
+<li>使用本地运行的数据库实例，如本地 PostgreSQL 服务器或 Deno 内置的 Deno KV 后端。</li>
+<li>通过 <code>--tunnel</code> 连接 Deno Deploy 上供应的托管隔离本地开发实例。</li>
+</ul>
+<h3 id="%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B" tabindex="-1">使用本地数据库实例 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<h4 id="deno-kv-1" tabindex="-1">Deno KV <a class="header-anchor" href="#deno-kv-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>对于 Deno KV，您可以调用内置的 <code>Deno.openKv()</code> API 连接本地 Deno KV 实例。默认使用存储在主目录的本地文件后端。</p>
+<div class="relative"><pre><code class="highlight notranslate language-typescript"><span class="token keyword">const</span> kv <span class="token operator">=</span> <span class="token keyword">await</span> Deno<span class="token punctuation">.</span><span class="token function">openKv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 连接本地 Deno KV 实例</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 使用 Deno KV 实例</span>
+  <span class="token keyword">await</span> kv<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"123"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Alice"</span><span class="token punctuation">,</span> age<span class="token operator">:</span> <span class="token number">30</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword">await</span> kv<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"123"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    headers<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token string-property property">"content-type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-348" class="copyButton" data-copy="const kv = await Deno.openKv(); // 连接本地 Deno KV 实例
+
+Deno.serve(async () => {
+  // 使用 Deno KV 实例
+  await kv.set([&quot;user&quot;, &quot;123&quot;], { name: &quot;Alice&quot;, age: 30 });
+  const user = await kv.get([&quot;user&quot;, &quot;123&quot;]);
+
+  return new Response(JSON.stringify(user.value), {
+    headers: { &quot;content-type&quot;: &quot;application/json&quot; },
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="postgresql-1" tabindex="-1">PostgreSQL <a class="header-anchor" href="#postgresql-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>要在本地安装 PostgreSQL，请参考 <a href="https://www.postgresql.org/download/">postgresql.org</a> 上针对您操作系统的说明。macOS 用户可使用 <code>brew install postgresql</code>，多数 Linux 发行版通过软件包管理器提供 PostgreSQL 包。</p>
+<p>安装后，为本地开发创建新数据库和用户：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">createdb myapp_dev
+createuser myuser <span class="token parameter variable">--pwprompt</span>
+</code></pre>
+
+      <button id="copy-button-358" class="copyButton" data-copy="createdb myapp_dev
+createuser myuser --pwprompt
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>在项目根目录设置 <code>.env</code> 文件，填写本地 PostgreSQL 连接信息：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token assign-left variable">DATABASE_URL</span><span class="token operator">=</span>postgresql://myuser:mypassword@localhost:5432/myapp_dev
+</code></pre>
+
+      <button id="copy-button-362" class="copyButton" data-copy="DATABASE_URL=postgresql://myuser:mypassword@localhost:5432/myapp_dev
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>然后，您可以使用喜欢的 PostgreSQL 客户端库（例如 npm 包 <code>pg</code>）通过 <code>DATABASE_URL</code> 环境变量连接本地数据库。</p>
+<p>若使用 Deno 本地开发，可通过 <code>--env-file</code> 标志从 <code>.env</code> 文件自动加载环境变量：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno run <span class="token parameter variable">-A</span> --env-file main.ts
+</code></pre>
+
+      <button id="copy-button-369" class="copyButton" data-copy="deno run -A --env-file main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E4%BD%BF%E7%94%A8%E6%89%98%E7%AE%A1%E9%9A%94%E7%A6%BB%E7%9A%84%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E5%AE%9E%E4%BE%8B" tabindex="-1">使用托管隔离的本地开发实例 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8%E6%89%98%E7%AE%A1%E9%9A%94%E7%A6%BB%E7%9A%84%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E5%AE%9E%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>Deno Deploy 支持使用 <a href="https://docs.deno.com/deploy/reference/tunnel"><code>--tunnel</code> 标志</a> 连接托管隔离的本地开发数据库。</p>
+<p>操作流程：</p>
+<ol>
+<li>在您的 Deno Deploy 组织中供应一个数据库实例，像往常一样分配给应用。</li>
+<li>使用 <code>--tunnel</code> 标志启动本地开发服务器：</li>
+</ol>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno task <span class="token parameter variable">--tunnel</span> dev
+<span class="token comment"># 或</span>
+deno run <span class="token parameter variable">-A</span> <span class="token parameter variable">--tunnel</span> main.ts
+</code></pre>
+
+      <button id="copy-button-391" class="copyButton" data-copy="deno task --tunnel dev
+# 或
+deno run -A --tunnel main.ts
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>Deno Deploy 会自动注入相应的数据库环境变量，使代码能连接托管的隔离数据库。请注意，该实例在使用同一应用的所有开发者间共享，修改数据时请谨慎。</p>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>使用 <code>--tunnel</code> 标志时，Deno Deploy 同时启用其他功能，如：</p>
+<ul>
+<li>将日志、跟踪和指标从本地导出到 Deno Deploy 仪表盘</li>
+<li>将“Local”环境变量拉取至本地环境</li>
+<li>将本地服务器暴露到公共 URL，方便分享和测试</li>
+</ul>
+<p>若不需要这些功能，建议使用本地数据库实例。</p>
+<p>
+</div>
+</p>
+<h2 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86" tabindex="-1">数据库管理 <a class="header-anchor" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E7%BB%84%E7%BB%87%E5%B1%82%E9%9D%A2" tabindex="-1">组织层面 <a class="header-anchor" href="#%E7%BB%84%E7%BB%87%E5%B1%82%E9%9D%A2"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>您可在组织仪表盘的“Databases”页面查看和管理所有数据库实例。这里列出所有链接和供应的数据库实例及其状态、分配的应用和连接详情（如适用）。</p>
+<p>点击数据库实例进入详细页面，可查看实例信息，包括分配的应用和实例内创建的各个数据库。每个数据库显示名称、状态及关联的应用和时间线。</p>
+<p>若数据库创建失败，将显示错误状态和“Fix”按钮，您可以重试或查看详细错误信息。</p>
+<p>在该页面，您还可将数据库实例从应用分离，或完全删除实例。</p>
+<p>每个数据库旁边可以打开数据库浏览器（仅限 PostgreSQL），或复制连接字符串（<code>DATABASE_URL</code>），方便在本地调试时连接数据库。</p>
+<h3 id="%E5%BA%94%E7%94%A8%E5%B1%82%E9%9D%A2" tabindex="-1">应用层面 <a class="header-anchor" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E9%9D%A2"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>在应用设置的“Databases”标签页，也可以管理数据库实例。这里能看到分配给应用的数据库实例及其状态和连接详情。</p>
+<p>可以查看为应用内所分配实例创建的所有数据库，包括生产环境、Git 分支和预览时间线。每个数据库显示名称和状态。</p>
+<p>支持打开数据库浏览器（PostgreSQL）以及复制每个数据库的连接字符串（<code>DATABASE_URL</code>），方便本地调试。</p>
+<h2 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8F%E8%A7%88%E5%99%A8" tabindex="-1">数据库浏览器 <a class="header-anchor" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>Deno Deploy 为 PostgreSQL 数据库内置数据库浏览器，允许您直接在仪表盘浏览和管理数据。</p>
+<p>访问方法：</p>
+<p>进入应用设置“Databases”标签页，找到分配的 PostgreSQL 数据库实例，点击“Explore Database”打开数据库浏览界面，您可以查看表格、执行查询及管理数据。</p>
+<p>
+<div class="admonition info">
+  <div class="title">Info</div>
+
+</p>
+<p>数据库浏览器目前不支持 Deno KV 数据库。</p>
+<p>
+</div>
+</p>
+<h2 id="prisma-postgres-%E5%AE%9E%E4%BE%8B%E5%8F%8A%E2%80%9C%E8%AE%A4%E9%A2%86%E2%80%9D%E6%93%8D%E4%BD%9C" tabindex="-1">Prisma Postgres 实例及“认领”操作 <a class="header-anchor" href="#prisma-postgres-%E5%AE%9E%E4%BE%8B%E5%8F%8A%E2%80%9C%E8%AE%A4%E9%A2%86%E2%80%9D%E6%93%8D%E4%BD%9C"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>通过 Deno Deploy 供应的托管 Prisma Postgres 实例初始为“未认领”状态。这意味着实例由 Deno Deploy 代表您管理，您无法直接访问拥有该实例的 Prisma 账户。未认领实例会根据 Deno Deploy 计划有限制数据库数量和大小。</p>
+<p>如果希望完全控制 Prisma Postgres 实例（包括升级 Prisma 计划），可以“认领”该实例到您自己的 Prisma 账户。操作方法：在 Deno Deploy 仪表盘数据库实例详情页点击“Claim Instance”按钮，按照指引将实例关联到您的 Prisma 账户。</p>
+<p>
+<div class="admonition warning">
+  <div class="title">Warning</div>
+
+</p>
+<p>认领 Prisma Postgres 实例为永久操作，无法撤销。认领后，实例归您的 Prisma 账户管理，并适用您的 Prisma 账户配额（基于计划）。Deno Deploy 自动为每个应用创建隔离数据库的功能依然正常工作。</p>
+<p>
+</div>
+</p>
+<h2 id="%E9%99%90%E5%88%B6" tabindex="-1">限制 <a class="header-anchor" href="#%E9%99%90%E5%88%B6"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>您在组织内可以创建无限数量的链接数据库实例和 Deno KV 实例。</p>
+<p>托管的 Prisma Postgres 实例，每个组织只能创建少数几个实例。每个实例有数据库数量限制，直接影响可分配给该实例的应用数量。达到限制后，该实例将无法再创建新数据库。</p>
+<p>若 Prisma Postgres 实例被“认领”，数据库数量限制由您的 Prisma 计划决定。未认领实例则适用默认限制。</p>
+<p>托管 Prisma Postgres 实例的数据库大小和操作次数限制也根据您所选计划而设。在实例详情页底部展示使用情况。若实例被认领，限制由 Prisma 计划决定，未认领实例则适用默认限制。</p>
+<h2 id="%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98" tabindex="-1">常见问题 <a class="header-anchor" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p><strong>问：多个应用可以共享同一个数据库实例吗？</strong></p>
+<p>答：可以！多个应用可以分配到同一个数据库实例，每个应用在该实例内拥有自己的隔离数据库。</p>
+<p><strong>问：将应用从数据库实例中移除后，数据会怎样？</strong></p>
+<p>答：数据库仍保留在服务器上，仅移除应用与数据库实例的连接关系。</p>
+<p><strong>问：多个环境可以使用同一个数据库吗？</strong></p>
+<p>答：默认每个环境（生产、分支、预览）拥有独立数据库，以确保隔离和防止数据冲突。但您可通过数据库库中的选项自定义代码连接的数据库。</p>
+<p><strong>问：如何直接访问我的数据库？</strong></p>
+<p>答：您可以使用提供的连接详情直接连接数据库服务器。请使用 Deno Deploy 仪表盘中显示的数据库名称。</p>
+<p><strong>问：可以修改数据库连接信息吗？</strong></p>
+<p>答：可以，点击任意数据库实例的“Edit”更新连接详情。保存前请测试连接确保有效。</p>
+<p><strong>问：如何删除数据库实例？</strong></p>
+<p>答：先移除实例的所有应用分配，然后点击数据库实例的“Delete”。此操作仅从 Deno Deploy 中移除连接，实际数据库服务器不受影响。</p>
+</div></article><div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 sm:p-8 bg-blue-splash dark:bg-deploy-900 rounded-md mx-auto"><h2 class="text-xl mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/deploy/reference/databases.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value=""><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn  mt-4">发送反馈给我们</button></div></div><a rel="" class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/privacy_policy">隐私政策</a></form></div></div></section></div></main><ul class="toc-list hidden sticky p-4 pr-0 h-screen-minus-header overflow-y-auto border-l border-l-foreground-tertiary lg:block lg:w-full top-header-plus-subnav" id="toc"><div class="wwads-cn wwads-vertical max-w-[200px] my-4" data-id="354"></div><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建数据库实例 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%93%BE%E6%8E%A5%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">链接外部数据库 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#tls%2Fssl-%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">TLS/SSL 配置 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BE%9B%E5%BA%94%E6%89%98%E7%AE%A1%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">供应托管数据库 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%B0%86%E6%95%B0%E6%8D%AE%E5%BA%93%E5%85%B3%E8%81%94%E5%88%B0%E5%BA%94%E7%94%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">将数据库关联到应用 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%8E%E4%BB%A3%E7%A0%81%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">从代码连接数据库 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#deno-kv" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Deno KV </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#postgresql" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">PostgreSQL </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%89%A7%E8%A1%8C%E8%BF%81%E7%A7%BB%E5%92%8C%E6%95%B0%E6%8D%AE%E5%A1%AB%E5%85%85%EF%BC%88seeding%EF%BC%89" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">执行迁移和数据填充（seeding） </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">本地开发 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BD%BF%E7%94%A8%E6%9C%AC%E5%9C%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%9E%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">使用本地数据库实例 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#deno-kv-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Deno KV </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#postgresql-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">PostgreSQL </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BD%BF%E7%94%A8%E6%89%98%E7%AE%A1%E9%9A%94%E7%A6%BB%E7%9A%84%E6%9C%AC%E5%9C%B0%E5%BC%80%E5%8F%91%E5%AE%9E%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">使用托管隔离的本地开发实例 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BB%84%E7%BB%87%E5%B1%82%E9%9D%A2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">组织层面 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BA%94%E7%94%A8%E5%B1%82%E9%9D%A2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">应用层面 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B5%8F%E8%A7%88%E5%99%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库浏览器 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#prisma-postgres-%E5%AE%9E%E4%BE%8B%E5%8F%8A%E2%80%9C%E8%AE%A4%E9%A2%86%E2%80%9D%E6%93%8D%E4%BD%9C" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Prisma Postgres 实例及“认领”操作 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%99%90%E5%88%B6" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">限制 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">常见问题 </a></li></ul></div><footer class="text-smaller bg-gray-50 dark:bg-gray-950 p-4 pt-12 sm:px-8 border-t border-t-foreground-tertiary"><nav class="flex flex-col gap-x-4 gap-y-12 max-w-7xl md:flex-row md:flex-wrap md:justify-between md:w-full md:gap-y-8 md:mx-auto"><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">Deno 文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/runtime/">Deno 运行时</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/examples/">示例</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://jsr.io/@std">标准库</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/api/deno/~/Deno">Deno API Reference</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">服务文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/">Deno Deploy </a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/classic/">Deno Deploy Classic</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/subhosting/manual/">Deno 子托管</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">社区</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">Discord</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland">GitHub</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://bsky.app/profile/deno.land">Bluesky</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://fosstodon.org/@deno_land">Mastodon</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.news/">Newsletter</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">帮助与反馈</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">社区支持</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://denostatus.com">部署系统状态</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">公司</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/">Deno Website</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/blog">Blog</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://merch.deno.com/">周边商品</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/privacy_policy">Privacy Policy</a></li></ul></section></nav><p class="m-0 mt-16 mx-auto text-center text-xs text-foreground-secondary"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></body></html>

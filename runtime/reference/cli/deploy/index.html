@@ -1,0 +1,1215 @@
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>deno deploy - Deno 中文文档</title><meta name="description" content="管理和发布您的网络项目"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/style.css"><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="me" href="https://fosstodon.org/@deno_land"><meta name="twitter:title" content="deno deploy"><meta name="twitter:description" content="管理和发布您的网络项目"><meta name="twitter:image" content="https://docs.deno.com/runtime/reference/cli/deploy/index.png"><meta name="twitter:image:alt" content="管理和发布您的网络项目"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@deno_land"><meta property="og:title" content="deno deploy"><meta property="og:description" content="管理和发布您的网络项目"><meta property="og:image" content="https://docs.deno.com/runtime/reference/cli/deploy/index.png"><meta property="og:image:alt" content="管理和发布您的网络项目"><meta property="og:type" content="article"><meta property="og:site_name" content="Deno"><meta property="og:locale" content="en_US"><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"><script type="module" defer src="/script.js"></script><script type="module" defer src="/js/main.js"></script><script type="module" defer src="/js/lint_rules.js"></script><script type="module" defer src="/js/copy.js"></script><script type="module" defer src="/js/tabs.js"></script><script type="module" defer src="/js/feedback.js"></script><script type="module" defer src="/js/search.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"></head><body ><a href="#content" class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]">Skip to main content</a><header class="w-full h-auto sticky top-0 z-[100] bg-background-raw border-b border-b-foreground-tertiary"><div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0"><a href="https://deno.com" title="Deno main website" class="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"><svg width="100%" height="100%" viewBox="0 0 1025 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" class="" data-component="logo"><path id="background" d="M28.829,227.937c-8.871,-19.143 -13.822,-40.465 -13.822,-62.935c-0,-5.815 0.332,-11.554 0.977,-17.197c0.655,-5.703 1.626,-11.299 2.893,-16.773c7.12,-30.704 23.68,-57.808 46.452,-78.082c19.127,-17.006 42.558,-29.14 68.244,-34.64c10.137,-2.165 20.651,-3.304 31.43,-3.304c3.778,0.004 7.583,0.149 11.411,0.441c18.154,1.386 35.309,5.956 50.959,13.121c12.625,5.786 24.31,13.274 34.762,22.169c26.253,22.364 44.562,53.517 50.651,88.476c1.455,8.379 2.213,16.996 2.213,25.789c-0.003,3.784 -0.149,7.595 -0.442,11.429c-1.106,14.489 -4.241,28.342 -9.104,41.302c-6.788,18.051 -16.959,34.452 -29.738,48.428c-16.621,16.971 -37.743,24.523 -55.384,24.209c-12.828,-0.229 -25.379,-5.333 -34.052,-12.801c-12.39,-10.669 -17.394,-22.865 -19.11,-36.474c-0.426,-3.383 -0.176,-12.601 1.585,-18.984c1.312,-4.758 4.64,-13.946 9.507,-17.965c-5.693,-2.452 -13.021,-7.792 -15.331,-10.355c-0.568,-0.63 -0.494,-1.617 0.014,-2.296c0.509,-0.678 1.4,-0.946 2.199,-0.659c4.895,1.68 10.856,3.337 17.142,4.389c8.267,1.382 18.548,3.122 28.963,3.634c25.395,1.247 51.921,-10.151 60.154,-32.83c8.232,-22.679 5.038,-45.111 -24.496,-58.566c-29.535,-13.456 -43.178,-29.455 -67.041,-39.104c-15.587,-6.303 -32.935,-2.561 -50.746,7.282c-47.974,26.512 -90.955,110.279 -71.142,187.887c0.283,1.062 -0.195,2.18 -1.158,2.709c-0.903,0.495 -2.013,0.354 -2.761,-0.331c-5.766,-6.336 -10.998,-13.166 -15.623,-20.421c-3.578,-5.614 -6.79,-11.475 -9.606,-17.548Z" style="fill: var(--logoColor);"></path><path id="outline" d="M172.67,0.181c90.968,4.232 161.386,81.521 157.155,172.489c-4.232,90.968 -81.522,161.385 -172.489,157.153c-90.968,-4.231 -161.386,-81.52 -157.155,-172.487c4.232,-90.968 81.521,-161.386 172.489,-157.155Zm38.578,198.678c-10.415,-0.512 -20.696,-2.252 -28.963,-3.634c-6.286,-1.052 -12.247,-2.709 -17.142,-4.389c-0.799,-0.287 -1.69,-0.019 -2.199,0.659c-0.508,0.679 -0.582,1.666 -0.014,2.296c2.31,2.563 9.638,7.903 15.331,10.355c-4.867,4.019 -8.195,13.207 -9.507,17.965c-1.761,6.383 -2.011,15.601 -1.585,18.984c1.716,13.609 6.72,25.805 19.11,36.474c8.673,7.468 21.224,12.572 34.052,12.801c17.702,0.315 38.909,-7.29 55.556,-24.385c21.765,-23.861 36.023,-54.887 38.67,-89.554c6.303,-82.546 -55.596,-154.681 -138.143,-160.984c-82.545,-6.303 -154.68,55.597 -160.983,138.143c-3.264,42.749 11.764,82.706 38.481,112.17c0.744,0.809 1.944,1.006 2.907,0.477c0.963,-0.529 1.441,-1.647 1.158,-2.709c-19.813,-77.608 23.168,-161.375 71.142,-187.887c17.811,-9.843 35.159,-13.585 50.746,-7.282c23.863,9.649 37.506,25.648 67.041,39.104c29.534,13.455 32.728,35.887 24.496,58.566c-8.233,22.679 -34.759,34.077 -60.154,32.83Z" style="fill: var(--outlineColor);"></path><path id="logotype" d="M694.596,164.68c-0,4.838 -0,11.794 -0.909,14.213l-103.727,0c4.837,17.542 18.749,28.431 37.8,28.431c15.728,0.302 27.219,-6.654 35.383,-16.636l25.705,23.894c-12.7,16.028 -34.171,27.822 -63.809,27.822c-43.243,-0 -75.904,-30.242 -75.904,-76.513c-0,-44.756 31.148,-75.907 73.184,-75.907c43.243,-0 72.277,31.453 72.277,74.696Zm-71.07,-39.918c-16.025,-0 -28.729,8.771 -33.265,25.706l65.02,-0c-3.932,-15.422 -14.515,-25.706 -31.755,-25.706Zm175.096,-34.778c31.758,-0 53.829,16.938 53.829,62.298l0,87.703l-39.615,-0l0,-77.724c0,-28.124 -9.976,-36.892 -28.427,-36.892c-19.953,0 -33.564,13.908 -33.564,40.221l-0,74.395l-39.617,-0l0,-147.582l39.617,-0l-0,19.055l0.602,0c12.095,-14.213 29.037,-21.474 47.175,-21.474Zm146.977,152.42c-46.871,-0 -78.324,-32.058 -78.324,-76.21c-0,-44.153 31.453,-76.21 78.324,-76.21c45.971,-0 78.628,30.849 78.628,76.21c0,45.36 -32.657,76.21 -78.628,76.21Zm-0,-35.386c21.469,0 38.411,-16.934 38.411,-40.824c-0,-24.192 -16.332,-40.825 -38.411,-40.825c-22.986,0 -38.404,17.539 -38.404,40.825c0,22.984 16.028,40.824 38.404,40.824Zm-540.473,32.967l0,-150.001l54.227,-0c47.449,-0 77.952,30.845 77.952,75.212c-0,44.154 -28.597,74.789 -77.316,74.789l-54.863,-0Zm38.976,-35.705l13.133,-0c22.878,-0 37.917,-17.535 37.917,-39.084c-0,-22.395 -15.251,-39.507 -34.952,-39.507l-16.098,-0l0,78.591Z" style="fill: var(--textColor);"></path><path id="eye" d="M159.634,78.772c8.092,-0.634 15.152,6.272 16.369,15.457c1.624,12.235 -2.867,24.874 -17.633,25.165c-12.614,0.252 -16.436,-12.469 -15.6,-20.175c0.83,-7.706 7.182,-19.687 16.864,-20.447Z" style="fill: var(--eyeColor);"></path><style>
+        [data-component="logo"] {
+          --logoColor: #000;
+          --textColor: #000;
+          --eyeColor: #000;
+          --outlineColor: transparent;
+
+          height: 100%;
+          width: auto;
+        }
+        .dark [data-component="logo"] {
+          --textColor: #fff;
+          --outlineColor: #fff;
+        }
+        @keyframes blink {
+          0%, 100% {
+            transform: scaleY(1);
+          }
+          50% {
+            transform: scaleY(0.15);
+          }
+        }
+        [data-component="logo"]:hover,
+        a:focus [data-component="logo"] {
+          #eye {
+            transform-origin: 50% 30%;
+            animation: blink 0.15s cubic-bezier(0.5, 0, 0.5, 1);
+          }
+        }
+        </style></svg></a><nav id="main-nav" class="flex h-full items-center row-start-2 col-span-2 md:row-auto md:col-auto -mx-4 md:mx-0 overflow-x-auto md:overflow-clip"><a href="/runtime/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200 font-bold text-gray-800 bg-header-highlight " data-active aria-current="location"><div id="current-nav-item" class="absolute inset-0 bg-header-highlight -z-10 transition-transform duration-200 easing-[cubic-bezier(0.5,0,0.5,1)] origin-left" style="--left: 0px; --scaleX: 1; transform: translateX(var(--left)) scaleX(var(--scaleX));"></div>文档</a><a href="/api/deno/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">API 参考</a><a href="/examples/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">示例</a><a href="/services/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  services">服务</a></nav><div class="flex items-center gap-x-2 sm:gap-x-4 ml-auto w-full max-w-80"><div class="md:relative w-full"><div class="relative"><input type="search" placeholder="Search" id="orama-search-input" class="w-full min-w-24 rounded-lg placeholder:text-sm text-base leading-normal p-1 pl-8 border transition-all duration-150 text-foreground-primary border-foreground-secondary hover:bg-background-secondary focus:bg-background-secondary focus:outline-offset-1" style="background: url(/img/search.svg) no-repeat 0.5em 50%; background-size: 1.25em; background-color: var(--color-background-raw);"><kbd id="search-key" class="hidden xs:flex pointer-events-none absolute font-sans rounded-sm top-1 right-1 bottom-1 w-auto border-1 border-foreground-tertiary border-b-2 border-r-2 bg-background-primary text-foreground-secondary text-center text-xs font-bold p-2 items-center justify-center dark:bg-background-secondary dark:border-gray-700">⌘K</kbd><div id="orama-search-loading" class="absolute left-2 top-1/2 transform -translate-y-1/2 hidden bg-background-raw"><div class="animate-spin rounded-full h-4 w-4 border-2 border-transparent border-r-foreground-primary bg-background-raw"></div></div><div class="sr-only" aria-live="polite" id="orama-results-announcer"></div></div><div id="orama-search-results" class="absolute inset-2 left-2 right-2 h-[calc(100vh-8rem)] top-10 md:top-full md:left-auto md:right-0 mt-2 bg-background-raw border border-foreground-tertiary rounded-xl shadow-2xl z-50 md:max-h-128 overflow-hidden hidden md:min-w-160 max-w-2xl"><div id="orama-search-results-content" class="overflow-y-auto h-full"></div><div class="border-t border-foreground-tertiary bg-background-secondary px-4 py-2 sticky bottom-0"><div class="flex items-center gap-6 text-xs text-foreground-secondary"><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↑↓</span><span class="sr-only">Up or down to</span></kbd>navigate</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↵</span><span class="sr-only">Enter to</span></kbd>select</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">ESC</span><span class="sr-only">Escape to</span></kbd>close</span></div></div></div></div><button type="button" aria-label="toggle theme" class="shrink-0 h-9 aspect-square p-1 cursor-pointer rounded border border-transparent transition-colors duration-200 ease-in-out text-foreground-secondary hover:decoration-none hover:bg-background-secondary hover:border-background-tertiary flex flex-col items-center justify-start overflow-hidden" id="theme-toggle"><img src="/img/light.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><img src="/img/dark.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><span class="sr-only">Toggle Theme</span></button><button type="button" id="hamburger-button" class="h-8 w-auto py-2 px-0 flex flex-col justify-between rounded md:hidden" aria-pressed="false"><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--top"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-opacity hamburger-bar--middle"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--bottom"></div><span class="sr-only">Toggle navigation menu</span></button></div></div></header><div class="layout layout--three-column"><aside class="fixed transition-all duration-200 md:duration-0 easing-[cubic-bezier(0.165,0.84,0.44,1)] -translate-x-full z-50 w-full bg-background-raw opacity-0 p-4 pb-8 overflow-auto text-smaller md:sticky md:overflow-y-auto md:[scrollbar-width:thin] md:z-10 md:!translate-x-0 md:!opacity-100 md:p-0 md:pb-16 lg:border-r lg:border-r-foreground-tertiary lg:w-full sidebar-open:translate-x-0 sidebar-open:opacity-100
+         top-header h-screen-minus-header" data-component="sidebar-nav" data-section="runtime" id="nav" style="scrollbar-width: none;" tabIndex="-1"><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">入门</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >欢迎使用 Deno</a></li><li><a href="/runtime/getting_started/installation/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >安装</a></li><li><a href="/runtime/getting_started/first_project/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >第一个项目</a></li><li><a href="/runtime/getting_started/setup_your_environment/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >设置你的环境</a></li><li><a href="/runtime/getting_started/command_line_interface/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >命令行界面</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">基础知识</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/fundamentals/typescript/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TypeScript</a></li><li><a href="/runtime/fundamentals/node/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Node</a></li><li><a href="/runtime/fundamentals/security/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >安全</a></li><li><a href="/runtime/fundamentals/modules/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >模块和依赖</a></li><li><a href="/runtime/fundamentals/configuration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >配置</a></li><li><a href="/runtime/fundamentals/web_dev/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Web 开发</a></li><li><a href="/runtime/fundamentals/testing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >测试</a></li><li><a href="/runtime/fundamentals/debugging/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >调试</a></li><li><a href="/runtime/fundamentals/workspaces/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >工作空间</a></li><li><a href="/runtime/fundamentals/linting_and_formatting/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >代码检查和格式化</a></li><li><a href="/runtime/fundamentals/http_server/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器</a></li><li><a href="/runtime/fundamentals/ffi/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >FFI</a></li><li><a href="/runtime/fundamentals/open_telemetry/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >OpenTelemetry</a></li><li><a href="/runtime/fundamentals/stability_and_releases/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >稳定性和发布</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">参考指南</h2><ul class="p-0 list-none overflow-y-hidden "><li><button type="button" data-accordion-toggle="CLI" class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">CLI</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/reference/cli/add/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno add</a></li><li><a href="/runtime/reference/cli/approve_scripts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno approve-scripts</a></li><li><a href="/runtime/reference/cli/audit/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno audit</a></li><li><a href="/runtime/reference/cli/bench/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno bench</a></li><li><a href="/runtime/reference/cli/bundle/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno bundle</a></li><li><a href="/runtime/reference/cli/check/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno check</a></li><li><a href="/runtime/reference/cli/clean/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno clean</a></li><li><a href="/runtime/reference/cli/compile/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno compile</a></li><li><a href="/runtime/reference/cli/completions/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno completions</a></li><li><a href="/runtime/reference/cli/coverage/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno coverage</a></li><li><a href="/runtime/reference/cli/deploy/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 bg-header-highlight border-foreground-secondary text-gray-800" data-active>deno deploy</a></li><li><a href="/runtime/reference/cli/doc/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno doc</a></li><li><a href="/runtime/reference/cli/eval/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno eval</a></li><li><a href="/runtime/reference/cli/fmt/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno fmt</a></li><li><a href="/runtime/reference/cli/info/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno info</a></li><li><a href="/runtime/reference/cli/init/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno init</a></li><li><a href="/runtime/reference/cli/install/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno install</a></li><li><a href="/runtime/reference/cli/jupyter/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno jupyter</a></li><li><a href="/runtime/reference/cli/lint/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno lint</a></li><li><a href="/runtime/reference/cli/outdated/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno outdated</a></li><li><a href="/runtime/reference/cli/publish/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno publish</a></li><li><a href="/runtime/reference/cli/lsp/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno lsp</a></li><li><a href="/runtime/reference/cli/remove/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno remove</a></li><li><a href="/runtime/reference/cli/repl/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno repl</a></li><li><a href="/runtime/reference/cli/run/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno run</a></li><li><a href="/runtime/reference/cli/sandbox/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno sandbox</a></li><li><a href="/runtime/reference/cli/serve/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno serve</a></li><li><a href="/runtime/reference/cli/task/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno task</a></li><li><a href="/runtime/reference/cli/test/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno test</a></li><li><a href="/runtime/reference/cli/types/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno types</a></li><li><a href="/runtime/reference/cli/uninstall/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno uninstall</a></li><li><a href="/runtime/reference/cli/update/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno update</a></li><li><a href="/runtime/reference/cli/upgrade/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno upgrade</a></li><li><a href="/runtime/reference/cli/unstable_flags/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno unstable flags</a></li><li><a href="/runtime/reference/cli/x/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >deno x</a></li></ul></li><li><button type="button" data-accordion-toggle="Standardlibrary" class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">Standard library</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/reference/std/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Overview</a></li><li><a href="/runtime/reference/std/assert/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >assert</a></li><li><a href="/runtime/reference/std/async/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >async</a></li><li><a href="/runtime/reference/std/bytes/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >bytes</a></li><li><a href="/runtime/reference/std/cache/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cache</a></li><li><a href="/runtime/reference/std/cbor/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cbor</a></li><li><a href="/runtime/reference/std/cli/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >cli</a></li><li><a href="/runtime/reference/std/collections/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >collections</a></li><li><a href="/runtime/reference/std/crypto/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >crypto</a></li><li><a href="/runtime/reference/std/csv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >csv</a></li><li><a href="/runtime/reference/std/data-structures/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >data-structures</a></li><li><a href="/runtime/reference/std/datetime/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >datetime</a></li><li><a href="/runtime/reference/std/dotenv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >dotenv</a></li><li><a href="/runtime/reference/std/encoding/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >encoding</a></li><li><a href="/runtime/reference/std/expect/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >expect</a></li><li><a href="/runtime/reference/std/fmt/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >fmt</a></li><li><a href="/runtime/reference/std/front-matter/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >front-matter</a></li><li><a href="/runtime/reference/std/fs/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >fs</a></li><li><a href="/runtime/reference/std/html/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >html</a></li><li><a href="/runtime/reference/std/http/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >http</a></li><li><a href="/runtime/reference/std/ini/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >ini</a></li><li><a href="/runtime/reference/std/internal/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >internal</a></li><li><a href="/runtime/reference/std/io/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >io</a></li><li><a href="/runtime/reference/std/json/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >json</a></li><li><a href="/runtime/reference/std/jsonc/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >jsonc</a></li><li><a href="/runtime/reference/std/log/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >log</a></li><li><a href="/runtime/reference/std/media-types/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >media-types</a></li><li><a href="/runtime/reference/std/msgpack/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >msgpack</a></li><li><a href="/runtime/reference/std/net/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >net</a></li><li><a href="/runtime/reference/std/path/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >path</a></li><li><a href="/runtime/reference/std/random/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >random</a></li><li><a href="/runtime/reference/std/regexp/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >regexp</a></li><li><a href="/runtime/reference/std/semver/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >semver</a></li><li><a href="/runtime/reference/std/streams/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >streams</a></li><li><a href="/runtime/reference/std/tar/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >tar</a></li><li><a href="/runtime/reference/std/testing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >testing</a></li><li><a href="/runtime/reference/std/text/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >text</a></li><li><a href="/runtime/reference/std/toml/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >toml</a></li><li><a href="/runtime/reference/std/ulid/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >ulid</a></li><li><a href="/runtime/reference/std/uuid/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >uuid</a></li><li><a href="/runtime/reference/std/webgpu/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >webgpu</a></li><li><a href="/runtime/reference/std/yaml/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >yaml</a></li></ul></li><li><a href="/runtime/reference/ts_config_migration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Configuring TypeScript</a></li><li><a href="/runtime/reference/continuous_integration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Continuous integration</a></li><li><a href="/runtime/reference/env_variables/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >环境变量</a></li><li><a href="/runtime/reference/vscode/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno &amp; VS Code</a></li><li><a href="/runtime/reference/jsx/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 JSX 和 React</a></li><li><a href="/runtime/reference/documentation/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在文档中测试代码</a></li><li><a href="/runtime/reference/bundling/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >捆绑</a></li><li><a href="/runtime/reference/lint_plugins/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Lint plugins</a></li><li><a href="/runtime/reference/wasm/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >WebAssembly</a></li><li><a href="/runtime/reference/migration_guide/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Migration guide</a></li><li><a href="/runtime/reference/lsp_integration/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >语言服务器集成</a></li><li><a href="/runtime/reference/docker/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Docker</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">贡献与支持</h2><ul class="p-0 list-none overflow-y-hidden "><li><button type="button" data-accordion-toggle="为Deno做出贡献" class="sub-nav-toggle block relative py-1 px-3 after:right-4 [font:inherit] after:translate-y-1/2 after:transition-transform after:duration-100 after:ease-in after:[background:url(./img/chevron.svg)_no-repeat_center] after:-top-0.5 after:block after:w-4 after:h-4 after:absolute w-full text-left">为 Deno 做出贡献</button><ul class="p-0 list-none overflow-y-hidden "><li><a href="/runtime/contributing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >贡献概述</a></li><li><a href="/runtime/contributing/architecture/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >内部细节</a></li><li><a href="/runtime/contributing/profiling/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >分析</a></li><li><a href="/runtime/contributing/release_schedule/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >发布计划</a></li><li><a href="/runtime/contributing/style_guide/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >风格指南</a></li><li><a href="/runtime/contributing/docs/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >文档</a></li><li><a href="/runtime/contributing/examples/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >示例</a></li></ul></li><li><a href="/runtime/help/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >帮助</a></li></ul></nav></aside><main id="content" class="content "><div class="w-full"><article class="mx-auto"><details class="block lg:hidden my-4 bg-foreground-quaternary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-background-tertiary">On this page</summary><ul class="p-4 pt-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%AE%A4%E8%AF%81" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">认证 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%85%A8%E5%B1%80%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">全局选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%AD%90%E5%91%BD%E4%BB%A4" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">子命令 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建应用 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%80%9A%E7%94%A8%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">通用选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">源代码选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">构建配置选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%A8%A1%E5%BC%8F%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">运行时模式选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9E%84%E5%BB%BA%E8%B5%84%E6%BA%90%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">构建资源选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%90%91%E5%AF%BC" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">交互式向导 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%A4%BA%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">示例 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">环境变量管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出环境变量 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">添加环境变量 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9B%B4%E6%96%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%80%BC" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">更新环境变量值 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%8C%87%E5%AE%9A%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%8A%E4%B8%8B%E6%96%87" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">指定环境变量上下文 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除环境变量 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">从文件加载环境变量 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%A2%84%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">预置数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%85%B3%E8%81%94%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">关联外部数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BB%99%E5%BA%94%E7%94%A8%E5%88%86%E9%85%8D%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">给应用分配数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%8E%E5%BA%94%E7%94%A8%E8%A7%A3%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">从应用解除数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">查询数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除数据库 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87%E5%92%8C%E5%BA%94%E7%94%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">切换组织和应用 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%99%BB%E5%87%BA" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">登出 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">应用日志 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B2%99%E7%AE%B1%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">沙箱管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BB%88%E6%AD%A2%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">终止沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#ssh-%E8%BF%9E%E6%8E%A5%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">SSH 连接沙箱 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%85%8D%E7%BD%AE%E4%BA%91%E8%BF%9E%E6%8E%A5" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">配置云连接 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#aws-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">AWS 集成配置 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#google-cloud-platform-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Google Cloud Platform 集成配置 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">使用示例 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%9F%BA%E7%A1%80%E9%83%A8%E7%BD%B2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">基础部署 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建应用 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%87%E6%8D%A2%E4%B8%8A%E4%B8%8B%E6%96%87" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">切换上下文 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库管理 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">环境变量配置 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%9B%91%E6%8E%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">监控 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BA%91%E9%9B%86%E6%88%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">云集成 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">获取帮助 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-6 sm:mt-6"><h1>deno deploy</h1><div><div class="bg-transparent mt-4 mb-12 relative pl-2 border-l border-background-tertiary"><div class="text-xs font-bold mb-1">Command line usage:</div><div><pre class="!mb-0 !p-6"><code>deno deploy [OPTIONS] [args]...</code></pre></div></div></div><p><code>deno deploy</code> 命令提供了一个命令行接口，用于管理和部署应用到 <a href="https://deno.com/deploy">Deno Deploy EA</a>，这是 Deno 用来托管 JavaScript、TypeScript 和 WebAssembly 应用的平台。</p>
+<p>当不带任何子命令调用时，<code>deno deploy</code> 会将您本地的目录部署到指定的应用中。</p>
+<h2 id="%E8%AE%A4%E8%AF%81" tabindex="-1">认证 <a class="header-anchor" href="#%E8%AE%A4%E8%AF%81"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>deploy 命令使用基于令牌的安全认证，令牌存储在系统的密钥环中：</p>
+<ul>
+<li><strong>自动认证</strong>：CLI 会在需要时提示进行认证</li>
+<li><strong>令牌存储</strong>：部署令牌通过系统密钥环安全存储</li>
+<li><strong>令牌管理</strong>：CLI 提供获取、设置和删除认证令牌的操作</li>
+</ul>
+<h2 id="%E5%85%A8%E5%B1%80%E9%80%89%E9%A1%B9" tabindex="-1">全局选项 <a class="header-anchor" href="#%E5%85%A8%E5%B1%80%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 指定组织名称</li>
+<li><code>--app &lt;name&gt;</code> - 指定应用名称</li>
+<li><code>--prod</code> - 直接部署到生产环境</li>
+</ul>
+<h2 id="%E5%AD%90%E5%91%BD%E4%BB%A4" tabindex="-1">子命令 <a class="header-anchor" href="#%E5%AD%90%E5%91%BD%E4%BB%A4"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8" tabindex="-1">创建应用 <a class="header-anchor" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>在 Deno Deploy 中创建一个新应用。无标志运行时，会启动交互式向导引导每一步。当提供任何配置标志时，命令以非交互模式运行（适用于 CI/CD 流水线和脚本）。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy create <span class="token punctuation">[</span>root-path<span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-63" class="copyButton" data-copy="deno deploy create [root-path]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>可选的 <code>[root-path]</code> 参数设置本地项目目录。默认是当前工作目录。</p>
+<h4 id="%E9%80%9A%E7%94%A8%E9%80%89%E9%A1%B9" tabindex="-1">通用选项 <a class="header-anchor" href="#%E9%80%9A%E7%94%A8%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 创建应用的组织</li>
+<li><code>--app &lt;name&gt;</code> - 应用名称（用于默认 URL）</li>
+<li><code>--allow-node-modules</code> - 上传时包含 <code>node_modules</code></li>
+<li><code>--no-wait</code> - 跳过等待首次构建完成</li>
+<li><code>--dry-run</code> - 验证标志并模拟流程，但不实际创建任何内容</li>
+</ul>
+<h4 id="%E6%BA%90%E4%BB%A3%E7%A0%81%E9%80%89%E9%A1%B9" tabindex="-1">源代码选项 <a class="header-anchor" href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>这些标志控制应用代码来源：</p>
+<ul>
+<li><code>--source &lt;github|local&gt;</code> - 从 GitHub 仓库或本地文件系统部署</li>
+<li><code>--owner &lt;name&gt;</code> - GitHub 拥有者/组织名（源为 <code>github</code> 时必需）</li>
+<li><code>--repo &lt;name&gt;</code> - GitHub 仓库名（源为 <code>github</code> 时必需）</li>
+</ul>
+<h4 id="%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9" tabindex="-1">构建配置选项 <a class="header-anchor" href="#%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<ul>
+<li><code>--app-directory &lt;path&gt;</code> - 项目中应用目录的路径</li>
+<li><code>--framework-preset &lt;preset&gt;</code> - 使用框架预设的构建默认配置。支持的值：<code>astro</code>、<code>nextjs</code>、<code>nuxt</code>、<code>remix</code>、<code>solidstart</code>、<code>sveltekit</code>、<code>fresh</code>、<code>lume</code>，或 <code>&quot;&quot;</code>（无）</li>
+<li><code>--do-not-use-detected-build-config</code> - 跳过自动检测的构建设置，仅使用提供的标志</li>
+<li><code>--install-command &lt;command&gt;</code> - 安装命令（例如 <code>&quot;deno install&quot;</code>）</li>
+<li><code>--build-command &lt;command&gt;</code> - 构建命令（例如 <code>&quot;deno task build&quot;</code>）</li>
+<li><code>--pre-deploy-command &lt;command&gt;</code> - 构建后部署前运行的命令</li>
+</ul>
+<h4 id="%E8%BF%90%E8%A1%8C%E6%97%B6%E6%A8%A1%E5%BC%8F%E9%80%89%E9%A1%B9" tabindex="-1">运行时模式选项 <a class="header-anchor" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%A8%A1%E5%BC%8F%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<ul>
+<li><code>--runtime-mode &lt;dynamic|static&gt;</code> - 应用运行模式，服务器端或静态站点</li>
+</ul>
+<p><strong>动态模式</strong>（服务器）：</p>
+<ul>
+<li><code>--entrypoint &lt;file&gt;</code> - 入口文件（例如 <code>main.ts</code>）</li>
+<li><code>--arguments &lt;arg&gt;</code> - 传递给入口文件的参数（可多次指定）</li>
+<li><code>--working-directory &lt;path&gt;</code> - 进程的工作目录</li>
+</ul>
+<p><strong>静态模式</strong>（静态站点）：</p>
+<ul>
+<li><code>--static-dir &lt;dir&gt;</code> - 存放静态文件的目录</li>
+<li><code>--single-page-app</code> - 对匹配不到文件的路由返回 <code>index.html</code>（替代 404）</li>
+</ul>
+<h4 id="%E6%9E%84%E5%BB%BA%E8%B5%84%E6%BA%90%E9%80%89%E9%A1%B9" tabindex="-1">构建资源选项 <a class="header-anchor" href="#%E6%9E%84%E5%BB%BA%E8%B5%84%E6%BA%90%E9%80%89%E9%A1%B9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<ul>
+<li><code>--build-timeout &lt;minutes&gt;</code> - 构建超时时间。允许值：<code>5</code>、<code>10</code>、<code>15</code>、<code>20</code>、<code>25</code>、<code>30</code></li>
+<li><code>--build-memory-limit &lt;megabytes&gt;</code> - 构建内存限制（MB）。允许值：<code>1024</code>、<code>2048</code>、<code>3072</code>、<code>4096</code></li>
+<li><code>--region &lt;region&gt;</code> - 部署区域。允许值：<code>us</code>、<code>eu</code>、<code>global</code></li>
+</ul>
+<h4 id="%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%90%91%E5%AF%BC" tabindex="-1">交互式向导 <a class="header-anchor" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%90%91%E5%AF%BC"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>运行 <code>deno deploy create</code> 无标志时，交互式向导会引导你完成每步配置：</p>
+<ol>
+<li><strong>组织</strong> - 选择创建应用的组织</li>
+<li><strong>应用名</strong> - 选择应用名称</li>
+<li><strong>来源</strong> - 从 GitHub 或本地目录部署</li>
+<li><strong>GitHub 仓库</strong> <em>(如果来源是 GitHub)</em> - 选择拥有者和仓库</li>
+<li><strong>应用目录</strong> - 选择项目内的目录（自动检测工作区成员）</li>
+<li><strong>构建配置</strong> - 自动检测框架设置，可接受或手动配置（框架预设、安装/构建命令、运行时模式等）</li>
+<li><strong>构建超时</strong> - 构建允许最长时间</li>
+<li><strong>构建内存限制</strong> - 分配给构建的内存大小</li>
+<li><strong>区域</strong> - 部署到哪里（<code>us</code>、<code>eu</code> 或 <code>global</code>）</li>
+<li><strong>确认</strong> - 创建前预览和确认</li>
+</ol>
+<h4 id="%E7%A4%BA%E4%BE%8B" tabindex="-1">示例 <a class="header-anchor" href="#%E7%A4%BA%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>交互式创建应用：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy create
+</code></pre>
+
+      <button id="copy-button-289" class="copyButton" data-copy="deno deploy create
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>使用所有标志创建本地动态应用（非交互）：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy create <span class="token punctuation">\</span>
+  <span class="token parameter variable">--org</span> my-org <span class="token punctuation">\</span>
+  <span class="token parameter variable">--app</span> my-api <span class="token punctuation">\</span>
+  <span class="token parameter variable">--source</span> <span class="token builtin class-name">local</span> <span class="token punctuation">\</span>
+  --runtime-mode dynamic <span class="token punctuation">\</span>
+  <span class="token parameter variable">--entrypoint</span> main.ts <span class="token punctuation">\</span>
+  --install-command <span class="token string">"deno install"</span> <span class="token punctuation">\</span>
+  --build-command <span class="token string">"deno task build"</span> <span class="token punctuation">\</span>
+  --build-timeout <span class="token number">5</span> <span class="token punctuation">\</span>
+  --build-memory-limit <span class="token number">1024</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">--region</span> us
+</code></pre>
+
+      <button id="copy-button-293" class="copyButton" data-copy="deno deploy create \
+  --org my-org \
+  --app my-api \
+  --source local \
+  --runtime-mode dynamic \
+  --entrypoint main.ts \
+  --install-command &quot;deno install&quot; \
+  --build-command &quot;deno task build&quot; \
+  --build-timeout 5 \
+  --build-memory-limit 1024 \
+  --region us
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>创建静态站点：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy create <span class="token punctuation">\</span>
+  <span class="token parameter variable">--org</span> my-org <span class="token punctuation">\</span>
+  <span class="token parameter variable">--app</span> my-site <span class="token punctuation">\</span>
+  <span class="token parameter variable">--source</span> <span class="token builtin class-name">local</span> <span class="token punctuation">\</span>
+  --runtime-mode static <span class="token punctuation">\</span>
+  --static-dir dist <span class="token punctuation">\</span>
+  --single-page-app <span class="token punctuation">\</span>
+  --build-command <span class="token string">"deno task build"</span> <span class="token punctuation">\</span>
+  --build-timeout <span class="token number">10</span> <span class="token punctuation">\</span>
+  --build-memory-limit <span class="token number">2048</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">--region</span> us
+</code></pre>
+
+      <button id="copy-button-297" class="copyButton" data-copy="deno deploy create \
+  --org my-org \
+  --app my-site \
+  --source local \
+  --runtime-mode static \
+  --static-dir dist \
+  --single-page-app \
+  --build-command &quot;deno task build&quot; \
+  --build-timeout 10 \
+  --build-memory-limit 2048 \
+  --region us
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>使用框架预设（因为预设提供默认配置，使用的标志更少）：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy create <span class="token punctuation">\</span>
+  <span class="token parameter variable">--org</span> my-org <span class="token punctuation">\</span>
+  <span class="token parameter variable">--app</span> my-fresh-app <span class="token punctuation">\</span>
+  <span class="token parameter variable">--source</span> <span class="token builtin class-name">local</span> <span class="token punctuation">\</span>
+  --framework-preset fresh <span class="token punctuation">\</span>
+  --build-timeout <span class="token number">5</span> <span class="token punctuation">\</span>
+  --build-memory-limit <span class="token number">1024</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">--region</span> us
+</code></pre>
+
+      <button id="copy-button-301" class="copyButton" data-copy="deno deploy create \
+  --org my-org \
+  --app my-fresh-app \
+  --source local \
+  --framework-preset fresh \
+  --build-timeout 5 \
+  --build-memory-limit 1024 \
+  --region us
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>从 GitHub 仓库部署：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy create <span class="token punctuation">\</span>
+  <span class="token parameter variable">--org</span> my-org <span class="token punctuation">\</span>
+  <span class="token parameter variable">--app</span> my-app <span class="token punctuation">\</span>
+  <span class="token parameter variable">--source</span> github <span class="token punctuation">\</span>
+  <span class="token parameter variable">--owner</span> my-github-org <span class="token punctuation">\</span>
+  <span class="token parameter variable">--repo</span> my-repo <span class="token punctuation">\</span>
+  --framework-preset astro <span class="token punctuation">\</span>
+  --build-timeout <span class="token number">10</span> <span class="token punctuation">\</span>
+  --build-memory-limit <span class="token number">2048</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">--region</span> global
+</code></pre>
+
+      <button id="copy-button-305" class="copyButton" data-copy="deno deploy create \
+  --org my-org \
+  --app my-app \
+  --source github \
+  --owner my-github-org \
+  --repo my-repo \
+  --framework-preset astro \
+  --build-timeout 10 \
+  --build-memory-limit 2048 \
+  --region global
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%AE%A1%E7%90%86" tabindex="-1">环境变量管理 <a class="header-anchor" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%AE%A1%E7%90%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>管理已部署应用的环境变量。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span>
+</code></pre>
+
+      <button id="copy-button-312" class="copyButton" data-copy="deno deploy env
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>选项：</strong></p>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 组织名称</li>
+<li><code>--app &lt;name&gt;</code> - 应用名称</li>
+</ul>
+<h4 id="%E5%88%97%E5%87%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" tabindex="-1">列出环境变量 <a class="header-anchor" href="#%E5%88%97%E5%87%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> list
+</code></pre>
+
+      <button id="copy-button-336" class="copyButton" data-copy="deno deploy env list
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>列出应用中的所有环境变量。</p>
+<h4 id="%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" tabindex="-1">添加环境变量 <a class="header-anchor" href="#%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> <span class="token function">add</span> <span class="token operator">&lt;</span>variable<span class="token operator">></span> <span class="token operator">&lt;</span>value<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-343" class="copyButton" data-copy="deno deploy env add <variable> <value>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>向应用添加环境变量。</p>
+<p><strong>选项：</strong></p>
+<ul>
+<li><code>--secret</code> - 标记变量为秘密。秘密值在仪表盘和 <code>env list</code> 输出中隐藏。</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> <span class="token function">add</span> DATABASE_URL <span class="token string">"postgresql://user:pass@localhost/db"</span>
+
+<span class="token comment"># 添加一个秘密环境变量</span>
+deno deploy <span class="token function">env</span> <span class="token function">add</span> API_KEY <span class="token string">"sk-secret-value"</span> <span class="token parameter variable">--secret</span>
+</code></pre>
+
+      <button id="copy-button-360" class="copyButton" data-copy="deno deploy env add DATABASE_URL &quot;postgresql://user:pass@localhost/db&quot;
+
+# 添加一个秘密环境变量
+deno deploy env add API_KEY &quot;sk-secret-value&quot; --secret
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E6%9B%B4%E6%96%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%80%BC" tabindex="-1">更新环境变量值 <a class="header-anchor" href="#%E6%9B%B4%E6%96%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%80%BC"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> update-value <span class="token operator">&lt;</span>variable<span class="token operator">></span> <span class="token operator">&lt;</span>value<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-364" class="copyButton" data-copy="deno deploy env update-value <variable> <value>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>更新已有环境变量的值。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> update-value API_KEY <span class="token string">"new-api-key-value"</span>
+</code></pre>
+
+      <button id="copy-button-371" class="copyButton" data-copy="deno deploy env update-value API_KEY &quot;new-api-key-value&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E6%8C%87%E5%AE%9A%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%8A%E4%B8%8B%E6%96%87" tabindex="-1">指定环境变量上下文 <a class="header-anchor" href="#%E6%8C%87%E5%AE%9A%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p>环境变量可以指定可用的上下文，如生产、预览、本地和构建环境。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> update-contexts <span class="token operator">&lt;</span>variable<span class="token operator">></span> <span class="token punctuation">[</span>contexts<span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-378" class="copyButton" data-copy="deno deploy env update-contexts <variable> [contexts...]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>更新应用中环境变量的上下文：</p>
+<h4 id="%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" tabindex="-1">删除环境变量 <a class="header-anchor" href="#%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> delete <span class="token operator">&lt;</span>variable<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-385" class="copyButton" data-copy="deno deploy env delete <variable>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>从应用中删除环境变量。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> delete OLD_API_KEY
+</code></pre>
+
+      <button id="copy-button-392" class="copyButton" data-copy="deno deploy env delete OLD_API_KEY
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E4%BB%8E%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" tabindex="-1">从文件加载环境变量 <a class="header-anchor" href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> load <span class="token operator">&lt;</span>file<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-396" class="copyButton" data-copy="deno deploy env load <file>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>从 <code>.env</code> 文件加载环境变量到应用。CLI 根据变量名自动检测其是否为秘密（例如包含 <code>SECRET</code>、<code>TOKEN</code>、<code>PASSWORD</code> 等关键字的变量），并相应标记。</p>
+<p><strong>选项：</strong></p>
+<ul>
+<li><code>--non-secrets &lt;keys...&gt;</code> - 指定 <code>.env</code> 文件中应被当作非秘密的键，覆盖自动检测</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token function">env</span> load .env.production
+
+<span class="token comment"># 加载并指定某些键为非秘密</span>
+deno deploy <span class="token function">env</span> load .env.production --non-secrets PUBLIC_URL SITE_NAME
+</code></pre>
+
+      <button id="copy-button-413" class="copyButton" data-copy="deno deploy env load .env.production
+
+# 加载并指定某些键为非秘密
+deno deploy env load .env.production --non-secrets PUBLIC_URL SITE_NAME
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86" tabindex="-1">数据库管理 <a class="header-anchor" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>管理组织的数据库实例。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database
+</code></pre>
+
+      <button id="copy-button-420" class="copyButton" data-copy="deno deploy database
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>选项：</strong></p>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 组织名称</li>
+</ul>
+<h4 id="%E9%A2%84%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">预置数据库 <a class="header-anchor" href="#%E9%A2%84%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database provision <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token parameter variable">--kind</span> <span class="token operator">&lt;</span>denokv<span class="token operator">|</span>prisma<span class="token operator">></span> <span class="token punctuation">[</span>--region <span class="token operator">&lt;</span>region<span class="token operator">></span><span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-439" class="copyButton" data-copy="deno deploy database provision <name> --kind <denokv|prisma> [--region <region>]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>创建新的数据库实例。</p>
+<p><strong>选项：</strong></p>
+<ul>
+<li><code>--kind &lt;denokv|prisma&gt;</code> - 要预置的数据库类型（必填）</li>
+<li><code>--region &lt;region&gt;</code> - 数据库的主区域（Prisma 类型必填）</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 预置一个 Deno KV 数据库</span>
+deno deploy database provision my-kv-db <span class="token parameter variable">--kind</span> denokv
+
+<span class="token comment"># 预置一个 Prisma Postgres 数据库</span>
+deno deploy database provision my-pg-db <span class="token parameter variable">--kind</span> prisma <span class="token parameter variable">--region</span> us-east-1
+</code></pre>
+
+      <button id="copy-button-461" class="copyButton" data-copy="# 预置一个 Deno KV 数据库
+deno deploy database provision my-kv-db --kind denokv
+
+# 预置一个 Prisma Postgres 数据库
+deno deploy database provision my-pg-db --kind prisma --region us-east-1
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E5%85%B3%E8%81%94%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">关联外部数据库 <a class="header-anchor" href="#%E5%85%B3%E8%81%94%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database <span class="token function">link</span> <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token punctuation">[</span>connectionString<span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-465" class="copyButton" data-copy="deno deploy database link <name> [connectionString]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>将外部 PostgreSQL 数据库连接到组织。可以提供连接字符串或使用单独的标志。</p>
+<p><strong>选项：</strong></p>
+<ul>
+<li><code>--hostname &lt;host&gt;</code> - 数据库域名（与连接字符串冲突）</li>
+<li><code>--username &lt;user&gt;</code> - 数据库用户名（与连接字符串冲突）</li>
+<li><code>--password &lt;pass&gt;</code> - 数据库密码（与连接字符串冲突）</li>
+<li><code>--port &lt;number&gt;</code> - 数据库端口（与连接字符串冲突）</li>
+<li><code>--cert &lt;cert&gt;</code> - SSL 证书用于连接</li>
+<li><code>--dry-run</code> - 测试连接但不实际关联</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 使用连接字符串关联</span>
+deno deploy database <span class="token function">link</span> my-db <span class="token string">"postgres://user:pass@host:5432/mydb"</span>
+
+<span class="token comment"># 使用单独标志关联</span>
+deno deploy database <span class="token function">link</span> my-db <span class="token punctuation">\</span>
+  <span class="token parameter variable">--hostname</span> db.example.com <span class="token punctuation">\</span>
+  <span class="token parameter variable">--username</span> admin <span class="token punctuation">\</span>
+  <span class="token parameter variable">--password</span> secret <span class="token punctuation">\</span>
+  <span class="token parameter variable">--port</span> <span class="token number">5432</span>
+
+<span class="token comment"># 先测试连接</span>
+deno deploy database <span class="token function">link</span> my-db <span class="token string">"postgres://user:pass@host:5432/mydb"</span> --dry-run
+</code></pre>
+
+      <button id="copy-button-507" class="copyButton" data-copy="# 使用连接字符串关联
+deno deploy database link my-db &quot;postgres://user:pass@host:5432/mydb&quot;
+
+# 使用单独标志关联
+deno deploy database link my-db \
+  --hostname db.example.com \
+  --username admin \
+  --password secret \
+  --port 5432
+
+# 先测试连接
+deno deploy database link my-db &quot;postgres://user:pass@host:5432/mydb&quot; --dry-run
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E7%BB%99%E5%BA%94%E7%94%A8%E5%88%86%E9%85%8D%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">给应用分配数据库 <a class="header-anchor" href="#%E7%BB%99%E5%BA%94%E7%94%A8%E5%88%86%E9%85%8D%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database assign <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token punctuation">[</span>--app <span class="token operator">&lt;</span>name<span class="token operator">></span><span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-511" class="copyButton" data-copy="deno deploy database assign <name> [--app <name>]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>将数据库实例分配给应用。如果没提供 <code>--app</code>，会交互式提示选择应用。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database assign my-db <span class="token parameter variable">--app</span> my-api
+</code></pre>
+
+      <button id="copy-button-518" class="copyButton" data-copy="deno deploy database assign my-db --app my-api
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E4%BB%8E%E5%BA%94%E7%94%A8%E8%A7%A3%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">从应用解除数据库 <a class="header-anchor" href="#%E4%BB%8E%E5%BA%94%E7%94%A8%E8%A7%A3%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database detach <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token punctuation">[</span>--app <span class="token operator">&lt;</span>name<span class="token operator">></span><span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-522" class="copyButton" data-copy="deno deploy database detach <name> [--app <name>]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>移除数据库实例与应用的连接。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database detach my-db <span class="token parameter variable">--app</span> my-api
+</code></pre>
+
+      <button id="copy-button-529" class="copyButton" data-copy="deno deploy database detach my-db --app my-api
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">查询数据库 <a class="header-anchor" href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database query <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token operator">&lt;</span>database<span class="token operator">></span> <span class="token punctuation">[</span>query<span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-533" class="copyButton" data-copy="deno deploy database query <name> <database> [query...]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>对数据库执行 SQL 查询。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database query my-db mydb <span class="token string">"SELECT * FROM users LIMIT 10"</span>
+</code></pre>
+
+      <button id="copy-button-540" class="copyButton" data-copy="deno deploy database query my-db mydb &quot;SELECT * FROM users LIMIT 10&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E5%88%97%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">列出数据库 <a class="header-anchor" href="#%E5%88%97%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database list <span class="token punctuation">[</span>search<span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-544" class="copyButton" data-copy="deno deploy database list [search]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>列出组织中所有数据库实例。也支持 <code>database ls</code>。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 列出所有数据库</span>
+deno deploy database list
+
+<span class="token comment"># 根据名称过滤</span>
+deno deploy database list my-db
+</code></pre>
+
+      <button id="copy-button-551" class="copyButton" data-copy="# 列出所有数据库
+deno deploy database list
+
+# 根据名称过滤
+deno deploy database list my-db
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h4 id="%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93" tabindex="-1">删除数据库 <a class="header-anchor" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database delete <span class="token operator">&lt;</span>name<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-555" class="copyButton" data-copy="deno deploy database delete <name>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>永久删除数据库实例。也可用 <code>database remove</code> 或 <code>database rm</code>。</p>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy database delete my-old-db
+</code></pre>
+
+      <button id="copy-button-562" class="copyButton" data-copy="deno deploy database delete my-old-db
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87%E5%92%8C%E5%BA%94%E7%94%A8" tabindex="-1">切换组织和应用 <a class="header-anchor" href="#%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87%E5%92%8C%E5%BA%94%E7%94%A8"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>设置默认组织和应用，后续命令无需重复传递 <code>--org</code> 和 <code>--app</code>。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy switch <span class="token punctuation">[</span>--org <span class="token operator">&lt;</span>name<span class="token operator">></span><span class="token punctuation">]</span> <span class="token punctuation">[</span>--app <span class="token operator">&lt;</span>name<span class="token operator">></span><span class="token punctuation">]</span>
+</code></pre>
+
+      <button id="copy-button-569" class="copyButton" data-copy="deno deploy switch [--org <name>] [--app <name>]
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>无标志运行时，交互式提示选择组织和应用。</p>
+<p><strong>选项：</strong></p>
+<ul>
+<li><code>--org &lt;name&gt;</code> - 切换到的组织</li>
+<li><code>--app &lt;name&gt;</code> - 切换到的应用</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 交互式切换</span>
+deno deploy switch
+
+<span class="token comment"># 切换到特定组织和应用</span>
+deno deploy switch <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api
+</code></pre>
+
+      <button id="copy-button-591" class="copyButton" data-copy="# 交互式切换
+deno deploy switch
+
+# 切换到特定组织和应用
+deno deploy switch --org my-company --app my-api
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E7%99%BB%E5%87%BA" tabindex="-1">登出 <a class="header-anchor" href="#%E7%99%BB%E5%87%BA"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>移除存储的认证令牌。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy <span class="token builtin class-name">logout</span>
+</code></pre>
+
+      <button id="copy-button-598" class="copyButton" data-copy="deno deploy logout
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97" tabindex="-1">应用日志 <a class="header-anchor" href="#%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>流式查看已部署应用日志。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy logs
+</code></pre>
+
+      <button id="copy-button-605" class="copyButton" data-copy="deno deploy logs
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>选项：</strong></p>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 组织名称</li>
+<li><code>--app &lt;name&gt;</code> - 应用名称</li>
+<li><code>--start &lt;date&gt;</code> - 日志的起始时间戳</li>
+<li><code>--end &lt;date&gt;</code> - 日志的结束时间戳（需要 <code>--start</code>）</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy logs <span class="token parameter variable">--org</span> my-org <span class="token parameter variable">--app</span> my-app <span class="token parameter variable">--start</span> <span class="token string">"2024-01-01T00:00:00Z"</span>
+</code></pre>
+
+      <button id="copy-button-639" class="copyButton" data-copy="deno deploy logs --org my-org --app my-app --start &quot;2024-01-01T00:00:00Z&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%B2%99%E7%AE%B1%E7%AE%A1%E7%90%86" tabindex="-1">沙箱管理 <a class="header-anchor" href="#%E6%B2%99%E7%AE%B1%E7%AE%A1%E7%90%86"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>从 Deploy CLI 直接操作运行中的沙箱。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy sandbox <span class="token parameter variable">--help</span>
+</code></pre>
+
+      <button id="copy-button-646" class="copyButton" data-copy="deno deploy sandbox --help
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>选项：</strong></p>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--token &lt;token&gt;</code> - 覆盖沙箱操作使用的认证令牌</li>
+<li><code>--config &lt;path&gt;</code> - 自定义 Deploy CLI 配置文件路径</li>
+<li><code>--org &lt;name&gt;</code> - 拥有沙箱的组织</li>
+</ul>
+<h4 id="%E5%88%97%E5%87%BA%E6%B2%99%E7%AE%B1" tabindex="-1">列出沙箱 <a class="header-anchor" href="#%E5%88%97%E5%87%BA%E6%B2%99%E7%AE%B1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy sandbox list <span class="token parameter variable">--org</span> my-org
+</code></pre>
+
+      <button id="copy-button-675" class="copyButton" data-copy="deno deploy sandbox list --org my-org
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>列出组织中的所有沙箱及状态信息。</p>
+<h4 id="%E7%BB%88%E6%AD%A2%E6%B2%99%E7%AE%B1" tabindex="-1">终止沙箱 <a class="header-anchor" href="#%E7%BB%88%E6%AD%A2%E6%B2%99%E7%AE%B1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy sandbox <span class="token function">kill</span> <span class="token operator">&lt;</span>sandbox-id<span class="token operator">></span> <span class="token parameter variable">--org</span> my-org
+</code></pre>
+
+      <button id="copy-button-682" class="copyButton" data-copy="deno deploy sandbox kill <sandbox-id> --org my-org
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>即时终止指定沙箱，适用于不再需要时。</p>
+<h4 id="ssh-%E8%BF%9E%E6%8E%A5%E6%B2%99%E7%AE%B1" tabindex="-1">SSH 连接沙箱 <a class="header-anchor" href="#ssh-%E8%BF%9E%E6%8E%A5%E6%B2%99%E7%AE%B1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy sandbox <span class="token function">ssh</span> <span class="token operator">&lt;</span>sandbox-id<span class="token operator">></span> <span class="token parameter variable">--org</span> my-org
+</code></pre>
+
+      <button id="copy-button-689" class="copyButton" data-copy="deno deploy sandbox ssh <sandbox-id> --org my-org
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>启动 SSH 会话，用于交互式调试运行中的沙箱。</p>
+<h3 id="%E9%85%8D%E7%BD%AE%E4%BA%91%E8%BF%9E%E6%8E%A5" tabindex="-1">配置云连接 <a class="header-anchor" href="#%E9%85%8D%E7%BD%AE%E4%BA%91%E8%BF%9E%E6%8E%A5"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><code>deploy</code> 命令包含工具，帮助您配置集成程序，以供应用中使用的<a href="/deploy/reference/cloud_connections/">云连接</a>。</p>
+<h4 id="aws-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE" tabindex="-1">AWS 集成配置 <a class="header-anchor" href="#aws-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h4>
+<p><a href="/deploy/reference/cloud_connections/#aws%3A-easy-setup-with-deno-deploy-setup-aws">配置 AWS 集成</a>，供应用中作为云连接使用。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy setup-aws <span class="token parameter variable">--org</span> <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token parameter variable">--app</span> <span class="token operator">&lt;</span>name<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-705" class="copyButton" data-copy="deno deploy setup-aws --org <name> --app <name>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>选项：</strong></p>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 组织名称（必填）</li>
+<li><code>--app &lt;name&gt;</code> - 应用名称（必填）</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy setup-aws <span class="token parameter variable">--org</span> my-org <span class="token parameter variable">--app</span> my-app
+</code></pre>
+
+      <button id="copy-button-729" class="copyButton" data-copy="deno deploy setup-aws --org my-org --app my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="google-cloud-platform-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE" tabindex="-1">Google Cloud Platform 集成配置 <a class="header-anchor" href="#google-cloud-platform-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p><a href="/deploy/reference/cloud_connections/#setting-up-gcp">配置 Google Cloud Platform 集成</a>，供应用中作为云连接使用。</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy setup-gcp <span class="token parameter variable">--org</span> <span class="token operator">&lt;</span>name<span class="token operator">></span> <span class="token parameter variable">--app</span> <span class="token operator">&lt;</span>name<span class="token operator">></span>
+</code></pre>
+
+      <button id="copy-button-736" class="copyButton" data-copy="deno deploy setup-gcp --org <name> --app <name>
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p><strong>选项：</strong></p>
+<ul>
+<li><code>-h, --help</code> - 显示帮助信息</li>
+<li><code>--org &lt;name&gt;</code> - 组织名称（必填）</li>
+<li><code>--app &lt;name&gt;</code> - 应用名称（必填）</li>
+</ul>
+<p>示例：</p>
+<div class="relative"><pre><code class="highlight notranslate language-bash">deno deploy setup-gcp <span class="token parameter variable">--org</span> my-org <span class="token parameter variable">--app</span> my-app
+</code></pre>
+
+      <button id="copy-button-760" class="copyButton" data-copy="deno deploy setup-gcp --org my-org --app my-app
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B" tabindex="-1">使用示例 <a class="header-anchor" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E5%9F%BA%E7%A1%80%E9%83%A8%E7%BD%B2" tabindex="-1">基础部署 <a class="header-anchor" href="#%E5%9F%BA%E7%A1%80%E9%83%A8%E7%BD%B2"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 将当前目录部署到生产环境</span>
+deno deploy <span class="token parameter variable">--prod</span>
+
+<span class="token comment"># 使用特定组织和应用部署</span>
+deno deploy <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api <span class="token parameter variable">--prod</span>
+</code></pre>
+
+      <button id="copy-button-767" class="copyButton" data-copy="# 将当前目录部署到生产环境
+deno deploy --prod
+
+# 使用特定组织和应用部署
+deno deploy --org my-company --app my-api --prod
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8-1" tabindex="-1">创建应用 <a class="header-anchor" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 启动交互式创建向导</span>
+deno deploy create
+
+<span class="token comment"># 使用框架预设创建</span>
+deno deploy create <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-site <span class="token punctuation">\</span>
+  <span class="token parameter variable">--source</span> <span class="token builtin class-name">local</span> --framework-preset fresh <span class="token punctuation">\</span>
+  --build-timeout <span class="token number">5</span> --build-memory-limit <span class="token number">1024</span> <span class="token parameter variable">--region</span> us
+
+<span class="token comment"># 从 GitHub 仓库创建静态站点</span>
+deno deploy create <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-docs <span class="token punctuation">\</span>
+  <span class="token parameter variable">--source</span> github <span class="token parameter variable">--owner</span> my-github-org <span class="token parameter variable">--repo</span> my-docs-repo <span class="token punctuation">\</span>
+  --runtime-mode static --static-dir dist --single-page-app <span class="token punctuation">\</span>
+  --build-command <span class="token string">"npm run build"</span> <span class="token punctuation">\</span>
+  --build-timeout <span class="token number">10</span> --build-memory-limit <span class="token number">2048</span> <span class="token parameter variable">--region</span> global
+</code></pre>
+
+      <button id="copy-button-771" class="copyButton" data-copy="# 启动交互式创建向导
+deno deploy create
+
+# 使用框架预设创建
+deno deploy create --org my-company --app my-site \
+  --source local --framework-preset fresh \
+  --build-timeout 5 --build-memory-limit 1024 --region us
+
+# 从 GitHub 仓库创建静态站点
+deno deploy create --org my-company --app my-docs \
+  --source github --owner my-github-org --repo my-docs-repo \
+  --runtime-mode static --static-dir dist --single-page-app \
+  --build-command &quot;npm run build&quot; \
+  --build-timeout 10 --build-memory-limit 2048 --region global
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E5%88%87%E6%8D%A2%E4%B8%8A%E4%B8%8B%E6%96%87" tabindex="-1">切换上下文 <a class="header-anchor" href="#%E5%88%87%E6%8D%A2%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 设置默认组织和应用，无需每次传递 --org/--app</span>
+deno deploy switch <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api
+
+<span class="token comment"># 后续命令自动使用保存的组织和应用</span>
+deno deploy <span class="token function">env</span> list
+deno deploy logs
+</code></pre>
+
+      <button id="copy-button-775" class="copyButton" data-copy="# 设置默认组织和应用，无需每次传递 --org/--app
+deno deploy switch --org my-company --app my-api
+
+# 后续命令自动使用保存的组织和应用
+deno deploy env list
+deno deploy logs
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86-1" tabindex="-1">数据库管理 <a class="header-anchor" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86-1"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 预置 Deno KV 数据库</span>
+deno deploy database provision my-kv <span class="token parameter variable">--kind</span> denokv <span class="token parameter variable">--org</span> my-company
+
+<span class="token comment"># 关联外部 PostgreSQL 数据库</span>
+deno deploy database <span class="token function">link</span> my-pg <span class="token string">"postgres://user:pass@host:5432/db"</span> <span class="token parameter variable">--org</span> my-company
+
+<span class="token comment"># 给应用分配数据库</span>
+deno deploy database assign my-kv <span class="token parameter variable">--app</span> my-api
+
+<span class="token comment"># 查询数据库</span>
+deno deploy database query my-pg mydb <span class="token string">"SELECT count(*) FROM users"</span>
+</code></pre>
+
+      <button id="copy-button-779" class="copyButton" data-copy="# 预置 Deno KV 数据库
+deno deploy database provision my-kv --kind denokv --org my-company
+
+# 关联外部 PostgreSQL 数据库
+deno deploy database link my-pg &quot;postgres://user:pass@host:5432/db&quot; --org my-company
+
+# 给应用分配数据库
+deno deploy database assign my-kv --app my-api
+
+# 查询数据库
+deno deploy database query my-pg mydb &quot;SELECT count(*) FROM users&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE" tabindex="-1">环境变量配置 <a class="header-anchor" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 设置环境变量</span>
+deno deploy <span class="token function">env</span> <span class="token function">add</span> DATABASE_URL <span class="token string">"postgresql://..."</span> <span class="token parameter variable">--secret</span>
+deno deploy <span class="token function">env</span> <span class="token function">add</span> SITE_NAME <span class="token string">"My App"</span>
+
+<span class="token comment"># 从 .env 文件加载</span>
+deno deploy <span class="token function">env</span> load .env.production
+</code></pre>
+
+      <button id="copy-button-783" class="copyButton" data-copy="# 设置环境变量
+deno deploy env add DATABASE_URL &quot;postgresql://...&quot; --secret
+deno deploy env add SITE_NAME &quot;My App&quot;
+
+# 从 .env 文件加载
+deno deploy env load .env.production
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E7%9B%91%E6%8E%A7" tabindex="-1">监控 <a class="header-anchor" href="#%E7%9B%91%E6%8E%A7"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 查看最近日志</span>
+deno deploy logs <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api
+
+<span class="token comment"># 查看特定时间段日志</span>
+deno deploy logs <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api <span class="token punctuation">\</span>
+  <span class="token parameter variable">--start</span> <span class="token string">"2024-01-01T00:00:00Z"</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">--end</span> <span class="token string">"2024-01-01T23:59:59Z"</span>
+</code></pre>
+
+      <button id="copy-button-787" class="copyButton" data-copy="# 查看最近日志
+deno deploy logs --org my-company --app my-api
+
+# 查看特定时间段日志
+deno deploy logs --org my-company --app my-api \
+  --start &quot;2024-01-01T00:00:00Z&quot; \
+  --end &quot;2024-01-01T23:59:59Z&quot;
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E4%BA%91%E9%9B%86%E6%88%90" tabindex="-1">云集成 <a class="header-anchor" href="#%E4%BA%91%E9%9B%86%E6%88%90"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<div class="relative"><pre><code class="highlight notranslate language-bash"><span class="token comment"># 设置 AWS 集成</span>
+deno deploy setup-aws <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api
+
+<span class="token comment"># 设置 GCP 集成</span>
+deno deploy setup-gcp <span class="token parameter variable">--org</span> my-company <span class="token parameter variable">--app</span> my-api
+</code></pre>
+
+      <button id="copy-button-791" class="copyButton" data-copy="# 设置 AWS 集成
+deno deploy setup-aws --org my-company --app my-api
+
+# 设置 GCP 集成
+deno deploy setup-gcp --org my-company --app my-api
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9" tabindex="-1">获取帮助 <a class="header-anchor" href="#%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<ul>
+<li>使用 <code>deno deploy --help</code> 获取通用帮助</li>
+<li>使用 <code>deno deploy &lt;subcommand&gt; --help</code> 获取具体子命令帮助</li>
+<li>查阅 <a href="/deploy/">Deno Deploy 文档</a> 了解平台相关信息</li>
+</ul>
+</div></article><div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 sm:p-8 bg-blue-splash dark:bg-deploy-900 rounded-md mx-auto"><h2 class="text-xl mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/runtime/reference/cli/deploy.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value=""><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn  mt-4">发送反馈给我们</button></div></div><a rel="" class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/privacy_policy">隐私政策</a></form></div></div></section></div></main><ul class="toc-list hidden sticky p-4 pr-0 h-screen-minus-header overflow-y-auto border-l border-l-foreground-tertiary lg:block lg:w-full top-header" id="toc"><div class="wwads-cn wwads-vertical max-w-[200px] my-4" data-id="354"></div><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%AE%A4%E8%AF%81" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">认证 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%85%A8%E5%B1%80%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">全局选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%AD%90%E5%91%BD%E4%BB%A4" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">子命令 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建应用 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%80%9A%E7%94%A8%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">通用选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%BA%90%E4%BB%A3%E7%A0%81%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">源代码选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">构建配置选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%A8%A1%E5%BC%8F%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">运行时模式选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9E%84%E5%BB%BA%E8%B5%84%E6%BA%90%E9%80%89%E9%A1%B9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">构建资源选项 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%90%91%E5%AF%BC" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">交互式向导 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%A4%BA%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">示例 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">环境变量管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出环境变量 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">添加环境变量 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9B%B4%E6%96%B0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%80%BC" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">更新环境变量值 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%8C%87%E5%AE%9A%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E4%B8%8A%E4%B8%8B%E6%96%87" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">指定环境变量上下文 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除环境变量 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%8E%E6%96%87%E4%BB%B6%E5%8A%A0%E8%BD%BD%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">从文件加载环境变量 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%A2%84%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">预置数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%85%B3%E8%81%94%E5%A4%96%E9%83%A8%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">关联外部数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BB%99%E5%BA%94%E7%94%A8%E5%88%86%E9%85%8D%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">给应用分配数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BB%8E%E5%BA%94%E7%94%A8%E8%A7%A3%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">从应用解除数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">查询数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出数据库 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">删除数据库 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%87%E6%8D%A2%E7%BB%84%E7%BB%87%E5%92%8C%E5%BA%94%E7%94%A8" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">切换组织和应用 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%99%BB%E5%87%BA" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">登出 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">应用日志 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B2%99%E7%AE%B1%E7%AE%A1%E7%90%86" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">沙箱管理 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%97%E5%87%BA%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">列出沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%BB%88%E6%AD%A2%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">终止沙箱 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#ssh-%E8%BF%9E%E6%8E%A5%E6%B2%99%E7%AE%B1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">SSH 连接沙箱 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%85%8D%E7%BD%AE%E4%BA%91%E8%BF%9E%E6%8E%A5" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">配置云连接 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#aws-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">AWS 集成配置 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#google-cloud-platform-%E9%9B%86%E6%88%90%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Google Cloud Platform 集成配置 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">使用示例 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%9F%BA%E7%A1%80%E9%83%A8%E7%BD%B2" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">基础部署 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">创建应用 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E5%88%87%E6%8D%A2%E4%B8%8A%E4%B8%8B%E6%96%87" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">切换上下文 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86-1" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">数据库管理 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">环境变量配置 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%9B%91%E6%8E%A7" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">监控 </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E4%BA%91%E9%9B%86%E6%88%90" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">云集成 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">获取帮助 </a></li></ul></div><footer class="text-smaller bg-gray-50 dark:bg-gray-950 p-4 pt-12 sm:px-8 border-t border-t-foreground-tertiary"><nav class="flex flex-col gap-x-4 gap-y-12 max-w-7xl md:flex-row md:flex-wrap md:justify-between md:w-full md:gap-y-8 md:mx-auto"><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">Deno 文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/runtime/">Deno 运行时</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/examples/">示例</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://jsr.io/@std">标准库</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/api/deno/~/Deno">Deno API Reference</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">服务文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/">Deno Deploy </a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/classic/">Deno Deploy Classic</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/subhosting/manual/">Deno 子托管</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">社区</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">Discord</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland">GitHub</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://bsky.app/profile/deno.land">Bluesky</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://fosstodon.org/@deno_land">Mastodon</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.news/">Newsletter</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">帮助与反馈</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">社区支持</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://denostatus.com">部署系统状态</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">公司</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/">Deno Website</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/blog">Blog</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://merch.deno.com/">周边商品</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/privacy_policy">Privacy Policy</a></li></ul></section></nav><p class="m-0 mt-16 mx-auto text-center text-xs text-foreground-secondary"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></body></html>

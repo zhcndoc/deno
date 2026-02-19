@@ -1,0 +1,1202 @@
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>使用 Mock 进行隔离测试 - Deno 中文文档</title><meta name="description" content="掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度"><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><script>const theme = localStorage.getItem('denoDocsTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); document.documentElement.classList.add(theme);</script><link rel="stylesheet" href="/style.css"><link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="preload" href="/fonts/inter/Inter-SemiBold.woff2" as="font" type="font/woff2" crossOrigin="anonymous"><link rel="me" href="https://fosstodon.org/@deno_land"><meta name="twitter:title" content="使用 Mock 进行隔离测试"><meta name="twitter:description" content="掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度"><meta name="twitter:image" content="https://docs.deno.com/examples/mocking_tutorial/index.png"><meta name="twitter:image:alt" content="掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@deno_land"><meta property="og:title" content="使用 Mock 进行隔离测试"><meta property="og:description" content="掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度"><meta property="og:image" content="https://docs.deno.com/examples/mocking_tutorial/index.png"><meta property="og:image:alt" content="掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度"><meta property="og:type" content="article"><meta property="og:site_name" content="Deno"><meta property="og:locale" content="en_US"><meta name="keywords" content="Deno, JavaScript, TypeScript, reference, documentation, guide, tutorial, example"><script type="module" defer src="/script.js"></script><script type="module" defer src="/js/main.js"></script><script type="module" defer src="/js/lint_rules.js"></script><script type="module" defer src="/js/copy.js"></script><script type="module" defer src="/js/tabs.js"></script><script type="module" defer src="/js/feedback.js"></script><script type="module" defer src="/js/search.js"></script><script async src="https://www.zhcndoc.com/js/common.js"></script><link rel="preconnect" href="https://www.googletagmanager.com"></head><body ><a href="#content" class="opacity-0 p-2 px-4 bg-background-secondary transition-transform duration-150 rounded-md ease-out absolute top-2 left-2 -translate-y-full focus:opacity-100 focus:translate-y-0 z-[500]">Skip to main content</a><header class="w-full h-auto sticky top-0 z-[100] bg-background-raw border-b border-b-foreground-tertiary"><div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0"><a href="https://deno.com" title="Deno main website" class="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"><svg width="100%" height="100%" viewBox="0 0 1025 331" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;" class="" data-component="logo"><path id="background" d="M28.829,227.937c-8.871,-19.143 -13.822,-40.465 -13.822,-62.935c-0,-5.815 0.332,-11.554 0.977,-17.197c0.655,-5.703 1.626,-11.299 2.893,-16.773c7.12,-30.704 23.68,-57.808 46.452,-78.082c19.127,-17.006 42.558,-29.14 68.244,-34.64c10.137,-2.165 20.651,-3.304 31.43,-3.304c3.778,0.004 7.583,0.149 11.411,0.441c18.154,1.386 35.309,5.956 50.959,13.121c12.625,5.786 24.31,13.274 34.762,22.169c26.253,22.364 44.562,53.517 50.651,88.476c1.455,8.379 2.213,16.996 2.213,25.789c-0.003,3.784 -0.149,7.595 -0.442,11.429c-1.106,14.489 -4.241,28.342 -9.104,41.302c-6.788,18.051 -16.959,34.452 -29.738,48.428c-16.621,16.971 -37.743,24.523 -55.384,24.209c-12.828,-0.229 -25.379,-5.333 -34.052,-12.801c-12.39,-10.669 -17.394,-22.865 -19.11,-36.474c-0.426,-3.383 -0.176,-12.601 1.585,-18.984c1.312,-4.758 4.64,-13.946 9.507,-17.965c-5.693,-2.452 -13.021,-7.792 -15.331,-10.355c-0.568,-0.63 -0.494,-1.617 0.014,-2.296c0.509,-0.678 1.4,-0.946 2.199,-0.659c4.895,1.68 10.856,3.337 17.142,4.389c8.267,1.382 18.548,3.122 28.963,3.634c25.395,1.247 51.921,-10.151 60.154,-32.83c8.232,-22.679 5.038,-45.111 -24.496,-58.566c-29.535,-13.456 -43.178,-29.455 -67.041,-39.104c-15.587,-6.303 -32.935,-2.561 -50.746,7.282c-47.974,26.512 -90.955,110.279 -71.142,187.887c0.283,1.062 -0.195,2.18 -1.158,2.709c-0.903,0.495 -2.013,0.354 -2.761,-0.331c-5.766,-6.336 -10.998,-13.166 -15.623,-20.421c-3.578,-5.614 -6.79,-11.475 -9.606,-17.548Z" style="fill: var(--logoColor);"></path><path id="outline" d="M172.67,0.181c90.968,4.232 161.386,81.521 157.155,172.489c-4.232,90.968 -81.522,161.385 -172.489,157.153c-90.968,-4.231 -161.386,-81.52 -157.155,-172.487c4.232,-90.968 81.521,-161.386 172.489,-157.155Zm38.578,198.678c-10.415,-0.512 -20.696,-2.252 -28.963,-3.634c-6.286,-1.052 -12.247,-2.709 -17.142,-4.389c-0.799,-0.287 -1.69,-0.019 -2.199,0.659c-0.508,0.679 -0.582,1.666 -0.014,2.296c2.31,2.563 9.638,7.903 15.331,10.355c-4.867,4.019 -8.195,13.207 -9.507,17.965c-1.761,6.383 -2.011,15.601 -1.585,18.984c1.716,13.609 6.72,25.805 19.11,36.474c8.673,7.468 21.224,12.572 34.052,12.801c17.702,0.315 38.909,-7.29 55.556,-24.385c21.765,-23.861 36.023,-54.887 38.67,-89.554c6.303,-82.546 -55.596,-154.681 -138.143,-160.984c-82.545,-6.303 -154.68,55.597 -160.983,138.143c-3.264,42.749 11.764,82.706 38.481,112.17c0.744,0.809 1.944,1.006 2.907,0.477c0.963,-0.529 1.441,-1.647 1.158,-2.709c-19.813,-77.608 23.168,-161.375 71.142,-187.887c17.811,-9.843 35.159,-13.585 50.746,-7.282c23.863,9.649 37.506,25.648 67.041,39.104c29.534,13.455 32.728,35.887 24.496,58.566c-8.233,22.679 -34.759,34.077 -60.154,32.83Z" style="fill: var(--outlineColor);"></path><path id="logotype" d="M694.596,164.68c-0,4.838 -0,11.794 -0.909,14.213l-103.727,0c4.837,17.542 18.749,28.431 37.8,28.431c15.728,0.302 27.219,-6.654 35.383,-16.636l25.705,23.894c-12.7,16.028 -34.171,27.822 -63.809,27.822c-43.243,-0 -75.904,-30.242 -75.904,-76.513c-0,-44.756 31.148,-75.907 73.184,-75.907c43.243,-0 72.277,31.453 72.277,74.696Zm-71.07,-39.918c-16.025,-0 -28.729,8.771 -33.265,25.706l65.02,-0c-3.932,-15.422 -14.515,-25.706 -31.755,-25.706Zm175.096,-34.778c31.758,-0 53.829,16.938 53.829,62.298l0,87.703l-39.615,-0l0,-77.724c0,-28.124 -9.976,-36.892 -28.427,-36.892c-19.953,0 -33.564,13.908 -33.564,40.221l-0,74.395l-39.617,-0l0,-147.582l39.617,-0l-0,19.055l0.602,0c12.095,-14.213 29.037,-21.474 47.175,-21.474Zm146.977,152.42c-46.871,-0 -78.324,-32.058 -78.324,-76.21c-0,-44.153 31.453,-76.21 78.324,-76.21c45.971,-0 78.628,30.849 78.628,76.21c0,45.36 -32.657,76.21 -78.628,76.21Zm-0,-35.386c21.469,0 38.411,-16.934 38.411,-40.824c-0,-24.192 -16.332,-40.825 -38.411,-40.825c-22.986,0 -38.404,17.539 -38.404,40.825c0,22.984 16.028,40.824 38.404,40.824Zm-540.473,32.967l0,-150.001l54.227,-0c47.449,-0 77.952,30.845 77.952,75.212c-0,44.154 -28.597,74.789 -77.316,74.789l-54.863,-0Zm38.976,-35.705l13.133,-0c22.878,-0 37.917,-17.535 37.917,-39.084c-0,-22.395 -15.251,-39.507 -34.952,-39.507l-16.098,-0l0,78.591Z" style="fill: var(--textColor);"></path><path id="eye" d="M159.634,78.772c8.092,-0.634 15.152,6.272 16.369,15.457c1.624,12.235 -2.867,24.874 -17.633,25.165c-12.614,0.252 -16.436,-12.469 -15.6,-20.175c0.83,-7.706 7.182,-19.687 16.864,-20.447Z" style="fill: var(--eyeColor);"></path><style>
+        [data-component="logo"] {
+          --logoColor: #000;
+          --textColor: #000;
+          --eyeColor: #000;
+          --outlineColor: transparent;
+
+          height: 100%;
+          width: auto;
+        }
+        .dark [data-component="logo"] {
+          --textColor: #fff;
+          --outlineColor: #fff;
+        }
+        @keyframes blink {
+          0%, 100% {
+            transform: scaleY(1);
+          }
+          50% {
+            transform: scaleY(0.15);
+          }
+        }
+        [data-component="logo"]:hover,
+        a:focus [data-component="logo"] {
+          #eye {
+            transform-origin: 50% 30%;
+            animation: blink 0.15s cubic-bezier(0.5, 0, 0.5, 1);
+          }
+        }
+        </style></svg></a><nav id="main-nav" class="flex h-full items-center row-start-2 col-span-2 md:row-auto md:col-auto -mx-4 md:mx-0 overflow-x-auto md:overflow-clip"><a href="/runtime/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">文档</a><a href="/api/deno/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  ">API 参考</a><a href="/examples/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200 font-bold text-gray-800 bg-header-highlight " data-active aria-current="location"><div id="current-nav-item" class="absolute inset-0 bg-header-highlight -z-10 transition-transform duration-200 easing-[cubic-bezier(0.5,0,0.5,1)] origin-left" style="--left: 0px; --scaleX: 1; transform: translateX(var(--left)) scaleX(var(--scaleX));"></div>示例</a><a href="/services/" class="font-[clamp(0.8rem,1.5vw,1rem)] whitespace-nowrap relative py-0 px-4 h-full flex justify-center items-center text-foreground-primary hover:text-gray-800 transition-colors duration-200  services">服务</a></nav><div class="flex items-center gap-x-2 sm:gap-x-4 ml-auto w-full max-w-80"><div class="md:relative w-full"><div class="relative"><input type="search" placeholder="Search" id="orama-search-input" class="w-full min-w-24 rounded-lg placeholder:text-sm text-base leading-normal p-1 pl-8 border transition-all duration-150 text-foreground-primary border-foreground-secondary hover:bg-background-secondary focus:bg-background-secondary focus:outline-offset-1" style="background: url(/img/search.svg) no-repeat 0.5em 50%; background-size: 1.25em; background-color: var(--color-background-raw);"><kbd id="search-key" class="hidden xs:flex pointer-events-none absolute font-sans rounded-sm top-1 right-1 bottom-1 w-auto border-1 border-foreground-tertiary border-b-2 border-r-2 bg-background-primary text-foreground-secondary text-center text-xs font-bold p-2 items-center justify-center dark:bg-background-secondary dark:border-gray-700">⌘K</kbd><div id="orama-search-loading" class="absolute left-2 top-1/2 transform -translate-y-1/2 hidden bg-background-raw"><div class="animate-spin rounded-full h-4 w-4 border-2 border-transparent border-r-foreground-primary bg-background-raw"></div></div><div class="sr-only" aria-live="polite" id="orama-results-announcer"></div></div><div id="orama-search-results" class="absolute inset-2 left-2 right-2 h-[calc(100vh-8rem)] top-10 md:top-full md:left-auto md:right-0 mt-2 bg-background-raw border border-foreground-tertiary rounded-xl shadow-2xl z-50 md:max-h-128 overflow-hidden hidden md:min-w-160 max-w-2xl"><div id="orama-search-results-content" class="overflow-y-auto h-full"></div><div class="border-t border-foreground-tertiary bg-background-secondary px-4 py-2 sticky bottom-0"><div class="flex items-center gap-6 text-xs text-foreground-secondary"><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↑↓</span><span class="sr-only">Up or down to</span></kbd>navigate</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">↵</span><span class="sr-only">Enter to</span></kbd>select</span><span><kbd class="px-1.5 py-0.5 text-xs font-semibold text-foreground-secondary bg-background-primary border-r-2 border-b-2 border border-foreground-tertiary rounded mr-1"><span aria-hidden="true">ESC</span><span class="sr-only">Escape to</span></kbd>close</span></div></div></div></div><button type="button" aria-label="toggle theme" class="shrink-0 h-9 aspect-square p-1 cursor-pointer rounded border border-transparent transition-colors duration-200 ease-in-out text-foreground-secondary hover:decoration-none hover:bg-background-secondary hover:border-background-tertiary flex flex-col items-center justify-start overflow-hidden" id="theme-toggle"><img src="/img/light.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><img src="/img/dark.svg" class="w-full block -translate-y-full dark:translate-y-0 transition-transform duration-200 easing-[0.86,0,0.07,1]" alt=""><span class="sr-only">Toggle Theme</span></button><button type="button" id="hamburger-button" class="h-8 w-auto py-2 px-0 flex flex-col justify-between rounded md:hidden" aria-pressed="false"><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--top"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-opacity hamburger-bar--middle"></div><div class="block w-6 h-0.5 bg-foreground-primary duration-200 ease-[cubic-bezier(0.77,0,0.175,1)] transition-transform hamburger-bar--bottom"></div><span class="sr-only">Toggle navigation menu</span></button></div></div></header><div class="layout layout--three-column"><aside class="fixed transition-all duration-200 md:duration-0 easing-[cubic-bezier(0.165,0.84,0.44,1)] -translate-x-full z-50 w-full bg-background-raw opacity-0 p-4 pb-8 overflow-auto text-smaller md:sticky md:overflow-y-auto md:[scrollbar-width:thin] md:z-10 md:!translate-x-0 md:!opacity-100 md:p-0 md:pb-16 lg:border-r lg:border-r-foreground-tertiary lg:w-full sidebar-open:translate-x-0 sidebar-open:opacity-100
+         top-header h-screen-minus-header" data-component="sidebar-nav" data-section="examples" id="nav" style="scrollbar-width: none;" tabIndex="-1"><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">基础</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/what_is_deno/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >什么是 Deno？</a></li><li><a href="/examples/run_script_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >运行脚本</a></li><li><a href="/examples/hello_world/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >你好，世界</a></li><li><a href="/examples/typescript_support/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >内置 TypeScript 支持</a></li><li><a href="/examples/deno_dev_environment/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >你的 Deno 开发环境</a></li><li><a href="/examples/initialize_project_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >初始化项目</a></li><li><a href="/examples/hashbang_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >可执行脚本</a></li><li><a href="/examples/all-in-one_tooling/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >一体化工具</a></li><li><a href="/examples/configuration_with_deno_json/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 deno.json 进行任务和配置</a></li><li><a href="/examples/top_level_await/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >顶级 await</a></li><li><a href="/examples/cjs_to_esm_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >从 CommonJS 更新到 ESM</a></li><li><a href="/examples/import_export/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >导入和导出函数</a></li><li><a href="/examples/interoperability_with_nodejs/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >与 Node.js 的互操作性</a></li><li><a href="/examples/intro_to_deno_apis/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno API 简介</a></li><li><a href="/examples/simple_api_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Simple API server</a></li><li><a href="/examples/file_server_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Simple file server</a></li><li><a href="/examples/deno_fmt/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 Deno fmt 格式化</a></li><li><a href="/examples/deno_bench/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 Deno bench 进行基准测试</a></li><li><a href="/examples/tunnel_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Sharing your local server with tunnel</a></li><li><a href="/examples/deno_doc_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Generating documentation with deno doc</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">模块和包管理</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/node_built_in/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Use Node.js built-in modules</a></li><li><a href="/examples/npm/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >从 npm 导入模块</a></li><li><a href="/examples/backward_compat_with_node_npm/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >与 Node &amp; npm 的兼容性</a></li><li><a href="/examples/esmodules/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >ECMAScript 模块</a></li><li><a href="/examples/publishing_modules_with_jsr/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >发布模块与 JSR</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Web 标准 API</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/browser_apis_in_deno/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno 中的浏览器 API</a></li><li><a href="/examples/debugging_with_console_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >通过控制台 API 更好的调试</a></li><li><a href="/examples/url_parsing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >操作和解析 URL</a></li><li><a href="/examples/fetch_data_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >获取和流式数据</a></li><li><a href="/examples/timers/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >设置超时和间隔</a></li><li><a href="/examples/color_logging/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >带颜色的日志记录</a></li><li><a href="/examples/web_workers/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Web Workers</a></li><li><a href="/examples/webassembly/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Web Assembly</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Web 框架和库</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/ts_jsx/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TypeScript 和 JSX</a></li><li><a href="/examples/react_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 React 应用</a></li><li><a href="/examples/next_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 Next.js 应用</a></li><li><a href="/examples/fresh_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 Fresh 应用</a></li><li><a href="/examples/svelte_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 Svelte 应用</a></li><li><a href="/examples/vue_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 Vue 应用</a></li><li><a href="/examples/express_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在 Deno 中使用 Express</a></li><li><a href="/examples/apollo_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >如何在 Deno 中使用 Apollo</a></li><li><a href="/examples/astro_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 Deno 构建 Astro 网站</a></li><li><a href="/examples/qwik_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >用 Deno 构建 Qwik 应用</a></li><li><a href="/examples/nuxt_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >用 Deno 构建 Nuxt 应用</a></li><li><a href="/examples/trpc_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >用 tRPC 和 Deno 构建类型安全 API</a></li><li><a href="/examples/build_api_server_ts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >用 TypeScript 构建 API 服务器</a></li><li><a href="/examples/vue_app_video/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 Vue 应用</a></li><li><a href="/examples/solidjs_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 SolidJS 应用</a></li><li><a href="/examples/react_app_video/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个 React 应用</a></li><li><a href="/examples/tanstack_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Build a Tanstack app</a></li><li><a href="/examples/http_server_file_upload/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP server file upload</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Deno Sandbox</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/sandbox_evaluating_javascript/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Evaluating JavaScript</a></li><li><a href="/examples/sandbox_spawn_subprocess/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Spawn a subprocess</a></li><li><a href="/examples/sandbox_web_framework/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Serve a web framework</a></li><li><a href="/examples/sandbox_ssh_access/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Provide SSH access to a sandbox</a></li><li><a href="/examples/sandbox_javascript_repl/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Interactive JavaScript REPL</a></li><li><a href="/examples/sandbox_vscode_instance/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Provide a VSCode instance in a sandbox</a></li><li><a href="/examples/sandbox_template_literals/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Use template literals with variable interpolation</a></li><li><a href="/examples/sandbox_error_handling/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Error handling</a></li><li><a href="/examples/sandbox_command_cancellation/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Command cancellation</a></li><li><a href="/examples/sandbox_access_output/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Streaming access string and binary output</a></li><li><a href="/examples/sandbox_environment_variables/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Set and get environment variables</a></li><li><a href="/examples/sandbox_stream_output/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Stream output to a local file</a></li><li><a href="/examples/sandbox_upload_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Upload files and directories to a sandbox</a></li><li><a href="/examples/sandbox_timeout_control/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Control sandbox timeout</a></li><li><a href="/examples/sandbox_memory/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Configure sandbox memory</a></li><li><a href="/examples/volumes_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Add read-write volumes to your Sandbox</a></li><li><a href="/examples/snapshots_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Boot instantly with snapshots</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Testing</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/writing_tests/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Writing tests</a></li><li><a href="/examples/testing_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Basics of testing</a></li><li><a href="/examples/mocking_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 bg-header-highlight border-foreground-secondary text-gray-800" data-active>Mocking data in tests</a></li><li><a href="/examples/stubbing_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Stubbing</a></li><li><a href="/examples/snapshot_test_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Snapshot testing</a></li><li><a href="/examples/spy_functions/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Spy functions</a></li><li><a href="/examples/deno_test/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Getting started with Deno test</a></li><li><a href="/examples/deno_coverage/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Better testing with Deno coverage</a></li><li><a href="/examples/web_testing_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Testing web applications</a></li><li><a href="/examples/bdd_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >BDD testing</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">OpenTelemetry</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/basic_opentelemetry_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Basic OpenTelemetry setup</a></li><li><a href="/examples/grafana_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Export telemetry to Grafana</a></li><li><a href="/examples/hyperdx_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Export telemetry to Hyperdx</a></li><li><a href="/examples/tunnel_telemetry_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >View telemetry data for your local application</a></li><li><a href="/examples/honeycomb_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Export telemetry to Honeycomb</a></li><li><a href="/examples/otel_span_propagation_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Span propagation</a></li><li><a href="/examples/deploy_otel_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >OpenTelemetry with Deno Deploy</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">Deploying Deno projects</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/deno_deploy_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deploy with Deno Deploy</a></li><li><a href="/examples/deploy_command_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deploy with the deploy command</a></li><li><a href="/examples/migrate_custom_domain_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Migrating a custom domain to Deno Deploy</a></li><li><a href="/examples/tunnel_database_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Connecting to a database both locally and on Deno Deploy</a></li><li><a href="/examples/aws_lambda_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >AWS Lambda</a></li><li><a href="/examples/deploy_deno_to_aws_lambda/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >将 Deno 部署到 AWS Lambda</a></li><li><a href="/examples/aws_lightsail_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >AWS Lightsail</a></li><li><a href="/examples/cloudflare_workers_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Cloudflare Workers</a></li><li><a href="/examples/digital_ocean_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Digital Ocean</a></li><li><a href="/examples/google_cloud_run_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Google Cloud Run</a></li><li><a href="/examples/kinsta_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Kinsta</a></li><li><a href="/examples/deploying_deno_with_docker/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 Docker 部署 Deno</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">连接到数据库</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/connecting_to_databases_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到数据库</a></li><li><a href="/examples/mysql2_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在 Deno 中使用 MySQL2</a></li><li><a href="/examples/planetscale_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在 Deno 中使用 PlanetScale</a></li><li><a href="/examples/redis_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在 Deno 中使用 Redis</a></li><li><a href="/examples/prisma_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在 Deno 中使用 Prisma</a></li><li><a href="/examples/drizzle_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >在 Deno 中使用 Drizzle</a></li><li><a href="/examples/mongoose_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 Mongoose 和 MongoDB</a></li><li><a href="/examples/redis/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 Redis</a></li><li><a href="/examples/postgres/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 Postgres</a></li><li><a href="/examples/supabase/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 Supabase</a></li><li><a href="/examples/mongo/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 MongoDB</a></li><li><a href="/examples/sqlite/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 SQLite</a></li><li><a href="/examples/mongoose/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 Mongoose 和 MongoDB</a></li><li><a href="/examples/prisma/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 Prisma</a></li><li><a href="/examples/duckdb/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 DuckDB</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">编码</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/hex_base64_encoding/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >十六进制和 base64 编码</a></li><li><a href="/examples/parsing_serializing_toml/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >解析和序列化 TOML</a></li><li><a href="/examples/importing_json/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >导入 JSON</a></li><li><a href="/examples/byte_and_text_imports/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >字节和文本导入</a></li><li><a href="/examples/image_bundling_deno_compile/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 deno compile 进行图像打包</a></li><li><a href="/examples/parsing_serializing_csv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >解析和序列化 CSV</a></li><li><a href="/examples/parsing_serializing_json/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >解析和序列化 JSON</a></li><li><a href="/examples/parsing_serializing_yaml/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >解析和序列化 YAML</a></li><li><a href="/examples/byte_manipulation/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >操作字节数组</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">命令行接口</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/command_line_utility/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个命令行工具</a></li><li><a href="/examples/prompts/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >输入提示</a></li><li><a href="/examples/permissions/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >权限管理</a></li><li><a href="/examples/command_line_arguments/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >命令行参数</a></li><li><a href="/examples/deno_version/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >获取 Deno 版本</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">网络</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/http_requests/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 请求</a></li><li><a href="/examples/http_server/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器：你好，世界</a></li><li><a href="/examples/http_server_routing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器：路由</a></li><li><a href="/examples/http_server_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器：提供文件</a></li><li><a href="/examples/http_server_streaming/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器：流式传输</a></li><li><a href="/examples/http_server_oak_crud_middleware_with_sqlite3_db/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器：使用 SQLite3 进行 CRUD</a></li><li><a href="/examples/hono/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Hono HTTP 服务器</a></li><li><a href="/examples/http_server_websocket/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HTTP 服务器：WebSockets</a></li><li><a href="/examples/piping_streams/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >管道流</a></li><li><a href="/examples/websocket/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >外发 WebSockets</a></li><li><a href="/examples/tcp_echo_server/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TCP 回声服务器</a></li><li><a href="/examples/tcp_connector/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TCP 连接器：Ping</a></li><li><a href="/examples/tcp_listener/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TCP 监听器：Ping</a></li><li><a href="/examples/tls_connector/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TCP/TLS 连接器：Ping</a></li><li><a href="/examples/tls_listener/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >TCP/TLS 监听器：Ping</a></li><li><a href="/examples/dns_queries/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >运行 DNS 查询</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">系统</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/os_signals/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >处理操作系统信号</a></li><li><a href="/examples/benchmarking/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >基准测试</a></li><li><a href="/examples/subprocess_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >创建子进程</a></li><li><a href="/examples/subprocess_running_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >子进程生成</a></li><li><a href="/examples/subprocesses_output/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >从子进程收集输出</a></li><li><a href="/examples/reading_system_metrics/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >读取系统指标</a></li><li><a href="/examples/pid/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >进程信息</a></li><li><a href="/examples/environment_variables/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >环境变量</a></li><li><a href="/examples/subprocesses_spawn/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >子进程：生成</a></li><li><a href="/examples/os_signals_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >处理操作系统信号</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">文件系统</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/path_operations/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >路径操作</a></li><li><a href="/examples/reading_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >读取文件</a></li><li><a href="/examples/writing_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >写入文件</a></li><li><a href="/examples/deleting_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >删除文件</a></li><li><a href="/examples/checking_file_existence/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >检查文件是否存在</a></li><li><a href="/examples/moving_renaming_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >移动/重命名文件</a></li><li><a href="/examples/create_remove_directories/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >创建和删除目录</a></li><li><a href="/examples/watching_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >监视文件系统</a></li><li><a href="/examples/walking_directories/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >行走目录</a></li><li><a href="/examples/unix_cat/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Unix 猫</a></li><li><a href="/examples/symlinks/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >创建和解析符号链接</a></li><li><a href="/examples/temporary_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >临时文件和目录</a></li><li><a href="/examples/streaming_files/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >流式文件操作</a></li><li><a href="/examples/unzip_gzipped_file/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >解压缩 gzip 文件</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">加密</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/uuids/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >生成和验证 UUID</a></li><li><a href="/examples/ulid/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >ULID</a></li><li><a href="/examples/hashing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >哈希</a></li><li><a href="/examples/rsa_signature/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >RSASSA-PKCS1-v1_5 签名和验证</a></li><li><a href="/examples/hmac_generate_verify/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >HMAC 生成和验证</a></li><li><a href="/examples/aes_encryption/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >AES 加密和解密</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">高级</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/file_system_events_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >文件系统事件</a></li><li><a href="/examples/module_metadata_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >模块元数据</a></li><li><a href="/examples/file_based_routing_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >基于文件的路由</a></li><li><a href="/examples/chat_app_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 WebSockets 构建聊天应用</a></li><li><a href="/examples/llm_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >LLM 聊天应用</a></li><li><a href="/examples/realtime_websocket_app/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建实时 WebSocket 应用</a></li><li><a href="/examples/word_finder_tutorial/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >构建一个单词查找应用</a></li><li><a href="/examples/openai_chat_completion/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >连接到 OpenAI - 聊天补全</a></li><li><a href="/examples/data_processing/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >使用 Deno Collections 处理用户数据</a></li><li><a href="/examples/exponential_backoff/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >指数退避</a></li></ul></nav><nav><h2 class="block uppercase py-2 pr-4 mt-4 text-foreground-secondary font-bold leading-[1.2] text-balance tracking-wide !border-0">不稳定的 API</h2><ul class="p-0 list-none overflow-y-hidden "><li><a href="/examples/kv_watch/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno KV 监视</a></li><li><a href="/examples/cron/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno Cron</a></li><li><a href="/examples/queues/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno 队列</a></li><li><a href="/examples/kv/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Deno KV：键/值数据库</a></li><li><a href="/examples/udp_listener/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >UDP 监听器：Ping</a></li><li><a href="/examples/udp_connector/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >UDP 连接器：Ping</a></li><li><a href="/examples/temporal/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >时间 API</a></li><li><a href="/examples/importing_text/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Importing text</a></li><li><a href="/examples/importing_bytes/" class="block m-0 py-1 px-3 border-l hover:bg-header-highlight hover:border-foreground-secondary hover:text-gray-800 transition-colors duration-150 border-foreground-tertiary" >Importing bytes</a></li></ul></nav></aside><main id="content" class="content "><div class="w-full"><article class="mx-auto"><details class="block lg:hidden my-4 bg-foreground-quaternary rounded-md group"><summary class="px-4 py-2 group-open:border-b border-background-tertiary">On this page</summary><ul class="p-4 pt-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%9B%91%E5%90%AC-(spying)" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">监听 (Spying) </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B8%85%E9%99%A4-spy" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">清除 Spy </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#stub%EF%BC%88%E5%AD%98%E6%A0%B9%EF%BC%89" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Stub（存根） </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84-stub" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">环境变量的 Stub </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%A8%A1%E6%8B%9F%E6%97%B6%E9%97%B4-(faking-time)" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">模拟时间 (Faking time) </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%AB%98%E7%BA%A7-mock-%E6%A8%A1%E5%BC%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">高级 Mock 模式 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%83%A8%E5%88%86-mock" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">部分 Mock </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#mock-fetch-%E8%AF%B7%E6%B1%82" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Mock fetch 请求 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">真实案例 </a></li></ul></details><div data-color-mode="auto" data-light-theme="light" data-dark-theme="dark" class="markdown-body mt-6 sm:mt-6"><h1>使用 Mock 进行隔离测试</h1><p>本指南基于
+<a href="/examples/testing_tutorial/">Deno 测试基础</a>，重点介绍可帮助你在测试中隔离代码的 Mock 技术。</p>
+<p>为了实现高效的单元测试，你经常需要“模拟”（mock）代码所交互的数据。Mock 是一种测试技术，通过用可控的模拟数据替代真实数据来测试代码。当测试与外部服务（比如 API 或数据库）交互的组件时，这尤为有用。</p>
+<p>Deno 标准库提供了<a href="https://jsr.io/@std/testing/doc/mock">便捷的 Mock 工具</a>，让你的测试更轻松编写、更可靠且执行更快。</p>
+<h3 id="%E7%9B%91%E5%90%AC-(spying)" tabindex="-1">监听 (Spying) <a class="header-anchor" href="#%E7%9B%91%E5%90%AC-(spying)"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>在 Deno 中，你可以使用 <a href="https://jsr.io/@std/testing/doc/mock#spying"><code>spy</code></a> 监听函数调用情况。Spy 不会改变函数行为，但会记录如函数被调用次数及传入参数等重要信息。</p>
+<p>通过使用 Spy，你可以检验代码是否与其依赖正确交互，而无需搭建复杂的基础设施。</p>
+<p>下面示例测试了一个名为 <code>saveUser()</code> 的函数，它接受一个用户对象和一个数据库对象，然后调用数据库的 <code>save</code> 方法：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertSpyCalls<span class="token punctuation">,</span> spy <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 定义类型以提升代码质量</span>
+<span class="token keyword">interface</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">interface</span> <span class="token class-name">Database</span> <span class="token punctuation">{</span>
+  <span class="token function-variable function">save</span><span class="token operator">:</span> <span class="token punctuation">(</span>user<span class="token operator">:</span> User<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span>User <span class="token operator">&amp;</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 待测试函数</span>
+<span class="token keyword">function</span> <span class="token function">saveUser</span><span class="token punctuation">(</span>
+  user<span class="token operator">:</span> User<span class="token punctuation">,</span>
+  database<span class="token operator">:</span> Database<span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span>User <span class="token operator">&amp;</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token builtin">number</span> <span class="token punctuation">}</span><span class="token operator">></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> database<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 使用 mock 测试</span>
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"saveUser 调用了 database.save"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 创建一个带有 save 方法的 mock 数据库，save 方法被 spy 包裹</span>
+  <span class="token keyword">const</span> mockDatabase <span class="token operator">=</span> <span class="token punctuation">{</span>
+    save<span class="token operator">:</span> <span class="token function">spy</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token operator">:</span> User<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">...</span>user <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> user<span class="token operator">:</span> User <span class="token operator">=</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Test User"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">saveUser</span><span class="token punctuation">(</span>user<span class="token punctuation">,</span> mockDatabase<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 验证 mock 调用情况</span>
+  <span class="token function">assertSpyCalls</span><span class="token punctuation">(</span>mockDatabase<span class="token punctuation">.</span>save<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>mockDatabase<span class="token punctuation">.</span>save<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"Test User"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-21" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { assertSpyCalls, spy } from &quot;jsr:@std/testing/mock&quot;;
+
+// 定义类型以提升代码质量
+interface User {
+  name: string;
+}
+
+interface Database {
+  save: (user: User) => Promise<User & { id: number }>;
+}
+
+// 待测试函数
+function saveUser(
+  user: User,
+  database: Database,
+): Promise<User & { id: number }> {
+  return database.save(user);
+}
+
+// 使用 mock 测试
+Deno.test(&quot;saveUser 调用了 database.save&quot;, async () => {
+  // 创建一个带有 save 方法的 mock 数据库，save 方法被 spy 包裹
+  const mockDatabase = {
+    save: spy((user: User) => Promise.resolve({ id: 1, ...user })),
+  };
+
+  const user: User = { name: &quot;Test User&quot; };
+  const result = await saveUser(user, mockDatabase);
+
+  // 验证 mock 调用情况
+  assertSpyCalls(mockDatabase.save, 1);
+  assertEquals(mockDatabase.save.calls[0].args[0], user);
+  assertEquals(result, { id: 1, name: &quot;Test User&quot; });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>我们从 Deno 标准库导入必要的函数，用于断言相等和创建及校验 spy 函数。</p>
+<p>这个模拟数据库是一个替代真实数据库对象的站位符，带有一个被 <code>spy</code> 包裹的 <code>save</code> 方法。这个 spy 函数会跟踪该方法的调用次数、记录传入的参数，并执行其底层实现（这里返回了包含 <code>user</code> 及 <code>id</code> 的 Promise）。</p>
+<p>测试中调用了带有模拟数据的 <code>saveUser()</code>，我们通过断言验证了：</p>
+<ol>
+<li><code>save</code> 方法被调用了且仅调用了一次</li>
+<li>调用的第一个参数是我们传入的 <code>user</code> 对象</li>
+<li>返回结果包含原有的用户数据和新增的 ID</li>
+</ol>
+<p>我们能够在无需搭建或清理复杂数据库状态的情况下，测试了 <code>saveUser</code> 功能。</p>
+<h3 id="%E6%B8%85%E9%99%A4-spy" tabindex="-1">清除 Spy <a class="header-anchor" href="#%E6%B8%85%E9%99%A4-spy"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>当多个测试都使用 spy 时，重要的是在测试之间重置或清除 spy，以避免相互干扰。Deno 测试库提供了使用 <code>restore()</code> 方法轻松恢复所有 spy 到原始状态。</p>
+<p>下面示例演示如何在完成使用 spy 后清理它：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertSpyCalls<span class="token punctuation">,</span> spy <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"spy 清理示例"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 创建一个监听函数的 spy</span>
+  <span class="token keyword">const</span> myFunction <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 使用 spy</span>
+  <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">myFunction</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertSpyCalls</span><span class="token punctuation">(</span>myFunction<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 测试完成后，恢复 spy</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 使用 spy 的测试代码</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 始终清理 spy</span>
+    myFunction<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-60" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { assertSpyCalls, spy } from &quot;jsr:@std/testing/mock&quot;;
+
+Deno.test(&quot;spy 清理示例&quot;, () => {
+  // 创建一个监听函数的 spy
+  const myFunction = spy((x: number) => x * 2);
+
+  // 使用 spy
+  const result = myFunction(5);
+  assertEquals(result, 10);
+  assertSpyCalls(myFunction, 1);
+
+  // 测试完成后，恢复 spy
+  try {
+    // 使用 spy 的测试代码
+    // ...
+  } finally {
+    // 始终清理 spy
+    myFunction.restore();
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>方法的 spy 是可销毁的，可以用 <code>using</code> 关键字让它们自动恢复。这种做法避免了你必须用 <code>try</code> 代码块包裹断言，确保测试结束前方法能被恢复。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> assertSpyCalls<span class="token punctuation">,</span> spy <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"使用可自动恢复的 spies"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> calculator <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function-variable function">add</span><span class="token operator">:</span> <span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> a <span class="token operator">+</span> b<span class="token punctuation">,</span>
+    <span class="token function-variable function">multiply</span><span class="token operator">:</span> <span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> a <span class="token operator">*</span> b<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// spy 会在超出作用域时自动恢复</span>
+  using addSpy <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span>calculator<span class="token punctuation">,</span> <span class="token string">"add"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 使用 spy</span>
+  <span class="token keyword">const</span> sum <span class="token operator">=</span> calculator<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>sum<span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertSpyCalls</span><span class="token punctuation">(</span>addSpy<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertEquals</span><span class="token punctuation">(</span>addSpy<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>args<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 不需要 try/finally 块，spy 会自动恢复</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"同时使用多个可自动恢复的 spies"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> calculator <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function-variable function">add</span><span class="token operator">:</span> <span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> a <span class="token operator">+</span> b<span class="token punctuation">,</span>
+    <span class="token function-variable function">multiply</span><span class="token operator">:</span> <span class="token punctuation">(</span>a<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">,</span> b<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> a <span class="token operator">*</span> b<span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 两个 spy 都会自动恢复</span>
+  using addSpy <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span>calculator<span class="token punctuation">,</span> <span class="token string">"add"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  using multiplySpy <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span>calculator<span class="token punctuation">,</span> <span class="token string">"multiply"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  calculator<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  calculator<span class="token punctuation">.</span><span class="token function">multiply</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token function">assertSpyCalls</span><span class="token punctuation">(</span>addSpy<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">assertSpyCalls</span><span class="token punctuation">(</span>multiplySpy<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 不需要清理代码</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-64" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { assertSpyCalls, spy } from &quot;jsr:@std/testing/mock&quot;;
+
+Deno.test(&quot;使用可自动恢复的 spies&quot;, () => {
+  const calculator = {
+    add: (a: number, b: number) => a + b,
+    multiply: (a: number, b: number) => a * b,
+  };
+
+  // spy 会在超出作用域时自动恢复
+  using addSpy = spy(calculator, &quot;add&quot;);
+
+  // 使用 spy
+  const sum = calculator.add(3, 4);
+  assertEquals(sum, 7);
+  assertSpyCalls(addSpy, 1);
+  assertEquals(addSpy.calls[0].args, [3, 4]);
+
+  // 不需要 try/finally 块，spy 会自动恢复
+});
+
+Deno.test(&quot;同时使用多个可自动恢复的 spies&quot;, () => {
+  const calculator = {
+    add: (a: number, b: number) => a + b,
+    multiply: (a: number, b: number) => a * b,
+  };
+
+  // 两个 spy 都会自动恢复
+  using addSpy = spy(calculator, &quot;add&quot;);
+  using multiplySpy = spy(calculator, &quot;multiply&quot;);
+
+  calculator.add(5, 3);
+  calculator.multiply(4, 2);
+
+  assertSpyCalls(addSpy, 1);
+  assertSpyCalls(multiplySpy, 1);
+
+  // 不需要清理代码
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>如果你有多个不支持 <code>using</code> 关键字的 spy，可以将它们保存在数组里，一次性调用恢复：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts">Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"多个 spies 清理"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> spies <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 创建 spy</span>
+  <span class="token keyword">const</span> functionA <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span><span class="token punctuation">(</span>x<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  spies<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>functionA<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">const</span> objectB <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function-variable function">method</span><span class="token operator">:</span> <span class="token punctuation">(</span>x<span class="token operator">:</span> <span class="token builtin">number</span><span class="token punctuation">)</span> <span class="token operator">=></span> x <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> spyB <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span>objectB<span class="token punctuation">,</span> <span class="token string">"method"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  spies<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>spyB<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 测试中使用 spies</span>
+  <span class="token comment">// ...</span>
+
+  <span class="token comment">// 测试结束时清理所有 spies</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 使用 spies 的测试代码</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 恢复所有 spies</span>
+    spies<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span>spyFn<span class="token punctuation">)</span> <span class="token operator">=></span> spyFn<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-68" class="copyButton" data-copy="Deno.test(&quot;多个 spies 清理&quot;, () => {
+  const spies = [];
+
+  // 创建 spy
+  const functionA = spy((x: number) => x + 1);
+  spies.push(functionA);
+
+  const objectB = {
+    method: (x: number) => x * 2,
+  };
+  const spyB = spy(objectB, &quot;method&quot;);
+  spies.push(spyB);
+
+  // 测试中使用 spies
+  // ...
+
+  // 测试结束时清理所有 spies
+  try {
+    // 使用 spies 的测试代码
+  } finally {
+    // 恢复所有 spies
+    spies.forEach((spyFn) => spyFn.restore());
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>正确清理 spies 能确保每个测试从干净的状态开始，避免测试间侧漏副作用。</p>
+<h3 id="stub%EF%BC%88%E5%AD%98%E6%A0%B9%EF%BC%89" tabindex="-1">Stub（存根） <a class="header-anchor" href="#stub%EF%BC%88%E5%AD%98%E6%A0%B9%EF%BC%89"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>虽然 spy 用于记录方法调用而不改变行为，但 stub 会完全替换原有实现。
+<a href="https://jsr.io/@std/testing/doc/mock#stubbing">Stub</a> 是 mock 的一种形式，用于临时替换函数或方法实现，可用于模拟特定情况或预设返回值，也常用于重写依赖环境的功能。</p>
+<p>在 Deno 中，你可以通过标准测试库的 <code>stub</code> 函数创建 stub：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Stub<span class="token punctuation">,</span> stub <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 定义类型以提升代码质量</span>
+<span class="token keyword">interface</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  name<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+  role<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 原始函数</span>
+<span class="token keyword">function</span> <span class="token function">getCurrentUser</span><span class="token punctuation">(</span>userId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> User <span class="token punctuation">{</span>
+  <span class="token comment">// 可能涉及数据库调用的实现</span>
+  <span class="token keyword">return</span> <span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Real User"</span><span class="token punctuation">,</span> role<span class="token operator">:</span> <span class="token string">"admin"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 待测试函数</span>
+<span class="token keyword">function</span> <span class="token function">hasAdminAccess</span><span class="token punctuation">(</span>userId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token function">getCurrentUser</span><span class="token punctuation">(</span>userId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> user<span class="token punctuation">.</span>role <span class="token operator">===</span> <span class="token string">"admin"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"hasAdminAccess 使用 stub 用户"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// 创建替代 getCurrentUser 的 stub</span>
+  <span class="token keyword">const</span> getUserStub<span class="token operator">:</span> Stub<span class="token operator">&lt;</span><span class="token keyword">typeof</span> getCurrentUser<span class="token operator">></span> <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>
+    globalThis<span class="token punctuation">,</span>
+    <span class="token string">"getCurrentUser"</span><span class="token punctuation">,</span>
+    <span class="token comment">// 返回非管理员的测试用户</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Test User"</span><span class="token punctuation">,</span> role<span class="token operator">:</span> <span class="token string">"guest"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 使用 stub 函数测试</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token function">hasAdminAccess</span><span class="token punctuation">(</span><span class="token string">"user123"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 测试中也能改变 stub 行为</span>
+    getUserStub<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 移除第一个 stub</span>
+
+    <span class="token keyword">const</span> adminStub <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>
+      globalThis<span class="token punctuation">,</span>
+      <span class="token string">"getCurrentUser"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token operator">:</span> <span class="token string">"Admin User"</span><span class="token punctuation">,</span> role<span class="token operator">:</span> <span class="token string">"admin"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> adminResult <span class="token operator">=</span> <span class="token function">hasAdminAccess</span><span class="token punctuation">(</span><span class="token string">"admin456"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">assertEquals</span><span class="token punctuation">(</span>adminResult<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      adminStub<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 始终还原原始函数，避免影响其他测试</span>
+    getUserStub<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-81" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { Stub, stub } from &quot;jsr:@std/testing/mock&quot;;
+
+// 定义类型以提升代码质量
+interface User {
+  name: string;
+  role: string;
+}
+
+// 原始函数
+function getCurrentUser(userId: string): User {
+  // 可能涉及数据库调用的实现
+  return { name: &quot;Real User&quot;, role: &quot;admin&quot; };
+}
+
+// 待测试函数
+function hasAdminAccess(userId: string): boolean {
+  const user = getCurrentUser(userId);
+  return user.role === &quot;admin&quot;;
+}
+
+Deno.test(&quot;hasAdminAccess 使用 stub 用户&quot;, () => {
+  // 创建替代 getCurrentUser 的 stub
+  const getUserStub: Stub<typeof getCurrentUser> = stub(
+    globalThis,
+    &quot;getCurrentUser&quot;,
+    // 返回非管理员的测试用户
+    () => ({ name: &quot;Test User&quot;, role: &quot;guest&quot; }),
+  );
+
+  try {
+    // 使用 stub 函数测试
+    const result = hasAdminAccess(&quot;user123&quot;);
+    assertEquals(result, false);
+
+    // 测试中也能改变 stub 行为
+    getUserStub.restore(); // 移除第一个 stub
+
+    const adminStub = stub(
+      globalThis,
+      &quot;getCurrentUser&quot;,
+      () => ({ name: &quot;Admin User&quot;, role: &quot;admin&quot; }),
+    );
+
+    try {
+      const adminResult = hasAdminAccess(&quot;admin456&quot;);
+      assertEquals(adminResult, true);
+    } finally {
+      adminStub.restore();
+    }
+  } finally {
+    // 始终还原原始函数，避免影响其他测试
+    getUserStub.restore();
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这里导入了必要函数，设置了一个可能调用数据库的原始 <code>getCurrentUser</code> 函数。</p>
+<p>我们定义了待测试的 <code>hasAdminAccess()</code>，用来判断用户是否为管理员。</p>
+<p>接着创建了 <code>hasAdminAccess with a stubbed user</code> 测试，用 stub 替换真实的 <code>getCurrentUser</code>，模拟返回一个非管理员用户。</p>
+<p>测试调用这个 stub，会发现返回 <code>false</code>，符合预期。</p>
+<p>然后将 stub 修改为返回管理员用户，断言结果为 <code>true</code>。</p>
+<p>最后在 <code>finally</code> 中保证还原函数，避免对其他测试造成影响。</p>
+<h3 id="%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84-stub" tabindex="-1">环境变量的 Stub <a class="header-anchor" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84-stub"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>要实现确定性的测试，经常需要控制环境变量。Deno 标准库提供了相关工具：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> stub <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 依赖环境变量和时间的函数</span>
+<span class="token keyword">function</span> <span class="token function">generateReport</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> environment <span class="token operator">=</span> Deno<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"ENVIRONMENT"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token string">"development"</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> timestamp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toISOString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token punctuation">{</span>
+    environment<span class="token punctuation">,</span>
+    generatedAt<span class="token operator">:</span> timestamp<span class="token punctuation">,</span>
+    data<span class="token operator">:</span> <span class="token punctuation">{</span><span class="token comment">/* 报告数据 */</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"在受控环境下生成报告"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token comment">// Stub 环境变量</span>
+  <span class="token keyword">const</span> originalEnv <span class="token operator">=</span> Deno<span class="token punctuation">.</span>env<span class="token punctuation">.</span>get<span class="token punctuation">;</span>
+  <span class="token keyword">const</span> envStub <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>Deno<span class="token punctuation">.</span>env<span class="token punctuation">,</span> <span class="token string">"get"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>key<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>key <span class="token operator">===</span> <span class="token string">"ENVIRONMENT"</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">"production"</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token function">originalEnv</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>Deno<span class="token punctuation">.</span>env<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Stub 时间</span>
+  <span class="token keyword">const</span> dateStub <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>
+    Date<span class="token punctuation">.</span>prototype<span class="token punctuation">,</span>
+    <span class="token string">"toISOString"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token string">"2023-06-15T12:00:00Z"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> report <span class="token operator">=</span> <span class="token function">generateReport</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 验证使用受控值生成的结果</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>report<span class="token punctuation">.</span>environment<span class="token punctuation">,</span> <span class="token string">"production"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>report<span class="token punctuation">.</span>generatedAt<span class="token punctuation">,</span> <span class="token string">"2023-06-15T12:00:00Z"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 始终还原 stub，避免影响其他测试</span>
+    envStub<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dateStub<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-106" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { stub } from &quot;jsr:@std/testing/mock&quot;;
+
+// 依赖环境变量和时间的函数
+function generateReport() {
+  const environment = Deno.env.get(&quot;ENVIRONMENT&quot;) || &quot;development&quot;;
+  const timestamp = new Date().toISOString();
+
+  return {
+    environment,
+    generatedAt: timestamp,
+    data: {/* 报告数据 */},
+  };
+}
+
+Deno.test(&quot;在受控环境下生成报告&quot;, () => {
+  // Stub 环境变量
+  const originalEnv = Deno.env.get;
+  const envStub = stub(Deno.env, &quot;get&quot;, (key: string) => {
+    if (key === &quot;ENVIRONMENT&quot;) return &quot;production&quot;;
+    return originalEnv.call(Deno.env, key);
+  });
+
+  // Stub 时间
+  const dateStub = stub(
+    Date.prototype,
+    &quot;toISOString&quot;,
+    () => &quot;2023-06-15T12:00:00Z&quot;,
+  );
+
+  try {
+    const report = generateReport();
+
+    // 验证使用受控值生成的结果
+    assertEquals(report.environment, &quot;production&quot;);
+    assertEquals(report.generatedAt, &quot;2023-06-15T12:00:00Z&quot;);
+  } finally {
+    // 始终还原 stub，避免影响其他测试
+    envStub.restore();
+    dateStub.restore();
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="%E6%A8%A1%E6%8B%9F%E6%97%B6%E9%97%B4-(faking-time)" tabindex="-1">模拟时间 (Faking time) <a class="header-anchor" href="#%E6%A8%A1%E6%8B%9F%E6%97%B6%E9%97%B4-(faking-time)"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>与时间相关的代码难以测试，因为测试结果可能随执行时间变化。Deno 提供了一个
+<a href="https://jsr.io/@std/testing/doc/time"><code>FakeTime</code></a> 工具，可在测试中模拟时间流动，控制日期相关函数。</p>
+<p>以下示例演示如何测试依赖时间的函数：
+<code>isWeekend()</code>（判断当天是否周六或周日返回 true），以及
+<code>delayedGreeting()</code>（1 秒延迟后回调）：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> FakeTime <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/time"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 基于当前时间的函数</span>
+<span class="token keyword">function</span> <span class="token function">isWeekend</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">boolean</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> date <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> day <span class="token operator">=</span> date<span class="token punctuation">.</span><span class="token function">getDay</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> day <span class="token operator">===</span> <span class="token number">0</span> <span class="token operator">||</span> day <span class="token operator">===</span> <span class="token number">6</span><span class="token punctuation">;</span> <span class="token comment">// 0 是星期日，6 是星期六</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 使用定时器的函数</span>
+<span class="token keyword">function</span> <span class="token function">delayedGreeting</span><span class="token punctuation">(</span><span class="token function-variable function">callback</span><span class="token operator">:</span> <span class="token punctuation">(</span>message<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">void</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+  <span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token function">callback</span><span class="token punctuation">(</span><span class="token string">"Hello after delay"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 1 秒延迟</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"时间相关测试"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  using fakeTime <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FakeTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 创建从特定日期（星期一）开始的假时间</span>
+  <span class="token keyword">const</span> mockedTime<span class="token operator">:</span> FakeTime <span class="token operator">=</span> <span class="token function">fakeTime</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token string">"2023-05-01T12:00:00Z"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 测试周一</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token function">isWeekend</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 向前推进时间到周六</span>
+    mockedTime<span class="token punctuation">.</span><span class="token function">tick</span><span class="token punctuation">(</span><span class="token number">5</span> <span class="token operator">*</span> <span class="token number">24</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 前进 5 天</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span><span class="token function">isWeekend</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 测试带定时器的异步操作</span>
+    <span class="token keyword">let</span> greeting <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token function">delayedGreeting</span><span class="token punctuation">(</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+      greeting <span class="token operator">=</span> message<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 立即推进 1 秒以触发定时器</span>
+    mockedTime<span class="token punctuation">.</span><span class="token function">tick</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>greeting<span class="token punctuation">,</span> <span class="token string">"Hello after delay"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 始终还原真实时间</span>
+    mockedTime<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-116" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { FakeTime } from &quot;jsr:@std/testing/time&quot;;
+
+// 基于当前时间的函数
+function isWeekend(): boolean {
+  const date = new Date();
+  const day = date.getDay();
+  return day === 0 || day === 6; // 0 是星期日，6 是星期六
+}
+
+// 使用定时器的函数
+function delayedGreeting(callback: (message: string) => void): void {
+  setTimeout(() => {
+    callback(&quot;Hello after delay&quot;);
+  }, 1000); // 1 秒延迟
+}
+
+Deno.test(&quot;时间相关测试&quot;, () => {
+  using fakeTime = new FakeTime();
+
+  // 创建从特定日期（星期一）开始的假时间
+  const mockedTime: FakeTime = fakeTime(new Date(&quot;2023-05-01T12:00:00Z&quot;));
+
+  try {
+    // 测试周一
+    assertEquals(isWeekend(), false);
+
+    // 向前推进时间到周六
+    mockedTime.tick(5 * 24 * 60 * 60 * 1000); // 前进 5 天
+    assertEquals(isWeekend(), true);
+
+    // 测试带定时器的异步操作
+    let greeting = &quot;&quot;;
+    delayedGreeting((message) => {
+      greeting = message;
+    });
+
+    // 立即推进 1 秒以触发定时器
+    mockedTime.tick(1000);
+    assertEquals(greeting, &quot;Hello after delay&quot;);
+  } finally {
+    // 始终还原真实时间
+    mockedTime.restore();
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>这里使用 <code>fakeTime</code> 创建受控时间环境，初始时间为 2023 年 5 月 1 日（星期一），返回的 <code>FakeTime</code> 对象可控制时间流逝。</p>
+<p>我们在模拟周一时测试 <code>isWeekend()</code> 返回 <code>false</code>，推进到周六后为 <code>true</code>。</p>
+<p><code>fakeTime</code> 替换了 JS 的时间函数 (<code>Date</code>、<code>setTimeout</code>、<code>setInterval</code> 等)，让你无论实际测试时间何时，都可测试指定时间条件。此技术可避免依赖系统时钟导致的测试不稳定，并可通过快速推进时间来加速测试。</p>
+<p>模拟时间适用于测试：</p>
+<ul>
+<li>日历或日期相关功能，如日程、预约、过期时间</li>
+<li>包含超时或定时器的代码，如轮询、延迟操作、去抖</li>
+<li>动画或过渡效果的定时测试</li>
+</ul>
+<p>和 Stub 类似，测试结束后记得调用 <code>restore()</code> 还原真实时间函数，避免影响其他测试。</p>
+<h2 id="%E9%AB%98%E7%BA%A7-mock-%E6%A8%A1%E5%BC%8F" tabindex="-1">高级 Mock 模式 <a class="header-anchor" href="#%E9%AB%98%E7%BA%A7-mock-%E6%A8%A1%E5%BC%8F"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<h3 id="%E9%83%A8%E5%88%86-mock" tabindex="-1">部分 Mock <a class="header-anchor" href="#%E9%83%A8%E5%88%86-mock"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>有时你只想 mock 某些对象方法，保留其他方法真实实现：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> stub <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">UserService</span> <span class="token punctuation">{</span>
+  <span class="token keyword">async</span> <span class="token function">getUser</span><span class="token punctuation">(</span>id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 复杂数据库查询</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> id<span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"Database User"</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">async</span> <span class="token function">formatUser</span><span class="token punctuation">(</span>user<span class="token operator">:</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">;</span> name<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      <span class="token operator">...</span>user<span class="token punctuation">,</span>
+      displayName<span class="token operator">:</span> user<span class="token punctuation">.</span>name<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">async</span> <span class="token function">getUserFormatted</span><span class="token punctuation">(</span>id<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getUser</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">formatUser</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"使用 stub 进行部分 Mock"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> service <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UserService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 仅 mock getUser 方法</span>
+  <span class="token keyword">const</span> getUserMock <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>
+    service<span class="token punctuation">,</span>
+    <span class="token string">"getUser"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token string">"test-id"</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"Mocked User"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token comment">// formatUser 仍使用真实实现</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> service<span class="token punctuation">.</span><span class="token function">getUserFormatted</span><span class="token punctuation">(</span><span class="token string">"test-id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      id<span class="token operator">:</span> <span class="token string">"test-id"</span><span class="token punctuation">,</span>
+      name<span class="token operator">:</span> <span class="token string">"Mocked User"</span><span class="token punctuation">,</span>
+      displayName<span class="token operator">:</span> <span class="token string">"MOCKED USER"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 验证 getUser 被正确调用</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>getUserMock<span class="token punctuation">.</span>calls<span class="token punctuation">.</span>length<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>getUserMock<span class="token punctuation">.</span>calls<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>args<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">"test-id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    getUserMock<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-158" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { stub } from &quot;jsr:@std/testing/mock&quot;;
+
+class UserService {
+  async getUser(id: string) {
+    // 复杂数据库查询
+    return { id, name: &quot;Database User&quot; };
+  }
+
+  async formatUser(user: { id: string; name: string }) {
+    return {
+      ...user,
+      displayName: user.name.toUpperCase(),
+    };
+  }
+
+  async getUserFormatted(id: string) {
+    const user = await this.getUser(id);
+    return this.formatUser(user);
+  }
+}
+
+Deno.test(&quot;使用 stub 进行部分 Mock&quot;, async () => {
+  const service = new UserService();
+
+  // 仅 mock getUser 方法
+  const getUserMock = stub(
+    service,
+    &quot;getUser&quot;,
+    () => Promise.resolve({ id: &quot;test-id&quot;, name: &quot;Mocked User&quot; }),
+  );
+
+  try {
+    // formatUser 仍使用真实实现
+    const result = await service.getUserFormatted(&quot;test-id&quot;);
+
+    assertEquals(result, {
+      id: &quot;test-id&quot;,
+      name: &quot;Mocked User&quot;,
+      displayName: &quot;MOCKED USER&quot;,
+    });
+
+    // 验证 getUser 被正确调用
+    assertEquals(getUserMock.calls.length, 1);
+    assertEquals(getUserMock.calls[0].args[0], &quot;test-id&quot;);
+  } finally {
+    getUserMock.restore();
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h3 id="mock-fetch-%E8%AF%B7%E6%B1%82" tabindex="-1">Mock fetch 请求 <a class="header-anchor" href="#mock-fetch-%E8%AF%B7%E6%B1%82"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h3>
+<p>测试涉及 HTTP 请求的代码通常需要模拟 <code>fetch</code> API：</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> stub <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 使用 fetch 的函数</span>
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">fetchUserData</span><span class="token punctuation">(</span>userId<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">https://api.example.com/users/</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>userId<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>response<span class="token punctuation">.</span>ok<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Failed to fetch user: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>response<span class="token punctuation">.</span>status<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"Mock fetch API"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> originalFetch <span class="token operator">=</span> globalThis<span class="token punctuation">.</span>fetch<span class="token punctuation">;</span>
+
+  <span class="token comment">// 创建 mock fetch 返回的响应</span>
+  <span class="token keyword">const</span> mockResponse <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span>
+    <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span><span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token string">"123"</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"John Doe"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span> status<span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span> headers<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token string-property property">"Content-Type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 用 stub 替换 fetch</span>
+  globalThis<span class="token punctuation">.</span>fetch <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>
+    globalThis<span class="token punctuation">,</span>
+    <span class="token string">"fetch"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">(</span>_input<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">|</span> <span class="token constant">URL</span> <span class="token operator">|</span> Request<span class="token punctuation">,</span> _init<span class="token operator">?</span><span class="token operator">:</span> RequestInit<span class="token punctuation">)</span> <span class="token operator">=></span>
+      <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>mockResponse<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetchUserData</span><span class="token punctuation">(</span><span class="token string">"123"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">assertEquals</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token punctuation">{</span> id<span class="token operator">:</span> <span class="token string">"123"</span><span class="token punctuation">,</span> name<span class="token operator">:</span> <span class="token string">"John Doe"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 还原原始 fetch</span>
+    globalThis<span class="token punctuation">.</span>fetch <span class="token operator">=</span> originalFetch<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-165" class="copyButton" data-copy="import { assertEquals } from &quot;jsr:@std/assert&quot;;
+import { stub } from &quot;jsr:@std/testing/mock&quot;;
+
+// 使用 fetch 的函数
+async function fetchUserData(userId: string) {
+  const response = await fetch(`https://api.example.com/users/${userId}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user: ${response.status}`);
+  }
+  return await response.json();
+}
+
+Deno.test(&quot;Mock fetch API&quot;, async () => {
+  const originalFetch = globalThis.fetch;
+
+  // 创建 mock fetch 返回的响应
+  const mockResponse = new Response(
+    JSON.stringify({ id: &quot;123&quot;, name: &quot;John Doe&quot; }),
+    { status: 200, headers: { &quot;Content-Type&quot;: &quot;application/json&quot; } },
+  );
+
+  // 用 stub 替换 fetch
+  globalThis.fetch = stub(
+    globalThis,
+    &quot;fetch&quot;,
+    (_input: string | URL | Request, _init?: RequestInit) =>
+      Promise.resolve(mockResponse),
+  );
+
+  try {
+    const result = await fetchUserData(&quot;123&quot;);
+    assertEquals(result, { id: &quot;123&quot;, name: &quot;John Doe&quot; });
+  } finally {
+    // 还原原始 fetch
+    globalThis.fetch = originalFetch;
+  }
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><h2 id="%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B" tabindex="-1">真实案例 <a class="header-anchor" href="#%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B"><span class="sr-only">Jump to heading</span><span aria-hidden="true" class="anchor-end">#</span></a></h2>
+<p>现在我们将所有技巧合并，测试一个用户认证服务，该服务：</p>
+<ol>
+<li>验证用户凭证</li>
+<li>调用 API 进行认证</li>
+<li>存储带有过期时间的 token</li>
+</ol>
+<p>下面示例创建了完整的 <code>AuthService</code> 类，用于登录、token 管理和鉴权。测试中使用了多种 Mock 技术：Stub fetch 请求、Spy 方法、模拟时间来测试 token 过期，并使用结构化测试步骤组织。</p>
+<p>Deno 的测试 API 提供了 <code>t.step()</code> 方法，将测试逻辑分割为步骤或子测试，使复杂测试更易读，更便于定位问题。每步可单独断言，测试结果中分别报告。</p>
+<div class="relative"><pre><code class="highlight notranslate language-ts"><span class="token keyword">import</span> <span class="token punctuation">{</span> assertEquals<span class="token punctuation">,</span> assertRejects <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/assert"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> spy<span class="token punctuation">,</span> stub <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/mock"</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> FakeTime <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">"jsr:@std/testing/time"</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 目标服务</span>
+<span class="token keyword">class</span> <span class="token class-name">AuthService</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> token<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> expiresAt<span class="token operator">:</span> Date <span class="token operator">|</span> <span class="token keyword">null</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">async</span> <span class="token function">login</span><span class="token punctuation">(</span>username<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">,</span> password<span class="token operator">:</span> <span class="token builtin">string</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">Promise</span><span class="token operator">&lt;</span><span class="token builtin">string</span><span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token comment">// 校验输入</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>username <span class="token operator">||</span> <span class="token operator">!</span>password<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Username and password are required"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">// 调用认证 API</span>
+    <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token string">"https://api.example.com/login"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      method<span class="token operator">:</span> <span class="token string">"POST"</span><span class="token punctuation">,</span>
+      headers<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token string-property property">"Content-Type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      body<span class="token operator">:</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span><span class="token punctuation">{</span> username<span class="token punctuation">,</span> password <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>response<span class="token punctuation">.</span>ok<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Authentication failed: </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>response<span class="token punctuation">.</span>status<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token keyword">await</span> response<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 存储带 1 小时过期时间的 token</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>token <span class="token operator">=</span> data<span class="token punctuation">.</span>token<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>expiresAt <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span>Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>token<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">getToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>token <span class="token operator">||</span> <span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>expiresAt<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Not authenticated"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>expiresAt<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>token <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>expiresAt <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Token expired"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>token<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token function">logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token keyword">void</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>token <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>expiresAt <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Deno<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span><span class="token string">"AuthService 综合测试"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span>t<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">await</span> t<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token string">"登录应该验证凭证"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> authService <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">await</span> <span class="token function">assertRejects</span><span class="token punctuation">(</span>
+      <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> authService<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">,</span> <span class="token string">"password"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      Error<span class="token punctuation">,</span>
+      <span class="token string">"Username and password are required"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> t<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token string">"登录应正确处理 API 调用"</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> authService <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// mock 成功响应</span>
+    <span class="token keyword">const</span> mockResponse <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Response</span><span class="token punctuation">(</span>
+      <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span><span class="token punctuation">{</span> token<span class="token operator">:</span> <span class="token string">"fake-jwt-token"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span> status<span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span> headers<span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token string-property property">"Content-Type"</span><span class="token operator">:</span> <span class="token string">"application/json"</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> fetchStub <span class="token operator">=</span> <span class="token function">stub</span><span class="token punctuation">(</span>
+      globalThis<span class="token punctuation">,</span>
+      <span class="token string">"fetch"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">(</span>_url<span class="token operator">:</span> <span class="token builtin">string</span> <span class="token operator">|</span> <span class="token constant">URL</span> <span class="token operator">|</span> Request<span class="token punctuation">,</span> options<span class="token operator">?</span><span class="token operator">:</span> RequestInit<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+        <span class="token comment">// 验证请求数据正确</span>
+        <span class="token keyword">const</span> body <span class="token operator">=</span> options<span class="token operator">?.</span>body <span class="token keyword">as</span> <span class="token builtin">string</span><span class="token punctuation">;</span>
+        <span class="token keyword">const</span> parsedBody <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>body<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span>parsedBody<span class="token punctuation">.</span>username<span class="token punctuation">,</span> <span class="token string">"testuser"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span>parsedBody<span class="token punctuation">.</span>password<span class="token punctuation">,</span> <span class="token string">"password123"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token builtin">Promise</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>mockResponse<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> token <span class="token operator">=</span> <span class="token keyword">await</span> authService<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">"testuser"</span><span class="token punctuation">,</span> <span class="token string">"password123"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">assertEquals</span><span class="token punctuation">(</span>token<span class="token punctuation">,</span> <span class="token string">"fake-jwt-token"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      fetchStub<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">await</span> t<span class="token punctuation">.</span><span class="token function">step</span><span class="token punctuation">(</span><span class="token string">"token 过期应正常工作"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    using fakeTime <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FakeTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">const</span> authService <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AuthService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">const</span> time <span class="token operator">=</span> <span class="token function">fakeTime</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token string">"2023-01-01T12:00:00Z"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token comment">// mock 登录过程直接设置 token</span>
+      authService<span class="token punctuation">.</span>login <span class="token operator">=</span> <span class="token function">spy</span><span class="token punctuation">(</span>
+        authService<span class="token punctuation">,</span>
+        <span class="token string">"login"</span><span class="token punctuation">,</span>
+        <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+          <span class="token punctuation">(</span>authService <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>token <span class="token operator">=</span> <span class="token string">"fake-token"</span><span class="token punctuation">;</span>
+          <span class="token punctuation">(</span>authService <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span>expiresAt <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span>
+            Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+          <span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">return</span> <span class="token string">"fake-token"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token comment">// 登录并验证 token</span>
+      authService<span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span><span class="token string">"user"</span><span class="token punctuation">,</span> <span class="token string">"pass"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+        <span class="token keyword">const</span> token <span class="token operator">=</span> authService<span class="token punctuation">.</span><span class="token function">getToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">assertEquals</span><span class="token punctuation">(</span>token<span class="token punctuation">,</span> <span class="token string">"fake-token"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 将时间推进到过期后</span>
+        time<span class="token punctuation">.</span><span class="token function">tick</span><span class="token punctuation">(</span><span class="token number">61</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// token 应该已过期</span>
+        <span class="token function">assertRejects</span><span class="token punctuation">(</span>
+          <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+            authService<span class="token punctuation">.</span><span class="token function">getToken</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span><span class="token punctuation">,</span>
+          Error<span class="token punctuation">,</span>
+          <span class="token string">"Token expired"</span><span class="token punctuation">,</span>
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+      time<span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">(</span>authService<span class="token punctuation">.</span>login <span class="token keyword">as</span> <span class="token builtin">any</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+      <button id="copy-button-195" class="copyButton" data-copy="import { assertEquals, assertRejects } from &quot;jsr:@std/assert&quot;;
+import { spy, stub } from &quot;jsr:@std/testing/mock&quot;;
+import { FakeTime } from &quot;jsr:@std/testing/time&quot;;
+
+// 目标服务
+class AuthService {
+  private token: string | null = null;
+  private expiresAt: Date | null = null;
+
+  async login(username: string, password: string): Promise<string> {
+    // 校验输入
+    if (!username || !password) {
+      throw new Error(&quot;Username and password are required&quot;);
+    }
+
+    // 调用认证 API
+    const response = await fetch(&quot;https://api.example.com/login&quot;, {
+      method: &quot;POST&quot;,
+      headers: { &quot;Content-Type&quot;: &quot;application/json&quot; },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Authentication failed: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // 存储带 1 小时过期时间的 token
+    this.token = data.token;
+    this.expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+    return this.token;
+  }
+
+  getToken(): string {
+    if (!this.token || !this.expiresAt) {
+      throw new Error(&quot;Not authenticated&quot;);
+    }
+
+    if (new Date() > this.expiresAt) {
+      this.token = null;
+      this.expiresAt = null;
+      throw new Error(&quot;Token expired&quot;);
+    }
+
+    return this.token;
+  }
+
+  logout(): void {
+    this.token = null;
+    this.expiresAt = null;
+  }
+}
+
+Deno.test(&quot;AuthService 综合测试&quot;, async (t) => {
+  await t.step(&quot;登录应该验证凭证&quot;, async () => {
+    const authService = new AuthService();
+    await assertRejects(
+      () => authService.login(&quot;&quot;, &quot;password&quot;),
+      Error,
+      &quot;Username and password are required&quot;,
+    );
+  });
+
+  await t.step(&quot;登录应正确处理 API 调用&quot;, async () => {
+    const authService = new AuthService();
+
+    // mock 成功响应
+    const mockResponse = new Response(
+      JSON.stringify({ token: &quot;fake-jwt-token&quot; }),
+      { status: 200, headers: { &quot;Content-Type&quot;: &quot;application/json&quot; } },
+    );
+
+    const fetchStub = stub(
+      globalThis,
+      &quot;fetch&quot;,
+      (_url: string | URL | Request, options?: RequestInit) => {
+        // 验证请求数据正确
+        const body = options?.body as string;
+        const parsedBody = JSON.parse(body);
+        assertEquals(parsedBody.username, &quot;testuser&quot;);
+        assertEquals(parsedBody.password, &quot;password123&quot;);
+
+        return Promise.resolve(mockResponse);
+      },
+    );
+
+    try {
+      const token = await authService.login(&quot;testuser&quot;, &quot;password123&quot;);
+      assertEquals(token, &quot;fake-jwt-token&quot;);
+    } finally {
+      fetchStub.restore();
+    }
+  });
+
+  await t.step(&quot;token 过期应正常工作&quot;, () => {
+    using fakeTime = new FakeTime();
+
+    const authService = new AuthService();
+    const time = fakeTime(new Date(&quot;2023-01-01T12:00:00Z&quot;));
+
+    try {
+      // mock 登录过程直接设置 token
+      authService.login = spy(
+        authService,
+        &quot;login&quot;,
+        async () => {
+          (authService as any).token = &quot;fake-token&quot;;
+          (authService as any).expiresAt = new Date(
+            Date.now() + 60 * 60 * 1000,
+          );
+          return &quot;fake-token&quot;;
+        },
+      );
+
+      // 登录并验证 token
+      authService.login(&quot;user&quot;, &quot;pass&quot;).then(() => {
+        const token = authService.getToken();
+        assertEquals(token, &quot;fake-token&quot;);
+
+        // 将时间推进到过期后
+        time.tick(61 * 60 * 1000);
+
+        // token 应该已过期
+        assertRejects(
+          () => {
+            authService.getToken();
+          },
+          Error,
+          &quot;Token expired&quot;,
+        );
+      });
+    } finally {
+      time.restore();
+      (authService.login as any).restore();
+    }
+  });
+});
+" title="Copy">
+        <svg class="copy-icon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="7" height="7" fill="none"/>
+          <rect x="6" y="6" width="7" height="7" fill="none"/>
+          <path d="M1.55566 2.7C1.55566 2.03726 2.09292 1.5 2.75566 1.5H8.75566C9.41841 1.5 9.95566 2.03726 9.95566 2.7V5.1H12.3557C13.0184 5.1 13.5557 5.63726 13.5557 6.3V12.3C13.5557 12.9627 13.0184 13.5 12.3557 13.5H6.35566C5.69292 13.5 5.15566 12.9627 5.15566 12.3V9.9H2.75566C2.09292 9.9 1.55566 9.36274 1.55566 8.7V2.7ZM6.35566 9.9V12.3H12.3557V6.3H9.95566V8.7C9.95566 9.36274 9.41841 9.9 8.75566 9.9H6.35566ZM8.75566 8.7V2.7H2.75566V8.7H8.75566Z" fill="hsla(var(--foreground-secondary))"/>
+        </svg>
+        <svg class="check-icon hidden" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 7.5L6.5 11L12 3" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div><p>该代码定义了 <code>AuthService</code> 类，包含三大功能：</p>
+<ul>
+<li>登录：校验凭证，调用 API，保存带过期时间的 token</li>
+<li>获取 Token：返回有效且未过期的 token</li>
+<li>登出：清除 token 和过期时间</li>
+</ul>
+<p>测试通过一个主测试，分为三个逻辑<strong>步骤</strong>，分别检验凭证验证、API 调用处理和 token 过期。</p>
+<p>🦕 高效的 Mock 技术对于编写可靠、可维护的单元测试至关重要。Deno 提供多种强大工具帮助你在测试中隔离代码。掌握这些技巧后，你能编写更可靠、更快速且不依赖外部服务的测试。</p>
+<p>更多测试资源请参考：</p>
+<ul>
+<li><a href="/api/deno/testing">Deno 测试 API 文档</a></li>
+<li><a href="https://jsr.io/@std/testing">Deno 标准库测试模块</a></li>
+<li><a href="/examples/testing_tutorial/">Deno 测试基础教程</a></li>
+</ul>
+</div></article><div class="wwads-cn wwads-horizontal w-full my-4" data-id="354"></div><section id="feedback-section" class="flex flex-col mt-12 gap-2 p-4 sm:p-8 bg-blue-splash dark:bg-deploy-900 rounded-md mx-auto"><h2 class="text-xl mb-2 pb-2 font-normal">你找到了你需要的东西吗？</h2><div class="flex flex-col sm:flex-row sm:flex-wrap gap-8"><div class="flex-1"><form aria-live="polite" id="feedback-form"><div id="feedback-form__content" class="grid grid-cols-1 transition-all duration-300 grid-rows-[max-content_0fr] w-full items-start gap-2 overflow-hidden"><div class="flex flex-wrap gap-2 items-center"><input class="sr-only" id="feedback-yes" type="radio" name="feedback-vote" aria-label="Yes" value="yes" required><label class="btn" for="feedback-yes">是的<svg aria-hidden="true" focusable="false" class="color-fg-muted" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.998.438 2.447.188 4.316l-.04.306c-.105.79-.195 1.473-.313 2.033-.131.63-.315 1.209-.668 1.672C13.97 15.847 12.706 16 11 16c-1.848 0-3.234-.333-4.388-.653-.165-.045-.323-.09-.475-.133-.658-.186-1.2-.34-1.725-.415A1.75 1.75 0 0 1 2.75 16h-1A1.75 1.75 0 0 1 0 14.25v-7.5C0 5.784.784 5 1.75 5h1a1.75 1.75 0 0 1 1.514.872c.258-.105.59-.268.918-.508C5.853 4.874 6.5 4.079 6.5 2.75v-.5c0-1.202.994-2.337 2.334-2.184ZM4.5 13.3c.705.088 1.39.284 2.072.478l.441.125c1.096.305 2.334.598 3.987.598 1.794 0 2.28-.223 2.528-.549.147-.193.276-.505.394-1.07.105-.502.188-1.124.295-1.93l.04-.3c.25-1.882.189-2.933-.068-3.497a.921.921 0 0 0-.442-.48c-.208-.104-.52-.174-.997-.174H11c-.686 0-1.295-.577-1.206-1.336.023-.192.05-.39.076-.586.065-.488.13-.97.13-1.328 0-.809-.144-1.15-.288-1.316-.137-.158-.402-.304-1.048-.378C8.357 1.521 8 1.793 8 2.25v.5c0 1.922-.978 3.128-1.933 3.825a5.831 5.831 0 0 1-1.567.81ZM2.75 6.5h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg></label><input class="sr-only" id="feedback-no" type="radio" name="feedback-vote" aria-label="No" value="no" required><label class="btn" for="feedback-no">没有<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;"><path d="M7.083 15.986c-.763-.087-1.499-.295-2.011-.884-.504-.581-.655-1.378-.655-2.299 0-.468.087-1.12.157-1.638l.015-.112H3.167c-.603 0-1.174-.086-1.669-.334a2.415 2.415 0 0 1-1.136-1.2c-.454-.998-.438-2.447-.188-4.316l.04-.306C.32 4.108.41 3.424.526 2.864c.132-.63.316-1.209.669-1.672C1.947.205 3.211.053 4.917.053c1.848 0 3.234.332 4.388.652l.474.133c.658.187 1.201.341 1.726.415a1.75 1.75 0 0 1 1.662-1.2h1c.966 0 1.75.784 1.75 1.75v7.5a1.75 1.75 0 0 1-1.75 1.75h-1a1.75 1.75 0 0 1-1.514-.872c-.259.105-.59.268-.919.508-.671.491-1.317 1.285-1.317 2.614v.5c0 1.201-.994 2.336-2.334 2.183Zm4.334-13.232c-.706-.089-1.39-.284-2.072-.479l-.441-.125c-1.096-.304-2.335-.597-3.987-.597-1.794 0-2.28.222-2.529.548-.147.193-.275.505-.393 1.07-.105.502-.188 1.124-.295 1.93l-.04.3c-.25 1.882-.19 2.933.067 3.497a.923.923 0 0 0 .443.48c.208.104.52.175.997.175h1.75c.685 0 1.295.577 1.205 1.335-.022.192-.049.39-.075.586-.066.488-.13.97-.13 1.329 0 .808.144 1.15.288 1.316.137.157.401.303 1.048.377.307.035.664-.237.664-.693v-.5c0-1.922.978-3.127 1.932-3.825a5.878 5.878 0 0 1 1.568-.809Zm1.75 6.798h1a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25Z"></path></svg></label><a class="btn" target="_blank" href="https://github.com/zhcndoc/deno/edit/main/examples/tutorials/mocking.md">编辑此页面<svg width="98" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" fill="currentColor" style="display:inline-block;user-select:none;vertical-align:text-bottom;" viewBox="0 0 98 96"><path fill-rule="evenodd" clip-rule="evenodd" d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z" fill="currentColor"></path></svg></a></div><div id="feedback-more" class="hidden w-full overflow-hidden"><p class="font-semibold !mt-2">我们可以做些什么来改善这个页面？</p><div class="space-y-1"><textarea class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-comment" id="feedback-comment" placeholder="Your feedback will be posted as an issue in the denoland/docs GitHub repo"></textarea></div><div class="space-y-1"><label for="feedback-contact">GitHub 用户名（可选）</label><input type="text" class="block w-full p-2 border border-foreground-tertiary bg-white dark:bg-background-primary rounded" name="feedback-contact" id="feedback-contact" aria-invalid="false" placeholder="username" value=""><p class="text-xs text-gray-600 dark:text-gray-400 italic mt-1">如果提供，您将在创建的 GitHub 问题中被 @提及</p></div><button type="submit" class="btn  mt-4">发送反馈给我们</button></div></div><a rel="" class="mt-4 !underline underline-offset-2 text-xs block" target="_blank" href="/deploy/privacy_policy">隐私政策</a></form></div></div></section></div></main><ul class="toc-list hidden sticky p-4 pr-0 h-screen-minus-header overflow-y-auto border-l border-l-foreground-tertiary lg:block lg:w-full top-header" id="toc"><div class="wwads-cn wwads-vertical max-w-[200px] my-4" data-id="354"></div><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%9B%91%E5%90%AC-(spying)" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">监听 (Spying) </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%B8%85%E9%99%A4-spy" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">清除 Spy </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#stub%EF%BC%88%E5%AD%98%E6%A0%B9%EF%BC%89" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Stub（存根） </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84-stub" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">环境变量的 Stub </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E6%A8%A1%E6%8B%9F%E6%97%B6%E9%97%B4-(faking-time)" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">模拟时间 (Faking time) </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%AB%98%E7%BA%A7-mock-%E6%A8%A1%E5%BC%8F" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">高级 Mock 模式 </a><ul class="ml-2"><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E9%83%A8%E5%88%86-mock" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">部分 Mock </a></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#mock-fetch-%E8%AF%B7%E6%B1%82" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">Mock fetch 请求 </a></li></ul></li><li class="m-2 mr-0 leading-4 text-balance"><a href="#%E7%9C%9F%E5%AE%9E%E6%A1%88%E4%BE%8B" class="text-smaller lg:text-foreground-secondary hover:text-primary transition-colors duration-200 ease-in-out select-none">真实案例 </a></li></ul></div><footer class="text-smaller bg-gray-50 dark:bg-gray-950 p-4 pt-12 sm:px-8 border-t border-t-foreground-tertiary"><nav class="flex flex-col gap-x-4 gap-y-12 max-w-7xl md:flex-row md:flex-wrap md:justify-between md:w-full md:gap-y-8 md:mx-auto"><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">Deno 文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/runtime/">Deno 运行时</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/examples/">示例</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://jsr.io/@std">标准库</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/api/deno/~/Deno">Deno API Reference</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">服务文档</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/">Deno Deploy </a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/classic/">Deno Deploy Classic</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/subhosting/manual/">Deno 子托管</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">社区</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">Discord</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland">GitHub</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://youtube.com/@deno_land">YouTube</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://bsky.app/profile/deno.land">Bluesky</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://fosstodon.org/@deno_land">Mastodon</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://twitter.com/deno_land">Twitter</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.news/">Newsletter</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">帮助与反馈</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://discord.gg/deno">社区支持</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://denostatus.com">部署系统状态</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://github.com/denoland/deploy_feedback">部署反馈</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="mailto:support@deno.com">报告问题</a></li></ul></section><section class="flex-auto"><h3 class="mb-2 uppercase font-bold text-foreground-primary whitespace-pre">公司</h3><ul class="m-0 p-0 pl-3 border-l border-l-background-tertiary list-none"><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/">Deno Website</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://deno.com/blog">Blog</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="https://merch.deno.com/">周边商品</a></li><li><a class="block mb-2 hover:text-primary hover:underline" href="/deploy/privacy_policy">Privacy Policy</a></li></ul></section></nav><p class="m-0 mt-16 mx-auto text-center text-xs text-foreground-secondary"><a target="_blank" href="https://www.zhcndoc.com">简中文档</a>｜<a rel="nofollow" target="_blank" href="https://beian.miit.gov.cn">沪ICP备2024070610号-3</a></p></footer></body></html>
