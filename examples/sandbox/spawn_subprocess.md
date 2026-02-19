@@ -12,8 +12,7 @@ import { Sandbox } from "@deno/sandbox";
 
 await using sandbox = await Sandbox.create();
 
-const text = await sandbox.sh`pwd`.text();
-console.log("result:", text); // → "/home/sandbox\n"
+const cwd = await sandbox.sh`pwd`;
 ```
 
 对于长时间运行的进程或大量输出，可以使用 stdout/stderr 流。

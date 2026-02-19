@@ -10,7 +10,7 @@ description: "了解如何从 Deno 沙箱暴露 HTTP 端点，使您能够在边
 <deno-tabs group-id="sandbox-sdk">
 <deno-tab value="js" label="JavaScript" default>
 
-```tsx title="main.ts"
+```tsx
 import { Sandbox } from "@deno/sandbox";
 
 await using sandbox = await Sandbox.create({ port: 8000 });

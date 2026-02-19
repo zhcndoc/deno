@@ -64,13 +64,41 @@ $ deno add npm:@deno/astro-adapter
 
 使用 Nuxt 轻松创建高质量 Web 应用，Nuxt 是一个开源框架，使基于 Vue.js 的全栈开发变得直观。
 
-Nuxt 无需额外设置。
+Nuxt 无需额外设置。Deno Deploy 会自动配置 Nitro，因此无需额外的预设配置。
 
 ### SolidStart (`solidstart`)
 
 SolidStart 是一个开源元框架，旨在统一组成 Web 应用的组件。它建立于 Solid 之上。
 
-SolidStart 无需额外设置。
+SolidStart 无需额外设置。Deno Deploy 会自动配置 Nitro，因此无需额外的预设配置。
+
+### TanStack Start (`tanstackstart`)
+
+TanStack Start 是一个基于 TanStack Router 的全栈 React 或 Solid 框架。它使用 Nitro 作为服务器层，从而支持在 Deno Deploy 上部署。
+
+要在 Deno Deploy 上部署 TanStack Start，您需要安装 `nitro` 并配置 Nitro Vite 插件：
+
+1. 将 `nitro` 添加到您的依赖中：
+
+```bash
+deno add npm:nitro-nightly@latest
+# 或 npm install nitro-nightly@latest
+```
+
+2. 配置您的 `vite.config.ts` 使用 Nitro 插件：
+
+```ts title="vite.config.ts"
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { defineConfig } from "vite";
+import { nitro } from "nitro/vite";
+import viteReact from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [tanstackStart(), nitro(), viteReact()],
+});
+```
+
+Deno Deploy 会自动配置 Nitro，因此无需额外的预设配置。
 
 ### SvelteKit (`sveltekit`)
 

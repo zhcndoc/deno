@@ -34,13 +34,13 @@ Deno 带有内置的代码格式化工具，可以自动格式化以下文件：
 | JSONC                | `.jsonc`                                           |                                                                                                |
 | CSS                  | `.css`                                             |                                                                                                |
 | HTML                 | `.html`                                            |                                                                                                |
-| [Nunjucks][Nunjucks] | `.njk`                                           |                                                                                                |
+| [Nunjucks][Nunjucks] | `.njk`                                             |                                                                                                |
 | [Vento][Vento]       | `.vto`                                             |                                                                                                |
 | YAML                 | `.yml`, `.yaml`                                    |                                                                                                |
-| Sass                 | `.sass`                                           |                                                                                                |
-| SCSS                 | `.scss`                                           |                                                                                                |
-| LESS                 | `.less`                                           |                                                                                                |
-| Jupyter Notebook     | `.ipynb`                                          |                                                                                                |
+| Sass                 | `.sass`                                            |                                                                                                |
+| SCSS                 | `.scss`                                            |                                                                                                |
+| LESS                 | `.less`                                            |                                                                                                |
+| Jupyter Notebook     | `.ipynb`                                           |                                                                                                |
 | Astro                | `.astro`                                           | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置选项。                  |
 | Svelte               | `.svelte`                                          | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置选项。                  |
 | Vue                  | `.vue`                                             | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置选项。                  |

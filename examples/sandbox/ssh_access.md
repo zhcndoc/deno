@@ -5,15 +5,20 @@ url: /examples/sandbox_ssh_access/
 layout: sandbox-example.tsx
 ---
 
-SSH 访问允许您通过 SSH 协议安全地连接到沙箱环境。`sandbox.exposeSsh()` 方法可以用来为沙箱提供 SSH 访问权限。
+SSH 访问允许您通过 SSH 协议安全地连接到沙箱环境。`sandbox.create({ ssh: true })` 方法可以用来为沙箱提供 SSH 访问权限。
 
 ```ts
 import { Sandbox } from "@deno/sandbox";
 
-await using sandbox = await Sandbox.create();
+await using sandbox = await Sandbox.create({ ssh: true });
 
-// 获取 SSH 凭据
-const { hostname, username } = await sandbox.exposeSsh();
+// 等待 Deploy 配置 SSH 访问信息。
+const creds = sandbox.ssh ?? await sandbox.exposeSsh();
+if (!creds) {
+  throw new Error("未为此沙箱配置 SSH 凭据");
+}
+
+const { hostname, username } = creds;
 console.log(`ssh ${username}@${hostname}`);
 
 // 通过睡眠保持进程存活，否则脚本退出时沙箱将被销毁。

@@ -9,7 +9,7 @@ oldUrl:
 command: lint
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno lint"
-description: "Run the Deno linter to check your code for errors and apply automated fixes"
+description: "运行 Deno linter 来检查您的代码错误并应用自动修复"
 ---
 
 ## 可用规则

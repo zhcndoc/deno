@@ -83,15 +83,16 @@ You can modify app configuration in three places:
     - **入口文件**：要执行的 JavaScript 或 TypeScript 文件
     - **参数**（可选）：传递给应用的命令行参数
     - **运行时工作目录**（可选）：应用运行时的工作目录
+    - **运行时内存限制**（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
   - **静态**：用于提供预渲染静态内容的静态网站
     - **目录**：包含静态资源的文件夹（如 `dist`、`.output`）
     - **单页应用模式**（可选）：对不匹配静态文件的路径返回 `index.html`，而不是 404 错误
+  - **自动**：使用框架预设时，运行时配置会自动设置。
+    - **运行时内存限制**（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
 
-- **Build timeout**: Maximum time allowed for the build process. Defaults to 5
-  minutes, can be increased to 15 minutes on the Pro plan.
+- **构建超时**：构建过程允许的最长时间。默认 5 分钟，Pro 计划下可增加至 15 分钟。
 
-- **Build memory**: Amount of memory allocated to the build process. Defaults to
-  3 GB, can be increased to 4 GB on the Pro plan.
+- **构建内存**：分配给构建过程的内存大小。默认 3 GB，Pro 计划下可增加至 4 GB。
 
 ### Editing app configuration from source code
 
@@ -122,12 +123,19 @@ the entire configuration will be sourced from the file instead of the dashboard
       application.
     - `deploy.runtime.cwd` (optional): The working directory for the application
       at runtime.
+    - `deploy.runtime.memory_limit` (optional): The maximum amount of memory the
+      application can use at runtime. Defaults to 768 MB, can be increased to 4
+      GB on the Pro plan.
   - For static apps:
     - `deploy.runtime.type`: Must be set to `"static"`.
     - `deploy.runtime.cwd`: Folder containing static assets (e.g., `dist`,
       `.output`).
     - `deploy.runtime.spa` (optional): If `true`, serves `index.html` for paths
       that don't match static files instead of returning 404 errors.
+  - For apps using a framework preset:
+    - `deploy.runtime.memory_limit` (optional): The maximum amount of memory the
+      application can use at runtime. Defaults to 768 MB, can be increased to 4
+      GB on the Pro plan.
 
 #### Examples
 

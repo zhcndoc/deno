@@ -113,6 +113,7 @@ assertEquals(
 构建元数据</h3>
 <p>构建元数据是以 <code>.</code> 分隔的字母数字字符串。解析版本时，保持在 SemVer 实例的 <code>build: string[]</code> 字段中。
 增量操作时，可通过额外参数设置 SemVer 实例的构建元数据。</p>
+
 <h3 id="advanced-range-syntax">
 高级范围语法</h3>
 <p>高级范围语法可确定性地转换为基本比较器。</p>

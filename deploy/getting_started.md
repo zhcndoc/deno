@@ -26,13 +26,17 @@ Deno Deploy<sup>EA</sup> 终将取代 Deno Deploy Classic。在此之前，两�
 
 创建组织后，系统会跳转至组织应用页面，展示您所有的应用，并可访问组织设置及自定义域名。
 
-要创建应用，请点击 `+ New App` 按钮：
+:::info
+
+您也可以通过命令行使用 `deno deploy create` 创建和配置应用。详情请参见[应用参考](/deploy/reference/apps/#using-the-cli)。
+
+:::
+
+## 选择仓库
 
 ![部署应用创建屏幕截图](./images/create_app.png)
 
 应用是一个单一部署的 Web 服务，拥有构建配置、构建历史、环境变量、附加自定义域名、关联的 GitHub 仓库等。
-
-## 选择仓库
 
 1. 选择您的应用对应的 GitHub 仓库：
 
