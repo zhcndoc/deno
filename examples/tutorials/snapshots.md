@@ -41,8 +41,7 @@ const client = new Client();
 const volume = await client.volumes.create({
   region: "ord",
   slug: "my-toolchain",
-  capacity: "10GiB",
-  from: "builtin:debian-13",
+  capacity: "10GB",
 });
 
 console.log(`可引导卷已准备好: ${volume.slug}`);

@@ -39,26 +39,20 @@ description: "Deno Deploy 中构建流程的详细说明，涵盖构建触发方
 
 ## 构建配置
 
-App configuration defines how to convert source code into a deployable artifact.
+应用配置定义了如何将源代码转换为可部署的构建产物。
 
-There are two places you can set app configuration:
+您可以在两个位置设置应用配置：
 
-- **In source code**: Using a `deno.json` or `deno.jsonc` file in the
-  application directory.
-- **In the Deno Deploy dashboard**: Using the app configuration settings.
+- **在源代码中**：在应用程序目录中使用 `deno.json` 或 `deno.jsonc` 文件。
+- **在 Deno Deploy 仪表盘**：使用应用配置设置。
 
-If you specify both options, settings in the source code take precedence over
-those in the dashboard. You will be unable to edit any of the app configuration
-values in the dashboard if the most recent successful build used configuration
-from source code.
+如果您同时指定了这两种方式，源代码中的设置优先于仪表盘中的设置。如果最近一次成功构建使用了源代码中的配置，则无法在仪表盘中编辑任何应用配置值。
 
-The application directory must be configured through the dashboard. This setting
-is not configurable from source code, as it determines where to find the source
-code itself.
+应用目录必须通过仪表盘配置。此设置不能通过源代码配置，因为它决定了在哪里查找源代码本身。
 
-### Editing app configuration in the dashboard
+### 在仪表盘中编辑应用配置
 
-You can modify app configuration in three places:
+您可以在三个地方修改应用配置：
 
 - 创建应用时点击“编辑构建配置”
 - 在应用设置中点击构建配置部分的“编辑”
@@ -66,7 +60,7 @@ You can modify app configuration in three places:
 
 在创建应用时，如果您使用已识别的框架或常见构建配置，构建配置可能会自动从仓库中检测。
 
-#### Configuration options
+#### 配置选项
 
 - **应用目录**：仓库中用作应用根目录的文件夹。适用于 Monorepo。默认是仓库根目录。
 
@@ -94,52 +88,33 @@ You can modify app configuration in three places:
 
 - **构建内存**：分配给构建过程的内存大小。默认 3 GB，Pro 计划下可增加至 4 GB。
 
-### Editing app configuration from source code
+### 从源代码编辑应用配置
 
-To configure your application from source code, add a `deno.json` or
-`deno.jsonc` file to the root of your application directory with a `deploy` key.
-If any of the following app configuration options are specified under this key,
-the entire configuration will be sourced from the file instead of the dashboard
-(any configuration specified in the dashboard will be ignored).
+要从源代码配置您的应用，在应用根目录中添加一个带有 `deploy` 键的 `deno.json` 或 `deno.jsonc` 文件。如果在此键下指定了以下任何应用配置选项，整个配置将从文件中获取，而不是从仪表盘（仪表盘中指定的配置将被忽略）。
 
-#### `deno.json` options
+#### `deno.json` 选项
 
-- `deploy.framework` (required unless `deploy.runtime` is set): The framework
-  preset to use, such as `nextjs` or `fresh`. Setting this option automatically
-  configures defaults for the framework. Available presets are listed in the
-  [framework integrations docs](./frameworks/).
-- `deploy.install` (optional): Shell command to install dependencies.
-- `deploy.build` (optional): Shell command to build the project.
-- `deploy.predeploy` (optional): Shell command to run after the build is
-  complete but before deployment, typically for tasks like database migrations.
-- `deploy.runtime` (required unless `deploy.framework` is set): Configuration
-  for how the app serves traffic. The app can either be static or dynamic, as
-  defined below:
-  - For dynamic apps:
-    - `deploy.runtime.type`: Must be set to `"dynamic"`, or omitted (dynamic is
-      the default).
-    - `deploy.runtime.entrypoint`: The JavaScript or TypeScript file to execute.
-    - `deploy.runtime.args` (optional): Command-line arguments to pass to the
-      application.
-    - `deploy.runtime.cwd` (optional): The working directory for the application
-      at runtime.
-    - `deploy.runtime.memory_limit` (optional): The maximum amount of memory the
-      application can use at runtime. Defaults to 768 MB, can be increased to 4
-      GB on the Pro plan.
-  - For static apps:
-    - `deploy.runtime.type`: Must be set to `"static"`.
-    - `deploy.runtime.cwd`: Folder containing static assets (e.g., `dist`,
-      `.output`).
-    - `deploy.runtime.spa` (optional): If `true`, serves `index.html` for paths
-      that don't match static files instead of returning 404 errors.
-  - For apps using a framework preset:
-    - `deploy.runtime.memory_limit` (optional): The maximum amount of memory the
-      application can use at runtime. Defaults to 768 MB, can be increased to 4
-      GB on the Pro plan.
+- `deploy.framework`（必填，除非设置了 `deploy.runtime`）：要使用的框架预设，例如 `nextjs` 或 `fresh`。设置此选项会自动配置框架的默认值。可用预设在[框架集成文档](./frameworks/)中列出。
+- `deploy.install`（可选）：安装依赖的 shell 命令。
+- `deploy.build`（可选）：构建项目的 shell 命令。
+- `deploy.predeploy`（可选）：构建完成但部署前运行的 shell 命令，通常用于数据库迁移等任务。
+- `deploy.runtime`（必填，除非设置了 `deploy.framework`）：应用如何提供流量的配置。应用可以是静态的或动态的，具体如下：
+  - 对于动态应用：
+    - `deploy.runtime.type`：必须设置为 `"dynamic"`，或省略（默认动态）。
+    - `deploy.runtime.entrypoint`：要执行的 JavaScript 或 TypeScript 文件。
+    - `deploy.runtime.args`（可选）：传递给应用的命令行参数。
+    - `deploy.runtime.cwd`（可选）：应用运行时的工作目录。
+    - `deploy.runtime.memory_limit`（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
+  - 对于静态应用：
+    - `deploy.runtime.type`：必须设置为 `"static"`。
+    - `deploy.runtime.cwd`：包含静态资源的文件夹（如 `dist`、`.output`）。
+    - `deploy.runtime.spa`（可选）：如果为 `true`，对未匹配静态文件的路径返回 `index.html`，而不是返回 404。
+  - 对于使用框架预设的应用：
+    - `deploy.runtime.memory_limit`（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
 
-#### Examples
+#### 示例
 
-**Example dynamic app configuration from `deno.json`:**
+**`deno.json` 中的动态应用配置示例：**
 
 ```jsonc
 {
@@ -157,7 +132,7 @@ the entire configuration will be sourced from the file instead of the dashboard
 }
 ```
 
-**Example static app configuration from `deno.jsonc`:**
+**`deno.jsonc` 中的静态应用配置示例：**
 
 ```jsonc
 {
@@ -173,7 +148,7 @@ the entire configuration will be sourced from the file instead of the dashboard
 }
 ```
 
-**Example framework preset configuration with Next.js from `deno.json`:**
+**使用 Next.js 框架预设的配置示例（`deno.json`）：**
 
 ```jsonc
 {
@@ -187,9 +162,9 @@ the entire configuration will be sourced from the file instead of the dashboard
 
 ## 构建环境
 
-构建环境在 Linux 上运行，支持 x64 或 ARM64 架构。可用工具包括：
+构建环境运行于 Linux，支持 x64 或 ARM64 架构。可用工具包括：
 
-- `deno`（与运行时版本相同）
+- `deno`（版本与运行时相同）
 - `node`
 - `npm`
 - `npx`
@@ -201,7 +176,7 @@ the entire configuration will be sourced from the file instead of the dashboard
 
 :::info
 
-构建器内部所有 JavaScript 代码均使用 Deno 执行。
+构建器内部所有 JavaScript 代码均通过 Deno 执行。
 
 `node` 命令实际上是一个 shim，负责将 Node.js 的调用转换为 `deno run`。类似地，`npm`、`npx`、`yarn` 和 `pnpm` 也都是通过 Deno 而非 Node.js 运行。
 
@@ -209,4 +184,18 @@ the entire configuration will be sourced from the file instead of the dashboard
 
 为“构建”上下文配置的环境变量在构建过程中可用，但来自“生产”或“开发”上下文的变量不可用。[了解更多关于环境变量](/deploy/reference/env_vars_and_contexts/)。
 
-构建器在构建期间可用的存储空间为 8 GB。
+构建期间将额外始终提供以下环境变量：
+
+- `CI`: `true`
+- `DENO_DEPLOY`: `true` - 表示代码正在 Deno Deploy 中运行。
+- `DENO_DEPLOY_ORGANIZATION_ID`：拥有该应用的组织的 ID（UUID）。
+- `DENO_DEPLOY_ORGANIZATION_SLUG`：拥有该应用的组织的 slug（用于 URL 的人类可读标识符，在创建组织时设置）。
+- `DENO_DEPLOY_APPLICATION_ID`：应用的 ID（UUID）。
+- `DENO_DEPLOY_APPLICATION_SLUG`：应用的 slug（用于 URL 的人类可读标识符，在创建应用时设置，或之后可在应用设置中更改）。
+- `DENO_DEPLOY_BUILD_ID`：当前运行的构建 ID。
+
+构建器在构建过程中可用的资源：
+
+- 2 个 vCPU
+- 3 GB 内存（Pro 计划下可增加至 4 GB）
+- 8 GB 存储空间

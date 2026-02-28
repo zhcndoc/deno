@@ -13,8 +13,8 @@ oldUrl:
   - /runtime/fundamentals/types/
 ---
 
-Deno 的灵活性体现在对 TypeScript 和 JavaScript 的平等对待。
-无论您是从 JavaScript 迁移到 TypeScript，还是反之，Deno
+Deno 的灵活性体现在对 TypeScript 和 JavaScript 的平等对待。  
+无论您是从 JavaScript 迁移到 TypeScript，还是反之，Deno  
 都提供了便利功能来帮助您顺利过渡。
 
 ## JavaScript 的类型检查
@@ -39,7 +39,7 @@ Deno 的灵活性体现在对 TypeScript 和 JavaScript 的平等对待。
 
 ## 在 JavaScript 中使用 JSDoc
 
-在对 JavaScript 进行类型检查或将 JavaScript 导入到 TypeScript 时，JSDoc 注释可以提供超出代码本身可以推断的额外类型信息。如果您在代码中以支持的
+在对 JavaScript 进行类型检查或将 JavaScript 导入到 TypeScript 时，JSDoc 注释可以提供超出代码本身可以推断的额外类型信息。如果您在代码中以支持的  
 [TypeScript JSDoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) 进行内联注释，Deno 将无缝支持这一点。
 
 例如，要设置数组的类型，可以使用以下 JSDoc 注释：
@@ -61,7 +61,7 @@ const a = [];
 
 ## 将 JS 文件重命名为 TS 文件
 
-TypeScript 文件受益于 TypeScript 编译器能够对您的代码进行更彻底的安全检查。这通常被称为 _严格模式_。
+TypeScript 文件受益于 TypeScript 编译器能够对您的代码进行更彻底的安全检查。这通常被称为 _严格模式_。  
 当您将 `.js` 文件重命名为 `.ts` 时，您可能会看到 TypeScript 之前无法检测到的新类型错误。
 
 ## 在 Deno 中配置 TypeScript
@@ -113,28 +113,28 @@ Deno 致力于基于以下设计原则简化 TypeScript 配置：
 
 | 选项                           | 默认值                 | 备注                                                                                                                                     |
 | ------------------------------ | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `allowUnreachableCode`         | `false`                |                                                                                                                                        |
-| `allowUnusedLabels`            | `false`                |                                                                                                                                           |
-| `baseUrl`                     | `"./"`                 | 用于解析 `paths` 和 `rootDirs` 中的裸模块描述符，但不会用于模块导入中的裸描述符。                                                           |
-| `checkJs`                      | `false`                |                                                                                                                                        |
+| `allowUnreachableCode`          | `false`                |                                                                                                                                           |
+| `allowUnusedLabels`             | `false`                |                                                                                                                                           |
+| `baseUrl`                      | `"./"`                 | 用于解析 `paths` 和 `rootDirs` 中的裸模块描述符，但不会用于模块导入中的裸描述符。                                                           |
+| `checkJs`                      | `false`                |                                                                                                                                           |
 | `jsx`                          | `"react"`              |                                                                                                                                           |
-| `jsxFactory`                   | `"React.createElement"` |                                                                                                                                           |
-| `jsxFragmentFactory`           | `"React.Fragment"`      |                                                                                                                                           |
+| `jsxFactory`                   | `"React.createElement"`|                                                                                                                                           |
+| `jsxFragmentFactory`           | `"React.Fragment"`     |                                                                                                                                           |
 | `keyofStringsOnly`             | `false`                |                                                                                                                                           |
-| `lib`                         | `[ "deno.window" ]`     | 该选项的默认值根据 Deno 中的其他设置而异。若提供此选项，则会覆盖默认设置。详见下文。                                                        |
+| `lib`                         | `[ "deno.window" ]`    | 该选项的默认值根据 Deno 中的其他设置而异。若提供此选项，则会覆盖默认设置。详见下文。                                                        |
 | `module`                      | `"nodenext"`           | 支持的值包括：`["nodenext", "esnext", "preserve"]`。                                                                                    |
 | `moduleResolution`            | `"nodenext"`           | 支持的值包括：`["nodenext", "bundler"]`。                                                                                               |
 | `noErrorTruncation`            | `false`                |                                                                                                                                           |
-| `noFallthroughCasesInSwitch`   | `false`                |                                                                                                                                           |
+| `noFallthroughCasesInSwitch`  | `false`                |                                                                                                                                           |
 | `noImplicitAny`                | `true`                 |                                                                                                                                           |
 | `noImplicitOverride`           | `true`                 |                                                                                                                                           |
 | `noImplicitReturns`            | `false`                |                                                                                                                                           |
 | `noImplicitThis`               | `true`                 |                                                                                                                                           |
 | `noImplicitUseStrict`          | `true`                 |                                                                                                                                           |
 | `noStrictGenericChecks`        | `false`                |                                                                                                                                           |
+| `noUncheckedIndexedAccess`     | `false`                |                                                                                                                                           |
 | `noUnusedLocals`               | `false`                |                                                                                                                                           |
 | `noUnusedParameters`           | `false`                |                                                                                                                                           |
-| `noUncheckedIndexedAccess`     | `false`                |                                                                                                                                           |
 | `paths`                      | `{}`                   |                                                                                                                                           |
 | `rootDirs`                   | `null`                  |                                                                                                                                           |
 | `strict`                     | `true`                  |                                                                                                                                           |

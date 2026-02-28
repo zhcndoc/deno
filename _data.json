@@ -13,8 +13,8 @@
       "href": "/examples/"
     },
     {
-      "name": "服务",
-      "href": "/services/",
+      "name": "Deno Deploy",
+      "href": "/deploy/",
       "style": "services"
     }
   ],

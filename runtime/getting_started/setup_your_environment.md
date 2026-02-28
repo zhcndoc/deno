@@ -10,6 +10,7 @@ Deno 附带许多在应用程序开发中常用的工具，包括完整的
 我们将涵盖：
 
 - 如何在你喜欢的编辑器/IDE 中使用 Deno
+- 如何使用 AI 编程助手与 Deno 配合
 - 如何生成 shell 自动补全
 
 ## 设置你的编辑器/IDE
@@ -36,6 +37,23 @@ Deno 附带许多在应用程序开发中常用的工具，包括完整的
 ```
 
 就这样！你已经成功设置了 VSCode 的 Deno 开发环境。现在你可以享受 Deno LSP 提供的所有功能，包括智能感知（IntelliSense）、代码格式化、代码检查等。
+
+### AI 助手技能配置
+
+Deno 提供官方 **skills** —— 专门的知识包，能让 AI 编程助手（例如 Claude、GitHub Copilot、Cursor 等）准确、及时地了解 Deno 的 API、规范和最佳实践。
+
+如果没有这些技能，AI 助手可能会建议针对 Node.js 的模式或使用过时的 Deno API。加载相关技能可确保助手理解 Deno 的模块系统、标准库、`deno.json` 配置、Deno Deploy、Fresh 等内容。
+
+技能可在
+[github.com/denoland/skills](https://github.com/denoland/skills) 获取。每个技能是一个纯文本或 markdown 文件，你可以将其粘贴到 AI 助手的上下文中，添加到项目级指令文件中（例如 `CLAUDE.md`、`.github/copilot-instructions.md`），或根据你的工具配置为持久的系统提示。
+
+可用技能包括：
+
+- **deno-guidance** —— 基础的 Deno 知识：模块导入、`deno.json`、CLI 命令和包选择
+- **deno-deploy** —— 部署到 Deno Deploy，KV，环境变量，以及 `deno deploy` CLI
+- **deno-frontend** —— 使用 Fresh 框架和 Preact 构建 Web 界面
+- **deno-expert** —— 针对代码审查和调试的高级 Deno 模式
+- **deno-sandbox** —— 使用 `@deno/sandbox` 安全执行不受信任代码
 
 ### JetBrains IDEs
 
