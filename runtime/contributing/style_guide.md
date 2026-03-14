@@ -17,7 +17,7 @@ oldUrl:
 大多数模块应包含以下版权头：
 
 ```ts
-// 版权 2018-2024 Deno 作者。保留所有权利。MIT 许可证。
+// Copyright 2018-2026 the Deno authors. All rights reserved. MIT license.
 ```
 
 如果代码来源于其他地方，请确保文件包含适当的版权头。我们仅允许 MIT、BSD 和 Apache 许可代码。
@@ -225,12 +225,15 @@ export function foo() {
 /** 从 `deno` 模块导入某些内容。 */
 ```
 
-除非参数的意图不是很明显，否则请勿对函数参数进行文档化（尽管如果它们的意图不明显，则应考虑 API）。因此，`@param` 通常不应使用。如果使用 `@param`，则不应包含 `type`，因为 TypeScript 已经是强类型的。
+Every exported function should have a `@param` tag for each parameter with a
+description. The `@param` tag should not include the `type` as TypeScript is
+already strongly-typed.
 
 ```ts
 /**
- * 带有不明显参数的函数。
- * @param foo 不明显参数的描述。
+ * Resolves a path to a file.
+ * @param path The path to resolve.
+ * @param base The base directory to resolve from.
  */
 ```
 
@@ -318,7 +321,10 @@ export function foo(): string {
 }
 ```
 
-常规函数和箭头函数在提升、绑定、参数和构造等方面的行为不同。`function` 关键字清楚地表明了定义函数的意图，提高了可读性和调试追踪能力。
+Regular functions and arrow functions have different behavior with respect to
+hoisting, binding, arguments, and constructability. The `function` keyword
+clearly indicates the intent to define a function, improving legibility and
+traceability while debugging.
 
 #### 错误消息
 
@@ -353,7 +359,7 @@ export function foo(): string {
 好的：无法解析输入 "hello, world"
 ```
 
-4. 消息应说明导致错误的操作：
+4. Message should state the action that led to the error:
 
 ```sh
 不好的：无效输入 x
@@ -479,9 +485,9 @@ const key_maxLength = 4294967295;
 const KeyPattern = /^[0-9a-f]+$/;
 ```
 
-当名称为 `camelCase` 或 `PascalCase` 时，请始终遵循它们的规则，即使它们的部分是首字母缩略词。
+当名称为 `camelCase` 或 `PascalCase` 时，请始终遵循它们的规则，即使它们的部分是首字母缩写。
 
-注意：Web API 使用大写缩略词（`JSON`、`URL`、`URL.createObjectURL()` 等）。Deno 标准库不遵循此约定。
+注意：Web API 使用大写缩写（`JSON`、`URL`、`URL.createObjectURL()` 等）。Deno 标准库不遵循此约定。
 
 好的：
 

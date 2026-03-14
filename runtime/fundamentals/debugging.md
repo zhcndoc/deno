@@ -128,7 +128,96 @@ deno run --strace-ops your_script.ts
 
 每个 op 都应包含一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间即为执行该 op 所花费的时间。此标志对于性能分析、调试挂起的程序或了解 Deno 的底层工作原理非常有用。
 
-## OpenTelemetry 集成
+## CPU Profiling
+
+Deno 包含对 V8 CPU 采样分析的内置支持，帮助您识别代码中的性能瓶颈。使用 `--cpu-prof` 标志可以在程序执行期间捕获 CPU 分析数据：
+
+```sh
+deno run --cpu-prof your_script.ts
+```
+
+当程序退出时，Deno 会在当前目录写入一个 `.cpuprofile` 文件（例如，`CPU.1769017882255.25986.cpuprofile`）。该文件可以加载到 Chrome DevTools（性能选项卡）或其他 V8 分析工具中进行分析。
+
+### CPU 采样分析标志
+
+| 标志                                  | 说明                                                                                                           |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `--cpu-prof`                         | 启用 CPU 采样分析。分析结果将在退出时写入磁盘。                                                              |
+| `--cpu-prof-dir=<DIR>`               | CPU 采样数据写入的目录。默认当前目录。隐式启用 `--cpu-prof`。                                                 |
+| `--cpu-prof-name=<NAME>`             | CPU 采样文件的文件名。默认格式为 `CPU.<timestamp>.<pid>.cpuprofile`。                                         |
+| `--cpu-prof-interval=<MICROSECONDS>` | 采样间隔，单位为微秒。默认值为 `1000`（即 1 毫秒）。值越小，采样越详尽，但文件越大。                          |
+| `--cpu-prof-md`                      | 同 `.cpuprofile` 文件一起生成一个可读的 Markdown 报告。                                                      |
+
+:::note
+
+CPU 采样报告的是转译后的 JavaScript 代码的行号，而非原始的 TypeScript 源代码。这是 V8 采样分析器的限制。对于 TypeScript 文件，报告的行号可能与您的源代码不完全对应。
+
+:::
+
+### 在 Chrome DevTools 中分析采样
+
+分析 `.cpuprofile` 文件步骤：
+
+1. 打开 Chrome DevTools（F12）
+2. 进入 **Performance**（性能）选项卡
+3. 点击 **Load profile**（加载分析文件）按钮（向上箭头图标）
+4. 选择您的 `.cpuprofile` 文件
+
+DevTools 会显示火焰图和详细的时间消耗分布。
+
+### 示例：Markdown 报告
+
+`--cpu-prof-md` 标志会生成一个可读的 Markdown 汇总报告，方便不用加载 DevTools 也能查看：
+
+```sh
+deno run -A --cpu-prof --cpu-prof-md server.js
+```
+
+这将创建 `.cpuprofile` 文件和一个类似如下的 `.md` 文件：
+
+```md
+# CPU Profile
+
+| Duration | Samples | Interval | Functions |
+| -------- | ------- | -------- | --------- |
+| 833.06ms | 641     | 1000us   | 10        |
+
+**Top 10:** `op_crypto_get_random_values` 98.5%, `(garbage collector)` 0.7%,
+`getRandomValues` 0.6%, `assertBranded` 0.2%
+
+## Hot Functions (Self Time)
+
+| Self% |     Self | Total% |    Total | Function                      | Location          |
+| ----: | -------: | -----: | -------: | ----------------------------- | ----------------- |
+| 98.5% | 533.00ms |  98.5% | 533.00ms | `op_crypto_get_random_values` | [native code]     |
+|  0.7% |   4.00ms |   0.7% |   4.00ms | `(garbage collector)`         | [native code]     |
+|  0.6% |   3.00ms |   0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
+|  0.2% |   1.00ms |   0.2% |   1.00ms | `assertBranded`               | 00_webidl.js:1149 |
+
+## Call Tree (Total Time)
+
+| Total% |    Total | Self% |     Self | Function                      | Location          |
+| -----: | -------: | ----: | -------: | ----------------------------- | ----------------- |
+|  16.8% |  91.00ms | 16.8% |  91.00ms | `(anonymous)`                 | server.js:1       |
+|   0.6% |   3.00ms |  0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
+|  98.5% | 533.00ms | 98.5% | 533.00ms | `op_crypto_get_random_values` | [native code]     |
+
+## Function Details
+
+### `op_crypto_get_random_values`
+
+[native code] | Self: 98.5% (533.00ms) | Total: 98.5% (533.00ms) | Samples: 533
+```
+
+该报告包含：
+
+- **摘要**：总时长、样本数量、采样间隔和函数数量
+- **Top 10**：最高耗时函数一览
+- **Hot Functions**：按自用时间（函数本身花费时间，不含调用其他函数时间）排序的函数
+- **调用树**：分层显示调用栈和时间分布
+- **函数详情**：每个函数的样本统计和细节
+
+## OpenTelemetry integration
 
 对于生产环境应用或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方案。Deno 内置支持 OpenTelemetry，允许您：
 
@@ -147,4 +236,19 @@ OTEL_DENO=true deno run your_script.ts
 - 运行时指标
 - 控制台日志和错误
 
-有关 Deno 的 OpenTelemetry 集成的完整详细信息，包括自定义指标、跟踪和配置选项，请参见 [OpenTelemetry 文档](/runtime/fundamentals/open_telemetry)。
+For full details on Deno's OpenTelemetry integration, including custom metrics,
+traces, and configuration options, see the
+[OpenTelemetry documentation](/runtime/fundamentals/open_telemetry).
+
+## TLS session debugging
+
+Set the `SSLKEYLOGFILE` environment variable to log TLS session keys to a file.
+This enables you to decrypt and inspect encrypted network traffic with tools
+like [Wireshark](https://www.wireshark.org/):
+
+```sh
+SSLKEYLOGFILE=./keys.log deno run -N main.ts
+```
+
+Then load `keys.log` in Wireshark (Edit > Preferences > Protocols > TLS >
+(Pre)-Master-Secret log filename) to decrypt captured TLS traffic.

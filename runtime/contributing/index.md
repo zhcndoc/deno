@@ -88,9 +88,9 @@ Deno 的官方 Docker 镜像。
 
 良好的 PR 标题示例：
 
-- fix(std/http): 修复服务器中的竞争条件
-- docs(console): 更新文档字符串
-- feat(doc): 处理嵌套重新导出
+- fix(std/http): fix race condition in server
+- docs(console): update docstrings
+- feat(doc): handle nested re-exports
 
 不佳的 PR 标题示例：
 

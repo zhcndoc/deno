@@ -1,10 +1,10 @@
 ---
-title: "`deno run`，运行一个文件"
+title: "deno run"
 oldUrl: /runtime/manual/tools/run/
 command: run
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno run"
-description: "Run a JavaScript or TypeScript program from a file or URL with Deno's runtime"
+description: "使用 Deno 运行时从文件或 URL 运行 JavaScript 或 TypeScript 程序"
 ---
 
 ## 用法

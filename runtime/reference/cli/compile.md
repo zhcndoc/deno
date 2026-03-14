@@ -1,5 +1,5 @@
 ---
-title: "`deno compile`，独立可执行文件"
+title: "deno compile"
 oldUrl:
   - /runtime/manual/tools/compile/
   - /runtime/manual/tools/compiler/
@@ -7,7 +7,7 @@ oldUrl:
 command: compile
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno compile"
-description: "Compile your code into a standalone executable"
+description: "将您的代码编译为独立可执行文件"
 ---
 
 ## 标志
@@ -123,6 +123,36 @@ import "./worker.ts";
 ```shell
 deno compile main.ts
 ```
+
+## 自解压可执行文件
+
+默认情况下，编译后的可执行文件通过内存中的虚拟文件系统提供嵌入的文件。`--self-extracting` 标志改变此行为，使得二进制文件在首次运行时将所有嵌入文件解压到磁盘，并在运行时使用真实的文件系统操作。
+
+```shell
+deno compile --self-extracting main.ts
+```
+
+这在代码需要磁盘上的真实文件的场景中非常有用，比如本机插件或读取相对文件的本机代码。
+
+解压目录按照优先顺序选择：
+
+1. `<exe_dir>/.<exe_name>/<hash>/`（与编译的二进制文件相邻）
+2. 平台数据目录备选：
+   - Linux: `$XDG_DATA_HOME/<exe_name>/<hash>` 或
+     `~/.local/share/<exe_name>/<hash>`
+   - macOS: `~/Library/Application Support/<exe_name>/<hash>`
+   - Windows: `%LOCALAPPDATA%\<exe_name>\<hash>`
+
+文件只解压一次 —— 后续运行如果已存在解压目录且哈希匹配，则复用该目录。
+
+### 权衡
+
+自解压模式带来了更广的兼容性，但有一些权衡：
+
+- **初始启动成本**：首次运行由于文件解压耗时更长。
+- **磁盘使用**：解压文件占用额外磁盘空间。
+- **内存使用**：内存占用更高，因为嵌入内容不能再作为静态数据引用。
+- **篡改风险**：用户或其他代码可能修改磁盘上的解压文件。
 
 ## 代码签名
 

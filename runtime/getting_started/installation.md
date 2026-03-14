@@ -7,7 +7,10 @@ oldUrl:
   - /runtime/fundamentals/installation
 ---
 
-Deno 可以在 macOS、Linux 和 Windows 上运行。Deno 是一个单一的二进制可执行文件。它没有外部依赖。在 macOS 上，同时提供 M1（arm64）和 Intel（x64）可执行文件。在 Linux 和 Windows 上，仅支持 x64。
+Deno 支持 macOS、Linux 和 Windows。Deno 是一个单一的二进制可执行文件。
+它没有外部依赖。在 macOS 上，提供了 M1（arm64）和 Intel（x64）
+两个架构的可执行文件。在 Windows 上，支持 ARM64 和 x64。 在
+Linux 上，仅支持 x64。
 
 ## 下载和安装
 

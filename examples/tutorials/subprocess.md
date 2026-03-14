@@ -122,6 +122,47 @@ const status = await process.status;
 console.log("退出码:", status.code);
 ```
 
+## 便捷的 spawn 函数
+
+:::caution
+
+`Deno.spawn()`, `Deno.spawnAndWait()`, 和 `Deno.spawnAndWaitSync()` 是
+Deno 2.7 版本引入的
+不稳定 API。它们可能会在稳定之前发生变化。
+
+:::
+
+自 Deno 2.7 起，提供了三个简洁的函数，它们是 `Deno.Command` 的简写替代：
+
+- **`Deno.spawn(command, args, options?)`** — 启动子进程并返回一个
+  `ChildProcess`（等同于 `new Deno.Command(cmd, { args }).spawn()`）
+- **`Deno.spawnAndWait(command, args, options?)`** — 启动子进程并
+  返回一个 promise，解析为 `CommandOutput`（等同于
+  `new Deno.Command(cmd, { args }).output()`）
+- **`Deno.spawnAndWaitSync(command, args, options?)`** — 同步版本，
+  会阻塞直到子进程完成
+
+```ts title="spawn_examples.ts"
+// 启动子进程
+const child = Deno.spawn("echo", ["hello"]);
+
+// 启动并等待输出
+const output = await Deno.spawnAndWait("git", ["status"]);
+console.log(new TextDecoder().decode(output.stdout));
+
+// 使用选项启动
+const formatted = Deno.spawn("deno", ["fmt", "--check"], {
+  stdout: "inherit",
+});
+
+// 同步执行
+const result = Deno.spawnAndWaitSync("echo", ["done"]);
+```
+
+这些函数接受命令和参数作为分开的参数，相较于 `Deno.Command` 构造函数的选项模式更加易读。
+
+## 输出流的便捷方法
+
 可用的便捷方法包括：
 
 - `.text()` - 返回 UTF-8 编码的字符串输出

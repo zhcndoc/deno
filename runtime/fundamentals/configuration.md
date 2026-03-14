@@ -452,11 +452,22 @@ import * as module_2 from "@example/my-package/module2";
 
 ## 权限
 
-Deno 2.5+ 支持在配置文件中存储权限集。
+Deno 2.5+ supports storing
+[permission](/runtime/fundamentals/security/#permissions) sets in the config
+file.
 
 ### 命名权限
 
-权限可以在 `"permissions"` 键下以键值对形式定义：
+Permissions can be defined as key-value pairs under arbitrarily-named permission
+sets under the `"permissions"` key. Within each set,
+
+- the key is the name of a
+  [permission](/runtime/fundamentals/security/#permissions) that would follow
+  `--allow-` or `--deny-` in the CLI invocation (i.e. `read`, `write`, `net`,
+  `env`, `sys`, `run`, `ffi`, `import`)
+- the value is a boolean (`true` / `false` correspond to allow / deny), an array
+  of strings representing paths, domains etc., or an object with `allow`,
+  `deny`, and/or `ignore` boolean key-value pairs.
 
 ```jsonc
 {
@@ -472,7 +483,8 @@ Deno 2.5+ 支持在配置文件中存储权限集。
 }
 ```
 
-然后通过 `--permission-set=<name>` 或 `-P=<name>` 标志使用：
+Permission sets can be used by specifying the `--permission-set=<name>` or
+`-P=<name>` flag:
 
 ```sh
 $ deno run -P=read-data main.ts
@@ -498,7 +510,99 @@ $ deno run -P=read-data main.ts
 $ deno run -P main.ts
 ```
 
-### 测试、基准和编译权限
+### Allow, deny, and ignore
+
+For finer control over permissions, you can use the object form with `allow`,
+`deny`, and `ignore` keys. This is especially useful when you need more granular
+permission control than simple boolean or array values provide.
+
+#### Object form syntax
+
+Instead of specifying a permission as a boolean or array:
+
+```jsonc
+{
+  "permissions": {
+    "default": {
+      "read": true, // Simple boolean form
+      "write": ["./data"] // Simple array form
+    }
+  }
+}
+```
+
+You can use the object form:
+
+```jsonc
+{
+  "permissions": {
+    "default": {
+      "read": {
+        "allow": ["./data", "./config"],
+        "deny": ["./data/secrets"],
+        "ignore": ["./data/cache"]
+      },
+      "write": {
+        "allow": ["./output"],
+        "deny": ["./output/system"]
+      }
+    }
+  }
+}
+```
+
+#### Available permissions
+
+The `allow`, `deny`, and `ignore` keys work differently depending on the
+permission type:
+
+- **`read` and `env`**: Support `allow`, `deny`, and `ignore`
+- **`write`, `net`, `run`, `ffi`, `sys`, and `import`**: Support `allow` and
+  `deny` (but not `ignore`)
+
+#### Behavior
+
+- **`allow`**: Explicitly grant access to specific resources. Can be `true` (to
+  allow all), `false` (to allow none), or an array of specific paths/values to
+  allow.
+- **`deny`**: Explicitly deny access (throw
+  [PermissionDenied](https://docs.deno.com/api/deno/~/Deno.errors.PermissionDenied))
+  to specific resources, even if they would otherwise be allowed. Can be `true`
+  (to deny all), `false` (to deny none), or an array of specific paths/values to
+  deny.
+- **`ignore`**: (Only for `read` and `env` permissions) Silently ignore access
+  attempts to specific resources without throwing errors. Can be `true`,
+  `false`, or an array of specific paths/values to ignore.
+
+#### Example
+
+```jsonc
+{
+  "permissions": {
+    "default": {
+      // Allow reading from data directory, but deny access to secrets
+      // and silently ignore cache files
+      "read": {
+        "allow": ["./data"],
+        "deny": ["./data/secrets"],
+        "ignore": ["./data/cache"]
+      },
+      // Allow all environment variables except API keys
+      "env": {
+        "allow": true,
+        "ignore": ["API_KEY", "SECRET_TOKEN"]
+      },
+      // Allow all, but deny 'rm', 'sudo'
+      "run": {
+        "allow": true,
+        "deny": ["rm", "sudo"]
+      }
+    }
+  }
+}
+```
+
+### Test, bench, and compile permissions
 
 权限可以选择性地在 `"test"`、`"bench"` 或 `"compile"` 键中指定。
 
@@ -562,7 +666,14 @@ error: Test permissions were found in the config file. Did you mean to run with 
   },
   "permissions": {
     "default": {
-      "read": ["./src/testdata/"]
+      "read": {
+        "allow": ["./src/"],
+        "deny": ["./src/secrets/"]
+      },
+      "env": {
+        "allow": true,
+        "ignore": ["TEMP_*"]
+      }
     }
   },
   "lint": {

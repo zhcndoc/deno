@@ -475,6 +475,40 @@ deno run --reload=jsr:@std/fs my_module.ts
 }
 ```
 
+### package.json 中的 JSR 包
+
+你可以直接从 `package.json` 依赖 JSR 包，使用 `jsr:` 方案，无需单独的 `deno.json`：
+
+```json title="package.json"
+{
+  "dependencies": {
+    "@std/path": "jsr:^1.0.9"
+  }
+}
+```
+
+这可以配合 `deno install` 使用，为使用 `package.json` 管理依赖的项目带来 JSR 包。
+
+### 依赖覆盖
+
+`package.json` 中的 `overrides` 字段允许你控制依赖树中传递依赖的版本。这对于应用安全补丁、修复版本兼容性问题或替换包非常有用：
+
+```json title="package.json"
+{
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "overrides": {
+    "cookie": "0.7.0",
+    "express": {
+      "qs": "6.13.0"
+    }
+  }
+}
+```
+
+在此示例中，`cookie` 全局固定为 `0.7.0`，而 `qs` 仅在 `express` 依赖中被覆盖为 `6.13.0`。
+
 ### 为什么 Deno 没有 `devImports` 字段？
 
 理解为什么 Deno 不在包清单中将开发依赖分离出来，重要的是理解开发依赖试图解决的问题。

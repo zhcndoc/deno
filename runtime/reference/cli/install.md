@@ -1,5 +1,5 @@
 ---
-title: "`deno install`"
+title: "deno install"
 oldUrl:
   - /runtime/manual/tools/script_installer/
   - /runtime/reference/cli/script_installer/
@@ -9,7 +9,7 @@ oldUrl:
 command: install
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno install"
-description: "Install and cache dependencies for your project"
+description: "为您的项目安装并缓存依赖项"
 ---
 
 ## 示例
@@ -139,7 +139,18 @@ if (import.meta.main) {
 $ deno install -n awesome_cli https://example.com/awesome/cli.ts
 ```
 
-## 原生 Node.js 附加模块
+### deno install --global --compile [PACKAGE_OR_URL]
+
+使用此命令将软件包或脚本编译为独立的、自包含的二进制文件。生成的可执行文件可以分发并运行，而无需在目标系统上安装 Deno。
+
+```shell
+$ deno install --global --compile -A npm:@anthropic-ai/claude-code
+```
+
+这结合了 [`deno compile`](/runtime/reference/cli/compile/)
+与全局安装的行为 —— 生成一个本地二进制文件，放置在安装根目录中（与不使用 `--compile` 的 `--global` 行为相同）。
+
+## 本机 Node.js 插件
 
 许多流行的 npm 软件包，如 [`npm:sqlite3`](https://www.npmjs.com/package/sqlite3) 或 [`npm:duckdb`](https://www.npmjs.com/package/duckdb)，依赖于 ["生命周期脚本"](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts)，例如 `preinstall` 或 `postinstall` 脚本。通常，运行这些脚本是软件包正常工作的必要条件。
 

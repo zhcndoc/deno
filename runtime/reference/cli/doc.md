@@ -1,5 +1,5 @@
 ---
-title: "`deno doc`, 文档生成器"
+title: "deno doc"
 oldUrl:
   - /runtime/manual/tools/doc/
   - /runtime/manual/tools/documentation_generator/
@@ -7,7 +7,7 @@ oldUrl:
 command: doc
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno doc"
-description: "Generate documentation from your code"
+description: "从代码生成文档"
 ---
 
 ## 示例

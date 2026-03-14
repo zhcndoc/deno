@@ -201,24 +201,16 @@ deno run --unstable your_script.ts
 
 ## `--unstable-temporal`
 
-启用全局作用域中的实验性 [Temporal API](https://tc39.es/proposal-temporal/docs/)。Temporal API 是正在开发中的现代日期和时间 API，旨在替代 JavaScript 中的传统 `Date` 对象。它提供了更好的时区、日历支持以及更精确的日期/时间计算。
+:::note
 
-要在 Deno 程序中使用 Temporal API，请使用以下标志运行：
+从 Deno 2.7 起，Temporal API 已**稳定**，默认可用。`--unstable-temporal` 标志不再需要。
 
-```sh
-deno run --unstable-temporal your_script.ts
-```
+:::
 
-或在您的 `deno.json` 中配置：
-
-```json title="deno.json"
-{
-  "unstable": ["temporal"]
-}
-```
+[Temporal API](https://tc39.es/proposal-temporal/docs/) 是一种现代的日期和时间 API，位于全局作用域。它相比旧的 `Date` 对象，提供了更好的时区、日历支持和更精确的日期/时间计算。
 
 ```ts title="example.ts"
-// 使用 Temporal API 的示例
+// 获取当前的日期和时间
 const now = Temporal.Now.plainDateTimeISO();
 console.log(`当前日期和时间: ${now}`);
 
@@ -230,5 +222,3 @@ console.log(`下一周: ${nextWeek}`);
 const zonedDateTime = Temporal.Now.zonedDateTimeISO("America/New_York");
 console.log(`纽约时间: ${zonedDateTime}`);
 ```
-
-请注意，Temporal API 仍处于实验阶段，规范可能在稳定之前发生变化。仅用于测试和试验目的使用此标志。

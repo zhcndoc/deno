@@ -1,5 +1,5 @@
 ---
-title: "`deno repl`，交互式脚本提示"
+title: "deno repl"
 oldUrl: /runtime/manual/tools/repl/
 command: repl
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -143,6 +143,6 @@ readTextFileSync  readFileSync      readDir           readLink          readAllS
 
 ## `DENO_REPL_HISTORY`
 
-默认情况下，Deno 将 REPL 历史存储在 `deno_history.txt` 文件中，该文件位于 `DENO_DIR` 目录内。您可以通过运行 `deno info` 找到您的 `DENO_DIR` 目录及其他资源的位置。
+By default, Deno stores REPL history in a file named `deno_history.txt` located inside the `DENO_DIR` directory. You can find the location of your `DENO_DIR` directory and other resources by running `deno info`.
 
-您可以使用 `DENO_REPL_HISTORY` 环境变量来控制 Deno 存储 REPL 历史文件的位置。您可以将其设置为空值，Deno 将不会存储历史文件。
+You can use the `DENO_REPL_HISTORY` environment variable to control where Deno stores the REPL history file. You can set it to an empty value, and Deno will not store the history file.

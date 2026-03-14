@@ -1,5 +1,5 @@
 ---
-title: "`deno fmt`, 代码格式化"
+title: "deno fmt"
 oldUrl:
   - /runtime/tools/formatter/
   - /runtime/manual/tools/formatter/
@@ -54,6 +54,15 @@ Deno 带有内置的代码格式化工具，可以自动格式化以下文件：
 **`deno fmt` 可以格式化 Markdown 文件中的代码块。** 代码块必须用三重反引号括起来，并具有语言属性。
 
 :::
+
+## 在 CI 中检查格式
+
+使用 `--check` 以验证文件是否格式正确，而不做任何修改。添加
+`--fail-fast` 可以在发现第一个未格式化文件时停止，而不是报告所有未格式文件，这在大型代码库中非常有用：
+
+```sh
+deno fmt --check --fail-fast
+```
 
 ## 忽略代码
 

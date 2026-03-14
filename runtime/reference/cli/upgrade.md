@@ -58,7 +58,25 @@ $ deno upgrade --quiet
 
 这对于脚本环境或在 CI 流水线中想要更简洁的输出非常有用。
 
-## Canary 构建
+## 缓存下载
+
+下载的 Deno 二进制文件会缓存到 `$DENO_DIR/dl/`。如果你之后重新安装相同版本，会重用缓存的归档文件而不是重新下载。对于 canary 版本，旧条目会自动被移除，只保留最近 10 个版本。
+
+## 校验和验证
+
+使用 `--checksum` 标志可以将下载的二进制文件与已知的 SHA-256 哈希值进行验证。这可以防止在 CI 环境和安全敏感的设置中遭到篡改：
+
+```shell
+$ deno upgrade --checksum=<sha256-hash> 2.7.0
+```
+
+SHA-256 校验和作为 `.sha256sum` 文件随发布归档一同发布在 GitHub 上：
+
+```shell
+$ curl -sL https://github.com/denoland/deno/releases/download/v2.7.0/deno-x86_64-unknown-linux-gnu.zip.sha256sum
+```
+
+## Canary 版本
 
 默认情况下，Deno 会从官方的 GitHub 发行版升级。你可以使用 `--canary` 构建标志来升级到最新的 canary 版本：
 

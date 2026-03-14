@@ -1,7 +1,7 @@
 ---
-title: "生成子进程，并获取缓冲输出"
+title: "生成子进程并获取缓冲输出"
 description: "学习如何生成子进程，并在沙箱中获取缓冲输出。"
-url: /examples/sandboxes_spawn_subprocess/
+url: /examples/sandbox_spawn_subprocess/
 layout: sandbox-example.tsx
 ---
 
