@@ -2,10 +2,10 @@
 title: "连接到 Neon Postgres"
 ---
 
-:::info Legacy Documentation
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧文档。我们建议您迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
@@ -15,7 +15,7 @@ title: "连接到 Neon Postgres"
 
 要开始，我们需要创建一个新的 Postgres 实例供我们连接。为了本教程，我们将使用 [Neon Postgres](https://neon.tech/)，因为他们提供免费的托管 Postgres 实例。如果你希望将数据库托管在其他地方，也可以这么做。
 
-1. 访问 https://neon.tech/ 并点击 **注册**，通过电子邮件、Github、Google 或合作伙伴帐户进行注册。注册后，系统将引导你进入 Neon 控制台以创建你的第一个项目。
+1. 访问 https://neon.tech/ 并点击 **注册**，通过电子邮件、Github、Google 或合作伙伴帐户进行注册。注册后，系统会引导你进入 Neon 控制台以创建你的第一个项目。
 2. 输入项目的名称，选择 Postgres 版本，提供数据库名称，并选择区域。通常，你会选择离你的应用程序最近的区域。当你完成后，点击 **创建项目**。
 3. 系统会向你展示新项目的连接字符串，你可以用来连接到数据库。保存连接字符串，通常看起来像这样：
 

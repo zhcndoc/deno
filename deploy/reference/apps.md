@@ -3,13 +3,91 @@ title: 应用程序
 description: "Deno Deploy 早期访问中管理应用程序的指南，包括应用创建、配置、GitHub 集成和部署选项。"
 ---
 
+应用程序是在组织内提供流量服务的网络服务。每个应用程序都包含一系列修订历史（之前的版本），通常在使用 GitHub 集成时对应于 Git 提交。
+
+应用程序通过 slug 进行标识，该 slug 必须在组织内唯一，并用于默认域名。
+
+## 创建应用程序
+
+可以通过 [Deno Deploy 仪表盘](https://console.deno.com) 或使用 [`deno deploy` CLI](/runtime/reference/cli/deploy/) 从命令行创建应用程序。
+
+### 使用仪表盘
+
+要从 Web 仪表盘创建应用程序：
+
+1. 在应用程序概览页面点击“+ New App”按钮
+2. 选择要部署的 GitHub 仓库
+3. 配置应用程序 slug（名称）
+4. 设置构建配置
+5. 添加所需的环境变量
+
+构建配置决定了应用程序在部署过程中的构建方式。每次向关联仓库推送时，或手动点击“Deploy Default Branch”时，都会自动触发构建。有关详细的构建配置信息，请参阅 [Builds 文档](/deploy/reference/builds/)。
+
+您可以在创建应用程序时通过点击“Edit Environment Variables”添加环境变量。有关环境变量的更多详情，请参阅 [Environment Variables and Contexts](/deploy/reference/env_vars_and_contexts/) 文档。
+
+### 使用 CLI
+
+您也可以使用命令行通过 `deno deploy create` 创建应用程序。不带参数运行时会启动一个交互式向导，逐步引导您完成每一步：
+
+```bash
+deno deploy create
+```
+
+对于 CI/CD 流水线或脚本，请提供参数以完全跳过向导：
+
+```bash
+deno deploy create \
+  --org my-org \
+  --app my-api \
+  --source local \
+  --framework-preset fresh \
+  --build-timeout 5 \
+  --build-memory-limit 1024 \
+  --region us
+```
+
+您也可以创建从 GitHub 仓库部署的应用程序：
+
+```bash
+deno deploy create \
+  --org my-org \
+  --app my-app \
+  --source github \
+  --owner my-github-org \
+  --repo my-repo \
+  --framework-preset astro \
+  --build-timeout 10 \
+  --build-memory-limit 2048 \
+  --region global
+```
+
+有关完整的参数和选项列表，请参阅 [`deno deploy create` CLI 参考](/runtime/reference/cli/deploy/#create-application)。
+
+## 重命名应用程序
+
+可以通过编辑应用设置页面上的应用 slug 来重命名应用程序。这将更新与应用关联的默认域名，因为它们基于应用 slug。新的 slug 必须在组织内唯一（即不能被同一组织中的其他应用或 playground 使用）。
+
+:::warning
+
+任何之前指向该应用的 `deno.net` URL 在重命名后都将不再可用。
+
+自定义域名将继续正常工作，因为它们不依赖于应用 slug。
+
+:::
+
+## 删除应用程序
+
+可以在应用设置页面删除应用程序。这将从组织中移除该应用及其所有修订版本。所有现有部署将立即停止提供流量，且所有自定义域名关联将被移除。
+
+删除后，该应用及其修订版本将不再可访问，也不会再提供任何流量。已删除的应用无法通过 Deno Deploy UI 恢复。
+
 :::info
 
 您正在查看 Deno Deploy<sup>EA</sup> 的文档。想查看 Deploy Classic 文档？[请点击这里](/deploy/)。
 
 :::
 
-应用程序是组织内提供流量服务的网络服务。每个应用程序包含一系列修订历史（之前的版本），通常对应于使用 GitHub 集成时的 Git 提交。
+应用程序是在组织内提供流量服务的网络服务。每个应用程序包含一系列修订历史（之前的版本），通常对应于使用 GitHub 集成时的 Git 提交。
 
 应用程序通过一个 slug 来标识，该 slug 必须在组织内唯一，并用于默认域名。
 

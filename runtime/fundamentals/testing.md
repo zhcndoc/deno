@@ -21,7 +21,8 @@ Deno 提供了一个内置的测试运行器，可以用来编写和运行 JavaS
 
 ## 编写测试
 
-在 Deno 中定义测试，您可以使用 `Deno.test()` 函数。以下是一些示例：
+要在 Deno 中定义测试，请使用 [`Deno.test()`](/api/deno/~/Deno.test)
+函数。以下是一些示例：
 
 ```ts title="my_test.ts"
 import { assertEquals } from "jsr:@std/assert";
@@ -129,7 +130,7 @@ import { assertEquals } from "jsr:@std/assert";
 let db: DatabaseSync;
 
 Deno.test.beforeAll(() => {
-  console.log("Setting up test database...");
+  console.log("正在设置测试数据库...");
   db = new DatabaseSync(":memory:");
   db.exec(`
     CREATE TABLE users (
@@ -141,17 +142,17 @@ Deno.test.beforeAll(() => {
 });
 
 Deno.test.beforeEach(() => {
-  console.log("Clearing database for clean test state...");
+  console.log("正在清空数据库以保持干净的测试状态...");
   db.exec("DELETE FROM users");
 });
 
 Deno.test.afterEach(() => {
-  console.log("Test completed, cleaning up resources...");
+  console.log("测试完成，正在清理资源...");
   // 每个测试后的额外清理
 });
 
 Deno.test.afterAll(() => {
-  console.log("Tearing down test database...");
+  console.log("正在拆除测试数据库...");
   db.close();
 });
 
@@ -184,16 +185,16 @@ Deno.test("user deletion", () => {
 
 ```ts
 Deno.test.beforeEach(() => {
-  console.log("First beforeEach hook");
+  console.log("第一个 beforeEach 钩子");
 });
 
 Deno.test.beforeEach(() => {
-  console.log("Second beforeEach hook");
+  console.log("第二个 beforeEach 钩子");
 });
 
 // 输出：
-// First beforeEach hook
-// Second beforeEach hook
+// 第一个 beforeEach 钩子
+// 第二个 beforeEach 钩子
 // （测试执行）
 ```
 
@@ -276,7 +277,8 @@ Deno.test({
 });
 ```
 
-如果您想要在没有条件的情况下忽略测试，可以使用 `Deno.test` 对象中的 `ignore()` 函数：
+如果您想在不传入任何条件的情况下忽略测试，可以使用 [`Deno.test`](/api/deno/~/Deno.test) 对象中的
+`ignore()` 函数：
 
 ```ts
 Deno.test.ignore("我的测试", () => {
@@ -345,7 +347,7 @@ deno test --junit-path=./report.xml
 
 ## 监视、模拟（测试替身）、存根和时间伪造
 
-[Deno 标准库](/runtime/reference/std/) 提供了一组函数，帮助您编写涉及监视、模拟和存根的测试。有关这些工具的更多信息，请查看 [JSR 上的 @std/testing 文档](https://jsr.io/@std/testing) 或我们的 [使用 deno 进行测试的模拟和监视教程](/examples/mocking_tutorial/)。
+[Deno 标准库](/runtime/reference/std/) 提供了一组函数，可帮助您编写涉及监视、模拟和存根的测试。请查看 [`@std/testing` 文档](/runtime/reference/std/testing/) 以了解这些工具的更多信息，或查看我们的 [在测试中使用 deno 进行模拟和监视的教程](/examples/mocking_tutorial/)。
 
 ## 覆盖率
 
@@ -355,7 +357,10 @@ deno test --junit-path=./report.xml
 
 ## 行为驱动开发
 
-使用 [@std/testing/bdd](https://jsr.io/@std/testing/doc/bdd/~) 模块，您可以以简化的格式编写测试，以分组测试和添加其他 JavaScript 测试框架（如 Jasmine、Jest 和 Mocha）使用的设置/拆卸钩子。
+使用 [`@std/testing/bdd`](/runtime/reference/std/testing/) 模块，您可以
+以其他 JavaScript 测试框架（如 Jasmine、
+Jest 和 Mocha）使用的熟悉格式编写测试，用于分组测试并添加
+设置/拆除钩子。
 
 `describe` 函数创建一个块，以将多个相关测试分组。`it` 函数注册一个单个测试用例。例如：
 
@@ -377,7 +382,8 @@ describe("add 函数", () => {
 });
 ```
 
-请查看 [JSR 的文档](https://jsr.io/@std/testing/doc/bdd/~) 获取有关这些函数和钩子的更多信息。
+查看 [`@std/testing` 文档](/runtime/reference/std/testing/)
+以了解这些函数和钩子的更多信息。
 
 - [BDD 测试教程](/examples/bdd_tutorial/)
 
@@ -507,7 +513,9 @@ export async function sendEmail(to: string) {
 
 资源消毒器确保在测试过程中创建的所有 I/O 资源都被关闭，以防止资源泄漏。
 
-I/O 资源是指 `Deno.FsFile` 句柄、网络连接、`fetch` 体、定时器等不自动进行垃圾回收的其他资源。
+I/O 资源包括诸如 [`Deno.FsFile`](/api/deno/~/Deno.FsFile) 句柄、
+网络连接、[`fetch`](/api/web/~/fetch) 主体、定时器，以及其他
+不会被自动垃圾回收的资源。
 
 完成操作后，您应始终关闭资源。例如，要关闭一个文件：
 
@@ -525,7 +533,7 @@ const conn = await Deno.connect({ hostname: "example.com", port: 80 });
 conn.close(); // <- 始终在完成后关闭连接
 ```
 
-要关闭一个 `fetch` 体：
+要关闭 [`fetch`](/api/web/~/fetch) 主体：
 
 ```ts
 const response = await fetch("https://example.com");
@@ -577,7 +585,8 @@ Deno.test({
 
 ### 退出消毒器
 
-退出消毒器确保被测试的代码不会调用 `Deno.exit()`，因为这可能会导致假测试成功。
+退出消毒器确保被测试代码不会调用
+[`Deno.exit()`](/api/deno/~/Deno.exit)，因为这可能会造成测试误成功。
 
 此消毒器默认启用，但可以使用 `sanitizeExit: false` 进行禁用。
 
@@ -601,7 +610,10 @@ Deno.test({
 
 ## 快照测试
 
-[Deno 标准库](/runtime/reference/std/) 包含一个 [快照模块](https://jsr.io/@std/testing/doc/snapshot/~)，允许开发者通过将值与参考快照进行比较来编写测试。这些快照是原始值的序列化表示，存储在测试文件旁边。
+[Deno 标准库](/runtime/reference/std/) 包含一个
+[快照模块](/runtime/reference/std/testing/)，允许开发者通过将值与参考快照进行比较来
+编写测试。这些快照是原始值的序列化表示，并与
+测试文件存储在一起。
 
 快照测试能够通过极少的代码捕捉到广泛的错误。在难以准确表达应该断言什么的情况下非常有用，而不需要过多的代码，或者在预期测试所做的断言经常变化的情况下也特别有帮助。
 
@@ -609,7 +621,7 @@ Deno.test({
 
 ## 测试和权限
 
-`Deno.test` 配置中的 `permissions` 属性允许您具体拒绝权限，但不授予权限。运行测试命令时必须提供权限。当构建健壮的应用程序时，您通常需要处理权限被拒绝的情况（例如，您可能希望编写测试以检查回退是否已正确设置）。
+[`Deno.test`](/api/deno/~/Deno.test) 配置中的 `permissions` 属性允许您有针对性地拒绝权限，但不会授予权限。权限必须在运行测试命令时提供。在构建健壮的应用程序时，您通常需要处理权限被拒绝的情况（例如，您可能希望编写测试来检查回退方案是否已正确设置）。
 
 考虑一种情况，您正在从文件中读取，您可能希望在函数没有读取权限的情况下提供一个回退值：
 

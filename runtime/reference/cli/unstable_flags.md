@@ -33,7 +33,7 @@ deno run --unstable-node-globals main.ts
 
 ## 通过环境变量配置
 
-有些标志可以通过为特定名称的环境变量设置一个值（任何值）来启用，而不是作为标志或 `deno.json` 配置选项传递。可以通过环境变量设置的标志将在下面进行说明。
+某些标志可以通过为指定名称的环境变量设置一个值（任意值）来启用，而不是作为标志或 [`deno.json`](/runtime/fundamentals/configuration/) 配置选项传递。可通过环境变量设置的标志将在下方注明。
 
 以下是通过环境变量设置 `--unstable-bare-node-builtins` 标志的示例：
 
@@ -85,7 +85,7 @@ console.log(readFileSync("deno.json", { encoding: "utf8" }));
 
 **环境变量：** `DENO_UNSTABLE_SLOPPY_IMPORTS`
 
-此标志启用一种行为，推断导入中缺少的文件扩展名。通常，下面的导入语句将产生错误：
+此标志启用一种行为，用于推断导入中缺少的文件扩展名。通常，下面的导入语句将产生错误：
 
 ```ts title="foo.ts"
 import { Example } from "./bar";

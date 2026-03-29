@@ -13,7 +13,8 @@ oldUrl:
 Deno 运行时提供了对环境变量的内置支持，通过
 [`Deno.env`](https://docs.deno.com/api/deno/~/Deno.env)。
 
-`Deno.env` 具有获取和设置方法。以下是示例用法：
+[`Deno.env`](/api/deno/~/Deno.env) 具有 getter 和 setter 方法。以下是
+示例用法：
 
 ```ts
 Deno.env.set("FIREBASE_API_KEY", "examplekey123");
@@ -43,7 +44,7 @@ deno run --env-file main.ts
 
 :::
 
-## `@std/dotenv`
+## [`@std/dotenv`](/runtime/reference/std/dotenv/)
 
 标准库中的 `dotenv` 包也可以用于从 `.env` 加载环境变量。
 
@@ -105,8 +106,7 @@ MY_VAR="my value" deno run main.ts
 
 :::note Variables with spaces
 
-When setting environment variables that contain space characters in a `.env`
-file, ensure you enclose the value in quotes. For example:
+当在 `.env` 文件中设置包含空格字符的环境变量时，请确保将值用引号括起来。例如：
 
 ```shell
 MY_VAR="my value with spaces"
@@ -122,25 +122,25 @@ Deno 标准库具有 [`std/cli` 模块](https://jsr.io/@std/cli) 用于解析命
 
 Deno 运行时具有以下特殊环境变量。
 
-| 名称                 | 描述                                                                                                                                                                       |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DENO_AUTH_TOKENS     | 用于从私有存储库获取远程模块时要使用的以分号分隔的 bearer 令牌和主机名列表<br />(例如 `abcde12345@deno.land;54321edcba@github.com`) |
-| DENO_TLS_CA_STORE    | 以逗号分隔的顺序相关证书存储列表.<br />可能的值：`system`，`mozilla`。默认为 `mozilla`。                                                                                     |
-| DENO_CERT            | 从 PEM 编码文件加载证书颁发机构                                                                                                                                      |
-| DENO_COVERAGE_DIR    | 设置收集覆盖率分析数据的目录。此选项仅适用于 [`deno test` 子命令](/runtime/reference/cli/test/)。                                        |
+| name                 | description                                                                                                                                                                       |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DENO_AUTH_TOKENS     | 用分号分隔的持有者令牌和主机名列表，用于在从私有仓库获取远程模块时使用<br />(例如 `abcde12345@deno.land;54321edcba@github.com`) |
+| DENO_TLS_CA_STORE    | 用逗号分隔、按顺序生效的证书存储列表。<br />可用值：`system`、`mozilla`。默认值为 `mozilla`。                                                     |
+| DENO_CERT            | 从 PEM 编码文件加载证书颁发机构                                                                                                                                  |
+| DENO_COVERAGE_DIR    | 设置用于收集覆盖率配置文件数据的目录。此选项仅适用于 [`deno test` 子命令](/runtime/reference/cli/test/)。                                        |
 | DENO_DIR             | 设置缓存目录                                                                                                                                                           |
-| DENO_INSTALL_ROOT    | 设置 deno 安装的输出目录（默认为 `$HOME/.deno/bin`）                                                                                                               |
-| DENO_REPL_HISTORY    | 设置 REPL 历史文件路径，当值为空时禁用历史文件<br />(默认为 `$DENO_DIR/deno_history.txt`)                                                                         |
-| DENO_NO_PACKAGE_JSON | 禁用 `package.json` 的自动解析                                                                                                                                     |
-| DENO_NO_PROMPT       | 设置以禁用访问时的权限提示<br />(作为调用时传递 `--no-prompt` 的替代)                                                                                             |
-| DENO_NO_UPDATE_CHECK | 设置以禁用检查是否有更新的 Deno 版本                                                                                                                                |
-| DENO_V8_FLAGS        | 设置 V8 命令行选项                                                                                                                                                    |
-| DENO_JOBS            | 用于 `--parallel` 标志与测试子命令的并行工作者数量.<br />默认为可用 CPU 的数量。                                                                                        |
-| DENO_KV_ACCESS_TOKEN | 连接到 Deno KV 数据库时使用的个人访问令牌（例如通过 `Deno.openKv` 或带有 KV Connect URL 的 `@deno/kv`）。                                                              |
-| DENO_WEBGPU_TRACE    | 使用 WebGPU API 时输出 [WGPU 追踪](https://github.com/gfx-rs/wgpu/pull/619) 的目录路径                                                                                 |
-| DENO_WEBGPU_BACKEND  | 选择 WebGPU 将使用的后端，或按优先顺序列出的逗号分隔的后端列表。可能的值为 `vulkan`，`dx12`，`metal` 或 `opengl`。                                                   |
-| HTTP_PROXY           | HTTP 请求的代理地址（模块下载，提取）                                                                                                                                  |
-| HTTPS_PROXY          | HTTPS 请求的代理地址（模块下载，提取）                                                                                                                                 |
-| NPM_CONFIG_REGISTRY  | 用于 npm 注册表的 URL。                                                                                                                                                 |
-| NO_COLOR             | 设置以禁用颜色                                                                                                                                                         |
-| NO_PROXY             | 以逗号分隔的主机列表，表示不使用代理（模块下载，提取）                                                                                                                 |
+| DENO_INSTALL_ROOT    | 设置 deno install 的输出目录（默认为 `$HOME/.deno/bin`）                                                                                                               |
+| DENO_REPL_HISTORY    | 设置 REPL 历史文件路径；当值为空时，历史文件将被禁用 <br />(默认为 `$DENO_DIR/deno_history.txt`)                                                      |
+| DENO_NO_PACKAGE_JSON | 禁用对 `package.json` 的自动解析                                                                                                                                        |
+| DENO_NO_PROMPT       | 设置为禁用访问时的权限提示<br />(可替代在调用时传递 `--no-prompt`)                                                                             |
+| DENO_NO_UPDATE_CHECK | 设置为禁用检查是否有更新版本的 Deno 可用                                                                                                                      |
+| DENO_V8_FLAGS        | 设置 V8 命令行选项                                                                                                                                                       |
+| DENO_JOBS            | `--parallel` 标志在测试子命令中使用的并行 worker 数量。<br />默认为可用 CPU 数量。                                                    |
+| DENO_KV_ACCESS_TOKEN | 连接到 Deno KV 数据库时使用的个人访问令牌（例如通过 [`Deno.openKv`](/api/deno/~/Deno.openKv) 或带有 KV Connect URL 的 `@deno/kv`）。                   |
+| DENO_WEBGPU_TRACE    | 使用 WebGPU API 时，输出 [WGPU 追踪](https://github.com/gfx-rs/wgpu/pull/619) 的目录路径                                                                |
+| DENO_WEBGPU_BACKEND  | 选择 WebGPU 将使用的后端，或按偏好顺序排列的后端逗号分隔列表。可用值为 `vulkan`、`dx12`、`metal` 或 `opengl`                      |
+| HTTP_PROXY           | HTTP 请求的代理地址（模块下载、fetch）                                                                                                                         |
+| HTTPS_PROXY          | HTTPS 请求的代理地址（模块下载、fetch）                                                                                                                        |
+| NPM_CONFIG_REGISTRY  | 用于 npm registry 的 URL。                                                                                                                                                  |
+| NO_COLOR             | 设置为禁用颜色                                                                                                                                                              |
+| NO_PROXY             | 不使用代理的主机列表，以逗号分隔（模块下载、fetch）                                                                                                  |

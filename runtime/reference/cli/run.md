@@ -9,16 +9,16 @@ description: "使用 Deno 运行时从文件或 URL 运行 JavaScript 或 TypeSc
 
 ## 用法
 
-要运行 [这个文件](https://docs.deno.com/examples/scripts/hello_world.ts)，使用：
+运行本地文件：
 
-```console
-deno run https://docs.deno.com/examples/scripts/hello_world.ts
+```sh
+deno run main.ts
 ```
 
-你也可以在本地运行文件。确保你在正确的目录下并使用：
+`run` 子命令是可选的 — 你也可以直接使用 `deno <file>`：
 
-```console
-deno run hello-world.ts
+```sh
+deno main.ts
 ```
 
 默认情况下，Deno 在一个沙箱中运行程序，没有访问磁盘、网络或生成子进程的能力。这是因为 Deno 运行时是 
@@ -29,19 +29,19 @@ deno run hello-world.ts
 
 授予从磁盘读取和监听网络的权限：
 
-```console
+```sh
 deno run --allow-read --allow-net server.ts
 ```
 
 授予从磁盘读取允许列出的文件的权限：
 
-```console
+```sh
 deno run --allow-read=/etc server.ts
 ```
 
 授予所有权限 _这不推荐，应该仅用于测试_：
 
-```console
+```sh
 deno run -A server.ts
 ```
 
@@ -53,7 +53,7 @@ deno run -A server.ts
 
 _确保在文件名之前放置标志_，例如：
 
-```console
+```sh
 deno run --allow-net --watch server.ts
 ```
 
@@ -65,10 +65,10 @@ Deno 的监视器会在控制台通知你文件的变化，并在工作时如果
 
 ## 从 stdin 运行代码
 
-你可以从 stdin 管道发送代码并立即运行它，使用：
+你可以从 stdin 管道传入代码并立即运行它：
 
-```console
-curl https://docs.deno.com/examples/scripts/hello_world.ts | deno run -
+```sh
+echo "console.log('hello')" | deno run -
 ```
 
 ## 终止运行

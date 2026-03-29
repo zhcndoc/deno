@@ -1,40 +1,26 @@
 ---
-title: "Snapshot testing"
+title: "快照测试"
 oldurl: /examples/snapshot_tutorial/
-description: "Learn how to use snapshot testing in Deno to compare outputs against recorded references, making it easier to detect unintended changes in your code"
+description: "了解如何在 Deno 中使用快照测试将输出与记录的参考值进行比较，从而更容易检测代码中的意外更改"
 url: "/examples/snapshot_test_tutorial/"
 ---
 
-Snapshot testing is a testing technique that captures the output of your code
-and compares it against a stored reference version. Rather than manually writing
-assertions for each property, you let the test runner record the entire output
-structure, making it easier to detect any unexpected changes.
+快照测试是一种测试技术，它会捕获代码的输出，并将其与存储的参考版本进行比较。与其为每个属性手动编写断言，不如让测试运行器记录整个输出结构，这样更容易检测任何意外的更改。
 
-The [Deno Standard Library](/runtime/reference/std/) has a
-[snapshot module](https://jsr.io/@std/testing/doc/snapshot), which enables
-developers to write tests which assert a value against a reference snapshot.
-This reference snapshot is a serialized representation of the original value and
-is stored alongside the test file.
+[Deno 标准库](/runtime/reference/std/) 中有一个
+[快照模块](https://jsr.io/@std/testing/doc/snapshot)，它使开发者能够编写将某个值与参考快照进行断言的测试。这个参考快照是原始值的序列化表示，并与测试文件存储在一起。
 
-## Basic usage
+## 基本用法
 
-The `assertSnapshot` function will create a snapshot of a value and compare it
-to a reference snapshot, which is stored alongside the test file in the
-`__snapshots__` directory.
+`assertSnapshot` 函数会为一个值创建快照，并将其与参考快照进行比较，参考快照存储在测试文件旁边的 `__snapshots__` 目录中。
 
-To create an initial snapshot (or to update an existing snapshot), use the
-`-- --update` flag with the `deno test` command.
+要创建初始快照（或更新现有快照），请在 `deno test` 命令中使用 `-- --update` 标志。
 
-### Basic snapshot example
+### 基本快照示例
 
-The below example shows how to use the snapshot library with the `Deno.test`
-API. We can test a snapshot of a basic object, containing string and number
-properties.
+下面的示例展示了如何将快照库与 `Deno.test` API 一起使用。我们可以对一个包含字符串和数字属性的基础对象进行快照测试。
 
-The `assertSnapshot(t, a)` function compares the object against a stored
-snapshot. The `t` parameter is the test context that Deno provides, which the
-snapshot function uses to determine the test name and location for storing
-snapshots.
+`assertSnapshot(t, a)` 函数会将对象与存储的快照进行比较。`t` 参数是 Deno 提供的测试上下文，快照函数会使用它来确定测试名称和用于存储快照的位置。
 
 ```ts title="example_test.ts"
 import { assertSnapshot } from "jsr:@std/testing/snapshot";
@@ -48,25 +34,21 @@ Deno.test("isSnapshotMatch", async (t) => {
 });
 ```
 
-You will need to grant read and write file permissions in order for Deno to
-write a snapshot file and then read it to test the assertion. If it is the first
-time you are running the test a do not already have a snapshot, add the
-`--update` flag:
+你需要授予读写文件权限，Deno 才能写入快照文件，然后读取它来测试断言。如果这是你第一次运行测试，并且你还没有快照，请添加 `--update` 标志：
 
 ```bash
 deno test --allow-read --allow-write -- --update
 ```
 
-If you already have a snapshot file, you can run the test with:
+如果你已经有了快照文件，可以使用以下命令运行测试：
 
 ```bash
 deno test --allow-read
 ```
 
-The test will compare the current output of the object against the stored
-snapshot. If they match, the test passes; if they differ, the test fails.
+测试会将对象的当前输出与存储的快照进行比较。如果匹配，测试通过；如果不同，测试失败。
 
-The snapshot file will look like this:
+快照文件如下所示：
 
 ```ts title="__snapshots__/example_test.ts.snap"
 export const snapshot = {};
@@ -79,18 +61,11 @@ snapshot[`isSnapshotMatch 1`] = `
 `;
 ```
 
-You can edit your test to change the `hello` string to `"everyone!"` and run the
-test again with `deno test --allow-read`. This time the `assertSnapshot`
-function will throw an `AssertionError`, causing the test to fail because the
-snapshot created during the test does not match the one in the snapshot file.
+你可以修改测试，将 `hello` 字符串改为 `"everyone!"`，然后再次使用 `deno test --allow-read` 运行测试。这一次 `assertSnapshot` 函数会抛出 `AssertionError`，导致测试失败，因为测试期间创建的快照与快照文件中的内容不匹配。
 
-## Updating snapshots
+## 更新快照
 
-When adding new snapshot assertions to your test suite, or when intentionally
-making changes which cause your snapshots to fail, you can update your snapshots
-by running the snapshot tests in update mode. Tests can be run in update mode by
-passing the `--update` or `-u` flag as an argument when running the test. When
-this flag is passed, then any snapshots which do not match will be updated.
+当你向测试套件中添加新的快照断言，或者有意做出会导致快照失败的更改时，可以通过以更新模式运行快照测试来更新快照。运行测试时，可以通过传入 `--update` 或 `-u` 标志作为参数来启用更新模式。当传入此标志时，任何不匹配的快照都会被更新。
 
 ```bash
 deno test --allow-read --allow-write -- --update
@@ -98,33 +73,23 @@ deno test --allow-read --allow-write -- --update
 
 :::note
 
-New snapshots will only be created when the `--update` flag is present.
+只有在存在 `--update` 标志时，才会创建新快照。
 
 :::
 
-## Permissions
+## 权限
 
-When running snapshot tests, the `--allow-read` permission must be enabled, or
-else any calls to `assertSnapshot` will fail due to insufficient permissions.
-Additionally, when updating snapshots, the `--allow-write` permission must be
-enabled, as this is required in order to update snapshot files.
+运行快照测试时，必须启用 `--allow-read` 权限，否则任何对 `assertSnapshot` 的调用都会因为权限不足而失败。此外，在更新快照时，必须启用 `--allow-write` 权限，因为更新快照文件需要它。
 
-The assertSnapshot function will only attempt to read from and write to snapshot
-files. As such, the allow list for `--allow-read` and `--allow-write` can be
-limited to only include existing snapshot files, if desired.
+`assertSnapshot` 函数只会尝试读取和写入快照文件。因此，如有需要，`--allow-read` 和 `--allow-write` 的允许列表可以仅限制为现有的快照文件。
 
-## Version Control
+## 版本控制
 
-Snapshot testing works best when changes to snapshot files are committed
-alongside other code changes. This allows for changes to reference snapshots to
-be reviewed along side the code changes that caused them, and ensures that when
-others pull your changes, their tests will pass without needing to update
-snapshots locally.
+快照测试最适合与其他代码更改一起提交快照文件的变更。这样可以将参考快照的变更与引起这些变更的代码改动一起审查，并确保其他人在拉取你的更改后，他们的测试可以通过，而无需在本地更新快照。
 
-## Options
+## 选项
 
-The `assertSnapshot` function can be called with an `options` object which
-offers greater flexibility and enables some non standard use cases:
+`assertSnapshot` 函数可以与一个 `options` 对象一起调用，这提供了更大的灵活性，并支持一些非标准用例：
 
 ```ts
 import { assertSnapshot } from "jsr:@std/testing/snapshot";
@@ -140,31 +105,21 @@ Deno.test("isSnapshotMatch", async (t) => {
 
 ### serializer
 
-When you run a test with `assertSnapshot`, the data you're testing needs to be
-converted to a string format that can be written to the snapshot file (when
-creating or updating snapshots) and compared with the existing snapshot (when
-validating), this is called serialization.
+当你使用 `assertSnapshot` 运行测试时，你正在测试的数据需要转换为一种字符串格式，以便可以写入快照文件（在创建或更新快照时）并与现有快照进行比较（在验证时）。这个过程称为序列化。
 
-The `serializer` option allows you to provide a custom serializer function. This
-custom function will be called by `assertSnapshot` and be passed the value being
-asserted. Your custom function must:
+`serializer` 选项允许你提供一个自定义序列化函数。这个自定义函数将由 `assertSnapshot` 调用，并接收被断言的值。你的自定义函数必须：
 
-1. Return a `string`
-2. Be deterministic, (it will always produce the same output, given the same
-   input).
+1. 返回一个 `string`
+2. 是确定性的（给定相同输入时，它总会产生相同的输出）。
 
-The code below shows a practical example of creating and using a custom
-serializer function for snapshot testing. This serialiser removes any ANSI
-colour codes from a string using the
-[`stripColour`](https://jsr.io/@std/fmt/doc/colors) string formatter from the
-Deno Standard Library.
+下面的代码展示了一个用于快照测试的自定义序列化函数的实际示例。这个序列化器使用 Deno 标准库中的 [`stripColour`](https://jsr.io/@std/fmt/doc/colors) 字符串格式化器从字符串中移除所有 ANSI 颜色代码。
 
 ```ts title="example_test.ts"
 import { assertSnapshot, serialize } from "jsr:@std/testing/snapshot";
 import { stripColor } from "jsr:@std/fmt/colors";
 
 /**
- * Serializes `actual` and removes ANSI escape codes.
+ * 序列化 `actual` 并移除 ANSI 转义代码。
  */
 function customSerializer(actual: string) {
   return serialize(stripColor(actual));
@@ -184,20 +139,16 @@ snapshot = {};
 snapshot[`Custom Serializer 1`] = `"Hello World!"`;
 ```
 
-Custom serializers can be useful in a variety of scenarios:
+自定义序列化器在多种场景中都很有用：
 
-- To remove irrelevant formatting (like ANSI codes shown above) and improve
-  legibility
-- To handle non-deterministic data. Timestamps, UUIDs, or random values can be
-  replaced with placeholders
-- To mask or remove sensitive data that shouldn't be saved in snapshots
-- Custom formatting to present complex objects in a domain-specific format
+- 移除无关的格式（例如上面显示的 ANSI 代码）并提高可读性
+- 处理非确定性数据。时间戳、UUID 或随机值可以替换为占位符
+- 掩盖或移除不应保存在快照中的敏感数据
+- 使用自定义格式以特定领域的方式呈现复杂对象
 
-### Serialization with `Deno.customInspect`
+### 使用 `Deno.customInspect` 进行序列化
 
-Because the default serializer uses `Deno.inspect` under the hood, you can set
-the property `Symbol.for("Deno.customInspect")` to a custom serialization
-function if desired:
+由于默认序列化器在底层使用了 `Deno.inspect`，如果需要，你可以将属性 `Symbol.for("Deno.customInspect")` 设置为一个自定义序列化函数：
 
 ```ts title="example_test.ts"
 // example_test.ts
@@ -228,19 +179,19 @@ class HTMLTag {
   }
 }
 
-Deno.test("Page HTML Tree", async (t) => {
+Deno.test("页面 HTML 树", async (t) => {
   const page = new HTMLTag("html", [
     new HTMLTag("head", [
       new HTMLTag("title", [
-        "Simple SSR Example",
+        "简单的 SSR 示例",
       ]),
     ]),
     new HTMLTag("body", [
       new HTMLTag("h1", [
-        "Simple SSR Example",
+        "简单的 SSR 示例",
       ]),
       new HTMLTag("p", [
-        "This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation",
+        "这是一个示例，展示如何使用 Deno.customInspect 来快照一个中间的 SSR 表示",
       ]),
     ]),
   ]);
@@ -249,32 +200,31 @@ Deno.test("Page HTML Tree", async (t) => {
 });
 ```
 
-This test will produce the following snapshot.
+这个测试将生成如下快照。
 
 ```ts title="__snapshots__/example_test.ts.snap"
 export const snapshot = {};
 
-snapshot[`Page HTML Tree 1`] = `
+snapshot[`页面 HTML 树 1`] = `
 <html>
   <head>
     <title>
-      Simple SSR Example
+      简单的 SSR 示例
     </title>
   </head>
   <body>
     <h1>
-      Simple SSR Example
+      简单的 SSR 示例
     </h1>
     <p>
-      This is an example of how Deno.customInspect could be used to snapshot an intermediate SSR representation
+      这是一个示例，展示如何使用 Deno.customInspect 来快照一个中间的 SSR 表示
     </p>
   </body>
 </html>
 `;
 ```
 
-In contrast, when we remove the `Deno.customInspect` method, the test will
-produce the following snapshot:
+相比之下，当我们移除 `Deno.customInspect` 方法时，测试会生成如下快照：
 
 ```ts title="__snapshots__/example_test.ts.snap"
 export const snapshot = {};
@@ -314,80 +264,61 @@ snapshot[`Page HTML Tree 1`] = `HTMLTag {
 }`;
 ```
 
-You can see that this second snapshot is much less readable. This is because:
+你可以看到第二个快照的可读性要差得多。这是因为：
 
-1. The keys are sorted alphabetically, so the name of the element is displayed
-   after its children
-2. It includes a lot of extra information, causing the snapshot to be more than
-   twice as long
-3. It is not an accurate serialization of the HTML which the data represents
+1. 键按字母顺序排序，因此元素名称显示在其子元素之后
+2. 它包含了很多额外信息，导致快照长度超过两倍
+3. 它并不是该数据所代表的 HTML 的准确序列化结果
 
-Note that in this example it would be possible to achieve the same result by
-calling:
+请注意，在这个示例中，通过调用以下代码也可以达到相同效果：
 
 ```ts
 await assertSnapshot(t, page.render(0));
 ```
 
-However, depending on the public API you choose to expose, this may not be
-practical.
+不过，这取决于你选择公开的公共 API，这样做可能并不现实。
 
-It is also worth considering that this could have an impact beyond your snapshot
-testing. For example, `Deno.customInspect` is also used to serialize objects
-when calling `console.log` (and in some other cases). This may or may not be
-desirable.
+还值得考虑的是，这可能会对快照测试之外的内容产生影响。例如，`Deno.customInspect` 在调用 `console.log` 时（以及某些其他情况）也用于序列化对象。这可能是你希望的，也可能不是。
 
-### `dir` and `path`
+### `dir` 和 `path`
 
-The `dir` and `path` options allow you to control where the snapshot file will
-be saved to and read from. These can be absolute paths or relative paths. If
-relative, they will be resolved relative to the test file.
+`dir` 和 `path` 选项允许你控制快照文件将保存到哪里以及从哪里读取。这些可以是绝对路径或相对路径。如果是相对路径，它们将相对于测试文件进行解析。
 
-For example, if your test file is located at `/path/to/test.ts` and the `dir`
-option is set to `snapshots`, then the snapshot file would be written to
-`/path/to/snapshots/test.ts.snap`.
+例如，如果你的测试文件位于 `/path/to/test.ts`，并且 `dir` 选项设置为 `snapshots`，那么快照文件将被写入 `/path/to/snapshots/test.ts.snap`。
 
-- `dir` allows you to specify the snapshot directory, while still using the
-  default format for the snapshot file name.
+- `dir` 允许你指定快照目录，同时仍然使用快照文件名的默认格式。
 
-- `path` allows you to specify the directory and file name of the snapshot file.
+- `path` 允许你指定快照文件的目录和文件名。
 
-If your test file is located at `/path/to/test.ts` and the `path` option is set
-to `snapshots/test.snapshot`, then the snapshot file would be written to
-`/path/to/snapshots/test.snapshot`.
+如果你的测试文件位于 `/path/to/test.ts`，并且 `path` 选项设置为 `snapshots/test.snapshot`，那么快照文件将被写入 `/path/to/snapshots/test.snapshot`。
 
 :::note
 
-If both `dir` and `path` are specified, the `dir` option will be ignored and the
-`path` option will be handled as normal.
+如果同时指定了 `dir` 和 `path`，`dir` 选项将被忽略，而 `path` 选项将正常处理。
 
 :::
 
 ### `mode`
 
-The `mode` option controls how `assertSnapshot` behaves regardless of command
-line flags and has two settings, `assert` or `update`:
+`mode` 选项控制 `assertSnapshot` 的行为，不受命令行标志影响，并且有两个设置：`assert` 或 `update`：
 
-- `assert`: Always performs comparison only, ignoring any `--update` or `-u`
-  flags. If snapshots don't match, the test will fail with an `AssertionError`.
+- `assert`：始终只进行比较，忽略任何 `--update` 或 `-u` 标志。如果快照不匹配，测试将以 `AssertionError` 失败。
 
-- `update`: Always updates snapshots. Any mismatched snapshots will be updated
-  after tests complete.
+- `update`：始终更新快照。任何不匹配的快照都会在测试完成后更新。
 
-This option is useful when you need different snapshot behaviors within the same
-test suite:
+当你需要在同一个测试套件中使用不同的快照行为时，这个选项很有用：
 
 ```ts
-// Create a new snapshot or verify an existing one
+// 创建一个新快照或验证现有快照
 await assertSnapshot(t, stableComponent);
 
-// Always update this snapshot regardless of command line flags
+// 无论命令行标志如何，始终更新此快照
 await assertSnapshot(t, experimentalComponent, {
   mode: "update",
   name: "experimental feature",
 });
 
-// Always verify but never update this snapshot regardless of command line flags
+// 无论命令行标志如何，始终验证但绝不更新此快照
 await assertSnapshot(t, criticalComponent, {
   mode: "assert",
   name: "critical feature",
@@ -396,8 +327,7 @@ await assertSnapshot(t, criticalComponent, {
 
 ### `name`
 
-The name of the snapshot. If unspecified, the name of the test step will be used
-instead.
+快照的名称。如果未指定，则会使用测试步骤的名称。
 
 ```ts title="example_test.ts"
 import { assertSnapshot } from "jsr:@std/testing/snapshot";
@@ -408,7 +338,7 @@ Deno.test("isSnapshotMatch", async (t) => {
     example: 123,
   };
   await assertSnapshot(t, a, {
-    name: "Test Name",
+    name: "测试名称",
   });
 });
 ```
@@ -416,7 +346,7 @@ Deno.test("isSnapshotMatch", async (t) => {
 ```ts title="__snapshots__/example_test.ts.snap"
 export const snapshot = {};
 
-snapshot[`Test Name 1`] = `
+snapshot[`测试名称 1`] = `
 {
   example: 123,
   hello: "world!",
@@ -424,17 +354,14 @@ snapshot[`Test Name 1`] = `
 `;
 ```
 
-When `assertSnapshot` is run multiple times with the same value for name, then
-the suffix will be incremented as normal. i.e. `Test Name 1`, `Test Name 2`,
-`Test Name 3`, etc.
+当使用相同的 `name` 值多次运行 `assertSnapshot` 时，后缀会像往常一样递增。即 `Test Name 1`、`Test Name 2`、`Test Name 3` 等。
 
 ### `msg`
 
-Used to set a custom error message. This will overwrite the default error
-message, which includes the diff for failed snapshots:
+用于设置自定义错误消息。这将覆盖默认错误消息，默认错误消息包含失败快照的 diff：
 
 ```ts
-Deno.test("custom error message example", async (t) => {
+Deno.test("自定义错误消息示例", async (t) => {
   const userData = {
     name: "John Doe",
     role: "admin",
@@ -442,43 +369,41 @@ Deno.test("custom error message example", async (t) => {
 
   await assertSnapshot(t, userData, {
     msg:
-      "User data structure has changed unexpectedly. Please verify your changes are intentional.",
+      "用户数据结构发生了意外变化。请确认你的修改是有意为之。",
   });
 });
 ```
 
-When the snapshot fails, instead of seeing the default diff message, you'll see
-your custom error message.
+当快照失败时，你看到的将不是默认的 diff 消息，而是你自定义的错误消息。
 
-## Testing Different Data Types
+## 测试不同数据类型
 
-Snapshot testing works with various data types and structures:
+快照测试适用于各种数据类型和结构：
 
 ```ts
 Deno.test("snapshot various types", async (t) => {
-  // Arrays
+  // 数组
   await assertSnapshot(t, [1, 2, 3, "four", { five: true }]);
 
-  // Complex objects
+  // 复杂对象
   await assertSnapshot(t, {
     user: { name: "Test", roles: ["admin", "user"] },
     settings: new Map([["theme", "dark"], ["language", "en"]]),
   });
 
-  // Error objects
+  // 错误对象
   await assertSnapshot(t, new Error("Test error message"));
 });
 ```
 
-## Working with Asynchronous Code
+## 处理异步代码
 
-When testing asynchronous functions, ensure you await the results before passing
-them to the snapshot:
+在测试异步函数时，确保在将结果传递给快照之前先等待结果：
 
 ```ts
 Deno.test("async function test", async (t) => {
   const fetchData = async () => {
-    // Simulate API call
+    // 模拟 API 调用
     return { success: true, data: ["item1", "item2"] };
   };
 
@@ -487,35 +412,33 @@ Deno.test("async function test", async (t) => {
 });
 ```
 
-## Best Practices
+## 最佳实践
 
-### Keep Snapshots Concise
+### 保持快照简洁
 
-Avoid capturing large data structures that aren't necessary for your test. Focus
-on capturing only what's relevant.
+避免捕获对测试不必要的大型数据结构。只关注相关内容。
 
-### Descriptive Test Names
+### 使用描述性的测试名称
 
-Use descriptive test names that clearly indicate what's being tested:
+使用能清楚表明测试内容的描述性测试名称：
 
 ```ts
 Deno.test(
-  "renders user profile card with all required fields",
+  "渲染包含所有必需字段的用户资料卡",
   async (t) => {
-    // ... test code
+    // ... 测试代码
     await assertSnapshot(t, component);
   },
 );
 ```
 
-### Review Snapshots During Code Reviews
+### 在代码评审中检查快照
 
-Always review snapshot changes during code reviews to ensure they represent
-intentional changes and not regressions.
+在代码评审过程中始终检查快照更改，以确保它们代表的是有意的变更，而不是回归。
 
-### Snapshot Organization
+### 快照组织
 
-For larger projects, consider organizing snapshots by feature or component:
+对于较大的项目，可以考虑按功能或组件组织快照：
 
 ```ts
 await assertSnapshot(t, component, {
@@ -523,12 +446,11 @@ await assertSnapshot(t, component, {
 });
 ```
 
-## Snapshot Testing in CI/CD
+## 在 CI/CD 中进行快照测试
 
-### GitHub Actions Example
+### GitHub Actions 示例
 
-When running snapshot tests in CI environments, you'll typically want to verify
-existing snapshots rather than updating them:
+在 CI 环境中运行快照测试时，通常你会希望验证现有快照，而不是更新它们：
 
 ```yaml title=".github/workflows/test.yml"
 name: Test
@@ -545,31 +467,26 @@ jobs:
         run: deno test --allow-read
 ```
 
-For pull requests that intentionally update snapshots, reviewers should verify
-the changes are expected before merging.
+对于有意更新快照的拉取请求，审阅者应在合并前确认这些更改是符合预期的。
 
-## Practical Examples
+## 实际示例
 
-### Testing HTML Output
+### 测试 HTML 输出
 
-HTML output testing with snapshots is particularly useful for web applications
-where you want to ensure your components render the expected markup. This
-approach allows you to catch unintended changes in your HTML structure,
-attributes, or content that might affect the visual appearance or functionality
-of your UI components.
+使用快照测试 HTML 输出对于 Web 应用特别有用，因为你希望确保组件渲染出预期的标记。这种方法可以帮助你捕捉 HTML 结构、属性或内容中可能影响 UI 组件视觉外观或功能的意外变化。
 
-By capturing a snapshot of the HTML output, you can:
+通过捕获 HTML 输出的快照，你可以：
 
-- Verify that UI components render correctly with different props/data
-- Detect regressions when refactoring rendering logic
-- Document the expected output format of components
+- 验证 UI 组件在不同的 props/数据下是否正确渲染
+- 在重构渲染逻辑时检测回归
+- 记录组件预期的输出格式
 
 ```ts
 Deno.test("HTML rendering", async (t) => {
   const renderComponent = () => {
     return `<div class="card">
-      <h2>User Profile</h2>
-      <p>Username: testuser</p>
+      <h2>用户资料</h2>
+      <p>用户名：testuser</p>
     </div>`;
   };
 
@@ -577,17 +494,14 @@ Deno.test("HTML rendering", async (t) => {
 });
 ```
 
-### Testing API Responses
+### 测试 API 响应
 
-When building applications that interact with APIs, snapshot testing helps
-ensure that the structure and format of API responses remain consistent. This is
-particularly valuable for:
+在构建与 API 交互的应用时，快照测试有助于确保 API 响应的结构和格式保持一致。这对于以下方面尤为重要：
 
-- Maintaining backward compatibility when updating API integrations
-- Verifying that your API response parsing logic works correctly
-- Documenting the expected shape of API responses for team collaboration
-- Detecting unexpected changes in API responses that could break your
-  application
+- 在更新 API 集成时保持向后兼容
+- 验证你的 API 响应解析逻辑是否正常工作
+- 为团队协作记录 API 响应的预期形状
+- 检测可能破坏应用的 API 响应中的意外变化
 
 ```ts
 Deno.test("API response format", async (t) => {
@@ -606,8 +520,4 @@ Deno.test("API response format", async (t) => {
 });
 ```
 
-🦕 Snapshot testing is a powerful technique that complements traditional unit
-tests by allowing you to capture and verify complex outputs without writing
-detailed assertions. By incorporating snapshot tests into your testing strategy,
-you can catch unintended changes, document expected behavior, and build more
-resilient applications.
+🦕 快照测试是一种强大的技术，它通过让你在不编写详细断言的情况下捕获并验证复杂输出，来补充传统的单元测试。通过将快照测试纳入你的测试策略，你可以捕捉意外变化、记录预期行为，并构建更具弹性的应用。

@@ -5,10 +5,11 @@ oldUrl:
   - /deploy/kv/manual/cron/
 ---
 
-:::info 旧版文档
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧版文档。我们建议您迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详见
+<a href="/deploy/migration_guide/">迁移指南</a> 获取详细信息。
 
 :::
 

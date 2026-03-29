@@ -8,7 +8,7 @@ url: /examples/migrate_custom_domain_tutorial/
 
 ## 将您的域添加到 Deno Deploy
 
-1. 访问 [Deno Deploy 控制台](https://dash.deno.com)，并导航到您想关联自定义域的项目。
+1. 访问 [Deno Deploy 控制台](https://console.deno.com)，并导航到您想要关联自定义域的应用。
 
 2. 点击 **“Settings”** 标签。
 

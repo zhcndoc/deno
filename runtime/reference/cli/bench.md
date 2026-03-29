@@ -11,7 +11,8 @@ description: "使用 Deno 内置的 bench 工具运行基准测试。"
 
 ## 快速开始
 
-首先，创建一个文件 `url_bench.ts` 并使用 `Deno.bench()` 函数注册一个基准测试。
+首先，让我们创建一个文件 `url_bench.ts`，并使用
+[`Deno.bench()`](/api/deno/~/Deno.bench) 函数注册一个基准测试。
 
 ```ts
 // url_bench.ts
@@ -22,8 +23,8 @@ Deno.bench("URL 解析", () => {
 
 其次，使用 `deno bench` 子命令运行基准测试。
 
-```shell
-$ deno bench url_bench.ts
+```sh
+deno bench url_bench.ts
 Check file:///path/to/url_bench.ts
     CPU | 12th Gen Intel(R) Core(TM) i3-12100
 Runtime | Deno 2.4.2 (x86_64-unknown-linux-gnu)
@@ -37,7 +38,8 @@ file:///path/to/url_bench.ts
 
 ## 编写基准测试
 
-要定义一个基准测试，你需要通过调用 `Deno.bench` API 来注册它。这个 API 有多个重载，可以提供最大的灵活性，并在不同形式之间轻松切换（例如，当需要快速关注单个基准进行调试时，使用 `only: true` 选项）：
+要定义一个基准测试，你需要通过调用
+[`Deno.bench`](/api/deno/~/Deno.bench) API 来注册它。这个 API 有多个重载，以提供最大的灵活性，并便于在这些形式之间快速切换（例如，当你需要为了调试快速聚焦某个单独的基准时，可以使用 `only: true` 选项）：
 
 ```ts
 // 紧凑形式：名称和函数
@@ -91,7 +93,9 @@ Deno.bench("异步你好，世界", async () => {
 
 有时基准测试用例需要包括设置和拆卸代码，这可能会影响基准结果。例如，如果你想测量读取小文件的时间，你需要打开文件、读取它，然后关闭它。如果文件足够小，打开和关闭文件所需的时间可能会超过读取文件本身所需的时间。
 
-为帮助处理此类情况，你可以使用 `Deno.BenchContext.start` 和 `Deno.BenchContext.end` 来告诉基准测试工具你想要测量的关键部分。在这两个调用之间的所有部分将被排除在测量之外。
+为帮助处理这种情况，你可以使用
+[`Deno.BenchContext.start`](/api/deno/~/Deno.BenchContext.start) 和
+[`Deno.BenchContext.end`](/api/deno/~/Deno.BenchContext.end)，告诉基准测试工具你想要测量的关键部分。位于这两个调用之间的部分之外的所有内容都将被排除在测量之外。
 
 ```ts
 Deno.bench("foo", async (b) => {
@@ -114,7 +118,8 @@ Deno.bench("foo", async (b) => {
 
 ## 分组与基准线
 
-在注册基准测试用例时，可以使用 `Deno.BenchDefinition.group` 选项将其分配到一个组中：
+注册一个基准用例时，可以使用
+[`Deno.BenchDefinition.group`](/api/deno/~/Deno.BenchDefinition.group) 选项将其分配到某个组：
 
 ```ts
 // url_bench.ts
@@ -123,9 +128,11 @@ Deno.bench("url 解析", { group: "url" }, () => {
 });
 ```
 
-将多个用例分配到单个组中并比较它们的表现相对于“基准线”用例是非常有用的。
+将多个用例分配到单个组中，并将它们的表现与“基准线”用例进行比较是非常有用的。
 
-在这个示例中，我们将检查 `Date.now()` 相对于 `performance.now()` 的性能如何，为此，我们将第一个用例标记为“基准线”，使用 `Deno.BenchDefinition.baseline` 选项：
+在这个示例中，我们将检查 `Date.now()` 相对于 `performance.now()` 的性能，为此我们会使用
+[`Deno.BenchDefinition.baseline`](/api/deno/~/Deno.BenchDefinition.baseline)
+选项将第一个用例标记为“基准线”：
 
 ```ts
 // time_bench.ts
@@ -138,8 +145,8 @@ Deno.bench("performance.now()", { group: "timing" }, () => {
 });
 ```
 
-```shell
-$ deno bench time_bench.ts
+```sh
+deno bench time_bench.ts
     CPU | 12th Gen Intel(R) Core(TM) i3-12100
 Runtime | Deno 2.4.2 (x86_64-unknown-linux-gnu)
 
@@ -169,7 +176,7 @@ summary
 - 或以 `.bench.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件，
 - 或以 `_bench.{ts, tsx, mts, js, mjs, jsx}` 结尾的文件
 
-```bash
+```sh
 # 运行当前目录及所有子目录中的所有基准测试
 deno bench
 
@@ -182,8 +189,8 @@ deno bench my_bench.ts
 
 > ⚠️ 如果你想向基准测试文件传递其他 CLI 参数，请使用 `--` 来告知 Deno 剩余的参数是脚本参数。
 
-```bash
-# 向基准测试文件传递额外参数
+```sh
+# 向基准文件传递额外参数
 deno bench my_bench.ts -- -e --foo --bar
 ```
 
@@ -191,7 +198,7 @@ deno bench my_bench.ts -- -e --foo --bar
 
 要查看与 `deno bench` 相关的所有运行时选项，可以参考命令行帮助：
 
-```bash
+```sh
 deno help bench
 ```
 
@@ -224,13 +231,13 @@ Deno.bench({
 
 此命令将运行所有这些基准测试，因为它们都包含单词“bench”。
 
-```bash
+```sh
 deno bench --filter "bench" benchmarks/
 ```
 
 反之，以下命令使用模式，会运行第二个和第三个基准测试。
 
-```bash
+```sh
 deno bench --filter "/bench-*\d/" benchmarks/
 ```
 
@@ -272,8 +279,8 @@ Deno.bench({
 
 要以 JSON 格式检索输出，请使用 `--json` 标志：
 
-```shell
-$ deno bench my_bench.ts --json
+```sh
+deno bench my_bench.ts --json
 {
   "version": 1,
   "runtime": "Deno/2.4.2 x86_64-unknown-linux-gnu",

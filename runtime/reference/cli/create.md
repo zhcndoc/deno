@@ -20,9 +20,11 @@ deno create [OPTIONS] [PACKAGE] [-- [ARGS]...]
 
 npm 和 JSR 的包解析方式不同：
 
-- **npm 包** 使用 `create-` 命名规范。运行
-  `deno create npm:vite` 会解析到 npm 上的 `create-vite` 包，并执行其主入口。
-- **JSR 包** 使用 `./create` 导出。任何 JSR 包都可以通过在其 `deno.json` 中定义 `./create` 入口点来充当模板：
+- **npm 包** 使用 `create-` 命名约定。运行
+  `deno create npm:vite` 会解析为 npm 上的 `create-vite` 包，并
+  执行其主入口点。
+- **JSR 包** 使用 `./create` 导出。任何 JSR 包都可以通过在其
+  [`deno.json`](/runtime/fundamentals/configuration/) 中定义一个 `./create` 入口点来充当模板：
 
 ```json title="deno.json"
 {

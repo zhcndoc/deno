@@ -7,36 +7,76 @@ openGraphTitle: "deno serve"
 description: "一个灵活且可配置的 Deno HTTP 服务器"
 ---
 
-## 示例
+`deno serve` 使用 [`Deno.serve()`](/api/deno/~/Deno.serve) 将一个文件作为 HTTP 服务器运行。该文件必须导出一个带有 `fetch` 处理器的默认对象。有关构建 HTTP 服务器的完整指南，请参阅 [编写 HTTP 服务器](/runtime/fundamentals/http_server/)。
 
-这是一个如何使用声明式 fetch 创建简单 HTTP 服务器的示例：
+## 基本用法
 
 ```typescript title="server.ts"
 export default {
-  async fetch(_req) {
+  fetch(_req: Request) {
     return new Response("Hello world!");
   },
 } satisfies Deno.ServeDefaultExport;
 ```
 
-`satisfies Deno.ServeDefaultExport` 类型断言确保您导出的对象符合 Deno HTTP 服务器的预期接口。这提供了类型安全性和更好的编辑器自动完成功能，同时允许您保持实现的推断类型。
-
-然后，您可以使用 `deno serve` 命令运行服务器：
-
-```bash
+```sh
 deno serve server.ts
 ```
 
-`fetch` 函数中的逻辑可以根据不同类型的请求进行自定义，并相应地提供内容：
+默认情况下，服务器监听 **8000** 端口。可以使用 `--port` 覆盖它：
+
+```sh
+deno serve --port=3000 server.ts
+```
+
+## 路由请求
+
+`fetch` 处理器接收一个标准的
+[`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) 对象。
+使用 URL 进行路由：
 
 ```typescript title="server.ts"
 export default {
-  async fetch(request) {
-    if (request.url.endsWith("/json")) {
-      return Response.json({ hello: "world" });
+  fetch(request: Request) {
+    const url = new URL(request.url);
+
+    if (url.pathname === "/api/health") {
+      return Response.json({ status: "ok" });
     }
 
-    return new Response("Hello world!");
+    return new Response("Not found", { status: 404 });
   },
 } satisfies Deno.ServeDefaultExport;
+```
+
+## 绑定到主机名
+
+默认情况下，`deno serve` 监听 `0.0.0.0`。使用 `--host` 绑定到特定接口：
+
+```sh
+deno serve --host=127.0.0.1 server.ts
+```
+
+## 水平扩展
+
+跨多个 CPU 核心运行多个服务器实例，以获得更好的吞吐量：
+
+```sh
+deno serve --parallel server.ts
+```
+
+## 监视模式
+
+在文件发生更改时自动重启服务器：
+
+```sh
+deno serve --watch server.ts
+```
+
+## 权限
+
+`deno serve` 会自动允许服务器监听，无需 `--allow-net`。其他权限（如文件读取）必须显式授予：
+
+```sh
+deno serve --allow-read server.ts
 ```

@@ -2,7 +2,17 @@
 title: "边缘缓存"
 ---
 
-[Web Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache) 在 Deno Deploy 上得到支持。此缓存旨在提供微秒级的读取延迟、多GB/s的写入吞吐量以及无限存储，尽管其在一致性和耐久性方面提供的是尽力而为的保障。
+:::warning 2026 年 7 月 20 日停止服务
+
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
+
+:::
+
+[Web Cache API](https://developer.mozilla.org/en-US/docs/Web/API/Cache) 在
+Deno Deploy 上受支持。该缓存旨在提供微秒级读取延迟、每秒数 GB 的写入吞吐量以及无限制存储，
+但其代价是尽力而为的一致性和持久性。
 
 ```ts
 const cache = await caches.open("my-cache");
@@ -13,7 +23,7 @@ Deno.serve(async (req) => {
     return cached;
   }
 
-  const res = new Response("cached at " + new Date().toISOString());
+  const res = new Response("缓存于 " + new Date().toISOString());
   await cache.put(req, res.clone());
   return res;
 });

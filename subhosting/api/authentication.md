@@ -2,7 +2,15 @@
 title: 认证
 ---
 
-开发者可以使用 Subhosting REST API 配置项目、域、KV 数据库和其他资源。
+:::warning 2026 年 7 月 20 日停止服务
+
+subhosting v1 API 将于 2026 年 7 月 20 日关闭。请迁移到
+<a href="https://api.deno.com/v2/docs">v2 API</a>。详情请参阅
+<a href="/subhosting/manual/api_migration_guide/">API 迁移指南</a>。
+
+:::
+
+开发者可以使用 Subhosting REST API 配置项目、域名、KV 数据库和其他资源。
 
 ## 端点和认证
 

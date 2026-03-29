@@ -1,10 +1,10 @@
 ---
-title: "deno completions"
+title: "deno 补全"
 oldUrl: /runtime/manual/tools/completions/
 command: completions
 openGraphLayout: "/open_graph/cli-commands.jsx"
-openGraphTitle: "deno completions"
-description: "Generate shell completions for Deno"
+openGraphTitle: "deno 补全"
+description: "为 Deno 生成 shell 补全"
 ---
 
 您可以使用输出脚本来配置 `deno` 命令的自动补全。
@@ -13,9 +13,9 @@ description: "Generate shell completions for Deno"
 
 ## 示例
 
-### 配置 Bash shell 完成
+### 配置 Bash shell 补全
 
-```bash
+```sh
 deno completions bash > deno.bash
 
 if [ -d "/usr/local/etc/bash_completion.d/" ]; then
@@ -25,21 +25,21 @@ elif [ -d "/usr/share/bash-completion/completions/" ]; then
   sudo mv deno.bash /usr/share/bash-completion/completions/
   source /usr/share/bash-completion/completions/deno.bash
 else
-  echo "Please move deno.bash to the appropriate bash completions directory"
+  echo "请将 deno.bash 移动到合适的 bash 补全目录"
 fi
 ```
 
-### 配置 PowerShell shell 完成
+### 配置 PowerShell shell 补全
 
-```bash
+```sh
 deno completions powershell | Out-String | Invoke-Expression
 ```
 
-### 配置 zsh shell 完成
+### 配置 zsh shell 补全
 
 首先将以下内容添加到你的 `.zshrc` 文件中：
 
-```bash
+```sh
 fpath=(~/.zsh/completion $fpath)
 autoload -U compinit
 compinit
@@ -47,15 +47,15 @@ compinit
 
 然后运行以下命令：
 
-```bash
+```sh
 deno completions zsh > _deno
 mv _deno ~/.zsh/completion/_deno
 autoload -U compinit && compinit
 ```
 
-### 配置 fish shell 完成
+### 配置 fish shell 补全
 
-```bash
+```sh
 deno completions fish > completions.fish
 chmod +x ./completions.fish
 ```

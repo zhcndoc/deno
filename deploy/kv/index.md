@@ -31,7 +31,7 @@ Deno KV 仍在开发中，可能会发生变化。要使用它，必须向 Deno 
 ```ts
 const kv = await Deno.openKv();
 // 执行一些查询 ...
-await kv.close();
+kv.close();
 ```
 
 ## 创建、更新和读取键值对
@@ -137,7 +137,7 @@ const value = {
 };
 
 const res = await kv.atomic()
-  .check({ key, versionstamp: null }) // `null` 版本戳表示 '没有值'
+  .check({ key, versionstamp: null }) // `null` 版本戳表示“没有值”
   .set(key, value)
   .commit();
 if (res.ok) {
@@ -253,4 +253,4 @@ Deno.test("Preferences", async (t) => {
 
 ## 下一步
 
-到这里，你刚刚开始接触 Deno KV。确保查看我们关于 [Deno KV 键空间](./key_space) 的指南，以及 [这里](../tutorials/index.md) 的一系列 [教程和示例应用程序]。
+到这里，你刚刚开始接触 Deno KV。确保查看我们关于 [Deno KV 键空间](./key_space) 的指南，以及 [这里](../tutorials/index.md) 的一系列 [教程和示例应用程序]】【。

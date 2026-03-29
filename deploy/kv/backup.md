@@ -101,7 +101,7 @@ oldUrl:
 </deno-tab>
 </deno-tabs>
 
-现在访问 [Deno Deploy 控制台](https://dash.deno.com)，并在您的项目中点击 “KV” 选项卡。滚动到 “备份” 部分，点击 “AWS S3”。输入您之前创建的存储桶名称、访问密钥 ID 和秘密访问密钥，以及存储桶所在的区域。然后点击 “保存”。
+现在访问 [Deno Deploy 仪表板](https://console.deno.com)，然后点击您项目中的 “KV” 选项卡。滚动到 “备份” 部分，然后点击 “AWS S3”。输入您之前创建的存储桶名称、访问密钥 ID、秘密访问密钥以及存储桶所在的区域。然后点击 “保存”。
 
 <img
   src="./images/backup-add-bucket-to-dash.png"
@@ -178,7 +178,7 @@ Google Cloud Storage (GCS) 兼容 S3 协议，也可以用作备份目标。
 </deno-tab>
 </deno-tabs>
 
-现在访问 [Deno Deploy 控制台](https://dash.deno.com)，并在您的项目中点击 “KV” 选项卡。滚动到 “备份” 部分，点击 “Google Cloud Storage”。输入您之前创建的存储桶名称、访问密钥 ID 和秘密访问密钥，以及存储桶所在的区域。然后点击 “保存”。
+现在访问 [Deno Deploy 仪表板](https://console.deno.com)，然后点击您项目中的 “KV” 选项卡。滚动到 “备份” 部分，然后点击 “Google Cloud Storage”。输入您之前创建的存储桶名称、访问密钥 ID、秘密访问密钥以及存储桶所在的区域。然后点击 “保存”。
 
 备份将立即开始。一旦数据备份完成，并且连续备份处于活动状态，您将看到状态变为 “活跃”。
 

@@ -52,7 +52,9 @@ title: "配置 Deno 行为"
 
 ### NO_COLOR
 
-如果设置，此选项将阻止 Deno CLI 在写入 stdout 和 stderr 时发送 ANSI 颜色代码。有关此 _事实_ 标准的更多信息，请参见网站 [https://no-color.org](https://no-color.org/)。此标志的值可以在运行时访问，而无需读取环境变量的权限，方法是检查 `Deno.noColor` 的值。
+如果设置，将阻止 Deno CLI 在写入 stdout 和 stderr 时发送 ANSI 颜色代码。有关这一 _事实上的_ 标准的更多信息，请参阅网站
+[https://no-color.org](https://no-color.org/)。无需读取环境变量的权限，即可在运行时通过检查
+[`Deno.noColor`](/api/deno/~/Deno.noColor) 的值来访问此标志的值。
 
 ### NO_PROXY
 

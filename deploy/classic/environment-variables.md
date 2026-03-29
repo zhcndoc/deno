@@ -2,11 +2,9 @@
 title: "环境变量"
 ---
 
-:::info 旧版文档
+:::warning Sunsetting on July 20, 2026
 
-您正在查看的是 Deno Deploy Classic 的旧版文档。我们推荐
-迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅 <a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 

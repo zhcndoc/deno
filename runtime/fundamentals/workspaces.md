@@ -6,7 +6,9 @@ oldUrl: /runtime/manual/basics/workspaces
 
 Deno 支持工作区，也称为“单体仓库”，允许您同时管理多个相关且相互依赖的包。
 
-“工作区”是一个包含 `deno.json` 或 `package.json` 配置文件的文件夹集合。根 `deno.json` 文件定义了工作区：
+A "workspace" is a collection of folders containing
+[`deno.json`](/runtime/fundamentals/configuration/) or `package.json`
+configuration files. The root `deno.json` file defines the workspace:
 
 ```json title="deno.json"
 {

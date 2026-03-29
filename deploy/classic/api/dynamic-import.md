@@ -2,9 +2,11 @@
 title: "动态导入"
 ---
 
-### 规范符必须是静态确定的字符串字面量
+:::warning 2026 年 7 月 20 日停止支持
 
-在普通的动态导入中，规范符不需要在构建时确定。因此以下所有形式都是有效的：
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 ```ts title="Deno CLI 中有效的动态导入"
 // 1. 静态确定的字符串字面量

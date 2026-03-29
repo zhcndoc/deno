@@ -25,7 +25,7 @@ description: "启动一个安全的 Linux 微型虚拟机"
 
 在组织中创建一个新的沙箱。接受别名 `create` 和 `new`。
 
-```bash
+```sh
 deno sandbox create
 ```
 
@@ -33,7 +33,7 @@ deno sandbox create
 
 列出组织中的所有沙箱。接受别名 `list` 和 `ls`。
 
-```bash
+```sh
 deno sandbox list
 ```
 
@@ -41,7 +41,7 @@ deno sandbox list
 
 立即终止一个正在运行的沙箱。接受别名 `kill`、`remove` 和 `rm`。
 
-```bash
+```sh
 deno sandbox kill <sandbox-id>
 ```
 
@@ -49,7 +49,7 @@ deno sandbox kill <sandbox-id>
 
 在本地机器与运行中的沙箱之间复制文件。使用 `copy` 或其简写别名 `cp`。
 
-```bash
+```sh
 deno sandbox copy <paths...>
 ```
 
@@ -57,13 +57,13 @@ deno sandbox copy <paths...>
 
 在现有沙箱中运行任意命令。
 
-```bash
+```sh
 deno sandbox exec <sandbox-id> <command...>
 ```
 
 示例：
 
-```bash
+```sh
 deno sandbox exec sbx-1234 uptime
 ```
 
@@ -71,7 +71,7 @@ deno sandbox exec sbx-1234 uptime
 
 延长沙箱活动时间，避免超时结束。
 
-```bash
+```sh
 deno sandbox extend <sandbox-id> <timeout>
 ```
 
@@ -79,7 +79,7 @@ deno sandbox extend <sandbox-id> <timeout>
 
 示例：
 
-```bash
+```sh
 deno sandbox extend <sandbox-id> 30m
 ```
 
@@ -87,7 +87,7 @@ deno sandbox extend <sandbox-id> 30m
 
 打开与沙箱的交互式 SSH 会话。
 
-```bash
+```sh
 deno sandbox ssh <sandbox-id>
 ```
 
@@ -95,7 +95,7 @@ deno sandbox ssh <sandbox-id>
 
 将正在运行的沙箱的状态转变为 Deno Deploy 应用。
 
-```bash
+```sh
 deno sandbox deploy <sandbox-id> <app>
 ```
 
@@ -103,7 +103,7 @@ deno sandbox deploy <sandbox-id> <app>
 
 创建、列出和挂载持久块存储卷。
 
-```bash
+```sh
 deno sandbox volumes --help
 ```
 
@@ -111,7 +111,7 @@ deno sandbox volumes --help
 
 创建一个新卷。接受别名 `volumes create` 或 `volumes new`。
 
-```bash
+```sh
 deno sandbox volumes create <name>
 ```
 
@@ -119,7 +119,7 @@ deno sandbox volumes create <name>
 
 列出组织中的所有卷。接受别名 `volumes list` 或 `volumes ls`。
 
-```bash
+```sh
 deno sandbox volumes list
 ```
 
@@ -127,13 +127,13 @@ deno sandbox volumes list
 
 删除一个卷。接受别名 `volumes delete`、`volumes rm` 或 `volumes remove`。
 
-```bash
+```sh
 deno sandbox volumes delete <volume-id-or-slug>
 ```
 
 或者
 
-```bash
+```sh
 deno sandbox volumes delete <volume-slug>
 ```
 
@@ -141,13 +141,13 @@ deno sandbox volumes delete <volume-slug>
 
 创建卷的快照。接受卷 ID 或别名及快照别名。
 
-```bash
+```sh
 deno sandbox volumes snapshot <volume-id-or-slug> <snapshot-slug>
 ```
 
 或者
 
-```bash
+```sh
 deno sandbox volumes snapshot <volume-slug> <snapshot-slug>
 ```
 
@@ -155,7 +155,7 @@ deno sandbox volumes snapshot <volume-slug> <snapshot-slug>
 
 为沙箱创建和恢复文件系统快照。
 
-```bash
+```sh
 deno sandbox snapshots --help
 ```
 
@@ -163,7 +163,7 @@ deno sandbox snapshots --help
 
 创建沙箱的新快照。接受别名 `snapshots create` 或 `snapshots new`。需要卷 ID 或别名及快照别名。
 
-```bash
+```sh
 deno sandbox snapshots create <volume-id-or-slug> <snapshot-slug>
 ```
 
@@ -171,7 +171,7 @@ deno sandbox snapshots create <volume-id-or-slug> <snapshot-slug>
 
 列出组织中的所有快照。接受别名 `snapshots list` 或 `snapshots ls`。
 
-```bash
+```sh
 deno sandbox snapshots list
 ```
 
@@ -179,7 +179,7 @@ deno sandbox snapshots list
 
 删除快照。接受别名 `snapshots delete`、`snapshots rm` 或 `snapshots remove`。需要快照 ID 或别名。
 
-```bash
+```sh
 deno sandbox snapshots delete <id-or-slug>
 ```
 
@@ -187,6 +187,6 @@ deno sandbox snapshots delete <id-or-slug>
 
 切换当前 Deploy 组织或应用上下文，沙箱命令将使用此进行认证。
 
-```bash
+```sh
 deno sandbox switch
 ```

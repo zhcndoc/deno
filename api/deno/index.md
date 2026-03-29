@@ -719,24 +719,44 @@ mul({ a: 10, b: 2 }); // 20
 
 Deno 支持浏览器兼容的生命周期事件：
 
-- [`load`](https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event#:~:text=The%20load%20event%20is%20fired,for%20resources%20to%20finish%20loading.)：
-  当整个页面加载完毕，包括所有依赖资源（样式表和图像）时触发。
-- [`beforeunload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#:~:text=The%20beforeunload%20event%20is%20fired,want%20to%20leave%20the%20page.)：
-  当事件循环没有更多工作要做且即将退出时触发。
-  安排更多异步工作（如定时器或网络请求）将使程序继续运行。
-- [`unload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event)：
-  当文档或子资源被卸载时触发。
-- [`unhandledrejection`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event)：
-  当没有拒绝处理程序的 Promise 被拒绝时触发，即没有 `.catch()` 处理程序或 `.then()` 的第二参数。
-- [`rejectionhandled`](https://developer.mozilla.org/en-US/docs/Web/API/Window/rejectionhandled_event)：
-  当给已拒绝的 Promise 添加 `.catch()` 处理器时触发。
-  该事件仅在安装了 `unhandledrejection` 监听器且阻止事件传播（防止程序因错误终止）时触发。
+- [`load`](https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event#:~:text=The%20load%20event%20is%20fired,for%20resources%20to%20finish%20loading.):
+  在整个页面加载完成时触发，包括所有依赖资源，例如样式表和图片。
+- [`beforeunload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#:~:text=The%20beforeunload%20event%20is%20fired,want%20to%20leave%20the%20page.):
+  当事件循环没有更多工作可做并即将退出时触发。
+  安排更多异步工作（如定时器或网络请求）会使程序继续运行。
+- [`unload`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event):
+  当程序没有更多工作可做时触发。安排更多异步工作（如定时器或网络请求）**不会**让程序保持运行。
+- [`unhandledrejection`](https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event):
+  当一个没有拒绝处理器的 promise 被拒绝时触发，即一个没有 `.catch()` 处理器或 `.then()` 第二个参数的 promise。
+- [`rejectionhandled`](https://developer.mozilla.org/en-US/docs/Web/API/Window/rejectionhandled_event):
+  当向一个已经被拒绝的 promise 添加 `.catch()` 处理器时触发。只有在安装了 `unhandledrejection` 监听器且它阻止了事件传播时，才会触发此事件（否则程序会因错误终止）。
+- [`error`](https://developer.mozilla.org/en-US/docs/Web/API/Window/error_event):
+  当发生未捕获异常时触发。如果注册了监听器，它会阻止默认行为，即将错误打印到控制台并终止程序。
+
+Deno 也支持与 Node.js 兼容的生命周期事件：
+
+- [`process.on("beforeExit")`](https://nodejs.org/api/process.html#event-beforeexit):
+  当事件循环没有更多工作可做并即将退出时触发。
+  安排更多异步工作（如定时器或网络请求）会使程序继续运行。是 `beforeunload` Web 事件的对应事件。会在 `beforeunload` 事件之后立即触发。
+- [`process.on("exit")`](https://nodejs.org/api/process.html#event-exit): 当程序没有更多工作可做时触发。安排更多异步工作
+  （如定时器或网络请求）**不会**让程序保持运行。
+  是 `unload` Web 事件的对应事件。会在 `unload` 事件之后立即触发。
+- [`process.on("rejectionHandled")`](https://nodejs.org/api/process.html#event-rejectionhandled):
+  当向一个已经被拒绝的 promise 添加 `.catch()` 处理器时触发。是 `rejectionhandled` Web 事件的对应事件。会在 `rejectionhandled` 事件之后立即触发。
+- [`process.on("uncaughtException")`](https://nodejs.org/api/process.html#event-uncaughtexception):
+  当未捕获异常向上传播时触发。如果注册了监听器，它会阻止默认行为，即打印堆栈跟踪并退出。
+  是 `error` Web 事件的对应事件。会在 `error` 事件之后立即触发。
+- [`process.on("unhandledRejection")`](https://nodejs.org/api/process.html#event-unhandledrejection):
+  当 promise 被拒绝且未附加拒绝处理器时触发。
+  是 `unhandledrejection` Web 事件的对应事件。会在 `unhandledrejection` 事件之后立即触发。
 
 你可以利用这些事件编写程序初始化和清理代码。
 
-`load` 事件监听器可异步，且会被等待，事件无法被取消。
-`beforeunload` 监听器必须同步，可取消以保持程序运行。
-`unload` 监听器必须同步，且无法取消。
+`load` 事件的监听器可以是异步的，并且会被等待。此事件
+不能被取消。`beforeunload` 的监听器需要是同步的，并且可以
+被取消以保持程序运行。`unload` 事件的监听器需要是同步的，
+并且不能被取消。相同的规则适用于它们对应的 Node.js
+事件（`beforeExit` 和 `exit`）。
 
 ## main.ts
 

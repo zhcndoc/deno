@@ -5,28 +5,20 @@ oldUrl:
   - /deploy/manual/hello-world/
 ---
 
-:::info 旧版文档
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧文档。我们建议您迁移至新的 <a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。有关详细信息，请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
 本节记录的是传统的 Deno Deploy Classic 平台（dash.deno.com）。
 我们不再为 Deploy Classic 新增用户或组织。
 
-如果您已有 Deploy Classic 项目，可以继续使用，但我们强烈建议您开始迁移至
-新的 Deno Deploy 平台，网址为 [console.deno.com](https://console.deno.com)。
-
-主要区别：
-
-- Deploy Classic 已进入维护模式（无新功能，有限更新）。
-- 新功能（增强的 Node/NPM 支持、集成构建、指标、追踪、框架预设、静态资源、改进基础设施）已在 Deno Deploy 提供。
-
-您可以从这里开始使用新平台：
-[关于 Deno Deploy 早期访问](/deploy/)。
-
-迁移指南即将推出。与此同时，您可以设置新的 Deno Deploy 组织并重新部署应用。
-如需帮助，请联系 <a href="mailto:support@deno.com">support</a>。
+如果您已经有现有的 Deploy Classic 项目，您必须在
+关闭日期之前将它们迁移到新的 Deno Deploy 平台，地址为 [console.deno.com](https://console.deno.com)
+。有关分步说明，请参阅 [迁移指南](/deploy/migration_guide/)。
 
 ## 什么是 Deno Deploy Classic？
 

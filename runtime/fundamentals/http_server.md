@@ -17,7 +17,9 @@ Deno 内置了一个 HTTP 服务器 API，使您能够编写 HTTP 服务器。 [
 
 ### 一个 “Hello World” 服务器
 
-`Deno.serve` 函数接收一个处理函数，该函数将在每个传入请求时被调用，并且预计将返回一个响应（或一个解析为响应的 promise）。
+[`Deno.serve`](/api/deno/~/Deno.serve) 函数接受一个处理函数，
+该函数会在每个传入请求到达时被调用，并且预期返回一个
+响应（或一个解析为响应的 promise）。
 
 以下是一个示例服务器，它对每个请求返回“Hello, World！”响应：
 
@@ -35,12 +37,13 @@ Deno.serve((_req) => {
 deno run --allow-net server.ts
 ```
 
-还有更多关于使用 `Deno.serve` 的示例，见
-[示例集合](/examples/#network)。
+在[示例集](https://docs.deno.com/api/deno/~/Deno.serve)中还有更多使用 [`Deno.serve`](/api/deno/~/Deno.serve) 的示例。
 
 ### 监听特定端口
 
-默认情况下，`Deno.serve` 将在端口 `8000` 上监听，但可以通过将端口号作为选项包的第一个或第二个参数传入来更改此行为：
+默认情况下，[`Deno.serve`](/api/deno/~/Deno.serve) 会监听端口 `8000`，
+但您可以通过在选项对象中将端口号作为第一个
+或第二个参数传入来更改它：
 
 ```js title="server.ts"
 // 在端口 4242 上监听。
@@ -130,7 +133,7 @@ Deno.serve((req) => {
 
 :::
 
-请注意，当客户端挂断连接时，响应主体流会被“取消”。确保处理此情况。这可能会在附加到响应主体 `ReadableStream` 对象的 `WritableStream` 对象的 `write()` 调用中出现错误（例如通过 `TransformStream`）。
+当客户端挂断连接时，响应主体流会被“取消”。请确保处理此情况。这可能会在附加到响应主体 [`ReadableStream`](/api/web/~/ReadableStream) 对象的 [`WritableStream`](/api/web/~/WritableStream) 对象上的 `write()` 调用中表现为错误（例如通过 [`TransformStream`](/api/web/~/TransformStream)）。
 
 ### HTTPS 支持
 
@@ -179,7 +182,11 @@ HTTP 服务器具备自动压缩响应主体的功能。当响应发送到客户
 
 Deno 可以将传入的 HTTP 请求升级为 WebSocket。这使您能够在 HTTP 服务器上处理 WebSocket 端点。
 
-要将传入的 `Request` 升级为 WebSocket，您可以使用 `Deno.upgradeWebSocket` 函数。这返回一个包含 `Response` 和一个 Web 标准 `WebSocket` 对象的对象。返回的响应应被用于响应传入的请求。
+要将传入的 [`Request`](/api/web/~/Request) 升级为 WebSocket，您可以使用
+[`Deno.upgradeWebSocket`](/api/deno/~/Deno.upgradeWebSocket) 函数。此函数
+会返回一个由 [`Response`](/api/web/~/Response) 和一个 Web
+标准 [`WebSocket`](/api/web/~/WebSocket) 对象组成的对象。返回的响应
+应当用于响应传入请求。
 
 由于 WebSocket 协议是对称的，因此 `WebSocket` 对象与可用于客户端通信的对象是相同的。有关文档，可以在 [MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) 上找到。
 

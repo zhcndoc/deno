@@ -135,7 +135,8 @@ steps:
 
 最初，当这个工作流程运行时，缓存仍然是空的，像 `deno test` 这样的命令仍然需要下载依赖项，但当作业成功时，缓存的依赖项内容会被保存，任何后续运行都可以从缓存中恢复它们，而不是重新下载。
 
-为了演示，假设你有一个使用来自 [`@std/log`](https://jsr.io/@std/log) 的日志记录器的项目：
+为了演示，假设您有一个使用来自
+[`@std/log`](/runtime/reference/std/log/) 的 logger 的项目：
 
 ```json title="deno.json"
 {

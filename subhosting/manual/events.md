@@ -2,8 +2,18 @@
 title: 部署事件
 ---
 
-在部署执行的生命周期中，多个事件被记录到其执行日志中。通过使用
-[部署日志 API](https://apidocs.deno.com/#get-/deployments/-deploymentId-/app_logs)，这些事件日志可以用来理解和监控您的部署行为。
+:::warning 2026年7月20日停止支持
+
+subhosting v1 API 将于 2026 年 7 月 20 日关闭。请迁移到
+<a href="https://api.deno.com/v2/docs">v2 API</a>。请参阅
+<a href="/subhosting/manual/api_migration_guide/">API 迁移指南</a>以了解
+详情。
+
+:::
+
+在部署执行的生命周期内，会将多个事件记录到其执行日志中。使用
+[deployment logs API](https://apidocs.deno.com/#get-/deployments/-deploymentId-/app_logs)，
+这些事件日志可用于理解和监控部署的行为。
 
 ## 启动
 

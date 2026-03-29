@@ -38,8 +38,16 @@ export const sidebar = [
         href: "/subhosting/manual/events/",
       },
       {
-        title: "API 参考文档",
+        title: "v1 API 参考（旧版）",
         href: "https://apidocs.deno.com",
+      },
+      {
+        title: "v2 API 参考",
+        href: "https://api.deno.com/v2/docs",
+      },
+      {
+        title: "迁移指南（v1 到 v2）",
+        href: "/subhosting/manual/api_migration_guide/",
       },
     ],
   },

@@ -2,11 +2,10 @@
 title: "本地开发"
 ---
 
-:::info 旧版文档
+:::warning 2026年7月20日停用
 
-您正在查看 Deno Deploy Classic 的旧版文档。我们建议
-迁移至新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详见
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 

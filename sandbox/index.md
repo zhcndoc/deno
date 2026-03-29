@@ -127,7 +127,7 @@ await Sandbox.create({
 </deno-tab>
 <deno-tab value="python-async" label="Python (异步)">
 
-```python
+```py
 sdk = AsyncDenoDeploy()
 
 async with sdk.sandboxes.create(
@@ -145,7 +145,7 @@ async with sdk.sandboxes.create(
 </deno-tab>
 <deno-tab value="python" label="Python">
 
-```python
+```py
 sdk = DenoDeploy()
 
 with sdk.sandboxes.create(
@@ -183,7 +183,7 @@ Deno 沙箱 SDK 已在以下环境测试并支持：
 - **Node.js:** 版本 24 及以上
 - **Python:** 3.10 及以上
 
-你可以从任何能够向 Deno Deploy API 发起 HTTPS 出站请求的环境中使用 Deno 沙箱。JavaScript SDK 可在 [jsr](https://jsr.io/@deno/sandbox) 和 [npm](https://www.npmjs.com/package/@deno/sandbox) 以 `@deno/sandbox` 名称获得（JSR 包针对 Deno 使用进行了优化）。Python SDK 可在 [PyPI](https://pypi.org/project/deno-sandbox/) 以 `deno-sandbox` 名称获得。有关直接 API 访问，请参阅 [REST API 文档](https://console.deno.com/api/v2/docs)。
+你可以在任何能够向 Deno Deploy API 发起出站 HTTPS 请求的环境中使用 Deno 沙箱。JavaScript SDK 以 `@deno/sandbox` 的形式提供，支持 [jsr](https://jsr.io/@deno/sandbox) 和 [npm](https://www.npmjs.com/package/@deno/sandbox)（JSR 包针对 Deno 使用进行了优化）。Python SDK 以 `deno-sandbox` 的形式提供，见 [PyPI](https://pypi.org/project/deno-sandbox/)。如需直接使用 API，请参阅 [REST API 文档](https://api.deno.com/v2/docs)。
 
 :::note await using 支持
 

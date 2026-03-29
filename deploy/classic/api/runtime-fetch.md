@@ -5,10 +5,11 @@ oldUrl:
   - /deploy/api/runtime-fetch/
 ---
 
-:::info 旧文档说明
+:::warning 2026年7月20日停止服务
 
-您正在查看 Deno Deploy Classic 的旧文档。我们推荐您迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
@@ -53,7 +54,7 @@ function fetch(
 ```ts
 async function handler(req: Request): Promise<Response> {
   const resp = await fetch("https://api.github.com/users/denoland", {
-    // 这里的 init 对象包含一个 headers 对象，其中包含指示我们接受的响应类型的头部。
+    // 此处的 init 对象包含一个 headers 对象，其中包含指示我们接受的响应类型的头部。
     // 我们没有指定 method 字段，因为默认情况下 fetch 发起的是 GET 请求。
     headers: {
       accept: "application/json",

@@ -41,7 +41,8 @@ Jupyter 笔记本开箱即用。
 
 ## 丰富内容输出
 
-`Deno.jupyter` 命名空间提供了用于在笔记本中显示丰富内容的辅助函数，
+[`Deno.jupyter`](/api/deno/~/Deno.jupyter) 命名空间提供用于
+在笔记本中显示丰富内容的辅助函数，
 [使用 Jupyter 支持的 MIME 类型](https://docs.jupyter.org/en/latest/reference/mimetype.html)。
 
 ---
@@ -73,7 +74,9 @@ _返回普通文本和 HTML 输出的对象示例。_
 
 :::
 
-这是一个常规函数，因此你可以使用任何库来格式化输出 —— 例如，使用 `@std/fmt/colors` 提供彩色输出：
+这是一个普通函数，因此你可以使用任何你想要的库来格式化
+输出 - 例如，使用 [`@std/fmt/colors`](/runtime/reference/std/fmt/) 来提供
+彩色输出：
 
 ```ts
 import * as colors from "jsr:@std/fmt/colors";
@@ -87,7 +90,8 @@ import * as colors from "jsr:@std/fmt/colors";
 }
 ```
 
-你还可以使用 `Deno.jupyter.display` 函数直接显示 MIME 集合：
+你也可以使用 [`Deno.jupyter.display`](/api/deno/~/Deno.jupyter.display)
+函数直接显示 MIME bundle：
 
 ```js
 await Deno.jupyter.display({
@@ -103,9 +107,11 @@ await Deno.jupyter.display({
 
 ---
 
-`Deno.jupyter` 提供了若干用于常见媒体类型的丰富输出的辅助方法。
+[`Deno.jupyter`](/api/deno/~/Deno.jupyter) 提供了多个用于
+常见媒体类型丰富输出的辅助方法。
 
-`Deno.jupyter.html` 是一个标记模板，将提供的字符串作为 HTML 渲染在笔记本中。
+[`Deno.jupyter.html`](/api/deno/~/Deno.jupyter.html) 是一个带标签的模板，它
+会将提供的字符串渲染为笔记本中的 HTML。
 
 ```js
 Deno.jupyter.html`<h1>Hello, world!</h1>
@@ -115,7 +121,8 @@ Deno.jupyter.html`<h1>Hello, world!</h1>
 
 ![`Deno.jupyter.html` API 示例](../images/jupyter-html.png)
 
-`Deno.jupyter.md` 是一个标记模板，将提供的字符串作为 Markdown 文档在笔记本中渲染。
+[`Deno.jupyter.md`](/api/deno/~/Deno.jupyter.md) 是一个带标签的模板，它
+会将提供的字符串渲染为笔记本中的 Markdown 文档。
 
 ```js
 Deno.jupyter
@@ -126,7 +133,8 @@ Deno.jupyter
 
 ![`Deno.jupyter.md` API 示例](../images/jupyter-md.png)
 
-`Deno.jupyter.svg` 是一个标记模板，将提供的字符串作为 SVG 图形在笔记本中渲染。
+[`Deno.jupyter.svg`](/api/deno/~/Deno.jupyter.svg) 是一个带标签的模板，它
+会将提供的字符串渲染为笔记本中的 SVG 图形。
 
 ```js
 Deno.jupyter.svg`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -136,7 +144,8 @@ Deno.jupyter.svg`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 
 ![`Deno.jupyter.svg` API 示例](../images/jupyter-svg.png)
 
-`Deno.jupyter.image` 是一个函数，将渲染 JPG 或 PNG 图像。你可以传入文件路径或已读取的字节：
+[`Deno.jupyter.image`](/api/deno/~/Deno.jupyter.image) 是一个函数，它会
+渲染 JPG 或 PNG 图像。你可以传入文件路径，或者已经读取的字节：
 
 ```js
 Deno.jupyter.image("./cat.jpg");
@@ -159,7 +168,9 @@ Deno.jupyter.image(data);
 
 ## IO pub 通道广播
 
-`Deno.jupyter.broadcast` 允许将消息发布到 IO pub 通道，允许在单元格被评估时提供实时更新。
+[`Deno.jupyter.broadcast`](/api/deno/~/Deno.jupyter.broadcast) 允许向 IO pub 通道发布
+消息，从而在单元格
+求值时提供实时更新。
 
 考虑以下示例，该示例在开始计算之前打印一条消息，计算完成时再打印另一条消息：
 
@@ -182,7 +193,7 @@ await Deno.jupyter.broadcast("update_display_data", {
 
 <figure>
 
-<video class="w-full" alt="`Deno.jupyter.broadcast` API 示例" autoplay muted loop playsinline controls src="../images/jupyter-broadcast.mp4"></video>
+<video class="w-full" alt="[`Deno.jupyter.broadcast`](/api/deno/~/Deno.jupyter.broadcast) API 示例" autoplay muted loop playsinline controls src="../images/jupyter-broadcast.mp4"></video>
 
 <figcaption><span style="font-family: monospace;">Deno.jupyter.broadcast</span> API 示例</figcaption>
 

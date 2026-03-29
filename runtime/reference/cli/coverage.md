@@ -4,18 +4,20 @@ oldUrl: /runtime/manual/tools/coverage/
 command: coverage
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno coverage"
-description: "Generate a coverage report for your code"
+description: "为您的代码生成覆盖率报告"
 ---
+
+`deno coverage` 会根据从 [`deno test --coverage`](/runtime/reference/cli/test/#code-coverage) 收集的数据生成覆盖率报告。
 
 ## 包含和排除
 
-默认情况下，覆盖率包括您本地文件系统中存在的任何代码及其导入。
+默认情况下，覆盖率会包含本地文件系统中存在的任何代码及其导入内容。
 
 您可以通过使用 `--include` 和 `--exclude` 选项来自定义包含和排除。
 
 您可以通过使用 `--include` 选项并自定义正则表达式模式来扩展覆盖率，以包括不在本地文件系统上的文件。
 
-```bash
+```sh
 deno coverage --include="^file:|https:"
 ```
 
@@ -25,11 +27,11 @@ deno coverage --include="^file:|https:"
 
 这相当于：
 
-```bash
+```sh
 deno coverage --exclude="test\.(js|mjs|ts|jsx|tsx)$"
 ```
 
-此默认设置防止您的测试代码为您的覆盖率报告做出贡献。URL 要匹配，它必须与包含模式匹配，且不与排除模式匹配。
+此默认设置可防止您的测试代码为覆盖率报告做出贡献。URL 要匹配，它必须与包含模式匹配，且不与排除模式匹配。
 
 ## 忽略代码
 
@@ -109,13 +111,13 @@ console.log("This line is not ignored");
 
 默认情况下，我们支持 Deno 自己的覆盖率格式 - 但您也可以输出覆盖率报告为 [lcov 格式](https://github.com/linux-test-project/lcov?tab=readme-ov-file)（一种用于描述代码覆盖率数据的标准文件格式），或以 html 格式。
 
-```bash
+```sh
 deno coverage --lcov --output=cov.lcov
 ```
 
 此 lcov 文件可与支持 lcov 格式的其他工具一起使用。
 
-```bash
+```sh
 deno coverage --html
 ```
 
@@ -125,14 +127,14 @@ deno coverage --html
 
 从工作区的默认覆盖配置生成覆盖率报告。
 
-```bash
+```sh
 deno test --coverage
 deno coverage
 ```
 
 从具有自定义名称的覆盖配置生成覆盖率报告。
 
-```bash
+```sh
 deno test --coverage=custom_profile_name
 deno coverage custom_profile_name
 ```
@@ -147,13 +149,13 @@ deno coverage custom_profile_name
 
 仅包括匹配特定模式的覆盖率 - 在这种情况下，仅包括 main.ts 的测试。
 
-```bash
+```sh
 deno coverage --include="main.ts"
 ```
 
 将默认覆盖配置中的测试覆盖率导出到 lcov 文件。
 
-```bash
+```sh
 deno test --coverage
 deno coverage --lcov --output=cov.lcov
 ```

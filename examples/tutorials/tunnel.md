@@ -110,22 +110,22 @@ export const load: PageServerLoad = async () => {
 
 ```svelte title="src/routes/+page.svelte"
 <script lang="ts">
-	export let data: {
-		message: string;
-		username: string;
-		accent: string;
-	};
+  export let data: {
+    message: string;
+    username: string;
+    accent: string;
+  };
 
-	const { message, username, accent } = data;
+  const { message, username, accent } = data;
 </script>
 
 <h1>环境变量示例</h1>
 <p>
-    这条信息是从 <code>PUBLIC_TUTORIAL_MESSAGE</code> 读取的：<br />
-    <strong style="color: {accent}">{message}</strong>
+  这条消息从 <code>PUBLIC_TUTORIAL_MESSAGE</code> 读取：<br />
+  <strong style="color: {accent}">{message}</strong>
 </p>
 <p>
-    你好 <strong style="color: {accent}">{username}</strong>！尝试编辑你的环境变量并刷新页面，你将在构建时看到值的变化。
+  你好，<strong style="color: {accent}">{username}</strong>！试着编辑你的环境变量并刷新页面，看看值如何在构建时发生变化。
 </p>
 ```
 
@@ -137,7 +137,7 @@ export const load: PageServerLoad = async () => {
 
 | 名称               | 值                                   |
 | ------------------ | ------------------------------------ |
-| TUTORIAL_MESSAGE   | This message is set in Deno Deploy  |
+| TUTORIAL_MESSAGE   | 此消息已在 Deno Deploy 中设置        |
 | TUTORIAL_USERNAME  | [你的名字]                          |
 | TUTORIAL_ACCENT    | #0099ff                             |
 

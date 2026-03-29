@@ -4,8 +4,16 @@ oldUrl:
   - /deploy/api/rest/
 ---
 
-要构建 Deno Deploy 的子托管，了解系统内的一些关键资源是很有帮助的。这些资源在
-[REST API](../api/index.md) 中也有体现。
+:::warning 2026年7月20日停止服务
+
+subhosting v1 API 将于 2026年7月20日关闭。请迁移到
+<a href="https://api.deno.com/v2/docs">v2 API</a>。详情请参阅
+<a href="/subhosting/manual/api_migration_guide/">API 迁移指南</a>。
+
+:::
+
+要使用 Deno Deploy 构建子托管，理解系统中的一些关键资源会很有帮助。这些资源也体现在
+[REST API](../api/index.md) 中。
 
 ![子托管资源概述](./images/subhosting-org-structure.svg)
 

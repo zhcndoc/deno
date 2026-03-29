@@ -11,15 +11,96 @@ openGraphTitle: "deno fmt"
 description: "使用 Deno 内置的格式化工具格式化你的代码"
 ---
 
-要查看 `deno fmt` 可用的 CLI 选项列表，请运行：
+Deno 自带一个基于 [dprint](https://dprint.dev/) 的内置代码格式化工具，
+它会自动将你的代码格式化为一致的风格。有关更广泛的概述，请参见
+[Linting and Formatting](/runtime/fundamentals/linting_and_formatting/)。
+
+## 基本用法
+
+格式化当前目录中所有受支持的文件：
 
 ```sh
-deno fmt --help
+deno fmt
+```
+
+格式化特定文件或目录：
+
+```sh
+deno fmt main.ts src/
+```
+
+## 监视模式
+
+在文件发生更改时自动重新格式化文件：
+
+```sh
+deno fmt --watch
+```
+
+## 在 CI 中检查格式
+
+使用 `--check` 验证文件是否已格式化，而不修改它们。若有任何文件未格式化，该命令
+会以非零状态码退出：
+
+```sh
+deno fmt --check
+```
+
+添加 `--fail-fast` 可在遇到第一个未格式化文件时停止，而不是报告全部
+文件，这在大型代码库中很有用：
+
+```sh
+deno fmt --check --fail-fast
+```
+
+## 格式化 stdin
+
+格式化通过 stdin 传入的代码——这对编辑器集成很有用：
+
+```sh
+cat main.ts | deno fmt -
+```
+
+## 配置格式化器
+
+在你的 `deno.json` 中自定义格式化选项：
+
+```json title="deno.json"
+{
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 80,
+    "indentWidth": 2,
+    "semiColons": true,
+    "singleQuote": false,
+    "proseWrap": "preserve"
+  }
+}
+```
+
+查看 [Configuration](/runtime/fundamentals/configuration/#formatting) 页面
+了解所有可用选项。
+
+## 包含和排除文件
+
+在 `deno.json` 中指定要格式化的文件：
+
+```json title="deno.json"
+{
+  "fmt": {
+    "include": ["src/"],
+    "exclude": ["src/testdata/", "src/generated/**/*.ts"]
+  }
+}
+```
+
+你也可以在命令行中排除文件：
+
+```sh
+deno fmt --ignore=dist/,build/
 ```
 
 ## 支持的文件类型
-
-Deno 带有内置的代码格式化工具，可以自动格式化以下文件：
 
 <!-- This list needs to be updated along with https://github.com/denoland/deno/blob/main/cli/tools/fmt.rs -->
 
@@ -55,15 +136,6 @@ Deno 带有内置的代码格式化工具，可以自动格式化以下文件：
 
 :::
 
-## 在 CI 中检查格式
-
-使用 `--check` 以验证文件是否格式正确，而不做任何修改。添加
-`--fail-fast` 可以在发现第一个未格式化文件时停止，而不是报告所有未格式文件，这在大型代码库中非常有用：
-
-```sh
-deno fmt --check --fail-fast
-```
-
 ## 忽略代码
 
 ### JavaScript / TypeScript / JSONC
@@ -85,11 +157,11 @@ export const identity = [
 
 通过在接下来的项目前加上 `<!--- deno-fmt-ignore -->` 注释来忽略格式化：
 
-```html
+```html title="HTML"
 <html>
   <body>
     <p>
-      Hello there
+      你好
       <!-- deno-fmt-ignore -->
     </p>
   </body>
@@ -104,9 +176,6 @@ export const identity = [
 
 通过在接下来的项目前加上 `# deno-fmt-ignore` 注释来忽略格式化：
 
-```html
+```html title="HTML"
 # deno-fmt-ignore aaaaaa: bbbbbbb
 ```
-## 关于代码检查和格式化的更多信息
-
-有关 Deno 中代码检查和格式化的更多信息，以及这两个工具之间的区别，请访问我们基础知识部分的 [代码检查和格式化](/runtime/fundamentals/linting_and_formatting/) 页面。

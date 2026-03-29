@@ -5,18 +5,17 @@ oldUrl:
   - /deploy/kv/manual/queue_overview/
 ---
 
-:::info 旧文档
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧文档。我们建议迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅 <a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
 <deno-admonition></deno-admonition>
 
-Deno 运行时包含一个队列 API，支持异步处理大型工作负载，并确保队列消息的至少一次投递。队列可以用于在 web 应用程序中卸载任务，或安排未来某个时间的工作单元。
+Deno 运行时包含一个队列 API，支持异步处理大型工作负载，并确保队列消息的至少一次投递。队列可用于在 web 应用程序中卸载任务，或安排未来某个时间执行工作单元。
 
-您将使用的主要 API 在 `Deno.Kv` 命名空间中，分别是 [ `enqueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.enqueue) 和 [ `listenQueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.listenQueue)。
+您将使用的主要 API 位于 `Deno.Kv` 命名空间中，分别是 [ `enqueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.enqueue) 和 [ `listenQueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.listenQueue)。
 
 ## 入队消息
 
@@ -173,7 +172,7 @@ Deno Deploy 提供了全球范围内、无服务器、分布式的队列 API 实
 
 ### 定价细节和限制
 
-- [ `enqueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.enqueue) 与其他 [ `Deno.Kv`](https://docs.deno.com/api/deno/~/Deno.Kv) 写入操作一样对待。 入队的消息会占用 KV 存储和写入单位。
+- [ `enqueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.enqueue) 与其他 [ `Deno.Kv`](https://docs.deno.com/api/deno/~/Deno.Kv) 写入操作一样对待。入队的消息会占用 KV 存储和写入单位。
 - 通过 [ `listenQueue`](https://docs.deno.com/api/deno/~/Deno.Kv.prototype.listenQueue) 发送的消息会消耗请求和 KV 写入单位。
 - 有关更多信息，请参见 [定价细节](https://deno.com/deploy/pricing)。
 

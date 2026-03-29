@@ -1,6 +1,6 @@
 ---
 title: "Web Platform APIs"
-description: "A guide to the Web Platform APIs available in Deno. Learn about fetch, events, workers, storage, and other web standard APIs, including implementation details and deviations from browser specifications."
+description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、worker、存储以及其他 Web 标准 API，包括实现细节和与浏览器规范的偏差。"
 oldUrl:
   - /runtime/manual/runtime/navigator_api/
   - /runtime/manual/runtime/web_platform_apis/
@@ -11,7 +11,7 @@ oldUrl:
 
 Deno 简化网络和云开发的一种方式是使用标准的 Web 平台 API（如 `fetch`、WebSockets 等）而不是专有 API。这意味着如果你曾经为浏览器开发过，你可能已经对 Deno 有了一定的熟悉；而如果你正在学习 Deno，你也在投资于对网络的了解。
 
-<a href="/api/web/" class="docs-cta runtime-cta">Explore supported Web APIs</a>
+<a href="/api/web/" class="docs-cta runtime-cta">查看受支持的 Web API</a>
 
 下面我们将重点介绍一些 Deno 支持的标准 Web API。
 
@@ -27,21 +27,31 @@ Deno 简化网络和云开发的一种方式是使用标准的 Web 平台 API（
 
 ### 规范偏差
 
-- Deno 用户代理没有 cookie 存储。因此，响应中的 `set-cookie` 头不会被处理，也不会从可见的响应头中过滤。
-- Deno 不遵循同源策略，因为 Deno 用户代理当前没有原始的概念，也没有 cookie 存储。这意味着 Deno 不需要保护防止跨源泄露身份验证数据。因此 Deno 不实现 WHATWG `fetch` 规范的以下部分：
-  - 第 `3.1.` 节：`'Origin'` 头。
-  - 第 `3.2.` 节：CORS 协议。
-  - 第 `3.5.` 节：CORB。
-  - 第 `3.6.` 节：`'Cross-Origin-Resource-Policy'` 头。
-  - `原子 HTTP 重定向处理`。
+- Deno 用户代理没有 cookie jar。因此，响应中的 `set-cookie`
+  头不会被处理，也不会从可见的响应头中过滤掉。
+- Deno 不遵循同源策略，因为 Deno 用户代理
+  目前没有“源”的概念，也没有 cookie jar。这意味着 Deno 不需要防止已认证数据跨源泄漏。正因为如此，Deno 没有实现 WHATWG `fetch` 规范中的以下部分：
+  - 第 `3.1. 'Origin' header` 节。
+  - 第 `3.2. CORS protocol` 节。
+  - 第 `3.5. CORB` 节。
+  - 第 `3.6. 'Cross-Origin-Resource-Policy' header` 节。
+  - `Atomic HTTP redirect handling`。
   - `opaqueredirect` 响应类型。
-- 使用 `redirect` 模式为 `manual` 的 `fetch` 会返回 `basic` 响应，而不是 `opaqueredirect` 响应。
-- 规范对于如何处理 [`file:` URLs](https://fetch.spec.whatwg.org/#scheme-fetch) 上并不明确。Firefox 是唯一实施 `file:` URLs 获取的主流浏览器，即使如此，默认情况下它不工作。从 Deno 1.16 开始，Deno 支持获取本地文件。请参阅下一节以获取详情。
-- `request` 和 `response` 头保护已实现，但与浏览器不同，没有任何对允许哪些头名称的限制。
-- `referrer`、`referrerPolicy`、`mode`、`credentials`、`cache`、`integrity`、`keepalive` 和 `window` 属性及其在 `RequestInit` 中的相关行为未实现。相关字段不存在于 `Request` 对象上。
-- 支持请求体上传流（在 HTTP/1.1 和 HTTP/2 上）。与当前的 fetch 提案不同，实施方案支持双向流。
-- 在迭代 `headers` 时，`set-cookie` 头不会被连接。此行为正在
-  [进行规范](https://github.com/whatwg/fetch/pull/1346)。
+- 当 `redirect` 模式为 `manual` 时，`fetch` 返回的是 `basic` 响应
+  而不是 `opaqueredirect` 响应。
+- 规范对于如何处理
+  [`file:` URLs 的方式很模糊](https://fetch.spec.whatwg.org/#scheme-fetch)。
+  Firefox 是唯一实现了获取 `file:` URLs 的主流浏览器，
+  即便如此默认情况下也无法工作。截至 Deno 1.16，Deno 支持
+  获取本地文件。详情见下一节。
+- `request` 和 `response` 的 header guard 已实现，但与浏览器不同，
+  对允许的 header 名称没有任何限制。
+- `RequestInit` 中的 `referrer`、`referrerPolicy`、`mode`、`credentials`、`cache`、`integrity`、
+  `keepalive` 和 `window` 属性及其相关行为未实现。相关字段不会出现在
+  [`Request`](/api/web/~/Request) 对象上。
+- 支持请求体上传流式传输（在 HTTP/1.1 和 HTTP/2 上）。与当前的 fetch 提案不同，实现支持 duplex 流式传输。
+- 在 `headers` 迭代器中遍历时，`set-cookie` 头不会被拼接。此行为正在
+  [被规范化的过程中](https://github.com/whatwg/fetch/pull/1346)。
 
 ### 获取本地文件
 
@@ -145,7 +155,8 @@ const worker = new Worker("./workers/hello.ts", { type: "module" });
 
 :::note
 
-对于上述用例，最好完整传递 URL 而不是依赖 `--location`。如有需要，你可以使用 `URL` 构造函数手动构建相对 URL。
+对于上述用例，最好直接传入完整 URL，而不是依赖 `--location`。如果需要，你可以使用
+[`URL`](/api/web/~/URL) 构造函数手动以相对 URL 为基础进行解析。
 
 :::
 
@@ -185,7 +196,7 @@ Worker 可用于在多个线程上运行代码。每个 `Worker` 实例在单独
 
 当前 Deno 仅支持 `module` 类型的 workers；因此在创建新 worker 时务必传递 `type: "module"` 选项。
 
-在主 worker 中使用相对模块说明符仅在 CLI 传递 `--location <href>` 时受支持。这不推荐用于可移植性。你可以使用 `URL` 构造函数和 `import.meta.url` 来轻松创建某个附近脚本的说明符。然而，专用 worker 默认具有位置及此能力。
+主 worker 中对相对模块标识符的使用，仅在 CLI 传递了 `--location <href>` 时才受支持。这不利于可移植性。你可以改用 [`URL`](/api/web/~/URL) 构造函数和 `import.meta.url`，轻松为附近的脚本创建一个标识符。不过，专用 worker 默认具有位置，因此也具备此能力。
 
 ```ts
 // 好

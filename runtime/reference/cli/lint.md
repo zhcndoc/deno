@@ -12,9 +12,96 @@ openGraphTitle: "deno lint"
 description: "运行 Deno linter 来检查您的代码错误并应用自动修复"
 ---
 
+Deno 附带一个内置的 linter，用于分析您的代码中可能存在的错误、
+漏洞以及风格问题。有关更广泛的概述，请参阅
+[Linting and Formatting](/runtime/fundamentals/linting_and_formatting/)。
+
+## 基本用法
+
+检查当前目录中的所有 TypeScript 和 JavaScript 文件：
+
+```sh
+deno lint
+```
+
+检查特定文件或目录：
+
+```sh
+deno lint src/ main.ts
+```
+
+## 监视模式
+
+当文件发生变化时自动重新检查：
+
+```sh
+deno lint --watch
+```
+
+## 在 CI 中使用
+
+`deno lint` 在发现违规时会以非零状态码退出，因此适用于 CI 流水线：
+
+```sh
+deno lint
+deno fmt --check
+deno test
+```
+
 ## 可用规则
 
-要查看支持的规则的完整列表，请访问 [规则列表](/lint/) 文档页面。
+Deno 的 linter 包含 100 多条规则。查看所有可用规则：
+
+```sh
+deno lint --rules
+```
+
+如需带有文档的完整列表，请访问 [lint rules](/lint/) 参考。
+
+## 在 `deno.json` 中配置规则
+
+在您的 `deno.json` 中自定义启用哪些规则：
+
+```json title="deno.json"
+{
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": ["ban-untagged-todo"],
+      "exclude": ["no-unused-vars"]
+    }
+  }
+}
+```
+
+- **`tags`** — 要启用的规则集。可用标签：`recommended`、`fresh`
+- **`include`** — 要启用的额外单条规则
+- **`exclude`** — 即使被标签包含，也要禁用的规则
+
+有关所有可用选项，请参阅 [Configuration](/runtime/fundamentals/configuration/#linting) 页面。
+
+## 包含和排除文件
+
+在 `deno.json` 中指定要检查的文件：
+
+```json title="deno.json"
+{
+  "lint": {
+    "include": ["src/"],
+    "exclude": ["src/testdata/", "src/generated/**/*.ts"]
+  }
+}
+```
+
+您也可以从命令行排除文件：
+
+```sh
+deno lint --ignore=dist/,build/
+```
+
+## Lint 插件
+
+您可以使用 [lint plugins](/runtime/reference/lint_plugins/) 通过自定义规则扩展 linter。
 
 ## 忽略指令
 
@@ -126,8 +213,8 @@ function foo(): any {
 console.log(42);
 ```
 
-请注意，忽略 `ban-unused-ignore` 本身仅通过文件级忽略指令有效。这意味着像 `// deno-lint-ignore ban-unused-ignore` 这样的行级指令完全无效。如果您出于某些特殊原因想要忽略 `ban-unused-ignore`，请确保将其作为文件级忽略指令添加。
-
-## 更多关于 linting 和格式化的信息
-
-有关 Deno 中 linting 和格式化的更多信息，以及这两种工具之间的差异，请访问我们基础部分的 [Linting 和格式化](/runtime/fundamentals/linting_and_formatting/) 页面。
+请注意，忽略 `ban-unused-ignore` 本身仅可通过文件级别的
+忽略指令实现。这意味着按行指令，例如
+`// deno-lint-ignore ban-unused-ignore`，完全不起作用。如果您出于某些特殊原因想要
+忽略 `ban-unused-ignore`，请务必将其作为
+文件级别忽略指令添加。

@@ -1,89 +1,74 @@
 ---
-title: "Connect to Prisma Postgres"
+title: "连接到 Prisma Postgres"
 ---
 
-:::info Legacy Documentation
+:::warning 2026 年 7 月 20 日停止服务
 
-You are viewing legacy documentation for Deno Deploy Classic. We recommend
-migrating to the new
-<a href="/deploy/">Deno Deploy</a> platform.
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅 <a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
-This tutorial covers how to connect to a Prisma Postgres database from an
-application deployed on Deno Deploy.
+本教程介绍如何从部署在 Deno Deploy 上的应用程序连接到 Prisma Postgres 数据库。
 
-## Setup Postgres
+## 设置 Postgres
 
-There are several ways to set up a Prisma Postgre database for your Prisma
-project. This guide covers the most common approaches.
+为你的 Prisma 项目设置 Prisma Postgre 数据库有几种方法。本指南涵盖最常见的几种方式。
 
-### Method 1: Using Prisma CLI
+### 方法 1：使用 Prisma CLI
 
-Run the following command to initialize a new Prisma project with a database:
+运行以下命令，用数据库初始化一个新的 Prisma 项目：
 
 ```bash
 npx prisma init --db
 ```
 
-This will prompt you to select your preferred region and database name. Once
-completed, you'll find the `DATABASE_URL` connection string in your `.env` file.
+这会提示你选择偏好的区域和数据库名称。完成后，你会在 `.env` 文件中找到 `DATABASE_URL` 连接字符串。
 
-### Method 2: Using `npx create-db`
+### 方法 2：使用 `npx create-db`
 
-Alternatively, you can use the dedicated database creation tool:
+或者，你也可以使用专门的数据库创建工具：
 
 ```bash
 npx create-db@latest
 ```
 
-This command will provide you with two connection strings tied to the same
-database:
+该命令会为你提供两条指向同一数据库的连接字符串：
 
-**Prisma ORM optimized connection string:**
+**Prisma ORM 优化连接字符串：**
 
 ```txt
 prisma+postgres://accelerate.prisma-data.net/?api_key=<api_key>
 ```
 
-**Standard Prisma Postgres connection string:**
+**标准 Prisma Postgres 连接字符串：**
 
 ```txt
 postgresql://<username>:<password>@db.prisma.io:5432/postgres
 ```
 
-In order to keep the database created with `npx create-db`, you must follow
-through with the claim process. That can be done via the claim link provided in
-the terminal.
+为了保留通过 `npx create-db` 创建的数据库，你必须完成认领流程。可以通过终端中提供的认领链接来完成。
 
-The Prisma ORM optimized connection string (`prisma+postgres://`) only works
-with the Prisma ORM, while the standard Prisma Postgre connection string can be
-used with other database tools and libraries.
+Prisma ORM 优化连接字符串（`prisma+postgres://`）只能与 Prisma ORM 一起使用，而标准 Prisma Postgre 连接字符串可用于其他数据库工具和库。
 
-## Create a project in Deno Deploy
+## 在 Deno Deploy 中创建项目
 
-Next, let's create a project in Deno Deploy Classic and set it up with the
-requisite environment variables:
+接下来，让我们在 Deno Deploy Classic 中创建一个项目，并设置所需的环境变量：
 
-1. Go to [https://dash.deno.com/new](https://dash.deno.com/new) (Sign in with
-   GitHub if you didn't already) and click on **Create an empty project** under
-   **Deploy your own code**.
-2. Now click on the **Settings** button available on the project page.
-3. Navigate to **Environment Variables** Section and add the following secret.
+1. 访问 [https://dash.deno.com/new](https://dash.deno.com/new)（如果你还没有登录，请使用 GitHub 登录），然后在 **Deploy your own code** 下点击 **Create an empty project**。
+2. 现在点击项目页面上的 **Settings** 按钮。
+3. 导航到 **Environment Variables** 部分，并添加以下密钥。
 
-- `DATABASE_URL` - The value should be set to the connection string you saved in
-  the last step.
+- `DATABASE_URL` - 其值应设置为你在上一步保存的连接字符串。
 
 ![postgres_env_variable](../docs-images/prisma_postgres_env_variable.png)
 
-## Write code that connects to Postgres
+## 编写连接到 Postgres 的代码
 
-Now that you have your database set up, let's create a simple application that
-connects to the Prisma Postgres database using Prisma ORM.
+既然数据库已经设置好了，我们来创建一个使用 Prisma ORM 连接到 Prisma Postgres 数据库的简单应用。
 
-### 1. Install dependencies
+### 1. 安装依赖
 
-First, install the required dependencies:
+首先，安装所需的依赖项：
 
 ```bash
 deno install npm:@prisma/client
@@ -93,26 +78,23 @@ deno install npm:dotenv-cli
 
 :::note
 
-The `dotenv-cli` package is needed because Prisma Client doesn't read `.env`
-files by default on Deno.
+之所以需要 `dotenv-cli` 包，是因为 Prisma Client 默认不会在 Deno 上读取 `.env` 文件。
 
 :::
 
-### 2. Create the database schema
+### 2. 创建数据库模式
 
-With your database connection configured, you can now apply the data model to
-your database:
+配置好数据库连接后，你现在可以将数据模型应用到数据库中：
 
 ```bash
 deno run -A npm:prisma migrate dev --name init
 ```
 
-This command creates a new SQL migration file and runs it against your database.
+该命令会创建一个新的 SQL 迁移文件，并将其应用到你的数据库上。
 
-### 3. Update your Prisma schema
+### 3. 更新你的 Prisma schema
 
-Edit your `prisma/schema.prisma` file to define a `Log` model and configure it
-for Deno:
+编辑你的 `prisma/schema.prisma` 文件，定义一个 `Log` 模型并为 Deno 进行配置：
 
 ```ts
 generator client {
@@ -140,9 +122,9 @@ enum Level {
 }
 ```
 
-### 4. Create your application
+### 4. 创建你的应用程序
 
-Create `index.ts` in your project root with the following content:
+在项目根目录中创建 `index.ts`，内容如下：
 
 ```typescript
 import { serve } from "https://deno.land/std@0.140.0/http/server.ts";
@@ -152,7 +134,7 @@ import { PrismaClient } from "./generated/prisma/client.ts";
 const prisma = new PrismaClient().$extends(withAccelerate());
 
 async function handler(request: Request) {
-  // Ignore /favicon.ico requests:
+  // 忽略 /favicon.ico 请求：
   const url = new URL(request.url);
   if (url.pathname === "/favicon.ico") {
     return new Response(null, { status: 204 });
@@ -176,35 +158,30 @@ async function handler(request: Request) {
 serve(handler);
 ```
 
-### 4. Test your application locally
+### 4. 在本地测试你的应用程序
 
-Start your application locally to test the database connection:
+在本地启动你的应用程序以测试数据库连接：
 
 ```bash
 npx dotenv -- deno run -A ./index.ts
 ```
 
-Visit `http://localhost:8000` in your browser. Each request will create a new
-log entry in your database and return the log data as JSON.
+在浏览器中访问 `http://localhost:8000`。每个请求都会在你的数据库中创建一条新的日志记录，并以 JSON 形式返回日志数据。
 
-## Deploy application to Deno Deploy Classic
+## 将应用部署到 Deno Deploy Classic
 
-Once you have finished writing your application, you can deploy it on Deno
-Deploy Classic.
+完成应用程序编写后，你可以将其部署到 Deno Deploy Classic。
 
-To do this, go back to your project page at
-`https://dash.deno.com/projects/<project-name>`.
+要这样做，请返回到你的项目页面 `https://dash.deno.com/projects/<project-name>`。
 
-You should see a couple of options to deploy:
+你应该会看到几个部署选项：
 
-- [Github integration](ci_github)
+- [Github 集成](ci_github)
 - [`deployctl`](./deployctl.md)
   ```sh
   deployctl deploy --project=<project-name> <application-file-name>
   ```
 
-Unless you want to add a build step, we recommend that you select the GitHub
-integration.
+除非你想添加构建步骤，否则我们建议你选择 GitHub 集成。
 
-For more details on the different ways to deploy on Deno Deploy Classic and the
-different configuration options, read [here](how-to-deploy).
+有关在 Deno Deploy Classic 上部署的不同方式以及不同配置选项的更多详细信息，请阅读[这里](how-to-deploy)。

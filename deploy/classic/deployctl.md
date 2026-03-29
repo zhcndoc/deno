@@ -2,10 +2,10 @@
 title: "在命令行中使用 deployctl"
 ---
 
-:::info Legacy Documentation
+:::warning 2026年7月20日停用
 
-你正在查看 Deno Deploy Classic 的遗留文档。我们建议迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。有关详细信息，请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
@@ -53,13 +53,13 @@ deployctl deploy --project=helloworld --entrypoint=src/entrypoint.ts --org=my-te
 
 默认情况下，deployctl 会递归部署当前目录下的所有文件（除了 `node_modules` 目录）。你可以使用 `--include` 和 `--exclude` 参数自定义此行为（这些参数在配置文件中也支持）。这些参数接受特定文件、整个目录和通配符。以下是一些示例：
 
-- 仅包括源文件和静态文件：
+- 仅包含源文件和静态文件：
 
   ```shell
   deployctl deploy --include=./src --include=./static
   ```
 
-- 仅包括 Typescript 文件：
+- 仅包含 Typescript 文件：
 
   ```shell
   deployctl deploy --include=**/*.ts
@@ -71,7 +71,7 @@ deployctl deploy --project=helloworld --entrypoint=src/entrypoint.ts --org=my-te
   deployctl deploy --exclude=./tools --exclude=./benches
   ```
 
-一个常见的陷阱是未包括需要运行的源代码模块（入口点和依赖项）。以下示例将失败，因为未包括 `main.ts`：
+一个常见的陷阱是未包含需要运行的源代码模块（入口点和依赖项）。以下示例将失败，因为未包含 `main.ts`：
 
 ```shell
 deployctl deploy --include=./static --entrypoint=./main.ts

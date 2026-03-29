@@ -20,7 +20,7 @@ description: "Deno 的可配置任务运行器"
 
 例如：
 
-```jsonc
+```jsonc title="deno.json"
 {
   "tasks": {
     "data": "deno task collect && deno task analyze",
@@ -41,7 +41,7 @@ description: "Deno 的可配置任务运行器"
 
 例如，以下任务将更改任务的当前工作目录，使之位于用户运行任务的相同目录，然后输出当前工作目录，现在就是该目录（请记住，这在 Windows 上也有效，因为 `deno task` 是跨平台的）。
 
-```json
+```json title="deno.json"
 {
   "tasks": {
     "my_task": "cd $INIT_CWD && pwd"
@@ -55,7 +55,7 @@ description: "Deno 的可配置任务运行器"
 
 例如，要将该目录提供给任务中的脚本，请执行以下操作（注意，目录用双引号括起来，以便在包含空格的情况下将其作为单个参数保持）：
 
-```json
+```json title="deno.json"
 {
   "tasks": {
     "start": "deno run main.ts \"$INIT_CWD\""
@@ -103,8 +103,8 @@ description: "Deno 的可配置任务运行器"
 
 在上面的示例中，运行 `deno task serve` 将首先并行执行 `build` 和 `generate` 任务，一旦它们都成功完成，`serve` 任务将被执行：
 
-```bash
-$ deno task serve
+```sh
+deno task serve
 Task build deno run -RW build.ts
 Task generate deno run -RW generate.ts
 Generating data...
@@ -144,8 +144,8 @@ Listening on http://localhost:8000/
 }
 ```
 
-```bash
-$ deno task a
+```sh
+deno task a
 Task d deno run d.js
 Running d
 Task c deno run c.js
@@ -173,8 +173,8 @@ Running a
 }
 ```
 
-```bash
-$ deno task a
+```sh
+deno task a
 Task cycle detected: a -> b -> a
 ```
 
@@ -198,7 +198,7 @@ Task cycle detected: a -> b -> a
 
 默认情况下，`deno task` 将使用 `deno` 二进制执行命令。如果您需要确保命令使用 `npm` 或 `npx` 二进制运行，您可以通过分别调用 `npm` 或 `npx` 的 `run` 命令来实现。例如：
 
-```json
+```json title="deno.json"
 {
   "tasks": {
     "test:node": "npm run test"
@@ -237,8 +237,8 @@ Task cycle detected: a -> b -> a
 }
 ```
 
-```bash
-$ deno task --recursive dev
+```sh
+deno task --recursive dev
 Task dev deno run -RN build.ts
 Task dev deno run -RN server.ts
 Bundling project...
@@ -248,14 +248,16 @@ Project bundled
 
 要运行的任务可以根据工作空间成员进行过滤：
 
-```bash
-$ deno task --filter "client" dev
+```sh
+deno task --filter "client" dev
 Task dev deno run -RN build.ts
 Bundling project...
 Project bundled
 ```
 
-请注意，过滤器是根据每个成员的 `deno.json` 文件中的 `name` 字段指定的工作空间成员名称进行匹配的。
+请注意，过滤器会根据工作空间成员名称进行匹配，这些名称由每个成员的
+[`deno.json`](/runtime/fundamentals/configuration/) 文件中的
+`name` 字段指定。
 
 ## 语法
 
@@ -316,7 +318,7 @@ export VAR=hello && echo $VAR && deno eval "console.log('Deno: ' + Deno.env.get(
 
 将输出：
 
-```console
+```sh
 hello
 Deno: hello
 ```
@@ -325,7 +327,7 @@ Deno: hello
 
 要在命令之前指定环境变量，请像下面这样列出：
 
-```console
+```sh
 VAR=hello VAR2=bye deno run main.ts
 ```
 
@@ -347,7 +349,7 @@ VAR=hello && echo $VAR && deno eval "console.log('Deno: ' + Deno.env.get('VAR'))
 
 我们将得到以下输出：
 
-```console
+```sh
 hello
 Deno: undefined
 ```
@@ -493,8 +495,8 @@ Hello there!
 
 在 Deno 1.34 及以上版本中支持 glob 扩展。这允许以跨平台方式指定 glob 来匹配文件。
 
-```console
-# 匹配当前及其子目录中的 .ts 文件
+```sh
+# match .ts files in the current and descendant directories
 echo **/*.ts
 # 匹配当前目录中的 .ts 文件
 echo *.ts

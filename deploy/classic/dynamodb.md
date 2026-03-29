@@ -2,10 +2,9 @@
 title: "连接到 DynamoDB"
 ---
 
-:::info Legacy Documentation
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧文档。我们推荐迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅 <a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 

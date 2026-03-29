@@ -20,7 +20,7 @@ deno compile --allow-read --allow-net jsr:@std/http/file-server
 
 [脚本参数](/runtime/getting_started/command_line_interface/#passing-script-arguments) 可以部分嵌入。
 
-```console
+```sh
 deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
 
 ./file_server --help
@@ -79,7 +79,7 @@ const calculator = await import(specifier);
 
 要包含不可静态分析的动态导入，请指定 `--include <path>` 标志。
 
-```shell
+```sh
 deno compile --include calc.ts --include better_calc.ts main.ts
 ```
 
@@ -87,7 +87,7 @@ deno compile --include calc.ts --include better_calc.ts main.ts
 
 从 Deno 2.1 开始，您可以通过 `--include <path>` 标志在可执行文件中包含文件或目录。
 
-```shell
+```sh
 deno compile --include names.csv --include data main.ts
 ```
 
@@ -109,7 +109,7 @@ const dataFiles = Deno.readDirSync(import.meta.dirname + "/data");
 
 1. 使用 `--include <path>` 标志包含工作代码。
 
-```shell
+```sh
 deno compile --include worker.ts main.ts
 ```
 
@@ -120,7 +120,7 @@ deno compile --include worker.ts main.ts
 import "./worker.ts";
 ```
 
-```shell
+```sh
 deno compile main.ts
 ```
 
@@ -128,7 +128,7 @@ deno compile main.ts
 
 默认情况下，编译后的可执行文件通过内存中的虚拟文件系统提供嵌入的文件。`--self-extracting` 标志改变此行为，使得二进制文件在首次运行时将所有嵌入文件解压到磁盘，并在运行时使用真实的文件系统操作。
 
-```shell
+```sh
 deno compile --self-extracting main.ts
 ```
 
@@ -160,9 +160,9 @@ deno compile --self-extracting main.ts
 
 默认情况下，在 macOS 上，编译后的可执行文件将使用临时签名签名，等同于运行 `codesign -s -`：
 
-```shell
-$ deno compile -o main main.ts
-$ codesign --verify -vv ./main
+```sh
+deno compile -o main main.ts
+codesign --verify -vv ./main
 
 ./main: 磁盘上的有效
 ./main: 满足其指定要求
@@ -170,7 +170,7 @@ $ codesign --verify -vv ./main
 
 您可以在对可执行文件进行代码签名时指定签名身份，就像您对任何其他 macOS 可执行文件所做的那样：
 
-```shell
+```sh
 codesign -s "Developer ID Application: Your Name" ./main
 ```
 
@@ -180,9 +180,9 @@ codesign -s "Developer ID Application: Your Name" ./main
 
 在 Windows 上，可以使用 `SignTool.exe` 工具对编译后的可执行文件进行签名。
 
-```shell
-$ deno compile -o main.exe main.ts
-$ signtool sign /fd SHA256 main.exe
+```sh
+deno compile -o main.exe main.ts
+signtool sign /fd SHA256 main.exe
 ```
 
 ## 在可执行文件中不可用

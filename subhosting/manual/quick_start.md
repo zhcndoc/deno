@@ -4,7 +4,17 @@ oldUrl:
   - /deploy/manual/subhosting/projects_and_deployments/
 ---
 
-想要寻找一个尽可能小的示例，展示如何将代码部署到 Deno 的隔离云吗？我们在下面为您提供了相关信息，或者您可以跳到[更详细的入门指南](#getting-started-with-subhosting)。
+:::warning 将于 2026 年 7 月 20 日停止服务
+
+subhosting v1 API 将于 2026 年 7 月 20 日关闭。请迁移到
+<a href="https://api.deno.com/v2/docs">v2 API</a>。请参阅
+<a href="/subhosting/manual/api_migration_guide/">API 迁移指南</a>
+了解详细信息。
+
+:::
+
+正在寻找一个尽可能小的示例来展示如何将代码部署到 Deno 的 isolate 云吗？下面我们已经为您准备好了，或者您也可以直接跳到
+[更详细的入门指南](#getting-started-with-subhosting)。
 
 ```ts
 // 1.) 准备 API 访问信息

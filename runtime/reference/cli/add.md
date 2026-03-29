@@ -6,8 +6,11 @@ openGraphTitle: "deno add"
 description: "使用 Deno 添加和管理项目依赖"
 ---
 
-`deno add` 命令将依赖项添加到项目的配置文件中。
-它是 [`deno install [PACKAGES]`](/runtime/reference/cli/install/#deno-install-packages) 的别名。
+`deno add` 命令会将依赖项添加到项目的配置文件中。
+它是
+[`deno install [PACKAGES]`](/runtime/reference/cli/install/#deno-install-packages) 的别名。
+有关 Deno 如何处理依赖项的更多信息，请参阅
+[模块和依赖项](/runtime/fundamentals/modules/)。
 
 ## 示例
 
@@ -34,6 +37,6 @@ deno add --npm express
 
 ## 依赖项存储位置
 
-如果你的项目中有 `package.json`，npm 包将被添加到
-`package.json` 中的 `dependencies`。否则，所有包将被添加到
-`deno.json` 的 `imports` 字段中。
+如果你的项目有 `package.json`，npm 包将添加到
+`package.json` 中的 `dependencies`。否则，所有包都会添加到
+[`deno.json`](/runtime/fundamentals/configuration/) 中的 `imports` 字段。

@@ -6,21 +6,25 @@ openGraphTitle: "deno 更新"
 description: "通过交互式 CLI 更新过时的依赖项"
 ---
 
+`deno update` 会更新你的
+[`deno.json`](/runtime/fundamentals/configuration/) 或 `package.json` 中的依赖项。有关依赖项管理的更多信息，请参阅
+[Modules](/runtime/fundamentals/modules/)。
+
 ## 更新依赖项
 
 默认情况下，`update` 子命令只会更新到符合 semver 兼容的版本（即不会更新到破坏性版本）。
 
-```bash
-$ deno update
-更新了 1 个依赖项：
+```sh
+deno update
+Updated 1 dependency:
  - jsr:@std/fmt 1.0.0 -> 1.0.3
 ```
 
 如果要更新到最新版本（无论是否符合 semver 兼容），请添加 `--latest` 标志。
 
-```bash
-$ deno update --latest
-更新了 3 个依赖项：
+```sh
+deno update --latest
+Updated 3 dependencies:
  - jsr:@std/async 1.0.1 -> 1.0.8
  - jsr:@std/fmt   1.0.0 -> 1.0.3
  - npm:chalk      4.1.2 -> 5.3.0
@@ -30,9 +34,9 @@ $ deno update --latest
 
 `update` 子命令也支持选择要操作的包。
 
-```bash
-$ deno update --latest chalk
-更新了 1 个依赖项：
+```sh
+deno update --latest chalk
+Updated 1 dependency:
  - npm:chalk 4.1.2 -> 5.3.0
 ```
 
@@ -40,9 +44,9 @@ $ deno update --latest chalk
 
 例如，要更新所有带有 `@std` 作用域的包，除了 `@std/fmt`：
 
-```bash
-$ deno update --latest "@std/*" "!@std/fmt"
-更新了 1 个依赖项：
+```sh
+deno update --latest "@std/*" "!@std/fmt"
+Updated 1 dependency:
  - jsr:@std/async 1.0.1 -> 1.0.8
 ```
 
@@ -50,11 +54,11 @@ $ deno update --latest "@std/*" "!@std/fmt"
 
 ### 更新到特定版本
 
-除了选择要更新的包之外，`--update` 标志还支持选择新的 _版本_，通过在版本号前添加 `@` 指定。
+You can also select a specific version to update to by appending it after `@`.
 
-```bash
-❯ deno update chalk@5.2 @std/async@1.0.6
-更新了 2 个依赖项：
+```sh
+deno update chalk@5.2 @std/async@1.0.6
+Updated 2 dependencies:
  - jsr:@std/async 1.0.1 -> 1.0.6
  - npm:chalk      4.1.2 -> 5.2.0
 ```
@@ -65,7 +69,7 @@ $ deno update --latest "@std/*" "!@std/fmt"
 
 例如，给定如下工作区：
 
-```json
+```json title="deno.json"
 {
   "workspace": ["./member-a", "./member-b"]
 }
@@ -73,15 +77,15 @@ $ deno update --latest "@std/*" "!@std/fmt"
 
 从 `./member-a` 目录运行
 
-```bash
+```sh
 deno update
 ```
 
 将只更新 `./member-a/deno.json` 或 `./member-a/package.json` 中列出的依赖项。
 
-要包含所有工作区成员，请传入 `--recursive` 标志（也接受 `-r` 简写）
+要包含所有工作区成员，请传入 `--recursive` 标志（也接受 `-r` 简写）。
 
-```bash
+```sh
 deno update --recursive
 deno update --latest -r
 ```

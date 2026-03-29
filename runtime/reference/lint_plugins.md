@@ -1,13 +1,13 @@
 ---
-title: "Lint Plugins"
-description: "Guide to creating and using custom lint plugins in Deno. Learn how to write custom lint rules, use selectors for AST matching, implement fixes, and test your plugins using Deno's lint plugin API."
+title: "Lint 插件"
+description: "Deno 自定义 lint 插件创建与使用指南。了解如何编写自定义 lint 规则、使用 AST 匹配选择器、实现修复，以及使用 Deno 的 lint 插件 API 测试您的插件。"
 ---
 
 :::caution
 
 这是一个实验性功能，要求 Deno 版本为 `2.2.0` 或更高。
 
-插件 API 目前被标记为"不稳定"，因为它在未来可能会发生变化。
+插件 API 目前被标记为“不稳定”，因为它在未来可能会发生变化。
 
 :::
 
@@ -24,7 +24,7 @@ lint 插件 API 有意模拟了
 
 插件通过 `deno.json` 中的 `lint.plugins` 设置加载。
 
-该值是一个插件描述符数组。这些描述符可以是路径、`npm:`或
+该值是一个插件描述符数组。这些描述符可以是路径、`npm:` 或
 `jsr:` 描述符。
 
 ```json title="deno.json"
@@ -43,7 +43,8 @@ lint 插件 API 有意模拟了
 
 Deno 为 lint 插件 API 提供了类型声明。
 
-所有类型定义都在 `Deno.lint` 命名空间下可用。
+所有类型定义都可在 [`Deno.lint`](/api/deno/~/Deno.lint)
+命名空间下找到。
 
 :::
 
@@ -248,7 +249,9 @@ console.log("hey");
 
 ## 测试插件
 
-`Deno.lint.runPlugin` API 提供了一种方便的方式来测试您的插件。它允许您断言插件根据特定输入生成预期的诊断信息。
+[`Deno.lint.runPlugin`](/api/deno/~/Deno.lint.runPlugin) API 提供了一种
+方便的方式来测试您的插件。它允许您断言插件在给定特定输入时
+会产生预期的诊断信息。
 
 让我们使用上面定义的示例插件：
 
@@ -273,8 +276,8 @@ Deno.test("my-plugin", () => {
 
 :::info
 
-`Deno.lint.runPlugin` API 仅在 `deno test` 和
-`deno bench` 子命令中可用。
+[`Deno.lint.runPlugin`](/api/deno/~/Deno.lint.runPlugin) API 仅在
+`deno test` 和 `deno bench` 子命令中可用。
 
 尝试在其他子命令中使用它将会抛出错误。
 

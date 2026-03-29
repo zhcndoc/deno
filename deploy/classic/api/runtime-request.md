@@ -5,10 +5,11 @@ oldUrl:
   - /deploy/api/runtime-request/
 ---
 
-:::info 旧版文档
+:::warning 2026年7月20日停止服务
 
-您正在查看 Deno Deploy Classic 的旧版文档。我们建议迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参见
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
@@ -50,7 +51,7 @@ let request = new Request(resource, init);
 | [`integrity`][integrity]     | `string`                                                                                | 无             | 请求主体的加密哈希。                                      |
 | [`mode`][mode]               | `string`                                                                                | `cors`         | 您想使用的请求模式。                                      |
 | [`redirect`][redirect]       | `string`                                                                                | `follow`       | 处理重定向的模式。                                        |
-| [`referrer`][referrer]       | `string`                                                                                | `about:client` | 一个 `USVString`，指定 `no-referrer`、`client` 或一个 URL。 |
+| [`referrer`][referrer]     | `string`                                                                                | `about:client` | 一个 `USVString`，指定 `no-referrer`、`client` 或一个 URL。 |
 
 ## 属性
 
@@ -91,7 +92,7 @@ function handler(_req) {
   const request = new Request("https://post.deno.dev", {
     method: "POST",
     body: JSON.stringify({
-      message: "Hello world!",
+      message: "你好，世界！",
     }),
     headers: {
       "content-type": "application/json",

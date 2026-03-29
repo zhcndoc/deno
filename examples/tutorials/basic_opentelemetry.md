@@ -119,6 +119,18 @@ Deno.serve({ port: 8000 }, (req) => {
 OTEL_DENO=true OTEL_SERVICE_NAME=my-server deno run --allow-net server.ts
 ```
 
+:::tip
+
+要快速查看遥测输出，而无需设置收集器，您可以使用
+内置的控制台导出器，它会将 span、日志和指标直接打印到
+stderr：
+
+```sh
+OTEL_DENO=true OTEL_EXPORTER_OTLP_PROTOCOL=console OTEL_SERVICE_NAME=my-server deno run --allow-net server.ts
+```
+
+:::
+
 ## 第三步：创建测试客户端
 
 让我们创建一个简单客户端，向服务器发送请求：
@@ -151,11 +163,11 @@ deno run --allow-net client.ts
 
 ## 第五步：查看遥测数据
 
-默认情况下，Deno 会使用 OTLP 协议将遥测数据导出到 `http://localhost:4318`。您需要一个 OpenTelemetry collector 来接收并可视化这些数据。
+默认情况下，Deno 会使用 OTLP 协议将遥测数据导出到 `http://localhost:4318`。您需要一个 OpenTelemetry 收集器来接收并可视化这些数据。
 
-### 安装本地 Collector
+### 安装本地收集器
 
-最快速的方式是使用 Docker 运行本地 LGTM 堆栈（Loki, Grafana, Tempo, Mimir）：
+最快速的方式是使用 Docker 运行本地 LGTM 堆栈（Loki、Grafana、Tempo、Mimir）：
 
 ```sh
 docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
@@ -208,10 +220,10 @@ docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
 
 ## 故障排除
 
-如果您在 Collector 中看不到数据：
+如果您在收集器中看不到数据：
 
 1. 检查是否设置了 `OTEL_DENO=true`
-2. 确认 Collector 正在运行且在默认端点可访问
+2. 确认收集器正在运行且在默认端点可访问
 3. 检查是否需要将 `OTEL_EXPORTER_OTLP_ENDPOINT` 设置为其他 URL
 4. 查看 Deno 控制台输出中是否有错误信息
 

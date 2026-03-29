@@ -3,7 +3,35 @@ title: "Deno Deploy 更新日志"
 description: "列出 Deno Deploy 开发与演进过程中的显著进展"
 ---
 
-## 2026年1月27日
+## March 12th, 2026
+
+### 功能
+
+- Deno Deploy 现在支持使用 `Deno.cron()` API 调度 cron 作业。
+  - Cron 作业定义在您的应用代码中，并会在您部署时被平台自动发现和管理。
+  - 您可以在应用仪表盘中新加入的“Cron”标签页中监控 cron 执行历史和状态。
+  - [在 cron 文档中了解更多](/deploy/reference/cron/)。
+- 现在可以在应用设置页面更改现有应用的部署区域。
+  - 之前，部署区域只能在创建应用时设置。
+  - 新的区域选择器位于应用设置中的“Deployment Region”下。
+- 组织现在可以直接从组织设置页面删除。
+  - 之前，删除组织需要联系 Deno 支持。
+  - 要删除组织，请前往组织设置页面并滚动到危险区域部分。
+- TanStack Start 现在是 Deno Deploy 原生支持的框架。
+  - Deno Deploy 会自动检测 TanStack Start 项目，并为构建和运行时设置进行最优配置。
+  - [了解更多关于 TanStack Start 支持](/deploy/reference/frameworks/#tanstack-start-tanstackstart)。
+- 现在可以配置外部 OpenTelemetry 收集器，以导出您 Deno Deploy 组织的可观测性数据。
+  - 可在组织设置页面的“OpenTelemetry”下设置自定义 OTLP 端点和请求头。
+  - 您应用的所有 traces、metrics 和 logs 除了可在 Deno Deploy 仪表盘中查看外，还会转发到您配置的收集器。
+- 应用的运行时内存限制现在可以按应用进行配置。
+  - 可用的内存限制范围为 512 MB 到 4096 MB，具体取决于您的方案。
+  - 可以在应用构建配置设置中设置内存限制，或通过 `deno.json` 文件中的 `deploy.runtime.memory_limit` 字段设置。
+  - [在构建文档中了解更多](/deploy/reference/builds/)。
+- 现在为需要更高限制和更多算力的组织提供了新的 Builder 方案。
+  - Builder 方案价格为每月 $200，包含 2000 万次 HTTP 请求、400 CPU 小时、最高 4 GB 运行时和构建内存，以及每小时最多 200 次部署。
+  - [查看定价页面了解完整详情](https://deno.com/deploy/pricing)。
+
+## January 27th, 2026
 
 ### 新功能
 

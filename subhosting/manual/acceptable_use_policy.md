@@ -2,7 +2,15 @@
 title: 可接受使用政策
 ---
 
-Deno 子托管服务包括受此可接受使用政策约束的资源（CPU 时间，请求计数）。本文件可以大致估计我们认为的“可接受使用”，以及我们不认可的内容。
+:::warning 将于 2026 年 7 月 20 日停止服务
+
+subhosting v1 API 将于 2026 年 7 月 20 日关闭。请迁移到
+<a href="https://api.deno.com/v2/docs">v2 API</a>。有关详细信息，请参阅
+<a href="/subhosting/manual/api_migration_guide/">API 迁移指南</a>。
+
+:::
+
+Deno Subhosting 服务包含资源（CPU 时间、请求次数），这些资源受本可接受使用政策约束。本文档可以大致说明我们认为什么是“可接受使用”，以及什么不是。
 
 ### 可接受使用示例
 

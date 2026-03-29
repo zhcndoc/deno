@@ -29,7 +29,34 @@ OTEL_DENO=true deno run my_script.ts
 
 :::tip
 
-如果您还未搭建 OpenTelemetry 收集器，可以使用以下命令快速启动 [Docker 中的本地 LGTM 堆栈](https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file)（Loki（日志）、Grafana（仪表盘）、Tempo（追踪）和 Prometheus（指标））：
+如果您想在不设置收集器的情况下快速查看 OpenTelemetry 输出，
+可以使用内置的控制台导出器将跨度、日志和指标
+直接以人类可读的格式打印到 stderr：
+
+```sh
+OTEL_DENO=true OTEL_EXPORTER_OTLP_PROTOCOL=console deno run my_script.ts
+```
+
+示例输出：
+
+```
+SPAN inner span [00000000000000000000000000000001/0000000000000002] Internal 0.495ms
+  parent: 0000000000000001
+  scope: example-tracer
+  key: value
+LOG [INFO] 2025-03-14T13:47:07.235Z "hello from inner"
+  scope: deno@2.7.5
+  trace: 00000000000000000000000000000001/0000000000000002
+```
+
+:::
+
+:::tip
+
+如果您想在仪表盘中可视化遥测数据，
+可以通过运行以下命令，使用
+[Docker 中的本地 LGTM 栈](https://github.com/grafana/docker-otel-lgtm/tree/main?tab=readme-ov-file)
+（Loki（日志）、Grafana（仪表盘）、Tempo（追踪）和 Prometheus（指标））开始使用：
 
 ```sh
 docker run --name lgtm -p 3000:3000 -p 4317:4317 -p 4318:4318 --rm -ti \
@@ -60,12 +87,14 @@ Deno 会自动收集并将部分可观察性数据导出到 OTLP 端点。
 
 Deno 会自动为多种操作创建跨度，例如：
 
-- 使用 `Deno.serve` 提供的传入 HTTP 请求。
-- 使用 `fetch` 发出的传出 HTTP 请求。
+- 使用 [`Deno.serve`](/api/deno/~/Deno.serve) 处理的入站 HTTP 请求。
+- 使用 [`fetch`](/api/web/~/fetch) 发出的出站 HTTP 请求。
 
-#### `Deno.serve`
+#### [`Deno.serve`](/api/deno/~/Deno.serve)
 
-当您使用 `Deno.serve` 创建 HTTP 服务器时，系统会为每个传入请求创建一个跨度。该跨度在响应头发送时自动结束（而非等待响应体完全发送）。
+当您使用 [`Deno.serve`](/api/deno/~/Deno.serve) 创建 HTTP 服务器时，
+会为每个传入请求创建一个跨度。响应头发送后，跨度会自动结束
+（而不是在响应主体发送完成时）。
 
 创建的跨度名称为 `${method}`，跨度类型为 `server`。
 
@@ -107,9 +136,10 @@ Deno.serve(async (req) => {
 });
 ```
 
-#### `fetch`
+#### [`fetch`](/api/web/~/fetch)
 
-当您使用 `fetch` 发出请求时，系统会为该请求创建一个跨度，且在收到响应头时自动结束。
+当您使用 [`fetch`](/api/web/~/fetch) 发起 HTTP 请求时，
+会为该请求创建一个跨度。响应头收到后，跨度会自动结束。
 
 创建的跨度名称为 `${method}`，跨度类型为 `client`。
 
@@ -129,12 +159,15 @@ Deno.serve(async (req) => {
 
 自动收集和导出的指标包括：
 
-#### `Deno.serve` / `Deno.serveHttp`
+#### [`Deno.serve`](/api/deno/~/Deno.serve) / [`Deno.serveHttp`](/api/deno/~/Deno.serveHttp)
 
 ##### `http.server.request.duration`
 
-一个直方图，记录通过 `Deno.serve` 或 `Deno.serveHttp` 提供的传入 HTTP 请求的持续时间。测量时间为从请求接收至响应头发送的时间，不包含发送响应体的时间。单位为秒。该直方图的桶边界为：
-`[0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0]`。
+使用 [`Deno.serve`](/api/deno/~/Deno.serve) 或
+[`Deno.serveHttp`](/api/deno/~/Deno.serveHttp) 处理的传入 HTTP 请求持续时间的直方图。
+测量时间从收到请求开始，到发送响应头为止。
+不包括发送响应主体所需的时间。该指标的单位为秒。
+直方图桶为 `[0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0]`。
 
 该指标记录以下属性：
 
@@ -148,7 +181,10 @@ Deno.serve(async (req) => {
 
 ##### `http.server.active_requests`
 
-一个量表，统计任意时刻由 `Deno.serve` 或 `Deno.serveHttp` 正在处理的活动请求数量，即已接收但尚未发送响应头的请求数。该指标记录以下属性：
+在任意时刻，由 [`Deno.serve`](/api/deno/~/Deno.serve) 或
+[`Deno.serveHttp`](/api/deno/~/Deno.serveHttp) 处理的活动请求数量的仪表。
+这指的是已经收到但尚未响应的请求数量（即响应头尚未发送）。
+该指标记录以下属性：
 
 - `http.request.method`：请求的 HTTP 方法。
 - `url.scheme`：请求 URL 的协议。
@@ -157,7 +193,9 @@ Deno.serve(async (req) => {
 
 ##### `http.server.request.body.size`
 
-一个直方图，记录传入 HTTP 请求的请求体大小，单位为字节。直方图桶边界为：
+使用 [`Deno.serve`](/api/deno/~/Deno.serve) 或
+[`Deno.serveHttp`](/api/deno/~/Deno.serveHttp) 处理的传入 HTTP 请求请求体大小的直方图。
+该指标的单位为字节。直方图桶为
 `[0, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000]`。
 
 记录属性：
@@ -172,7 +210,10 @@ Deno.serve(async (req) => {
 
 ##### `http.server.response.body.size`
 
-一个直方图，记录传入 HTTP 请求的响应体大小，单位为字节。直方图桶边界同请求体大小指标。
+使用 [`Deno.serve`](/api/deno/~/Deno.serve) 或
+[`Deno.serveHttp`](/api/deno/~/Deno.serveHttp) 处理的传入 HTTP 请求响应体大小的直方图。
+该指标的单位为字节。直方图桶为
+`[0, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000]`。
 
 记录属性：
 
@@ -286,12 +327,12 @@ span.setStatus({
 });
 ```
 
-Spans can also have
-[events](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.Span.html#addevent)
-and
-[links](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.Span.html#addlink)
-added to them. Events are points in time that are associated with the span.
-Links are references to other spans.
+跨度还可以添加
+[事件](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.Span.html#addevent)
+和
+[链接](https://open-telemetry.github.io/opentelemetry-js/interfaces/_opentelemetry_api._opentelemetry_api.Span.html#addlink)。
+事件是与跨度关联的时间点。
+链接是对其他跨度的引用。
 
 ```ts
 // 向跨度添加事件
@@ -466,7 +507,15 @@ span.end();
 
 通过设置环境变量 `OTEL_DENO=true` 启用 OpenTelemetry 集成。
 
-OTLP 导出端点和协议可通过环境变量 `OTEL_EXPORTER_OTLP_ENDPOINT` 和 `OTEL_EXPORTER_OTLP_PROTOCOL` 配置。
+OTLP 导出器的端点和协议可通过
+`OTEL_EXPORTER_OTLP_ENDPOINT` 和 `OTEL_EXPORTER_OTLP_PROTOCOL` 环境
+变量配置。`OTEL_EXPORTER_OTLP_PROTOCOL` 支持的值为：
+
+- `http/protobuf`（默认）：通过 HTTP 使用 Protobuf 导出到配置的
+  端点。
+- `http/json`：通过 HTTP 使用 JSON 导出到配置的端点。
+- `console`：以人类可读的文本格式将跨度、日志和指标打印到 stderr。
+  这对于在不运行 OTLP 收集器的情况下调试和测试埋点很有用。使用 `console` 时，不需要配置端点。
 
 若端点需要身份验证，可使用环境变量 `OTEL_EXPORTER_OTLP_HEADERS` 设置请求头。
 
@@ -513,7 +562,9 @@ Deno 支持上下文传播器，用以自动跨进程边界传播追踪上下文
 
 :::note
 
-这些传播器会自动与 Deno 的 `fetch` 和 `Deno.serve` 配合，使 HTTP 请求可以端到端自动传播追踪上下文，无需手动管理。
+这些传播器会自动与 Deno 的 [`fetch`](/api/web/~/fetch) API
+以及 [`Deno.serve`](/api/deno/~/Deno.serve) 协同工作，无需手动管理上下文即可实现跨
+HTTP 请求的端到端追踪。
 
 :::
 
@@ -548,15 +599,24 @@ async function tracedFetch(url: string) {
 
 Deno 的 OpenTelemetry 集成仍在开发中，存在以下限制：
 
-- 追踪始终被采样（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
-- 追踪只支持无属性的链接。
-- 不支持指标采样。
-- 不支持自定义日志流（仅支持 `console.log` 和 `console.error` 日志）。
-- 唯一支持的导出器是 OTLP，其他导出器未支持。
-- OTLP 仅支持 `http/protobuf` 和 `http/json` 协议，不支持 `grpc` 等。
-- 可观察（异步）仪表采集的指标在进程退出或崩溃时不会被采集，故最后指标可能未导出。同步指标可正常导出。
-- 追踪跨度不遵守环境变量中指定的 `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、`OTEL_ATTRIBUTE_COUNT_LIMIT`、`OTEL_SPAN_EVENT_COUNT_LIMIT`、`OTEL_SPAN_LINK_COUNT_LIMIT`、`OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和 `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 限制。
-- 不尊重环境变量 `OTEL_METRIC_EXPORT_TIMEOUT`。
-- 未知的 HTTP 方法不会在 `http.request.method` 跨度属性中标准化为 `_OTHER`，与 OpenTelemetry 语义约定不符。
-- `Deno.serve` 的 HTTP 服务器跨度在处理程序抛出（调用 `onError`）时不会设置错误状态，错误也不通过事件附加到跨度。
-- `fetch` 的 HTTP 客户端跨度中无机制添加 `http.route` 属性或更新跨度名称以包含路由信息。
+- 跟踪总是采样的（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
+- 跟踪仅支持不带属性的链接。
+- 不支持指标样本点。
+- 不支持自定义日志流（例如除 `console.log` 和 `console.error`
+  之外的日志）。
+- 支持的导出器为 OTLP（`http/protobuf`、`http/json`）和 `console`。
+  不支持其他导出器和协议，例如 `grpc`。
+- 进程退出/崩溃时，不会收集可观测（异步）仪表的指标，因此指标的最后值可能不会被导出。同步
+  指标会在进程退出/崩溃时导出。
+- `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、`OTEL_ATTRIBUTE_COUNT_LIMIT`、
+  `OTEL_SPAN_EVENT_COUNT_LIMIT`、`OTEL_SPAN_LINK_COUNT_LIMIT`、
+  `OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和
+  `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 环境变量中指定的限制对
+  跟踪跨度不生效。
+- `OTEL_METRIC_EXPORT_TIMEOUT` 环境变量不生效。
+- 未知的 HTTP 方法不会按照 OpenTelemetry 语义约定
+  在 `http.request.method` 跨度属性中规范化为 `_OTHER`。
+- [`Deno.serve`](/api/deno/~/Deno.serve) 的 HTTP 服务端跨度没有设置
+  OpenTelemetry 状态，并且如果处理器抛出错误（即调用了 `onError`），
+  该跨度不会设置错误状态，错误也不会通过事件附加到跨度上。
+- 没有机制可以为 [`fetch`](/api/web/~/fetch) 的 HTTP 客户端跨度添加 `http.route` 属性，或者将跨度名称更新为包含该路由。

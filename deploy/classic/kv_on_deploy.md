@@ -1,16 +1,16 @@
 ---
-title: "Deno Deploy 上的 KV"
+title: "Deno 部署上的 KV"
 oldUrl:
   - /deploy/manual/kv/
   - /kv/manual/on_deploy/
   - /deploy/kv/manual/on_deploy/
 ---
 
-:::info 旧版文档
+:::warning 2026年7月20日停止服务
 
-You are viewing legacy documentation for Deno Deploy Classic. We recommend
-migrating to the new
-<a href="/deploy/">Deno Deploy</a> platform.
+Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 

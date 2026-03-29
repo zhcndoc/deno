@@ -107,14 +107,12 @@ deno run --tunnel -A migrate.ts
 接下来，更新 Svelte 应用以展示数据库数据。打开 `src/routes/+page.svelte` 文件，更新代码以从数据库获取笔记。
 
 ```svelte title="src/routes/+page.svelte"
-import { Client } from "pg";
-
-export const load = async () => {
+import {Client} from "pg"; export const load = async () => {
   const client = new Client();
   await client.connect();
   const res = await client.query(` SELECT note from notes; `);
   await client.end();
-  return { notes: res.rows };
+  return { notes: res.rows }
 };
 ```
 
@@ -124,7 +122,7 @@ export const load = async () => {
 <script>
   let { data } = $props();
 </script>
-<h1>Welcome to SvelteKit</h1>
+<h1>欢迎来到 SvelteKit</h1>
 <ul>
   {#each data.notes as row}
     <li>{row.note}</li>

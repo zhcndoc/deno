@@ -6,11 +6,9 @@ oldUrl:
   - /deploy/api/runtime-fs/
 ---
 
-:::info 旧版文档
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧版文档。我们建议
-迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅 <a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
@@ -200,7 +198,7 @@ function Deno.open(path: string | URL): Promise<Deno.File>
 
 ### 示例
 
-此示例打开一个文件，并将内容作为响应主体进行流式传输。
+此示例打开一个文件，并将内容作为响应正文进行流式传输。
 
 ```js
 async function handler(_req) {
@@ -267,7 +265,7 @@ function Deno.stat(path: string | URL): Promise<Deno.FileInfo>
 
 ### 示例
 
-此示例获取文件的大小，并将结果作为响应主体返回。
+此示例获取文件的大小，并将结果作为响应正文返回。
 
 ```js
 async function handler(_req) {

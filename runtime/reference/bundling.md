@@ -70,11 +70,14 @@ Hello from `deno bundle`!
 
 ## 运行时 API
 
-除了命令行工具外，您还可以使用 `Deno.bundle()` 来以编程方式打包您的 JavaScript 或 TypeScript 文件。这使得您能够将打包过程集成到构建流程和工作流中。
+除了 CLI 之外，你还可以使用 [`Deno.bundle()`](/api/deno/~/Deno.bundle)
+以编程方式打包你的 JavaScript 或 TypeScript 文件。这使你能够将打包集成到
+构建流程和工作流中。
 
 :::note
 
-该 API 从 Deno v2.5 开始提供，属于实验性功能，使用时必须添加 `--unstable-bundle` 标志。
+此 API 于 Deno v2.5 中添加。[`Deno.bundle()`](/api/deno/~/Deno.bundle)
+API 是实验性的，必须与 `--unstable-bundle` 标志一起使用。
 
 :::
 
@@ -219,8 +222,8 @@ Bundled 9 modules in 99ms
   app.bundle.js 874.67KB
 ```
 
-至此，我们准备好提供页面服务，使用
-[`@std/http/file-server` 来自 JSR](https://jsr.io/@std/http/file-server) 进行服务：
+此时，我们已经可以开始提供页面服务了，使用
+[`@std/http/file-server`](/runtime/reference/std/http/) 来托管我们的应用：
 
 ```bash
 $ deno run -ENR jsr:@std/http/file-server

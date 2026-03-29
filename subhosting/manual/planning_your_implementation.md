@@ -2,7 +2,15 @@
 title: 规划你的实现
 ---
 
-假设你正在构建一个类似于 Salesforce 的 SaaS CRM 平台。你希望让你的客户能够编写 JavaScript 代码，以便在每次捕获新客户时执行。
+:::warning 2026 年 7 月 20 日停止支持
+
+subhosting v1 API 将于 2026 年 7 月 20 日关闭。请迁移到
+<a href="https://api.deno.com/v2/docs">v2 API</a>。详情请参阅
+<a href="/subhosting/manual/api_migration_guide/">API 迁移指南</a>。
+
+:::
+
+例如，假设你正在构建一个类似 Salesforce 的 SaaS CRM 平台。你希望让你的客户能够编写 JavaScript 代码，并在每次捕获到新线索时执行这些代码。
 
 如果你打算使用 Deno Deploy 实现这个功能，以下是你可能会考虑的构建方式：
 

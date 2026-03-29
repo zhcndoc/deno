@@ -10,7 +10,7 @@ description: "使用 @deno/sandbox 客户端程序化地创建、列出、更新
 - 将 Deploy 资源配置直接集成进 CI/CD
 - 按计划清理过时或未使用的应用
 
-SDK 封装了 [Deno Deploy REST API](https://console.deno.com/api/v2/docs)。
+该 SDK 封装了 [Deno Deploy REST API](https://api.deno.com/v2/docs)。
 
 ## 快速开始
 

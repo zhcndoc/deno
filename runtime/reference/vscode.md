@@ -1,6 +1,6 @@
 ---
 title: "Deno & Visual Studio Code"
-description: "Complete guide to using Deno with Visual Studio Code. Learn about extension setup, workspace configuration, debugging, testing, task automation, and advanced IDE features for Deno development."
+description: "使用 Visual Studio Code 和 Deno 的完整指南。了解扩展设置、工作区配置、调试、测试、任务自动化以及面向 Deno 开发的高级 IDE 功能。"
 oldUrl:
   - /runtime/manual/vscode_deno/
   - /runtime/manual/references/vscode_deno/
@@ -122,7 +122,7 @@ Deno 支持远程模块，并将提取远程模块并将其存储在本地缓存
 
 ### 测试代码透镜
 
-Deno CLI 包含一个 [内置测试 API](/runtime/reference/lsp_integration/#testing)，可在 `Deno.test` 下可用。该扩展和语言服务器默认启用一个代码透镜，提供了从编辑器运行测试的能力。
+Deno CLI 包含一个可在 [`Deno.test`](/api/deno/~/Deno.test) 下使用的 [内置测试 API](/runtime/reference/lsp_integration/#testing)。扩展和语言服务器默认启用了一个代码透镜，它提供了在编辑器中运行测试的能力。
 
 当您有一个提供测试的代码块时：
 
@@ -146,7 +146,7 @@ Deno.test({
 
 如果您单击代码透镜，扩展将启动 Deno CLI 为您运行测试并显示输出。根据您的其他设置，扩展将尝试以相同的设置运行您的测试。如果您需要调整在执行 `deno test` 时提供的参数，您可以通过设置 `deno.codeLens.testArgs` 设置来实现。
 
-扩展还将尝试跟踪您在同一模块中是否解构了 `Deno.test` 函数或将其分配给变量。这样，您可以像这样做并仍然让代码透镜工作：
+扩展还会尝试跟踪您是否在同一模块中解构了 [`Deno.test`](/api/deno/~/Deno.test) 函数，或将其赋值给变量。因此，您可以这样做，代码透镜仍然可以正常工作：
 
 ```ts
 const { test: denoTest } = Deno;

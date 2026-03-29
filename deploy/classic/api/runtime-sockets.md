@@ -5,18 +5,18 @@ oldUrl:
   - /deploy/api/sockets/
 ---
 
-:::info 旧文档
+:::warning 2026 年 7 月 20 日停止服务
 
-您正在查看 Deno Deploy Classic 的旧版文档。我们建议
-迁移到新的
-<a href="/deploy/">Deno Deploy</a> 平台。
+Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
+到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
+<a href="/deploy/migration_guide/">迁移指南</a>。
 
 :::
 
 Deno Deploy Classic 支持出站 TCP 和 TLS 连接。这些 API 允许
 您在 Deploy 中使用诸如 PostgreSQL、SQLite、MongoDB 等数据库。
 
-需要了解如何服务 TCP 的相关信息？请查阅 [`Deno.serve`](/api/deno/~/Deno.serve) 的文档，其中包括对 [TCP 选项](/api/deno/~/Deno.ServeTcpOptions) 的支持说明。
+需要了解如何提供 TCP 服务的相关信息？请查阅 [`Deno.serve`](/api/deno/~/Deno.serve) 的文档，其中包括对 [TCP 选项](/api/deno/~/Deno.ServeTcpOptions) 的支持说明。
 
 ## `Deno.connect`
 

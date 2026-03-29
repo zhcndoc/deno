@@ -68,7 +68,7 @@ const kv = await openKv("<KV 连接 URL>", { accessToken: myToken });
 URL。一个在 Deno Deploy 中托管的数据库的 KV 连接 URL 将是这种格式：`https://api.deno.com/databases/<database-id>/connect`。
 
 您项目的 `database-id` 可以在
-[Deno Deploy 仪表板](https://dash.deno.com/projects)中找到，在项目的 "KV" 标签下。
+[Deno Deploy 仪表板](https://console.deno.com)中的应用 "KV" 选项卡下找到。
 
 ![Deploy 中连接字符串的位置](./images/kv-connect.png)
 

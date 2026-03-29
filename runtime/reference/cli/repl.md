@@ -16,7 +16,7 @@ REPL 提供了一些特殊变量，始终可用：
 | _        | 返回最后评估的表达式              |
 | _error   | 返回最后抛出的错误                 |
 
-```console
+```sh
 Deno 1.14.3
 使用 ctrl+d 或 close() 退出
 > "hello world!"
@@ -42,8 +42,8 @@ REPL 在全局作用域提供了几个函数：
 
 `--eval` 标志允许您在进入 REPL 之前运行一些代码。这对于导入您在 REPL 中常用的一些代码或以某种方式修改运行时尤其有用：
 
-```console
-$ deno repl --allow-net --eval 'import { assert } from "jsr:@std/assert@1"'
+```sh
+deno repl --allow-net --eval 'import { assert } from "jsr:@std/assert@1"'
 Deno 1.45.3
 使用 ctrl+d、ctrl+c 或 close() 退出
 > assert(true)
@@ -62,11 +62,11 @@ undefined
 
 如果同时指定了 `--eval`，则 `--eval-file` 文件将在 `--eval` 代码之前运行。
 
-```console
-$ deno repl --eval-file=https://docs.deno.com/examples/welcome.ts,https://docs.deno.com/examples/local.ts
-下载 https://docs.deno.com/examples/welcome.ts
-欢迎使用 Deno！
-下载 https://docs.deno.com/examples/local.ts
+```sh
+deno repl --eval-file=https://docs.deno.com/examples/welcome.ts,https://docs.deno.com/examples/local.ts
+Download https://docs.deno.com/examples/welcome.ts
+Welcome to Deno!
+Download https://docs.deno.com/examples/local.ts
 Deno 1.45.3
 使用 ctrl+d 或 close() 退出
 > local // 这个变量在 local.ts 中被本地定义，但未被导出
@@ -77,9 +77,9 @@ Deno 1.45.3
 
 如果 `--eval-file` 指定的代码文件包含相对导入，则运行时将尝试将导入相对于当前工作目录解析。它不会尝试相对于代码文件的位置解析。这可能导致使用模块文件时出现 "Module not found" 错误：
 
-```console
-$ deno repl --eval-file=https://jsr.io/@std/encoding/1.0.0/ascii85.ts
---eval-file 文件 https://jsr.io/@std/encoding/1.0.0/ascii85.ts 中出错。未捕获 TypeError: 找不到模块 "file:///home/_validate_binary_like.ts"。
+```sh
+deno repl --eval-file=https://jsr.io/@std/encoding/1.0.0/ascii85.ts
+error in --eval-file file https://jsr.io/@std/encoding/1.0.0/ascii85.ts. Uncaught TypeError: Module not found "file:///home/_validate_binary_like.ts".
     at async <anonymous>:2:13
 Deno 1.45.3
 使用 ctrl+d 或 close() 退出
@@ -88,10 +88,10 @@ Deno 1.45.3
 
 ## Tab 补全
 
-Tab 补全是 REPL 中快速导航的重要功能。在按下 `tab` 键后，Deno 会显示所有可能补全的列表。
+Tab 补全对于在 REPL 中快速导航至关重要。按下 `tab` 键后，Deno 现在会显示所有可能的补全项列表。
 
-```console
-$ deno repl
+```sh
+deno repl
 Deno 1.45.3
 使用 ctrl+d 或 close() 退出
 > Deno.read
@@ -143,6 +143,6 @@ readTextFileSync  readFileSync      readDir           readLink          readAllS
 
 ## `DENO_REPL_HISTORY`
 
-By default, Deno stores REPL history in a file named `deno_history.txt` located inside the `DENO_DIR` directory. You can find the location of your `DENO_DIR` directory and other resources by running `deno info`.
+默认情况下，Deno 会将 REPL 历史记录存储在 `DENO_DIR` 目录中的一个名为 `deno_history.txt` 的文件里。你可以通过运行 `deno info` 来找到 `DENO_DIR` 目录的位置以及其他资源。
 
-You can use the `DENO_REPL_HISTORY` environment variable to control where Deno stores the REPL history file. You can set it to an empty value, and Deno will not store the history file.
+你可以使用 `DENO_REPL_HISTORY` 环境变量来控制 Deno 存储 REPL 历史文件的位置。你可以将其设置为空值，这样 Deno 就不会存储历史文件。

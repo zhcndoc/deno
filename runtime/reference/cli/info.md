@@ -7,18 +7,20 @@ oldUrl:
 command: info
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno info"
-description: "Inspect the dependencies of your project"
+description: "检查项目的依赖"
 ---
+
+`deno info` 会显示一个模块依赖树的信息。有关 Deno 如何解析和缓存依赖的更多内容，请参见
+[Modules](/runtime/fundamentals/modules/)。
 
 ## 示例
 
-```shell
-$ deno info jsr:@std/http@1.0.0-rc.5/file-server
-本地: /home/lucacasonato/.cache/deno/deps/https/jsr.io/3a0e5ef03d2090c75c81daf771ed9a73009518adfe688c333dc11d8006dc3598
-输出: /home/lucacasonato/.cache/deno/gen/https/jsr.io/3a0e5ef03d2090c75c81daf771ed9a73009518adfe688c333dc11d8006dc3598.js
-类型: TypeScript
-依赖项: 40 个唯一
-大小: 326.42KB
+```sh
+deno info jsr:@std/http/file-server
+local: /home/user/.cache/deno/deps/https/jsr.io/...
+type: TypeScript
+dependencies: 40 unique
+size: 326.42KB
 
 https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 ├─┬ https://jsr.io/@std/path/1.0.1/posix/join.ts (862B)
@@ -104,11 +106,19 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 
 依赖检查器支持任何本地或远程的 ES 模块。
 
+## JSON 输出
+
+使用 `--json` 获取机器可读输出，适用于工具和 CI：
+
+```sh
+deno info --json main.ts
+```
+
 ## 缓存位置
 
-`deno info` 可以用来显示缓存位置的信息：
+`deno info` 可以用来显示缓存位置信息：
 
-```shell
+```sh
 deno info
 DENO_DIR 位置: "/Users/deno/Library/Caches/deno"
 远程模块缓存: "/Users/deno/Library/Caches/deno/deps"

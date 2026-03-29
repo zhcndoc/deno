@@ -73,7 +73,8 @@ deno test --no-check
 
 ## 与 JavaScript 一起使用
 
-Deno 可以运行 JavaScript 和 TypeScript 代码。然而，在类型检查期间，Deno 默认只对 TypeScript 文件进行类型检查。如果您想对 JavaScript 文件进行类型检查，可以在文件顶部添加 `// @ts-check` 指令，或在 `deno.json` 文件中添加 `compilerOptions.checkJs`。
+Deno 运行 JavaScript 和 TypeScript 代码。不过，在类型检查期间，Deno 默认只会检查 TypeScript 文件的类型。如果您也想检查 JavaScript 文件的类型，可以在文件顶部添加 `// @ts-check` 预置指令，或者在您的
+[`deno.json`](/runtime/fundamentals/configuration/) 文件中添加 `compilerOptions.checkJs`。
 
 ```ts title="main.js"
 // @ts-check
@@ -174,7 +175,8 @@ X-TypeScript-Types: ./add.d.ts
 }
 ```
 
-这将启用对浏览器环境的类型检查，为全局对象（如 `document`）提供类型信息。但是，这将禁用 Deno 特定 API（如 `Deno.readFile`）的类型信息。
+这将启用浏览器环境的类型检查，为 `document` 等全局对象提供类型信息。不过，这也会禁用 Deno 特定 API 的类型信息，例如
+[`Deno.readFile`](/api/deno/~/Deno.readFile)。
 
 要启用对 **浏览器和 Deno 环境** 的组合类型检查，例如在使用 Deno 进行 SSR 时，您可以在 `deno.json` 配置文件的 `compilerOptions.lib` 选项中指定 `dom` 和 `deno.ns`（Deno 命名空间）库文件：
 
@@ -186,7 +188,7 @@ X-TypeScript-Types: ./add.d.ts
 }
 ```
 
-这将同时启用对浏览器和 Deno 环境的类型检查，为全局对象（如 `document`）和 Deno 特定 API（如 `Deno.readFile`）提供类型信息。
+这将同时启用浏览器和 Deno 环境的类型检查，为 `document` 等全局对象以及 [`Deno.readFile`](/api/deno/~/Deno.readFile) 等 Deno 特定 API 提供类型信息。
 
 要启用对 **Deno 中 web worker 环境** 的类型检查（即用 `new Worker` 运行的代码），您可以在 `deno.json` 的 `compilerOptions.lib` 选项中指定 `deno.worker` 库文件：
 

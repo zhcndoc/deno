@@ -247,7 +247,7 @@ jobs:
 
 要在您的 Deno 项目中使用 VSCode 的 ESLint 扩展，您的项目目录需要有一个 `node_modules` 文件夹，供 VSCode 扩展识别。
 
-在您的 `deno.json` 中确保创建 `node_modules` 文件夹，以便编辑器能解析包：
+在您的 [`deno.json`](/runtime/fundamentals/configuration/) 中确保创建一个 `node_modules` 文件夹，以便编辑器可以解析包：
 
 ```jsonc
 {

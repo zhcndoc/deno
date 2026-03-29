@@ -4,18 +4,19 @@ oldUrl: /runtime/manual/tools/uninstall/
 command: uninstall
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno uninstall"
-description: "Remove a dependency from your project or from your global cache"
+description: "从你的项目或全局缓存中移除一个依赖"
 ---
 
 ## `deno uninstall [PACKAGES]`
 
-移除在 `deno.json` 或 `package.json` 中指定的依赖：
+移除指定于
+[`deno.json`](/runtime/fundamentals/configuration/) 或 `package.json` 中的依赖：
 
-```shell
-$ deno add npm:express
-添加 npm:express@5.0.0
+```sh
+deno add npm:express
+Add npm:express@5.0.0
 
-$ cat deno.json
+cat deno.json
 {
   "imports": {
     "express": "npm:express@5.0.0"
@@ -23,11 +24,11 @@ $ cat deno.json
 }
 ```
 
-```shell
-$ deno uninstall express
-已移除 express
+```sh
+deno uninstall express
+Removed express
 
-$ cat deno.json
+cat deno.json
 {
   "imports": {}
 }
@@ -41,12 +42,12 @@ $ cat deno.json
 
 你可以一次性移除多个依赖：
 
-```shell
-$ deno add npm:express jsr:@std/http
-添加 npm:express@5.0.0
-添加 jsr:@std/http@1.0.7
+```sh
+deno add npm:express jsr:@std/http
+Added npm:express@5.0.0
+Added jsr:@std/http@1.0.7
 
-$ cat deno.json
+cat deno.json
 {
   "imports": {
     "@std/http": "jsr:@std/http@^1.0.7",
@@ -55,12 +56,12 @@ $ cat deno.json
 }
 ```
 
-```shell
-$ deno remove express @std/http
-已移除 express
-已移除 @std/http
+```sh
+deno remove express @std/http
+Removed express
+Removed @std/http
 
-$ cat deno.json
+cat deno.json
 {
   "imports": {}
 }
@@ -74,18 +75,18 @@ $ cat deno.json
 
 如果你的项目包含 `package.json`，`deno uninstall` 也可以与之一起工作：
 
-```shell
-$ cat package.json
+```sh
+cat package.json
 {
   "dependencies": {
     "express": "^5.0.0"
   }
 }
 
-$ deno remove express
-已移除 express
+deno remove express
+Removed express
 
-$ cat package.json
+cat package.json
 {
   "dependencies": {}
 }
@@ -95,12 +96,12 @@ $ cat package.json
 
 卸载 `serve`
 
-```bash
+```sh
 deno uninstall --global serve
 ```
 
 从特定的安装根目录卸载 `serve`
 
-```bash
+```sh
 deno uninstall -g --root /usr/local/bin serve
 ```
