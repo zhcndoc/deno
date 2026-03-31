@@ -1,0 +1,278 @@
+---
+title: "调试"
+description: "Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器及其他调试技巧来调试 Deno 中的 TypeScript/JavaScript 代码。"
+oldUrl:
+  - /runtime/manual/getting_started/debugging_your_code/
+  - /runtime/manual/basics/debugging_your_code/
+---
+
+Deno 支持 [V8 Inspector Protocol](https://v8.dev/docs/inspector)，这是 Chrome、Edge 和 Node.js 使用的协议。这使得可以使用 Chrome DevTools 或其他支持该协议的客户端（例如 VSCode）调试 Deno 程序。
+
+要激活调试功能，请使用以下标志之一运行 Deno：
+
+- `--inspect`
+- `--inspect-wait`
+- `--inspect-brk`
+
+## --inspect
+
+使用 `--inspect` 标志将启动一个带有 inspector 服务器的程序，这样就可以从支持 V8 Inspector 协议的工具（例如 Chrome DevTools）连接客户端。
+
+在 Chromium 兼容的浏览器中访问 `chrome://inspect` 以将 Deno 连接到 inspector 服务器。这允许您检查代码、添加断点并逐步执行代码。
+
+```sh
+deno run --inspect your_script.ts
+```
+
+:::note
+
+如果您使用 `--inspect` 标志，代码将立即开始执行。如果您的程序较短，您可能没有足够的时间在程序完成执行之前连接调试器。
+
+在这种情况下，请尝试使用 `--inspect-wait` 或 `--inspect-brk` 标志，或者在代码的结尾添加一个超时。
+
+:::
+
+## --inspect-wait
+
+`--inspect-wait` 标志将在执行代码之前等待调试器连接。
+
+```sh
+deno run --inspect-wait your_script.ts
+```
+
+## --inspect-brk
+
+`--inspect-brk` 标志将在执行代码之前等待调试器连接，然后在您连接后立即在您的程序中设置一个断点，允许您在继续执行之前添加额外的断点或评估表达式。
+
+**这是最常用的 inspect 标志**。JetBrains 和 VSCode IDE 默认使用此标志。
+
+```sh
+deno run --inspect-brk your_script.ts
+```
+
+## 使用 Chrome DevTools 的示例
+
+让我们尝试使用 Chrome DevTools 调试一个程序。为此，我们将使用
+[`@std/http/file-server`](/runtime/reference/std/http/)，一个静态文件服务器。
+
+使用 `--inspect-brk` 标志在第一行中暂停执行：
+
+```sh
+$ deno run --inspect-brk -RN jsr:@std/http/file-server
+Debugger listening on ws://127.0.0.1:9229/ws/1e82c406-85a9-44ab-86b6-7341583480b1
+...
+```
+
+在像 Google Chrome 或 Microsoft Edge 这样的 Chromium 兼容浏览器中，打开 `chrome://inspect` 并点击目标旁边的 `Inspect`：
+
+![chrome://inspect](./images/debugger1.png)
+
+打开 DevTools 后可能需要几秒钟才能加载所有模块。
+
+![DevTools 已打开](./images/debugger2.jpg)
+
+您可能会注意到 DevTools 在 `_constants.ts` 的第一行暂停执行，而不是在 `file_server.ts`。这是由于 JavaScript 中 ES 模块的评估方式造成的预期行为（`_constants.ts` 是 `file_server.ts` 的最左侧、最底部依赖项，因此它首先被评估）。
+
+此时，所有源代码在 DevTools 中均可用，所以让我们打开 `file_server.ts` 并在此添加断点；转到 "Sources" 面板并展开树形结构：
+
+![打开 file_server.ts](./images/debugger3.jpg)
+
+_仔细查看您会发现每个文件都有重复条目；一个是常规写法，一个是斜体。前者是编译的源文件（因此在 `.ts` 文件的情况下，它将发出 JavaScript 源），而后者是该文件的源映射。_
+
+接下来，在 `listenAndServe` 方法中添加一个断点：
+
+![在 file_server.ts 中设置断点](./images/debugger4.jpg)
+
+一旦添加了断点，DevTools 将自动打开源映射文件，这让我们可以逐步查看包含类型的实际源代码。
+
+现在我们已经设置了断点，可以继续执行脚本，以便检查传入的请求。点击 "Resume script execution" 按钮来完成。您可能需要点击两次！
+
+一旦我们的脚本在运行，尝试发送请求并在 DevTools 中检查它：
+
+```sh
+curl http://0.0.0.0:4507/
+```
+
+![在请求处理中设置断点](./images/debugger5.jpg)
+
+此时我们可以检查请求的内容，并逐步调试代码。
+
+## VSCode
+
+可以使用 VSCode 调试 Deno。最好的方法是借助官方的 `vscode_deno` 扩展。有关此扩展的文档可以在 [这里](/runtime/reference/vscode#using-the-debugger) 找到。
+
+## JetBrains IDEs
+
+_**注意**：确保您已安装并在首选项/设置 | 插件中启用 [此 Deno 插件](https://plugins.jetbrains.com/plugin/14382-deno)。有关更多信息，请参见 [此博客文章](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)。_
+
+您可以通过右键单击要调试的文件并选择 `Debug 'Deno: <file name>'` 选项来使用 JetBrains IDE 调试 Deno。
+
+![调试文件](./images/jb-ide-debug.png)
+
+这将创建一个没有权限标志的运行/调试配置。如果您想配置它们，请打开您的运行/调试配置并将所需标志添加到 `Command` 字段。
+
+## --log-level=debug
+
+如果您在连接 inspector 时遇到问题，可以使用 `--log-level=debug` 标志以获取有关发生情况的更多信息。这将显示例如模块解析、网络请求和其他权限检查等信息。
+
+```sh
+deno run --inspect-brk --log-level=debug your_script.ts
+```
+
+## --strace-ops
+
+Deno ops 是一个 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 机制，用于在 JavaScript 和 Rust 之间提供功能，例如文件 I/O、网络和定时器。`--strace-ops` 标志将在程序运行时打印所有正在执行的 Deno ops 及其时序。
+
+```sh
+deno run --strace-ops your_script.ts
+```
+
+每个 op 都应包含一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间即为执行该 op 所花费的时间。此标志对于性能分析、调试挂起的程序或了解 Deno 的底层工作原理非常有用。
+
+## CPU Profiling
+
+Deno 包含对 V8 CPU 采样分析的内置支持，帮助您识别代码中的性能瓶颈。使用 `--cpu-prof` 标志可以在程序执行期间捕获 CPU 分析数据：
+
+```sh
+deno run --cpu-prof your_script.ts
+# 或使用 deno eval
+deno eval --cpu-prof "for (let i = 0; i < 1e8; i++) {}"
+```
+
+当程序退出时，Deno 会在当前目录写入一个 `.cpuprofile` 文件（例如，`CPU.1769017882255.25986.cpuprofile`）。该文件可以加载到 Chrome DevTools（性能选项卡）或其他 V8 分析工具中进行分析。
+
+### CPU 采样分析标志
+
+| Flag                                 | Description                                                                                                      |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `--cpu-prof`                         | 启用 CPU 分析。分析文件会在退出时写入磁盘。                                                        |
+| `--cpu-prof-dir=<DIR>`               | 将写入 CPU 分析文件的目录。默认是当前目录。会隐式启用 `--cpu-prof`。 |
+| `--cpu-prof-name=<NAME>`             | CPU 分析文件的文件名。默认值为 `CPU.<timestamp>.<pid>.cpuprofile`。                                    |
+| `--cpu-prof-interval=<MICROSECONDS>` | 采样间隔，单位为微秒。默认值为 `1000`（1ms）。较小的值会提供更多细节，但生成的文件更大。      |
+| `--cpu-prof-md`                      | 生成一个可读的 Markdown 报告，并与 `.cpuprofile` 文件一起输出。                                      |
+| `--cpu-prof-flamegraph`              | 生成一个交互式 SVG 火焰图，并与 `.cpuprofile` 文件一起输出。                                         |
+
+:::note
+
+CPU 采样报告的是转译后的 JavaScript 代码的行号，而非原始的 TypeScript 源代码。这是 V8 采样分析器的限制。对于 TypeScript 文件，报告的行号可能与您的源代码不完全对应。
+
+:::
+
+### 在 Chrome DevTools 中分析采样
+
+分析 `.cpuprofile` 文件步骤：
+
+1. 打开 Chrome DevTools（F12）
+2. 进入 **Performance**（性能）选项卡
+3. 点击 **Load profile**（加载分析文件）按钮（向上箭头图标）
+4. 选择您的 `.cpuprofile` 文件
+
+DevTools 会显示火焰图和详细的时间消耗分布。
+
+### 示例：Markdown 报告
+
+`--cpu-prof-md` 标志会生成一个可读的 Markdown 汇总报告，方便不用加载 DevTools 也能查看：
+
+```sh
+deno run -A --cpu-prof --cpu-prof-md server.js
+```
+
+这将创建 `.cpuprofile` 文件和一个类似如下的 `.md` 文件：
+
+```md
+# CPU Profile
+
+| Duration | Samples | Interval | Functions |
+| -------- | ------- | -------- | --------- |
+| 833.06ms | 641     | 1000us   | 10        |
+
+**Top 10:** `op_crypto_get_random_values` 98.5%, `(garbage collector)` 0.7%,
+`getRandomValues` 0.6%, `assertBranded` 0.2%
+
+## Hot Functions (Self Time)
+
+| Self% |     Self | Total% |    Total | Function                      | Location          |
+| ----: | -------: | -----: | -------: | ----------------------------- | ----------------- |
+| 98.5% | 533.00ms |  98.5% | 533.00ms | `op_crypto_get_random_values` | [native code]     |
+|  0.7% |   4.00ms |   0.7% |   4.00ms | `(garbage collector)`         | [native code]     |
+|  0.6% |   3.00ms |   0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
+|  0.2% |   1.00ms |   0.2% |   1.00ms | `assertBranded`               | 00_webidl.js:1149 |
+
+## Call Tree (Total Time)
+
+| Total% |    Total | Self% |     Self | Function                      | Location          |
+| -----: | -------: | ----: | -----: | ----------------------------- | ----------------- |
+|  16.8% |  91.00ms | 16.8% |  91.00ms | `(anonymous)`                 | server.js:1       |
+|   0.6% |   3.00ms |  0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
+|  98.5% | 533.00ms | 98.5% | 533.00ms | `op_crypto_get_random_values` | [native code]     |
+
+## Function Details
+
+### `op_crypto_get_random_values`
+
+[native code] | Self: 98.5% (533.00ms) | Total: 98.5% (533.00ms) | Samples: 533
+```
+
+该报告包含：
+
+- **摘要**：总时长、样本数量、采样间隔和函数数量
+- **Top 10**：最高耗时函数一览
+- **Hot Functions**：按自用时间（函数本身花费时间，不含调用其他函数时间）排序的函数
+- **调用树**：分层显示调用栈和时间分布
+- **函数详情**：每个函数的样本统计和细节
+
+### 示例：交互式火焰图
+
+`--cpu-prof-flamegraph` 标志会生成一个自包含的、交互式 SVG 火焰图，您可以直接在浏览器中打开，无需外部工具：
+
+```sh
+deno run --cpu-prof --cpu-prof-flamegraph your_script.ts
+```
+
+这会同时创建一个 `.cpuprofile` 文件和一个 `.svg` 文件。使用任意浏览器打开 SVG 以交互式探索分析结果：
+
+- **点击** 任意框以缩放到该子树
+- **Reset Zoom** 按钮可恢复完整视图
+- **Ctrl+F** 或 **Search** 按钮可进行基于正则表达式的函数搜索，并高亮显示及匹配百分比
+- **Invert** 复选框可切换为倒置冰柱图（根在顶部）
+- **悬停** 任意框以查看函数名和样本数
+
+该火焰图也可与 `deno eval` 一起使用：
+
+```sh
+deno eval --cpu-prof --cpu-prof-flamegraph "for (let i = 0; i < 1e8; i++) {}"
+```
+
+## OpenTelemetry 集成
+
+对于生产环境应用或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方案。Deno 内置支持 OpenTelemetry，允许您：
+
+- 跟踪应用中的请求
+- 监测应用性能指标
+- 收集结构化日志
+- 将遥测数据导出到监控系统
+
+```sh
+OTEL_DENO=true deno run your_script.ts
+```
+
+这将自动收集和导出运行时可观察性数据，包括：
+
+- HTTP 请求跟踪
+- 运行时指标
+- 控制台日志和错误
+
+有关 Deno 的 OpenTelemetry 集成的完整详情，包括自定义指标、跟踪和配置选项，请参见
+[OpenTelemetry 文档](/runtime/fundamentals/open_telemetry)。
+
+## TLS 会话调试
+
+设置 `SSLKEYLOGFILE` 环境变量以将 TLS 会话密钥记录到文件中。
+这使您可以使用 [Wireshark](https://www.wireshark.org/) 等工具解密并检查加密网络流量：
+
+```sh
+SSLKEYLOGFILE=./keys.log deno run -N main.ts
+```
+
+然后在 Wireshark 中加载 `keys.log`（Edit > Preferences > Protocols > TLS >
+(Pre)-Master-Secret log filename）以解密捕获的 TLS 流量。
