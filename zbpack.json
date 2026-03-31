@@ -1,0 +1,6 @@
+{
+  "app_dir": "/",
+  "install_command": "npm install -g deno && deno install",
+  "output_dir": "_site",
+  "build_command": "deno task generate:reference && deno task lume"
+}

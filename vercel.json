@@ -1,0 +1,16 @@
+{
+  "installCommand": "npm install -g deno && deno install",
+  "buildCommand": "deno task generate:reference && deno task lume",
+  "outputDirectory": "_site",
+  "headers": [
+    {
+      "source": "/api/(deno|node|web)/(.*)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}
