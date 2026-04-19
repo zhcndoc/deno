@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-09-11
 title: "连接到数据库"
-description: "Deno 中数据库连接的指南。学习如何使用 MySQL、PostgreSQL、MongoDB、SQLite、Firebase、Supabase 以及流行的 ORM 来构建基于 TypeScript 的数据驱动应用。"
+description: "Deno 中数据库连接指南。学习如何使用 MySQL、PostgreSQL、MongoDB、SQLite、Firebase、Supabase 以及流行的 ORM，通过 TypeScript 构建数据驱动的应用程序。"
 url: /examples/connecting_to_databases_tutorial/
 oldUrl:
   - /runtime/tutorials/connecting_to_databases/

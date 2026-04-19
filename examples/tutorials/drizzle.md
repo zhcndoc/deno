@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "使用 Drizzle ORM 和 Deno 构建数据库应用"
-description: "Step-by-step guide to building database applications with Drizzle ORM and Deno. Learn about schema management, type-safe queries, PostgreSQL integration, migrations, and how to implement CRUD operations."
+description: "使用 Drizzle ORM 和 Deno 构建数据库应用的循序渐进指南。了解模式管理、类型安全的查询、PostgreSQL 集成、迁移，以及如何实现 CRUD 操作。"
 url: /examples/drizzle_tutorial/
 oldUrl:
   - /runtime/tutorials/drizzle

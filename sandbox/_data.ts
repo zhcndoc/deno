@@ -2,57 +2,57 @@ import { Sidebar, SidebarNav } from "../types.ts";
 
 export const sidebar = [
   {
-    title: "Sandbox",
+    title: "Deno 沙箱",
     items: [
-      { title: "About", href: "/sandbox/" },
+      { title: "关于", href: "/sandbox/" },
       {
-        title: "Getting started",
+        title: "快速入门",
         href: "/sandbox/getting_started/",
       },
       {
-        title: "Create a sandbox",
+        title: "创建沙箱",
         href: "/sandbox/create/",
       },
       {
-        title: "Management via CLI",
+        title: "通过 CLI 管理",
         href: "/sandbox/cli/",
       },
     ],
   },
   {
-    title: "Concepts",
+    title: "概念",
     items: [
       {
-        title: "Expose HTTP",
+        title: "暴露 HTTP",
         href: "/sandbox/expose_http/",
       },
       {
-        title: "SSH",
+        title: "暴露 SSH",
         href: "/sandbox/ssh/",
       },
       {
-        title: "Manage Deno Deploy apps",
+        title: "管理 Deno Deploy 应用",
         href: "/sandbox/apps/",
       },
       {
-        title: "Volumes & Snapshots",
+        title: "持久卷与快照",
         href: "/sandbox/volumes/",
       },
       {
-        title: "Timeouts",
+        title: "沙盒生命周期",
         href: "/sandbox/timeouts/",
       },
       {
-        title: "Security",
+        title: "安全",
         href: "/sandbox/security/",
       },
     ],
   },
   {
-    title: "Reference",
+    title: "参考",
     items: [
       {
-        title: "SDK Reference",
+        title: "SDK 参考",
         href: "https://jsr.io/@deno/sandbox/doc/~/Sandbox",
       },
       {
@@ -60,22 +60,22 @@ export const sidebar = [
         href: "https://api.deno.com/v2/docs",
       },
       {
-        title: "Sandbox CLI commands",
+        title: "沙箱 CLI 命令",
         href: "/runtime/reference/cli/sandbox/",
       },
       {
-        title: "Examples",
+        title: "示例",
         href: "/examples/#sandbox",
       },
       {
-        title: "Pricing",
+        title: "定价",
         href: "https://deno.com/deploy/sandbox#sandbox-pricing",
       },
     ],
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Sandbox";
+export const sectionTitle = "Deno 沙箱";
 export const sectionHref = "/sandbox/";
 export const SidebarNav = [
   {
@@ -83,7 +83,7 @@ export const SidebarNav = [
     href: "/deploy/",
   },
   {
-    title: "Deno Sandbox",
+    title: "Deno 沙箱",
     href: "/sandbox/",
   },
   {
@@ -91,7 +91,7 @@ export const SidebarNav = [
     href: "/deploy/classic/",
   },
   {
-    title: "Subhosting",
+    title: "子托管",
     href: "/subhosting/manual/",
   },
 ] satisfies SidebarNav;

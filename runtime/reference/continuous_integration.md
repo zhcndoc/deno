@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-11-21
 title: "持续集成"
-description: "为 Deno 项目设置持续集成（CI）管道的指南。学习如何配置 GitHub Actions 工作流程，在 CI 中运行测试和代码检查，处理跨平台构建，并通过缓存优化管道性能。"
+description: "为 Deno 项目设置持续集成（CI）管道的指南。了解如何配置 GitHub Actions 工作流程，在 CI 中运行测试和代码检查，处理跨平台构建，并通过缓存优化管道性能。"
 oldUrl: /runtime/manual/advanced/continuous_integration
 ---
 

@@ -1,5 +1,6 @@
 ---
-title: "简单的 API 服务器"
+last_modified: 2025-09-24
+title: "Simple API server"
 url: /examples/simple_api_tutorial/
 oldUrl:
   - /deploy/tutorials/simple-api/

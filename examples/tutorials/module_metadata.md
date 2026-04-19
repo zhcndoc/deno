@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "模块元数据"
-description: "A guide to working with module metadata in Deno. Learn about import.meta properties, main module detection, file paths, URL resolution, and how to access module context information in your applications."
+description: "Deno 中使用模块元数据的指南。了解 import.meta 属性、主模块检测、文件路径、URL 解析，以及如何在应用中访问模块上下文信息。"
 url: /examples/module_metadata_tutorial/
 oldUrl:
   - /runtime/manual/examples/module_metadata/

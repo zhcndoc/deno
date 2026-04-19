@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-12-18
 title: 部署按钮
-description: "帮助用户快速轻松地克隆代码并通过点击按钮将其部署到 Deno Deploy"
+description: "帮助用户通过一键操作，快速轻松地克隆代码并将其部署到 Deno Deploy"
 ---
 
 :::info
@@ -19,7 +20,7 @@ description: "帮助用户快速轻松地克隆代码并通过点击按钮将其
 
 下面的部署按钮演示了基于一个简单入门项目创建新应用程序的过程
 
-[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/examples&path=hello-world)
+[![在 Deno 上部署](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/examples&path=hello-world)
 
 ## 创建并部署新应用程序
 
@@ -28,13 +29,13 @@ description: "帮助用户快速轻松地克隆代码并通过点击按钮将其
 **Markdown**
 
 ```bash
-[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=REPOSITORY_URL)
+[![在 Deno 上部署](https://deno.com/button)](https://console.deno.com/new?clone=REPOSITORY_URL)
 ```
 
 **HTML**
 
 ```bash
-<a href="https://console.deno.com/new?clone=REPOSITORY_URL"><img src="https://deno.com/button" alt="Deploy on Deno"/></a>
+<a href="https://console.deno.com/new?clone=REPOSITORY_URL"><img src="https://deno.com/button" alt="在 Deno 上部署"/></a>
 ```
 
 **URL**

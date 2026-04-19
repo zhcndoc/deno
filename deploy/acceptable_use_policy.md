@@ -1,10 +1,11 @@
 ---
+last_modified: 2025-10-07
 title: "可接受使用政策"
-description: "Deno Deploy Classic 的可接受使用定义。"
+description: "Deno Deploy Classic 的可接受使用是什么。"
 oldUrl: /deploy/classic/acceptable-use-policy/
 ---
 
-Deno Deploy 服务包含资源（CPU 时间，请求次数），这些资源受此可接受使用政策的约束。本文档可以大致估算我们认为的“可接受使用”以及我们不接受的使用情况。
+Deno Deploy 服务包含资源（CPU 时间、请求次数），这些资源受此可接受使用政策的约束。本文档可以大致估算我们认为的“可接受使用”以及我们不接受的使用情况。
 
 ### 可接受使用的例子
 

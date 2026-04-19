@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-05
 title: "模块与依赖"
-description: "管理 Deno 中模块与依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制以及如何发布自己的模块。"
+description: "Deno 中管理模块和依赖的指南。了解 ECMAScript 模块、第三方包、导入映射、依赖管理、版本控制，以及如何发布你自己的模块。"
 oldUrl:
   - /runtime/manual/basics/modules/
   - /runtime/manual/basics/modules/integrity_checking/
@@ -137,7 +138,7 @@ console.log(textModule.default); // 输出：This is plain text
 数据 URL 格式遵循以下模式：
 
 ```sh
-data:[<media type>][;base64],<data>
+data:[<媒体类型>][;base64],<数据>
 ```
 
 对于 JavaScript 模块，请使用 `application/javascript` 作为媒体类型。

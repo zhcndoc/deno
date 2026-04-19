@@ -61,7 +61,7 @@ export const SidebarNav = [
     href: "/deploy/",
   },
   {
-    title: "Deno Sandbox",
+    title: "Deno 沙箱",
     href: "/sandbox/",
   },
   {
@@ -69,7 +69,7 @@ export const SidebarNav = [
     href: "/deploy/classic/",
   },
   {
-    title: "Subhosting",
+    title: "子托管",
     href: "/subhosting/manual/",
   },
 ] satisfies SidebarNav;

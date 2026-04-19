@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-19
 title: "使用 GitHub 集成进行部署"
 ---
 

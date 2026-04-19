@@ -1,6 +1,7 @@
 ---
-title: "使用 Tunnel 共享本地服务器"
-description: "使用 --tunnel 选项即时暴露公共 URL"
+last_modified: 2026-03-24
+title: "使用 Tunnel 共享你的本地服务器"
+description: "通过 --tunnel 选项立即公开一个公共 URL"
 url: /examples/tunnel_tutorial/
 ---
 

@@ -2,22 +2,22 @@ import { Sidebar, SidebarNav } from "../../types.ts";
 
 export const sidebar = [
   {
-    title: "Getting started",
+    title: "入门",
     items: [
       {
-        title: "Quick start",
+        title: "快速开始",
         href: "/deploy/classic/",
       },
       {
-        title: "Deploy basics",
+        title: "部署基础",
         items: [
-          { title: "Playgrounds", href: "/deploy/classic/playgrounds/" },
-          { title: "How to deploy", href: "/deploy/classic/how-to-deploy/" },
-          { title: "GitHub CI", href: "/deploy/classic/ci_github/" },
+          { title: "游乐场", href: "/deploy/classic/playgrounds/" },
+          { title: "如何部署", href: "/deploy/classic/how-to-deploy/" },
+          { title: "CI 和 GitHub Actions", href: "/deploy/classic/ci_github/" },
           { title: "deployctl", href: "/deploy/classic/deployctl/" },
-          { title: "Regions", href: "/deploy/classic/regions/" },
+          { title: "地区", href: "/deploy/classic/regions/" },
           {
-            title: "Pricing and limits",
+            title: "定价与限制",
             href: "/deploy/pricing_and_limits/",
           },
         ],
@@ -25,51 +25,51 @@ export const sidebar = [
     ],
   },
   {
-    title: "Deploy platform",
+    title: "部署平台",
     items: [
       {
-        title: "Deployments",
+        title: "部署",
         href: "/deploy/classic/deployments/",
       },
       {
-        title: "Custom domains",
+        title: "自定义域名",
         href: "/deploy/classic/custom-domains/",
       },
       {
-        title: "Environment variables",
+        title: "环境变量",
         href: "/deploy/classic/environment-variables/",
       },
       {
-        title: "Organizations",
+        title: "组织",
         href: "/deploy/classic/organizations/",
       },
       {
-        title: "Logs",
+        title: "应用程序日志",
         href: "/deploy/classic/logs/",
       },
       {
-        title: "Queues",
+        title: "队列",
         href: "/deploy/classic/queues/",
       },
       {
-        title: "Cron",
+        title: "Cron 任务",
         href: "/deploy/classic/cron/",
       },
       {
-        title: "Edge cache",
+        title: "边缘缓存",
         href: "/deploy/classic/edge-cache/",
       },
     ],
   },
   {
-    title: "Connecting to databases",
+    title: "连接到数据库",
     items: [
       {
         title: "Deno KV",
         href: "/deploy/classic/kv_on_deploy/",
       },
       {
-        title: "Third-Party Databases",
+        title: "第三方数据库",
         items: [
           { title: "DynamoDB", href: "/deploy/classic/dynamodb/" },
           { title: "Firebase", href: "/deploy/classic/firebase/" },
@@ -84,39 +84,39 @@ export const sidebar = [
     ],
   },
   {
-    title: "Reference",
+    title: "参考",
     items: [
-      { title: "Runtime API", href: "/deploy/classic/api/" },
-      { title: "Runtime FS", href: "/deploy/classic/api/runtime-fs/" },
-      { title: "Runtime Node", href: "/deploy/classic/api/runtime-node/" },
-      { title: "Compression", href: "/deploy/classic/api/compression/" },
+      { title: "API 参考", href: "/deploy/classic/api/" },
+      { title: "文件系统 API", href: "/deploy/classic/api/runtime-fs/" },
+      { title: "Node.js 内置 API", href: "/deploy/classic/api/runtime-node/" },
+      { title: "压缩响应体", href: "/deploy/classic/api/compression/" },
       {
-        title: "Runtime Sockets",
+        title: "TCP 套接字和 TLS",
         href: "/deploy/classic/api/runtime-sockets/",
       },
       {
-        title: "Runtime Broadcast Channel",
+        title: "BroadcastChannel",
         href: "/deploy/classic/api/runtime-broadcast-channel/",
       },
-      { title: "Runtime Fetch", href: "/deploy/classic/api/runtime-fetch/" },
+      { title: "HTTP 请求（fetch）", href: "/deploy/classic/api/runtime-fetch/" },
       {
-        title: "Runtime Request",
+        title: "HTTP 请求",
         href: "/deploy/classic/api/runtime-request/",
       },
       {
-        title: "Runtime Response",
+        title: "HTTP 响应",
         href: "/deploy/classic/api/runtime-response/",
       },
       {
-        title: "Runtime Headers",
+        title: "HTTP 请求头",
         href: "/deploy/classic/api/runtime-headers/",
       },
-      { title: "Dynamic Import", href: "/deploy/classic/api/dynamic-import/" },
+      { title: "动态导入", href: "/deploy/classic/api/dynamic-import/" },
     ],
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Deploy";
+export const sectionTitle = "Deploy Classic";
 export const sectionHref = "/deploy/classic/";
 export const SidebarNav = [
   {
@@ -124,7 +124,7 @@ export const SidebarNav = [
     href: "/deploy/",
   },
   {
-    title: "Deno Sandbox",
+    title: "Deno 沙箱",
     href: "/sandbox/",
   },
   {
@@ -132,7 +132,7 @@ export const SidebarNav = [
     href: "/deploy/classic/",
   },
   {
-    title: "Subhosting",
+    title: "子托管",
     href: "/subhosting/manual/",
   },
 ] satisfies SidebarNav;

@@ -1,5 +1,6 @@
 ---
-title: "deno 沙箱"
+last_modified: 2026-02-10
+title: "deno sandbox"
 command: sandbox
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno 沙箱"

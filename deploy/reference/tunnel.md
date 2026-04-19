@@ -1,6 +1,7 @@
 ---
-title: 隧道
-description: "了解 Deno Deploy 的本地隧道功能，该功能允许您从互联网安全地访问本地开发服务器。"
+last_modified: 2025-11-19
+title: Tunnel
+description: "了解 Deno Deploy 的本地隧道功能，它允许从互联网安全访问您的本地开发服务器。"
 ---
 
 Deno Deploy 的隧道功能允许您安全地将本地开发服务器暴露到互联网。这对于测试 webhook、与协作者共享您的工作，或从远程位置访问本地服务器尤为有用。

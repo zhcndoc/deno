@@ -24,7 +24,7 @@ export default function (
     >
       <div class="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] h-[var(--header-height)] gap-x-4 items-center justify-between px-4 w-full max-w-7xl mx-auto xlplus:px-0">
         <a
-          href="https://deno.com"
+          href="https://deno.zhcndoc.com"
           title="Deno main website"
           className="block h-8 w-8 xs:w-auto md:h-10 md:mr-auto overflow-hidden"
         >

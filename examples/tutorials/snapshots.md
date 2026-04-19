@@ -1,6 +1,7 @@
 ---
-title: "Deno 沙箱快照教程"
-description: "使用只读镜像创建隔离且可复现的环境。"
+last_modified: 2026-02-24
+title: "Deno Sandbox 快照教程"
+description: "使用只读镜像来创建隔离且可复现的环境。"
 url: "/examples/snapshots_tutorial/"
 ---
 

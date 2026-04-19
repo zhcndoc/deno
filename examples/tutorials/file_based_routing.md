@@ -1,13 +1,14 @@
 ---
+last_modified: 2025-08-20
 title: 基于文件的路由
-description: "Tutorial on implementing file-based routing in Deno. Learn how to create a dynamic routing system similar to Next.js, handle HTTP methods, manage nested routes, and build a flexible server architecture."
+description: "在 Deno 中实现基于文件的路由教程。学习如何创建类似 Next.js 的动态路由系统，处理 HTTP 方法，管理嵌套路由，并构建灵活的服务器架构。"
 url: /examples/file_based_routing_tutorial/
 oldUrl:
   - /examples/http-server-file-router/
   - /runtime/tutorials/file_based_routing/
 ---
 
-如果您使用过像 [Next.js](https://nextjs.org/) 这样的框架，您可能对基于文件的路由已不陌生 - 您在特定目录中添加一个文件，它会自动成为一个路由。本教程演示如何创建一个使用基于文件的路由的简单 HTTP 服务器。
+如果您使用过像 [Next.js](https://nextjs.org/) 这样的框架，您可能对基于文件的路由已不陌生——您在特定目录中添加一个文件，它会自动成为一个路由。本教程演示如何创建一个使用基于文件的路由的简单 HTTP 服务器。
 
 ## 路由请求
 
@@ -39,9 +40,9 @@ Deno.serve(handler);
 
 `handler` 函数设置了一个路径变量，其中包含从请求 URL 中提取的路径，以及一个方法变量，包含请求方法。
 
-接下来尝试根据路径导入一个模块。如果未找到模块，则返回404响应。
+接下来尝试根据路径导入一个模块。如果未找到模块，则返回 404 响应。
 
-如果找到了模块，它会检查该模块是否有请求方法的处理程序。如果找到了方法处理程序，它将使用请求对象调用该方法处理程序。如果未找到方法处理程序，则返回501响应。
+如果找到了模块，它会检查该模块是否有请求方法的处理程序。如果找到了方法处理程序，它将使用请求对象调用该方法处理程序。如果未找到方法处理程序，则返回 501 响应。
 
 最后，它使用 `Deno.serve` 提供处理程序函数。
 

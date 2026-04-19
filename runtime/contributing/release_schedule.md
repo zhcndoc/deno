@@ -1,6 +1,7 @@
 ---
-title: "Release Schedule"
-description: "Overview of Deno's release cycle and versioning process. Learn about stable releases, canary builds, and how to manage different Deno versions including upgrading to specific builds."
+last_modified: 2025-03-10
+title: "发布计划"
+description: "概述 Deno 的发布周期和版本管理流程。了解稳定版本、Canary 构建，以及如何管理不同的 Deno 版本（包括升级到特定构建）。"
 oldUrl: /runtime/manual/references/contributing/release_schedule/
 ---
 

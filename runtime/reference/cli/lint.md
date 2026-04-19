@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-12
 title: "deno lint"
 oldUrl:
   - /runtime/tools/linter/
@@ -12,7 +13,7 @@ openGraphTitle: "deno lint"
 description: "运行 Deno linter 来检查您的代码错误并应用自动修复"
 ---
 
-Deno 附带一个内置的 linter，用于分析您的代码中可能存在的错误、
+Deno 自带一个内置的 linter，用于分析您的代码中可能存在的错误、
 漏洞以及风格问题。有关更广泛的概述，请参阅
 [Linting and Formatting](/runtime/fundamentals/linting_and_formatting/)。
 

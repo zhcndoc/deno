@@ -1,6 +1,7 @@
 ---
-title: "使用隧道功能进行本地遥测"
-description: "使用 Deno 的隧道功能从本地开发服务器发送遥测数据"
+last_modified: 2026-02-02
+title: "使用隧道进行本地遥测"
+description: "使用 Deno 的隧道功能，从你的本地开发服务器发送遥测"
 url: /examples/tunnel_telemetry_tutorial/
 ---
 
@@ -71,7 +72,7 @@ deno run --tunnel dev
 console.log("这是服务器端页面模块。");
 
 export const load = async ({ fetch }) => {
-  // 用于示范的基础服务器端 fetch
+  // 用于演示的基础服务器端 fetch
   const response = await fetch("https://example.com");
   const exampleHtml = await response.text();
 
@@ -91,6 +92,6 @@ export const load = async ({ fetch }) => {
 
 现在你可以深入查看跟踪详情，看到遥测数据。你应该能看到对隧道 URL 的 GET 请求和对 `https://example.com` 的 fetch 请求，这些都是从你的本地开发服务器捕获的，无需额外配置！
 
-你还可以点击跟踪旁的 **查看日志** 按钮，查看特定请求产生的日志。如果你看到一个路径为 `/` 的跟踪记录，日志中会显示我们之前控制台输出的 "这是服务器端页面模块。"。
+你还可以点击跟踪旁的 **查看日志** 按钮，查看特定请求产生的日志。如果你看到一个路径为 `/` 的跟踪记录，日志中会显示我们之前控制台输出的 "这是服务器端页面模块。"
 
 🦕 JavaScript 拥有单线程事件循环和异步函数，项目中很可能存在大量日志和跟踪。Deno Deploy 的遥测工具旨在帮助你探索和调试异常或性能问题，因此如果看到大量数据也不必担心！请利用筛选和搜索功能，帮你找到所需信息。

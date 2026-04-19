@@ -1,6 +1,7 @@
 ---
-title: 框架
-description: "Deno Deploy 早期访问中支持的 JavaScript 和 TypeScript 框架的详细指南，包括 Next.js、Astro、Nuxt、SvelteKit 等。"
+last_modified: 2026-02-11
+title: Frameworks
+description: "Detailed guide to supported JavaScript and TypeScript frameworks in Deno Deploy, including Next.js, Astro, Nuxt, SvelteKit, and more."
 ---
 
 Deno Deploy 支持多种 JavaScript 和 TypeScript 框架的开箱即用。这意味着您可以在无需额外配置或设置的情况下使用这些框架。

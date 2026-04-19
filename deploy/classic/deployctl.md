@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-19
 title: "在命令行中使用 deployctl"
 ---
 

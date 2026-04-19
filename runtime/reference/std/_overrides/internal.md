@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-10-10
 title: "@std/internal"
 description: "@std 的内部包。请勿直接使用。"
 jsr: jsr:@std/internal

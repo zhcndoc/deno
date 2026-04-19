@@ -1,79 +1,74 @@
 ---
-title: "Stubbing in tests"
-description: "Learn how to use stubs in Deno to isolate code during testing by replacing function implementations with controlled behavior"
+last_modified: 2025-12-16
+title: "在测试中使用桩（Stubbing）"
+description: "了解如何在 Deno 中使用桩来隔离测试代码：通过用受控的行为替换函数实现"
 url: /examples/stubbing_tutorial/
 ---
 
-Stubbing is a powerful technique for isolating the code you're testing by
-replacing functions with controlled implementations. While
-[spies](/examples/mocking_tutorial/#spying) monitor function calls without
-changing behavior, stubs go a step further by completely replacing the original
-implementation, allowing you to simulate specific conditions or behaviors during
-testing.
+桩（Stubbing）是一种强大的技术，通过用受控的实现替换被测代码中的函数，从而实现代码隔离。尽管
+[间谍（spies）](/examples/mocking_tutorial/#spying) 会在不改变行为的情况下监控函数调用，但桩更进一步：它会彻底替换原始实现，让你能够在测试期间模拟特定的条件或行为。
 
-## What are stubs?
+## 什么是桩（stubs）？
 
-Stubs are fake implementations that replace real functions during testing. They
-let you:
+桩是用于测试的“假实现”，在测试时会替换真实函数。它们让你：
 
-- Control what values functions return
-- Simulate errors or specific edge cases
-- Prevent external services like databases or APIs from being called
-- Test code paths that would be difficult to trigger with real implementations
+- 控制函数返回哪些值
+- 模拟错误或特定的边界情况
+- 防止调用数据库或 API 等外部服务
+- 测试那些使用真实实现很难触发的代码路径
 
-Deno provides robust stubbing capabilities through the
-[Standard Library's testing tools](https://jsr.io/@std/testing/doc/mock#stubbing).
+Deno 通过
+[标准库的测试工具](https://jsr.io/@std/testing/doc/mock#stubbing)
+提供了强大的桩能力。
 
-## Basic stub usage
+## 基本桩用法
 
-Here's a simple example demonstrating how to stub a function:
+下面是一个简单示例，演示如何对函数进行桩替换：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
 import { stub } from "jsr:@std/testing/mock";
 
-// Wrap dependencies so they can be stubbed safely from tests.
+// 将依赖封装起来，以便能够在测试中安全地进行桩替换。
 const deps = {
   getUserName(_id: number): string {
-    // In a real app, this might call a database
+    // 在真实应用中，这可能会调用数据库
     return "Original User";
   },
 };
 
-// Function under test
+// 要测试的函数
 function greetUser(id: number): string {
   const name = deps.getUserName(id);
   return `Hello, ${name}!`;
 }
 
 Deno.test("greetUser with stubbed getUserName", () => {
-  // Create a stub that returns a controlled value
+  // 创建一个桩：返回一个受控的值
   const getUserNameStub = stub(deps, "getUserName", () => "Test User");
 
   try {
-    // Test with the stubbed function
+    // 使用桩后的实现进行测试
     const greeting = greetUser(123);
     assertEquals(greeting, "Hello, Test User!");
   } finally {
-    // Always restore the original function
+    // 始终恢复原始函数
     getUserNameStub.restore();
   }
 });
 ```
 
-In this example, we:
+在这个示例中，我们：
 
-1. Import the necessary functions from Deno's standard library
-2. Create a stub for the `getUserName` function that returns "Test User" instead
-   of calling the real implementation
-3. Call our function under test, which will use the stubbed implementation
-4. Verify the result meets our expectations
-5. Restore the original function to prevent affecting other tests
+1. 从 Deno 的标准库中导入所需的函数
+2. 为 `getUserName` 函数创建一个桩：使其返回 “Test User”，而不是调用真实实现
+3. 调用我们的被测函数，它会使用被桩替换后的实现
+4. 验证结果符合我们的预期
+5. 恢复原始函数，以防影响其他测试
 
-## Using stubs in a testing scenario
+## 在测试场景中使用桩
 
-Let's look at a more practical example with a `UserRepository` class that
-interacts with a database:
+让我们用一个更贴近实际的例子来看看：一个与数据库交互的 `UserRepository` 类：
 
 ```ts
 import { assertSpyCalls, returnsNext, stub } from "jsr:@std/testing/mock";
@@ -84,15 +79,15 @@ type User = {
   name: string;
 };
 
-// This represents our database access layer
+// 这表示我们的数据库访问层
 const database = {
   getUserById(id: number): User | undefined {
-    // In a real app, this would query a database
+    // 在真实应用中，这会查询数据库
     return { id, name: "Ada Lovelace" };
   },
 };
 
-// The class we want to test
+// 我们想要测试的类
 class UserRepository {
   static findOrThrow(id: number): User {
     const user = database.getUserById(id);
@@ -104,34 +99,31 @@ class UserRepository {
 }
 
 Deno.test("findOrThrow method throws when the user was not found", () => {
-  // Stub the database.getUserById function to return undefined
+  // 将 database.getUserById 桩替换为返回 undefined
   using dbStub = stub(database, "getUserById", returnsNext([undefined]));
 
-  // We expect this function call to throw an error
+  // 我们期望这个函数调用会抛出错误
   assertThrows(() => UserRepository.findOrThrow(1), Error, "User not found");
 
-  // Verify the stubbed function was called once
+  // 验证被桩替换的函数只被调用了一次
   assertSpyCalls(dbStub, 1);
 });
 ```
 
-In this example:
+在这个示例中：
 
-1. We're testing the `findOrThrow` method, which should throw an error when a
-   user is not found
-2. We stub `database.getUserById` to return `undefined`, simulating a missing
-   user
-3. We verify that `findOrThrow` throws the expected error
-4. We also check that the database method was called exactly once
+1. 我们正在测试 `findOrThrow` 方法：当找不到用户时它应该抛出错误
+2. 我们将 `database.getUserById` 桩替换为返回 `undefined`，用于模拟用户缺失
+3. 我们验证 `findOrThrow` 会抛出预期的错误
+4. 我们还会检查数据库方法是否恰好被调用了一次
 
-Note that we're using the `using` keyword with `stub`, which is a convenient way
-to ensure the stub is automatically restored when it goes out of scope.
+注意：我们在 `stub` 上使用了 `using` 关键字，它是一种很方便的方式，能够确保当桩超出作用域时会自动恢复。
 
-## Advanced stub techniques
+## 高级桩技巧
 
-### Returning different values on subsequent calls
+### 在连续调用中返回不同的值
 
-Sometimes you want a stub to return different values each time it's called:
+有时你希望桩在每次被调用时返回不同的值：
 
 ```ts
 import { returnsNext, stub } from "jsr:@std/testing/mock";
@@ -145,7 +137,7 @@ Deno.test("stub with multiple return values", () => {
   const fetchDataStub = stub(
     dataService,
     "fetchData",
-    // Return these values in sequence
+    // 按顺序返回这些值
     returnsNext(["first result", "second result", "third result"]),
   );
 
@@ -159,16 +151,16 @@ Deno.test("stub with multiple return values", () => {
 });
 ```
 
-### Stubbing with implementation logic
+### 使用桩时编写实现逻辑
 
-You can also provide custom logic in your stub implementations:
+你也可以在桩的实现中提供自定义逻辑：
 
 ```ts
 import { stub } from "jsr:@std/testing/mock";
 import { assertEquals } from "jsr:@std/assert";
 
 Deno.test("stub with custom implementation", () => {
-  // Create a counter to track how many times the stub is called
+  // 创建一个计数器，用于跟踪桩被调用了多少次
   let callCount = 0;
 
   const mathService = {
@@ -180,7 +172,7 @@ Deno.test("stub with custom implementation", () => {
     "calculate",
     (a: number, b: number) => {
       callCount++;
-      return a + b * 2; // Custom implementation
+      return a + b * 2; // 自定义实现
     },
   );
 
@@ -194,9 +186,9 @@ Deno.test("stub with custom implementation", () => {
 });
 ```
 
-## Stubbing API calls and external services
+## 对 API 调用和外部服务进行桩替换
 
-One of the most common uses of stubs is to replace API calls during testing:
+桩最常见的用途之一，是在测试期间替换 API 调用：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -220,7 +212,7 @@ Deno.test("fetchUserData with stubbed fetch", async () => {
     { status: 200, headers: { "Content-Type": "application/json" } },
   );
 
-  // Replace apiClient.fetch with a stubbed version
+  // 用桩替换 apiClient.fetch
   const fetchStub = stub(
     apiClient,
     "fetch",
@@ -236,30 +228,25 @@ Deno.test("fetchUserData with stubbed fetch", async () => {
 });
 ```
 
-## Best practices
+## 最佳实践
 
-1. **Always restore stubs**: Use `try/finally` blocks or the `using` keyword to
-   ensure stubs are restored, even if tests fail.
+1. **始终恢复桩**：使用 `try/finally` 代码块或 `using` 关键字来
+   确保即使测试失败，桩也会被恢复。
 
-2. **Use stubs for external dependencies**: Stub out database calls, API
-   requests, or file system operations to make tests faster and more reliable.
+2. **为外部依赖使用桩**：对数据库调用、API 请求或文件系统操作进行桩替换，
+   以让测试更快、更可靠。
 
-3. **Keep stubs simple**: Stubs should return predictable values that let you
-   test specific scenarios.
+3. **保持桩的简单**：桩应该返回可预测的值，以便你测试特定场景。
 
-4. **Combine with spies when needed**: Sometimes you need to both replace
-   functionality (stub) and track calls (spy).
+4. **需要时与间谍（spies）结合**：有时你不仅要替换功能（桩），
+   还需要跟踪调用（间谍）。
 
-5. **Stub at the right level**: Stub at the interface boundary rather than deep
-   within implementation details.
+5. **在正确的层级进行桩替换**：在接口边界处进行桩替换，而不是深入到底层实现细节。
 
-🦕 Stubs are a powerful tool for isolating your code during testing, allowing
-you to create deterministic test environments and easily test edge cases. By
-replacing real implementations with controlled behavior, you can write more
-focused, reliable tests that run quickly and consistently.
+🦕 桩是一个强大的工具，能在测试期间隔离你的代码：它让你能够创建确定性的测试环境，并轻松测试各种边界情况。通过用受控的行为替换真实实现，你可以编写更聚焦、更可靠、且运行更快的一致性测试。
 
-For more testing resources, check out:
+想了解更多测试资源，请查看：
 
-- [Testing in isolation with mocks](/examples/mocking_tutorial/)
-- [Deno Standard Library Testing Modules](https://jsr.io/@std/testing)
-- [Basic Testing in Deno](/examples/testing_tutorial/)
+- [使用 mock 在隔离环境中测试](/examples/mocking_tutorial/)
+- [Deno 标准库测试模块](https://jsr.io/@std/testing)
+- [Deno 中的基础测试](/examples/testing_tutorial/)

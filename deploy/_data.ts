@@ -4,58 +4,58 @@ export const sidebar = [
   {
     title: "Deno Deploy",
     items: [
-      { title: "About", href: "/deploy/" },
+      { title: "关于", href: "/deploy/" },
       {
-        title: "Getting started",
+        title: "快速入门",
         href: "/deploy/getting_started/",
       },
       {
-        title: "Migrating from Deploy Classic",
+        title: "从 Deploy Classic 迁移",
         href: "/deploy/migration_guide/",
       },
     ],
   },
   {
-    title: "Reference",
+    title: "参考",
     items: [
       {
         title: "REST API",
         href: "https://api.deno.com/v2/docs",
       },
       {
-        title: "Accounts",
+        title: "账户",
         href: "/deploy/reference/accounts/",
       },
       {
-        title: "Organizations",
+        title: "组织",
         href: "/deploy/reference/organizations/",
       },
       {
-        title: "Apps",
+        title: "应用",
         href: "/deploy/reference/apps/",
       },
       {
-        title: "Builds",
+        title: "构建",
         href: "/deploy/reference/builds/",
       },
       {
-        title: "Environment Variables and Contexts",
+        title: "环境变量与上下文",
         href: "/deploy/reference/env_vars_and_contexts/",
       },
       {
-        title: "Timelines",
+        title: "时间线",
         href: "/deploy/reference/timelines/",
       },
       {
-        title: "Tunnel",
+        title: "隧道",
         href: "/deploy/reference/tunnel/",
       },
       {
-        title: "Observability",
+        title: "可观测性",
         href: "/deploy/reference/observability/",
       },
       {
-        title: "Domains",
+        title: "域名",
         href: "/deploy/reference/domains/",
       },
       {
@@ -67,11 +67,11 @@ export const sidebar = [
         href: "/deploy/reference/deno_kv/",
       },
       {
-        title: "Databases",
+        title: "数据库",
         href: "/deploy/reference/databases/",
       },
       {
-        title: "Cloud Connections",
+        title: "云连接",
         href: "/deploy/reference/cloud_connections/",
       },
       {
@@ -79,23 +79,23 @@ export const sidebar = [
         href: "/deploy/reference/oidc/",
       },
       {
-        title: "Runtime",
+        title: "运行时",
         href: "/deploy/reference/runtime/",
       },
       {
-        title: "Framework support",
+        title: "框架支持",
         href: "/deploy/reference/frameworks/",
       },
       {
-        title: "CDN and caching",
+        title: "CDN 与缓存",
         href: "/deploy/reference/caching/",
       },
       {
-        title: "Playgrounds",
+        title: "游乐场",
         href: "/deploy/reference/playgrounds/",
       },
       {
-        title: "Deploy Button",
+        title: "部署按钮",
         href: "/deploy/reference/button/",
       },
     ],
@@ -103,57 +103,57 @@ export const sidebar = [
   {
     title: "KV",
     items: [
-      { title: "Overview", href: "/deploy/kv/" },
-      { title: "Key space", href: "/deploy/kv/key_space/" },
-      { title: "Operations", href: "/deploy/kv/operations/" },
+      { title: "概览", href: "/deploy/kv/" },
+      { title: "键空间", href: "/deploy/kv/key_space/" },
+      { title: "操作", href: "/deploy/kv/operations/" },
       {
-        title: "Key expiration",
+        title: "键过期",
         href: "/deploy/kv/key_expiration/",
       },
       {
-        title: "Secondary indexes",
+        title: "二级索引",
         href: "/deploy/kv/secondary_indexes/",
       },
-      { title: "Transactions", href: "/deploy/kv/transactions/" },
+      { title: "事务", href: "/deploy/kv/transactions/" },
       { title: "Node", href: "/deploy/kv/node/" },
       {
-        title: "Data modeling",
+        title: "数据建模",
         href: "/deploy/kv/data_modeling_typescript/",
       },
-      { title: "Backup", href: "/deploy/kv/backup/" },
+      { title: "备份", href: "/deploy/kv/backup/" },
     ],
   },
   {
     title: "政策和限制",
     items: [
       {
-        title: "Usage and Limitations",
+        title: "使用与限制",
         href: "/deploy/usage/",
       },
       {
-        title: "Acceptable Use Policy",
+        title: "可接受使用政策",
         href: "/deploy/acceptable_use_policy/",
       },
       {
-        title: "Fulfillment Policy",
+        title: "履约政策",
         href: "/deploy/fulfillment_policy/",
       },
-      { title: "Privacy Policy", href: "/deploy/privacy_policy/" },
-      { title: "Security", href: "/deploy/security/" },
+      { title: "隐私政策", href: "/deploy/privacy_policy/" },
+      { title: "安全性", href: "/deploy/security/" },
       {
-        title: "Terms and Conditions",
+        title: "条款和条件",
         href: "/deploy/terms_and_conditions/",
       },
     ],
   },
   {
-    title: "Support and Feedback",
+    title: "支持与反馈",
     items: [
       {
-        title: "Changelog",
+        title: "更新日志",
         href: "/deploy/changelog/",
       },
-      { title: "Support", href: "/deploy/support/" },
+      { title: "支持", href: "/deploy/support/" },
     ],
   },
 ] satisfies Sidebar;
@@ -166,7 +166,7 @@ export const SidebarNav = [
     href: "/deploy/",
   },
   {
-    title: "Deno Sandbox",
+    title: "Deno 沙箱",
     href: "/sandbox/",
   },
   {
@@ -174,7 +174,7 @@ export const SidebarNav = [
     href: "/deploy/classic/",
   },
   {
-    title: "Subhosting",
+    title: "子托管",
     href: "/subhosting/manual/",
   },
 ] satisfies SidebarNav;

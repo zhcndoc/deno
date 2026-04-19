@@ -1,11 +1,12 @@
 ---
+last_modified: 2026-03-19
 title: "在 Node.js 中使用 KV"
 oldUrl:
   - /kv/manual/node/
 ---
 
-在 Node.js 中连接 Deno KV 数据库可以通过我们的
-[官方客户端库在 npm 上](https://www.npmjs.com/package/@deno/kv)进行支持。您可以在下面找到此选项的使用说明。
+可以通过我们的
+[官方客户端库在 npm 上](https://www.npmjs.com/package/@deno/kv)来支持在 Node.js 中连接 Deno KV 数据库。您可以在下面找到此选项的使用说明。
 
 ## 安装和使用
 

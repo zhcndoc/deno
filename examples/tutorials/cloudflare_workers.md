@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-11-04
 title: "将 Deno 部署到 Cloudflare Workers"
-description: "Step-by-step tutorial on deploying Deno functions to Cloudflare Workers. Learn how to configure denoflare, create worker modules, test locally, and deploy your code to Cloudflare's global edge network."
+description: "关于将 Deno 函数部署到 Cloudflare Workers 的分步教程。了解如何配置 denoflare、创建 worker 模块、在本地测试，并将代码部署到 Cloudflare 的全球边缘网络。"
 url: /examples/cloudflare_workers_tutorial/
 oldUrl:
   - /runtime/manual/advanced/deploying_deno/cloudflare_workers/

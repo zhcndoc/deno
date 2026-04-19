@@ -1,5 +1,8 @@
 ---
+last_modified: 2026-03-19
 title: "动态导入"
+oldUrl:
+  - /deploy/api/dynamic-import/
 ---
 
 :::warning 2026 年 7 月 20 日停止支持
@@ -8,7 +11,7 @@ Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
 到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅
 <a href="/deploy/migration_guide/">迁移指南</a>。
 
-```ts title="Deno CLI 中有效的动态导入"
+```ts title="在 Deno CLI 中有效的动态导入"
 // 1. 静态确定的字符串字面量
 await import("jsr:@std/assert");
 
@@ -75,7 +78,7 @@ await import(modPath);
 
 我们将考虑是否可以在未来放宽这一约束。
 
-:::tip 什么是 eszip？
+:::tip eszip 是什么？
 
 当您在 Deno Deploy 上进行新部署时，系统会分析您的代码，通过递归遍历构建模块图，并将所有依赖项打包到一个单独的文件中。我们称之为 [eszip](https://github.com/denoland/eszip)。由于其创建是完全静态完成的，因此 Deno Deploy 上的动态导入功能受到限制。
 

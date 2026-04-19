@@ -1,5 +1,6 @@
 ---
-title: "不稳定功能标志"
+last_modified: 2026-03-05
+title: "不稳定的功能标志"
 oldUrl:
   - /runtime/tools/unstable_flags/
   - /runtime/manual/tools/unstable_flags/

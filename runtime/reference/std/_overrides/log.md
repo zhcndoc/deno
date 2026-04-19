@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-10-10
 title: "@std/log"
 description: "一个可自定义的日志框架"
 jsr: jsr:@std/log

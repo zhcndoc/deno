@@ -1,5 +1,6 @@
 ---
-title: "HTTP 响应"
+last_modified: 2026-03-19
+title: "HTTP Response"
 oldUrl:
   - /deploy/docs/response/
   - /deploy/api/response/
@@ -13,8 +14,7 @@ Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移
 
 :::
 
-[Response](https://developer.mozilla.org/en-US/docs/Web/API/Response)
-接口是 Fetch API 的一部分，表示 fetch() 的响应资源。
+[Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) 接口是 Fetch API 的一部分，用于表示 fetch() 的响应资源。
 
 - [构造函数](#构造函数)
   - [参数](#参数)
@@ -44,7 +44,7 @@ let response = new Response(body, init);
 | 名称         | 类型                                                  | 可选 | 描述                                                      |
 | ------------ | ----------------------------------------------------- | ---- | --------------------------------------------------------- |
 | `status`     | `number`                                              | `true` | 响应的状态码。                                         |
-| `statusText` | `string`                                              | `true` | 表示状态码的状态信息。                                    |
+| `statusText` | `string`                                              | `true` | 表示状态码的状态信息。                                  |
 | `headers`    | `Headers` 或 `string[][]` 或 `Record<string, string>` | `false` | 响应的 HTTP 头信息。                                     |
 
 ## 属性

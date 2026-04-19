@@ -1,6 +1,7 @@
 ---
-title: 构建
-description: "Deno Deploy 中构建流程的详细说明，涵盖构建触发方式、阶段、配置选项、缓存以及构建环境。"
+last_modified: 2026-02-25
+title: 构建（Builds）
+description: "Detailed explanation of the build process in Deno Deploy, covering build triggers, stages, configuration options, caching, and the build environment."
 ---
 
 在 Deno Deploy 中，您应用程序代码的每个版本都被表示为一个修订（或构建）。当从 GitHub 部署时，修订通常与您仓库中的 git 提交一一对应。

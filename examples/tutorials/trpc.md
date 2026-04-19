@@ -1,6 +1,7 @@
 ---
-title: "Build a Typesafe API with tRPC and Deno"
-description: "A guide to building type-safe APIs with tRPC and Deno. Learn how to set up endpoints, implement RPC procedures, handle data validation, and create efficient client-server applications."
+last_modified: 2025-03-10
+title: "使用 tRPC 和 Deno 构建类型安全的 API"
+description: "学习使用 tRPC 和 Deno 构建类型安全的 API。了解如何设置端点、实现 RPC 过程、处理数据校验，并创建高效的客户端-服务器应用。"
 url: /examples/trpc_tutorial/
 oldUrl:
   - /runtime/tutorials/trpc/

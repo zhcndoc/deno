@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "如何在 Deno 中使用 MySQL2"
-description: "Step-by-step guide to using MySQL2 with Deno. Learn how to set up database connections, execute queries, handle transactions, and build data-driven applications using MySQL's Node.js driver."
+description: "使用 MySQL2 与 Deno 的循序渐进指南。学习如何设置数据库连接、执行查询、处理事务，并使用 MySQL 的 Node.js 驱动构建数据驱动型应用。"
 url: /examples/mysql2_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/mysql2/
@@ -8,7 +9,7 @@ oldUrl:
 ---
 
 [MySQL](https://www.mysql.com/) 是在
-[2022年 Stack Overflow 开发者调查](https://survey.stackoverflow.co/2022/#most-popular-technologies-database)
+[2022 年 Stack Overflow 开发者调查](https://survey.stackoverflow.co/2022/#most-popular-technologies-database)
 中最受欢迎的数据库，并且有 Facebook、Twitter、YouTube 和 Netflix 等用户。
 
 [在这里查看源代码。](https://github.com/denoland/examples/tree/main/with-mysql2)
@@ -64,7 +65,7 @@ await connection.query(
 
 ## 查询 MySQL
 
-我们可以使用相同的 connection.query() 方法来编写我们的查询。首先，我们尝试获取 `dinosaurs` 表中的所有数据：
+我们可以使用相同的 `connection.query()` 方法来编写我们的查询。首先，我们尝试获取 `dinosaurs` 表中的所有数据：
 
 ```tsx
 const results = await connection.query("SELECT * FROM `dinosaurs`");

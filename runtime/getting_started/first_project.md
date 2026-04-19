@@ -1,6 +1,7 @@
 ---
-title: Making a Deno project
-description: "Step-by-step guide to creating your first Deno project. Learn how to initialize a project, understand the basic file structure, run TypeScript code, and execute tests using Deno's built-in test runner."
+last_modified: 2025-03-10
+title: 制作一个 Deno 项目
+description: "一步步指导您创建第一个 Deno 项目。学习如何初始化项目、理解基本的文件结构、运行 TypeScript 代码，并使用 Deno 的内置测试运行器执行测试。"
 oldUrl: /runtime/manual/getting_started/first_steps/
 ---
 
@@ -25,7 +26,7 @@ my_project
 └── main.ts
 ```
 
-创建一个 `deno.json` 文件以 [配置您的项目](/runtime/fundamentals/configuration/)，并创建两个 TypeScript 文件；`main.ts` 和 `main_test.ts`。`main.ts` 文件是您编写应用程序代码的地方，初始创建时它将包含一个简单的程序，用于将两个数字相加。`main_test.ts` 文件是您可以编写测试的地方，初始时它将包含一个用于您的加法程序的测试。
+创建一个 `deno.json` 文件以 [配置您的项目](/runtime/fundamentals/configuration/)，并创建两个 TypeScript 文件；`main.ts` 和 `main_test.ts`。`main.ts` 文件是您编写应用程序代码的地方，初始创建时它将包含一个简单的程序，用于将两个数字相加。`main_test.ts` 文件是您可以编写测试的地方，初始创建时它将包含一个用于您的加法程序的测试。
 
 ## 运行您的项目
 
@@ -48,6 +49,6 @@ addTest ... ok (1ms)
 ok | 1 passed | 0 failed (3ms)
 ```
 
-现在您已经设置了一个基本项目，可以开始构建您的应用程序。查看我们的 [示例和教程](/examples/) 获取有关使用 Deno 构建的更多想法。
+现在您已经设置了一个基本项目，可以开始构建您的应用程序。查看我们的 [示例和教程](/examples/) 以获取有关使用 Deno 构建的更多想法。
 
 您可以 [在这里了解更多关于在 Deno 中使用 TypeScript 的信息](/runtime/fundamentals/typescript)。

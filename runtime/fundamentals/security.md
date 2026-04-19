@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-26
 title: "安全性与权限"
-description: "Deno 安全模型和权限系统指南。了解安全默认设置、权限标志、运行时提示以及如何使用细粒度访问控制安全执行代码。"
+description: "Deno 的安全模型与权限系统指南。了解安全默认设置、权限标志、运行时提示，以及如何在具备细粒度访问控制的情况下安全执行代码。"
 oldUrl:
   - /runtime/manual/basics/permissionsDeno/
   - /manual/basics/permissions
@@ -271,7 +272,7 @@ deno run --allow-sys="systemMemoryInfo,osRelease" script.ts
 # 允许访问所有系统信息，但限制 "networkInterfaces"
 deno run --allow-sys --deny-sys="networkInterfaces" script.ts
 
-# 拒绝对系统信息的所有访问，禁用权限提示。
+# 拒绝对所有系统信息的访问，禁用权限提示。
 deno run --deny-sys script.ts
 ```
 
@@ -304,7 +305,7 @@ deno run --allow-run="curl,whoami" script.ts
 定义：`--deny-run[=<PROGRAM_NAME>...]`
 
 ```sh
-# 允许运行所有程序，但 "whoami" 和 "ps"。
+# 允许运行所有程序，但拒绝 "whoami" 和 "ps"。
 deno run --allow-run --deny-run="whoami,ps" script.ts
 
 # 拒绝所有生成子进程的访问，禁用权限提示。
@@ -338,7 +339,7 @@ deno run --allow-ffi=./libfoo.so script.ts
 定义：`--deny-ffi[=<PATH>...]`
 
 ```sh
-# 允许加载所有动态库，但 ./libfoo.so
+# 允许加载所有动态库，但拒绝 ./libfoo.so
 deno run --allow-ffi --deny-ffi=./libfoo.so script.ts
 
 # 拒绝加载所有动态库，禁用权限提示。

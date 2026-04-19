@@ -1,6 +1,7 @@
 ---
-title: "构建一个 SvelteKit 应用"
-description: "一个使用 Deno 构建 SvelteKit 应用的教程。学习如何设置 SvelteKit 项目，实现基于文件的路由，使用 load 函数管理状态，以及创建全栈 TypeScript 应用。"
+last_modified: 2025-09-29
+title: "使用 SvelteKit 构建应用"
+description: "使用 Deno 构建 SvelteKit 应用的教程。了解如何设置 SvelteKit 项目、实现基于文件的路由、使用 load 函数管理状态，以及创建一个全栈 TypeScript 应用。"
 url: /examples/svelte_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/svelte/

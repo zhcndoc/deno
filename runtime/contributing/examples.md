@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "贡献一个示例"
-description: "Learn how to create and contribute meaningful examples to the Deno docs."
+description: "了解如何创建并贡献有意义的 Deno 文档示例。"
 ---
 
 [Deno 示例](/examples/) 是一个展示如何使用 Deno 及其 API 的示例集合。如果您贡献一个示例，我们将送您一包免费的贴纸！

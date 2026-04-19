@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: "API 参考"
-sidebar_title: "概述"
+sidebar_title: "概览"
 pagination_next: /deploy/api/runtime-broadcast-channel
 oldUrl:
   - /deploy/docs/runtime-api/
@@ -44,7 +45,7 @@ Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移到新的 
   - [SubtleCrypto](https://developer.mozilla.org/zh-CN/docs/Web/API/SubtleCrypto)
 - [WebSocket API](https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket)
 - [Timers](https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout)
-  (`setTimeout`, `clearTimeout`, 和 `setInterval`)
+  (`setTimeout`，`clearTimeout`，以及 `setInterval`)
 - [Streams API](https://developer.mozilla.org/zh-CN/docs/Web/API/Streams_API)
   - `ReadableStream`
   - `WritableStream`
@@ -94,7 +95,7 @@ Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移到新的 
 
 ## 未来支持
 
-在未来，这些 API 也将被添加：
+未来，这些 API 也将被添加：
 
 - [Cache API](https://developer.mozilla.org/zh-CN/docs/Web/API/Cache)
 - UDP API：

@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-05-01
 title: "deno serve"
 oldUrl: /runtime/manual/tools/serve/
 command: serve
@@ -29,11 +30,67 @@ deno serve server.ts
 deno serve --port=3000 server.ts
 ```
 
-## 路由请求
+## 默认导出结构
+
+该文件必须导出一个默认对象，该对象满足
+[`Deno.ServeDefaultExport`](/api/deno/~/Deno.ServeDefaultExport)。该对象包含
+两个属性：
+
+```typescript
+export interface ServeDefaultExport {
+  fetch: ServeHandler;
+  onListen?: (localAddr: Deno.Addr) => void;
+}
+```
+
+### `fetch`（必需）
 
 `fetch` 处理器接收一个标准的
-[`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) 对象。
-使用 URL 进行路由：
+[`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request) 以及一个携带连接元数据的
+[`ServeHandlerInfo`](/api/deno/~/Deno.ServeHandlerInfo) 对象：
+
+```typescript
+type ServeHandler = (
+  request: Request,
+  info: ServeHandlerInfo,
+) => Response | Promise<Response>;
+
+interface ServeHandlerInfo {
+  remoteAddr: Deno.Addr; // 连接的远程地址
+  completed: Promise<void>; // 在请求完成时解析
+}
+```
+
+如果处理器抛出错误，错误会被隔离到该请求——服务器会继续提供服务。
+
+### `onListen`（可选）
+
+当服务器开始监听时会调用一次。如果省略，将记录默认消息到控制台。
+
+```typescript title="server.ts"
+export default {
+  fetch(request, info) {
+    const { hostname, port } = info.remoteAddr as Deno.NetAddr;
+    console.log(`${request.method} ${request.url} from ${hostname}:${port}`);
+
+    return new Response("Hello, World!", {
+      headers: { "content-type": "text/plain" },
+    });
+  },
+
+  onListen({ hostname, port }) {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  },
+} satisfies Deno.ServeDefaultExport;
+```
+
+默认导出对象上的任何其他属性都会被静默忽略。如果缺少 `fetch`，
+则不会启动服务器。如果 `fetch` 或 `onListen` 存在但不是函数，
+将抛出 `TypeError`。
+
+## 路由请求
+
+使用请求 URL 将请求路由到不同的处理器：
 
 ```typescript title="server.ts"
 export default {
@@ -67,7 +124,7 @@ deno serve --parallel server.ts
 
 ## 监视模式
 
-在文件发生更改时自动重启服务器：
+当文件发生更改时自动重启服务器：
 
 ```sh
 deno serve --watch server.ts
@@ -75,7 +132,7 @@ deno serve --watch server.ts
 
 ## 权限
 
-`deno serve` 会自动允许服务器监听，无需 `--allow-net`。其他权限（如文件读取）必须显式授予：
+`deno serve` 会自动允许服务器监听，无需 `--allow-net`。其他权限（例如文件读取）必须显式授予：
 
 ```sh
 deno serve --allow-read server.ts

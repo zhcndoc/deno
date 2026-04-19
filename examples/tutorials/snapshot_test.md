@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-26
 title: "快照测试"
 oldurl: /examples/snapshot_tutorial/
 description: "了解如何在 Deno 中使用快照测试将输出与记录的参考值进行比较，从而更容易检测代码中的意外更改"

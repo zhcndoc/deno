@@ -1,115 +1,77 @@
 ---
+last_modified: 2025-12-08
 title: Playgrounds
-description: "Write and deploy code completely from Deno Deploy, without the need for a git repository."
+description: "无需 Git 仓库，直接从 Deno Deploy 部署并编写代码。"
 ---
 
-Playground applications enable you to create, edit, and deploy applications
-entirely from the Deno Deploy web dashboard, without needing to create a GitHub
-repository.
+Playground 应用可让你在不需要创建 GitHub
+仓库的情况下，完全从 Deno Deploy 的 Web 仪表板中创建、编辑并部署应用程序。
 
-Playgrounds contain one or more files (JavaScript, TypeScript, TSX, JSON, etc.)
-that you can edit directly in the playground editor.
+Playgrounds 包含一个或多个文件（JavaScript、TypeScript、TSX、JSON 等），你可以在 playground 编辑器中直接进行编辑。
 
-## Creating a playground
+## 创建一个 playground
 
-You can create playgrounds from the "Applications" page in your organization.
-Click the "New Playground" button to create a basic "Hello World" playground.
-Using the dropdown on the "New Playground" button lets you create playgrounds
-from other templates, such as Next.js or Hono.
+你可以从组织的“Applications”页面创建 playground。
+点击“New Playground”按钮以创建一个基础的“Hello World” playground。
+在“New Playground”按钮的下拉菜单中，你可以从其他模板创建 playground，例如 Next.js 或 Hono。
 
-## Editing a playground
+## 编辑一个 playground
 
-To edit a playground, open it from the "Applications" page in your organization.
+要编辑一个 playground，请在组织的“Applications”页面中打开它。
 
-The playground editor consists of five main sections:
+playground 编辑器由五个主要部分组成：
 
-- **Code editor**: The central area where you edit code for the currently
-  selected file. Above the editor is a navbar showing the current file name,
-  which you can click to edit.
-- **File browser**: Located on the left of the code editor, this panel shows all
-  files in the playground. Click any file to open it in the editor. Create new
-  files by clicking the "New" icon at the top of the file browser. Delete files
-  using the delete button next to each file name.
-- **Top bar**: Located above the code editor, this contains action buttons for
-  the playground. The "Deploy" button saves current changes and triggers a
-  build. "Build Config" and "Env Variables" buttons open their respective
-  configuration drawers. The left side of the top bar displays the playground
-  URL (unless the playground hasn't been deployed yet).
-- **Bottom drawer**: Located beneath the code editor, this contains debugging
-  tools including "Build Logs" that show build progress during deployment, and
-  tabs for viewing logs and traces.
-- **Right drawer**: Located to the right of the code editor, this contains tools
-  for inspecting application output. The "Preview" tab displays an iframe
-  showing the deployed application, while "HTTP Explorer" lets you send
-  individual HTTP requests to your deployment.
+- **代码编辑器**：位于编辑器中央区域，用于编辑当前选定文件的代码。在编辑器上方有一个显示当前文件名的导航栏，你可以点击它来进行编辑。
+- **文件浏览器**：位于代码编辑器左侧。该面板会显示 playground 中的所有文件。点击任意文件即可在编辑器中打开。通过点击文件浏览器顶部的“New”图标来创建新文件。使用每个文件名旁边的删除按钮来删除文件。
+- **顶部栏**：位于代码编辑器上方，包含 playground 的操作按钮。“Deploy”按钮会保存当前更改并触发构建。“Build Config”和“Env Variables”按钮会打开对应的配置抽屉。顶部栏左侧会显示 playground URL（除非该 playground 尚未部署）。
+- **底部抽屉**：位于代码编辑器下方，其中包含调试工具，包括“Build Logs”（在部署期间显示构建进度），以及用于查看日志和追踪的选项卡。
+- **右侧抽屉**：位于代码编辑器右侧，包含用于检查应用程序输出的工具。“Preview”选项卡会通过 iframe 显示已部署的应用程序，而“HTTP Explorer”则允许你向部署发送单独的 HTTP 请求。
 
-The playground content automatically saves when you click the "Deploy" button or
-when the editor loses focus.
+当你点击“Deploy”按钮，或当编辑器失去焦点时，playground 内容会自动保存。
 
-## Uploading files
+## 上传文件
 
-You can upload a zip file containing files and directories to the playground by
-dragging it into the file browser area. The contents of the zip file will be
-extracted into the playground, preserving the directory structure.
+你可以通过将包含文件和目录的 zip 文件拖拽到文件浏览器区域中，将其上传到 playground。zip 文件的内容会被解压到 playground 中，并保留目录结构。
 
-> ⚠️ The playground editor does not support uploading individual files or
-> directories.
+> ⚠️ playground 编辑器不支持上传单个文件或目录。
 
-## Using the HTTP explorer
+## 使用 HTTP explorer
 
-The HTTP Explorer tab in the playground allows you to make arbitrary HTTP
-requests to any URL served by the playground. This is useful for testing APIs or
-other services that do not serve a web page.
+playground 中的 HTTP Explorer 选项卡允许你向 playground 提供服务的任意 URL 发起任意 HTTP 请求。这对于测试 API 或其他不提供网页的服务非常有用。
 
-To use the HTTP Explorer, enter the path and query parameters for the request
-you want to make, select the HTTP method (GET, POST, etc.), and click on the
-button labeled with the selected method.
+使用 HTTP Explorer 时，输入你想发起请求的路径和查询参数，选择 HTTP 方法（GET、POST 等），然后点击带有所选方法名称的按钮。
 
-Additional request headers can be added by clicking the "Set Headers" button.
+还可以通过点击“Set Headers”按钮来添加额外的请求头。
 
-After the response has been made, the HTTP Explorer will display the response
-status, headers, and body.
+请求发出后，HTTP Explorer 将显示响应状态、响应头和响应正文。
 
-To view the trace for the request, click on the "Trace" button in the response
-section. This will open the request trace for the request in a drawer on top of
-the playground editor. From there you can also view any `console.log` output
-that was captured during the request.
+要查看该请求的追踪信息，请在响应部分点击“Trace”按钮。这会在 playground 编辑器顶部打开一个抽屉，其中显示该请求的追踪信息。在这里你也可以查看请求过程中捕获到的任何 `console.log` 输出。
 
-## Renaming a playground
+## 重命名一个 playground
 
-You can rename a playground by editing the playground slug on the playground
-settings page. This will update the default domain names associated with the
-playground since they are based on the playground slug. The new slug must be
-unique within the organization (i.e. must not be in use by another app or
-playground in the same organization).
+你可以在 playground 设置页面编辑 playground slug 来重命名 playground。这会更新与该 playground 关联的默认域名，因为这些域名基于 playground slug。新的 slug 必须在组织内唯一（即不能正在被同一组织中的其他应用或 playground 使用）。
 
 :::info
 
-Any previous `deno.net` URLs pointing to the playground will no longer work
-after renaming.
+重命名后，指向 playground 的任何先前 `deno.net` URL 将不再可用。
 
-Custom domains will continue to work, as they are not tied to the playground
-slug.
+自定义域名将继续可用，因为它们不绑定到 playground
+slug。
 
 :::
 
-## Deleting a playground
+## 删除一个 playground
 
-Playgrounds can be deleted from the playground settings page. This will remove
-the playground and all its revisions from the organization. All existing
-deployments will immediately stop serving traffic, and all custom domain
-associations will be removed.
+你可以在 playground 设置页面删除一个 playground。这将从组织中移除 playground 及其所有修订版本。所有现有部署将立即停止对外提供流量服务，并移除所有自定义域名关联。
 
-The playground and its revisions will no longer be accessible after deletion.
-Deleted playgrounds cannot be restored through the Deno Deploy UI.
+删除后，playground 及其修订版本将不再可访问。通过 Deno Deploy UI 删除的 playground 无法恢复。
 
 :::info
 
-Deleted a playground by mistake? Contact Deno support within 30 days to restore
-it.
+不小心删除了 playground？请在 30 天内联系 Deno 支持以恢复它。
 
 :::
 
-## Limitations
+## 限制
 
-> ⚠️ Playgrounds cannot currently be transferred to another organization.
+> ⚠️ 当前无法将 Playgrounds 转移到另一个组织。

@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-19
 title: "压缩响应体"
 oldUrl:
   - /deploy/docs/compression/

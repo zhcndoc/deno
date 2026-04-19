@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-04-23
 title: "deno coverage"
 oldUrl: /runtime/manual/tools/coverage/
 command: coverage
@@ -145,7 +146,6 @@ deno coverage custom_profile_name
 > DENO_COVERAGE_DIR=custom_profile_name deno test
 > deno coverage custom_profile_name
 > ```
-
 
 仅包括匹配特定模式的覆盖率 - 在这种情况下，仅包括 main.ts 的测试。
 

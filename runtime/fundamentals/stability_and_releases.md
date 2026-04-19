@@ -1,6 +1,7 @@
 ---
-title: "稳定性和发布"
-description: "关于 Deno 稳定性保障和发布流程的指南。涵盖发布渠道、长期支持（LTS）、不稳定特性、版本控制策略，以及 Deno 如何维护向后兼容性。"
+last_modified: 2025-11-04
+title: "稳定性与发布"
+description: "Deno 的稳定性保证和发布流程指南。涵盖发布渠道、长期支持（LTS）、不稳定特性、版本策略，以及 Deno 如何保持向后兼容。"
 oldUrl:
   - /runtime/manual/runtime/stability/
   - /runtime/fundamentals/stability/

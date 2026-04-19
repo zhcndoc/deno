@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "初始化一个项目"
-description: "Guide to creating and structuring new Deno projects. Learn about starting a new project, task configuration, dependency management, and best practices for growing applications."
+description: "创建并构建新的 Deno 项目的指南。了解如何启动新项目、配置任务、管理依赖以及应用程序扩展的最佳实践。"
 url: /examples/initialize_project_tutorial/
 oldUrl:
 ---
@@ -53,9 +54,9 @@ deno test
 
 ### 向你的项目添加内容
 
-`main.ts` 文件作为应用程序的入口点。这里是你编写主要程序逻辑的地方。在开发项目时，你将从删除默认的加法程序开始，并将其替换为自己的代码。例如，如果你正在构建一个网络服务器，这里是你设置路由和处理请求的地方。
+`main.ts` 文件作为应用程序的入口点。在这里编写主要的程序逻辑。在开发项目时，你将从删除默认的加法程序开始，并将其替换为自己的代码。例如，如果你正在构建一个网络服务器，这里就是你设置路由和处理请求的地方。
 
-除了初始文件外，你可能还会创建其他模块（文件）来组织代码。考虑将相关功能分组成单独的文件。请记住，Deno [支持 ES 模块](/runtime/fundamentals/modules/)，因此你可以使用导入和导出语句来组织代码。
+除了初始文件外，你还可能会创建其他模块（文件）来组织代码。考虑将相关功能分组成单独的文件。请记住，Deno [支持 ES 模块](/runtime/fundamentals/modules/)，因此你可以使用导入和导出语句来组织代码。
 
 Deno 项目的示例文件夹结构：
 

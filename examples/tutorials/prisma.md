@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-10-01
 title: "如何使用 Prisma 和 Oak 创建 RESTful API"
-description: "使用 Prisma 和 Oak 以及 Deno 构建 RESTful API 的指南。学习如何设置数据库模式、生成客户端、实现 CRUD 操作，并以合适的类型安全性部署您的 API。"
+description: "使用 Deno，借助 Prisma 和 Oak 构建 RESTful API 指南。学习如何设置数据库模式、生成客户端、实现 CRUD 操作，并以良好的类型安全部署你的 API。"
 url: /examples/prisma_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/prisma/

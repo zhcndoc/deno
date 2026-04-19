@@ -1,6 +1,7 @@
 ---
-title: "Architecture Overview"
-description: "Deep dive into Deno's internal architecture, explaining core components like the runtime, compiler, and security sandbox. Learn how Deno processes requests and executes JavaScript/TypeScript code."
+last_modified: 2025-03-10
+title: "架构概览"
+description: "深入了解 Deno 的内部架构，解释运行时、编译器和安全沙箱等核心组件。了解 Deno 如何处理请求并执行 JavaScript/TypeScript 代码。"
 oldUrl: /runtime/manual/references/contributing/architecture/
 ---
 

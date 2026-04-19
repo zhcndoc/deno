@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-25
 title: "配置 TypeScript"
-description: "Deno 中 TypeScript 配置指南。了解编译器选项、JavaScript 的类型检查、JSDoc 支持、类型声明以及跨平台兼容性的 TypeScript 配置。"
+description: "在 Deno 中配置 TypeScript 的指南。了解编译器选项、类型检查 JavaScript、JSDoc 支持、类型声明，以及为跨平台兼容性配置 TypeScript。"
 oldUrl:
   - /runtime/manual/advanced/typescript/faqs/
   - /runtime/manual/advanced/typescript/migration/
@@ -119,7 +120,7 @@ Deno 致力于基于以下设计原则简化 TypeScript 配置：
 | `checkJs`                      | `false`                |                                                                                                                                           |
 | `jsx`                          | `"react"`              |                                                                                                                                           |
 | `jsxFactory`                   | `"React.createElement"`|                                                                                                                                           |
-| `jsxFragmentFactory`           | `"React.Fragment"`     |                                                                                                                                           |
+| `jsxFragmentFactory`          | `"React.Fragment"`     |                                                                                                                                           |
 | `keyofStringsOnly`             | `false`                |                                                                                                                                           |
 | `lib`                         | `[ "deno.window" ]`    | 该选项的默认值根据 Deno 中的其他设置而异。若提供此选项，则会覆盖默认设置。详见下文。                                                        |
 | `module`                      | `"nodenext"`           | 支持的值包括：`["nodenext", "esnext", "preserve"]`。                                                                                    |

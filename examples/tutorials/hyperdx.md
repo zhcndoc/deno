@@ -1,60 +1,50 @@
 ---
-title: "How to export telemetry data to HyperDX"
-description: "Complete guide to exporting telemetry data with OpenTelemetry and HyperDX. Learn how to configure collectors, visualize traces, logs, metrics, and debug distributed applications effectively."
+last_modified: 2025-07-11
+title: "如何将遥测数据导出到 HyperDX"
+description: "使用 OpenTelemetry 和 HyperDX 导出遥测数据的完整指南。学习如何配置采集器、可视化追踪、日志、指标，并有效调试分布式应用。"
 url: /examples/hyperdx_tutorial/
 ---
 
-[HyperDX](https://hyperdx.io) is an open source observability platform that
-unifies logs, traces, metrics, exceptions, and session replays into a single
-interface. It helps developers debug applications faster by providing a complete
-view of your system's behavior and performance.
+[HyperDX](https://hyperdx.io) 是一个开源的可观测性平台，它将日志、追踪、指标、异常以及会话回放统一到一个界面中。它通过提供系统行为和性能的完整视图，帮助开发者更快地调试应用程序。
 
-[OpenTelemetry](https://opentelemetry.io/) (often abbreviated as OTel) provides
-a standardized way to collect and export telemetry data. Deno includes built-in
-OpenTelemetry support, allowing you to instrument your applications without
-additional dependencies. This integration works seamlessly with platforms like
-HyperDX to collect and visualize telemetry data.
+[OpenTelemetry](https://opentelemetry.io/)（通常简称 OTel）提供了一种标准化的方式来采集并导出遥测数据。Deno 内置了 OpenTelemetry 支持，使你能够在无需额外依赖的情况下为应用程序进行埋点。这个集成可以与类似 HyperDX 的平台无缝协作，用于采集和可视化遥测数据。
 
-In this tutorial, we'll build a simple application and export its telemetry data
-to HyperDX:
+在本教程中，我们将构建一个简单的应用，并将其遥测数据导出到 HyperDX：
 
-- [Set up your chat app](#set-up-your-chat-app)
-- [Set up a Docker collector](#set-up-a-docker-collector)
-- [Generating telemetry data](#generating-telemetry-data)
-- [Viewing telemetry data](#viewing-telemetry-data)
+- [设置你的聊天应用](#set-up-your-chat-app)
+- [设置一个 Docker 采集器](#set-up-a-docker-collector)
+- [生成遥测数据](#generating-telemetry-data)
+- [查看遥测数据](#viewing-telemetry-data)
 
-You can find the complete source code for this tutorial
-[on GitHub](https://github.com/denoland/examples/tree/main/with-hyperdx).
+你可以在
+[GitHub](https://github.com/denoland/examples/tree/main/with-hyperdx) 上找到本教程的完整源代码。
 
-## Set up the app
+## 设置应用
 
-For this tutorial, we'll use a simple chat application to demonstrate how to
-export telemetry data. You can find the
-[code for the app on GitHub](https://github.com/denoland/examples/tree/main/with-hyperdx).
+在本教程中，我们将使用一个简单的聊天应用来演示如何导出遥测数据。你可以在
+[GitHub](https://github.com/denoland/examples/tree/main/with-hyperdx) 上找到应用程序代码。
 
-Either take a copy of that repository or create a
+你可以直接复制该仓库，或创建一个
 [main.ts](https://github.com/denoland/examples/blob/main/with-hyperdx/main.ts)
-file and a
+文件，以及一个
 [.env](https://github.com/denoland/examples/blob/main/with-hyperdx/.env.example)
-file.
+文件。
 
-In order to run the app you will need an OpenAI API key. You can get one by
-signing up for an account at [OpenAI](https://platform.openai.com/signup) and
-creating a new secret key. You can find your API key in the
-[API keys section](https://platform.openai.com/account/api-keys) of your OpenAI
-account. Once you have an API key, set up an `OPENAI_API-KEY` environment
-variable in your `.env` file:
+要运行该应用，你需要一个 OpenAI API 密钥。你可以通过在
+[OpenAI](https://platform.openai.com/signup) 注册账号并创建新的密钥来获得。你可以在
+OpenAI 账号的
+[API keys 部分](https://platform.openai.com/account/api-keys)
+找到你的 API 密钥。拿到 API 密钥后，在你的 `.env` 文件中设置一个 `OPENAI_API-KEY` 环境变量：
 
 ```env title=".env"
 OPENAI_API_KEY=your_openai_api_key
 ```
 
-## Set up the collector
+## 设置采集器
 
-First, create a free HyperDX account to get your API key. Then, we'll set up two
-files to configure the OpenTelemetry collector:
+首先，创建一个免费的 HyperDX 账号以获取你的 API 密钥。然后，我们将设置两个文件来配置 OpenTelemetry 采集器：
 
-1. Create a `Dockerfile`:
+1. 创建一个 `Dockerfile`：
 
 ```dockerfile title="Dockerfile"
 FROM otel/opentelemetry-collector:latest
@@ -64,13 +54,13 @@ COPY otel-collector.yml /otel-config.yml
 CMD ["--config", "/otel-config.yml"]
 ```
 
-This Dockerfile:
+这个 Dockerfile：
 
-- Uses the official OpenTelemetry Collector as the base image
-- Copies your configuration into the container
-- Sets up the collector to use your config when it starts
+- 使用官方 OpenTelemetry Collector 作为基础镜像
+- 将你的配置复制到容器中
+- 在启动时使用你的配置来设置采集器
 
-2. Create a file called `otel-collector.yml`:
+2. 创建一个名为 `otel-collector.yml` 的文件：
 
 ```yml title="otel-collector.yml"
 receivers:
@@ -107,27 +97,22 @@ service:
       exporters: [otlphttp/hdx]
 ```
 
-This configuration file sets up the OpenTelemetry collector to receive telemetry
-data from your application and export it to HyperDX. It includes:
+这个配置文件会将 OpenTelemetry 采集器设置为从你的应用接收遥测数据，并将其导出到 HyperDX。它包含：
 
-- The receivers section accepts data via gRPC (4317) and HTTP (4318)
-- The Exporters section sends data to HyperDX with compression and
-  authentication
-- The processors section batches telemetry data for efficient transmission
-- The pipelines section defines separate flows for logs, traces, and metrics
+- receivers（接收器）部分：通过 gRPC（4317）和 HTTP（4318）接收数据
+- Exporters（导出器）部分：使用压缩和认证将数据发送到 HyperDX
+- processors（处理器）部分：将遥测数据进行批处理，以便高效传输
+- pipelines（流水线）部分：为日志、追踪和指标定义了独立的数据流
 
-Build and run the docker instance to start collecting your telemetry data with
-the following command:
+使用下面的命令构建并运行 docker 实例，以开始收集你的遥测数据：
 
 ```sh
 docker build -t otel-collector . && docker run -p 4317:4317 -p 4318:4318 otel-collector
 ```
 
-## Generating telemetry data
+## 生成遥测数据
 
-Now that we have the app and the docker container set up, we can start
-generating telemetry data. Run your application with these environment variables
-to send data to the collector:
+既然应用和 docker 容器都已经配置好了，我们就可以开始生成遥测数据了。运行你的应用时，使用这些环境变量把数据发送到采集器：
 
 ```sh
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 \
@@ -136,52 +121,52 @@ OTEL_DENO=true \
 deno run --allow-net --allow-env --env-file --allow-read main.ts
 ```
 
-This command:
+这个命令：
 
-- Points the OpenTelemetry exporter to your local collector (`localhost:4318`)
-- Names your service "chat-app" in HyperDX
-- Enables Deno's OpenTelemetry integration
-- Runs your application with the necessary permissions
+- 将 OpenTelemetry 导出器指向你本地的采集器（`localhost:4318`）
+- 在 HyperDX 中将你的服务命名为“chat-app”
+- 启用 Deno 的 OpenTelemetry 集成
+- 使用必要的权限运行你的应用
 
-To generate some telemetry data, make a few requests to your running application
-in your browser at [`http://localhost:8000`](http://localhost:8000).
+为了生成一些遥测数据，请在浏览器中向你正在运行的应用发起一些请求：  
+[`http://localhost:8000`](http://localhost:8000)。
 
-Each request will:
+每个请求将：
 
-1. Generate traces as it flows through your application
-2. Send logs from your application's console output
-3. Create metrics about the request performance
-4. Forward all this data through the collector to HyperDX
+1. 在应用中流转时生成追踪（traces）
+2. 从你应用的控制台输出中发送日志（logs）
+3. 创建关于请求性能的指标（metrics）
+4. 将所有这些数据通过采集器转发到 HyperDX
 
-## Viewing telemetry data
+## 查看遥测数据
 
-In your HyperDX dashboard, you'll see different views of your telemetry data:
+在你的 HyperDX 仪表盘中，你会看到遥测数据的不同视图：
 
-### Logs View
+### 日志视图
 
-![Viewing logs in HyperDX](./images/how-to/hyperdx/hyperdx-1.webp)
+![在 HyperDX 中查看日志](./images/how-to/hyperdx/hyperdx-1.webp)
 
-Click any log to see details:
-![Viewing a single log in HyperDX](./images/how-to/hyperdx/hyperdx-2.webp)
+点击任意一条日志查看详情：
+![在 HyperDX 中查看单条日志](./images/how-to/hyperdx/hyperdx-2.webp)
 
-### Request Traces
+### 请求追踪
 
-See all logs within a single request:
-![Viewing all logs in a request in HyperDX](./images/how-to/hyperdx/hyperdx-3.webp)
+在单个请求内查看所有日志：
+![在 HyperDX 中查看单个请求里的所有日志](./images/how-to/hyperdx/hyperdx-3.webp)
 
-### Metrics Dashboard
+### 指标仪表盘
 
-Monitor system performance:
-![Viewing metrics in HyperDX](./images/how-to/hyperdx/hyperdx-4.webp)
+监控系统性能：
+![在 HyperDX 中查看指标](./images/how-to/hyperdx/hyperdx-4.webp)
 
-🦕 Now that you have telemetry export working, you could:
+🦕 现在你的遥测导出已经可以工作了，你可以：
 
-1. Add custom spans and attributes to better understand your application
-2. Set up alerts based on latency or error conditions
-3. Deploy your application and collector to production using platforms like:
+1. 添加自定义 span 和属性，以更好地理解你的应用
+2. 基于延迟或错误条件设置告警
+3. 使用类似以下平台把你的应用和采集器部署到生产环境：
    - [Fly.io](https://docs.deno.com/examples/deploying_deno_with_docker/)
    - [Digital Ocean](https://docs.deno.com/examples/digital_ocean_tutorial/)
    - [AWS Lightsail](https://docs.deno.com/examples/aws_lightsail_tutorial/)
 
-🦕 For more details on OpenTelemetry configuration with HyperDX, see their
-[documentation](https://www.hyperdx.io/docs/install/opentelemetry).
+🦕 如需了解 HyperDX 中使用 OpenTelemetry 的更多配置细节，请参阅他们的
+[文档](https://www.hyperdx.io/docs/install/opentelemetry)。

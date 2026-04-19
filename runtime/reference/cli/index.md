@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-08
 title: "Deno CLI 子命令"
 oldUrl: "/runtime/reference/cli/all_commands"
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -29,7 +30,7 @@ Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运
 ## 工具
 
 - [deno bench](/runtime/reference/cli/bench/) - 基准测试工具
-- [deno check](/runtime/reference/cli/check/) - 类型检查你的程序，且不运行它
+- [deno check](/runtime/reference/cli/check/) - 对你的程序进行类型检查，且不运行
 - [deno compile](/runtime/reference/cli/compile/) - 将程序编译为独立的可执行文件
 - [deno completions](/runtime/reference/cli/completions/) - 生成 shell 补全
 - [deno coverage](/runtime/reference/cli/coverage/) - 生成测试覆盖率报告
@@ -45,7 +46,7 @@ Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运
 - [deno publish](/runtime/reference/cli/publish/) - 发布模块到 JSR
 - [deno test](/runtime/reference/cli/test/) - 运行测试
 - [deno types](/runtime/reference/cli/types/) - 打印运行时类型
-- [deno upgrade](/runtime/reference/cli/upgrade/) - 升级 Deno 到最新版本
+- [deno upgrade](/runtime/reference/cli/upgrade/) - 将 Deno 升级到最新版本
 - [deno x](/runtime/reference/cli/x/) - 运行 npm 或 JSR 包
 
 ## 其他

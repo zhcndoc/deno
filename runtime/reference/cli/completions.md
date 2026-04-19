@@ -1,5 +1,6 @@
 ---
-title: "deno 补全"
+last_modified: 2025-04-24
+title: "deno completions"
 oldUrl: /runtime/manual/tools/completions/
 command: completions
 openGraphLayout: "/open_graph/cli-commands.jsx"

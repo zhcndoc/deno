@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "如何在 Deno 中使用 Redis"
-description: "Step-by-step guide to using Redis with Deno. Learn how to set up caching, implement message brokers, handle data streaming, and optimize your applications with Redis's in-memory data store."
+description: "使用 Deno 搭配 Redis 的分步指南。学习如何设置缓存、实现消息代理、处理数据流，并使用 Redis 的内存数据存储来优化你的应用。"
 url: /examples/redis_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/redis/
@@ -13,16 +14,16 @@ oldUrl:
 
 在这里，我们将设置 Redis 来缓存 API 调用的数据，从而加快对该数据后续请求的响应速度。我们将会：
 
-- 设置一个 Redis 客户端，将每个 API 调用的数据保存在内存中
+- 设置一个 Redis 客户端，将每次 API 调用的数据保存在内存中
 - 设置一个 Deno 服务器，以便我们可以方便地请求特定数据
-- 在服务器处理程序中调用 Github API 来在第一次请求时获取数据
+- 在服务器处理程序中调用 Github API，在第一次请求时获取数据
 - 在每一次后续请求中从 Redis 提供数据
 
 我们可以在一个文件 `main.ts` 中完成这一切。
 
 ## 连接到 Redis 客户端
 
-我们需要两个模块。第一个是 Deno 服务器。我们将使用这个模块来获取用户的信息以查询我们的 API。第二个是 Redis。我们可以使用 `npm:` 修饰符获取 Redis 的节点包：
+我们需要两个模块。第一个是 Deno 服务器。我们将使用这个模块来获取用户信息，以查询我们的 API。第二个是 Redis。我们可以使用 `npm:` 修饰符获取 Redis 的 Node 包：
 
 ```tsx
 import { createClient } from "npm:redis@^4.5";
@@ -45,7 +46,7 @@ await client.connect();
 
 我们的服务器将作为 Github API 的一个封装。客户端可以通过 URL 路径名调用我们的服务器，格式为 `http://localhost:3000/{username}`。
 
-解析路径名并调用 Github API 将在我们服务器的处理函数内进行。我们去掉了前导斜杠，这样就得到了一个可以传递给 Github API 作为用户名的变量。然后我们将响应返回给用户。
+解析路径名并在服务器的处理函数内调用 Github API。我们去掉前导斜杠，这样就得到了一个可以传递给 Github API 作为用户名的变量。然后我们将响应返回给用户。
 
 ```tsx
 Deno.serve({ port: 3000 }, async (req) => {
@@ -76,7 +77,7 @@ deno run --allow-net main.ts
 
 ## 检查缓存
 
-一旦我们从 Github API 得到响应，我们可以使用 `client.set` 将其缓存到 Redis 中，将我们的用户名作为键，用户对象作为值：
+一旦我们从 Github API 得到响应，我们可以使用 `client.set` 将其缓存到 Redis 中，将我们的用户名作为键、用户对象作为值：
 
 ```tsx
 await client.set(username, JSON.stringify(user));
@@ -137,4 +138,4 @@ server.listenAndServe();
 
 我们还可以看到响应快了大约 200 毫秒！
 
-你可以在 [这里](https://redis.io/docs/) 查看 Redis 文档，以及在 [这里](https://github.com/redis/node-redis) 查看 Redis 节点包。
+你可以在 [这里](https://redis.io/docs/) 查看 Redis 文档，以及在 [这里](https://github.com/redis/node-redis) 查看 Redis 的 Node 包。

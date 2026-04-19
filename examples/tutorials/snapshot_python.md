@@ -1,6 +1,7 @@
 ---
-title: "使用快照启动 Python 环境"
-description: "创建沙箱，预装 Python + 科学计算包，生成快照，并启动零配置沙箱来运行曼德尔布罗特集合浏览器。"
+last_modified: 2026-02-24
+title: "使用快照启动一个 Python 环境"
+description: "创建一个沙箱，预加载 Python + 科学计算包，对其进行快照，并启动无需额外配置的沙箱来运行一个曼德尔布罗特探索器。"
 url: /examples/snapshot_python_tutorial/
 ---
 
@@ -70,7 +71,7 @@ await sandbox.sh`sudo pip3 install --break-system-packages \
     pandas \
     python-dotenv`;
 
-console.log("Verifying Python installation...");
+console.log("正在验证 Python 安装...");
 
 await sandbox.sh`python3 --version`;
 await sandbox.sh`pip3 --version`;
@@ -89,13 +90,13 @@ return volume.id;
 ```ts title="setup_python.ts (cont.)"
 const volumeId = await initSandbox();
 
-console.log("Snapshotting the volume...");
+console.log("正在对卷进行快照...");
 
 const snapshot = await client.volumes.snapshot(volumeId, {
   slug: "fun-with-python-snapshot",
 });
 
-console.log("Created Python snapshot " + snapshot.id);
+console.log("已创建 Python 快照 " + snapshot.id);
 ```
 
 使用带网络和环境权限运行该脚本，以便访问 Sandbox API：
@@ -134,7 +135,7 @@ await using sandbox = await client.sandboxes.create({
 目前我们使用一个占位字符串，将在稍后替换成真正的 Python 应用代码，并将它写入沙箱文件系统的 `/tmp/app.py`：
 
 ```ts title="use_python.ts (cont.)"
-const appCode = `# Python app code goes here`;
+const appCode = `# Python 应用代码放在这里`;
 
 await sandbox.fs.writeTextFile("/tmp/app.py", appCode);
 ```
@@ -144,7 +145,7 @@ await sandbox.fs.writeTextFile("/tmp/app.py", appCode);
 ```ts title="use_python.ts (cont.)"
 const p = await sandbox.sh`python3 /tmp/app.py`.spawn();
 
-console.log("\nMandelbrot Explorer running at", sandbox.url);
+console.log("\n曼德尔布罗特探索器正在运行于", sandbox.url);
 
 await p.output();
 ```

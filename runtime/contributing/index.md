@@ -1,6 +1,7 @@
 ---
-title: "贡献与支持"
-description: "关于如何为 Deno 项目和生态系统做出贡献的指南。了解不同的 Deno 仓库、贡献方针，以及如何提交高质量的拉取请求。"
+last_modified: 2026-03-13
+title: "Contributing and support"
+description: "Guide to contributing to the Deno project and ecosystem. Learn about different Deno repositories, contribution guidelines, and how to submit effective pull requests."
 oldUrl:
   - /runtime/manual/contributing/
   - /runtime/manual/contributing/contribute

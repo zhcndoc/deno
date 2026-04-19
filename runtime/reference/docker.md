@@ -1,63 +1,64 @@
 ---
-title: Deno and Docker
-description: "Complete guide to using Deno with Docker containers. Learn about official Deno images, writing Dockerfiles, multi-stage builds, workspace containerization, and Docker best practices for Deno applications."
+last_modified: 2025-12-16
+title: Deno 和 Docker
+description: "使用 Docker 容器搭配 Deno 的完整指南。了解官方 Deno 镜像、编写 Dockerfile、多阶段构建、工作区容器化，以及 Deno 应用的 Docker 最佳实践。"
 ---
 
-## Using Deno with Docker
+## 使用 Docker 搭配 Deno
 
-Deno provides [official Docker files](https://github.com/denoland/deno_docker)
-and [images](https://hub.docker.com/r/denoland/deno).
+Deno 提供了[官方 Docker 文件](https://github.com/denoland/deno_docker)
+和[镜像](https://hub.docker.com/r/denoland/deno)。
 
-To use the official image, create a `Dockerfile` in your project directory:
+要使用官方镜像，请在项目目录中创建一个 `Dockerfile`：
 
 ```dockerfile
 FROM denoland/deno:latest
 
-# Create working directory
+# 创建工作目录
 WORKDIR /app
 
-# Copy source
+# 复制源代码
 COPY . .
 
-# Install dependencies (use just `deno install` if deno.json has imports)
+# 安装依赖（如果 deno.json 有 imports，就只需使用 `deno install`）
 RUN deno install --entrypoint main.ts
 
-# Run the app
+# 运行应用
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
 
-### Best Practices
+### 最佳实践
 
-#### Use Multi-stage Builds
+#### 使用多阶段构建
 
-For smaller production images:
+用于更小的生产镜像：
 
 ```dockerfile
-# Build stage
+# 构建阶段
 FROM denoland/deno:latest AS builder
 WORKDIR /app
 COPY . .
-# Install dependencies (use just `deno install` if deno.json has imports)
+# 安装依赖（如果 deno.json 有 imports，就只需使用 `deno install`）
 RUN deno install --entrypoint main.ts
 
-# Production stage
+# 生产阶段
 FROM denoland/deno:latest
 WORKDIR /app
 COPY --from=builder /app .
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
 
-#### Permission Flags
+#### 权限标志
 
-Specify required permissions explicitly:
+明确指定所需权限：
 
 ```dockerfile
 CMD ["deno", "run", "--allow-net=api.example.com", "--allow-read=/data", "main.ts"]
 ```
 
-#### Development Container
+#### 开发容器
 
-For development with hot-reload:
+用于支持热重载的开发：
 
 ```dockerfile
 FROM denoland/deno:latest
@@ -68,22 +69,22 @@ COPY . .
 CMD ["deno", "run", "--watch", "--allow-net", "main.ts"]
 ```
 
-### Common Issues and Solutions
+### 常见问题和解决方案
 
-1. **Permission Denied Errors**
-   - Use `--allow-*` flags appropriately
-   - Consider using `deno.json` permissions
+1. **权限被拒绝（Permission Denied）错误**
+   - 使用 `--allow-*` 标志
+   - 考虑使用 `deno.json` 权限
 
-2. **Large Image Sizes**
-   - Use multi-stage builds
-   - Include only necessary files
-   - Add proper `.dockerignore`
+2. **镜像体积过大**
+   - 使用多阶段构建
+   - 仅包含必要文件
+   - 添加合适的 `.dockerignore`
 
-3. **Cache Invalidation**
-   - Separate dependency caching
-   - Use proper layer ordering
+3. **缓存失效（Cache Invalidation）**
+   - 分离依赖缓存
+   - 使用正确的镜像层顺序
 
-### Example .dockerignore
+### 示例 .dockerignore
 
 ```text
 .git
@@ -95,31 +96,31 @@ _build/
 node_modules/
 ```
 
-### Available Docker Tags
+### 可用的 Docker 标签
 
-Deno provides several official tags:
+Deno 提供了多个官方标签：
 
-- `denoland/deno:latest` - Latest stable release
-- `denoland/deno:alpine` - Alpine-based smaller image
-- `denoland/deno:distroless` - Google's distroless-based image
-- `denoland/deno:ubuntu` - Ubuntu-based image
-- `denoland/deno:1.x` - Specific version tags
+- `denoland/deno:latest` - 最新稳定版本
+- `denoland/deno:alpine` - 基于 Alpine 的更小镜像
+- `denoland/deno:distroless` - 基于 Google distroless 的镜像
+- `denoland/deno:ubuntu` - 基于 Ubuntu 的镜像
+- `denoland/deno:1.x` - 特定版本标签
 
-### Environment Variables
+### 环境变量
 
-Common environment variables for Deno in Docker:
+Docker 中常见的 Deno 环境变量：
 
 ```dockerfile
 ENV DENO_DIR=/deno-dir/
 ENV DENO_INSTALL_ROOT=/usr/local
 ENV PATH=${DENO_INSTALL_ROOT}/bin:${PATH}
 
-# Optional environment variables
+# 可选环境变量
 ENV DENO_NO_UPDATE_CHECK=1
 ENV DENO_NO_PROMPT=1
 ```
 
-### Running Tests in Docker
+### 在 Docker 中运行测试
 
 ```dockerfile
 FROM denoland/deno:latest
@@ -127,11 +128,11 @@ FROM denoland/deno:latest
 WORKDIR /app
 COPY . .
 
-# Run tests
+# 运行测试
 CMD ["deno", "test", "--allow-none"]
 ```
 
-### Using Docker Compose
+### 使用 Docker Compose
 
 ```yaml
 // filepath: docker-compose.yml
@@ -148,19 +149,19 @@ services:
     command: ["deno", "run", "--watch", "--allow-net", "main.ts"]
 ```
 
-### Health Checks
+### 健康检查
 
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD deno eval "try { await fetch('http://localhost:8000/health'); } catch { Deno.exit(1); }"
 ```
 
-### Common Development Workflow
+### 常见开发工作流
 
-For local development:
+本地开发：
 
-1. Build the image: `docker build -t my-deno-app .`
-2. Run with volume mount:
+1. 构建镜像：`docker build -t my-deno-app .`
+2. 使用数据卷挂载运行：
 
 ```bash
 docker run -it --rm \
@@ -169,44 +170,43 @@ docker run -it --rm \
   my-deno-app
 ```
 
-### Security Considerations
+### 安全性考虑
 
-- Run as non-root user:
+- 以非 root 用户运行：
 
 ```dockerfile
-# Create deno user
+# 创建 deno 用户
 RUN addgroup --system deno && \
     adduser --system --ingroup deno deno
 
-# Switch to deno user
+# 切换到 deno 用户
 USER deno
 
-# Continue with rest of Dockerfile
+# 继续 Dockerfile 的其余部分
 ```
 
-- Use minimal permissions:
+- 使用最小权限：
 
 ```dockerfile
 CMD ["deno", "run", "--allow-net=api.example.com", "--allow-read=/app", "main.ts"]
 ```
 
-- Consider using `--deny-*` flags for additional security
+- 考虑使用 `--deny-*` 标志以增强安全性
 
-## Working with Workspaces in Docker
+## 在 Docker 中使用工作区（Workspaces）
 
-When working with Deno workspaces (monorepos) in Docker, there are two main
-approaches:
+当在 Docker 中处理 Deno 的工作区（monorepos，单仓多包）时，主要有两种方案：
 
-### 1. Full Workspace Containerization
+### 1. 完整工作区容器化
 
-Include the entire workspace when you need all dependencies:
+当你需要所有依赖时，将整个工作区包含进去：
 
 ```dockerfile
 FROM denoland/deno:latest
 
 WORKDIR /app
 
-# Copy entire workspace
+# 复制整个工作区
 COPY deno.json .
 COPY project-a/ ./project-a/
 COPY project-b/ ./project-b/
@@ -215,11 +215,11 @@ WORKDIR /app/project-a
 CMD ["deno", "run", "-A", "mod.ts"]
 ```
 
-### 2. Minimal Workspace Containerization
+### 2. 最小工作区容器化
 
-For smaller images, include only required workspace members:
+对于更小的镜像，只包含所需的工作区成员：
 
-1. Create a build context structure:
+1. 创建构建上下文目录结构：
 
 ```sh
 project-root/
@@ -233,39 +233,39 @@ project-root/
 └── project-b/
 ```
 
-2. Create a `.dockerignore`:
+2. 创建一个 `.dockerignore`：
 
 ```text
 // filepath: docker/project-a/.dockerignore
 *
 !deno.json
 !project-a/**
-!project-b/**  # Only if needed
+!project-b/**  # 仅在需要时
 ```
 
-3. Create a build context script:
+3. 创建构建上下文脚本：
 
 ```bash
 // filepath: docker/project-a/build-context.sh
 #!/bin/bash
 
-# Create temporary build context
+# 创建临时构建上下文
 BUILD_DIR="./tmp-build-context"
 mkdir -p $BUILD_DIR
 
-# Copy workspace configuration
+# 复制工作区配置
 cp ../../deno.json $BUILD_DIR/
 
-# Copy main project
+# 复制主项目
 cp -r ../../project-a $BUILD_DIR/
 
-# Copy only required dependencies
+# 仅复制所需依赖
 if grep -q "\"@scope/project-b\"" "../../project-a/mod.ts"; then
     cp -r ../../project-b $BUILD_DIR/
 fi
 ```
 
-4. Create a minimal Dockerfile:
+4. 创建一个最小的 Dockerfile：
 
 ```dockerfile
 // filepath: docker/project-a/Dockerfile
@@ -273,10 +273,10 @@ FROM denoland/deno:latest
 
 WORKDIR /app
 
-# Copy only necessary files
+# 复制必要文件
 COPY deno.json .
 COPY project-a/ ./project-a/
-# Copy dependencies only if required
+# 仅在需要时复制依赖
 COPY project-b/ ./project-b/
 
 WORKDIR /app/project-a
@@ -284,7 +284,7 @@ WORKDIR /app/project-a
 CMD ["deno", "run", "-A", "mod.ts"]
 ```
 
-5. Build the container:
+5. 构建容器：
 
 ```bash
 cd docker/project-a
@@ -293,11 +293,11 @@ docker build -t project-a -f Dockerfile tmp-build-context
 rm -rf tmp-build-context
 ```
 
-### Best Practices
+### 最佳实践
 
-- Always include the root `deno.json` file
-- Maintain the same directory structure as development
-- Document workspace dependencies clearly
-- Use build scripts to manage context
-- Include only required workspace members
-- Update `.dockerignore` when dependencies change
+- 始终包含根目录下的 `deno.json` 文件
+- 保持与开发时相同的目录结构
+- 清晰记录工作区依赖
+- 使用构建脚本管理上下文
+- 仅包含所需的工作区成员
+- 当依赖发生变化时更新 `.dockerignore`

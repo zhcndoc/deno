@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-19
 title: "调度 cron 任务"
 oldUrl:
   - /kv/manual/cron/
@@ -83,7 +84,7 @@ Deno.cron("重试示例", "* * * * *", {
 
 Deno 运行时中的 `Deno.cron` 实现将执行状态保存在内存中。如果您运行多个使用 `Deno.cron` 的 Deno 程序，每个程序将有自己独立的 cron 任务集。
 
-#### Deno Deploy 上的cron工作原理
+#### Deno Deploy 上的 cron 工作原理
 
 Deno Deploy 提供了一个无服务器实现的 `Deno.cron`，旨在实现高可用性和扩展性。Deno Deploy 会在部署时自动提取您的 `Deno.cron` 定义，并使用按需隔离进行任务调度。您最新的生产部署定义了安排执行的活动 cron 任务集。要添加、删除或修改 cron 任务，只需修改代码并创建一个新的生产部署。
 

@@ -1,5 +1,6 @@
 ---
-title: "HTTP 请求 (fetch)"
+last_modified: 2026-03-19
+title: "HTTP 请求（fetch）"
 oldUrl:
   - /deploy/docs/runtime-fetch/
   - /deploy/api/runtime-fetch/

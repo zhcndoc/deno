@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-19
 title: "HTTP 请求"
 oldUrl:
   - /deploy/docs/runtime-request/
@@ -13,8 +14,7 @@ Deno Deploy Classic 将于 2026年7月20日关闭。我们建议迁移
 
 :::
 
-[Request](https://developer.mozilla.org/en-US/docs/Web/API/Request)
-接口是 Fetch API 的一部分，表示 fetch() 的请求。
+[Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) 接口是 Fetch API 的一部分，表示 fetch() 的请求。
 
 - [构造函数](#constructor)
   - [参数](#parameters)
@@ -46,8 +46,8 @@ let request = new Request(resource, init);
 | [`method`][method]           | `string`                                                                                | `GET`          | 请求的方法。                                              |
 | [`headers`][headers]         | `Headers` 或 `{ [key: string]: string }`                                                | 无             | 请求的头部。                                              |
 | [`body`][body]               | `Blob`、`BufferSource`、`FormData`、`URLSearchParams`、`USVString` 或 `ReadableStream` | 无             | 请求的主体。                                              |
-| [`cache`][cache]             | `string`                                                                                | 无             | 请求的缓存模式。                                          |
-| [`credentials`][credentials] | `string`                                                                                | `same-origin`  | 请求的凭据模式。                                          |
+| [`cache`][cache]             | `string`                                                                                | 无             | 请求的缓存模式。                                        |
+| [`credentials`][credentials] | `string`                                                                                | `same-origin`  | 请求的凭据模式。                                        |
 | [`integrity`][integrity]     | `string`                                                                                | 无             | 请求主体的加密哈希。                                      |
 | [`mode`][mode]               | `string`                                                                                | `cors`         | 您想使用的请求模式。                                      |
 | [`redirect`][redirect]       | `string`                                                                                | `follow`       | 处理重定向的模式。                                        |
@@ -110,7 +110,7 @@ Deno.serve(handler);
 
 [cache]: https://developer.mozilla.org/en-US/docs/Web/API/Request/cache
 [credentials]: https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
-[destination]: https://developer.mozilla.org/en-us/docs/web/api/request/destination
+[destination]: https://developer.mozilla.org/en-US/docs/web/api/request/destination
 [requestdestination]: https://developer.mozilla.org/en-US/docs/Web/API/RequestDestination
 [body]: https://developer.mozilla.org/en-US/docs/Web/API/Body/body
 [bodyused]: https://developer.mozilla.org/en-US/docs/Web/API/Body/bodyUsed

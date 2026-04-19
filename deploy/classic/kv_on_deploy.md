@@ -1,5 +1,6 @@
 ---
-title: "Deno 部署上的 KV"
+last_modified: 2026-03-19
+title: "Deno Deploy 上的 KV"
 oldUrl:
   - /deploy/manual/kv/
   - /kv/manual/on_deploy/

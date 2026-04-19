@@ -1,5 +1,6 @@
 ---
-title: "如何将 Deno 部署到 AWS Lambda"
+last_modified: 2025-08-20
+title: "How to Deploy Deno to AWS Lambda"
 description: "Step-by-step tutorial on deploying Deno applications to AWS Lambda. Learn about Docker containerization, ECR repositories, function configuration, and how to set up serverless Deno apps on AWS."
 url: /examples/aws_lambda_tutorial/
 oldUrl:

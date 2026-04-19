@@ -1,5 +1,6 @@
 ---
-title: "部署"
+last_modified: 2026-03-19
+title: "部署（Deployments）"
 ---
 
 :::warning 2026 年 7 月 20 日停止服务

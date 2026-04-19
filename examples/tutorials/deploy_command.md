@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-09-29
 title: "使用 deno deploy 命令部署应用"
-description: "使用 deno deploy CLI 命令创建并部署第一个应用到 Deno Deploy 早期访问的分步教程。"
+description: "使用 deno deploy CLI 命令创建并部署你的第一个应用到 Deno Deploy 的分步教程。"
 url: /examples/deploy_command_tutorial/
 ---
 

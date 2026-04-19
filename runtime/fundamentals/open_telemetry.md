@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-25
 title: OpenTelemetry
 description: "学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"
 ---

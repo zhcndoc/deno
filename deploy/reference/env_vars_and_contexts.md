@@ -1,6 +1,8 @@
 ---
-title: 环境变量和上下文
-description: "Deno Deploy 早期访问版中管理环境变量和上下文的指南，包括变量类型、创建、编辑以及在代码中访问它们的方式。"
+last_modified: 2026-02-25
+title: Environment Variables and Contexts
+description: "Guide to managing environment variables and contexts in Deno Deploy, including variable types, creation, editing, and accessing them in your code."
+oldUrl: /deploy/reference/env-vars-and-contexts/
 ---
 
 :::info
@@ -124,7 +126,16 @@ const value = await Deno.readTextFile(Deno.env.get("MY_ENV_VAR"));
 
 Deno Deploy<sup>EA</sup> 在所有上下文中提供以下预定义环境变量：
 
-- `DENO_DEPLOY=1`：表示应用正在 Deno Deploy 环境中运行。
+- `DENO_DEPLOY`: `true` - 表示代码正在 Deno Deploy 中运行。
+- `DENO_DEPLOY_ORG_ID`: 拥有该应用的组织 ID。
+- 这是一个 UUID。
+- `DENO_DEPLOY_ORG_SLUG`: 拥有该应用的组织的标识符（slug）。这是用于 URL 的人类可读标识符，在创建组织时设置。
+- `DENO_DEPLOY_APP_ID`: 应用的 ID。这是一个 UUID。
+- `DENO_DEPLOY_APP_SLUG`: 应用的标识符（slug）。这是在创建应用时设置（或在应用设置中后续更改）的用于 URL 的人类可读标识符。
+- `DENO_DEPLOY_BUILD_ID`: 当前正在运行的构建 ID。
+- `DENO_DEPLOYMENT_ID`: 表示整个配置集的唯一标识符（应用 ID、构建 ID、上下文、环境变量、云连接、数据库）。当这些组件中的任何一个更改时此值也会变化。
+- `DENO_DEPLOY_BUILD_ID`: 当前正在运行的修订版本 ID。
+- `DENO_TIMELINE`: 应用当前运行的时间线。可能的值包括 `production`、`git-branch/<branch-name>` 和 `preview/<revision-id>`。构建期间不设置此变量，因为构建并不针对任何特定时间线。
 
 - `DENO_DEPLOYMENT_ID`：表示整个配置集（应用 ID、修订 ID、上下文和环境变量）的唯一标识符。当其中任何组件更改时此值也会变化。
 

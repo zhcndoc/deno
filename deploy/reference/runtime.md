@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-01-20
 title: 运行时
-description: "关于 Deno Deploy 早期访问运行时环境的详细信息，包括应用程序生命周期、启动、关闭和冷启动优化."
+description: "有关 Deno Deploy 运行时环境的详细信息，包括应用生命周期、启动、关闭以及冷启动优化。"
 ---
 
 您正在查看 Deno Deploy<sup>EA</sup> 的文档。 查找 Deploy Classic 的文档？[点击这里查看](/deploy/)。

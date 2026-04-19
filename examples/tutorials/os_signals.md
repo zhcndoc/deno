@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "处理操作系统信号"
-description: "Tutorial on handling operating system signals in Deno. Learn how to capture SIGINT and SIGBREAK events, manage signal listeners, and implement graceful shutdown handlers in your applications."
+description: "关于在 Deno 中处理操作系统信号的教程。学习如何捕获 SIGINT 和 SIGBREAK 事件，管理信号监听器，并在应用程序中实现优雅退出处理程序。"
 url: /examples/os_signals_tutorial/
 oldUrl:
   - /runtime/manual/examples/os_signals/

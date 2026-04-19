@@ -1,5 +1,6 @@
 ---
-title: 组织
+last_modified: 2026-01-27
+title: Organizations
 description: "在 Deno Deploy 中创建和管理组织的指南，包括成员、权限和组织管理。"
 ---
 

@@ -1,6 +1,7 @@
 ---
-title: "在 Deno 中入门 OpenTelemetry"
-description: "在 Deno 应用中设置基本的 OpenTelemetry 监测。本教程涵盖创建一个带有自定义指标和跟踪的简单 HTTP 服务器，以及查看遥测数据。"
+last_modified: 2026-03-25
+title: "Deno 中开始使用 OpenTelemetry"
+description: "在 Deno 应用中设置基础的 OpenTelemetry 监测。本教程涵盖创建一个带自定义指标和跟踪的简单 HTTP 服务器，并查看遥测数据。"
 url: /examples/basic_opentelemetry_tutorial/
 ---
 

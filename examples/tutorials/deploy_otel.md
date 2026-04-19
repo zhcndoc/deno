@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-09-29
 title: "使用 OpenTelemetry 和 Deno Deploy 监控您的应用"
-description: "添加自定义 OpenTelemetry 仪表到您的 Deno Deploy 应用的逐步教程。"
+description: "关于为您的 Deno Deploy 应用添加自定义 OpenTelemetry 仪表的分步教程。"
 url: /examples/deploy_otel_tutorial/
 ---
 

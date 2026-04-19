@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-27
 title: CDN 与缓存
-description: "Deno Deploy 中的 HTTP 缓存：缓存控制头、缓存标签、失效 API 及边缘缓存的最佳实践。"
+description: "Deno Deploy 中的 HTTP 缓存：cache control 头、缓存标签、失效 API，以及用于边缘缓存的最佳实践。"
 ---
 
 Deno Deploy 包含一个内置的 HTTP 缓存层，可以在边缘自动缓存符合条件的响应，从而降低延迟和源服务器负载。本文档介绍缓存的工作原理、如何控制缓存行为以及如何失效缓存内容。

@@ -1,5 +1,6 @@
 ---
-title: "Deno 的 Jupyter 内核"
+last_modified: 2025-11-05
+title: "用于 Deno 的 Jupyter 内核"
 oldUrl: /runtime/manual/tools/jupyter/
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno jupyter"

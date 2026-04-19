@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-07-01
 title: "deno update"
 command: update
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -54,7 +55,7 @@ Updated 1 dependency:
 
 ### 更新到特定版本
 
-You can also select a specific version to update to by appending it after `@`.
+你也可以通过在 `@` 后附加版本号来选择要更新到的特定版本。
 
 ```sh
 deno update chalk@5.2 @std/async@1.0.6

@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-19
 title: "设置你的环境"
-description: "Deno 开发环境搭建指南。学习如何配置流行编辑器如 VS Code，设置语言服务器支持，并启用 shell 自动补全以提升工作效率。"
+description: "Deno 开发环境搭建指南。了解如何配置流行的编辑器（如 VS Code）、设置语言服务器支持，并启用 shell 自动补全以提升工作效率。"
 oldUrl: /runtime/manual/getting_started/setup_your_environment/
 ---
 

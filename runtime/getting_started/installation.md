@@ -1,6 +1,7 @@
 ---
-title: 安装
-description: "关于在不同操作系统上安装 Deno 的指南。包含了 Windows、macOS 和 Linux 使用各种包管理器、手动安装方法及 Docker 容器的说明。"
+last_modified: 2026-03-05
+title: Installation
+description: "在不同操作系统上安装 Deno 的指南。包含使用各种包管理器在 Windows、macOS 和 Linux 上安装的说明，以及手动安装方法和 Docker 容器。"
 oldUrl:
   - /runtime/manual/fundamentals/installation
   - /runtime/manual/getting_started/installation

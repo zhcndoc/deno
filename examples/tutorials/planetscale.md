@@ -1,6 +1,7 @@
 ---
-title: "如何使用 Planetscale 与 Deno"
-description: "Step-by-step guide to using Planetscale with Deno. Learn how to set up serverless MySQL databases, manage connections, execute queries, and build scalable applications with Planetscale's developer-friendly platform."
+last_modified: 2025-03-10
+title: "如何在 Deno 中使用 Planetscale"
+description: "使用 Deno 搭配 Planetscale 的分步指南。了解如何设置无服务器 MySQL 数据库、管理连接、执行查询，并使用 Planetscale 的开发者友好型平台构建可扩展应用。"
 url: /examples/planetscale_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/planetscale/
@@ -19,7 +20,7 @@ import { connect } from "npm:@planetscale/database@^1.4";
 
 ## 配置我们的连接
 
-连接需要三种凭据：主机、用户名和密码。这些都是特定于数据库的，因此我们首先需要在 Planetscale 中创建一个数据库。您可以按照最初的说明[在这里](https://planetscale.com/docs/tutorials/planetscale-quick-start-guide)进行操作。别担心添加模式—我们可以通过 `@planetscale/database` 来完成这一点。
+连接需要三种凭据：主机、用户名和密码。这些都是特定于数据库的，因此我们首先需要在 Planetscale 中创建一个数据库。您可以按照最初的说明[在这里](https://planetscale.com/docs/tutorials/planetscale-quick-start-guide)进行操作。别担心添加模式——我们可以通过 `@planetscale/database` 来完成这一点。
 
 一旦您创建了数据库，前往概览，点击“连接”，选择“使用 `@planetscale/database` 连接”以获取主机和用户名。然后点击“密码”创建一个新的数据库密码。一旦您拥有这三项，您可以直接输入它们，或者更好的是，将它们存储为环境变量：
 

@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-10-10
 title: "欢迎使用 Deno"
-description: "学习 Deno 的基础知识，一个安全的 JavaScript、TypeScript 和 WebAssembly 运行时。"
+description: "了解 Deno 的基础知识——一种安全的 JavaScript、TypeScript 和 WebAssembly 运行时。"
 pagination_next: /runtime/getting_started/first_project/
 oldUrl:
   - /manual/
@@ -12,7 +13,7 @@ oldUrl:
 ---
 
 [Deno](https://deno.com)
-([/ˈdiːnoʊ/](https://ipa-reader.com/?text=%CB%88di%CB%90no%CA%8A)，发音为
+([/ˈdiːnoʊ/](https://ipa-reader.com/?text=%CB%88di%CB%90no%CA%8A，发音为
 `dee-no`) 是一个
 [开源](https://github.com/denoland/deno/blob/main/LICENSE.md) 的 JavaScript、
 TypeScript 和 WebAssembly 运行时，具备安全默认设置和出色的开发者体验。它基于 [V8](https://v8.dev/),
@@ -45,7 +46,7 @@ curl -fsSL https://deno.land/install.sh | sh
 </deno-tab>
 <deno-tab value="windows" label="Windows">
 
-Windows PowerShell 中执行：
+在 Windows PowerShell 中执行：
 
 ```powershell
 irm https://deno.land/install.ps1 | iex

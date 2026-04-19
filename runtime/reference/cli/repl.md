@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-12
 title: "deno repl"
 oldUrl: /runtime/manual/tools/repl/
 command: repl
@@ -64,9 +65,9 @@ undefined
 
 ```sh
 deno repl --eval-file=https://docs.deno.com/examples/welcome.ts,https://docs.deno.com/examples/local.ts
-Download https://docs.deno.com/examples/welcome.ts
-Welcome to Deno!
-Download https://docs.deno.com/examples/local.ts
+下载 https://docs.deno.com/examples/welcome.ts
+欢迎使用 Deno！
+下载 https://docs.deno.com/examples/local.ts
 Deno 1.45.3
 使用 ctrl+d 或 close() 退出
 > local // 这个变量在 local.ts 中被本地定义，但未被导出
@@ -79,7 +80,7 @@ Deno 1.45.3
 
 ```sh
 deno repl --eval-file=https://jsr.io/@std/encoding/1.0.0/ascii85.ts
-error in --eval-file file https://jsr.io/@std/encoding/1.0.0/ascii85.ts. Uncaught TypeError: Module not found "file:///home/_validate_binary_like.ts".
+错误：在 --eval-file 文件 https://jsr.io/@std/encoding/1.0.0/ascii85.ts 中发生未捕获的 TypeError：找不到模块 "file:///home/_validate_binary_like.ts"。
     at async <anonymous>:2:13
 Deno 1.45.3
 使用 ctrl+d 或 close() 退出

@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-10-23
 title: "如何将 Deno 部署到 Digital Ocean"
-description: "在 Digital Ocean 上部署 Deno 应用的逐步指南。了解 Docker 容器化、GitHub Actions 自动化、容器注册表以及如何设置持续部署工作流。"
+description: "分步骤指南：在 Digital Ocean 上部署 Deno 应用。了解 Docker 容器化、GitHub Actions 自动化、容器注册表以及如何设置持续部署工作流。"
 url: /examples/digital_ocean_tutorial/
 oldUrl:
   - /runtime/manual/advanced/deploying_deno/digital_ocean/

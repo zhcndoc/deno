@@ -1,6 +1,7 @@
 ---
-title: "在 Deno 中使用上下文传播实现分布式追踪"
-description: "在 Deno 应用中实现端到端的分布式追踪及自动上下文传播。本教程涵盖创建追踪服务、追踪上下文的自动传播，以及分布式追踪的可视化。"
+last_modified: 2025-07-11
+title: "在 Deno 中实现带上下文传播的分布式追踪"
+description: "在 Deno 应用中实现端到端分布式追踪，并自动进行上下文传播。本教程涵盖创建带追踪的服务、自动传播追踪上下文，以及可视化分布式追踪。"
 url: /examples/otel_span_propagation_tutorial/
 ---
 

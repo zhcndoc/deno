@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-10
 title: "Node 和 npm 兼容性"
-description: "关于在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包以及 Node.js 和 Deno 环境之间的差异。"
+description: "在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包，以及 Node.js 与 Deno 环境之间的差异。"
 oldUrl:
   - /runtime/reference/node/
   - /runtime/manual/npm_nodejs/std_node/
@@ -320,7 +321,7 @@ error ReferenceError: module is not defined
 - 添加带 `{ "type": "commonjs" }` 的相邻 `package.json`
 - 使用 `--unstable-detect-cjs` 标志运行
 
-详见文档：[CommonJS in Deno](https://docs.deno.com/go/commonjs)
+详见文档：[Deno 中的 CommonJS](https://docs.deno.com/go/commonjs)
 
 ## 条件导出（Conditional exports）
 

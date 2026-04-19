@@ -1,6 +1,7 @@
 ---
-title: "Deno 沙箱卷教程"
-description: "为你的 Deno 沙箱添加读写块存储。"
+last_modified: 2026-02-03
+title: "Deno Sandbox Volumes 教程"
+description: "为你的 Deno 沙箱添加可读写的块存储。"
 url: "/examples/volumes_tutorial/"
 ---
 

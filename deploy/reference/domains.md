@@ -1,6 +1,7 @@
 ---
-title: 域名
-description: "Deno Deploy 早期访问中的域管理完整指南，包括组织域、自定义域、DNS 配置、TLS 证书和域分配。"
+last_modified: 2025-10-15
+title: 域
+description: "Deno Deploy 中域名管理的完整指南，包括组织域、自定义域、DNS 配置、TLS 证书以及域名分配。"
 ---
 
 :::info

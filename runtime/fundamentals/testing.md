@@ -1,6 +1,7 @@
 ---
-title: "测试"
-description: "Deno 测试功能指南。了解内置测试运行器、断言、模拟、覆盖率报告、快照测试，以及如何为您的 Deno 应用程序编写有效测试。"
+last_modified: 2026-02-03
+title: "Testing"
+description: "Deno 的测试能力指南。了解内置测试运行器、断言、模拟、覆盖率报告、快照测试，以及如何为您的 Deno 应用编写有效的测试。"
 oldUrl:
   - /runtime/manual/advanced/language_server/testing_api/
   - /runtime/manual/basics/testing/

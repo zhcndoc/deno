@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "文件系统事件"
-description: "Tutorial on monitoring file system changes with Deno. Learn how to watch directories for file modifications, handle change events, and understand platform-specific behaviors across Linux, macOS, and Windows."
+description: "使用 Deno 监控文件系统更改的教程。了解如何监视目录以捕获文件修改、处理更改事件，并理解在 Linux、macOS 和 Windows 上的特定平台行为。"
 url: /examples/file_system_events_tutorial/
 oldUrl:
   - /runtime/manual/examples/file_system_events/

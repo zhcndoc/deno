@@ -1,6 +1,7 @@
 ---
-title: "兑现政策"
-description: "我们关于 Deno Deploy 的退款和取消政策。"
+last_modified: 2025-10-07
+title: "履约政策"
+description: "关于 Deno Deploy 的退款与取消政策。"
 oldUrl: /deploy/classic/fulfillment-policy/
 ---
 
@@ -14,4 +15,4 @@ oldUrl: /deploy/classic/fulfillment-policy/
 
 您可以在以下条款下随时取消您的 Deno Deploy 或 Deno Deploy Classic 订阅：
 
-订阅取消将立即生效，服务将继续运行至当前计费周期结束。要取消您的订阅，请导航到 Deno Deploy 仪表板上的帐户设置，并选择“取消订阅”。一旦订阅被取消，将不再产生进一步费用，但您仍需对取消生效日期之前的所有费用负责。如需了解我们履行政策的更多信息，或如果您需要帮助，请通过 [deploy@deno.com](mailto:deploy@deno.com) 联系我们的支持团队。
+订阅取消将立即生效，服务将继续运行至当前计费周期结束。要取消您的订阅，请导航到 Deno Deploy 仪表板上的帐户设置，并选择“取消订阅”。一旦订阅被取消，将不再产生进一步费用，但您仍需对取消生效日期之前的所有费用负责。如需了解我们履约政策的更多信息，或如果您需要帮助，请通过 [deploy@deno.com](mailto:deploy@deno.com) 联系我们的支持团队。

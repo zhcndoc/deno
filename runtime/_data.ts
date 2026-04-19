@@ -93,7 +93,7 @@ export const sidebar = [
     title: "参考指南",
     items: [
       {
-        title: "CLI",
+        title: "命令行接口",
         href: "/runtime/reference/cli/",
         items: [
           {
@@ -243,9 +243,9 @@ export const sidebar = [
         ],
       },
       {
-        title: "Standard library",
+        title: "标准库",
         items: [
-          { title: "Overview", href: "/runtime/reference/std/" },
+          { title: "概览", href: "/runtime/reference/std/" },
           ...[
             "assert",
             "async",
@@ -295,11 +295,11 @@ export const sidebar = [
         ],
       },
       {
-        title: "Configuring TypeScript",
+        title: "配置 TypeScript",
         href: "/runtime/reference/ts_config_migration/",
       },
       {
-        title: "Continuous integration",
+        title: "持续集成",
         href: "/runtime/reference/continuous_integration/",
       },
       {
@@ -307,7 +307,7 @@ export const sidebar = [
         href: "/runtime/reference/env_variables/",
       },
       {
-        title: "Deno & VS Code",
+        title: "Deno 与 VS Code",
         href: "/runtime/reference/vscode/",
       },
       {
@@ -323,7 +323,7 @@ export const sidebar = [
         href: "/runtime/reference/bundling/",
       },
       {
-        title: "Lint plugins",
+        title: "Lint 插件",
         href: "/runtime/reference/lint_plugins/",
       },
       {
@@ -331,7 +331,7 @@ export const sidebar = [
         href: "/runtime/reference/wasm/",
       },
       {
-        title: "Migration guide",
+        title: "迁移指南",
         href: "/runtime/reference/migration_guide/",
       },
       {
@@ -339,7 +339,7 @@ export const sidebar = [
         href: "/runtime/reference/lsp_integration/",
       },
       {
-        title: "Docker",
+        title: "Deno 与 Docker",
         href: "/runtime/reference/docker/",
       },
     ],

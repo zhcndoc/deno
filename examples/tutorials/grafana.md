@@ -1,68 +1,61 @@
 ---
-title: "How to export telemetry data to Grafana"
-description: "Complete guide to exporting telemetry data with OpenTelemetry and Grafana. Learn how to configure collectors, visualize traces, and monitor application performance."
+last_modified: 2025-07-11
+title: "如何将遥测数据导出到 Grafana"
+description: "使用 OpenTelemetry 和 Grafana 导出遥测数据的完整指南。了解如何配置采集器、可视化追踪，并监控应用性能。"
 url: /examples/grafana_tutorial/
 ---
 
-[OpenTelemetry](https://opentelemetry.io/) (often abbreviated as OTel) is an
-open-source observability framework that provides a standardized way to collect
-and export telemetry data such as traces, metrics and logs. Deno has built-in
-support for OpenTelemetry, making it easy to instrument your applications
-without adding external dependencies. This integration works out of the box with
-observability platforms like [Grafana](https://grafana.com/).
+[OpenTelemetry](https://opentelemetry.io/)（通常简称为 OTel）是一个
+开源的可观测性框架，它提供了一种标准化方式来收集
+并导出遥测数据，例如追踪（traces）、指标（metrics）和日志（logs）。Deno 内置了对 OpenTelemetry 的支持，使你能够在
+不添加外部依赖的情况下轻松为应用进行埋点。该集成可与
+[Grafana](https://grafana.com/) 等可观测性平台无缝开箱即用。
 
-Grafana is an open-source observability platform that lets DevOps teams
-visualize, query, and alert on metrics, logs, and traces from diverse data
-sources in real time. It’s widely used for building dashboards to monitor
-infrastructure, applications, and systems health.
+Grafana 是一个开源的可观测性平台，它让 DevOps 团队能够在
+实时环境中可视化、查询并告警来自多种数据源的指标、日志和追踪。它被广泛用于构建仪表盘，以监控
+基础设施、应用以及系统健康状况。
 
-Grafana also offers a hosted version called
-[Grafana Cloud](https://grafana.com/products/cloud/). This tutorial will help
-you configure your project to export OTel data to Grafana Cloud.
+Grafana 还提供一个托管版本，名为
+[Grafana Cloud](https://grafana.com/products/cloud/)。本教程将帮助你
+配置项目，将 OTel 数据导出到 Grafana Cloud。
 
-In this tutorial, we'll build a simple application and export its telemetry data
-to Grafana Cloud. We'll cover:
+在本教程中，我们将构建一个简单的应用，并将其遥测数据
+导出到 Grafana Cloud。我们将涵盖：
 
-- [Set up your chat app](#set-up-your-chat-app)
-- [Set up a Docker collector](#set-up-a-docker-collector)
-- [Generating telemetry data](#generating-telemetry-data)
-- [Viewing telemetry data](#viewing-telemetry-data)
+- [搭建你的聊天应用](#set-up-your-chat-app)
+- [搭建一个 Docker 采集器](#set-up-a-docker-collector)
+- [生成遥测数据](#generating-telemetry-data)
+- [查看遥测数据](#viewing-telemetry-data)
 
-You can find the complete source code for this tutorial
-[on GitHub](https://github.com/denoland/examples/tree/main/with-grafana).
+你可以在
+[GitHub](https://github.com/denoland/examples/tree/main/with-grafana) 上找到本教程的完整源代码。
 
-## Set up your chat app
+## 搭建你的聊天应用
 
-For this tutorial, we'll use a simple chat application to demonstrate how to
-export telemetry data. You can find the
-[code for the app on GitHub](https://github.com/denoland/examples/tree/main/with-grafana).
+在本教程中，我们将使用一个简单的聊天应用来演示如何
+导出遥测数据。你可以在
+[GitHub](https://github.com/denoland/examples/tree/main/with-grafana) 上找到该应用的
+代码。
 
-Either take a copy of that repository or create a
-[main.ts](https://github.com/denoland/examples/blob/main/with-grafana/main.ts)
-file and a
-[.env](https://github.com/denoland/examples/blob/main/with-grafana/.env.example)
-file.
+你可以直接复制该仓库，或者创建一个
+[main.ts](https://github.com/denoland/examples/blob/main/with-grafana/main.ts) 文件，并创建一个
+[.env](https://github.com/denoland/examples/blob/main/with-grafana/.env.example) 文件。
 
-In order to run the app you will need an OpenAI API key. You can get one by
-signing up for an account at [OpenAI](https://platform.openai.com/signup) and
-creating a new secret key. You can find your API key in the
-[API keys section](https://platform.openai.com/account/api-keys) of your OpenAI
-account. Once you have an API key, set up an `OPENAI_API-KEY` environment
-variable in your `.env` file:
+要运行该应用，你需要一个 OpenAI API 密钥。你可以通过在
+[OpenAI](https://platform.openai.com/signup) 注册一个账号并创建新的
+密钥来获取。你可以在你的 OpenAI 账号的
+[API keys（API 密钥）部分](https://platform.openai.com/account/api-keys)找到你的 API 密钥。获得 API 密钥后，在你的 `.env` 文件中设置一个 `OPENAI_API-KEY` 环境变量：
 
 ```env title=".env"
 OPENAI_API_KEY=your_openai_api_key
 ```
 
-## Set up a Docker collector
+## 搭建一个 Docker 采集器
 
-Next, we'll set up a Docker container to run the OpenTelemetry collector. The
-collector is responsible for receiving telemetry data from your application and
-exporting it to Grafana Cloud.
+接下来，我们将设置一个 Docker 容器来运行 OpenTelemetry 采集器。该
+采集器负责接收来自你应用的遥测数据，并将其导出到 Grafana Cloud。
 
-In the same directory as your `main.ts` file, create a `Dockerfile` and an
-`otel-collector.yml` file. The `Dockerfile` will be used to build a Docker
-image:
+在你的 `main.ts` 文件所在目录中，创建一个 `Dockerfile` 和一个 `otel-collector.yml` 文件。`Dockerfile` 将用于构建 Docker 镜像：
 
 ```dockerfile title="Dockerfile"
 FROM otel/opentelemetry-collector-contrib:latest
@@ -73,39 +66,31 @@ CMD ["--config", "/otel-config.yml"]
 ```
 
 [`FROM otel/opentelemetry-collector-contrib:latest`](https://hub.docker.com/r/otel/opentelemetry-collector-contrib/) -
-This line specifies the base image for the container. It uses the official
-OpenTelemetry Collector Contributor image, which contains all receivers,
-exporters, processors, connectors, and other optional components, and pulls the
-latest version.
+这一行指定容器的基础镜像。它使用官方的
+OpenTelemetry Collector Contributor 镜像，其中包含所有 receivers、exporters、processors、connectors 以及其他可选组件，并会拉取
+最新版本。
 
-`COPY otel-collector.yml /otel-config.yml` - This instruction copies our
-configuration file named `otel-collector.yml` from the local build context into
-the container. The file is renamed to `/otel-config.yml` inside the container.
+`COPY otel-collector.yml /otel-config.yml` - 这条指令会把名为 `otel-collector.yml` 的配置文件从本地构建上下文复制到容器中。该文件会在容器内被重命名为 `/otel-config.yml`。
 
-`CMD ["--config", "/otel-config.yml"]` - This sets the default command that will
-run when the container starts. It tells the OpenTelemetry Collector to use the
-configuration file we copied in the previous step.
+`CMD ["--config", "/otel-config.yml"]` - 这会设置容器启动时运行的默认命令。它告诉 OpenTelemetry Collector 使用我们在上一步复制的配置文件。
 
-Next, let's setup a Grafana Cloud account and grab some info.
+接下来，让我们配置一个 Grafana Cloud 账号并获取一些信息。
 
-If you have not already,
-[create a free Grafana Cloud account](https://grafana.com/auth/sign-up/create-user).
-Once created, you will receive a Grafana Cloud stack. Click "Details".
+如果你还没有，
+[创建一个免费的 Grafana Cloud 账号](https://grafana.com/auth/sign-up/create-user)。
+创建完成后，你会收到一个 Grafana Cloud stack。点击 “Details”。
 
-![Click details on your Grafana Cloud stack](./images/how-to/grafana/grafana-1.png)
+![在你的 Grafana Cloud stack 中点击 Details](./images/how-to/grafana/grafana-1.png)
 
-Next, find "OpenTelemetry" and click "Configure".
+接着找到 “OpenTelemetry” 并点击 “Configure”。
 
-![Find and configure OpenTelemetry](./images/how-to/grafana/grafana-2.png)
+![查找并配置 OpenTelemetry](./images/how-to/grafana/grafana-2.png)
 
-This page will provide you with all the details you'll need to configure your
-OpenTelemetry collector. Make note of your **OTLP Endpoint**, **Instance ID**,
-and **Password / API Token** (you will have to generate one).
+该页面会提供你配置 OpenTelemetry 采集器所需的全部细节。请记下你的 **OTLP Endpoint**、**Instance ID** 和 **Password / API Token**（你需要生成一个）。
 
-![Configuring OTel in Grafana Cloud](./images/how-to/grafana/grafana-3.png)
+![在 Grafana Cloud 中配置 OTel](./images/how-to/grafana/grafana-3.png)
 
-Next, add the following to your `otel-collector.yml` file to define how how
-telemetry data should be collected and exported to Grafana Cloud:
+接下来，向你的 `otel-collector.yml` 文件中添加以下内容，以定义如何收集遥测数据并将其导出到 Grafana Cloud：
 
 ```yml title="otel-collector.yml"
 receivers:
@@ -148,38 +133,25 @@ service:
       exporters: [otlphttp/grafana_cloud]
 ```
 
-The `receivers` section configures how the collector receives data. It sets up
-an OTLP (OpenTelemetry Protocol) receiver that listens on two protocols, `gRPC`
-and `HTTP`, the `0.0.0.0` address means it will accept data from any source.
+`receivers` 部分用于配置采集器如何接收数据。它会设置一个 OTLP（OpenTelemetry Protocol）receiver，监听两种协议：`gRPC` 和 `HTTP`。`0.0.0.0` 地址表示它会接受来自任何来源的数据。
 
-The `exporters` section defines where the collected data should be sent. Be sure
-to include **the OTLP endpoint** provided by your Grafana Cloud instance.
+`exporters` 部分用于定义应该将采集到的数据发送到哪里。请确保包含你的 Grafana Cloud 实例提供的**OTLP endpoint**。
 
-The `extensions` section defines the authentication for OTel to export data to
-Grafana Cloud. Be sure to include your Grafana Cloud **Instance ID**, as well as
-your generated **Password / API Token**.
+`extensions` 部分用于定义 OTel 将数据导出到 Grafana Cloud 时的身份验证方式。请务必包含你的 Grafana Cloud **Instance ID**，以及你生成的 **Password / API Token**。
 
-The `processors` section defines how the data should be processed before export.
-It uses batch processing with a timeout of 5 seconds and a maximum batch size of
-5000 items.
+`processors` 部分用于定义在导出之前如何处理数据。它使用批处理（batch processing），超时时间为 5 秒，最大批大小为 5000 条。
 
-The `service` section ties everything together by defining three pipelines. Each
-pipeline is responsible for a different type of telemetry data. The logs
-pipeline collects application logs. The traces pipeline is for distributed
-tracing data. The metric pipeline is for performance metrics.
+`service` 部分通过定义三个 pipeline 将所有内容连接起来。每个 pipeline 负责不同类型的遥测数据。logs pipeline 会收集应用日志。traces pipeline 用于分布式追踪数据。metric pipeline 用于性能指标。
 
-Build and run the docker instance to start collecting your telemetry data with
-the following command:
+使用以下命令构建并运行该 docker 实例，以开始收集你的遥测数据：
 
 ```sh
 docker build -t otel-collector . && docker run -p 4317:4317 -p 4318:4318 otel-collector
 ```
 
-## Generating telemetry data
+## 生成遥测数据
 
-Now that we have the app and the docker container set up, we can start
-generating telemetry data. Run your application with these environment variables
-to send data to the collector:
+既然我们已经把应用和 docker 容器都搭好了，现在就可以开始生成遥测数据了。使用下面这些环境变量运行你的应用，以便把数据发送到采集器：
 
 ```sh
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 \
@@ -188,46 +160,44 @@ OTEL_DENO=true \
 deno run --allow-net --allow-env --env-file --allow-read main.ts
 ```
 
-This command:
+该命令：
 
-- Points the OpenTelemetry exporter to your local collector (`localhost:4318`)
-- Names your service "chat-app" in Grafana Cloud
-- Enables Deno's OpenTelemetry integration
-- Runs your application with the necessary permissions
+- 将 OpenTelemetry exporter 指向你本地的采集器（`localhost:4318`）
+- 在 Grafana Cloud 中将你的服务命名为 “chat-app”
+- 启用 Deno 的 OpenTelemetry 集成
+- 使用必要的权限运行你的应用
 
-To generate some telemetry data, make a few requests to your running application
-in your browser at [`http://localhost:8000`](http://localhost:8000).
+为了生成一些遥测数据，请在浏览器中对你运行的应用发起几次请求：[`http://localhost:8000`](http://localhost:8000)。
 
-Each request will:
+每次请求将：
 
-1. Generate traces as it flows through your application
-2. Send logs from your application's console output
-3. Create metrics about the request performance
-4. Forward all this data through the collector to Grafana Cloud
+1. 在请求通过你的应用流转时生成追踪（traces）
+2. 从你应用的控制台输出中发送日志
+3. 创建关于请求性能的指标（metrics）
+4. 通过采集器将所有这些数据转发到 Grafana Cloud
 
-## Viewing telemetry data
+## 查看遥测数据
 
-After making some requests to your application, you'll see three types of data
-in your Grafana Cloud dashboard:
+在向你的应用发起一些请求之后，你会在 Grafana Cloud 仪表盘中看到三种类型的数据：
 
-1. **Traces** - End-to-end request flows through your system
-2. **Logs** - Console output and structured log data
-3. **Metrics** - Performance and resource utilization data
+1. **Traces** - 你的系统中的端到端请求流转
+2. **Logs** - 控制台输出和结构化日志数据
+3. **Metrics** - 性能与资源利用率数据
 
-![Viewing logs in Grafana](./images/how-to/grafana/grafana-logs.png)
+![在 Grafana 中查看日志](./images/how-to/grafana/grafana-logs.png)
 
-You can drill down into individual spans to debug performance issues:
+你可以深入查看各个 span，以调试性能问题：
 
-![Viewing traces in Grafana](./images/how-to/grafana/grafana-traces.png)
+![在 Grafana 中查看追踪](./images/how-to/grafana/grafana-traces.png)
 
-🦕 Now that you have telemetry export working, you could:
+🦕 现在你已经让遥测导出工作了，你可以：
 
-1. Add custom spans and attributes to better understand your application
-2. Set up alerts based on latency or error conditions
-3. Deploy your application and collector to production using platforms like:
+1. 添加自定义 spans 和属性，以更好地理解你的应用
+2. 基于延迟或错误条件设置告警
+3. 使用诸如以下平台将你的应用和采集器部署到生产环境：
    - [Fly.io](https://docs.deno.com/examples/deploying_deno_with_docker/)
    - [Digital Ocean](https://docs.deno.com/examples/digital_ocean_tutorial/)
    - [AWS Lightsail](https://docs.deno.com/examples/aws_lightsail_tutorial/)
 
-For more details on OpenTelemetry configuration, check out the
-[Grafana Cloud documentation](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/collector/).
+如需更多关于 OpenTelemetry 配置的信息，请查看
+[Grafana Cloud 文档](https://grafana.com/docs/grafana-cloud/monitor-applications/application-observability/collector/)。

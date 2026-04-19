@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-08-20
 title: Node APIs
-description: "A guide to Node.js compatibility in Deno. Learn about supported Node.js built-in modules, global objects, and how to use Node.js packages in Deno projects."
+description: "Deno 中的 Node.js 兼容性指南。了解受支持的 Node.js 内置模块、全局对象，以及如何在 Deno 项目中使用 Node.js 包。"
 templateEngine: [vto, md]
 oldUrl:
   - /runtime/manual/node/compatibility/
@@ -11,7 +12,7 @@ Deno 为多个内置的 Node.js 模块和全局变量提供了填充。
 
 <a href="/api/node/" class="docs-cta runtime-cta">探索内置 Node API</a>
 
-Node 兼容性是一个正在进行的项目 - 帮助我们识别缺口，并告诉我们
+Node 兼容性是一个正在进行的项目——帮助我们识别缺口，并告诉我们
 您需要哪些模块，通过
 [在 GitHub 上开一个问题](https://github.com/denoland/deno)。
 
@@ -29,7 +30,7 @@ Node 兼容性是一个正在进行的项目 - 帮助我们识别缺口，并告
 | [`Buffer`](https://nodejs.org/api/globals.html#class-buffer)                                                        | ✅                                 |
 | [`ByteLengthQueuingStrategy`](https://nodejs.org/api/globals.html#class-bytelengthqueuingstrategy)                   | ✅                                 |
 | [`__dirname`](https://nodejs.org/api/globals.html#__dirname)                                                        | ⚠️ [信息](#node.js-global-objects) |
-| [`__filename`](https://nodejs.org/api/globals.html#__filename)                                                      | ⚠️ [信息](#nodejs-global-objects)  |
+| [`__filename`](https://nodejs.org/api/globals.html#__filename)                                                      | ⚠️ [信息](#node.js-global-objects)  |
 | [`atob`](https://nodejs.org/api/globals.html#atobdata)                                                              | ✅                                 |
 | [`BroadcastChannel`](https://nodejs.org/api/globals.html#broadcastchannel)                                          | ✅                                 |
 | [`btoa`](https://nodejs.org/api/globals.html#btoadata)                                                              | ✅                                 |

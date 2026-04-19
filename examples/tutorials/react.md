@@ -1,6 +1,7 @@
 ---
-title: "使用 Vite 构建 React 应用"
-description: "Deno 和 Vite 构建 React 应用的完整指南。学习如何搭建项目、实现路由、添加 API 接口以及部署你的全栈 TypeScript 应用。"
+last_modified: 2025-09-29
+title: "使用 Vite 构建的 React 应用"
+description: "使用 Deno 和 Vite 构建 React 应用的完整指南。了解如何搭建项目、实现路由、添加 API 端点，并部署你的全栈 TypeScript 应用。"
 url: /examples/react_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/react/
@@ -279,7 +280,7 @@ export default function Index() {
 
   return (
     <main id="content">
-      <h1>🦕 Dinosaur app</h1>
+      <h1>🦕 恐龙应用</h1>
       <p>点击下方恐龙，了解详情。</p>
       {dinosaurs.map((dinosaur: { name: string; description: string }) => {
         return (

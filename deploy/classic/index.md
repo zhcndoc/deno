@@ -1,5 +1,6 @@
 ---
-title: "部署 Classic"
+last_modified: 2026-03-19
+title: "Deploy Classic"
 oldUrl:
   - /deploy/docs/
   - /deploy/manual/hello-world/

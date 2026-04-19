@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-03-10
 title: "可执行脚本"
-description: "Guide to creating executable scripts with Deno. Learn about hashbangs, file permissions, cross-platform compatibility, and how to create command-line tools that can run directly from the terminal."
+description: "使用 Deno 创建可执行脚本的指南。了解哈希bang（hashbang）、文件权限、跨平台兼容性，以及如何创建可直接从终端运行的命令行工具。"
 url: /examples/hashbang_tutorial/
 oldUrl:
   - /runtime/manual/examples/hashbang/

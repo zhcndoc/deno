@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: "将自定义域从 Deploy Classic 迁移到 Deno Deploy"
-description: "了解如何将您的自定义域从 Deploy Classic 迁移到 Deno Deploy"
+description: "了解如何将自定义域从 Deploy Classic 迁移到 Deno Deploy"
 url: /examples/migrate_custom_domain_tutorial/
 ---
 

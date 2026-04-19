@@ -1,13 +1,14 @@
 ---
+last_modified: 2025-08-26
 title: "使用 Deno 构建 Nuxt 应用"
-description: "逐步指南，教你如何使用 Deno 构建 Nuxt 应用。学习如何创建完整的 Vue.js 全栈应用，实现服务器端渲染，添加 Tailwind 样式，并部署你的应用。"
+description: "使用 Deno 构建 Nuxt 应用的循序渐进指南。学习如何创建完整的全栈 Vue.js 应用、实现服务端渲染、添加 Tailwind 样式，并部署你的应用。"
 url: /examples/nuxt_tutorial/
 ---
 
 [Nuxt](https://nuxt.com/) 是一个基于 [Vue](https://vuejs.org/) 的直观框架，
 提供了文件路由、多种渲染选项和开箱即用的自动代码拆分。凭借其模块化架构，Nuxt 通过提供结构化的开发方式简化了 Vue 应用的构建流程。
 
-在本教程中，我们将使用 Deno 构建一个简单的 Nuxt 应用，显示恐龙列表，并允许你点击名字查看更多恐龙信息。
+在本教程中，我们将使用 Deno 构建一个简单的 Nuxt 应用，展示恐龙列表，并允许你点击名字查看更多恐龙信息。
 
 你可以在
 [GitHub 上查看完整示例](https://github.com/denoland/examples/tree/main/with-nuxt)。
@@ -85,7 +86,7 @@ NUXT-APP/
 路由均为 `*.get.ts` 文件，Nuxt 会自动根据文件生成响应 `GET` 请求的 API 端点。
 [文件命名决定 HTTP 方法及路由路径](https://nuxt.com/docs/guide/directory-structure/server#matching-http-method)。
 
-初始的 `dinosaurs.get.ts` 十分简单，使用 [`defineCachedEventHandler`](https://nitro.build/guide/cache) 创建缓存端点提升性能。该函数直接返回完整恐龙数据数组，无任何过滤：
+初始的 `dinosaurs.get.ts` 十分简单，使用 [`defineCachedEventHandler`](https://nitro.build/guide/cache) 创建缓存端点以提升性能。该函数直接返回完整恐龙数据数组，无任何过滤：
 
 ```tsx title="server/api/dinosaurs.get.ts"
 import data from "./data.json" with { type: "json" };
@@ -130,7 +131,7 @@ export default defineCachedEventHandler((event) => {
 
 ![设置 API](./images/how-to/nuxt/nuxt-1.webp)
 
-访问某个恐龙的特定 URL，如：
+访问某个恐龙的特定 URL，例如：
 [http://localhost:3000/api/dinosaurs/aardonyx](http://localhost:3000/api/dinosaurs/aardonyx)，查看单个恐龙数据。
 
 ![设置 API](./images/how-to/nuxt/nuxt-2.webp)
@@ -156,8 +157,8 @@ const { data: dinosaurs } = await useFetch("/api/dinosaurs");
 
 <template>
   <main id="content">
-    <h1 class="text-2xl font-bold mb-4">Welcome to the Dinosaur app</h1>
-    <p class="mb-4">Click on a dinosaur below to learn more.</p>
+    <h1 class="text-2xl font-bold mb-4">欢迎来到恐龙应用</h1>
+    <p class="mb-4">点击下面的恐龙了解更多。</p>
     <ul class="space-y-2">
       <li v-for="dinosaur in dinosaurs" :key="dinosaur.name">
         <NuxtLink

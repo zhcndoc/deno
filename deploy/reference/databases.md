@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-10
 title: 数据库
-description: 连接到外部数据库实例，实现您的应用及其环境无缝集成。
+description: 连接外部数据库实例，并无缝集成您的应用及其环境。
 ---
 
 Deno Deploy 的数据库功能让您的应用轻松连接多种数据库，实现应用状态的无缝管理。目前支持 PostgreSQL 和 Deno KV。

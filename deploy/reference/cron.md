@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-02
 title: Cron
 description: "在 Deno Deploy 中调度和管理 cron 任务，包括在代码中定义 cron 任务、执行生命周期、重试以及可观测性。"
 ---

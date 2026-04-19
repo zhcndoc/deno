@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: "从 Deploy Classic 迁移到 Deno Deploy"
-description: "将您的应用程序从 Deno Deploy Classic（dash.deno.com）迁移到新的 Deno Deploy（console.deno.com）的指南，包括 subhosting API 迁移。"
+description: "指导将应用从 Deno Deploy Classic（dash.deno.com）迁移到新的 Deno Deploy（console.deno.com），包括子托管 API 迁移。"
 ---
 
 Deno Deploy Classic（dash.deno.com）和 subhosting v1 API（apidocs.deno.com）
@@ -67,9 +68,32 @@ Deploy Classic 为所有部署使用同一组环境变量。
 有关逐步操作说明，请参阅
 [自定义域名迁移教程](/examples/migrate_custom_domain_tutorial/)。
 
-## Cron 任务
+## HTTP server API
 
-`Deno.cron()` API 在新的 Deploy 上的工作方式相同。您现有的 cron
+Deploy Classic 支持来自 `deno.land/std` HTTP
+模块的 `serve()` 函数（例如 `https://deno.land/std@0.170.0/http/server.ts`）。新的 Deploy
+**不支持** 这种遗留的 `serve()` 函数。
+
+请更新您的代码，改用内置的
+[`Deno.serve()`](https://docs.deno.com/api/deno/~/Deno.serve) API：
+
+```diff
+- import { serve } from "https://deno.land/std@0.170.0/http/server.ts";
+-
+- serve(() => new Response("hello, world"));
++ Deno.serve(() => new Response("hello, world"));
+```
+
+自 Deno 1.35 起，`Deno.serve()` 一直是推荐的 HTTP 服务器 API，且性能更佳。如果您的应用使用旧版标准库 `serve()`，
+请在迁移到新 Deploy 之前先更新。
+
+如果您部署了使用旧版 `serve()` 函数的代码到新 Deploy，它
+会在部署的 **预热阶段** 失败，并出现 **超时错误**。如果遇到此错误，请检查您的入口点或任何依赖项是否在使用标准库 `serve()`。
+某些较旧版本的第三方库可能在内部依赖遗留的 `serve()` 函数——在这种情况下，请将该库升级到使用 `Deno.serve()` 的版本。
+
+## Cron jobs
+
+新的 Deploy 上的 `Deno.cron()` API 工作方式相同。您现有的 cron
 任务代码应可直接运行，无需修改。有关详细信息，请参阅
 [cron 参考](/deploy/reference/cron/)。
 

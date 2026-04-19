@@ -2,24 +2,24 @@ import { Sidebar } from "../types.ts";
 
 export const sidebar = [
   {
-    title: "Style Guide",
+    title: "风格指南",
     href: "/styleguide/",
     items: [
       {
-        title: "Typography",
+        title: "排版",
         href: "/styleguide/typography/",
       },
       {
-        title: "Components",
+        title: "组件",
         href: "/styleguide/components/",
       },
       {
-        title: "OG images",
+        title: "OG 图像",
         href: "/styleguide/og/",
       },
     ],
   },
 ] satisfies Sidebar;
 
-export const sectionTitle = "Style Guide";
+export const sectionTitle = "风格指南";
 export const sectionHref = "/styleguide/";

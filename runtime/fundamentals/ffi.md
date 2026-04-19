@@ -1,6 +1,7 @@
 ---
-title: "外部函数接口（FFI）"
-description: "了解如何使用 Deno 的外部函数接口（FFI）从 JavaScript 或 TypeScript 直接调用本地库。包含示例、最佳实践和安全注意事项。"
+last_modified: 2025-10-15
+title: "外部函数接口（Foreign Function Interface，FFI）"
+description: "了解如何使用 Deno 的外部函数接口（FFI）直接从 JavaScript 或 TypeScript 调用原生库。包含示例、最佳实践和安全注意事项。"
 ---
 
 Deno 的外部函数接口（FFI）允许 JavaScript 和 TypeScript 代码

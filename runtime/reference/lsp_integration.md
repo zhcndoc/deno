@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-02
 title: "语言服务器集成"
-description: "集成 Deno 的语言服务器协议（LSP）的技术指南。了解 LSP 实现细节、自定义命令、请求、通知以及测试 API 集成，面向编辑器和工具开发者。"
+description: "将 Deno 的语言服务器协议（LSP）集成到项目中的技术指南。了解 LSP 的实现细节、自定义命令、请求、通知，以及为编辑器和工具开发者测试 API 集成。"
 oldUrl:
   - /runtime/manual/reference/lsp/
   - /runtime/manual/advanced/language_server/overview/
@@ -16,19 +17,19 @@ oldUrl:
 
 :::
 
-Deno CLI 内置一个语言服务器，可以提供智能的编辑体验，以及一种轻松访问 Deno 中内置的其他工具的方法。对于大多数用户而言，使用语言服务器将通过 [Visual Studio Code](/runtime/reference/vscode/) 或 [其他编辑器](/runtime/getting_started/setup_your_environment/) 来实现。
+Deno CLI 内置了一个语言服务器，可以提供智能的编辑体验，并提供一种轻松访问 Deno 内置其他工具的方法。对大多数用户而言，使用语言服务器将通过 [Visual Studio Code](/runtime/reference/vscode/) 或 [其他编辑器](/runtime/getting_started/setup_your_environment/) 来实现。
 
-此页面针对的是创建语言服务器集成或提供与 Deno 智能集成的包注册表的开发者。
+此页面面向创建语言服务器集成，或提供与 Deno 智能集成的包注册表的开发者。
 
-Deno 语言服务器提供了 [语言服务器协议](https://microsoft.github.io/language-server-protocol/) 的服务端实现，特别设计为提供代码的 _Deno_ 视图。它集成在命令行中，并可以通过 `lsp` 子命令启动。
+Deno 语言服务器提供了 [语言服务器协议](https://microsoft.github.io/language-server-protocol/) 的服务端实现，并特别设计为提供代码的 _Deno_ 视图。它集成在命令行中，并可以通过 `lsp` 子命令启动。
 
 ## 结构
 
-当语言服务器启动时，会创建一个 `LanguageServer` 实例，该实例持有语言服务器的所有状态。它还定义了客户端通过语言服务器 RPC 协议调用的所有方法。
+当语言服务器启动时，将创建一个 `LanguageServer` 实例。该实例持有语言服务器的所有状态。它还定义了客户端通过语言服务器 RPC 协议调用的所有方法。
 
 ## 设置
 
-语言服务器支持一系列的工作区设置：
+语言服务器支持一系列工作区设置：
 
 - `deno.enable`
 - `deno.enablePaths`
@@ -52,13 +53,13 @@ Deno 语言服务器提供了 [语言服务器协议](https://microsoft.github.i
 - `deno.unsafelyIgnoreCertificateErrors`
 - `deno.unstable`
 
-此外，语言服务器还支持按资源的设置：
+此外，语言服务器还支持按资源（resource）的设置：
 
 - `deno.enable`
 - `deno.enablePaths`
 - `deno.codeLens.test`
 
-Deno 在语言服务器进程的多个点分析这些设置。首先，当来自客户端的 `initialize` 请求到达时，`initializationOptions` 将被视为一个表示 `deno` 命名空间选项的对象。例如，以下值将为该实例的语言服务器启用不稳定 API：
+Deno 在语言服务器进程的多个位置分析这些设置。首先，当来自客户端的 `initialize` 请求到达时，`initializationOptions` 将被视为一个表示 `deno` 命名空间选项的对象。例如，以下值将为该实例的语言服务器启用不稳定 API：
 
 ```json
 {
@@ -67,7 +68,7 @@ Deno 在语言服务器进程的多个点分析这些设置。首先，当来自
 }
 ```
 
-当语言服务器接收到 `workspace/didChangeConfiguration` 通知时，它将评估客户端是否指示是否具有 `workspaceConfiguration` 功能。如果有，它将发送一个 `workspace/configuration` 请求，其中将包括请求工作区配置以及语言服务器当前跟踪的所有 URI 的配置。
+当语言服务器接收到 `workspace/didChangeConfiguration` 通知时，它会评估客户端是否指示支持 `workspaceConfiguration` 功能。如果有，它将发送一个 `workspace/configuration` 请求，其中包括请求工作区配置以及语言服务器当前跟踪的所有 URI 的配置。
 
 如果客户端具有 `workspaceConfiguration` 功能，语言服务器将在收到 `textDocument/didOpen` 通知时发送一个 URI 的配置请求，以获取特定于资源的设置。
 
@@ -79,19 +80,19 @@ Deno 在语言服务器进程的多个点分析这些设置。首先，当来自
 
 ### .cache
 
-`deno.cache` 作为解析代码操作发送，当有未缓存的模块说明被导入到模块时发送。它将以包含作为字符串的已解析说明符的参数发送。
+`deno.cache` 作为解析代码操作发送，当导入到模块中时会发送那些尚未缓存的模块说明。它将以包含解析后的说明符字符串的参数发送。
 
 ### showReferences
 
-`deno.showReferences` 作为某些代码透镜上的命令发送，以显示引用位置。参数包含该命令的主题说明符、目标的起始位置和要显示的引用的位置。
+`deno.showReferences` 作为某些代码透镜（code lens）上的命令发送，用于显示引用位置。参数包含该命令的主题说明符、目标的起始位置，以及要显示引用的位置。
 
 ### test
 
-`deno.test` 作为测试代码透镜的一部分发送，客户端应根据参数运行测试，这些参数是测试所在的说明符和用于过滤测试的测试名称。
+`deno.test` 作为测试代码透镜的一部分发送。客户端应根据参数运行测试；这些参数包括测试所在的说明符，以及用于过滤测试的测试名称。
 
 ## 请求
 
-LSP 当前支持以下自定义请求。客户端应实现这些请求，以便拥有一个与 Deno 完美集成的完全功能的客户端：
+LSP 当前支持以下自定义请求。客户端应实现这些请求，以便拥有一个与 Deno 完美集成的、功能完整的客户端：
 
 ### /cache
 
@@ -108,7 +109,7 @@ interface CacheParams {
 
 ### performance
 
-`deno/performance` 请求返回 Deno 内部仪器化的平均时机。它不期望任何参数。
+`deno/performance` 请求返回 Deno 内部仪器化（instrumented）的平均时机。它不期望任何参数。
 
 ### reloadImportRegistries
 
@@ -116,9 +117,9 @@ interface CacheParams {
 
 ### virtualTextDocument
 
-`deno/virtualTextDocument` 请求从 LSP 生成一个虚拟文本文档，这是一个只读文档，可以在客户端显示。这让客户端能够访问 Deno 缓存中的文档，如远程模块和内置于 Deno 的 TypeScript 库文件。Deno 语言服务器将在自定义架构 `deno:` 下编码所有内部文件，因此客户端应将所有针对 `deno:` 架构的请求路由回 `deno/virtualTextDocument` API。
+`deno/virtualTextDocument` 请求从 LSP 生成一个虚拟文本文档——一个只读文档，可以由客户端显示。这使得客户端能够访问 Deno 缓存中的文档，例如远程模块，以及内置于 Deno 的 TypeScript 库文件。Deno 语言服务器将在自定义架构 `deno:` 下对所有内部文件进行编码，因此客户端应将所有对 `deno:` 架构的请求路由回 `deno/virtualTextDocument` API。
 
-它还支持一个特殊的 URL `deno:/status.md`，该 URL 提供一个 markdown 格式的文本文档，其中包含有关 LSP 状态的详细信息以供用户显示。
+它还支持一个特殊的 URL `deno:/status.md`，该 URL 提供一个 markdown 格式的文本文档，包含有关 LSP 状态的详细信息以供用户显示。
 
 它期望参数为：
 
@@ -130,13 +131,13 @@ interface VirtualTextDocumentParams {
 
 ### task
 
-`deno/task` 请求返回可用的 Deno 任务，请参阅 [task_runner](/runtime/reference/cli/task_runner/)。它不期望任何参数。
+`deno/task` 请求返回可用的 Deno 任务；请参阅 [task_runner](/runtime/reference/cli/task_runner/)。它不期望任何参数。
 
 ## 通知
 
-当前有一个自定义通知从服务器发送到客户端，`deno/registryState`。当 `deno.suggest.imports.autoDiscover` 为 `true`，且待添加到文档中的导入的源未在 `deno.suggest.imports.hosts` 中明确设置时，将检查源并向客户端发送状态通知。
+当前有一个自定义通知从服务器发送到客户端：`deno/registryState`。当 `deno.suggest.imports.autoDiscover` 为 `true`，且待添加到文档中的导入源没有在 `deno.suggest.imports.hosts` 中明确设置时，将检查源并向客户端发送状态通知。
 
-接收到通知时，如果参数 `suggestion` 为 `true`，客户端应向用户提供选择，以启用该源并将其添加到 `deno.suggest.imports.hosts` 的配置中。如果 `suggestion` 为 `false`，客户端应将其添加到配置中作为 `false`，以阻止语言服务器尝试检测建议是否被支持。
+接收到通知时，如果参数 `suggestion` 为 `true`，客户端应向用户提供选择，以启用该源并将其添加到 `deno.suggest.imports.hosts` 的配置中。如果 `suggestion` 为 `false`，客户端应将其添加到配置中为 `false`，以阻止语言服务器尝试检测建议是否被支持。
 
 通知的参数为：
 
@@ -166,7 +167,7 @@ interface RegistryStatusNotificationParams {
 
 ## 测试
 
-Deno 语言服务器支持一组自定义 API 来启用测试。这些 API 基于提供信息以启用 [vscode 的测试 API](https://code.visualstudio.com/api/extension-guides/testing)，但其他语言服务器客户端也可以使用来提供类似的接口。
+Deno 语言服务器支持一组自定义 API 来启用测试。这些 API 基于提供信息以启用 [vscode 的测试 API](https://code.visualstudio.com/api/extension-guides/testing)，但其他语言服务器客户端也可以使用它们来提供类似的接口。
 
 客户端与服务器都应支持实验性的 `testingApi` 功能：
 
@@ -211,13 +212,13 @@ Deno 以这种方式构建：
 - 一个测试可以包含 _n_ 个步骤。
 - 一个步骤可以包含 _n_ 个步骤。
 
-当 Deno 进行测试模块的静态分析时，它会尝试识别任何测试和测试步骤。由于测试在 Deno 中的声明方式是动态的，因此不能总是静态识别，只有在模块执行时才能识别。当更新客户端时，该通知被设计为处理这两种情况。当静态发现测试时，通知 `kind` 将是 `"replace"`；当在执行时发现测试或步骤时，通知 `kind` 将是 `"insert"`。
+当 Deno 对测试模块进行静态分析时，它会尝试识别任何测试和测试步骤。由于测试在 Deno 中的声明方式是动态的，因此不能总是静态识别，只有在模块执行时才能识别。当更新客户端时，该通知被设计为处理这两种情况。当静态发现测试时，通知 `kind` 将是 `"replace"`；当在执行时发现测试或步骤时，通知 `kind` 将是 `"insert"`。
 
-当在编辑器中编辑测试文档，并从客户端接收到 `textDocument/didChange` 通知时，该变更的静态分析将在服务器端执行，如果测试已更改，客户端将接收到通知。
+当在编辑器中编辑测试文档，并从客户端接收到 `textDocument/didChange` 通知时，该变更的静态分析将在服务器端执行。如果测试已更改，客户端将接收到通知。
 
-当客户端收到 `"replace"` 通知时，它可以安全地“替换”测试模块表示，当收到 `"insert"` 时，应递归尝试添加到现有表示中。
+当客户端收到 `"replace"` 通知时，它可以安全地“替换”测试模块表示；当收到 `"insert"` 时，应递归尝试添加到现有表示中。
 
-对于测试模块，`textDocument.uri` 应该用作所有表示的唯一 ID（因为它是唯一模块的字符串 URL）。`TestData` 项包含一个唯一的 `id` 字符串。此 `id` 字符串是服务器跟踪的识别信息的 SHA-256 哈希。
+对于测试模块，`textDocument.uri` 应该用作所有表示的唯一 ID（因为它是唯一模块的字符串 URL）。`TestData` 项包含一个唯一的 `id` 字符串。该 `id` 字符串是服务器跟踪的识别信息的 SHA-256 哈希。
 
 ```ts
 interface TestData {
@@ -238,7 +239,7 @@ interface TestModuleParams {
   /** 与测试相关的文本文档标识符。 */
   textDocument: TextDocumentIdentifier;
 
-  /** 如果描述的测试是 _新发现_ 的，并应 _插入_ 或如果相关的测试是现有测试的替代品的指示。 */
+  /** 如果描述的测试是 _新发现_ 的，并应 _插入_，或如果相关的测试是现有测试的替代品的指示。 */
   kind: "insert" | "replace";
 
   /** 测试模块的文本标签。 */
@@ -268,8 +269,8 @@ interface TestModuleDeleteParams {
 
 状态变化在 `TestRunProgressParams` 的 `.message.kind` 属性中表示。状态为：
 
-- `"enqueued"` - 一个测试或测试步骤已经排队等待测试。
-- `"skipped"` - 一个测试或测试步骤被跳过。这发生在 Deno 测试中设置了 `ignore` 选项为 `true`。
+- `"enqueued"` - 一个测试或测试步骤已排队等待测试。
+- `"skipped"` - 一个测试或测试步骤被跳过。这发生在 Deno 测试中将 `ignore` 选项设置为 `true` 时。
 - `"started"` - 一个测试或测试步骤已开始。
 - `"passed"` - 一个测试或测试步骤已通过。
 - `"failed"` - 一个测试或测试步骤已失败。这旨在表明测试工具中的错误，而不是测试本身，但目前 Deno 不支持这种区分。
@@ -330,7 +331,7 @@ interface TestFailedErrored {
   /** 与状态变化相关的消息。 */
   messages: TestMessage[];
 
-  /** 从开始到当前状态的可选持续时间，以毫秒为单位。 */
+  /** 从开始到当前状态的可选持续时间（以毫秒为单位）。 */
   duration?: number;
 }
 
@@ -341,7 +342,7 @@ interface TestPassed {
   /** 与状态变化相关的测试或测试步骤。 */
   test: TestIdentifier;
 
-  /** 从开始到当前状态的可选持续时间，以毫秒为单位。 */
+  /** 从开始到当前状态的可选持续时间（以毫秒为单位）。 */
   duration?: number;
 }
 
@@ -390,7 +391,7 @@ interface TestRunProgressParams {
 
 当前 Deno 仅支持 `"run"` 类型的测试运行。`"debug"` 和 `"coverage"` 计划在未来支持。
 
-当没有包含的测试模块或测试时，意味着应该执行所有发现的测试模块和测试。当一个测试模块被包含，但没有任何测试 ID 时，意味着应包含该测试模块中的所有测试。一旦识别出所有测试，将排除的测试将被移除，并在响应中作为 `"enqueued"` 返回解析的测试集。
+当没有包含的测试模块或测试时，意味着应执行所有发现的测试模块和测试。当一个测试模块被包含，但没有任何测试 ID 时，意味着应包含该测试模块中的所有测试。一旦识别出所有测试，将排除的测试移除，并在响应中以 `"enqueued"` 返回已解析的测试集。
 
 通过此 API 无法包含或排除测试步骤，因为测试步骤的声明和运行方式是动态的。
 
@@ -425,7 +426,7 @@ interface TestRunResponseParams {
 
 #### deno/testRunCancel
 
-如果客户端希望取消正在运行的测试运行，则发送 `deno/testRunCancel` 请求以取消测试 ID。返回的响应将是一个布尔值 `true`，表示测试已取消，或 `false`，表示无法取消。适当的测试进度通知仍会在测试取消时发送。
+如果客户端希望取消正在运行的测试运行，则发送 `deno/testRunCancel` 请求以取消测试 ID。返回的响应将是一个布尔值 `true`（表示测试已取消）或 `false`（表示无法取消）。即使取消，仍会在取消时发送适当的测试进度通知。
 
 ```ts
 interface TestRunCancelParams {

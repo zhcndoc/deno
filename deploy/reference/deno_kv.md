@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-02-13
 title: Deno KV
 description: 在你的应用中使用 Deno KV，每个时间线配备专用数据库
 oldUrl: /deploy/reference/deno-kv/

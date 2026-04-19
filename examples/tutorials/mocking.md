@@ -1,6 +1,7 @@
 ---
-title: "使用 Mock 进行隔离测试"
-description: "掌握单元测试中的 Mock 技巧。了解如何使用 Spy、Stub、模拟时间及 Deno 其他工具来提升代码质量与测试可信度"
+last_modified: 2025-06-17
+title: "使用 Mock 在隔离环境中进行测试"
+description: "掌握在单元测试中进行 Mock 的艺术。了解 spies、stubs、假的时间等 Deno 工具如何帮助你改进代码并增强信心"
 url: /examples/mocking_tutorial/
 ---
 
@@ -11,7 +12,7 @@ url: /examples/mocking_tutorial/
 
 Deno 标准库提供了[便捷的 Mock 工具](https://jsr.io/@std/testing/doc/mock)，让你的测试更轻松编写、更可靠且执行更快。
 
-### 监听 (Spying)
+### 监听（Spying）
 
 在 Deno 中，你可以使用 [`spy`](https://jsr.io/@std/testing/doc/mock#spying) 监听函数调用情况。Spy 不会改变函数行为，但会记录如函数被调用次数及传入参数等重要信息。
 
@@ -300,7 +301,7 @@ Deno.test("在受控环境下生成报告", () => {
 });
 ```
 
-### 模拟时间 (Faking time)
+### 模拟时间（Faking time）
 
 与时间相关的代码难以测试，因为测试结果可能随执行时间变化。Deno 提供了一个
 [`FakeTime`](https://jsr.io/@std/testing/doc/time) 工具，可在测试中模拟时间流动，控制日期相关函数。
@@ -554,7 +555,7 @@ Deno.test("AuthService 综合测试", async (t) => {
   await t.step("登录应正确处理 API 调用", async () => {
     const authService = new AuthService();
 
-    // mock 成功响应
+    // 模拟成功响应
     const mockResponse = new Response(
       JSON.stringify({ token: "fake-jwt-token" }),
       { status: 200, headers: { "Content-Type": "application/json" } },
@@ -583,13 +584,13 @@ Deno.test("AuthService 综合测试", async (t) => {
   });
 
   await t.step("token 过期应正常工作", () => {
-    using fakeTime = new FakeTime();
+    使用假时间 = new FakeTime();
 
     const authService = new AuthService();
     const time = fakeTime(new Date("2023-01-01T12:00:00Z"));
 
     try {
-      // mock 登录过程直接设置 token
+      // 模拟登录过程直接设置 token
       authService.login = spy(
         authService,
         "login",

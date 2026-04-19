@@ -1,5 +1,6 @@
 ---
-title: "二级索引"
+last_modified: 2025-10-23
+title: "Secondary Indexes"
 oldUrl:
   - /runtime/manual/runtime/kv/secondary_indexes
   - /kv/manual/secondary_indexes

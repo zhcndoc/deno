@@ -1,6 +1,7 @@
 ---
-title: "使用 Deno 构建字词查找应用"
-description: "A tutorial on creating a word search application with Deno. Learn how to build a web server, implement pattern matching, handle HTTP requests, and create an interactive web interface using Oak framework."
+last_modified: 2025-03-18
+title: "使用 Deno 构建单词查找器应用"
+description: "本教程介绍如何使用 Deno 创建一个单词搜索应用。学习如何构建 Web 服务器、实现模式匹配、处理 HTTP 请求，并使用 Oak 框架创建交互式 Web 界面。"
 url: /examples/word_finder_tutorial/
 oldUrl:
   - /runtime/manual/examples/word_finder/
@@ -133,12 +134,11 @@ export function search(pattern, dictionary) {
 
 ## 运行 Deno 服务器
 
-[Oak](https://jsr.io/@oak/oak) is a framework that lets you easily setup a
-server in Deno (analogous to JavaScript's Express) and we'll be using it to host
-our application. Our server will use our search function to populate our HTML
-template with data and then return the customized HTML back to the viewer. We
-can conveniently rely on the `/usr/share/dict/words` file as our dictionary
-which is a standard file present on most Unix-like operating systems.
+[Oak](https://jsr.io/@oak/oak) 是一个框架，它让你在 Deno 中轻松搭建
+服务器（类似于 JavaScript 的 Express），我们将使用它来托管
+我们的应用。我们的服务器将使用我们的 search 函数，用数据
+填充 HTML 模板，然后将定制后的 HTML 返回给浏览者。我们
+可以方便地依赖 `/usr/share/dict/words` 文件作为字典，它是大多数 Unix-like 操作系统中常见的标准文件。
 
 ```jsx title="server.js"
 import { Application, Router } from "jsr:@oak/oak";

@@ -1,6 +1,7 @@
 ---
-title: 应用程序
-description: "Deno Deploy 早期访问中管理应用程序的指南，包括应用创建、配置、GitHub 集成和部署选项。"
+last_modified: 2026-03-19
+title: Applications
+description: "Guide to managing applications in Deno Deploy, including app creation, configuration, GitHub integration, and deployment options."
 ---
 
 应用程序是在组织内提供流量服务的网络服务。每个应用程序都包含一系列修订历史（之前的版本），通常在使用 GitHub 集成时对应于 Git 提交。

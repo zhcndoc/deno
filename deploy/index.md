@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-20
 title: "关于 Deno Deploy"
-description: "Deno Deploy 功能指南、与 Deploy Classic 的对比以及部署入门指南。"
+description: "Deno Deploy 功能指南，与 Deploy Classic 的对比，以及部署入门说明。"
 ---
 
 <div class="sm:flex sm:flex-row md:flex-col lg:flex-row xl:fle sm:gap-6 md:gap-0 lg:gap-8">

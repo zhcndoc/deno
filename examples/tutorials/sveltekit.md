@@ -1,5 +1,6 @@
 ---
-title: "使用 sv 和 Deno 构建 SvelteKit 应用"
+last_modified: 2026-02-10
+title: "使用 sv 和 Deno 构建一个 SvelteKit 应用"
 url: /examples/sveltekit_tutorial/
 ---
 

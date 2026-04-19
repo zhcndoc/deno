@@ -1,6 +1,7 @@
 ---
-title: "定价和限制"
-description: "Deno Deploy的重要限制、服务等级预期及使用条款。"
+last_modified: 2025-10-07
+title: "定价与限制"
+description: "Deno Deploy 的重要限制、服务等级预期和使用条款。"
 oldUrl: /deploy/classic/pricing-and-limits/
 ---
 

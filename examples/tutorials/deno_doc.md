@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-07-11
 title: "使用 deno doc 生成文档"
-description: "学习如何使用内置的 deno doc 命令为您的 Deno 项目生成专业文档。本教程涵盖 JSDoc 注释、HTML 输出、代码规范检查以及编写文档的最佳实践。"
+description: "了解如何使用内置的 deno doc 命令为 Deno 项目生成专业文档。本教程涵盖 JSDoc 注释、HTML 输出、代码检查以及为代码编写文档的最佳实践。"
 url: /examples/deno_doc_tutorial/
 ---
 

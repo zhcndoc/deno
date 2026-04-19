@@ -1,6 +1,7 @@
 ---
-title: "Run a script"
-description: "A guide to creating and running basic scripts with Deno. Learn how to write and execute JavaScript and TypeScript code, understand runtime environments, and get started with fundamental Deno concepts."
+last_modified: 2025-03-10
+title: "运行脚本"
+description: "使用 Deno 创建和运行基础脚本的指南。学习如何编写并执行 JavaScript 和 TypeScript 代码，理解运行时环境，并开始了解 Deno 的基础概念。"
 url: /examples/run_script_tutorial/
 oldUrl:
   - /runtime/manual/examples/hello_world/
@@ -22,7 +23,7 @@ Deno 提供了无缝的 JavaScript 和 TypeScript 代码运行体验。无论你
 
 ## 运行脚本
 
-在本教程中，我们将使用 Deno 创建一个简单的 "Hello World" 示例，分别用 JavaScript 和 TypeScript 来演示。
+在本教程中，我们将使用 Deno 创建一个简单的“Hello World”示例，分别用 JavaScript 和 TypeScript 来演示。
 
 我们将定义一个 `capitalize` 函数，该函数将单词的首字母大写。然后，我们定义一个 `hello` 函数，该函数返回带有大写名字的问候消息。最后，我们用不同的名字调用 `hello` 函数并将输出打印到控制台。
 

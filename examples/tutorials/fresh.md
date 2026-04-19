@@ -1,10 +1,11 @@
 ---
-title: "构建一个 Fresh 应用"
-description: "使用 Fresh 和 Deno 构建全栈应用的完整指南。学习如何设置项目、使用岛屿架构实现服务器端渲染、添加 API 路由，以及部署你的 TypeScript 应用。"
+last_modified: 2025-09-29
+title: "构建一个全新的应用"
+description: "使用 Fresh 和 Deno 构建全栈应用的完整指南。学习如何搭建项目、使用岛屿架构实现服务端渲染、添加 API 路由，并部署你的 TypeScript 应用。"
 url: /examples/fresh_tutorial/
 ---
 
-[Fresh](https://fresh.deno.dev/) 是一个面向 Deno 的全栈 Web 框架，强调使用岛屿交互的服务器端渲染。它默认不向客户端发送任何 JavaScript，使其运行极其快速且高效。Fresh 采用基于文件的路由系统，并利用 Deno 现代运行时的能力。
+[Fresh](https://fresh.deno.dev/) 是一个面向 Deno 的全栈 Web 框架，强调使用岛屿交互的服务端渲染。它默认不向客户端发送任何 JavaScript，使其运行极其快速且高效。Fresh 采用基于文件的路由系统，并利用 Deno 现代运行时的能力。
 
 在本教程中，我们将构建一个简单的恐龙目录应用，演示 Fresh 的关键特性。该应用将展示恐龙列表，允许你查看单个恐龙的详细信息，并使用 Fresh 的岛屿架构添加交互组件。
 
@@ -17,7 +18,7 @@ url: /examples/fresh_tutorial/
 
 想跳过教程，立即部署完成的应用吗？点击下面的按钮，即可将完整的 Fresh 恐龙应用即时部署到 Deno Deploy。你将获得一个可实时运行的应用，可以在学习过程中自定义和修改！
 
-[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-fresh)
+[![在 Deno 上部署](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-fresh)
 
 :::
 
@@ -48,7 +49,7 @@ cd my-fresh-app
 deno task dev
 ```
 
-打开浏览器，访问 `http://localhost:5173`，即可看到你的 Fresh 应用运行起来了！
+打开浏览器，访问 `http://localhost:5173`，即可看到你的 Fresh 应用正在运行！
 
 ## 了解项目结构
 
@@ -69,7 +70,7 @@ my-fresh-app/
 
 ## 添加恐龙数据
 
-为了给应用添加恐龙数据，我们将创建一个简单的数据文件，里面包含一些恐龙的 JSON 信息。在真实应用中，这些数据可能来自数据库或外部 API，但为了简单起见，我们使用静态文件。
+为了给应用添加恐龙数据，我们将创建一个简单的数据文件，其中包含一些恐龙的 JSON 信息。在真实应用中，这些数据可能来自数据库或外部 API，但为了简单起见，我们使用静态文件。
 
 在 `routes/api` 目录下创建一个新文件 `data.json`，并复制这里的内容：
 [链接](https://github.com/denoland/tutorial-with-fresh/blob/main/routes/api/data.json)。
@@ -82,15 +83,15 @@ my-fresh-app/
 
 ```tsx title="index.tsx"
 <main>
-  <h1>🦕 Welcome to the Dinosaur Encyclopedia</h1>
-  <p>Click on a dinosaur below to learn more.</p>
+  <h1>🦕 欢迎来到恐龙百科</h1>
+  <p>点击下面的恐龙了解更多。</p>
   <div class="dinosaur-list">
-    {/* Dinosaur list will go here */}
+    {/* 恐龙列表将在此处显示 */}
   </div>
 </main>;
 ```
 
-我们将创建一个新组件，用于展示列表中的每个恐龙。
+我们将创建一个新组件，用于展示列表中的每一只恐龙。
 
 ## 创建组件
 
@@ -130,11 +131,11 @@ export default define.page(function Home() {
   return (
     <>
       <Head>
-        <title>Dinosaur Encyclopedia</title>
+        <title>恐龙百科</title>
       </Head>
       <main>
-        <h1>🦕 Welcome to the Dinosaur Encyclopedia</h1>
-        <p>Click on a dinosaur below to learn more.</p>
+        <h1>🦕 欢迎来到恐龙百科</h1>
+        <p>点击下面的恐龙了解更多。</p>
         <div class="dinosaur-list">
           {data.map((dinosaur: { name: string; description: string }) => (
             <LinkButton
@@ -171,7 +172,7 @@ export default function DinosaurPage(props: PageProps) {
   if (!dinosaur) {
     return (
       <main>
-        <h1>Dinosaur not found</h1>
+        <h1>未找到恐龙</h1>
       </main>
     );
   }
@@ -180,7 +181,7 @@ export default function DinosaurPage(props: PageProps) {
     <main>
       <h1>{dinosaur.name}</h1>
       <p>{dinosaur.description}</p>
-      <LinkButton href="/" class="btn-secondary">← Back to list</LinkButton>
+      <LinkButton href="/" class="btn-secondary">← 返回列表</LinkButton>
     </main>
   );
 }
@@ -204,7 +205,7 @@ export default function FavoriteButton() {
       className={`btn fav ${favorited ? "btn-favorited" : "btn-primary"}`}
       onClick={() => setFavorited((f) => !f)}
     >
-      {favorited ? "★ Favorited!" : "☆ Add to Favorites"}
+      {favorited ? "★ 已收藏！" : "☆ 添加到收藏"}
     </button>
   );
 }
@@ -286,7 +287,7 @@ git push -u origin main
 
 - 添加数据库（尝试 [Deno KV](https://docs.deno.com/runtime/fundamentals/kv/) 或连接到 [PostgreSQL](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)）
 - 实现用户身份验证
-- 增加更多交互功能如收藏或评分
+- 增加更多交互功能，如收藏或评分
 - 连接外部 API 获取更多恐龙数据
 
 Fresh 架构让你轻松构建快速、可扩展的 Web 应用，同时保持良好的开发体验。默认的服务器端渲染结合可选的客户端交互，为你提供了两者的最佳结合。

@@ -1,94 +1,80 @@
 ---
-title: "Writing tests"
-description: "Learn key concepts like test setup and structure, assertions, async testing, mocking, test fixtures, and code coverage"
+last_modified: 2025-09-10
+title: "编写测试"
+description: "学习测试设置和结构、断言、异步测试、模拟、测试夹具以及代码覆盖率等关键概念"
 url: /examples/testing_tutorial/
 ---
 
-Testing is critical in software development to ensure your code works as
-expected, and continues to work as you make changes. Tests verify that your
-functions, modules, and applications behave correctly, handle edge cases
-appropriately, and maintain expected performance characteristics.
+在软件开发中，测试至关重要：用来确保你的代码按预期工作，并在你进行修改后持续保持正确性。测试会验证你的函数、模块和应用程序行为是否正确，能否恰当地处理边界情况，并维持预期的性能特征。
 
-## Why testing matters
+## 为什么测试很重要
 
-Testing your code allows you to catch bugs, issues or regressions before they
-reach production, saving time and resources. Tests are also useful to help plan
-out the logic of your application, they can serve as a human readable
-description of how your code is meant to be used.
+在代码进入生产环境之前，对代码进行测试可以帮助你在其到达生产前发现漏洞、问题或回归，从而节省时间和资源。测试也能用来帮助你规划应用程序的逻辑：它们可以作为一种人类可读的说明，描述你的代码应该如何被使用。
 
-Deno provides [built-in testing capabilities](/runtime/fundamentals/testing/),
-making it straightforward to implement robust testing practices in your
-projects.
+Deno 提供了[内置的测试能力](/runtime/fundamentals/testing/)，使你能够在项目中轻松实现健壮的测试实践。
 
-## Writing tests with `Deno.test`
+## 使用 `Deno.test` 编写测试
 
-Defining a test in Deno is straightforward - use the `Deno.test()` function to
-register your test with the test runner. This function accepts either a test
-name and function, or a configuration object with more detailed options. All
-test functions in files that match patterns like `*_test.{ts,js,mjs,jsx,tsx}` or
-`*.test.{ts,js,mjs,jsx,tsx}` are automatically discovered and executed when you
-run the `deno test` command.
+在 Deno 中定义测试非常简单——使用 `Deno.test()` 函数将你的测试注册到测试运行器中。该函数既可以接受测试名称和函数，也可以接受带有更多详细选项的配置对象。所有符合诸如 `*_test.{ts,js,mjs,jsx,tsx}` 或 `*.test.{ts,js,mjs,jsx,tsx}` 这类命名模式的文件中的测试函数，都会在你运行 `deno test` 命令时被自动发现并执行。
 
-Here are the basic ways to define tests:
+下面是定义测试的基本方式：
 
 ```ts
-// Basic test with a name and function
+// 带名称和函数的基础测试
 Deno.test("my first test", () => {
-  // Your test code here
+  // 你的测试代码放在这里
 });
 
-// Test with configuration options
+// 带配置选项的测试
 Deno.test({
   name: "my configured test",
   fn: () => {
-    // Your test code here
+    // 你的测试代码放在这里
   },
-  ignore: false, // Optional: set to true to skip this test
-  only: false, // Optional: set to true to only run this test
-  permissions: { // Optional: specify required permissions
+  ignore: false, // 可选：设为 true 以跳过此测试
+  only: false, // 可选：设为 true 仅运行此测试
+  permissions: { // 可选：指定所需权限
     read: true,
     write: false,
   },
 });
 ```
 
-### A simple example test
+### 一个简单的示例测试
 
-Let's start with a simple test. Create a file called `main_test.ts`, in it we
-will test a basic addition operation using Deno's testing API and the
-`assertEquals` function from the [Deno Standard Library](https://jsr.io/@std).
+我们从一个简单的测试开始。创建一个名为 `main_test.ts` 的文件，在其中我们将使用 Deno 的测试 API 以及来自 [Deno 标准库](https://jsr.io/@std) 的 `assertEquals` 函数来测试一个基础的加法操作。
 
-We use `Deno.test` and provide a name that describes what the test will do:
+我们使用 `Deno.test`，并提供一个能描述该测试将做什么的名称：
 
 ```ts title="main_test.ts"
 // hello_test.ts
 import { assertEquals } from "jsr:@std/assert";
 
-// Function we want to test
+// 我们想要测试的函数
 function add(a: number, b: number): number {
   return a + b;
 }
 
 Deno.test("basic addition test", () => {
-  // Arrange - set up the test data
+  // Arrange - 设置测试数据
   const a = 1;
   const b = 2;
 
-  // Act - call the function being tested
+  // Act - 调用被测试的函数
   const result = add(a, b);
 
-  // Assert - verify the result is what we expect
+  // Assert - 验证结果是否是我们期望的值
   assertEquals(result, 3);
 });
 ```
 
-To run this test, use the `deno test` command:
+要运行这个测试，使用 `deno test` 命令：
 
 ```sh
 deno test hello_test.ts
 ```
 
-You should see output indicating that your test has passed:
+你应该会看到输出，表明你的测试通过了：
 
 ```
 running 1 test from ./hello_test.ts
@@ -97,15 +83,15 @@ basic addition test ... ok (2ms)
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out (2ms)
 ```
 
-Try changing the function implementation to make the test fail:
+试着修改函数实现，使测试失败：
 
 ```ts
 function add(a: number, b: number): number {
-  return a - b; // Changed from addition to subtraction
+  return a - b; // 从加法改为减法
 }
 ```
 
-You'll see an error message that clearly shows what went wrong:
+你会看到一条清晰地展示出哪里出错的错误信息：
 
 ```sh
 running 1 test from ./hello_test.ts
@@ -131,113 +117,102 @@ error: AssertionError: Values are not equal:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out (3ms)
 ```
 
-This clear feedback helps you quickly identify and fix issues in your code.
+这种明确的反馈能帮助你快速定位并修复代码中的问题。
 
-## Test structure and organization
+## 测试结构与组织
 
-Deno will automatically find and run tests that match naming patterns like
-`*_test.{ts,js,mjs,jsx,tsx}` or `*.test.{ts,js,mjs,jsx,tsx}`. There are plenty
-of ways to organize your test files, we recommend co-locating your unit tests
-with the code they are testing, and keeping integration tests and configuration
-in a `tests` directory. This allows for immediate discovery of unit tests and
-simplified imports, while keeping a separation between different types of tests.
+Deno 会自动查找并运行所有符合命名模式的测试，例如 `*_test.{ts,js,mjs,jsx,tsx}` 或 `*.test.{ts,js,mjs,jsx,tsx}`。组织测试文件的方式有很多。我们建议将单元测试与其对应的代码放在一起，并将集成测试和配置放在一个 `tests` 目录中。这使你能立即发现单元测试并简化导入，同时还能保持不同类型测试之间的分离。
 
-Here's an example of how you might structure your project with tests:
+下面是一个你可能如何用测试来组织项目的示例结构：
 
 ```sh
 my-deno-project/
 ├── src/
 │   ├── models/
 │   │   ├── user.ts
-│   │   ├── user_test.ts          // Unit tests for user model
+│   │   ├── user_test.ts          // user 模型的单元测试
 │   │   ├── product.ts
-│   │   └── product_test.ts       // Unit tests for product model
+│   │   └── product_test.ts       // product 模型的单元测试
 │   ├── services/
 │   │   ├── auth-service.ts
-│   │   ├── auth-service_test.ts  // Unit tests for auth service
+│   │   ├── auth-service_test.ts  // auth 服务的单元测试
 │   │   ├── data-service.ts
-│   │   └── data-service_test.ts  // Unit tests for data service
+│   │   └── data-service_test.ts  // data 服务的单元测试
 │   └── utils/
 │       ├── helpers.ts
-│       └── helpers_test.ts       // Unit tests for helpers
+│       └── helpers_test.ts       // helpers 的单元测试
 ├── tests/
-│   ├── integration/              // Integration tests directory
-│   │   ├── api_test.ts           // Tests API endpoints
-│   │   └── db_test.ts            // Tests database interactions
-│   ├── e2e/                      // End-to-end tests
-│   │   └── user_flow_test.ts     // Tests complete user workflows
-│   └── fixtures/                 // Shared test data and utilities
-│       ├── test_data.ts          // Test data used across tests
-│       └── setup.ts              // Common setup functions
+│   ├── integration/              // 集成测试目录
+│   │   ├── api_test.ts           // 测试 API 端点
+│   │   └── db_test.ts            // 测试数据库交互
+│   ├── e2e/                      // 端到端测试
+│   │   └── user_flow_test.ts     // 测试完整的用户工作流
+│   └── fixtures/                 // 共享的测试数据与工具
+│       ├── test_data.ts          // 各测试间共享的测试数据
+│       └── setup.ts              // 通用的设置函数
 ├── main.ts
-└── deno.json                     // Project configuration
+└── deno.json                     // 项目配置
 ```
 
-This kind of structure offers a centralized place for test configuration while
-maintaining the benefits of co-locating unit tests with their relevant files.
-With this structure, you can:
+这种结构为测试配置提供了一个集中位置，同时仍能保留将单元测试与相关文件并置的好处。使用这种结构，你可以：
 
 ```sh
-# Run all tests
+# 运行所有测试
 deno test
 
-# Run only unit tests
+# 只运行单元测试
 deno test src/
 
-# Run only integration tests
+# 只运行集成测试
 deno test tests/integration/
 
-# Run specific module tests
+# 运行特定模块的测试
 deno test src/models/
 
-# Run a specific test file
+# 运行特定的测试文件
 deno test src/models/user_test.ts
 ```
 
-## Assertions
+## 断言
 
-Assertions are the building blocks of effective tests, allowing you to verify
-that your code behaves as expected. They check if a specific condition is true
-and throw an error if it's not, causing the test to fail. Good assertions are
-clear, specific, and help identify exactly what went wrong when a test fails.
+断言是高效测试的构建基块，使你能够验证代码是否按预期运行。它们会检查某个特定条件是否为真；如果不是，就会抛出错误，从而导致测试失败。良好的断言应该清晰、具体，并能在测试失败时帮助你准确定位哪里出了问题。
 
-Deno doesn't include assertions in its core library, but you can import them
-from the [Deno standard library](https://jsr.io/@std/assert):
+Deno 的核心库不包含断言，但你可以从[ Deno 标准库 ](https://jsr.io/@std/assert)中导入它们：
 
 ```ts
 import {
-  assertArrayIncludes, // Check that array contains value
-  assertEquals, // Check that values are equal
-  assertExists, // Check that value is not null or undefined
-  assertMatch, // Check that string matches regex pattern
-  assertNotEquals, // Check that values are not equal
-  assertObjectMatch, // Check that object has expected properties
-  assertRejects, // Check that Promise rejects
-  assertStrictEquals, // Check that values are strictly equal (===)
-  assertStringIncludes, // Check that string contains substring
-  assertThrows, // Check that function throws an error
+  assertArrayIncludes, // 检查数组是否包含某个值
+  assertEquals, // 检查值是否相等
+  assertExists, // 检查值是否不是 null 或 undefined
+  assertMatch, // 检查字符串是否匹配正则模式
+  assertNotEquals, // 检查值是否不相等
+  assertObjectMatch, // 检查对象是否具有预期属性
+  assertRejects, // 检查 Promise 是否会拒绝（reject）
+  assertStrictEquals, // 检查值是否严格相等（===）
+  assertStringIncludes, // 检查字符串是否包含子字符串
+  assertThrows, // 检查函数是否会抛出错误
 } from "jsr:@std/assert";
 
 Deno.test("assertion examples", () => {
-  // Basic assertions
+  // 基础断言
   assertEquals(1 + 1, 2);
   assertNotEquals("hello", "world");
   assertExists("Hello");
 
-  // String assertions
+  // 字符串断言
   assertStringIncludes("Hello, world!", "world");
   assertMatch("deno@1.0.0", /^deno@\d+\.\d+\.\d+$/);
 
-  // Object assertions
+  // 对象断言
   assertObjectMatch(
     { name: "Jane", age: 25, city: "Tokyo" },
-    { name: "Jane" }, // Only checks specified properties
+    { name: "Jane" }, // 只检查指定的属性
   );
 
-  // Strict equality (type + value)
+  // 严格相等（类型 + 值）
   assertStrictEquals("deno", "deno");
 
-  // Error assertions
+  // 错误断言
   assertThrows(
     () => {
       throw new Error("Something went wrong");
@@ -248,43 +223,42 @@ Deno.test("assertion examples", () => {
 });
 ```
 
-For those that prefer fluent assertions (familiar to users of Jest), you can use
-the `expect` module:
+如果你更喜欢流式断言（类似 Jest 用户熟悉的方式），你可以使用 `expect` 模块：
 
 ```ts
 import { expect } from "jsr:@std/expect";
 
 Deno.test("expect style assertions", () => {
-  // Basic matchers
+  // 基础匹配器
   expect(5).toBe(5);
   expect({ name: "deno" }).toEqual({ name: "deno" });
 
-  // Collection matchers
+  // 集合匹配器
   expect([1, 2, 3]).toContain(2);
 
-  // Truthiness matchers
+  // 真值性匹配器
   expect(true).toBeTruthy();
   expect(0).toBeFalsy();
   expect(null).toBeNull();
   expect(undefined).toBeUndefined();
 
-  // Number matchers
+  // 数值匹配器
   expect(100).toBeGreaterThan(99);
   expect(1).toBeLessThan(2);
 
-  // String matchers
+  // 字符串匹配器
   expect("Hello world").toMatch(/world/);
 
-  // Function/error matchers
+  // 函数/错误匹配器
   expect(() => {
     throw new Error("fail");
   }).toThrow();
 });
 ```
 
-### Real-world Example
+### 真实世界示例
 
-Here's a more realistic example testing a function that processes user data:
+下面是一个更贴近实际的示例：测试一个处理用户数据的函数。
 
 ```ts
 // user_processor.ts
@@ -357,24 +331,24 @@ Deno.test("validateUser", async (t) => {
 });
 ```
 
-## Async testing
+## 异步测试
 
-Deno handles async tests naturally. Just make your test function async and use
-await:
+Deno 能够自然地处理异步测试。只需让你的测试函数标记为 `async`，并使用
+`await`：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
 
-Deno.test("async test example", async () => {
+Deno.test("异步测试示例", async () => {
   const response = await fetch("https://deno.land");
   const status = response.status;
   assertEquals(status, 200);
 });
 ```
 
-### Testing async functions
+### 测试异步函数
 
-When testing functions that return promises, you should always await the result:
+当你测试返回 Promise 的函数时，你应该始终等待其结果：
 
 ```ts
 // async-function.ts
@@ -390,8 +364,8 @@ export async function fetchUserData(userId: string) {
 import { assertEquals, assertRejects } from "jsr:@std/assert";
 import { fetchUserData } from "./async-function.ts";
 
-Deno.test("fetchUserData success", async () => {
-  // Mock the fetch function for testing
+Deno.test("fetchUserData 成功", async () => {
+  // 为测试模拟 fetch 函数
   globalThis.fetch = async (url: string) => {
     const data = JSON.stringify({ id: "123", name: "Test User" });
     return new Response(data, { status: 200 });
@@ -402,8 +376,8 @@ Deno.test("fetchUserData success", async () => {
   assertEquals(userData.name, "Test User");
 });
 
-Deno.test("fetchUserData failure", async () => {
-  // Mock the fetch function to simulate an error
+Deno.test("fetchUserData 失败", async () => {
+  // 模拟错误以模拟失败场景
   globalThis.fetch = async (url: string) => {
     return new Response("Not Found", { status: 404 });
   };
@@ -416,21 +390,17 @@ Deno.test("fetchUserData failure", async () => {
 });
 ```
 
-## Mocking in tests
+## 测试中的 Mock
 
-Mocking is an essential technique for isolating the code being tested from its
-dependencies. Deno provides built-in utilities and third-party libraries for
-creating mocks.
+Mock 是一种用于将被测代码与其依赖隔离开来的关键技术。Deno 提供内置工具以及第三方库来创建 mock。
 
-### Basic Mocking
+### 基础 Mock
 
-You can create simple mocks by
-[replacing functions or objects with your own
-implementations](/examples/mocking_tutorial/). This allows you to control the
-behavior of dependencies and test how your code interacts with them.
+你可以通过
+[将函数或对象替换为你自己的实现](/examples/mocking_tutorial/)，来创建简单的 mock。这使你能够控制依赖的行为，并测试你的代码如何与它们交互。
 
 ```ts
-// Example of a module with a function we want to mock
+// 一个包含我们想要 mock 的函数的模块示例
 const api = {
   fetchData: async () => {
     const response = await fetch("https://api.example.com/data");
@@ -438,59 +408,58 @@ const api = {
   },
 };
 
-// In your test file
-Deno.test("basic mocking example", async () => {
-  // Store the original function
+// 在你的测试文件中
+Deno.test("基础 mocking 示例", async () => {
+  // 保存原始函数
   const originalFetchData = api.fetchData;
 
-  // Replace with mock implementation
+  // 替换为 mock 实现
   api.fetchData = async () => {
     return { id: 1, name: "Test Data" };
   };
 
   try {
-    // Test using the mock
+    // 使用 mock 进行测试
     const result = await api.fetchData();
     assertEquals(result, { id: 1, name: "Test Data" });
   } finally {
-    // Restore the original function
+    // 还原原始函数
     api.fetchData = originalFetchData;
   }
 });
 ```
 
-### Using Spy Functions
+### 使用 Spy 函数
 
-Spies allow you to track function calls without changing their behavior:
+Spy 可以在不改变其行为的情况下跟踪函数是否被调用：
 
 ```ts
 import { spy } from "jsr:@std/testing/mock";
 
-Deno.test("spy example", () => {
-  // Create a spy on console.log
+Deno.test("spy 示例", () => {
+  // 在 console.log 上创建 spy
   const consoleSpy = spy(console, "log");
 
-  // Call the function we're spying on
+  // 调用我们正在监视的函数
   console.log("Hello");
   console.log("World");
 
-  // Verify the function was called correctly
+  // 验证函数是否被正确调用
   assertEquals(consoleSpy.calls.length, 2);
   assertEquals(consoleSpy.calls[0].args, ["Hello"]);
   assertEquals(consoleSpy.calls[1].args, ["World"]);
 
-  // Restore the original function
+  // 还原原始函数
   consoleSpy.restore();
 });
 ```
 
-For more advanced mocking techniques, check our
-[dedicated guide on mocking in Deno](/examples/mocking_tutorial/).
+如需更高级的 mock 技术，请查看我们
+[关于 Deno 中 mocking 的专门指南](/examples/mocking_tutorial/)。
 
-## Test hooks
+## 测试 Hook（钩子）
 
-Deno provides test hooks for running setup and teardown code. Here's a simple
-example using `beforeEach` to ensure clean state between tests:
+Deno 提供测试 Hook，用于运行初始化和清理代码。下面是一个简单示例：使用 `beforeEach` 来确保测试之间拥有干净的状态：
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -501,58 +470,51 @@ Deno.test.beforeEach(() => {
   testData = ["initial", "data"];
 });
 
-Deno.test("first test", () => {
+Deno.test("第一个测试", () => {
   testData.push("first");
   assertEquals(testData.length, 3);
 });
 
-Deno.test("second test", () => {
+Deno.test("第二个测试", () => {
   testData.push("second");
-  assertEquals(testData.length, 3); // Clean state from beforeEach
+  assertEquals(testData.length, 3); // 使用 beforeEach 清理状态
 });
 ```
 
-For complete information on all available hooks (`beforeAll`, `beforeEach`,
-`afterEach`, `afterAll`), see the
-[Testing documentation](/runtime/fundamentals/testing/#test-hooks).
+有关所有可用 Hook（`beforeAll`、`beforeEach`、
+`afterEach`、`afterAll`）的完整信息，请参阅
+[测试文档](/runtime/fundamentals/testing/#test-hooks)。
 
-## Coverage
+## 覆盖率（Coverage）
 
-Code coverage is a metric that helps you understand how much of your code is
-being tested. It measures which lines, functions, and branches of your code are
-executed during your tests, giving you insight into areas that might lack proper
-testing.
+代码覆盖率是一项指标，用于帮助你了解你的代码有多少被测试到了。它衡量在测试过程中执行了你代码的哪些行、哪些函数以及哪些分支，从而让你洞察可能缺少适当测试的区域。
 
-Coverage analysis helps you to:
+覆盖率分析可以帮助你：
 
-- Identify untested parts of your codebase
-- Ensure critical paths have tests
-- Prevent regressions when making changes
-- Measure testing progress over time
+- 识别未测试过的代码部分
+- 确保关键路径都有测试
+- 在做出变更时防止回归
+- 随时间衡量测试进度
 
 :::note
 
-High coverage doesn't guarantee high-quality tests. It simply shows what code
-was executed, not whether your assertions are meaningful or if edge cases are
-handled correctly.
+高覆盖率并不保证高质量的测试。它只表明执行了哪些代码，而不是断言是否有意义，或者边界情况是否处理得正确。
 
 :::
 
-Deno provides built-in coverage tools to help you analyze your test coverage. To
-collect coverage information:
+Deno 提供内置的覆盖率工具，帮助你分析测试覆盖情况。要收集覆盖率信息：
 
 ```bash
 deno test --coverage=coverage_dir
 ```
 
-This generates coverage data in a specified directory (here, `coverage_dir`). To
-view a human-readable report:
+这会在指定目录中生成覆盖率数据（此处为 `coverage_dir`）。要查看可读性更强的报告：
 
 ```bash
 deno coverage coverage_dir
 ```
 
-You'll see output like:
+你会看到类似如下的输出：
 
 ```sh
 file:///projects/my-project/src/utils.ts 85.7% (6/7)
@@ -562,38 +524,35 @@ file:///projects/my-project/src/services/auth.ts 78.3% (18/23)
 total: 87.5% (39/45)
 ```
 
-For more detailed insights, you can also generate an HTML report:
+如需更详细的洞察，你也可以生成 HTML 报告：
 
 ```bash
 deno coverage --html coverage_dir
 ```
 
-This creates an interactive HTML report in the specified directory that shows
-exactly which lines are covered and which are not.
+这会在指定目录中创建一个交互式的 HTML 报告，准确显示哪些行被覆盖、哪些没有被覆盖。
 
-By default, the coverage tool automatically excludes:
+默认情况下，覆盖率工具会自动排除：
 
-- Test files (matching patterns like `test.ts` or `test.js`)
-- Remote files (those not starting with `file:`)
+- 测试文件（匹配如 `test.ts` 或 `test.js` 之类的模式）
+- 远程文件（不以 `file:` 开头的文件）
 
-This ensures your coverage reports focus on your application code rather than
-test files or external dependencies.
+这可确保你的覆盖率报告聚焦于你的应用代码，而不是测试文件或外部依赖。
 
-### Coverage Configuration
+### 覆盖率配置（Coverage Configuration）
 
-You can exclude files from coverage reports by using the `--exclude` flag:
+你可以通过使用 `--exclude` 标志从覆盖率报告中排除文件：
 
 ```bash
 deno coverage --exclude="test_,vendor/,_build/,node_modules/" coverage_dir
 ```
 
-### Integrating with CI
+### 与 CI 集成
 
-For continuous integration environments, you might want to enforce a minimum
-coverage threshold:
+在持续集成环境中，你可能希望强制执行最低覆盖率门槛：
 
 ```yaml
-# In your GitHub Actions workflow
+# 在你的 GitHub Actions 工作流中
 - name: Run tests with coverage
   run: deno test --coverage=coverage_dir
 
@@ -606,27 +565,25 @@ coverage threshold:
     fi
 ```
 
-When working on your test coverage, remember to set realistic goals, aim for
-meaningful coverage with high quality tests over 100% coverage.
+当你进行覆盖率相关的工作时，请记得设定现实的目标：在确保质量的前提下，争取高覆盖率，而不是仅仅追求超过 100%。
 
-## Comparison with other testing frameworks
+## 与其他测试框架的对比
 
-If you're coming from other JavaScript testing frameworks, here's how Deno's
-testing capabilities compare:
+如果你来自其他 JavaScript 测试框架，下面是 Deno 的测试能力与它们的对比方式：
 
-| Feature       | Deno             | Jest                   | Mocha                      | Jasmine               |
+| 功能         | Deno             | Jest                   | Mocha                      | Jasmine               |
 | ------------- | ---------------- | ---------------------- | -------------------------- | --------------------- |
-| Setup         | Built-in         | Requires installation  | Requires installation      | Requires installation |
-| Syntax        | `Deno.test()`    | `test()`, `describe()` | `it()`, `describe()`       | `it()`, `describe()`  |
-| Assertions    | From std library | Built-in expect        | Requires assertion library | Built-in expect       |
-| Mocking       | From std library | Built-in jest.mock()   | Requires sinon or similar  | Built-in spies        |
-| Async support | Native           | Needs special handling | Supports promises          | Supports promises     |
-| File watching | `--watch` flag   | watch mode             | Requires nodemon           | Requires extra tools  |
-| Code coverage | Built-in         | Built-in               | Requires istanbul          | Requires istanbul     |
+| 设置         | 内置             | 需要安装              | 需要安装                 | 需要安装             |
+| 语法         | `Deno.test()`    | `test()`, `describe()` | `it()`, `describe()`       | `it()`, `describe()`  |
+| 断言         | 来自 std 库     | 内置 expect           | 需要断言库               | 内置 expect           |
+| Mock         | 来自 std 库     | 内置 jest.mock()      | 需要 sinon 或类似工具    | 内置 spies            |
+| 异步支持     | 原生             | 需要特殊处理          | 支持 Promise              | 支持 Promise          |
+| 文件监视     | `--watch` 参数  | watch 模式             | 需要 nodemon              | 需要额外工具         |
+| 代码覆盖率   | 内置             | 内置                   | 需要 istanbul             | 需要 istanbul         |
 
-### Testing Style Comparison
+### 测试风格对比
 
-**Deno:**
+**Deno：**
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -636,7 +593,7 @@ Deno.test("add function", () => {
 });
 ```
 
-**Jest:**
+**Jest：**
 
 ```ts
 test("add function", () => {
@@ -644,7 +601,7 @@ test("add function", () => {
 });
 ```
 
-**Mocha:**
+**Mocha：**
 
 ```ts
 import { assert } from "chai";
@@ -656,7 +613,7 @@ describe("math", () => {
 });
 ```
 
-**Jasmine:**
+**Jasmine：**
 
 ```ts
 describe("math", () => {
@@ -666,15 +623,12 @@ describe("math", () => {
 });
 ```
 
-## Next steps
+## 下一步
 
-🦕 Deno's built-in testing capabilities make it easy to write and run tests
-without needing to install extra testing frameworks or tools. By following the
-patterns and practices outlined in this tutorial, you can ensure your Deno
-applications are well-tested and reliable.
+🦕 Deno 内置的测试能力使得编写和运行测试变得很容易，无需安装额外的测试框架或工具。通过遵循本教程中概述的模式和最佳实践，你可以确保你的 Deno 应用具有良好的测试覆盖，并保持可靠性。
 
-For more information about testing in Deno, check out:
+如需更多关于 Deno 测试的信息，请查看：
 
-- [Testing documentation](/runtime/fundamentals/testing)
-- [Mocking data for tests](/examples/mocking_tutorial/)
-- [Writing benchmark tests](/examples/benchmarking/)
+- [测试文档](/runtime/fundamentals/testing)
+- [用于测试的 mock 数据](/examples/mocking_tutorial/)
+- [编写基准测试](/examples/benchmarking/)

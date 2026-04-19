@@ -1,37 +1,36 @@
 ---
-title: "Build an app with Tanstack and Deno"
-description: "Complete guide to building applications with Tanstack and Deno. Learn how to implement Query for data fetching, Router for navigation, manage server state, and create type-safe full-stack applications."
+last_modified: 2025-03-10
+title: "使用 Tanstack 和 Deno 构建应用"
+description: "使用 Tanstack 和 Deno 构建应用的完整指南。学习如何实现 Query 进行数据获取，Router 进行导航，管理服务器状态，并创建类型安全的全栈应用。"
 url: /examples/tanstack_tutorial/
 ---
 
-[Tanstack](https://tanstack.com/) is a set of framework-agnostic data management
-tools. With Tanstack, developers can manage server state efficiently with
-[Query](https://tanstack.com/query/latest), create powerful tables with
-[Table](https://tanstack.com/table/latest), handle complex routing with
-[Router](https://tanstack.com/router/latest), and build type-safe forms with
-[Form](https://tanstack.com/form/latest). These tools work seamlessly across
-[React](/examples/react_tutorial), [Vue](/examples/vue_tutorial),
-[Solid](/examples/solidjs_tutorial), and other frameworks while maintaining
-excellent TypeScript support.
+[Tanstack](https://tanstack.com/) 是一套与框架无关的数据管理工具。
+借助 Tanstack，开发者可以使用
+[Query](https://tanstack.com/query/latest) 高效管理服务器状态，
+使用 [Table](https://tanstack.com/table/latest) 创建强大的表格，
+使用 [Router](https://tanstack.com/router/latest) 处理复杂路由，
+并使用 [Form](https://tanstack.com/form/latest) 构建类型安全的表单。
+这些工具能在 [React](/examples/react_tutorial)、[Vue](/examples/vue_tutorial)、
+[Solid](/examples/solidjs_tutorial) 和其他框架中无缝协作，同时保持出色的 TypeScript 支持。
 
-In this tutorial, we’ll build a simple app using
-[Tanstack Query](https://tanstack.com/query/latest) and
-[Tanstack Router](https://tanstack.com/router/latest/docs/framework/react/quick-start).
-The app will display a list of dinosaurs. When you click on one, it'll take you
-to a dinosaur page with more details.
+在本教程中，我们将使用
+[Tanstack Query](https://tanstack.com/query/latest) 和
+[Tanstack Router](https://tanstack.com/router/latest/docs/framework/react/quick-start)
+构建一个简单的应用。
+该应用将展示一份恐龙列表。你点击其中一只时，会跳转到包含更多细节的恐龙详情页面。
 
-- [Start with the backend API](#start-with-the-backend-api)
-- [Create a Tanstack-driven frontend](#create-tanstack-driven-frontend)
-- [Next steps](#next-steps)
+- [从后端 API 开始](#start-with-the-backend-api)
+- [创建一个由 Tanstack 驱动的前端](#create-tanstack-driven-frontend)
+- [下一步](#next-steps)
 
-Feel free to skip directly to
-[the source code](https://github.com/denoland/examples/tree/main/with-tanstack)
-or follow along below!
+你可以直接跳到
+[源代码](https://github.com/denoland/examples/tree/main/with-tanstack)
+或继续在下面跟着做！
 
-## Start with the backend API
+## 从后端 API 开始
 
-Within our main directory, let's setup an `api/` directory and create our
-dinosaur data file, `api/data.json`:
+在我们的主目录中，先创建一个 `api/` 目录，并准备恐龙数据文件 `api/data.json`：
 
 ```jsonc
 // api/data.json
@@ -39,38 +38,39 @@ dinosaur data file, `api/data.json`:
 [
   {
     "name": "Aardonyx",
-    "description": "An early stage in the evolution of sauropods."
+    "description": "蜥脚类的进化早期阶段。"
   },
   {
     "name": "Abelisaurus",
-    "description": "\"Abel's lizard\" has been reconstructed from a single skull."
+    "description": "“Abel 的蜥蜴”已根据一具单独的头骨重建。"
   },
   {
     "name": "Abrictosaurus",
-    "description": "An early relative of Heterodontosaurus."
+    "description": "异齿龙（Heterodontosaurus）的早期近亲。"
   },
   ...
 ]
 ```
 
-This is where our data will be pulled from. In a full application, this data
-would come from a database.
+这里就是我们将从中读取数据的地方。在完整应用中，这些数据
+将来自数据库。
 
-> ⚠️️ In this tutorial we hard code the data. But you can connect
-> to [a variety of databases](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) and [even use ORMs like Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) with
-> Deno.
+> ⚠️️ 在本教程中我们是把数据写死（hard code）的。但你可以连接
+> [多种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 并且
+> 甚至可以使用像 [Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) 这样的 ORM
+> 来配合 Deno 使用。
 
-Secondly, let's create our [Hono](https://hono.dev/) server. We start by
-installing Hono from [JSR](https://jsr.io) with `deno add`:
+接下来，让我们创建我们的 [Hono](https://hono.dev/) 服务器。
+我们从 [JSR](https://jsr.io) 使用 `deno add` 安装 Hono：
 
 ```shell
 deno add jsr:@hono/hono
 ```
 
-Next, let's create an `api/main.ts` file and populate it with the below. Note
-we'll need to import
-[`@hono/hono/cors`](https://hono.dev/docs/middleware/builtin/cors) and define
-key attributes to allow the frontend to access the API routes.
+然后，让我们创建一个 `api/main.ts` 文件，并用下面的代码来填充它。注意
+我们需要导入
+[`@hono/hono/cors`](https://hono.dev/docs/middleware/builtin/cors)，并定义一些关键属性，
+以允许前端访问 API 路由。
 
 ```ts
 // api/main.ts
@@ -94,7 +94,7 @@ app.use(
 );
 
 app.get("/", (c) => {
-  return c.text("Welcome to the dinosaur API!");
+  return c.text("欢迎来到恐龙 API！");
 });
 
 app.get("/api/dinosaurs", (c) => {
@@ -103,7 +103,7 @@ app.get("/api/dinosaurs", (c) => {
 
 app.get("/api/dinosaurs/:dinosaur", (c) => {
   if (!c.req.param("dinosaur")) {
-    return c.text("No dinosaur name provided.");
+    return c.text("未提供恐龙名称。");
   }
 
   const dinosaur = data.find((item) =>
@@ -120,13 +120,13 @@ app.get("/api/dinosaurs/:dinosaur", (c) => {
 Deno.serve(app.fetch);
 ```
 
-The Hono server provides two API endpoints:
+Hono 服务器提供两个 API 端点：
 
-- `GET /api/dinosaurs` to fetch all dinosaurs, and
-- `GET /api/dinosaurs/:dinosaur` to fetch a specific dinosaur by name
+- `GET /api/dinosaurs` 用于获取所有恐龙，以及
+- `GET /api/dinosaurs/:dinosaur` 用于按名称获取特定恐龙
 
-Before we start working on the frontend, let's update our `deno tasks` in our
-`deno.json` file. Yours should look something like this:
+在我们开始开发前端之前，先来更新一下 `deno.json` 文件中的
+`deno tasks`。你的配置应该类似下面这样：
 
 ```jsonc
 {
@@ -137,27 +137,26 @@ Before we start working on the frontend, let's update our `deno tasks` in our
 }
 ```
 
-Now, the backend server will be started on `localhost:8000` when we run
-`deno task dev`.
+现在，当我们运行 `deno task dev` 时，后端服务器将会在 `localhost:8000`
+启动。
 
-## Create Tanstack-driven frontend
+## 创建一个由 Tanstack 驱动的前端
 
-Let's create the frontend that will use this data. First, we'll quickly scaffold
-a new React app with Vite using the TypeScript template in the current
-directory:
+让我们创建会使用这些数据的前端。首先，我们将在当前目录中使用
+TypeScript 模板，用 Vite 快速脚手架一个新的 React 应用：
 
 ```shell
 deno init --npm vite@latest --template react-ts ./
 ```
 
-Then, we'll install our Tanstack-specific dependencies:
+接着，我们安装 Tanstack 相关的依赖：
 
 ```shell
 deno install npm:@tanstack/react-query npm:@tanstack/react-router
 ```
 
-Let's update our `deno tasks` in our `deno.json` to add a command to start the
-Vite server:
+然后，更新一下 `deno.json` 里的 `deno tasks`，以添加用于启动 Vite
+服务器的命令：
 
 ```jsonc
 // deno.json
@@ -171,14 +170,13 @@ Vite server:
 }
 ```
 
-We can move onto building our components. We'll need two main pages for our app:
+接下来我们可以开始构建组件。我们的应用需要两个主要页面：
 
-- `DinosaurList.tsx`: the index page, which will list out all the dinosaurs, and
-- `Dinosaur.tsx`: the leaf page, which displays information about a single
-  dinosaur
+- `DinosaurList.tsx`：索引页，用于列出所有恐龙，以及
+- `Dinosaur.tsx`：叶子页面，用于展示单只恐龙的信息
 
-Let's create a new `./src/components` directory and, within that, the file
-`DinosaurList.tsx`:
+我们先创建一个新的 `./src/components` 目录，在其中创建文件
+`DinosaurList.tsx`：
 
 ```ts
 // ./src/components/DinosaurList.tsx
@@ -204,14 +202,14 @@ export function DinosaurList() {
     queryFn: fetchDinosaurs,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>加载中...</div>;
   if (error instanceof Error) {
-    return <div>An error occurred: {error.message}</div>;
+    return <div>发生错误：{error.message}</div>;
   }
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Dinosaur List</h2>
+      <h2 className="text-xl font-semibold mb-4">恐龙列表</h2>
       <ul className="space-y-2">
         {dinosaurs?.map((dino: { name: string; description: string }) => (
           <li key={dino.name}>
@@ -230,16 +228,15 @@ export function DinosaurList() {
 }
 ```
 
-This uses
+这里使用了
 [`useQuery`](https://tanstack.com/query/v4/docs/framework/react/guides/queries)
-from **Tanstack Query** to fetch and cache the dinosaur data automatically, with
-built-in loading and error states. Then it uses
+来自 **Tanstack Query**，用于自动获取并缓存恐龙数据，同时提供内置的
+加载与错误状态。然后它使用
 [`Link`](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent)
-from **Tanstack Router** to create client-side navigation links with type-safe
-routing parameters.
+来自 **Tanstack Router**，来创建带类型安全路由参数的客户端导航链接。
 
-Next, let's create the `DinosaurDetail.tsx` component in the `./src/components/`
-folder, which will show details about a single dinosaur:
+接下来，我们在 `./src/components/` 目录下创建 `DinosaurDetail.tsx`
+组件，用于展示单只恐龙的详情：
 
 ```ts
 // ./src/components/DinosaurDetail.tsx
@@ -266,9 +263,9 @@ export function DinosaurDetail() {
     queryFn: () => fetchDinosaurDetail(name),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>加载中...</div>;
   if (error instanceof Error) {
-    return <div>An error occurred: {error.message}</div>;
+    return <div>发生错误：{error.message}</div>;
   }
 
   return (
@@ -280,16 +277,16 @@ export function DinosaurDetail() {
 }
 ```
 
-Again, this uses `useQuery` from **Tanstack Query** to fetch and cache
-individual dinosaur details, with
+同样地，这里使用 **Tanstack Query** 的 `useQuery` 来获取并缓存
+单只恐龙的详情，并且
 [`queryKey`](https://tanstack.com/query/latest/docs/framework/react/guides/query-keys)
-including the dinosaur name to ensure proper caching. Additionally, we use
+包含恐龙名称，以确保正确的缓存行为。此外，我们使用
 [`useParams`](https://tanstack.com/router/v1/docs/framework/react/api/router/useParamsHook)
-from **Tanstack Router** to safely extract and type the URL parameters defined
-in our route configuration.
+来自 **Tanstack Router**，用于安全地从 URL 中提取并为我们路由配置中定义的参数
+提供类型支持。
 
-Before we can run this, we need to encapsulate these components into a layout.
-Let's create another file in the `./src/components/` folder called `Layout.tsx`:
+在运行之前，我们需要将这些组件封装进一个布局（layout）中。
+我们在 `./src/components/` 目录下再创建一个文件：`Layout.tsx`：
 
 ```ts
 // ./src/components/Layout.tsx
@@ -297,10 +294,10 @@ Let's create another file in the `./src/components/` folder called `Layout.tsx`:
 export function Layout() {
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Dinosaur Encyclopedia</h1>
+      <h1 className="text-2xl font-bold mb-4">恐龙百科全书</h1>
       <nav className="mb-4">
         <Link to="/" className="text-blue-500 hover:underline">
-          Home
+          首页
         </Link>
       </nav>
       <Outlet />
@@ -309,15 +306,14 @@ export function Layout() {
 }
 ```
 
-You may notice the
+你可能已经注意到，新创建的布局底部附近的
 [`Outlet`](https://tanstack.com/router/v1/docs/framework/react/guide/outlets)
-component towards the bottom of our newly created layout. This component is from
-**Tanstack Router** and renders the child route's content, allowing for nested
-routing while maintaining a consistent layout structure.
+组件。这个组件来自 **Tanstack Router**，用于渲染子路由的内容，
+从而在保持一致的布局结构的同时，实现嵌套路由。
 
-Next, we'll have to wire up this layout with `./src/main.tsx`, which an
-important file that sets up the Tanstack Query client for managing server state
-and the Tanstack Router for handling navigation:
+接下来，我们需要把这个布局接入 `./src/main.tsx`，它是一个重要的文件：
+用于为管理服务器状态设置 Tanstack Query client，
+并为处理导航设置 Tanstack Router。
 
 ```ts
 // ./src/main.tsx
@@ -347,16 +343,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 );
 ```
 
-You'll notice we import
-[`QueryClientProvider`](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider),
-which wraps the entire application to allow for query caching and state
-management. We also import `RouterProvider`, which connects our defined routes
-to React's rendering system.
+你会注意到我们导入了
+[`QueryClientProvider`](https://tanstack.com/query/latest/docs/framework/react/reference/QueryClientProvider)，
+它会把整个应用包裹起来，从而支持查询缓存与状态管理。
+我们还导入了 `RouterProvider`，用于把我们定义的路由连接到 React 的渲染系统。
 
-Finally, we'll need to define a
+最后，我们需要在 `./src/` 目录下定义一个
 [`routeTree.tsx`](https://tanstack.com/router/v1/docs/framework/react/guide/route-trees)
-file in our `./src/` directory. This file defines our application's routing
-structure using Tanstack Router's type-safe route definitions:
+文件。这个文件使用 Tanstack Router 的类型安全路由定义，
+来描述我们应用的路由结构：
 
 ```ts
 // ./src/routeTree.tsx
@@ -385,12 +380,12 @@ const dinosaurRoute = new Route({
 export const routeTree = rootRoute.addChildren([indexRoute, dinosaurRoute]);
 ```
 
-In `./src/routeTree.tsx`, we create a hierarchy of routes with `Layout` as the
-root component. Then we set two child routes, their paths and components — one
-for the dinosaur list, `DinosaurList`, and the other for the individual dinosaur
-details with a dynamic parameter, `DinosaurDetail`.
+在 `./src/routeTree.tsx` 中，我们创建了一层以 `Layout` 作为根组件的路由层级。
+然后我们再配置两个子路由：它们的路径与组件——一个用于恐龙列表，
+`DinosaurList`；另一个用于单只恐龙详情，并带有动态参数，
+`DinosaurDetail`。
 
-With all that complete, we can run this project:
+完成这些之后，我们就可以运行这个项目了：
 
 ```shell
 deno task dev
@@ -398,28 +393,27 @@ deno task dev
 
 <figure>
 
-<video class="w-full" alt="Build an app with Deno and Tanstack." autoplay muted loop playsinline src="./images/how-to/tanstack/demo.mp4"></video>
+<video class="w-full" alt="使用 Deno 和 Tanstack 构建应用。" autoplay muted loop playsinline src="./images/how-to/tanstack/demo.mp4"></video>
 
 </figure>
 
-## Next steps
+## 下一步
 
-This is just the beginning of building with Deno and Tanstack. You can add
-persistent data storage like
-[using a database like Postgres or MongoDB](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)
-and an ORM like [Drizzle](https://deno.com/blog/build-database-app-drizzle) or
-[Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/). Or
-deploy your app to
+这只是用 Deno 和 Tanstack 进行开发的起点。你可以添加
+持久化数据存储，例如
+[使用像 Postgres 或 MongoDB 这样的数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)
+以及像 [Drizzle](https://deno.com/blog/build-database-app-drizzle) 或
+[Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) 这样的 ORM。或者将你的应用部署到
 [AWS](https://docs.deno.com/runtime/tutorials/aws_lightsail/),
-[Digital Ocean](https://docs.deno.com/runtime/tutorials/digital_ocean/), or
+[Digital Ocean](https://docs.deno.com/runtime/tutorials/digital_ocean/)，或
 [Google Cloud Run](https://docs.deno.com/runtime/tutorials/google_cloud_run/)
 
-You could also add real-time updates using
-[Tanstack Query's refetching capabilities](https://tanstack.com/query/latest/docs/framework/react/examples/auto-refetching),
-[implement infinite scrolling](https://tanstack.com/query/latest/docs/framework/react/examples/load-more-infinite-scroll)
-for large dinosaur lists, or
-[add complex filtering and sorting](https://tanstack.com/table/v8/docs/guide/column-filtering)
-using **[Tanstack Table](https://tanstack.com/table/latest)**. The combination
-of Deno's built-in web standards, tooling, and native TypeScript support, as
-well as Tanstack's powerful data management opens up numerous possibilities for
-building robust web applications.
+你还可以使用
+[Tanstack Query 的自动重新获取功能](https://tanstack.com/query/latest/docs/framework/react/examples/auto-refetching)
+来添加实时更新，
+针对大型恐龙列表
+[实现无限滚动](https://tanstack.com/query/latest/docs/framework/react/examples/load-more-infinite-scroll)，或
+通过使用 **[Tanstack Table](https://tanstack.com/table/latest)** 来
+[添加复杂的筛选和排序](https://tanstack.com/table/v8/docs/guide/column-filtering)。
+Deno 内置的 Web 标准、工具链以及原生 TypeScript 支持，
+再加上 Tanstack 强大的数据管理能力，为构建健壮的 Web 应用打开了无数可能性。

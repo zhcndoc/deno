@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-09-04
 title: "Deno 命名空间 API"
-description: "Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间提供的文件系统操作、网络功能、权限管理及其他核心能力。"
+description: "Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间提供的文件系统操作、网络功能、权限管理以及其他核心能力。"
 layout: layout.tsx
 oldUrl:
   - /runtime/manual/runtime/

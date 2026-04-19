@@ -1,5 +1,8 @@
 ---
+last_modified: 2026-03-19
 title: "边缘缓存"
+oldUrl:
+  - /deploy/classic/edge-cache/
 ---
 
 :::warning 2026 年 7 月 20 日停止服务
@@ -23,7 +26,7 @@ Deno.serve(async (req) => {
     return cached;
   }
 
-  const res = new Response("缓存于 " + new Date().toISOString());
+  const res = new Response("cached at " + new Date().toISOString());
   await cache.put(req, res.clone());
   return res;
 });

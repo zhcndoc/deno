@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-04-02
 title: "Lint 插件"
-description: "Deno 自定义 lint 插件创建与使用指南。了解如何编写自定义 lint 规则、使用 AST 匹配选择器、实现修复，以及使用 Deno 的 lint 插件 API 测试您的插件。"
+description: "在 Deno 中创建和使用自定义 lint 插件的指南。学习如何编写自定义 lint 规则、使用选择器进行 AST 匹配、实现修复，并使用 Deno 的 lint 插件 API 测试你的插件。"
 ---
 
 :::caution

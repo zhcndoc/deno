@@ -1,6 +1,7 @@
 ---
-title: "使用 Deno 构建 SolidJS 应用"
-description: "Build a SolidJS application with Deno. Learn how to set up a project, implement reactive components, handle routing, create API endpoints with Hono, and build a full-stack TypeScript application."
+last_modified: 2025-07-28
+title: "使用 Deno 构建一个 SolidJS 应用"
+description: "使用 Deno 构建一个 SolidJS 应用。了解如何搭建项目、实现响应式组件、处理路由、使用 Hono 创建 API 端点，并构建一个全栈 TypeScript 应用。"
 url: /examples/solidjs_tutorial/
 ---
 
@@ -37,7 +38,7 @@ deno add jsr:@hono/hono npm:@solidjs/router
 
 <figcaption>
 <a href="https://docs.deno.com/runtime/reference/cli/add/">
-了解更多关于 <code>deno add</code> 和将 Deno 用作包管理器的信息。
+了解更多关于 <code>deno add</code> 以及将 Deno 用作包管理器的信息。
 </a>
 </figcaption>
 </figure>
@@ -73,7 +74,7 @@ deno add jsr:@hono/hono npm:@solidjs/router
 ```
 
 <figcaption>
-<a href="https://docs.deno.com/runtime/reference/cli/task/">您可以将 <code>tasks</code> 作为对象编写</a>。在这里，我们的 <code>serve</code> 命令包含一个 <code>description</code> 和 <code>dependencies</code>。
+<a href="https://docs.deno.com/runtime/reference/cli/task/">您可以将 <code>tasks</code> 作为对象来编写</a>。在这里，我们的 <code>serve</code> 命令包含一个 <code>description</code> 和 <code>dependencies</code>。
 </figcaption>
 </figure>
 
@@ -107,8 +108,9 @@ deno add jsr:@hono/hono npm:@solidjs/router
 这是我们将提取数据的地方。在完整的应用中，这些数据将来自数据库。
 
 > ⚠️️ 在本教程中，我们是硬编码数据。但您可以连接到
-> [多种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 和 [甚至使用 Prisma 等 ORM](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) 与
-> Deno。
+> [多种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 并
+> [甚至使用 Prisma 等 ORM](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/)
+> 与 Deno。
 
 其次，我们需要我们的 Hono 服务器，`api/main.ts`：
 
@@ -338,13 +340,12 @@ render(() => <App />, wrapper);
 
 - 添加持久化数据存储
   [使用像 Postgres 或 MongoDB 的数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/)
-  和像 [Drizzle](https://deno.com/blog/build-database-app-drizzle) 或
+  并像 [Drizzle](https://deno.com/blog/build-database-app-drizzle) 或
   [Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) 的 ORM
 - 使用 SolidJS 的
   [`createContext`](https://docs.solidjs.com/reference/component-apis/create-context) 实现全局状态，在组件之间共享数据
 - 使用
-  [`createResource`](https://docs.solidjs.com/reference/basic-reactivity/create-resource) 的
-  loading 属性添加加载状态
+  [`createResource`](https://docs.solidjs.com/reference/basic-reactivity/create-resource) 的加载属性添加加载状态
 - 实现基于路由的代码分割，使用
   [`lazy`](https://docs.solidjs.com/reference/component-apis/lazy) 导入
 - 使用 `Index` 组件提升列表渲染效率

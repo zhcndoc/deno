@@ -1,5 +1,6 @@
 ---
-title: 云连接
+last_modified: 2025-10-07
+title: Cloud Connections
 description: 了解如何将 Deno Deploy 连接到 AWS 和 Google Cloud Platform 等云提供商，而无需管理凭据。
 oldUrl: /deploy/reference/cloud-connections
 ---

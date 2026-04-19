@@ -1,11 +1,12 @@
 ---
-title: 账户
-description: "有关用户账户、通过 GitHub 进行身份验证以及在 Deno Deploy 中管理个人资料的信息。"
+last_modified: 2025-12-08
+title: Accounts
+description: "有关用户账户的信息、通过 GitHub 进行身份验证，以及在 Deno Deploy 中管理你的个人资料。"
 ---
 
 Deno Deploy 支持使用 GitHub 登录。
 
-您的主要联系邮箱地址和名称会从 GitHub 同步。您的用户名和邮箱地址会在每次登录时更新。在 GitHub 更改邮箱、登录名或名称后，请重新登录以便在 Deno Deploy 仪表板中看到这些更改。
+你的主要联系邮箱地址和名称将从 GitHub 同步。你的用户名和邮箱地址会在每次登录时更新。在 GitHub 更改邮箱、登录名或名称后，请重新登录，以便在 Deno Deploy 仪表板中看到这些更改。
 
 Deno 也支持使用 Google 账户登录。
 

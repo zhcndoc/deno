@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-12
 title: "deno init"
 oldUrl: /runtime/manual/tools/init/
 command: init
@@ -31,12 +32,12 @@ Check file:///dev/main_test.ts
 running 1 test from main_test.ts
 addTest ... ok (6ms)
 
-ok | 1 通过 | 0 失败 (29ms)
+ok | 1 passed | 0 failed (29ms)
 ```
 
-`init` 子命令将创建两个文件（`main.ts` 和 `main_test.ts`）。这些文件提供了如何编写 Deno 程序和如何为其编写测试的基本示例。`main.ts` 文件导出了一个 `add` 函数，该函数将两个数字相加，而 `main_test.ts` 文件则包含了对此函数的测试。
+`init` 子命令将创建两个文件（`main.ts` 和 `main_test.ts`）。这些文件提供了如何编写 Deno 程序以及如何为其编写测试的基本示例。`main.ts` 文件导出了一个 `add` 函数，该函数将两个数字相加；而 `main_test.ts` 文件则包含对该函数的测试。
 
-您还可以为 `deno init` 指定一个参数，以在特定目录中初始化项目：
+你也可以为 `deno init` 指定一个参数，以在特定目录中初始化项目：
 
 ```sh
 deno init my_deno_project
@@ -58,7 +59,7 @@ deno init my_deno_project
 
 ## 初始化一个 JSR 包
 
-通过运行 `deno init --lib`，Deno 将引导一个准备好在 [JSR](https://jsr.io/) 上发布的项目。
+通过运行 `deno init --lib`，Deno 将引导一个可在 [JSR](https://jsr.io/) 上发布的项目。
 
 ```sh
 deno init --lib
@@ -76,7 +77,7 @@ deno init --lib
   deno publish --dry-run
 ```
 
-在 `deno.json` 中，您会看到 `name`、`exports` 和 `version` 的条目已预填充。
+在 `deno.json` 中，你会看到 `name`、`exports` 和 `version` 的条目已预填充。
 
 ```json title="deno.json"
 {
@@ -94,7 +95,7 @@ deno init --lib
 
 ## 初始化一个 Web 服务器
 
-运行 `deno init --serve` 将引导一个与 [`deno serve`](./serve) 一起工作的 Web 服务器。
+运行 `deno init --serve` 将引导一个可与 [`deno serve`](./serve) 一起工作的 Web 服务器。
 
 ```sh
 deno init --serve
@@ -112,7 +113,7 @@ deno init --serve
   deno -R test
 ```
 
-您的 [`deno.json`](/runtime/fundamentals/configuration/) 文件将如下所示：
+你的 [`deno.json`](/runtime/fundamentals/configuration/) 文件将如下所示：
 
 ```json title="deno.json"
 {
@@ -126,7 +127,7 @@ deno init --serve
 }
 ```
 
-现在，您可以通过运行 `deno task dev` 启动您的 Web 服务器，该服务器
+现在，你可以通过运行 `deno task dev` 启动你的 Web 服务器，该服务器
 [监听变更](/runtime/getting_started/command_line_interface/#watch-mode)。
 
 ```sh
@@ -138,7 +139,7 @@ deno serve: Listening on http://0.0.0.0:8000/
 
 ## 初始化一个空项目
 
-运行 `deno init --empty` 会搭建一个带有基础控制台日志的空项目。
+运行 `deno init --empty` 会创建一个带有基础控制台日志的空项目。
 
 ```sh
 deno init --empty
@@ -153,7 +154,7 @@ deno init --empty
   deno task dev
 ```
 
-您的 [`deno.json`](/runtime/fundamentals/configuration/) 文件将如下所示：
+你的 [`deno.json`](/runtime/fundamentals/configuration/) 文件将如下所示：
 
 ```json title="deno.json"
 {
@@ -163,7 +164,7 @@ deno init --empty
 }
 ```
 
-现在，您可以通过运行 `deno task dev` 启动项目，它将[监听变更](/runtime/getting_started/command_line_interface/#watch-mode)。
+现在，你可以通过运行 `deno task dev` 启动项目，它将[监听变更](/runtime/getting_started/command_line_interface/#watch-mode)。
 
 ```sh
 deno task dev
@@ -174,7 +175,7 @@ Hello world!
 
 ## 生成一个库项目
 
-您可以附加一个 `--lib` 标志，以向您的 `deno.json` 添加额外的参数，例如 "name"、"version" 和 "exports" 字段。
+你可以附加一个 `--lib` 标志，以向你的 `deno.json` 添加额外的参数，例如 `name`、`version` 和 `exports` 字段。
 
 ```sh
 deno init my_deno_project --lib

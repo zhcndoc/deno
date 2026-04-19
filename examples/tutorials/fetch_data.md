@@ -1,13 +1,14 @@
 ---
-title: "获取和流数据"
-description: "A tutorial on working with network requests in Deno. Learn how to use the fetch API for HTTP requests, handle responses, implement data streaming, and manage file uploads and downloads."
+last_modified: 2025-08-11
+title: "获取并流式传输数据"
+description: "关于在 Deno 中使用网络请求的教程。学习如何使用 fetch API 进行 HTTP 请求、处理响应、实现数据流式传输，以及管理文件上传和下载。"
 url: /examples/fetch_data_tutorial/
 oldUrl:
   - /runtime/manual/examples/fetch_data/
   - /runtime/tutorials/fetch_data/
 ---
 
-Deno 将几个熟悉的 Web API 引入到服务器环境中。如果您曾经使用过浏览器，您可能会认识 [`fetch()`](/api/web/fetch) 方法和 [`streams`](/api/web/streams) API，它们用于进行网络请求和访问网络上的数据流。Deno 实现了这些 API，使您能够从网络中获取和流式传输数据。
+Deno 将一些熟悉的 Web API 引入到服务器环境中。如果您曾经使用过浏览器，您可能会认识 [`fetch()`](/api/web/fetch) 方法和 [`streams`](/api/web/streams) API，它们用于进行网络请求和访问网络上的数据流。Deno 实现了这些 API，使您能够从网络中获取并流式传输数据。
 
 ## 获取数据
 
@@ -52,7 +53,7 @@ Deno 提供了一种使用 `Streams API` 进行数据流式传输的方法。我
 
 创建一个名为 `stream.js` 的新文件。
 
-我们将使用 `fetch` API 来检索一个文件。然后我们将使用 [`Deno.open`](/api/deno/Deno.open) 方法来创建和打开一个可写文件，并使用 Streams API 的 [`pipeTo`](/api/web/~/ReadableStream.pipeTo) 方法将字节流发送到创建的文件。
+我们将使用 `fetch` API 来检索一个文件。然后我们将使用 [`Deno.open`](/api/deno/Deno.open) 方法来创建并打开一个可写文件，并使用 Streams API 的 [`pipeTo`](/api/web/~/ReadableStream.pipeTo) 方法将字节流发送到创建的文件。
 
 接下来，我们将使用 `readable` 属性在 `POST` 请求中将文件的字节流发送到服务器。
 
@@ -75,7 +76,7 @@ await fetch("https://example.com/", {
 });
 ```
 
-您可以使用 `deno run` 命令运行此代码。因为它正在从网络获取数据并写入文件，所以您需要授予 `--allow-net`、`--allow-write` 和 `--allow-read` 权限：
+您可以使用 `deno run` 命令运行此代码。因为它正在从网络获取数据并写入文件，您需要授予 `--allow-net`、`--allow-write` 和 `--allow-read` 权限：
 
 ```sh
 deno run --allow-read --allow-write --allow-net stream.js
@@ -83,4 +84,4 @@ deno run --allow-read --allow-write --allow-net stream.js
 
 您应该会看到文件 `logo.svg` 在当前目录中创建并填充，而如果您拥有 example.com，您会看到文件被发送到服务器。
 
-🦕 现在您知道如何在网络上获取和流式传输数据，以及如何将数据流式传输到文件和从文件中流式传输数据！无论您是提供静态文件、处理上传、生成动态内容还是流式传输大型数据集，Deno 的文件处理和流式传输能力都是您开发工具箱中的绝佳工具！
+🦕 现在您知道如何在网络上获取并流式传输数据，以及如何将数据流式传输到文件和从文件中流式传输数据！无论您是提供静态文件、处理上传、生成动态内容还是流式传输大型数据集，Deno 的文件处理和流式传输能力都是您开发工具箱中的绝佳工具！

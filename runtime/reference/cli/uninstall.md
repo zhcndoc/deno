@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-03-10
 title: "deno uninstall"
 oldUrl: /runtime/manual/tools/uninstall/
 command: uninstall
@@ -14,7 +15,7 @@ description: "从你的项目或全局缓存中移除一个依赖"
 
 ```sh
 deno add npm:express
-Add npm:express@5.0.0
+添加 npm:express@5.0.0
 
 cat deno.json
 {
@@ -26,7 +27,7 @@ cat deno.json
 
 ```sh
 deno uninstall express
-Removed express
+已移除 express
 
 cat deno.json
 {
@@ -44,8 +45,8 @@ cat deno.json
 
 ```sh
 deno add npm:express jsr:@std/http
-Added npm:express@5.0.0
-Added jsr:@std/http@1.0.7
+已添加 npm:express@5.0.0
+已添加 jsr:@std/http@1.0.7
 
 cat deno.json
 {
@@ -58,8 +59,8 @@ cat deno.json
 
 ```sh
 deno remove express @std/http
-Removed express
-Removed @std/http
+已移除 express
+已移除 @std/http
 
 cat deno.json
 {
@@ -84,7 +85,7 @@ cat package.json
 }
 
 deno remove express
-Removed express
+已移除 express
 
 cat package.json
 {

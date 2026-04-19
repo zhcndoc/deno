@@ -1,6 +1,7 @@
 ---
-title: "调试"
-description: "Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器及其他调试技巧来调试 Deno 中的 TypeScript/JavaScript 代码。"
+last_modified: 2026-03-19
+title: "调试（Debugging）"
+description: "Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器以及其他调试技术来调试 Deno 中的 TypeScript/JavaScript 代码。"
 oldUrl:
   - /runtime/manual/getting_started/debugging_your_code/
   - /runtime/manual/basics/debugging_your_code/
@@ -201,9 +202,9 @@ deno run -A --cpu-prof --cpu-prof-md server.js
 ## Call Tree (Total Time)
 
 | Total% |    Total | Self% |     Self | Function                      | Location          |
-| -----: | -------: | ----: | -----: | ----------------------------- | ----------------- |
+| -----: | -------: | -----: | -------: | ----------------------------- | ----------------- |
 |  16.8% |  91.00ms | 16.8% |  91.00ms | `(anonymous)`                 | server.js:1       |
-|   0.6% |   3.00ms |  0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
+|   0.6% |   3.00ms |   0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
 |  98.5% | 533.00ms | 98.5% | 533.00ms | `op_crypto_get_random_values` | [native code]     |
 
 ## Function Details

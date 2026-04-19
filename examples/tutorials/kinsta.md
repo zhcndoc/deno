@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-08-20
 title: "如何在 Kinsta 上部署 Deno"
-description: "Step-by-step guide to deploying Deno applications on Kinsta. Learn how to configure package.json, handle environment variables, set up Git deployments, and use Kinsta's application hosting platform."
+description: "在 Kinsta 上部署 Deno 应用的循序渐进指南。了解如何配置 package.json、处理环境变量、设置 Git 部署，以及使用 Kinsta 的应用托管平台。"
 url: /examples/kinsta_tutorial/
 oldUrl:
   - /runtime/manual/advanced/deploying_deno/kinsta/
@@ -47,5 +48,5 @@ Deno.serve({ port }, (_req) => new Response("Hello, world"));
 1. 在 [Kinsta 应用托管](https://kinsta.com/signup/?product_type=app-db) 注册，或直接登录 [My Kinsta](https://my.kinsta.com/) 管理面板。
 2. 转到应用程序选项卡。
 3. 连接您的 GitHub 仓库。
-4. 按下 **添加服务 > 应用程序按钮**。
+4. 按下 **添加服务 > 应用程序** 按钮。
 5. 按照向导步骤操作。

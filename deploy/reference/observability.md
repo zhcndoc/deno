@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-09-29
 title: 可观测性
-description: "Deno Deploy 中监控功能的全面概述，包括日志、跟踪、指标和过滤选项。"
+description: "全面概述 Deno Deploy 中的监控功能，包括日志、跟踪、指标以及筛选选项。"
 ---
 
 Deno Deploy 提供全面的可观测性功能，帮助您了解应用性能、调试错误和监控使用情况。这些功能利用了 OpenTelemetry 以及

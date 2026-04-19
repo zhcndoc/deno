@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-05
 title: "deno 升级"
 oldUrl: /runtime/manual/tools/upgrade/
 command: upgrade

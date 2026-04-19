@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-26
 title: "Deno KV 快速入门"
 oldUrl:
   - /kv/
@@ -253,4 +254,4 @@ Deno.test("Preferences", async (t) => {
 
 ## 下一步
 
-到这里，你刚刚开始接触 Deno KV。确保查看我们关于 [Deno KV 键空间](./key_space) 的指南，以及 [这里](../tutorials/index.md) 的一系列 [教程和示例应用程序]】【。
+到这里，你刚刚开始接触 Deno KV。确保查看我们关于 [Deno KV 键空间](./key_space) 的指南，以及 [这里](../tutorials/index.md) 的一系列 [教程和示例应用程序]。

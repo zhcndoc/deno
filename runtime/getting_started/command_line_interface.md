@@ -1,6 +1,7 @@
 ---
-title: 命令行接口
-description: "关于使用 Deno 命令行接口（CLI）的全面指南。学习如何运行脚本、管理权限、使用观察模式，以及通过命令行标志和选项配置 Deno 运行时行为。"
+last_modified: 2025-11-05
+title: 命令行界面
+description: "使用 Deno 的命令行界面（CLI）的全面指南。了解如何运行脚本、管理权限、使用观察模式，以及通过命令行标志和选项配置 Deno 运行时行为。"
 oldUrl:
   - /manual/getting_started/command_line_interface
   - /runtime/manual/getting_started/command_line_interface/
@@ -8,7 +9,7 @@ oldUrl:
   - /runtime/manual/tools/
 ---
 
-Deno 是一个命令行程序。Deno 的命令行接口（CLI）可以用于运行脚本、管理依赖关系，甚至将你的代码编译成独立的可执行文件。到目前为止，经过这些示例，你可能已经熟悉了一些简单的命令。此页面将提供 Deno CLI 更详细的概述。
+Deno 是一个命令行程序。Deno 的命令行接口（CLI）可用于运行脚本、管理依赖关系，甚至将你的代码编译成独立的可执行文件。到目前为止，经过这些示例，你可能已经熟悉了一些简单的命令。此页面将提供 Deno CLI 更详细的概述。
 
 Deno CLI 具有多个子命令（如 `run`、`init` 和 `test` 等）。它们用于在 Deno 运行时环境中执行不同的任务。每个子命令都有自己的一组标志和选项（例如 --version），可以用于自定义其行为。
 
@@ -156,7 +157,7 @@ addEventListener("hmr", (e) => {
 > deno run --check main.ts
 ```
 
-此标志影响 `deno run`、`deno eval`、`deno repl`。下面的表格描述了各种子命令的类型检查行为。在此，“本地”意味着只有本地代码中的错误会导致类型错误，从 https URL 导入的模块（远程）可能有未报告的类型错误。（要打开所有模块的类型检查，请使用 `--check=all`。）
+此标志影响 `deno run`、`deno eval`、`deno repl`。下面的表格描述了各种子命令的类型检查行为。在此，“本地”意味着只有本地代码中的错误会导致类型错误，而从 https URL 导入的模块（远程）可能有未报告的类型错误。（要打开所有模块的类型检查，请使用 `--check=all`。）
 
 | 子命令         | 类型检查模式 |
 | -------------- | ------------------ |

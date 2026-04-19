@@ -1,13 +1,14 @@
 ---
+last_modified: 2025-10-28
 title: "如何在 Deno 中使用 Mongoose"
-description: "使用 Deno 搭配 Mongoose 的分步指南。学习如何设置 MongoDB 连接，创建模式，实施数据模型，并使用 Mongoose 的基于模式建模执行 CRUD 操作。"
+description: "使用 Deno 搭配 Mongoose 的一步步指南。了解如何设置 MongoDB 连接、创建模式、实现数据模型，并使用 Mongoose 基于模式的建模执行 CRUD 操作。"
 url: /examples/mongoose_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/mongoose/
   - /runtime/tutorials/how_to_with_npm/mongoose/
 ---
 
-[Mongoose](https://mongoosejs.com/) 是一个流行的基于模式的库，用于建模 [MongoDB](https://www.mongodb.com/) 的数据。它简化了编写 MongoDB 验证、类型转换和其他相关业务逻辑的过程。
+[Mongoose](https://mongoosejs.com/) 是一个流行的基于模式（schema-based）的库，用于建模 [MongoDB](https://www.mongodb.com/) 的数据。它简化了编写 MongoDB 验证、类型转换和其他相关业务逻辑的过程。
 
 本教程将向您展示如何在 Deno 项目中设置 Mongoose 和 MongoDB。
 

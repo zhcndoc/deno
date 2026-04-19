@@ -1,34 +1,34 @@
 ---
-title: "Build a Real-time LLM Chat App with Deno"
-description: "Learn how to integrate Large Language Models (LLM) with Deno to create an interactive roleplay chat application with AI characters using OpenAI or Anthropic APIs."
+last_modified: 2025-09-29
+title: "使用 Deno 构建实时 LLM 聊天应用"
+description: "学习如何将大型语言模型（LLM）与 Deno 集成，使用 OpenAI 或 Anthropic API 创建一个交互式角色扮演聊天应用，其中包含 AI 角色。"
 url: /examples/llm_tutorial/
 ---
 
-Large Language Models (LLMs) like OpenAI's GPT and Anthropic's Claude are
-powerful tools for creating intelligent, conversational applications. In this
-tutorial, we'll build a real-time chat application where AI characters powered
-by LLMs interact with users in a roleplay game setting.
+像 OpenAI 的 GPT 和 Anthropic 的 Claude 这样的
+大型语言模型（LLM）是创建智能对话应用的强大工具。在本
+教程中，我们将构建一个实时聊天应用：由 LLM 驱动的 AI 角色会在
+角色扮演游戏场景中与用户进行互动。
 
-You can see the code for the
-[finished app on GitHub](https://github.com/denoland/tutorial-with-llm).
+你可以在
+[GitHub 上查看已完成的应用代码](https://github.com/denoland/tutorial-with-llm)。
 
-:::info Deploy your own
+:::info 部署你自己的版本
 
-Want to skip the tutorial and deploy the finished app right now? Click the
-button below to instantly deploy your own copy of the complete LLM chat
-application to Deno Deploy. You'll get a live, working application that you can
-customize and modify as you learn!
+想跳过教程并立刻部署已完成的应用吗？点击下面的按钮，
+立即将你自己的完整 LLM 聊天应用副本部署到 Deno Deploy。
+你将获得一个可运行的线上应用，并且在学习过程中可以
+对其进行自定义和修改！
 
-[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-llm&mode=dynamic&entrypoint=main.ts&install=deno+install)
+[![在 Deno 上部署](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-llm&mode=dynamic&entrypoint=main.ts&install=deno+install)
 
-Once you have deployed, add your `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` in the
-project "Settings".
+部署完成后，在项目的 “Settings” 中添加你的 `OPENAI_API_KEY` 或 `ANTHROPIC_API_KEY`。
 
 :::
 
-## Initialize a new project
+## 初始化一个新项目
 
-First, create a new directory for your project and initialize it:
+首先，为你的项目创建一个新目录并进行初始化：
 
 ```bash
 mkdir deno-llm-chat
@@ -36,36 +36,36 @@ cd deno-llm-chat
 deno init
 ```
 
-## Project structure
+## 项目结构
 
-We'll create a modular structure that separates concerns between LLM
-integration, game logic, and server management:
+我们将创建一个模块化结构，以将 LLM
+集成、游戏逻辑和服务器管理之间的职责分离开：
 
 ```sh
-├── main.ts                 # Main server entry point
-├── main_test.ts            # Test file
-├── deno.json               # Deno configuration
-├── .env                    # Environment variables (API keys)
+├── main.ts                 # 主服务器入口
+├── main_test.ts            # 测试文件
+├── deno.json               # Deno 配置
+├── .env                    # 环境变量（API 密钥）
 ├── src/
 │   ├── config/
-│   │   ├── characters.ts   # Character configurations and presets
-│   │   └── scenarios.ts    # Pre-defined scenario templates
+│   │   ├── characters.ts   # 角色配置和预设
+│   │   └── scenarios.ts    # 预定义的场景模板
 │   ├── game/
-│   │   ├── GameManager.ts  # Core game logic and state management
-│   │   └── Character.ts    # AI character implementation
+│   │   ├── GameManager.ts  # 核心游戏逻辑与状态管理
+│   │   └── Character.ts    # AI 角色实现
 │   ├── llm/
-│   │   └── LLMProvider.ts  # LLM integration layer (OpenAI/Anthropic)
+│   │   └── LLMProvider.ts  # LLM 集成层（OpenAI/Anthropic）
 │   └── server/
-│       └── WebSocketHandler.ts # Real-time communication
+│       └── WebSocketHandler.ts # 实时通信
 └── static/
-    ├── index.html         # Web interface
-    ├── app.js            # Frontend JavaScript
-    └── styles.css        # Application styling
+    ├── index.html         # Web 界面
+    ├── app.js            # 前端 JavaScript
+    └── styles.css        # 应用样式
 ```
 
-## Set up dependencies
+## 设置依赖项
 
-Add the required dependencies to your `deno.json`:
+将所需依赖添加到你的 `deno.json`：
 
 ```json title="deno.json"
 {
@@ -90,33 +90,33 @@ Add the required dependencies to your `deno.json`:
 }
 ```
 
-## Configure environment variables
+## 配置环境变量
 
-Create a `.env` file for your API keys. The application supports both OpenAI and
-Anthropic. Comment out the config that you won't be using with a `#`.
+为你的 API 密钥创建一个 `.env` 文件。该应用同时支持 OpenAI 和
+Anthropic。用 `#` 将你不使用的配置注释掉。
 
 ```bash title=".env"
-# Choose one of the following LLM providers:
+# 选择以下 LLM 供应商之一：
 
-# OpenAI Configuration
+# OpenAI 配置
 OPENAI_API_KEY=your-openai-api-key-here
 
-# OR Anthropic Configuration  
+# 或 Anthropic 配置  
 # ANTHROPIC_API_KEY=your-anthropic-api-key-here
 
-# Server Configuration (optional)
+# 服务器配置（可选）
 PORT=8000
 ```
 
-You can get API keys from:
+你可以从以下位置获取 API 密钥：
 
-- [OpenAI Platform](https://platform.openai.com/api-keys)
-- [Anthropic Console](https://console.anthropic.com/)
+- [OpenAI 平台](https://platform.openai.com/api-keys)
+- [Anthropic 控制台](https://console.anthropic.com/)
 
-## Build the LLM Provider
+## 构建 LLM Provider
 
-The core of our application is the LLM provider that handles communication with
-AI services. Create `src/llm/LLMProvider.ts`:
+我们应用的核心是 LLM provider，它负责与
+AI 服务进行通信。创建 `src/llm/LLMProvider.ts`：
 
 ```typescript title="src/llm/LLMProvider.ts"
 export interface LLMConfig {
@@ -138,7 +138,7 @@ export class LLMProvider {
       Deno.env.get("OPENAI_API_KEY") ||
       Deno.env.get("ANTHROPIC_API_KEY");
 
-    // Auto-detect provider based on available API keys
+    // 根据可用的 API 密钥自动检测供应商
     let provider = config?.provider;
     if (!provider && apiKey) {
       if (Deno.env.get("OPENAI_API_KEY")) {
@@ -159,13 +159,13 @@ export class LLMProvider {
       apiKey,
     };
 
-    console.log(`LLM Provider initialized: ${this.config.provider}`);
+    console.log(`LLM Provider 已初始化：${this.config.provider}`);
   }
 
   async generateResponse(prompt: string): Promise<string> {
-    // Check rate limiting
+    // 检查限流
     if (this.rateLimitedUntil > Date.now()) {
-      console.warn("Rate limited, using mock response");
+      console.warn("已限流，使用 mock 响应");
       return this.mockResponse(prompt);
     }
 
@@ -180,12 +180,12 @@ export class LLMProvider {
           return this.mockResponse(prompt);
       }
     } catch (error) {
-      console.error("LLM API error:", error);
+      console.error("LLM API 错误：", error);
 
       if (this.shouldRetry(error)) {
         this.retryCount++;
         if (this.retryCount <= this.maxRetries) {
-          console.log(`Retrying... (${this.retryCount}/${this.maxRetries})`);
+          console.log(`正在重试...（${this.retryCount}/${this.maxRetries}）`);
           await this.delay(1000 * this.retryCount);
           return this.generateResponse(prompt);
         }
@@ -211,11 +211,11 @@ export class LLMProvider {
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+      throw new Error(`OpenAI API 错误：${response.status}`);
     }
 
     const data = await response.json();
-    this.retryCount = 0; // Reset on success
+    this.retryCount = 0; // 成功后重置
     return data.choices[0].message.content.trim();
   }
 
@@ -236,28 +236,28 @@ export class LLMProvider {
     });
 
     if (!response.ok) {
-      throw new Error(`Anthropic API error: ${response.status}`);
+      throw new Error(`Anthropic API 错误：${response.status}`);
     }
 
     const data = await response.json();
-    this.retryCount = 0; // Reset on success
+    this.retryCount = 0; // 成功后重置
     return data.content[0].text.trim();
   }
 
   private mockResponse(prompt: string): string {
     const responses = [
-      "I understand! Let me think about this...",
-      "That's an interesting approach to the situation.",
-      "I see what you're getting at. Here's what I think...",
-      "Fascinating! I would approach it this way...",
-      "Good point! That gives me an idea...",
+      "我明白了！让我想想……",
+      "这想法很有意思。",
+      "我懂你的意思。以下是我怎么想……",
+      "太有趣了！我会这样来处理……",
+      "说得好！这给了我一个主意……",
     ];
 
     return responses[Math.floor(Math.random() * responses.length)];
   }
 
   private shouldRetry(error: any): boolean {
-    // Retry on rate limits and temporary server errors
+    // 在限流和临时服务器错误时进行重试
     const errorMessage = error.message?.toLowerCase() || "";
     return errorMessage.includes("rate limit") ||
       errorMessage.includes("429") ||
@@ -272,14 +272,14 @@ export class LLMProvider {
 }
 ```
 
-In this file we set an LLM provider, this allows us to easily switch between
-different LLM APIs or mock responses for testing. We also add a retry mechanism
-for handling API errors.
+在这个文件中，我们设置了 LLM provider，这样我们就能很轻松地在
+不同的 LLM API 之间切换，或者在测试时切换为 mock 响应。
+此外，我们还添加了重试机制，用于处理 API 错误。
 
-## Create AI Characters
+## 创建 AI 角色
 
-Characters are the heart of our roleplay application. Create
-`src/game/Character.ts`:
+角色是我们角色扮演应用的核心。创建
+`src/game/Character.ts`：
 
 ```typescript title="src/game/Character.ts"
 import { LLMProvider } from "../llm/LLMProvider.ts";
@@ -307,36 +307,36 @@ export class Character {
     context: string,
     userMessage: string,
   ): Promise<string> {
-    // Build the character's prompt with personality and context
+    // 构建包含个性和上下文的角色提示词
     const characterPrompt = `
-You are ${this.name}, a ${this.class} with this personality: ${this.personality}
+你是 ${this.name}，一个 ${this.class}，拥有这种性格：${this.personality}
 
-Context: ${context}
+上下文：${context}
 
-Recent conversation:
+最近对话：
 ${this.conversationHistory.slice(-3).join("\n")}
 
-User message: ${userMessage}
+用户消息：${userMessage}
 
-Respond as ${this.name} in character. Keep responses under 150 words and maintain your personality traits. Be engaging and helpful to advance the roleplay scenario.
+请以 ${this.name} 的身份进行角色内回应。将回复控制在 150 词以内，并保持你的性格特征。让对话生动有趣，并在推进角色扮演场景的同时提供帮助。
         `.trim();
 
     try {
       const response = await this.llmProvider.generateResponse(characterPrompt);
 
-      // Add to conversation history
-      this.conversationHistory.push(`User: ${userMessage}`);
-      this.conversationHistory.push(`${this.name}: ${response}`);
+      // 添加到对话历史中
+      this.conversationHistory.push(`用户：${userMessage}`);
+      this.conversationHistory.push(`${this.name}：${response}`);
 
-      // Keep history manageable
+      // 保持历史可管理
       if (this.conversationHistory.length > 20) {
         this.conversationHistory = this.conversationHistory.slice(-10);
       }
 
       return response;
     } catch (error) {
-      console.error(`Error generating response for ${this.name}:`, error);
-      return `*${this.name} seems lost in thought and doesn't respond*`;
+      console.error(`为 ${this.name} 生成响应时出错：`, error);
+      return `*${this.name} 似乎陷入沉思，无法回应*`;
     }
   }
 
@@ -354,13 +354,12 @@ Respond as ${this.name} in character. Keep responses under 150 words and maintai
 }
 ```
 
-Here we define the `Character` class, which represents each player character in
-the game. This class will handle generating responses based on the character's
-personality and the current game context.
+在这里，我们定义了 `Character` 类，它表示游戏中的每个玩家角色。
+该类将根据角色的个性和当前的游戏上下文来生成回复。
 
-## Set up character configurations
+## 设置角色配置
 
-Create predefined character templates in `src/config/characters.ts`:
+在 `src/config/characters.ts` 中创建预定义的角色模板：
 
 ```typescript title="src/config/characters.ts"
 export interface CharacterConfig {
@@ -377,36 +376,33 @@ export const defaultCharacters: CharacterConfig[] = [
     emoji: "⚔️",
     class: "Fighter",
     personality:
-      "Brave and loyal team leader, always ready to protect allies. Takes charge in dangerous situations but listens to party input.",
-    backstory: "A former city guard seeking adventure and justice.",
+      "勇敢且忠诚的团队领导者，始终准备保护队友。遇到危险局面时会主动负责，但也会倾听队伍的意见。",
+    backstory: "一位曾经的城市卫兵，寻求冒险与正义。",
   },
   {
     name: "Lyra",
     emoji: "🔮",
     class: "Wizard",
     personality:
-      "Curious and analytical strategist, loves solving puzzles. Uses magic creatively to support the party.",
-    backstory: "A scholar of ancient magic seeking forgotten spells.",
+      "好奇且善于分析的策略家，喜欢解谜。会创造性地使用魔法来支持队伍。",
+    backstory: "一位研究古代魔法的学者，追寻被遗忘的法术。",
   },
   {
     name: "Finn",
     emoji: "🗡️",
     class: "Rogue",
     personality:
-      "Witty and sneaky scout, prefers clever solutions. Acts quickly and adapts to what allies need.",
-    backstory: "A former street thief now using skills for good.",
+      "风趣又擅长潜行的侦察兵，更倾向于用聪明的办法解决问题。行动迅速，并根据队友的需要进行调整。",
+    backstory: "曾是街头窃贼，如今用这些本领做些正义的事。",
   },
 ];
 ```
 
-These templates are what the `Character` class will use to instantiate each
-character with their unique traits. The LLM will use these traits to generate
-responses that are consistent with each character's personality and backstory.
+这些模板就是 `Character` 类将用来实例化每个角色的依据，从而让每个角色都拥有独特的特质。LLM 将使用这些特质来生成与角色个性和背景故事一致的回复。
 
-## Build the Game Manager
+## 构建游戏管理器
 
-The Game Manager coordinates characters and maintains game state. Create
-`src/game/GameManager.ts`:
+游戏管理器负责协调角色并维护游戏状态。创建 `src/game/GameManager.ts`：
 
 ```typescript title="src/game/GameManager.ts"
 import { Character } from "./Character.ts";
@@ -453,7 +449,7 @@ export class GameManager {
   ): Promise<string> {
     const gameId = crypto.randomUUID();
 
-    // Create characters with their LLM personalities
+    // 使用他们的 LLM 个性创建角色
     const characters = characterConfigs.map((config) =>
       new Character(
         config.name,
@@ -475,7 +471,7 @@ export class GameManager {
 
     this.games.set(gameId, gameState);
 
-    // Add initial system message
+    // 添加初始系统消息
     this.addMessage(gameId, {
       speaker: "System",
       message: `Game started! Players: ${
@@ -497,14 +493,14 @@ export class GameManager {
       throw new Error("Game not found or inactive");
     }
 
-    // Add player message
+    // 添加玩家消息
     this.addMessage(gameId, {
       speaker: "Player",
       message,
       type: "gm",
     });
 
-    // Generate responses from each character
+    // 从每个角色生成回复
     const responses: GameMessage[] = [];
 
     for (const character of game.characters) {
@@ -520,7 +516,7 @@ export class GameManager {
 
         responses.push(characterMessage);
 
-        // Small delay between character responses for realism
+        // 为了更真实：角色回复之间稍作延迟
         await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (error) {
         console.error(`Error getting response from ${character.name}:`, error);
@@ -582,15 +578,11 @@ export class GameManager {
 }
 ```
 
-The game manager will handle all game-related logic, including starting new
-games, processing player messages, and managing game state. When a player sends
-a message, the game manager will route it to the appropriate character for
-response generation.
+游戏管理器会处理所有与游戏相关的逻辑，包括启动新游戏、处理玩家消息以及管理游戏状态。当玩家发送一条消息时，游戏管理器会将其转发到对应的角色，以生成回复。
 
-## Add WebSocket Support
+## 添加 WebSocket 支持
 
-Real-time communication makes the roleplay experience more engaging. Create
-`src/server/WebSocketHandler.ts`:
+实时通信会让角色扮演体验更有趣。创建 `src/server/WebSocketHandler.ts`：
 
 ```typescript title="src/server/WebSocketHandler.ts"
 import { GameManager } from "../game/GameManager.ts";
@@ -717,7 +709,7 @@ export class WebSocketHandler {
         data: {
           gameId,
           characters: game.characters.map((c) => c.getCharacterInfo()),
-          messages: game.messages.slice(-10), // Last 10 messages
+          messages: game.messages.slice(-10), // 最后 10 条消息
           isActive: game.isActive,
         },
       });
@@ -741,15 +733,11 @@ export class WebSocketHandler {
 }
 ```
 
-Here we set up the WebSocket server to handle connections and messages.
-Websockets allow for real-time communication between the client and server,
-making them ideal for interactive applications like a chat app, or game. We send
-messages back and forth between the client and server to keep the game state in
-sync.
+在这里，我们搭建了 WebSocket 服务器来处理连接和消息。WebSocket 允许客户端和服务器之间进行实时通信，因此非常适合像聊天应用或游戏这类交互式应用。我们在客户端和服务器之间来回发送消息，以保持游戏状态同步。
 
-## Create the main server
+## 创建主服务器
 
-Now let's tie everything together in `main.ts`:
+现在让我们把所有内容在 `main.ts` 中整合起来：
 
 ```typescript title="main.ts"
 import { GameManager } from "./src/game/GameManager.ts";
@@ -762,12 +750,12 @@ const wsHandler = new WebSocketHandler(gameManager);
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
 
-  // Handle WebSocket connections
+  // 处理 WebSocket 连接
   if (req.headers.get("upgrade") === "websocket") {
     return wsHandler.handleConnection(req);
   }
 
-  // Serve static files and API endpoints
+  // 提供静态文件和 API 端点
   switch (url.pathname) {
     case "/":
       return new Response(await getIndexHTML(), {
@@ -836,15 +824,15 @@ async function getIndexHTML(): Promise<string> {
   try {
     return await Deno.readTextFile("./static/index.html");
   } catch {
-    // Return a basic HTML template if file doesn't exist
+    // 如果文件不存在，返回一个基础 HTML 模板
     return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>LLM Roleplay Chat</title>
+    <title>LLM 角色扮演聊天</title>
 </head>
 <body>
-   <h1>Oops! Something went wrong.</h1>
+   <h1>哎呀！出了点问题。</h1>
 </body>
 </html>
     `;
@@ -852,69 +840,58 @@ async function getIndexHTML(): Promise<string> {
 }
 
 const port = parseInt(Deno.env.get("PORT") || "8000");
-console.log(`🎭 LLM Chat server starting on http://localhost:${port}`);
+console.log(`🎭 LLM 聊天服务器正在 http://localhost:${port} 上启动`);
 
 Deno.serve({ port }, handler);
 ```
 
-In the `main.ts` file we set up an HTTP server and a WebSocket server to handle
-real-time communication. We use the HTTP server to serve static files and
-provide API endpoints, while the WebSocket server manages real-time interactions
-between clients.
+在 `main.ts` 文件中，我们设置了一个 HTTP 服务器和一个 WebSocket 服务器，用于处理实时通信。我们使用 HTTP 服务器来提供静态文件并提供 API 端点，而 WebSocket 服务器则管理客户端之间的实时交互。
 
-## Add a frontend
+## 添加前端
 
-The frontend of our app will live in the `static` directory. Create an
-`index.html`, `app.js` and a `style.css` file in the `static` directory.
+我们的应用前端将位于 `static` 目录中。在 `static` 目录下创建一个
+`index.html`、`app.js` 和一个 `style.css` 文件。
 
 ### `index.html`
 
-We'll create a very basic layout with a textarea to collect the user's scenario
-input and a section to show the response messages with a text input to send
-messages. Copy the content from
+我们将创建一个非常基础的布局：使用 textarea 来收集用户的场景输入，并使用一个用于发送消息的文本输入来显示响应消息。将
 [this html file](https://github.com/denoland/tutorial-with-llm/blob/main/static/index.html)
-into your `index.html`.
+中的内容复制到你的 `index.html` 中。
 
 ### `app.js`
 
-In `app.js`, we'll add the JavaScript to handle user input and display
-responses. Copy the content from
+在 `app.js` 中，我们将添加 JavaScript 来处理用户输入并展示响应。将
 [this js file](https://github.com/denoland/tutorial-with-llm/blob/main/static/app.js)
-into your `app.js`.
+中的内容复制到你的 `app.js` 中。
 
 ### `style.css`
 
-We'll add some basic styles to make our app look nicer. Copy the content from
+我们将添加一些基础样式，让我们的应用看起来更好。将
 [this css file](https://github.com/denoland/tutorial-with-llm/blob/main/static/style.css)
-into your `style.css`.
+中的内容复制到你的 `style.css` 中。
 
-## Run your application
+## 运行你的应用
 
-Start your development server:
+启动开发服务器：
 
 ```bash
 deno task dev
 ```
 
-Your LLM chat application will be available at `http://localhost:8000`. The
-application will:
+你的 LLM 聊天应用将可以在 `http://localhost:8000` 访问。该应用将：
 
-1. **Auto-detect your LLM provider** based on available API keys
-2. **Fall back to mock responses** if no API keys are configured
-3. **Handle rate limiting** gracefully with retries and fallbacks
-4. **Provide real-time interaction** through WebSockets
+1. **根据可用的 API 密钥自动检测你的 LLM 提供商**
+2. 如果未配置 API 密钥，则**回退到模拟响应（mock responses）**
+3. 通过**重试与回退**来优雅地处理**限流（rate limiting）**
+4. 通过 **WebSockets** 提供**实时交互**
 
-## Deploy your application to the cloud
+## 将你的应用部署到云端
 
-Now that you have your working LLM chat application, you can deploy it to the
-cloud with Deno Deploy.
+现在你已经拥有一个可工作的 LLM 聊天应用，你可以使用 Deno Deploy 将它部署到云端。
 
-For the best experience, you can deploy your app directly from GitHub, which
-will set up automated deployments. Create a GitHub repository and push your app
-there.
+为了获得最佳体验，你可以直接从 GitHub 部署你的应用，这会设置自动化部署。创建一个 GitHub 仓库并把你的应用推送到那里。
 
-[Create a new GitHub repository](https://github.com/new), then initialize and
-push your app to GitHub:
+[创建一个新的 GitHub 仓库](https://github.com/new)，然后初始化并推送你的应用到 GitHub：
 
 ```sh
 git init -b main
@@ -924,30 +901,24 @@ git commit -am 'initial commit'
 git push -u origin main
 ```
 
-Once your app is on GitHub, you can
-[deploy it to Deno Deploy](https://console.deno.com/).
+当你的应用在 GitHub 上之后，你就可以
+[将其部署到 Deno Deploy](https://console.deno.com/)。
 
-Don't forget to add your `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` environment
-variables in the project "Settings".
+别忘了在项目的“Settings（设置）”中添加你的 `OPENAI_API_KEY` 或 `ANTHROPIC_API_KEY` 环境变量。
 
-For a walkthrough of deploying your app, check out the
-[Deno Deploy tutorial](/examples/deno_deploy_tutorial/).
+要了解部署应用的演示，请查看
+[Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
 
-## Testing
+## 测试
 
-We've provided tests to verify your setup, copy the
+我们提供了测试来验证你的设置。将
 [`main.test.ts`](https://github.com/denoland/tutorial-with-llm/blob/main/tests/main.test.ts)
-file to your project directory and run the included tests to verify your setup:
+文件复制到你的项目目录，并运行包含的测试来验证你的设置：
 
 ```bash
 deno task test
 ```
 
-🦕 You now have a working LLM chat application, with realtime interaction, rate
-limiting and error handling. Next you can customise it to your own play style!
-Consider giving the LLM instructions on how to behave in different scenarios, or
-how to respond to specific user inputs. You can add these into the character
-configuration files.
+🦕 现在你有了一个可运行的 LLM 聊天应用，具备实时交互、限流与错误处理。接下来你可以根据自己的游戏风格对它进行定制！考虑给 LLM 提供关于如何在不同场景下行动的指令，或如何回应特定的用户输入。你可以把这些添加到角色配置文件中。
 
-You could also consider adding a database to store the conversation history for
-long-term character and story development.
+你也可以考虑添加一个数据库，用于存储对话历史，从而支持长期的角色和故事发展。

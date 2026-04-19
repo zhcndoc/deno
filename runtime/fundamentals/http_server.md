@@ -1,6 +1,7 @@
 ---
-title: "编写 HTTP 服务器"
-description: "一份在 Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流以及如何构建具备自动压缩功能的生产级 HTTP/HTTPS 服务器。"
+last_modified: 2025-09-10
+title: "编写一个 HTTP 服务器"
+description: "在 Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流式传输，以及如何构建具备自动压缩能力、可用于生产的 HTTP/HTTPS 服务器。"
 oldUrl:
   - /runtime/manual/runtime/http_server_apis/
   - /runtime/manual/examples/http_server/
@@ -9,7 +10,7 @@ oldUrl:
 
 HTTP 服务器是网络的支柱，使您能够访问网站、下载文件和与网络服务交互。它们监听来自客户端（例如网页浏览器）的传入请求并发送响应。
 
-当您构建自己的 HTTP 服务器时，您可以完全控制它的行为，并根据您的特定需求进行调整。您可能会将其用于本地开发，以提供 HTML、CSS 和 JS 文件，或者构建 REST API - 拥有自己的服务器使您能够定义端点、处理请求和管理数据。
+当您构建自己的 HTTP 服务器时，您可以完全控制它的行为，并根据您的特定需求进行调整。您可能会将其用于本地开发，以提供 HTML、CSS 和 JS 文件，或者构建 REST API —— 拥有自己的服务器使您能够定义端点、处理请求和管理数据。
 
 ## Deno 的内置 HTTP 服务器
 

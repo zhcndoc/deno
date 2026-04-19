@@ -1,8 +1,9 @@
 ---
+last_modified: 2026-03-19
 title: "环境变量"
 ---
 
-:::warning Sunsetting on July 20, 2026
+:::warning 于 2026 年 7 月 20 日停止服务
 
 Deno Deploy Classic 将于 2026 年 7 月 20 日关闭。我们建议迁移到新的 <a href="/deploy/">Deno Deploy</a> 平台。详情请参阅 <a href="/deploy/migration_guide/">迁移指南</a>。
 

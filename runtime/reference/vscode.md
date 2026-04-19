@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-08-20
 title: "Deno & Visual Studio Code"
 description: "使用 Visual Studio Code 和 Deno 的完整指南。了解扩展设置、工作区配置、调试、测试、任务自动化以及面向 Deno 开发的高级 IDE 功能。"
 oldUrl:

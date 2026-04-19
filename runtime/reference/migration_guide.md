@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-11-03
 title: "Deno 1.x 到 2.x 迁移指南"
-description: "从 Deno 1.x 迁移到 2.x 的全面指南。了解破坏性更改、API 更新、Node.js 兼容功能，以及如何更新代码库以适配 Deno 2.x。"
+description: "从 Deno 1.x 迁移到 2.x 的全面指南。了解破坏性变更、API 更新、Node.js 兼容性功能，以及如何更新你的代码库以适配 Deno 2.x。"
 oldUrl:
   - /runtime/manual/advanced/migrate_deprecations/
   - /runtime/reference/migrate_deprecations/
@@ -1272,7 +1273,7 @@ using listener = Deno.listenTls({
 + writeAllSync(Deno.stdout, data);
 ```
 
-有关详细信息，请参阅 [deno#9795][deno#9795]。
+有关详细信息，请参见 [deno#9795][deno#9795]。
 
 - `Deno.writeAll()`
 
@@ -1287,7 +1288,7 @@ using listener = Deno.listenTls({
 + await writeAll(Deno.stdout, data);
 ```
 
-有关详细信息，请参阅 [deno#9795][deno#9795]。
+有关详细信息，请参见 [deno#9795][deno#9795]。
 
 - `Deno.Writer`
 
@@ -1302,7 +1303,7 @@ using listener = Deno.listenTls({
 }
 ```
 
-有关详细信息，请参阅 [deno#9795][deno#9795]。
+有关详细信息，请参见 [deno#9795][deno#9795]。
 
 - `Deno.WriterSync`
 
@@ -1317,7 +1318,7 @@ using listener = Deno.listenTls({
 }
 ```
 
-有关详细信息，请参阅 [deno#9795][deno#9795]。
+有关详细信息，请参见 [deno#9795][deno#9795]。
 
 - `Deno.writeSync()`
 

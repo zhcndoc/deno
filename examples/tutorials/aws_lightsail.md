@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-08-20
 title: 将 Deno 部署到 Amazon Lightsail
-description: "Step-by-step tutorial on deploying Deno applications to AWS Lightsail. Learn about Docker containers, GitHub Actions automation, continuous deployment, and how to set up cost-effective cloud hosting for Deno apps."
+description: "关于将 Deno 应用部署到 AWS Lightsail 的逐步教程。了解 Docker 容器、GitHub Actions 自动化、持续部署，以及如何为 Deno 应用设置具有成本效益的云托管。"
 url: /examples/aws_lightsail_tutorial/
 oldUrl:
   - /runtime/manual/advanced/deploying_deno/aws_lightsail/
@@ -175,7 +176,7 @@ docker push {{ username }}/deno-on-aws-lightsail
 让我们将以下内容添加到 `.github/workflows/deploy.yml` 文件中：
 
 ```yml
-name: Build and Deploy to AWS Lightsail
+name: 构建并部署到 AWS Lightsail
 
 on:
   push:
@@ -187,17 +188,17 @@ env:
   AWS_LIGHTSAIL_SERVICE_NAME: container-service-2
 jobs:
   build_and_deploy:
-    name: Build and Deploy
+    name: 构建并部署
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
+      - name: 检出 main
         uses: actions/checkout@v4
 
-      - name: Install Utilities
+      - name: 安装实用工具
         run: |
           sudo apt-get update
           sudo apt-get install -y jq unzip
-      - name: Install AWS Client
+      - name: 安装 AWS 客户端
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
@@ -206,15 +207,15 @@ jobs:
           curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "lightsailctl"
           sudo mv "lightsailctl" "/usr/local/bin/lightsailctl"
           sudo chmod +x /usr/local/bin/lightsailctl
-      - name: Configure AWS credentials
+      - name: 配置 AWS 凭据
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Build Docker Image
+      - name: 构建 Docker 镜像
         run: docker build -t ${{ env.AWS_LIGHTSAIL_SERVICE_NAME }}:release .
-      - name: Push and Deploy
+      - name: 推送并部署
         run: |
           service_name=${{ env.AWS_LIGHTSAIL_SERVICE_NAME }}
           aws lightsail push-container-image \

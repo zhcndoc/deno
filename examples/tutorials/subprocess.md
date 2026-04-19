@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-09
 title: "创建子进程"
-description: "在 Deno 中使用子进程的指南。学习如何启动进程、处理输入/输出流、管理进程生命周期，以及安全实现进程间通信模式。"
+description: "Deno 中使用子进程的指南。了解如何生成进程、处理输入/输出流、管理进程生命周期，并安全地实现进程间通信模式。"
 url: /examples/subprocess_tutorial/
 oldUrl:
   - /runtime/manual/examples/subprocess/

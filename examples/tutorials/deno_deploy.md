@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-10-07
 title: "使用 Deno Deploy 部署应用"
-description: "一步步指导你将第一个 Deno 应用部署到 Deno Deploy 早期访问。"
+description: "一步一步教程：将你的第一个 Deno 应用部署到 Deno Deploy。"
 url: /examples/deno_deploy_tutorial/
 ---
 

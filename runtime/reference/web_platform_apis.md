@@ -1,5 +1,6 @@
 ---
-title: "Web Platform APIs"
+last_modified: 2025-05-09
+title: "Web 平台 API"
 description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、worker、存储以及其他 Web 标准 API，包括实现细节和与浏览器规范的偏差。"
 oldUrl:
   - /runtime/manual/runtime/navigator_api/
@@ -139,7 +140,7 @@ location.pathname = "./foo";
 // deno run --location https://api.github.com/ --allow-net main.ts
 
 const response = await fetch("./orgs/denoland");
-// Fetches "https://api.github.com/orgs/denoland".
+// 获取 "https://api.github.com/orgs/denoland"。
 ```
 
 如果没有传递 `--location` 标志，上面的 `fetch()` 调用将抛出错误，因为没有可以基于的 Web 类似位置。
@@ -150,7 +151,7 @@ const response = await fetch("./orgs/denoland");
 // deno run --location https://example.com/index.html --allow-net main.ts
 
 const worker = new Worker("./workers/hello.ts", { type: "module" });
-// Fetches worker module at "https://example.com/workers/hello.ts".
+// 在 "https://example.com/workers/hello.ts" 获取 worker 模块。
 ```
 
 :::note

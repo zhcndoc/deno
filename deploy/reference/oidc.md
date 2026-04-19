@@ -1,4 +1,5 @@
 ---
+last_modified: 2025-10-07
 title: OIDC
 description: Deno Deploy 运行时环境充当 OpenID Connect (OIDC) 提供者，使您能够与支持 OIDC 认证的第三方服务集成。
 ---

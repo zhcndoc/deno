@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-10-27
 title: "TypeScript 支持"
-description: "了解如何在 Deno 中使用 TypeScript。涵盖配置选项、类型检查以及编写类型安全 Deno 应用的最佳实践。"
+description: "了解如何在 Deno 中使用 TypeScript。涵盖配置选项、类型检查以及编写类型安全的 Deno 应用的最佳实践。"
 oldUrl:
   - /runtime/manual/advanced/typescript/
   - /runtime/manual/typescript/

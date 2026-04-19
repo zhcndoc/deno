@@ -1,5 +1,6 @@
 ---
-title: "在 TypeScript 中的数据建模"
+last_modified: 2025-10-07
+title: "TypeScript 中的数据建模"
 oldUrl:
   - /kv/manual/data_modeling_typescript/
   - /deploy/kv/manual/data_modeling_typescript/

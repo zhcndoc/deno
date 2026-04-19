@@ -1,6 +1,7 @@
 ---
-title: "打包"
-description: "`deno bundle` 子命令的概述，可用于生成一个单文件应用程序，由多个源文件创建以实现优化执行。"
+last_modified: 2025-09-11
+title: "Bundling"
+description: "`deno bundle` 子命令概览。可用于将多个源文件创建为单个文件应用，以实现优化执行。"
 ---
 
 :::caution

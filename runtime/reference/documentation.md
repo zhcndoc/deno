@@ -1,6 +1,7 @@
 ---
+last_modified: 2025-06-19
 title: "Documentation Tests"
-description: "Learn how to write and run documentation tests in Deno. This guide covers how to create testable code examples in documentation comments, type-checking documentation, and running doc tests with the Deno test runner."
+description: "了解如何在 Deno 中编写和运行文档测试。本指南涵盖如何在文档注释中创建可测试的代码示例、对文档进行类型检查，以及使用 Deno 测试运行器运行 doc tests。"
 oldUrl: /runtime/manual/testing/documentation/
 ---
 
@@ -49,7 +50,7 @@ Deno 支持对文档示例进行类型检查和评估。
 
 如果这个示例在一个名为 foo.ts 的文件中，运行 `deno test --doc foo.ts` 将提取这个示例，然后对其进行类型检查和评估，作为一个独立的模块，位于与正在文档化的模块相同的目录中。
 
-要文档化你的导出，请使用相对路径说明符导入模块：
+要对导出进行文档化，请使用相对路径说明符导入模块：
 
 ````ts
 /**

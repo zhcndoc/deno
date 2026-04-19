@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-12
 title: "deno info"
 oldUrl:
   - /runtime/manual/tools/dependency_inspector/
@@ -11,7 +12,7 @@ description: "检查项目的依赖"
 ---
 
 `deno info` 会显示一个模块依赖树的信息。有关 Deno 如何解析和缓存依赖的更多内容，请参见
-[Modules](/runtime/fundamentals/modules/)。
+[模块](/runtime/fundamentals/modules/)。
 
 ## 示例
 
@@ -90,7 +91,7 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 │ │   └── https://jsr.io/@std/media-types/1.0.2/_util.ts *
 │ ├─┬ https://jsr.io/@std/media-types/1.0.2/format_media_type.ts (2.45KB)
 │ │ └── https://jsr.io/@std/media-types/1.0.2/_util.ts *
-│ ├── https://jsr.io/@std/media-types/1.0.2/_db.ts *
+│ ├─┬ https://jsr.io/@std/media-types/1.0.2/_db.ts *
 │ └─┬ https://jsr.io/@std/media-types/1.0.2/type_by_extension.ts (1.15KB)
 │   └── https://jsr.io/@std/media-types/1.0.2/_db.ts *
 ├─┬ https://jsr.io/@std/http/1.0.0-rc.5/etag.ts (6.46KB)

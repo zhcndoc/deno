@@ -1,10 +1,11 @@
 ---
-title: "Where to get help"
-description: "Guide to getting help with Deno. Find community resources, support channels, discussion forums, and how to engage with the Deno community for troubleshooting and assistance."
+last_modified: 2025-06-19
+title: "去哪里获取帮助"
+description: "关于如何在 Deno 中获得帮助的指南。查找社区资源、支持渠道、讨论论坛，以及如何与 Deno 社区互动以进行故障排查和获取协助。"
 oldUrl: /runtime/manual/help/
 ---
 
-Stuck? Lost? Get Help from the Deno Community.
+卡住了？迷路了？从 Deno 社区获取帮助。
 
 ## [社区 Discord](https://discord.gg/deno)
 
@@ -12,7 +13,7 @@ Stuck? Lost? Get Help from the Deno Community.
 
 ## [Stack Overflow](https://stackoverflow.com/questions/tagged/deno)
 
-Stack Overflow 是一个流行的论坛，可以询问代码相关的问题或如果你在特定错误上遇到困难。
+Stack Overflow 是一个流行的论坛，可以询问代码相关的问题，或如果你在特定错误上遇到困难。
 [问你自己的问题！](https://stackoverflow.com/questions/ask?tags=deno)
 
 ## [DEV 的 Deno 社区](https://dev.to/t/deno)

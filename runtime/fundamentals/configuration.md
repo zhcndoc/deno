@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-09
 title: "deno.json 和 package.json"
-description: "配置您的 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查以及如何有效使用 deno.json 和/或 package.json。"
+description: "配置 Deno 项目的指南。了解 TypeScript 设置、任务、依赖项、格式化、代码检查，以及如何有效地使用 deno.json 和/或 package.json。"
 oldUrl:
   - /runtime/manual/getting_started/configuration_file/
   - /runtime/manual/basics/modules/import_maps/
@@ -452,22 +453,17 @@ import * as module_2 from "@example/my-package/module2";
 
 ## 权限
 
-Deno 2.5+ supports storing
-[permission](/runtime/fundamentals/security/#permissions) sets in the config
-file.
+Deno 2.5+ 支持在配置文件中存储
+[权限](/runtime/fundamentals/security/#permissions) 设置。
 
 ### 命名权限
 
-Permissions can be defined as key-value pairs under arbitrarily-named permission
-sets under the `"permissions"` key. Within each set,
+权限可以定义为 `"permissions"` 键下任意命名的权限集中的键值对。在每个权限集中，
 
-- the key is the name of a
-  [permission](/runtime/fundamentals/security/#permissions) that would follow
-  `--allow-` or `--deny-` in the CLI invocation (i.e. `read`, `write`, `net`,
-  `env`, `sys`, `run`, `ffi`, `import`)
-- the value is a boolean (`true` / `false` correspond to allow / deny), an array
-  of strings representing paths, domains etc., or an object with `allow`,
-  `deny`, and/or `ignore` boolean key-value pairs.
+- 该键是一个
+  [权限](/runtime/fundamentals/security/#permissions)，它在命令行调用中会跟在 `--allow-` 或 `--deny-` 后面（即 `read`, `write`, `net`,
+  `env`, `sys`, `run`, `ffi`, `import`）
+- 该值是一个布尔值（`true` / `false` 对应允许 / 禁止），或者一个由字符串组成的数组，表示路径、域名等，或是一个对象，该对象包含 `allow`、`deny` 和/或 `ignore` 的布尔键值对。
 
 ```jsonc
 {
@@ -483,8 +479,8 @@ sets under the `"permissions"` key. Within each set,
 }
 ```
 
-Permission sets can be used by specifying the `--permission-set=<name>` or
-`-P=<name>` flag:
+可以通过指定 `--permission-set=<name>` 或
+`-P=<name>` 标志来使用权限集：
 
 ```sh
 $ deno run -P=read-data main.ts
@@ -510,28 +506,26 @@ $ deno run -P=read-data main.ts
 $ deno run -P main.ts
 ```
 
-### Allow, deny, and ignore
+### Allow、deny 和 ignore
 
-For finer control over permissions, you can use the object form with `allow`,
-`deny`, and `ignore` keys. This is especially useful when you need more granular
-permission control than simple boolean or array values provide.
+为了对权限进行更精细的控制，你可以使用带有 `allow`、`deny` 和 `ignore` 键的对象形式。这在你需要比简单布尔值或数组值提供的更细粒度权限控制时尤其有用。
 
-#### Object form syntax
+#### 对象形式语法
 
-Instead of specifying a permission as a boolean or array:
+与将权限指定为布尔值或数组不同：
 
 ```jsonc
 {
   "permissions": {
     "default": {
-      "read": true, // Simple boolean form
-      "write": ["./data"] // Simple array form
+      "read": true, // 简单布尔形式
+      "write": ["./data"] // 简单数组形式
     }
   }
 }
 ```
 
-You can use the object form:
+你可以使用对象形式：
 
 ```jsonc
 {
@@ -551,48 +545,41 @@ You can use the object form:
 }
 ```
 
-#### Available permissions
+#### 可用权限
 
-The `allow`, `deny`, and `ignore` keys work differently depending on the
-permission type:
+`allow`、`deny` 和 `ignore` 键的工作方式会根据权限类型而有所不同：
 
-- **`read` and `env`**: Support `allow`, `deny`, and `ignore`
-- **`write`, `net`, `run`, `ffi`, `sys`, and `import`**: Support `allow` and
-  `deny` (but not `ignore`)
+- **`read` 和 `env`**：支持 `allow`、`deny` 和 `ignore`
+- **`write`、`net`、`run`、`ffi`、`sys` 和 `import`**：支持 `allow` 和
+  `deny`（但不支持 `ignore`）
 
-#### Behavior
+#### 行为
 
-- **`allow`**: Explicitly grant access to specific resources. Can be `true` (to
-  allow all), `false` (to allow none), or an array of specific paths/values to
-  allow.
-- **`deny`**: Explicitly deny access (throw
-  [PermissionDenied](https://docs.deno.com/api/deno/~/Deno.errors.PermissionDenied))
-  to specific resources, even if they would otherwise be allowed. Can be `true`
-  (to deny all), `false` (to deny none), or an array of specific paths/values to
-  deny.
-- **`ignore`**: (Only for `read` and `env` permissions) Silently ignore access
-  attempts to specific resources without throwing errors. Can be `true`,
-  `false`, or an array of specific paths/values to ignore.
+- **`allow`**：明确授予对特定资源的访问权限。可以是 `true`（允许全部）、`false`（允许 none），或一个包含要允许的特定路径/值的数组。
+- **`deny`**：明确拒绝对特定资源的访问（即使它们本来会被允许，也会抛出
+  [PermissionDenied](https://docs.deno.com/api/deno/~/Deno.errors.PermissionDenied)）。
+  可以是 `true`（拒绝全部）、`false`（拒绝 none），或一个包含要拒绝的特定路径/值的数组。
+- **`ignore`**：仅适用于 `read` 和 `env` 权限。对特定资源的访问尝试会被静默忽略，不会抛出错误。可以是 `true`、`false`，或一个包含要忽略的特定路径/值的数组。
 
-#### Example
+#### 示例
 
 ```jsonc
 {
   "permissions": {
     "default": {
-      // Allow reading from data directory, but deny access to secrets
-      // and silently ignore cache files
+      // 允许从 data 目录读取，但拒绝访问 secrets
+      // 并且静默忽略 cache 文件
       "read": {
         "allow": ["./data"],
         "deny": ["./data/secrets"],
         "ignore": ["./data/cache"]
       },
-      // Allow all environment variables except API keys
+      // 允许所有环境变量，除了 API keys
       "env": {
         "allow": true,
         "ignore": ["API_KEY", "SECRET_TOKEN"]
       },
-      // Allow all, but deny 'rm', 'sudo'
+      // 允许所有，但拒绝 'rm'、'sudo'
       "run": {
         "allow": true,
         "deny": ["rm", "sudo"]
@@ -602,7 +589,7 @@ permission type:
 }
 ```
 
-### Test, bench, and compile permissions
+### 测试、基准和编译权限
 
 权限可以选择性地在 `"test"`、`"bench"` 或 `"compile"` 键中指定。
 
