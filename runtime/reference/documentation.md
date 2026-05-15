@@ -1,6 +1,6 @@
 ---
 last_modified: 2025-06-19
-title: "Documentation Tests"
+title: "文档测试"
 description: "了解如何在 Deno 中编写和运行文档测试。本指南涵盖如何在文档注释中创建可测试的代码示例、对文档进行类型检查，以及使用 Deno 测试运行器运行 doc tests。"
 oldUrl: /runtime/manual/testing/documentation/
 ---
@@ -36,7 +36,8 @@ Deno 支持对文档示例进行类型检查和评估。
 
 如果未指定语言标识符，则语言从提取代码块的源文档的媒体类型推断。
 
-另一个支持的属性是 `ignore`，它告诉测试运行器跳过对代码块的类型检查。
+另一个支持的属性是 `ignore`，它告诉测试运行器跳过
+该代码块的评估和类型检查。
 
 ````ts
 /**

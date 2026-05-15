@@ -160,7 +160,7 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 
 ## `--unstable-cron`
 
-启用此标志将使 [`Deno.cron`](/deploy/kv/manual/cron) API 可用于 `Deno` 命名空间。
+启用此标志后，[`Deno.cron`](/runtime/fundamentals/cron/) API 将可在 `Deno` 命名空间中使用。
 
 ## `--unstable-kv`
 

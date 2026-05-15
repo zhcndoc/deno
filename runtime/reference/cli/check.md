@@ -25,6 +25,30 @@ deno check main.ts
 deno check src/server.ts src/utils.ts
 ```
 
+## 范围与排除文件
+
+你可以将目录或 glob 作为位置参数传入，一次性对整个
+目录树进行类型检查：
+
+```sh
+deno check src/
+deno check "src/**/*.ts"
+```
+
+要跳过文件或目录，请在 `deno.json` 中使用顶层的 `exclude` 字段。
+它会与 `deno check` 以及其他子命令（如 `deno fmt` 和
+`deno lint`）一起生效：
+
+```jsonc title="deno.json"
+{
+  "exclude": ["dist/", "vendor/", "**/*.generated.ts"]
+}
+```
+
+请参阅配置参考中的
+[include and exclude](/runtime/fundamentals/configuration/#include-and-exclude)，
+了解完整的 glob 语法，包括如何取消排除某个子路径。
+
 ## 对远程模块进行类型检查
 
 默认情况下，只会对本地模块进行类型检查。使用 `--all` 也可以对

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-07-11
+last_modified: 2026-05-14
 title: "使用 deno doc 生成文档"
-description: "了解如何使用内置的 deno doc 命令为 Deno 项目生成专业文档。本教程涵盖 JSDoc 注释、HTML 输出、代码检查以及为代码编写文档的最佳实践。"
+description: "了解如何使用内置的 deno doc 命令为您的 Deno 项目生成专业文档。本教程涵盖 JSDoc 注释、HTML 输出、lint 检查以及文档编写最佳实践。"
 url: /examples/deno_doc_tutorial/
 ---
 
@@ -165,7 +165,7 @@ deno doc math.ts
 deno doc --html --name="数学工具" math.ts
 ```
 
-这将在 `./docs/` 目录生成静态网站。该站点包括：
+这将在您的 `./docs/` 目录生成静态网站。该站点包括：
 
 - 可搜索的界面
 - 语法高亮
@@ -186,11 +186,13 @@ deno doc --html --name="数学工具" --output=./documentation/ math.ts
 deno doc --lint math.ts
 ```
 
-它会报告多种问题：
+linter 会报告三类问题，每类问题都有一个命名的错误代码，方便您
+使用 grep 搜索或在工具中筛选：
 
-1. 导出函数、类或接口缺少 JSDoc 注释
-2. 函数缺少返回类型注释
-3. 导出符号引用了未导出的类型
+- `missing-jsdoc` — 导出的符号没有 JSDoc 注释。
+- `missing-return-type` — 导出的函数没有显式返回类型
+  注解。
+- `private-type-ref` — 公共导出引用了一个本身未导出的类型，因此使用者无法命名它。
 
 我们创建一个带有一些文档问题的文件，来查看 linter 的表现：
 
@@ -210,7 +212,41 @@ export function anotherFunction(param: InternalType) {
 }
 ```
 
-运行 `deno doc --lint bad_example.ts` 会显示这些问题的错误。
+运行 `deno doc --lint bad_example.ts` 会产生如下输出：
+
+```console
+error[missing-jsdoc]: 导出的符号缺少 JSDoc 文档
+ --> /work/bad_example.ts:2:1
+  |
+2 | export function badFunction(x) {
+  | ^
+
+
+error[missing-return-type]: 导出的函数缺少显式返回类型注解
+ --> /work/bad_example.ts:2:1
+  |
+2 | export function badFunction(x) {
+  | ^
+
+
+error[private-type-ref]: 公共类型 'anotherFunction' 引用了私有类型 'InternalType'
+  --> /work/bad_example.ts:11:1
+   |
+11 | export function anotherFunction(param: InternalType) {
+   | ^
+   = 提示：请将所引用的类型设为 public，或移除该引用
+   |
+ 6 | interface InternalType {
+   | - 这是被引用的类型
+   |
+
+  info: 为确保文档完整，公共 API 中暴露的所有类型都必须是 public
+
+
+error: 发现 5 个文档 lint 错误。
+```
+
+每条诊断都会指出触发它的确切行，而 `private-type-ref` 错误还会额外强调有问题的类型定义。当 `--lint` 找到任何错误时，命令会以非零状态码退出，这使得它可以安全地放入 CI 步骤或 `deno task doc:lint` 条目中——如果未来的更改新增了未文档化的导出，构建将明确失败。
 
 ## 同时处理多个文件
 

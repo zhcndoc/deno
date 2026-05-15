@@ -14,7 +14,7 @@ JavaScript 文件。
 ## 基本用法
 
 ```sh
-deno bundle main.ts output.js
+deno bundle -o output.js main.ts
 ```
 
 然后可以使用 Deno 或其他 JavaScript 运行时来运行输出文件：

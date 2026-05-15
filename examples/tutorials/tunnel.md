@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-03-24
-title: "使用 Tunnel 共享你的本地服务器"
-description: "通过 --tunnel 选项立即公开一个公共 URL"
+last_modified: 2026-05-14
+title: "通过 Tunnel 共享你的本地服务器"
+description: "使用 --tunnel 选项即时暴露一个公共 URL"
 url: /examples/tunnel_tutorial/
 ---
 
@@ -62,28 +62,32 @@ deno deploy
 
 ## 通过隧道连接到你的本地服务器
 
-隧道功能内置于 Deno CLI 中。它启用了一些 Deno Deploy 的强大功能，但作用于你的本地服务器！
+`--tunnel` 标志内置于 Deno CLI 中。它会从一个公共的 Deno Deploy URL 打开一条安全的 HTTPS 隧道到你本地机器上运行的服务器，因此请求会像发送到已部署应用一样到达你的本地进程。公共 URL 绑定到你在上一步创建的 Deploy 项目；每次重新启动隧道时它都保持不变，这使得你可以安全地将它粘贴到 webhook 配置中，或与同事共享，而无需在每次会话时提供一个新的 URL。
 
-要启动隧道连接到本地服务器，在项目目录下运行：
+`--tunnel` 可用于任何运行长时间服务的子命令，因此你可以将它与 `deno run`、`deno task` 或 `deno serve` 配合使用。在本教程中，我们将为 Svelte 的 `dev` 任务建立隧道：
 
 ```sh
 deno run --tunnel dev
 ```
 
-如果被重定向到浏览器，请使用你的 Deno Deploy 账户进行身份验证。
+第一次运行时，浏览器会打开，以便你使用 Deno Deploy 账户进行身份验证；后续运行会复用缓存的凭据。几分钟后，你应该会看到类似如下的输出：
 
-该命令会启动本地服务器并创建一个到它的安全隧道。几秒钟后，你应看到如下输出：
-
-```sh
+```console
   ➜  Local:   http://localhost:5173/
   ➜  Network: use --host to expose
   ➜  press h + enter to show help
 You are connected to https://my-app-name.myusername.deno.net
 ```
 
-该公共 URL（示例中为 `https://my-app-name.myusername.deno.net`）现在可以从互联网上任何地方访问！你可以将此 URL 分享给他人访问你的本地 Svelte 应用，（类似于 ngrok 或其他隧道服务）。
+现在，这个公共 URL（本例中的 `https://my-app-name.myusername.deno.net`）可以从互联网上任何地方访问：你可以把它分享给同事，指向一个 webhook，或者在另一网络下用手机打开它来测试移动端布局。你对本地代码所做的更改会实时反映到公共 URL 上，就像本地开发一样。
 
-你可以照常修改本地代码，修改内容将实时反映在公共 URL 上。
+要停止隧道，请在终端中按 `Ctrl+C`。公共 URL 会离线，直到你再次启动隧道。Deno Deploy 上该项目的已部署版本不会受到影响，`--tunnel` 只会在本地命令运行期间转发流量。
+
+:::tip
+
+如果你想暴露不同的本地端口（例如运行在 `localhost:8000` 的后端，而不是 Vite 开发服务器），可以针对监听该端口的文件运行 `deno serve --tunnel`。隧道总是会转发到 Deno 命令启动的那个服务器。
+
+:::
 
 ## 配置环境变量
 

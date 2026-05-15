@@ -26,8 +26,8 @@ const client = new Client();
 
 const volume = await client.volumes.create({
   slug: "training-cache",
-  region: "ord", // ord（芝加哥）或 ams（阿姆斯特丹）
-  capacity: "2GB", // 接受字节数或 "1GB"/"512MB" 等样式的字符串
+  region: "ord", // 今天仅支持 "ord"（芝加哥）
+  capacity: "2GB", // 接受字节数或 "1GB"/"512MB" 之类的字符串
 });
 
 console.log(volume);
@@ -50,8 +50,8 @@ sdk = DenoDeploy()
 
 volume = sdk.volumes.create(
   slug="training-cache",
-  region="ord",  # ord (芝加哥) 或 ams (阿姆斯特丹)
-  capacity="2GB"  # 接受字节数或 "1GB"/"512MB" 样式的字符串
+  region="ord",  # 今天仅支持 "ord"（芝加哥）
+  capacity="2GB"  # 接受字节数或 "1GB"/"512MB" 之类的字符串
 )
 
 print(volume)
@@ -74,8 +74,8 @@ sdk = AsyncDenoDeploy()
 
 volume = await sdk.volumes.create(
   slug="training-cache",
-  region="ord",  # ord (芝加哥) 或 ams (阿姆斯特丹)
-  capacity="2GB"  # 接受字节数或 "1GB"/"512MB" 样式的字符串
+  region="ord",  # 今天仅支持 "ord"（芝加哥）
+  capacity="2GB"  # 接受字节数或 "1GB"/"512MB" 之类的字符串
 )
 
 print(volume)
@@ -91,11 +91,11 @@ print(volume)
 </deno-tab>
 </deno-tabs>
 
-| 字段       | 是否必需 | 详情                                                                                                           |
-| ---------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `slug`     | ✅       | 在组织内唯一。Slug 会成为挂载元数据的一部分，请选择描述性强的名称。                                            |
-| `region`   | ✅       | 必须匹配可用的沙箱区域（目前为 `"ord"` 或 `"ams"`）。只有同一区域的沙箱才能挂载该卷。                           |
-| `capacity` | ✅       | 介于 300 MB 和 20 GB 之间。支持字节数，或带有 `GB`/`MB`/`KB`（十进制）或 `GiB`/`MiB`/`KiB`（二进制）单位的字符串。 |
+| Field      | Required | Details                                                                                                                 |
+| ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `slug`     | ✅       | 每个组织内唯一。slug 会成为挂载元数据的一部分，因此请选择有描述性的名称。                                              |
+| `region`   | ✅       | 目前仅支持 `"ord"`（芝加哥）。只有同一区域中的沙箱才能挂载该卷。                                                        |
+| `capacity` | ✅       | 介于 300 MB 和 20 GB 之间。传入字节数，或带有 `GB/MB/KB`（十进制）或 `GiB/MiB/KiB`（二进制）单位的字符串。 |
 
 ## 检查和搜索卷
 

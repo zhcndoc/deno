@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-02-03
+last_modified: 2026-05-13
 title: "行为驱动开发（BDD）"
-description: "使用 Deno 标准库的 BDD 模块实现行为驱动开发。创建可读、组织良好的测试，并使用有效的断言。"
+description: "使用 Deno 标准库的 BDD 模块实现行为驱动开发。创建可读性高、组织良好的测试，并使用有效的断言。"
 url: /examples/bdd_tutorial/
 ---
 
@@ -244,36 +244,73 @@ BDD 模块提供了四个钩子：
 - 设置和拆除数据库连接
 - 创建和清理共享资源
 
-以下是如何使用 `beforeAll` 和 `afterAll` 的示例：
+下面是一个可运行的示例，用于测试一个小型 HTTP 服务。每个测试都启动和关闭一次服务器会很浪费——而且当测试案例变多时会很慢——因此服务器会在 `beforeAll` 中启动一次，并在 `afterAll` 中关闭一次：
 
-```ts
-describe("数据库操作", () => {
-  let db: Database;
+```ts title="user_api_test.ts"
+import { afterAll, beforeAll, describe, it } from "jsr:@std/testing/bdd";
+import { assertEquals } from "jsr:@std/assert";
 
-  beforeAll(async () => {
-    // 在所有测试之前一次连接到数据库
-    db = await Database.connect(TEST_CONNECTION_STRING);
-    await db.migrate();
+describe("用户 API", () => {
+  let server: Deno.HttpServer;
+  let baseUrl: string;
+
+  beforeAll(() => {
+    // 在任何测试运行之前先启动一次测试服务器。端口 0 会向
+    // 操作系统请求一个可用端口，因此并行测试文件不会冲突。
+    server = Deno.serve({ port: 0, onListen() {} }, (req) => {
+      const { pathname } = new URL(req.url);
+      if (pathname === "/users/1") {
+        return Response.json({ id: 1, name: "Ada" });
+      }
+      return new Response("Not Found", { status: 404 });
+    });
+    const { port } = server.addr as Deno.NetAddr;
+    baseUrl = `http://localhost:${port}`;
   });
 
   afterAll(async () => {
-    // 在所有测试完成后断开连接
-    await db.close();
+    // 在所有测试运行完之后关闭服务器一次。若没有
+    // 这样做，`deno test` 会报告资源泄漏。
+    await server.shutdown();
   });
 
-  it("应插入一条记录", async () => {
-    const result = await db.insert({ name: "测试" });
-    assertEquals(result.success, true);
+  it("返回已知用户", async () => {
+    const res = await fetch(`${baseUrl}/users/1`);
+    assertEquals(res.status, 200);
+    assertEquals(await res.json(), { id: 1, name: "Ada" });
   });
 
-  it("应检索一条记录", async () => {
-    const record = await db.findById(1);
-    assertEquals(record.name, "测试");
+  it("对未知用户返回 404", async () => {
+    const res = await fetch(`${baseUrl}/users/999`);
+    assertEquals(res.status, 404);
+    await res.body?.cancel();
   });
 });
 ```
 
-## Gherkin 与 JavaScript 风格的 BDD
+服务器绑定到本地端口，因此测试需要网络权限才能访问自身：
+
+```sh
+deno test --allow-net=0.0.0.0,localhost user_api_test.ts
+```
+
+```console
+running 1 test from ./user_api_test.ts
+User API ...
+  returns a known user ... ok (4ms)
+  returns 404 for unknown users ... ok (1ms)
+User API ... ok (6ms)
+
+ok | 1 passed (2 steps) | 0 failed (11ms)
+```
+
+:::caution
+
+在 `beforeAll` 中创建的任何内容都会被该块中的每个测试共享。如果某个测试修改了这些共享状态——添加了一行、修改了一个字段、留下了已注册的处理程序——那么下一个测试开始时看到的就是修改后的状态，而不是原始状态。当测试需要干净的初始状态时，请在 `beforeEach` 中设置廉价的、按测试隔离的状态，只在 `beforeAll` 中保留昂贵的、主要只读的设置。
+
+:::
+
+## Gherkin 与 JavaScript 风格 BDD
 
 如果您熟悉 Cucumber 或其他 BDD 框架，您可能会期待使用 "Given-When-Then" 语句的 Gherkin 语法。
 

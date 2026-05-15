@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-10
+last_modified: 2026-05-14
 title: "编写测试"
-description: "学习测试设置和结构、断言、异步测试、模拟、测试夹具以及代码覆盖率等关键概念"
+description: "学习测试设置与结构、断言、异步测试、模拟、测试夹具以及代码覆盖率等关键概念"
 url: /examples/testing_tutorial/
 ---
 
@@ -348,10 +348,9 @@ Deno.test("异步测试示例", async () => {
 
 ### 测试异步函数
 
-当你测试返回 Promise 的函数时，你应该始终等待其结果：
+在测试返回 promise 的函数时，务必 `await` 结果。当函数调用像 `fetch` 或 `Deno.readTextFile` 这样的全局 API 时，不要直接重新赋值全局变量，而应使用来自 [`@std/testing/mock`](https://jsr.io/@std/testing/doc/mock/~) 的 stub。stub 会匹配真实签名（因此测试文件仍可通过类型检查），并结合 `using` 声明在测试作用域退出时恢复原始值——这样一个测试就不会污染下一个测试。
 
-```ts
-// async-function.ts
+```ts title="async_function.ts"
 export async function fetchUserData(userId: string) {
   const response = await fetch(`https://api.example.com/users/${userId}`);
   if (!response.ok) {
@@ -359,38 +358,67 @@ export async function fetchUserData(userId: string) {
   }
   return await response.json();
 }
+```
 
-// async-function_test.ts
+```ts title="async_function_test.ts"
 import { assertEquals, assertRejects } from "jsr:@std/assert";
-import { fetchUserData } from "./async-function.ts";
+import { stub } from "jsr:@std/testing/mock";
+import { fetchUserData } from "./async_function.ts";
 
-Deno.test("fetchUserData 成功", async () => {
-  // 为测试模拟 fetch 函数
-  globalThis.fetch = async (url: string) => {
-    const data = JSON.stringify({ id: "123", name: "Test User" });
-    return new Response(data, { status: 200 });
-  };
+Deno.test("fetchUserData success", async () => {
+  using _fetchStub = stub(
+    globalThis,
+    "fetch",
+    () =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({ id: "123", name: "Test User" }),
+          { status: 200 },
+        ),
+      ),
+  );
 
   const userData = await fetchUserData("123");
   assertEquals(userData.id, "123");
   assertEquals(userData.name, "Test User");
 });
 
-Deno.test("fetchUserData 失败", async () => {
-  // 模拟错误以模拟失败场景
-  globalThis.fetch = async (url: string) => {
-    return new Response("Not Found", { status: 404 });
-  };
+Deno.test("fetchUserData failure", async () => {
+  using _fetchStub = stub(
+    globalThis,
+    "fetch",
+    () => Promise.resolve(new Response("Not Found", { status: 404 })),
+  );
 
   await assertRejects(
-    async () => await fetchUserData("nonexistent"),
+    () => fetchUserData("nonexistent"),
     Error,
     "Failed to fetch user: 404",
   );
 });
 ```
 
-## 测试中的 Mock
+使用 `deno test async_function_test.ts` 运行该文件：
+
+```console
+running 2 tests from ./async_function_test.ts
+fetchUserData success ... ok (1ms)
+fetchUserData failure ... ok (0ms)
+
+ok | 2 passed | 0 failed (5ms)
+```
+
+:::tip
+
+为什么不直接写 `globalThis.fetch = async (url: string) => …`？有两个原因。
+首先，真实的 `fetch` 接受的是 `URL | RequestInfo`，而不仅仅是 `string`，所以这种赋值会导致类型检查失败。其次，普通赋值不会被撤销：同一文件中的后续测试（或者你的测试通过传递依赖导入的任何代码）都会继续看到这个 mock。`using` + `stub` 模式可以同时解决这两个问题。
+
+:::
+
+关于 spy、fake timer 以及更高级的模拟，请参阅
+[测试数据模拟](/examples/mocking_tutorial/)。
+
+## Mocking in tests
 
 Mock 是一种用于将被测代码与其依赖隔离开来的关键技术。Deno 提供内置工具以及第三方库来创建 mock。
 

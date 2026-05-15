@@ -15,7 +15,9 @@ description: "从模板包搭建一个新项目"
 deno create [OPTIONS] [PACKAGE] [-- [ARGS]...]
 ```
 
-默认情况下，未加前缀的包名会从 JSR 解析。你可以使用 `npm:` 或 `jsr:` 前缀来明确指定，也可以使用 `--npm` / `--jsr` 标志。
+`[PACKAGE]` 参数要求使用 `jsr:` 或 `npm:` 前缀之一，或者使用
+`--jsr` / `--npm` 标志之一。未加前缀的包名会报错：
+`Missing 'jsr:' or 'npm:' prefix.`
 
 ## 工作原理
 
@@ -38,14 +40,15 @@ npm 和 JSR 的包解析方式不同：
 }
 ```
 
-当你运行 `deno create @my-scope/my-template` 时，Deno 会查找 `./create` 导出并作为脚手架脚本执行。
+当你运行 `deno create jsr:@my-scope/my-template` 时，Deno 会查找
+`./create` 导出并将其作为脚手架脚本运行。
 
 ## 示例
 
 从 JSR 包创建项目：
 
 ```sh
-deno create @fresh/init
+deno create jsr:@fresh/init
 ```
 
 从 npm 包创建项目：
@@ -63,11 +66,11 @@ deno create --npm create-vite my-app
 向模板包传递参数：
 
 ```sh
-deno create @fresh/init -- --force
+deno create jsr:@fresh/init -- --force
 ```
 
 ## 参数标志
 
-- `--npm` - 将未加前缀的包名当作 npm 包处理
-- `--jsr` - 将未加前缀的包名当作 JSR 包处理（默认）
-- `-y, --yes` - 跳过提示，使用完全权限运行
+- `--npm` - 将未加前缀的包名视为 npm 包
+- `--jsr` - 将未加前缀的包名视为 JSR 包
+- `-y, --yes` - 跳过提示并以完全权限运行

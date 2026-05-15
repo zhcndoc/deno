@@ -36,6 +36,8 @@ CMD ["deno", "run", "--allow-net", "main.ts"]
 ```dockerfile
 # 构建阶段
 FROM denoland/deno:latest AS builder
+# 将 Deno 的缓存指向一个已知位置，以便在下一阶段复制
+ENV DENO_DIR=/deno-dir
 WORKDIR /app
 COPY . .
 # 安装依赖（如果 deno.json 有 imports，就只需使用 `deno install`）
@@ -43,10 +45,16 @@ RUN deno install --entrypoint main.ts
 
 # 生产阶段
 FROM denoland/deno:latest
+ENV DENO_DIR=/deno-dir
 WORKDIR /app
 COPY --from=builder /app .
+# 复制已填充的 Deno 缓存，以便运行时阶段拥有这些依赖
+COPY --from=builder /deno-dir /deno-dir
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
+
+如果不复制 `$DENO_DIR`，`deno install` 只会写入构建阶段内 Deno 的全局缓存——这些文件不会随着
+`COPY --from=builder /app .` 一起传递，因此容器在首次运行时会重新下载依赖。
 
 #### 权限标志
 

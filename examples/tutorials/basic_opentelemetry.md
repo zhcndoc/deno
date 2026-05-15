@@ -18,7 +18,7 @@ OpenTelemetry 为您的应用提供强大的可观察性工具。借助 Deno 内
 让我们开始创建一个基础的 HTTP 服务器，模拟一个小型的网页应用：
 
 ```ts title="server.ts"
-import { metrics, trace } from "npm:@opentelemetry/api@1";
+import { metrics, SpanStatusCode, trace } from "npm:@opentelemetry/api@1";
 
 // 为我们的应用创建 tracer 和 meter
 const tracer = trace.getTracer("my-server", "1.0.0");
@@ -90,7 +90,7 @@ Deno.serve({ port: 8000 }, (req) => {
       if (error instanceof Error) {
         span.recordException(error);
         span.setStatus({
-          code: trace.SpanStatusCode.ERROR,
+          code: SpanStatusCode.ERROR,
           message: error.message,
         });
       }
