@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-02-03
-title: "Testing"
+last_modified: 2026-05-20
+title: "测试"
 description: "Deno 的测试能力指南。了解内置测试运行器、断言、模拟、覆盖率报告、快照测试，以及如何为您的 Deno 应用编写有效的测试。"
 oldUrl:
   - /runtime/manual/advanced/language_server/testing_api/
@@ -104,6 +104,28 @@ Deno.test("数据库操作", async (t) => {
 });
 ```
 
+## 超时
+
+您可以使用 `timeout` 选项为单个测试设置最大持续时间。
+如果测试超过其截止时间，它将被标记为失败。无论是异步挂起
+（一个永远不会解析的 promise）还是同步死循环（`while (true) {}`)
+都会被捕获。
+
+```ts
+Deno.test({
+  name: "在截止时间内完成",
+  timeout: 5000, // 5 秒
+  async fn() {
+    const response = await fetch("https://example.com");
+    await response.body?.cancel();
+  },
+});
+```
+
+如果某个测试超时，同一文件中的下一个测试仍会正常运行。
+
+将 `timeout` 设为 `0` 或省略它，表示测试将在没有截止时间的情况下运行。
+
 ## 测试钩子
 
 Deno 提供了测试钩子，允许您在测试运行之前和之后运行设置和拆卸代码。这些钩子对于初始化资源、测试后清理以及确保测试环境一致非常有用。
@@ -157,7 +179,7 @@ Deno.test.afterAll(() => {
   db.close();
 });
 
-Deno.test("user creation", () => {
+Deno.test("用户创建", () => {
   const stmt = db.prepare(
     "INSERT INTO users (name, email) VALUES (?, ?) RETURNING *",
   );
@@ -165,7 +187,7 @@ Deno.test("user creation", () => {
   assertEquals(user!.name, "alice");
 });
 
-Deno.test("user deletion", () => {
+Deno.test("用户删除", () => {
   const insertStmt = db.prepare(
     "INSERT INTO users (name, email) VALUES (?, ?) RETURNING *",
   );
@@ -542,21 +564,24 @@ const response = await fetch("https://example.com");
 await response.body?.cancel(); // <- 如果不以其他方式使用它，请始终在完成后取消主体
 ```
 
-此消毒器默认启用，但可以在此测试中使用 `sanitizeResources: false` 进行禁用：
+从 Deno 2.8 开始，此消毒器**默认关闭**。可通过
+`sanitizeResources: true` 启用，或通过
+[全局启用消毒器](#enabling-sanitizers-globally) 中描述的全局机制之一启用。
 
 ```ts
 Deno.test({
-  name: "泄漏资源测试",
+  name: "no leaks allowed",
   async fn() {
-    await Deno.open("hello.txt");
+    using file = await Deno.open("hello.txt");
+    // ...
   },
-  sanitizeResources: false,
+  sanitizeResources: true,
 });
 ```
 
 ### 异步操作消毒器
 
-异步操作消毒器确保在测试中启动的所有异步操作都在测试结束前完成。这很重要，因为如果异步操作没有被等待，测试将在操作完成之前结束，并且即使操作可能实际上失败，测试也会被标记为成功。
+异步操作消毒器确保在测试中启动的所有异步操作都在测试结束前完成。这很重要，因为如果异步操作没有被等待，测试将在操作完成之前结束，并且即使操作实际上可能失败，测试也会被标记为成功。
 
 在测试中，您应始终等待所有异步操作。例如：
 
@@ -569,20 +594,58 @@ Deno.test({
 });
 ```
 
-此消毒器默认启用，但可以使用 `sanitizeOps: false` 进行禁用：
+从 Deno 2.8 开始，此消毒器**默认关闭**。可通过
+`sanitizeOps: true` 启用，或通过下方描述的全局机制之一启用。
 
 ```ts
 Deno.test({
-  name: "泄漏操作测试",
-  fn() {
-    crypto.subtle.digest(
-      "SHA-256",
-      new TextEncoder().encode("a".repeat(100000000)),
-    );
+  name: "no leaked ops allowed",
+  async fn() {
+    await someAsyncWork();
   },
-  sanitizeOps: false,
+  sanitizeOps: true,
 });
 ```
+
+### 全局启用消毒器
+
+如果您想恢复到 2.8 之前的行为——对每个测试都启用资源和操作消毒器——您可以在以下四个作用域中的任意一个重新启用它们。优先级更高的设置会覆盖优先级更低的设置。
+
+1. **单个测试**（最高优先级）：
+
+   ```ts
+   Deno.test({
+     name: "strict",
+     sanitizeOps: true,
+     sanitizeResources: true,
+     fn() {/* … */},
+   });
+   ```
+
+2. **单个模块**，使用
+   [`Deno.test.sanitizer()`](/api/deno/~/Deno.test.sanitizer)：
+
+   ```ts
+   Deno.test.sanitizer({ ops: true, resources: true });
+
+   Deno.test("uses module-level sanitizers", () => {/* … */});
+   ```
+
+3. **CLI 标志**：`--sanitize-ops` 和 `--sanitize-resources`。
+
+4. **环境变量**：`DENO_TEST_SANITIZE_OPS=1` 和
+   `DENO_TEST_SANITIZE_RESOURCES=1`。
+
+5. **`deno.json`**（最低优先级）：
+
+   ```jsonc
+   {
+     "test": {
+       "sanitizeOps": true,
+       "sanitizeResources": true
+     }
+   }
+   ```
 
 ### 退出消毒器
 
@@ -632,7 +695,7 @@ import getFileText from "./main.ts";
 
 Deno.test({
   name: "File reader gets text with permission",
-  // no `permissions` means "inherit"
+  // 没有 `permissions` 表示“继承”
   fn: async () => {
     const result = await getFileText();
     console.log(result);
@@ -662,7 +725,7 @@ deno test --allow-read
 Deno.test({
   name: "permission configuration example",
   // permissions: { read: true } // 授予所有读取权限，拒绝其他所有权限
-  // OR
+  // 或者
   permissions: {
     read: ["./data", "./config"], // 仅授予对特定路径的读取权限
     write: false, // 明确拒绝写权限

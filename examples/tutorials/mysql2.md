@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-03-10
+last_modified: 2026-05-14
 title: "如何在 Deno 中使用 MySQL2"
-description: "使用 MySQL2 与 Deno 的循序渐进指南。学习如何设置数据库连接、执行查询、处理事务，并使用 MySQL 的 Node.js 驱动构建数据驱动型应用。"
+description: "在 Deno 中使用 MySQL2 的分步指南。学习如何设置数据库连接、执行查询、处理事务，并使用 MySQL 的 Node.js 驱动构建数据驱动的应用程序。"
 url: /examples/mysql2_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/mysql2/
@@ -65,46 +65,51 @@ await connection.query(
 
 ## 查询 MySQL
 
-我们可以使用相同的 `connection.query()` 方法来编写我们的查询。首先，我们尝试获取 `dinosaurs` 表中的所有数据：
+我们可以使用相同的 `connection.query()` 方法来读取数据。`mysql2/promise` 驱动会返回一个 `[rows, fields]` 元组，因此可以直接解构取出 rows：
 
 ```tsx
-const results = await connection.query("SELECT * FROM `dinosaurs`");
-console.log(results);
+const [rows] = await connection.query("SELECT * FROM `dinosaurs`");
+console.log(rows);
 ```
 
-此查询的结果是我们数据库中的所有数据：
+这会打印出表中的每一行：
 
 ```tsx
 [
-  [
-    {
-      id: 1,
-      name: "Aardonyx",
-      description: "An early stage in the evolution of sauropods."
-    },
-    {
-      id: 2,
-      name: "Abelisaurus",
-      description: `Abel's lizard has been reconstructed from a single skull.`
-    },
-    { id: 3, name: "Deno", description: "The fastest dinosaur that ever lived." }
-  ],
+  {
+    id: 1,
+    name: "Aardonyx",
+    description: "An early stage in the evolution of sauropods.",
+  },
+  {
+    id: 2,
+    name: "Abelisaurus",
+    description: "Abels lizard has been reconstructed from a single skull.",
+  },
+  { id: 3, name: "Deno", description: "The fastest dinosaur that ever lived." },
+];
 ```
 
-如果我们只想从数据库中获取单个元素，可以更改我们的查询：
+### 参数化查询
+
+如果要根据某个值进行过滤，不要把它直接拼到 SQL 字符串里——那样很容易引入 SQL 注入漏洞。请使用带有 `?` 占位符的 `connection.execute()`。驱动会在服务器上准备语句，并将值单独绑定，因此你传入 values 数组中的任何内容都会被严格视为数据，而不会被解析为 SQL：
 
 ```tsx
-const [results, fields] = await connection.query(
-  "SELECT * FROM `dinosaurs` WHERE `name` = 'Deno'",
+const name = "Deno"; // 假设这来自用户请求
+const [rows] = await connection.execute(
+  "SELECT * FROM `dinosaurs` WHERE `name` = ?",
+  [name],
 );
-console.log(results);
+console.log(rows);
 ```
 
-这将给我们一个单行结果：
+这会返回一条匹配的记录：
 
 ```tsx
 [{ id: 3, name: "Deno", description: "The fastest dinosaur that ever lived." }];
 ```
+
+`?` 占位符是按位置对应的，因此 values 必须与 SQL 中占位符的顺序一致。同样的模式也适用于 `INSERT`、`UPDATE` 和 `DELETE`；`mysql2` 还会缓存每个预编译语句，因此使用不同值的重复调用在后续运行时会跳过解析步骤。
 
 最后，我们可以关闭连接：
 

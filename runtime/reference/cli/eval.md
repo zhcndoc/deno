@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-03-10
+last_modified: 2026-05-20
 title: "deno eval"
 oldUrl: /runtime/manual/tools/eval/
 command: eval
@@ -22,13 +22,22 @@ TypeScript 开箱即用：
 deno eval "const greeting: string = 'Hello'; console.log(greeting)"
 ```
 
-## 支持 CommonJS
+## CommonJS 和 ESM 自动检测
 
-系统会自动识别并支持 CommonJS 模块：
+从 Deno 2.8 开始，`deno eval` 默认使用 ESM，但当代码片段看起来像 CJS 脚本时会切换到 CommonJS。仅当片段没有 `import` / `export` 声明，并且引用了以下 CommonJS 专用绑定之一时，才会被视为 CJS：`require(`、`module.exports`、`exports.`、`__dirname` 或 `__filename`。其他情况——包括普通表达式——都会以 ESM 方式运行，这与长期以来的 `deno eval` 默认行为一致。
 
 ```sh
+# 检测为 CommonJS — 使用 require()
 deno eval "const path = require('path'); console.log(path.join('a', 'b'))"
+
+# 以 ESM 运行（默认）— 没有 CJS 专用模式
+deno eval "console.log(1 + 2)"
+
+# 因为静态 import 而以 ESM 运行
+deno eval "import { ok } from 'node:assert'; ok(true); console.log('ok')"
 ```
+
+如果启发式判断出错——例如某个代码片段只是在字符串中提到了 `require`——请传入 `--ext=mjs` 强制使用 ESM，或传入 `--ext=cjs` 强制使用 CommonJS。
 
 ## 打印表达式结果
 

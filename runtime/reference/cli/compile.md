@@ -27,6 +27,34 @@ deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
 ./file_server --help
 ```
 
+## 框架检测
+
+从 Deno 2.8 开始，`deno compile .`（或 `deno compile <directory>`）会检测常见的 Web 框架，并生成一个知道如何启动它们的入口点。检测到的构建脚本会先运行，因此编译后的二进制文件始终包含最新构建。
+
+支持的框架：
+
+- Next.js
+- Astro
+- Fresh (1.x and 2.x)
+- Remix
+- SvelteKit
+- Nuxt
+- SolidStart
+- TanStack Start
+- Vite (SSR mode)
+
+```sh
+# 在 Next.js / Astro / Fresh / 等项目中
+deno compile .
+
+# 或指向某个特定应用目录
+deno compile ./apps/web
+```
+
+生成的入口点使用 `import.meta.dirname`，因此框架资源路径可以在编译后的二进制文件内部，正确地相对于 [虚拟文件系统](#including-data-files-or-directories) 解析。
+
+如果项目不匹配任何受支持的框架，`deno compile` 将报错退出。
+
 ## 交叉编译
 
 您可以使用 `--target` 标志为其他平台进行交叉编译二进制文件。
@@ -104,7 +132,22 @@ const dataFiles = Deno.readDirSync(import.meta.dirname + "/data");
 
 请注意，这目前仅适用于文件系统上的文件，不适用于远程文件。
 
-## Worker
+### 在 `deno.json` 中配置 `include` / `exclude`
+
+可以在 `deno.json` 中以声明式方式设置 `--include` 和 `--exclude` 路径，这样您就不必在每次调用 `deno compile` 时重复指定它们：
+
+```jsonc title="deno.json"
+{
+  "compile": {
+    "include": ["names.csv", "data", "worker.ts"],
+    "exclude": ["data/secrets", "**/*.test.ts"]
+  }
+}
+```
+
+CLI 标志会与配置合并：`--include` 和 `--exclude` 会添加到 `deno.json` 中的列表，而不是替换它们。更多细节请参阅配置指南中的 [编译配置](/runtime/fundamentals/configuration/#compile-config) 部分，其中还包括如何在同一块中声明 `permissions`。
+
+## Workers
 
 与不可静态分析的动态导入类似，默认情况下，`[workers](../web_platform_apis/#web-workers)` 的代码不会包含在编译后的可执行文件中。有两种方法可以包含 workers：
 

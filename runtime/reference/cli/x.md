@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-12-10
+last_modified: 2026-05-20
 title: "deno x"
 command: x
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -43,6 +43,23 @@ deno x npm:create-vite my-app
 ```sh
 deno x jsr:@std/http/file-server
 ```
+
+## 将包与二进制文件分开指定
+
+一些 npm 包会暴露多个二进制文件——例如，`typescript` 同时提供 `tsc` 和
+`tsserver`。从 Deno 2.8 开始，`--package`（`-p`）可以让你
+独立选择包和二进制文件，与
+`npx -p <package> <binary>` 的约定一致：
+
+```sh
+# 从 typescript 包中运行 `tsc`
+deno x -p typescript tsc
+
+# 锁定包版本
+deno x -p typescript@5 tsc
+```
+
+之前的形式 `deno x typescript/tsc` 仍然有效。
 
 ## 工作原理
 

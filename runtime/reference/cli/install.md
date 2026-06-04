@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-05-20
 title: "deno install"
 oldUrl:
   - /runtime/manual/tools/script_installer/
@@ -33,6 +33,15 @@ description: "为您的项目安装并缓存依赖项"
 deno install jsr:@std/testing npm:express
 ```
 
+:::info Deno 2.8
+
+不带前缀的软件包名称默认会被视为 npm 软件包，因此在 CLI 中不再需要 `npm:`
+前缀。`deno install express` 等同于
+`deno install npm:express`。JSR 软件包仍然需要 `jsr:` 前缀以避免歧义。`npm:`
+前缀在 `import` 指定符中仍然是必需的。
+
+:::
+
 :::tip
 
 您也可以使用 `deno add`，它是 `deno install [PACKAGES]` 的别名。
@@ -40,6 +49,43 @@ deno install jsr:@std/testing npm:express
 :::
 
 如果您的项目有 `package.json` 文件，来自 npm 的软件包将被添加到 `package.json` 的 `dependencies` 中。否则，所有软件包将被添加到 `deno.json` 中。
+
+### deno install --os and --arch
+
+从 Deno 2.8 开始，`deno install` 接受 `--os` 和 `--arch` 标志，因此您
+可以安装面向与当前运行平台不同的平台的 npm 软件包。这对于预先安装带有原生二进制文件的
+软件包最有用——例如，在 macOS 开发机上构建一个部署产物，
+最终将运行在 Linux/arm64 上。
+
+这些标志接受与 Node.js 兼容的值，也就是 `process.platform` 和 `process.arch` 生成的相同字符串。
+
+```sh
+# 为 linux/arm64 安装 npm 软件包
+deno install --os linux --arch arm64
+
+# 为 windows/x64 安装
+deno install --os win32 --arch x64
+
+# 仅覆盖架构；--os 默认为当前系统
+deno install --arch x64
+```
+
+`--os` 和 `--arch` 仅适用于本地安装，并且与 `--global` 冲突。
+
+### deno install --package-json
+
+默认情况下，Deno 会根据哪个配置文件离当前工作目录更近来选择要写入的配置文件（`deno.json` 或
+`package.json`）。从 Deno 2.8 开始，`--package-json` 会强制将依赖项写入
+`package.json`，而不管附近是否存在 `deno.json`。如果还不存在 `package.json`
+，则会创建一个。
+
+```sh
+deno install --package-json npm:express jsr:@std/path
+```
+
+使用 `--package-json` 添加的 JSR 软件包会以其与 npm 兼容的
+形式（`npm:@jsr/...`）写入。相同的标志也适用于 `deno add`、`deno remove` 和
+`deno uninstall`。
 
 ### deno install --entrypoint [FILES]
 
@@ -155,7 +201,53 @@ deno install --global --compile -A npm:@anthropic-ai/claude-code
 这结合了 [`deno compile`](/runtime/reference/cli/compile/)
 与全局安装的行为 —— 生成一个本地二进制文件，放置在安装根目录中（与不使用 `--compile` 的 `--global` 行为相同）。
 
-## 本机 Node.js 插件
+### deno install --prod
+
+使用此命令仅安装生产依赖项，跳过
+`package.json` 中的 `devDependencies`。
+
+```sh
+deno install --prod
+```
+
+这在部署应用程序时非常有用，因为此时并不需要测试框架或构建工具之类的开发依赖项。
+
+`--prod` 标志与 `--global` 和 `--dev` 冲突。
+
+在 CI 环境中，建议使用 [`deno ci --prod`](/runtime/reference/cli/ci/)，它
+还会强制使用冻结的锁文件，并在安装前移除任何已存在的 `node_modules`
+。
+
+#### --skip-types
+
+当与 `--prod` 结合使用时，`--skip-types` 标志还会跳过
+`@types/*` 软件包，这些软件包既包括 `package.json` 依赖项中的，也包括 `deno.json`
+导入中的：
+
+```sh
+deno install --prod --skip-types
+```
+
+:::caution
+
+`--skip-types` 标志通过检查软件包名称是否
+以 `@types/` 开头来识别类型包。这种启发式方法可能无法覆盖所有仅类型包。
+
+:::
+
+#### --prod with --entrypoint
+
+当 `--prod` 与 `--entrypoint` 结合使用时，模块图会以
+“仅代码”方式构建，这将排除仅类型依赖项：
+
+```sh
+deno install --prod --entrypoint main.ts
+```
+
+这提供了最精确的生产安装——只有指定入口点（以及其传递导入）在运行时实际导入的
+依赖项才会被安装。
+
+## 原生 Node.js 插件
 
 许多流行的 npm 软件包，如 [`npm:sqlite3`](https://www.npmjs.com/package/sqlite3) 或 [`npm:duckdb`](https://www.npmjs.com/package/duckdb)，依赖于 ["生命周期脚本"](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts)，例如 `preinstall` 或 `postinstall` 脚本。通常，运行这些脚本是软件包正常工作的必要条件。
 

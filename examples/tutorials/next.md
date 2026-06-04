@@ -17,7 +17,7 @@ oldUrl:
 
 :::info 部署你自己的应用
 
-想跳过教程，立即部署完成的应用？点击下面按钮，立刻将完整的 SvelteKit 恐龙应用副本部署到 Deno Deploy。你将获得一个可运行、可自定义、可修改的实时代码！
+想跳过教程，立即部署完成后的应用吗？点击下面的按钮，即可立刻将完整的 Next.js 恐龙应用副本部署到 Deno Deploy。你将获得一个实时可用的应用，并且可以在学习过程中自由定制和修改！
 
 [![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-next)
 
@@ -174,8 +174,8 @@ useEffect(() => {
 ```tsx title="page.tsx"
 return (
   <main id="content">
-    <h1>Welcome to the Dinosaur app</h1>
-    <p>Click on a dinosaur below to learn more.</p>
+    <h1>欢迎来到恐龙应用</h1>
+    <p>点击下面的恐龙了解更多信息。</p>
     <ul>
       {dinosaurs.map((dinosaur: Dino) => {
         return (

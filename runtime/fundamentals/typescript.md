@@ -208,6 +208,35 @@ X-TypeScript-Types: ./add.d.ts
 /// <reference lib="dom" />
 ```
 
+## 使用 `tsconfig.json` 配置 TypeScript {#tsconfig}
+
+虽然 Deno 默认使用 `deno.json` 进行 TypeScript 配置，但它也支持 `tsconfig.json`，以兼容现有的 Node.js 和 TypeScript 项目，从而更便于逐步采用 Deno。每个包含 `deno.json` 或 `package.json` 的工作区目录都会查找 `tsconfig.json`——如果存在，Deno 会自动在类型检查和语言服务器中使用它，无需额外标志。自 Deno 2.1 起，在存在 `package.json` 时也会自动检测 `jsconfig.json`，这对于仅使用 JavaScript 的项目很有用。
+
+例如，现有的 Node.js 项目中包含如下 `tsconfig.json`：
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "react-jsx",
+    "lib": ["dom", "esnext"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
+```
+
+在运行 `deno check` 或使用 Deno 语言服务器时，它会被自动识别。如果之后添加了带有自身 `compilerOptions` 的 `deno.json`，则以后者为准。
+
+:::tip
+
+对于以 Deno 为先的项目，建议使用 `deno.json` 中的 `compilerOptions`，而不是单独的 `tsconfig.json`。有关支持字段、优先级规则和编译器选项默认值的完整列表，请参阅
+[配置 TypeScript](/runtime/reference/ts_config_migration/)。
+
+:::
+
 ## 扩展全局类型
 
 Deno 支持 TypeScript 中的环境（ambient）或全局类型。当填充全局对象或用附加属性扩展全局作用域时，这非常有用。**您应该尽可能避免使用环境或全局类型**，因为它们会导致命名冲突，并使您更难理解代码。在发布到 JSR 时也不支持它们。
@@ -250,4 +279,60 @@ interface Window {
 }
 ```
 
-这也将用 `polyfilledAPI` 函数扩展全局作用域。
+这也会使用 `polyfilledAPI` 函数扩展全局作用域。
+
+## 配置 TypeScript 编译器选项
+
+Deno 默认开箱即用地使用严格且现代的 TypeScript 默认值，因此大多数项目都不需要任何配置。当您确实需要自定义编译器行为时，请在
+[`deno.json`](/runtime/fundamentals/configuration/) 中使用 `compilerOptions` 字段：
+
+```json title="deno.json"
+{
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true
+  }
+}
+```
+
+请参阅
+[受支持的编译器选项完整列表](/runtime/reference/ts_config_migration/#ts-compiler-options)。
+
+## 在 Deno 中使用 `tsconfig.json`
+
+如果您正在将 TypeScript 项目从 Node.js 迁移过来，现有的 `tsconfig.json` 文件可以直接与 Deno 的类型检查器和 LSP 一起使用。Deno 会自动发现同时包含
+`deno.json` 或 `package.json` 的目录中的 `tsconfig.json` 文件。
+
+```
+my-project/
+├── deno.json
+├── tsconfig.json       # ← 自动发现
+├── src/
+│   └── main.ts
+└── packages/
+    └── lib/
+        ├── package.json
+        └── tsconfig.json  # ← 也会被发现
+```
+
+Deno 支持标准的 `tsconfig.json` 字段：`extends`、`files`、
+`include`、`exclude`、`references` 和 `compilerOptions`。
+
+:::note
+
+对于以 Deno 为先的项目，建议使用 `deno.json` 中的 `compilerOptions`，而不是单独的
+`tsconfig.json`。`tsconfig.json` 的兼容性主要是为了简化现有 Node.js 项目的迁移。
+
+:::
+
+### 优先级规则
+
+当 `deno.json` 和 `tsconfig.json` 同时存在时：
+
+1. 父级 `deno.json` 中的 `compilerOptions` 优先于任何 `tsconfig.json`。
+2. `tsconfig.json` 的引用优先于其引用者。
+3. 对于根引用，层级更深的 `tsconfig.json` 优先（例如 `foo/bar/tsconfig.json` 优先于 `foo/tsconfig.json`）。
+
+有关 `tsconfig.json` 兼容性、编译器选项和库配置的完整细节，请参阅
+[配置 TypeScript](/runtime/reference/ts_config_migration/) 参考文档。

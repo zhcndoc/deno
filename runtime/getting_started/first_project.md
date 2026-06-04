@@ -1,13 +1,11 @@
 ---
-last_modified: 2025-03-10
-title: 制作一个 Deno 项目
-description: "一步步指导您创建第一个 Deno 项目。学习如何初始化项目、理解基本的文件结构、运行 TypeScript 代码，并使用 Deno 的内置测试运行器执行测试。"
+last_modified: 2026-05-28
+title: 创建一个 Deno 项目
+description: "逐步指南，帮助你创建第一个 Deno 项目。学习如何初始化项目、了解基本文件结构、运行 TypeScript 代码，以及使用 Deno 内置测试运行器执行测试。"
 oldUrl: /runtime/manual/getting_started/first_steps/
 ---
 
-Deno 拥有许多 [内置工具](/runtime/reference/cli/) 使您的开发体验尽可能顺畅。其中一个工具是 [项目初始化器](/runtime/reference/cli/init)，它创建一个具有基本文件结构和配置的新 Deno 项目。
-
-虽然您可以使用 JavaScript，但 Deno 也内置支持 [TypeScript](https://www.typescriptlang.org/)，因此我们在本指南中将使用 TypeScript。如果您更愿意使用 JavaScript，可以将文件重命名为 `.js` 并删除类型注解。
+在本指南中，你将创建你的第一个 Deno 项目，运行它，并执行其测试。我们将全程使用 [TypeScript](https://www.typescriptlang.org/)。如果你想改用 JavaScript，请将文件重命名为 `.js` 并移除类型注解。
 
 ## 初始化新项目
 
@@ -26,29 +24,39 @@ my_project
 └── main.ts
 ```
 
-创建一个 `deno.json` 文件以 [配置您的项目](/runtime/fundamentals/configuration/)，并创建两个 TypeScript 文件；`main.ts` 和 `main_test.ts`。`main.ts` 文件是您编写应用程序代码的地方，初始创建时它将包含一个简单的程序，用于将两个数字相加。`main_test.ts` 文件是您可以编写测试的地方，初始创建时它将包含一个用于您的加法程序的测试。
+[`deno.json`](/runtime/fundamentals/configuration/) 保存你的项目配置。`main.ts` 是一个基于
+[`Deno.serve`](/api/deno/~/Deno.serve) 构建的小型 HTTP 服务器，而 `main_test.ts` 则包含它的测试。
 
-## 运行您的项目
+## 运行你的项目
 
-您可以使用以下命令运行该程序：
+进入新的项目目录：
 
 ```bash
-$ deno main.ts
-Add 2 + 3 = 5
+cd my_project
 ```
 
-## 运行您的测试
+你可以使用以下命令运行该程序：
 
-Deno 有一个 [内置测试运行器](/runtime/fundamentals/testing/)。您可以为您的代码编写测试，并使用 `deno test` 命令运行它们。使用以下命令在您的新项目中运行测试：
+```bash
+$ deno -N main.ts
+Listening on http://localhost:8000/
+```
+
+该服务器需要网络权限，这里通过 `-N` 授予（`--allow-net` 的简写）。更多内容请参阅[安全性](/runtime/fundamentals/security/)。
+
+在浏览器中打开该 URL 查看响应。
+
+## 运行你的测试
+
+使用 [`deno test`](/runtime/fundamentals/testing/) 运行测试：
 
 ```bash
 $ deno test
-running 1 test from ./main_test.ts     
-addTest ... ok (1ms)
+running 2 tests from ./main_test.ts
+handler returns hello ... ok (1ms)
+handler returns 404 for unknown route ... ok (1ms)
 
-ok | 1 passed | 0 failed (3ms)
+ok | 2 passed | 0 failed (3ms)
 ```
 
-现在您已经设置了一个基本项目，可以开始构建您的应用程序。查看我们的 [示例和教程](/examples/) 以获取有关使用 Deno 构建的更多想法。
-
-您可以 [在这里了解更多关于在 Deno 中使用 TypeScript 的信息](/runtime/fundamentals/typescript)。
+浏览我们的[示例和教程](/examples/)，获取下一步可以构建什么的灵感。

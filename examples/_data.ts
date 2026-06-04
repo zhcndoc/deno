@@ -558,7 +558,12 @@ export const sidebar = [
         type: "tutorial",
       },
       {
-        title: "如何将 Deno 部署到 Digital Ocean",
+        title: "使用 wrangler 的 Cloudflare Workers",
+        href: "/examples/cloudflare_workers_wrangler_tutorial/",
+        type: "tutorial",
+      },
+      {
+        title: "Digital Ocean",
         href: "/examples/digital_ocean_tutorial/",
         type: "tutorial",
       },

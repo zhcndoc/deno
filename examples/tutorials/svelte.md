@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-29
-title: "使用 SvelteKit 构建应用"
-description: "使用 Deno 构建 SvelteKit 应用的教程。了解如何设置 SvelteKit 项目、实现基于文件的路由、使用 load 函数管理状态，以及创建一个全栈 TypeScript 应用。"
+last_modified: 2026-05-17
+title: "构建一个 SvelteKit 应用"
+description: "使用 Deno 构建 SvelteKit 应用的教程。学习如何设置 SvelteKit 项目、实现基于文件的路由、使用 load 函数管理状态，以及创建一个全栈 TypeScript 应用。"
 url: /examples/svelte_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/svelte/
@@ -102,7 +102,7 @@ export const GET: RequestHandler = ({ params }) => {
     return json(dinosaur);
   }
 
-  return json({ error: "Not found" }, { status: 404 });
+  return json({ error: "未找到" }, { status: 404 });
 };
 ```
 
@@ -237,7 +237,14 @@ deno task build
 
 构建后的应用可部署到支持 Deno 的平台，如 Deno Deploy。
 
-你可以将应用部署到你喜欢的云服务。我们推荐使用 [Deno Deploy](https://deno.com/deploy)，简单又方便。你可以直接从 GitHub 部署，只需创建一个 GitHub 仓库并推送代码，然后连接到 Deno Deploy。
+如果你不打算部署到 Deno Deploy 或其他兼容 Deno 的平台，请访问
+[SvelteKit 适配器文档](https://svelte.dev/docs/kit/adapters) 以
+为你的托管提供商配置正确的适配器。
+
+你可以将此应用部署到你喜欢的云服务提供商。我们推荐使用
+[Deno Deploy](https://deno.com/deploy)，它提供简单易用的部署
+体验。你可以直接从 GitHub 部署应用，只需创建一个 GitHub
+仓库并将代码推送到那里，然后将其连接到 Deno Deploy。
 
 ### 创建 GitHub 仓库
 

@@ -14,18 +14,22 @@ Deno 提供了[官方 Docker 文件](https://github.com/denoland/deno_docker)
 ```dockerfile
 FROM denoland/deno:latest
 
-# 创建工作目录
 WORKDIR /app
 
-# 复制源代码
+# 先复制清单文件，以便依赖安装层在仅源代码变更时仍可缓存
+COPY deno.json deno.lock package.json* ./
+RUN deno ci --prod --skip-types
+
+# 然后复制其余源码
 COPY . .
 
-# 安装依赖（如果 deno.json 有 imports，就只需使用 `deno install`）
-RUN deno install --entrypoint main.ts
-
-# 运行应用
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
+
+[`deno ci`](/runtime/reference/cli/ci/) 会根据
+`deno.lock` 执行可复现安装。`--prod` 会跳过 `devDependencies`，而 `--skip-types` 会移除
+`@types/*` 包——两者都能在不影响运行时
+行为的前提下减小最终镜像体积。
 
 ### 最佳实践
 
@@ -39,9 +43,13 @@ FROM denoland/deno:latest AS builder
 # 将 Deno 的缓存指向一个已知位置，以便在下一阶段复制
 ENV DENO_DIR=/deno-dir
 WORKDIR /app
+
+# 先复制清单文件，以便依赖安装层在仅源代码变更时仍可缓存
+COPY deno.json deno.lock package.json* ./
+RUN deno ci --prod --skip-types
+
+# 然后复制其余源码
 COPY . .
-# 安装依赖（如果 deno.json 有 imports，就只需使用 `deno install`）
-RUN deno install --entrypoint main.ts
 
 # 生产阶段
 FROM denoland/deno:latest
@@ -53,8 +61,8 @@ COPY --from=builder /deno-dir /deno-dir
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
 
-如果不复制 `$DENO_DIR`，`deno install` 只会写入构建阶段内 Deno 的全局缓存——这些文件不会随着
-`COPY --from=builder /app .` 一起传递，因此容器在首次运行时会重新下载依赖。
+如果不复制 `$DENO_DIR`，`deno ci` 只会将内容写入构建阶段中的 Deno 全局缓存——这些文件不会随着 `COPY --from=builder /app .`
+一起传递，因此容器会在首次运行时重新下载依赖。
 
 #### 权限标志
 
@@ -142,9 +150,9 @@ CMD ["deno", "test", "--allow-none"]
 
 ### 使用 Docker Compose
 
-```yaml
-// filepath: docker-compose.yml
-version: "3.8"
+用于带热重载的开发的基础 Compose 文件：
+
+```yaml title="docker-compose.yml"
 services:
   deno-app:
     build: .
@@ -156,6 +164,54 @@ services:
       - DENO_ENV=development
     command: ["deno", "run", "--watch", "--allow-net", "main.ts"]
 ```
+
+对于带数据库的更真实场景：
+
+```yaml title="docker-compose.yml"
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://deno:${POSTGRES_PASSWORD}@db:5432/app
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    command:
+      [
+        "deno",
+        "run",
+        "--allow-net=db:5432",
+        "--allow-env=DATABASE_URL",
+        "main.ts",
+      ]
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: deno
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: app
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U deno"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+```
+
+将诸如 `POSTGRES_PASSWORD` 之类的密钥放在与
+`docker-compose.yml` 相邻的 `.env` 文件中。Compose 会自动加载它。不要提交该文件。
+
+使用 `docker compose up` 启动服务，或者使用
+`docker compose up -d` 在后台运行。
 
 ### 健康检查
 
@@ -243,8 +299,7 @@ project-root/
 
 2. 创建一个 `.dockerignore`：
 
-```text
-// filepath: docker/project-a/.dockerignore
+```text title="docker/project-a/.dockerignore"
 *
 !deno.json
 !project-a/**
@@ -253,8 +308,7 @@ project-root/
 
 3. 创建构建上下文脚本：
 
-```bash
-// filepath: docker/project-a/build-context.sh
+```bash title="docker/project-a/build-context.sh"
 #!/bin/bash
 
 # 创建临时构建上下文
@@ -275,8 +329,7 @@ fi
 
 4. 创建一个最小的 Dockerfile：
 
-```dockerfile
-// filepath: docker/project-a/Dockerfile
+```dockerfile title="docker/project-a/Dockerfile"
 FROM denoland/deno:latest
 
 WORKDIR /app

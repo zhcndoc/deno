@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-10-15
-title: "外部函数接口（Foreign Function Interface，FFI）"
-description: "了解如何使用 Deno 的外部函数接口（FFI）直接从 JavaScript 或 TypeScript 调用原生库。包含示例、最佳实践和安全注意事项。"
+last_modified: 2026-05-13
+title: "外部函数接口（FFI）"
+description: "了解如何使用 Deno 的外部函数接口（FFI）直接从 JavaScript 或 TypeScript 调用本地库。内容包括示例、最佳实践和安全注意事项。"
 ---
 
 Deno 的外部函数接口（FFI）允许 JavaScript 和 TypeScript 代码
@@ -103,48 +103,113 @@ Deno 的 FFI 支持多种参数和返回值数据类型：
 
 ## 处理结构体
 
-你可以在 FFI 代码中定义并使用 C 结构体：
+要按值传递或返回 C 结构体，请使用
+`{ struct: [...] }` 描述其布局——这是一个按声明顺序列出每个字段 FFI 类型的数组。结构体值会以字节布局与 C 一致的
+`TypedArray` 传递，而按值返回的结构体会以正确长度的
+`Uint8Array` 返回。前面类型表中的 `struct` 数组就是权威的形状定义。
 
-```ts
-// 为 Point 定义一个结构体类型
-const pointStruct = {
-  fields: {
-    x: "f64",
-    y: "f64",
-  },
-} as const;
+假设你有一个这样的小型 C 库，它操作一个二维 `Point`：
 
-// 定义库接口
-const signatures = {
-  distance: {
-    parameters: [
-      { struct: pointStruct },
-      { struct: pointStruct },
-    ],
-    result: "f64",
-  },
-} as const;
+```c title="point.c"
+typedef struct {
+  double x;
+  double y;
+} Point;
 
-// 创建结构体实例
-const point1 = new Deno.UnsafePointer(
-  new BigUint64Array([
-    BigInt(Float64Array.of(1.0).buffer),
-    BigInt(Float64Array.of(2.0).buffer),
-  ]).buffer,
-);
+double distance(Point a, Point b) {
+  double dx = a.x - b.x;
+  double dy = a.y - b.y;
+  return __builtin_sqrt(dx * dx + dy * dy);
+}
 
-const point2 = new Deno.UnsafePointer(
-  new BigUint64Array([
-    BigInt(Float64Array.of(4.0).buffer),
-    BigInt(Float64Array.of(6.0).buffer),
-  ]).buffer,
-);
-
-// 使用结构体调用函数
-const dist = dylib.symbols.distance(point1, point2);
+Point midpoint(Point a, Point b) {
+  Point m;
+  m.x = (a.x + b.x) / 2.0;
+  m.y = (a.y + b.y) / 2.0;
+  return m;
+}
 ```
 
-## 处理回调
+将其构建为共享库。编译器参数和输出文件名会因平台而异：
+
+<deno-tabs group-id="operating-systems">
+<deno-tab value="linux" label="Linux" default>
+
+```sh
+cc -shared -fPIC -O2 -o libpoint.so point.c
+```
+
+</deno-tab>
+<deno-tab value="mac" label="macOS">
+
+```sh
+cc -dynamiclib -O2 -o libpoint.dylib point.c
+```
+
+</deno-tab>
+<deno-tab value="windows" label="Windows">
+
+```sh
+cl /LD /O2 point.c /Fe:point.dll
+```
+
+</deno-tab>
+</deno-tabs>
+
+然后在 Deno 中调用它，在 [`Deno.dlopen`](/api/deno/~/Deno.dlopen) 中使用适合你平台的文件名。请注意，`struct` 定义是按声明顺序排列的 _字段类型数组_，而不是带有命名字段的对象：
+
+```ts title="point.ts"
+// `Point` 对应 C 的 `struct Point { double x; double y; }`。
+const Point = { struct: ["f64", "f64"] } as const;
+
+const lib = Deno.dlopen(
+  "./libpoint.so",
+  {
+    distance: { parameters: [Point, Point], result: "f64" },
+    midpoint: { parameters: [Point, Point], result: Point },
+  } as const,
+);
+
+// 构建与 C 布局匹配的 TypedArray 结构体值。
+// 两个 f64 字段 → Float64Array 中的两个槽位。
+const a = new Float64Array([1.0, 2.0]); // Point { x: 1.0, y: 2.0 }
+const b = new Float64Array([4.0, 6.0]); // Point { x: 4.0, y: 6.0 }
+
+// FFI 会读取底层字节，因此将 buffer 作为 Uint8Array 视图传入。
+const aBytes = new Uint8Array(a.buffer);
+const bBytes = new Uint8Array(b.buffer);
+
+console.log("distance =", lib.symbols.distance(aBytes, bBytes));
+
+// 按值返回的结构体会以与结构体大小相同的 Uint8Array 形式返回。
+// 用 Float64Array 包装它，以读取回字段值。
+const midBytes = lib.symbols.midpoint(aBytes, bBytes);
+const mid = new Float64Array(midBytes.buffer);
+console.log("midpoint =", { x: mid[0], y: mid[1] });
+
+lib.close();
+```
+
+使用 `--allow-ffi` 权限运行它：
+
+```sh
+deno run --allow-ffi point.ts
+```
+
+你应该会看到：
+
+```console
+distance = 5
+midpoint = { x: 2.5, y: 4 }
+```
+
+在处理结构体时，请记住以下几点：
+
+- **布局与 C 编译器一致。** Deno 对结构体字段的填充方式与 C 编译器相同。如果你需要紧凑结构体，请像上面的类型表中所述那样，使用 `u8` 字段显式填充。
+- **字段顺序按位置决定。** `struct` 数组只是一组类型，按照声明顺序排列——在 JavaScript 端没有字段名。你传入的 `TypedArray` 必须以相同顺序排列这些字段。
+- **返回的结构体是字节。** 结构体结果始终是 `Uint8Array`；请通过合适的 `TypedArray`（或 `DataView`）来查看它，以读取字段。
+
+## 使用回调
 
 你可以将 JavaScript 函数作为回调传递给本地代码：
 

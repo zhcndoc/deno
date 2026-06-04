@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-05-20
 title: "deno task"
 oldUrl:
   - /runtime/tools/task_runner/
@@ -71,17 +71,19 @@ description: "Deno 的可配置任务运行器"
 ```json title="deno.json"
 {
   "tasks": {
-    "build-client": "deno run -RW client/build.ts",
-    "build-server": "deno run -RW server/build.ts"
+    "build:client": "deno run -RW client/build.ts",
+    "build:server": "deno run -RW server/build.ts"
   }
 }
 ```
 
-运行 `deno task "build-*"` 将同时运行 `build-client` 和 `build-server` 任务。
+运行 `deno task "build:*"` 将同时运行 `build:client` 和 `build:server` 任务。
+
+对于多词任务名称，我们建议使用 `:` 作为分隔符（例如 `build:client`、`test:unit`、`lint:fix`），以符合 npm 生态系统中使用的约定，并便于将相关任务分组以进行通配符匹配。
 
 :::note
 
-**使用通配符时** 确保引用任务名称（例如 `"build-*"`），否则您的 shell 可能会尝试扩展通配符字符，从而导致意外错误。
+**使用通配符时**，请务必将任务名称加引号（例如 `"build:*"`），否则您的 shell 可能会尝试展开通配符字符，从而导致意外错误。
 
 :::
 
@@ -118,7 +120,13 @@ Listening on http://localhost:8000/
 
 依赖任务是并行执行的，默认的并行限制等于您机器上的核心数量。要更改此限制，请使用 `DENO_JOBS` 环境变量。
 
-依赖项会被跟踪，如果多个任务依赖同一任务，该任务只会运行一次：
+:::info Deno 2.8
+
+当任务并行运行时，每一行输出都会带有产生该输出的任务名称前缀（每个任务的颜色不同）。即使任务派生了子进程，前缀也会保持附着，因此并行运行的 `build` + `test` + `lint` 仍然清晰可读，无需外部多路复用器。
+
+:::
+
+依赖关系会被跟踪，如果多个任务依赖同一个任务，则该任务只会运行一次：
 
 ```jsonc title="deno.json"
 {
@@ -176,7 +184,7 @@ Running a
 
 ```sh
 deno task a
-Task cycle detected: a -> b -> a
+检测到任务循环：a -> b -> a
 ```
 
 您还可以指定没有 `command` 的依赖任务。这对于逻辑上将几个任务分组在一起很有用：
@@ -184,16 +192,16 @@ Task cycle detected: a -> b -> a
 ```json title="deno.json"
 {
   "tasks": {
-    "dev-client": "deno run --watch client/mod.ts",
-    "dev-server": "deno run --watch sever/mod.ts",
+    "dev:client": "deno run --watch client/mod.ts",
+    "dev:server": "deno run --watch server/mod.ts",
     "dev": {
-      "dependencies": ["dev-client", "dev-server"]
+      "dependencies": ["dev:client", "dev:server"]
     }
   }
 }
 ```
 
-运行 `deno task dev` 将并行运行 `dev-client` 和 `dev-server`。
+运行 `deno task dev` 将并行运行 `dev:client` 和 `dev:server`。
 
 ## Node 和 npx 二进制支持
 
@@ -497,7 +505,7 @@ Hello there!
 在 Deno 1.34 及以上版本中支持 glob 扩展。这允许以跨平台方式指定 glob 来匹配文件。
 
 ```sh
-# match .ts files in the current and descendant directories
+# 匹配当前目录及其子目录中的 .ts 文件
 echo **/*.ts
 # 匹配当前目录中的 .ts 文件
 echo *.ts
@@ -511,10 +519,11 @@ echo data[0-9].csv
 
 从 Deno 2.6.6 及以上版本，`deno task` 支持 shell 选项以控制 glob 扩展和管道行为。默认情况下启用 `failglob` 和 `globstar`。
 
-- **failglob** - 启用时，glob 模式若不匹配任何文件将导致错误。可通过 `shopt -u failglob` 禁用。
-- **globstar** - 启用时，`**` 匹配零个或多个目录。可通过 `shopt -u globstar` 禁用。
-- **nullglob** - 启用时，未匹配任何文件的 glob 扩展为空字符串而非原样字符串。可通过 `shopt -s nullglob` 启用。
-- **pipefail** - 启用时，管道的退出码是最后一个非零退出码命令的退出码，若均成功则为零。可通过 `set -o pipefail` 启用。
+- **failglob** - 启用后，不匹配任何文件的 glob 会导致错误。可使用 `shopt -u failglob` 禁用。
+- **globstar** - 启用后，`**` 匹配零个或多个目录。可使用 `shopt -u globstar` 禁用。
+- **nullglob** - 启用后，不匹配任何文件的 glob 会展开为空，而不是字面上的 glob 模式。可使用 `shopt -s nullglob` 启用。
+- **pipefail** - 启用后，管道的退出码将是最后一个以非零状态退出的命令的退出码；如果所有命令都成功退出，则为零。可使用 `set -o pipefail` 启用。
+- **errexit**（Deno 2.8+）- 启用后，顺序列表会在第一个非零退出的命令处中止。可使用 `set -e` 或 `set -o errexit` 启用；可使用 `set +e` 或 `set +o errexit` 再次禁用。当将依赖 `set -e` 语义的 shell 脚本迁移到 `tasks` 块中时，这非常有用。
 
 示例：
 
@@ -528,7 +537,9 @@ echo data[0-9].csv
     // 禁用 globstar
     "task3": "shopt -u globstar && echo **/*.ts",
     // 启用 pipefail
-    "task4": "set -o pipefail && cat missing.txt | echo 'hello'"
+    "task4": "set -o pipefail && cat missing.txt | echo 'hello'",
+    // 在第一个失败的命令处中止顺序列表
+    "task5": "set -e; build_step_one; build_step_two; build_step_three"
   }
 }
 ```
@@ -545,19 +556,37 @@ Shell 选项不会传递给 `deno task` 的子进程。每次调用 `deno task` 
 
 - [`cp`](https://man7.org/linux/man-pages/man1/cp.1.html) - 复制文件。
 - [`mv`](https://man7.org/linux/man-pages/man1/mv.1.html) - 移动文件。
-- [`rm`](https://man7.org/linux/man-pages/man1/rm.1.html) - 删除文件或目录。
-  - 例如: `rm -rf [FILE]...` - 通常用于递归删除文件或目录。
-- [`mkdir`](https://man7.org/linux/man-pages/man1/mkdir.1.html) - 创建目录。
-  - 例如. `mkdir -p DIRECTORY...` - 通常用于创建目录及其所有父级，且如果已存在则不报错。
-- [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) - 打印当前/工作目录的名称。
-- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - 延迟指定时间。
-  - 例如. `sleep 1` 以暂停 1 秒，`sleep 0.5` 以暂停半秒，或者 `sleep 1m` 以暂停一分钟。
-- [`echo`](https://man7.org/linux/man-pages/man1/echo.1.html) - 显示一行文本。
-- [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) - 连接文件并将其输出到标准输出。没有提供参数时读取和输出标准输入。
-- [`exit`](https://man7.org/linux/man-pages/man1/exit.1p.html) - 导致 shell 退出。
-- [`head`](https://man7.org/linux/man-pages/man1/head.1.html) - 输出文件的第一部分。
-- [`unset`](https://man7.org/linux/man-pages/man1/unset.1p.html) - 取消设置环境变量。
-- [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) - 从标准输入构建参数并执行命令。
+- [`rm`](https://man7.org/linux/man-pages/man1/rm.1.html) - 删除文件或
+  目录。
+  - 例如：`rm -rf [FILE]...` - 常用于递归删除文件或
+    目录。
+- [`mkdir`](https://man7.org/linux/man-pages/man1/mkdir.1.html) - 创建
+  目录。
+  - 例如：`mkdir -p DIRECTORY...` - 常用于创建一个目录及其所有
+    父目录，如果目录已存在则不会报错。
+- [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) - 输出当前/工作
+  目录的名称。
+- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - 延迟指定
+  的时间。
+  - 例如：`sleep 1` 表示睡眠 1 秒，`sleep 0.5` 表示睡眠半秒，
+    或 `sleep 1m` 表示睡眠 1 分钟
+- [`echo`](https://man7.org/linux/man-pages/man1/echo.1.html) - 显示一行
+  文本。
+- [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) - 连接文件并
+  将其输出到 stdout。当未提供参数时，它会读取并
+  输出 stdin。
+- [`exit`](https://man7.org/linux/man-pages/man1/exit.1p.html) - 使
+  shell 退出。
+- [`head`](https://man7.org/linux/man-pages/man1/head.1.html) - 输出文件的
+  前半部分。
+- [`unset`](https://man7.org/linux/man-pages/man1/unset.1p.html) - 取消设置
+  环境变量。
+- [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) - 从 stdin 构建
+  参数并执行命令。
+- [`:`](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/colon.html) -
+  POSIX 空命令。不执行任何操作，并且总是以状态 `0` 退出（Deno
+  2.8+）。在条件语句中作为 no-op 占位符，或用于参数展开的
+  副作用时很方便。
 
 如果您发现缺少某个命令的有用标志或有任何应该支持的其他命令的建议，请
 [报告问题](https://github.com/denoland/deno_task_shell/issues) 到
@@ -567,5 +596,52 @@ Shell 选项不会传递给 `deno task` 的子进程。每次调用 `deno task` 
 
 ## package.json 支持
 
-如果发现 `deno task` 没有在 `deno.json` 中找到任务，将回退到读取 package.json 文件中的 `"scripts"` 条目。请注意，Deno 不尊重或支持任何 npm 生命周期事件，如 `preinstall` 或 `postinstall`——您必须显式运行您想要执行的脚本条目（例如：
+如果发现了 `package.json` 文件，`deno task` 会回退到读取其中的 `"scripts"` 条目。请注意，Deno 不遵循也不支持任何 npm
+生命周期事件，例如 `preinstall` 或 `postinstall`——您必须显式运行
+您想要运行的脚本条目（例如
 `deno install --entrypoint main.ts && deno task postinstall`）。
+
+## 命令解析
+
+当某个任务命令引用了一个二进制文件（例如 `ohm`、`tsc`、`eslint`）时，Deno
+会按以下顺序解析它：
+
+1. `node_modules/.bin/` - 如果任务所在目录或其父目录中有
+   `node_modules/.bin/` 文件夹，Deno 会先在那里查找。请注意
+   `deno add npm:<pkg>` 会更新 `deno.json` imports 和 `deno.lock`，但不会
+   创建 `node_modules` 目录。`node_modules` 目录仅在使用 `deno install` 或其他与 npm 兼容的工具时才会创建。
+
+2. `package.json` 的 `bin` 字段 - 当某个依赖在其
+   `package.json` 中定义了 `bin` 字段时，Deno 会通过其 npm 兼容层自动
+   让这些命令在任务脚本中可用。
+
+3. 系统 `PATH` - 如果在上述位置都找不到该命令，Deno 会回退到
+   搜索系统 `PATH`。
+
+### 示例
+
+给定一个包含以下内容的 `package.json`：
+
+```json
+{
+  "dependencies": {
+    "@ohm-js/cli": "^2.0.0"
+  }
+}
+```
+
+以及一个包含以下内容的 `deno.json`：
+
+```json
+{
+  "tasks": {
+    "generate": "ohm src/grammar.ohm -o src/grammar.js"
+  }
+}
+```
+
+运行 `deno task generate` 将会：
+
+1. 在 `node_modules/.bin/ohm` 中查找 `ohm`
+2. 如果找到，则使用 Deno 的 Node.js 兼容层执行它
+3. 该命令在 Deno 的运行时下运行，而不是 Node.js。

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-29
-title: "使用 Vite 构建的 React 应用"
-description: "使用 Deno 和 Vite 构建 React 应用的完整指南。了解如何搭建项目、实现路由、添加 API 端点，并部署你的全栈 TypeScript 应用。"
+last_modified: 2026-05-14
+title: "使用 Vite 的 React 应用"
+description: "使用 Deno 和 Vite 构建 React 应用的完整指南。了解如何设置项目、实现路由、添加 API 端点，以及部署你的全栈 TypeScript 应用。"
 url: /examples/react_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/react/
@@ -205,9 +205,13 @@ createRoot(document.getElementById("root")!).render(
 
 ## 添加路由
 
-应用将有两个路由：`/` 和 `/:dinosaur`。
+该应用将有两个路由：`/`（恐龙列表）和 `/:dinosaur`（单个恐龙的详情页）。Vite React 模板本身是单页应用，因此我们需要一个客户端路由器，根据 URL 切换渲染的组件。我们将使用 `react-router-dom` 来实现——用下面命令安装：
 
-在 `src/App.tsx` 中设置路由：
+```sh
+deno add npm:react-router-dom
+```
+
+然后在 `src/App.tsx` 中设置路由：
 
 ```tsx title="src/App.tsx"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -228,7 +232,18 @@ function App() {
 export default App;
 ```
 
-## 代理以转发 API 请求
+这里有三个部分在起作用：
+
+- `<BrowserRouter>` 会包裹整个应用，使其余组件树能够读取当前
+  URL，并在不刷新整页的情况下触发导航。
+- `<Routes>` 会为当前路径选择第一个匹配的 `<Route>` 并渲染
+  其 `element`。
+- `<Route path="/:selectedDinosaur" ...>` 声明了一个路径参数。当
+  URL 为 `/triceratops` 时，React Router 会将 `selectedDinosaur: "triceratops"`
+  暴露给匹配到的组件——这正是 `Dinosaur.tsx` 之后通过
+  `useParams()` 读取的内容，用来判断要获取哪只恐龙。
+
+## 代理以转发 api 请求
 
 Vite 在端口 `3000` 提供 React 应用，API 在端口 `8000`。我们需要在 `vite.config.ts` 配置代理，将 API 请求转发：
 

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-05-16
 title: "deno info"
 oldUrl:
   - /runtime/manual/tools/dependency_inspector/
@@ -13,6 +13,10 @@ description: "检查项目的依赖"
 
 `deno info` 会显示一个模块依赖树的信息。有关 Deno 如何解析和缓存依赖的更多内容，请参见
 [模块](/runtime/fundamentals/modules/)。
+
+当你传入本地文件时，`deno info <file>` 会自动在当前目录或父目录中发现一个
+`deno.json` 或 `deno.jsonc` 配置文件。使用 `--config <file>` 指定不同的配置
+文件，或使用 `--no-config` 禁用自动配置发现。
 
 ## 示例
 

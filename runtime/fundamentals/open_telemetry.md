@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-25
+last_modified: 2026-05-20
 title: OpenTelemetry
 description: "学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"
 ---
@@ -45,7 +45,7 @@ SPAN inner span [00000000000000000000000000000001/0000000000000002] Internal 0.4
   parent: 0000000000000001
   scope: example-tracer
   key: value
-LOG [INFO] 2025-03-14T13:47:07.235Z "hello from inner"
+LOG [INFO] 2025-03-14T13:47:07.235Z "来自内部的问候"
   scope: deno@2.7.5
   trace: 00000000000000000000000000000001/0000000000000002
 ```
@@ -88,8 +88,9 @@ Deno 会自动收集并将部分可观察性数据导出到 OTLP 端点。
 
 Deno 会自动为多种操作创建跨度，例如：
 
-- 使用 [`Deno.serve`](/api/deno/~/Deno.serve) 处理的入站 HTTP 请求。
-- 使用 [`fetch`](/api/web/~/fetch) 发出的出站 HTTP 请求。
+- 由 [`Deno.serve`](/api/deno/~/Deno.serve) 提供服务的传入 HTTP 请求。
+- 使用 [`fetch`](/api/web/~/fetch) 发起的传出 HTTP 请求。
+- [`Deno.cron()`](/api/deno/~/Deno.cron) 作业调用（Deno 2.7 中新增）。
 
 #### [`Deno.serve`](/api/deno/~/Deno.serve)
 
@@ -242,7 +243,24 @@ Deno.serve(async (req) => {
 - `replace`：日志不输出到 stdout/stderr，只有导出到 OpenTelemetry。
 - `ignore`：日志只输出到 stdout/stderr，不导出到 OpenTelemetry。
 
-## 用户指标
+### Permission audit
+
+Deno 可以将权限审计日志路由到 OpenTelemetry 导出器中，
+与其余追踪、指标和日志一起导出。设置
+`DENO_AUDIT_PERMISSIONS=otel`（而不是文件路径），每次权限访问——允许或拒绝——都会作为 OpenTelemetry 日志记录发出，并带有以下属性：
+
+- `deno.permission.type` — 权限名称（`read`、`net`、`env` 等）。
+- `deno.permission.value` — 正在检查的具体值（路径、主机名、变量名等）。
+- `deno.permission.stack` — 访问位置处的 JavaScript 堆栈帧，仅在同时设置了 `DENO_TRACE_PERMISSIONS` 时存在。
+
+```sh
+OTEL_DENO=true DENO_AUDIT_PERMISSIONS=otel deno run -A main.ts
+```
+
+当您已经收集 OpenTelemetry 数据时，这很有用：审计记录会落在与请求追踪相同的后端中，因此您可以关联是哪次请求触发了哪次权限访问。有关完整属性集和 JSONL 文件路径模式，请参见
+[permission audit](/runtime/fundamentals/security/#permission-flags)。
+
+## User metrics
 
 除自动收集的遥测数据外，您还可以使用 `npm:@opentelemetry/api` 包创建自己的指标和追踪。
 
@@ -512,11 +530,16 @@ OTLP 导出器的端点和协议可通过
 `OTEL_EXPORTER_OTLP_ENDPOINT` 和 `OTEL_EXPORTER_OTLP_PROTOCOL` 环境
 变量配置。`OTEL_EXPORTER_OTLP_PROTOCOL` 支持的值为：
 
-- `http/protobuf`（默认）：通过 HTTP 使用 Protobuf 导出到配置的
+- `http/protobuf` (默认): 通过 HTTP 使用 Protobuf 导出到配置的
   端点。
-- `http/json`：通过 HTTP 使用 JSON 导出到配置的端点。
-- `console`：以人类可读的文本格式将跨度、日志和指标打印到 stderr。
-  这对于在不运行 OTLP 收集器的情况下调试和测试埋点很有用。使用 `console` 时，不需要配置端点。
+- `http/json`: 通过 HTTP 使用 JSON 导出到配置的端点。
+- `grpc`: 使用 gRPC（通过 HTTP/2 的 Protobuf）导出。Deno 2.8+ 可用。
+  适用于仅接受 gRPC 的收集器，例如 Azure Container Apps 的托管
+  OpenTelemetry agent。默认 OTLP gRPC 端口为 `4317`，因此通常还需要
+  设置 `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317`。
+- `console`: 将跨度、日志和指标以人类可读的文本格式打印到 stderr。
+  这适用于在不运行 OTLP 收集器的情况下进行调试和测试埋点。使用
+  `console` 时，不需要配置端点。
 
 若端点需要身份验证，可使用环境变量 `OTEL_EXPORTER_OTLP_HEADERS` 设置请求头。
 
@@ -600,24 +623,24 @@ async function tracedFetch(url: string) {
 
 Deno 的 OpenTelemetry 集成仍在开发中，存在以下限制：
 
-- 跟踪总是采样的（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
-- 跟踪仅支持不带属性的链接。
-- 不支持指标样本点。
+- 始终对追踪进行采样（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
+- 追踪仅支持不带属性的链接。
+- 不支持指标示例值。
 - 不支持自定义日志流（例如除 `console.log` 和 `console.error`
   之外的日志）。
-- 支持的导出器为 OTLP（`http/protobuf`、`http/json`）和 `console`。
-  不支持其他导出器和协议，例如 `grpc`。
-- 进程退出/崩溃时，不会收集可观测（异步）仪表的指标，因此指标的最后值可能不会被导出。同步
-  指标会在进程退出/崩溃时导出。
-- `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、`OTEL_ATTRIBUTE_COUNT_LIMIT`、
-  `OTEL_SPAN_EVENT_COUNT_LIMIT`、`OTEL_SPAN_LINK_COUNT_LIMIT`、
-  `OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和
-  `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 环境变量中指定的限制对
-  跟踪跨度不生效。
-- `OTEL_METRIC_EXPORT_TIMEOUT` 环境变量不生效。
-- 未知的 HTTP 方法不会按照 OpenTelemetry 语义约定
-  在 `http.request.method` 跨度属性中规范化为 `_OTHER`。
-- [`Deno.serve`](/api/deno/~/Deno.serve) 的 HTTP 服务端跨度没有设置
-  OpenTelemetry 状态，并且如果处理器抛出错误（即调用了 `onError`），
-  该跨度不会设置错误状态，错误也不会通过事件附加到跨度上。
-- 没有机制可以为 [`fetch`](/api/web/~/fetch) 的 HTTP 客户端跨度添加 `http.route` 属性，或者将跨度名称更新为包含该路由。
+- 仅支持 OTLP 导出器（`http/protobuf`、`http/json`、`grpc`）和
+  `console`。不支持其他导出格式。
+- 在进程退出/崩溃时，不会收集可观测（异步）仪表的指标，因此
+  可能不会导出指标的最后一个值。同步指标会在进程退出/崩溃时导出。
+- 环境变量 `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、
+  `OTEL_ATTRIBUTE_COUNT_LIMIT`、`OTEL_SPAN_EVENT_COUNT_LIMIT`、
+  `OTEL_SPAN_LINK_COUNT_LIMIT`、`OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和
+  `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 中指定的限制不会对追踪跨度生效。
+- 不会遵守环境变量 `OTEL_METRIC_EXPORT_TIMEOUT`。
+- 未知的 HTTP 方法不会按照 OpenTelemetry 语义约定规范化为
+  `http.request.method` 跨度属性中的 `_OTHER`。
+- [`Deno.serve`](/api/deno/~/Deno.serve) 的 HTTP 服务端跨度不会设置
+  OpenTelemetry 状态；如果处理程序抛出异常（即调用 `onError`），该跨度
+  不会设置错误状态，且错误不会通过事件附加到跨度上。
+- 没有机制可为 [`fetch`](/api/web/~/fetch) 的 HTTP 客户端跨度添加
+  `http.route` 属性，或更新跨度名称以包含该路由。

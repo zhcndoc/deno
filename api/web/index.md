@@ -59,6 +59,53 @@ Deno 支持一个全面的 Web 标准 API 集：
 - **[Performance API](/api/web/~/Performance)** - 高精度计时
 - **[Timers](/api/web/~/setTimeout)** - setTimeout、setInterval 和 setImmediate
 
+### Structured Clone & Transferable Objects
+
+Deno 支持 [`structuredClone()`](/api/web/~/structuredClone) 和
+[`postMessage()`](/api/web/~/Worker) 用于在不同上下文之间克隆和传输对象
+（例如主线程与 Web Workers 之间）。
+
+#### 可序列化类型
+
+以下类型可以通过 `structuredClone()` 克隆，并通过 `postMessage()` 发送：
+
+| Type                                      | Notes                                                                                        |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Primitives                                | `string`, `number`, `boolean`, `null`, `undefined`, `bigint`                                 |
+| `Array`, `Object`, `Map`, `Set`           | 包括嵌套结构和循环引用                                                                                |
+| `Date`, `RegExp`                          |                                                                                              |
+| `ArrayBuffer`, `TypedArray`, `DataView`   | 默认会被复制，或可被传输（见下文）                                                |
+| `Error` types                             | `Error`, `EvalError`, `RangeError`, `ReferenceError`, `SyntaxError`, `TypeError`, `URIError` |
+| [`Blob`](/api/web/~/Blob)                 | 需要 Deno 2.8+                                                                           |
+| [`File`](/api/web/~/File)                 | 需要 Deno 2.8+                                                                           |
+| [`DOMException`](/api/web/~/DOMException) |                                                                                              |
+| [`CryptoKey`](/api/web/~/CryptoKey)       |                                                                                              |
+
+#### 可传输类型
+
+以下类型可以通过 `structuredClone()` 中的 `transfer` 选项或 `postMessage()` 中的 `transfer` 列表进行 _传输_（而非复制）。传输后，原对象将不可用：
+
+| Type                                            | Notes                                    |
+| ----------------------------------------------- | ---------------------------------------- |
+| [`ArrayBuffer`](/api/web/~/ArrayBuffer)         | 将底层内存移动给接收方 |
+| [`MessagePort`](/api/web/~/MessagePort)         | 将端口传输到另一个上下文    |
+| [`ReadableStream`](/api/web/~/ReadableStream)   | 将流传输到另一个上下文  |
+| [`WritableStream`](/api/web/~/WritableStream)   | 将流传输到另一个上下文  |
+| [`TransformStream`](/api/web/~/TransformStream) | 将流传输到另一个上下文  |
+
+```ts
+// 克隆一个 Blob
+const blob = new Blob(["hello"], { type: "text/plain" });
+const cloned = structuredClone(blob);
+console.log(await cloned.text()); // "hello"
+
+// 通过 MessageChannel 传输 ArrayBuffer
+const buffer = new ArrayBuffer(1024);
+const ch = new MessageChannel();
+ch.port1.postMessage(buffer, [buffer]);
+// buffer.byteLength 现在为 0（已传输）
+```
+
 ## 主要优势
 
 - **标准兼容**：API 遵循 WHATWG 和 W3C 规范
@@ -85,7 +132,7 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 });
 
 worker.postMessage({ task: "process_data", data: [1, 2, 3] });
-worker.onmessage = (e) => console.log("Result:", e.data);
+worker.onmessage = (e) => console.log("结果：", e.data);
 ```
 
 ```javascript
@@ -268,7 +315,7 @@ localStorage.removeItem("myDemo");
 localStorage.clear();
 ```
 
-## Web Workers
+## Web Worker
 
 Deno 支持 [`Web Worker API`](/api/web/workers)。
 

@@ -482,17 +482,12 @@ Deno.test("Mock fetch API", async () => {
 2. 调用 API 进行认证
 3. 存储带有过期时间的 token
 
-下面示例创建了完整的 `AuthService` 类，用于登录、token 管理和鉴权。测试中使用了多种 Mock 技术：Stub fetch 请求、Spy 方法、模拟时间来测试 token 过期，并使用结构化测试步骤组织。
+在下面的示例中，我们将在应用程序模块中创建一个完整的 `AuthService` 类，用于处理用户登录、token 管理和认证。然后我们会将其导入到测试模块中，并使用前面介绍的各种 mocking 技术对其进行全面测试：stub 化 fetch 请求、spy 监视方法，以及操纵时间来测试 token 过期，所有这些都在组织良好的测试步骤中完成。
 
-Deno 的测试 API 提供了 `t.step()` 方法，将测试逻辑分割为步骤或子测试，使复杂测试更易读，更便于定位问题。每步可单独断言，测试结果中分别报告。
+Deno 的测试 API 提供了一个很有用的 `t.step()` 函数，它允许你将测试组织成逻辑步骤或子测试。这使得复杂测试更易读，也有助于准确定位测试失败的具体部分。每个步骤都可以有自己的断言，并会在测试输出中单独报告。首先，在它自己的模块中定义该服务：
 
-```ts
-import { assertEquals, assertRejects } from "jsr:@std/assert";
-import { spy, stub } from "jsr:@std/testing/mock";
-import { FakeTime } from "jsr:@std/testing/time";
-
-// 目标服务
-class AuthService {
+```ts title="auth_service.ts"
+export class AuthService {
   private token: string | null = null;
   private expiresAt: Date | null = null;
 
@@ -513,13 +508,13 @@ class AuthService {
       throw new Error(`Authentication failed: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: { token: string } = await response.json();
 
     // 存储带 1 小时过期时间的 token
     this.token = data.token;
     this.expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
-    return this.token;
+    return data.token;
   }
 
   getToken(): string {
@@ -541,6 +536,15 @@ class AuthService {
     this.expiresAt = null;
   }
 }
+```
+
+然后从你的测试文件中导入该服务：
+
+```ts title="auth_service_test.ts"
+import { assertEquals, assertRejects, assertThrows } from "jsr:@std/assert";
+import { assertSpyCalls, spy, stub } from "jsr:@std/testing/mock";
+import { FakeTime } from "jsr:@std/testing/time";
+import { AuthService } from "./auth_service.ts";
 
 Deno.test("AuthService 综合测试", async (t) => {
   await t.step("登录应该验证凭证", async () => {
@@ -561,7 +565,7 @@ Deno.test("AuthService 综合测试", async (t) => {
       { status: 200, headers: { "Content-Type": "application/json" } },
     );
 
-    const fetchStub = stub(
+    using fetchStub = stub(
       globalThis,
       "fetch",
       (_url: string | URL | Request, options?: RequestInit) => {
@@ -575,66 +579,55 @@ Deno.test("AuthService 综合测试", async (t) => {
       },
     );
 
-    try {
-      const token = await authService.login("testuser", "password123");
-      assertEquals(token, "fake-jwt-token");
-    } finally {
-      fetchStub.restore();
-    }
+    const token = await authService.login("testuser", "password123");
+    assertEquals(token, "fake-jwt-token");
+    assertSpyCalls(fetchStub, 1);
   });
 
-  await t.step("token 过期应正常工作", () => {
-    使用假时间 = new FakeTime();
-
+  await t.step("token 过期应正确工作", async () => {
+    using time = new FakeTime(new Date("2023-01-01T12:00:00Z"));
     const authService = new AuthService();
-    const time = fakeTime(new Date("2023-01-01T12:00:00Z"));
 
-    try {
-      // 模拟登录过程直接设置 token
-      authService.login = spy(
-        authService,
-        "login",
-        async () => {
-          (authService as any).token = "fake-token";
-          (authService as any).expiresAt = new Date(
-            Date.now() + 60 * 60 * 1000,
-          );
-          return "fake-token";
-        },
-      );
+    using fetchStub = stub(
+      globalThis,
+      "fetch",
+      () =>
+        Promise.resolve(
+          new Response(JSON.stringify({ token: "fake-token" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          }),
+        ),
+    );
 
-      // 登录并验证 token
-      authService.login("user", "pass").then(() => {
-        const token = authService.getToken();
-        assertEquals(token, "fake-token");
+    using getTokenSpy = spy(authService, "getToken");
 
-        // 将时间推进到过期后
-        time.tick(61 * 60 * 1000);
+    await authService.login("user", "pass");
+    assertEquals(authService.getToken(), "fake-token");
+    assertSpyCalls(getTokenSpy, 1);
 
-        // token 应该已过期
-        assertRejects(
-          () => {
-            authService.getToken();
-          },
-          Error,
-          "Token expired",
-        );
-      });
-    } finally {
-      time.restore();
-      (authService.login as any).restore();
-    }
+    // 将时间推进到过期时间之后
+    time.tick(61 * 60 * 1000);
+
+    // Token 现在应已过期
+    assertThrows(
+      () => authService.getToken(),
+      Error,
+      "Token expired",
+    );
+    assertSpyCalls(getTokenSpy, 2);
+    assertSpyCalls(fetchStub, 1);
   });
 });
 ```
 
-该代码定义了 `AuthService` 类，包含三大功能：
+`auth_service.ts` 模块定义了一个 `AuthService` 类，具有三个主要功能：
 
 - 登录：校验凭证，调用 API，保存带过期时间的 token
 - 获取 Token：返回有效且未过期的 token
 - 登出：清除 token 和过期时间
 
-测试通过一个主测试，分为三个逻辑**步骤**，分别检验凭证验证、API 调用处理和 token 过期。
+测试结构组织为一个主测试，包含三个逻辑 **步骤**，每个步骤测试服务的不同方面：凭证校验、API 调用处理，以及 token 过期。
 
 🦕 高效的 Mock 技术对于编写可靠、可维护的单元测试至关重要。Deno 提供多种强大工具帮助你在测试中隔离代码。掌握这些技巧后，你能编写更可靠、更快速且不依赖外部服务的测试。
 

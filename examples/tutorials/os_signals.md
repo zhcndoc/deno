@@ -1,14 +1,16 @@
 ---
-last_modified: 2025-03-10
+last_modified: 2026-05-20
 title: "处理操作系统信号"
-description: "关于在 Deno 中处理操作系统信号的教程。学习如何捕获 SIGINT 和 SIGBREAK 事件，管理信号监听器，并在应用程序中实现优雅退出处理程序。"
+description: "关于在 Deno 中处理操作系统信号的教程。学习如何捕获 SIGINT 和 SIGBREAK 事件、管理信号监听器，以及在应用程序中实现优雅关闭处理程序。"
 url: /examples/os_signals_tutorial/
 oldUrl:
   - /runtime/manual/examples/os_signals/
   - /runtime/tutorials/os_signals/
 ---
 
-> ⚠️ 从 Deno v1.23 开始，Windows 仅支持监听 SIGINT 和 SIGBREAK。
+> ⚠️ Windows 支持监听 `SIGINT`、`SIGBREAK`、`SIGTERM`、`SIGQUIT`、
+> `SIGHUP` 和 `SIGWINCH`（除 `SIGINT`/`SIGBREAK` 外，其余都通过 libuv 的
+> Windows 信号仿真机制）。
 
 ## 概念
 
@@ -72,3 +74,14 @@ setTimeout(() => {
 ```shell
 deno run signal_listeners.ts
 ```
+
+## Windows 支持
+
+受支持的信号集合因平台而异。Windows 上的特定行为如下：
+
+| Use case                         | Supported signals on Windows                                                                                                       |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `Deno.addSignalListener(sig, …)` | `SIGINT`, `SIGBREAK`, `SIGTERM`, `SIGQUIT`, `SIGHUP`, `SIGWINCH`                                                                   |
+| `Deno.kill(pid, sig)`            | `SIGINT`, `SIGBREAK`, `SIGTERM`, `SIGQUIT`, `SIGHUP`, `SIGWINCH`, `SIGKILL`, `SIGABRT`, plus signal `0` for a process-health check |
+
+`SIGKILL` 和 `SIGABRT` 故意**不能**通过 `addSignalListener` 注册——它们是不可捕获/致命的，这与 Unix 语义一致。在 Windows 上，可捕获的信号都会转发到 libuv 的仿真层；通过 `Deno.kill` 发送的信号最终会调用 `TerminateProcess`。

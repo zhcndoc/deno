@@ -1,9 +1,16 @@
 ---
-last_modified: 2024-10-07
+last_modified: 2026-05-20
 title: "配置 Deno 行为"
 ---
 
 有几个环境变量可以影响 Deno 的行为：
+
+### DENO_AUDIT_PERMISSIONS
+
+审计每次权限访问（允许或拒绝）。将其设置为文件路径以写入
+JSONL 审计日志，或将其设置为字面值 `otel`，以通过已配置的导出器将每次访问
+作为 OpenTelemetry 日志记录发出。有关字段集和 OTel 属性名称，请参阅
+[permissions](/runtime/fundamentals/security/#permission-flags)。
 
 ### DENO_AUTH_TOKENS
 
@@ -37,7 +44,7 @@ title: "配置 Deno 行为"
 
 ### DENO_NO_UPDATE_CHECK
 
-设置以禁用检查是否有更新的 Deno 版本可用。
+设置以禁用检查是否有可用的 Deno 更新版本。
 
 ### DENO_WEBGPU_TRACE
 
@@ -60,6 +67,11 @@ title: "配置 Deno 行为"
 ### NO_PROXY
 
 指示应绕过在其他环境变量中设置的代理的主机。有关更多信息，请参阅 [代理](#proxies) 部分。
+
+### NODE_EXTRA_CA_CERTS
+
+指向包含额外证书颁发机构的 PEM 文件的路径。它会在根证书存储级别加载，因此这些证书会被 `fetch()`、
+[`Deno.connectTls()`](/api/deno/~/Deno.connectTls) 以及 Node 兼容 API（`node:https`、`node:tls`）所信任。Deno 2.8+ 可用。缺失或无效的文件会发出警告而不是失败，这与 Node.js 的语义一致。
 
 ### NPM_CONFIG_REGISTRY
 

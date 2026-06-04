@@ -31,7 +31,7 @@ deno run --unstable-cron main.ts
 
 ```ts
 Deno.cron("log-a-message", "* * * * *", () => {
-  console.log("This runs once a minute.");
+  console.log("这段代码每分钟运行一次。");
 });
 ```
 
@@ -39,7 +39,7 @@ Deno.cron("log-a-message", "* * * * *", () => {
 
 ```ts
 Deno.cron("hourly-task", { hour: { every: 1 } }, () => {
-  console.log("This runs once an hour.");
+  console.log("这段代码每小时运行一次。");
 });
 ```
 
@@ -57,16 +57,30 @@ Deno.cron(
   "* * * * *",
   { backoffSchedule: [1000, 5000, 10000] },
   () => {
-    throw new Error("Will be retried up to three times.");
+    throw new Error("最多会重试三次。");
   },
 );
 ```
 
 ## 在生产环境中运行 cron 任务
 
-[`Deno.cron`](/api/deno/~/Deno.cron) 在 Deno CLI 中将执行状态保存在内存中，
-这意味着每个进程都会维护自己独立的一组 cron 任务。
-对于生产工作负载，[Deno Deploy](/deploy/reference/cron/) 在此运行时 API 之上构建：
-它会在部署时发现你的 [`Deno.cron()`](/api/deno/~/Deno.cron)
-定义，安排并调用它们，处理重试，并在仪表板中展示运行情况——这样你就
-不需要自己维持一个长期运行的进程。
+[`Deno.cron`](/api/deno/~/Deno.cron) 在 Deno
+CLI 中将执行状态保存在内存里，这意味着每个进程都会维护自己独立的一组 cron 任务。
+对于生产工作负载，[Deno Deploy](/deploy/reference/cron/) 在此运行时 API 的基础上构建：它会在部署时发现你的
+[`Deno.cron()`](/api/deno/~/Deno.cron)
+定义，负责调度和调用它们，处理重试，并在仪表板中展示运行情况——因此你无需自己维护一个长期运行的进程。
+
+## OpenTelemetry
+
+当启用 [OpenTelemetry](/runtime/fundamentals/open_telemetry/) 时
+（`OTEL_DENO=true`），每次 [`Deno.cron()`](/api/deno/~/Deno.cron) 调用
+都会自动生成一个 OpenTelemetry span。这使你能够将 cron 执行
+与你的其他已埋点代码一起进行追踪：
+
+```sh
+OTEL_DENO=true deno run --unstable-cron main.ts
+```
+
+每次 cron 调用都会创建一个以该 cron 作业命名的 span。该 span 覆盖
+处理函数的执行时长，且在处理函数内部创建的任何 span
+都会作为子 span 嵌套在其下。

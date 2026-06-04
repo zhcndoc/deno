@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-02-19
+last_modified: 2026-05-28
 title: "设置你的环境"
-description: "Deno 开发环境搭建指南。了解如何配置流行的编辑器（如 VS Code）、设置语言服务器支持，并启用 shell 自动补全以提升工作效率。"
+description: "一份用于为 Deno 设置开发环境的指南。了解如何配置 VS Code 等流行编辑器、设置语言服务器支持，并启用 shell 补全以提高生产力。"
 oldUrl: /runtime/manual/getting_started/setup_your_environment/
 ---
 
@@ -10,15 +10,15 @@ Deno 附带许多在应用程序开发中常用的工具，包括完整的
 
 我们将涵盖：
 
-- 如何在你喜欢的编辑器/IDE 中使用 Deno
-- 如何使用 AI 编程助手与 Deno 配合
-- 如何生成 shell 自动补全
+- 如何在你最喜欢的编辑器/IDE 中使用 Deno
+- 如何生成 shell 补全
 
 ## 设置你的编辑器/IDE
 
 ### Visual Studio Code
 
-如果你尚未安装，请从 [官方网站](https://code.visualstudio.com/) 下载并安装 Visual Studio Code。
+如果你还没有安装，请从
+[官方网站](https://code.visualstudio.com/)下载并安装 Visual Studio Code。
 
 在扩展视图中搜索 "Deno" 并安装
 [Denoland 的扩展](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)。
@@ -37,24 +37,7 @@ Deno 附带许多在应用程序开发中常用的工具，包括完整的
 }
 ```
 
-就这样！你已经成功设置了 VSCode 的 Deno 开发环境。现在你可以享受 Deno LSP 提供的所有功能，包括智能感知（IntelliSense）、代码格式化、代码检查等。
-
-### AI 助手技能配置
-
-Deno 提供官方 **skills** —— 专门的知识包，能让 AI 编程助手（例如 Claude、GitHub Copilot、Cursor 等）准确、及时地了解 Deno 的 API、规范和最佳实践。
-
-如果没有这些技能，AI 助手可能会建议针对 Node.js 的模式或使用过时的 Deno API。加载相关技能可确保助手理解 Deno 的模块系统、标准库、`deno.json` 配置、Deno Deploy、Fresh 等内容。
-
-技能可在
-[github.com/denoland/skills](https://github.com/denoland/skills) 获取。每个技能是一个纯文本或 markdown 文件，你可以将其粘贴到 AI 助手的上下文中，添加到项目级指令文件中（例如 `CLAUDE.md`、`.github/copilot-instructions.md`），或根据你的工具配置为持久的系统提示。
-
-可用技能包括：
-
-- **deno-guidance** —— 基础的 Deno 知识：模块导入、`deno.json`、CLI 命令和包选择
-- **deno-deploy** —— 部署到 Deno Deploy，KV，环境变量，以及 `deno deploy` CLI
-- **deno-frontend** —— 使用 Fresh 框架和 Preact 构建 Web 界面
-- **deno-expert** —— 针对代码审查和调试的高级 Deno 模式
-- **deno-sandbox** —— 使用 `@deno/sandbox` 安全执行不受信任代码
+就是这样！你已经成功使用 VSCode 为 Deno 设置好了开发环境。你现在将获得 Deno 的 LSP 带来的全部优势，包括 IntelliSense、代码格式化、代码检查等更多功能。
 
 ### JetBrains IDEs
 
@@ -71,18 +54,15 @@ Runtime** 切换为 **Deno**。在 **Deno** 下面，指定 Deno 可执行文件
 [这篇博客文章](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)
 以了解如何在 JetBrains IDE 中开始使用 Deno 的更多信息。
 
-### Vim/Neovim 通过插件
+### Vim/Neovim
 
-Deno 在 [Vim](https://www.vim.org/) 和 [Neovim](https://neovim.io/) 上有良好支持，可以通过
-[coc.nvim](https://github.com/neoclide/coc.nvim)、[vim-easycomplete](https://github.com/jayli/vim-easycomplete)、[ALE](https://github.com/dense-analysis/ale) 和 [vim-lsp](https://github.com/prabirshrestha/vim-lsp) 插件实现。coc.nvim 提供与 Deno 语言服务器集成的插件，而 ALE 开箱即用支持 Deno。
+Neovim 0.6+ 的推荐设置是使用内置语言服务器客户端
+并配合 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)，它自带一个
+[现成的 Deno 配置](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#denols)。
 
-### Neovim 0.6+ 使用内置语言服务器
-
-要使用 Deno 语言服务器，请安装
-[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/) 并按照说明启用
-[所提供的 Deno 配置](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#denols)。
-
-请注意，如果你同时使用 `ts_ls` 作为 LSP 客户端，可能会出现 `ts_ls` 和 `denols` 同时附加到当前缓冲区的问题。为解决此问题，请确保为 `ts_ls` 和 `denols` 设置不同的 `root_dir`。你可能还需将 `ts_ls` 的 `single_file_support` 设置为 `false`，以防其在单文件模式下运行。以下是示例配置：
+如果你还配置了 `ts_ls`，两个服务器都可能附加到同一个缓冲区。
+为避免这种情况，请给每个服务器设置不同的 `root_dir`（或 `root_markers`），并在 `ts_ls` 上设置
+`single_file_support = false`：
 
 ```lua
 vim.lsp.config('denols', {
@@ -97,11 +77,10 @@ vim.lsp.config('ts_ls', {
 })
 ```
 
-对于 Deno，上述示例假设项目根目录下存在 `deno.json` 或 `deno.jsonc` 文件。
+这假定你的 Deno 项目根目录下存在 `deno.json` 或 `deno.jsonc`。
 
-##### Kickstart.nvim 和 Mason LSP
-
-如果你使用 [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)，可以将上述配置以如下方式添加至你的 `init.lua` 配置中的服务器表：
+**Kickstart.nvim 和 Mason LSP。** 如果你使用
+[kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)，请将等效配置添加到 `init.lua` 中的 `servers` 表：
 
 ```lua
 local servers = {
@@ -119,73 +98,87 @@ local servers = {
     }
 ```
 
-#### coc.nvim
+**其他 Vim/Neovim 插件。** 如果你更喜欢其他插件生态，Deno
+也可以与以下插件配合使用：
 
-安装
-[coc.nvim](https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim) 后，你需要通过命令 `:CocInstall coc-deno` 安装
-[coc-deno](https://github.com/fannheyward/coc-deno) 插件。
+- **[ALE](https://github.com/dense-analysis/ale)：** 开箱即支持 Deno 语言服务器。参见
+  [`:help ale-typescript-deno`](https://github.com/dense-analysis/ale/blob/master/doc/ale-typescript.txt)
+  了解配置选项。
+- **[coc.nvim](https://github.com/neoclide/coc.nvim)：** 使用
+  `:CocInstall coc-deno` 安装 [coc-deno](https://github.com/fannheyward/coc-deno)，然后在
+  你的项目中运行 `:CocCommand deno.initializeWorkspace`。
+- **[vim-easycomplete](https://github.com/jayli/vim-easycomplete)：** 安装后，运行 `:InstallLspServer deno`。详见
+  [项目 README](https://github.com/jayli/vim-easycomplete)。
+- **[vim-lsp](https://github.com/prabirshrestha/vim-lsp)：** 在你的 `.vimrc` 中注册 Deno
+  语言服务器：
 
-插件安装完毕后，如想在某个工作区启用 Deno，可以运行命令 `:CocCommand deno.initializeWorkspace`，然后即可使用 `gd`（跳转到定义）、`gr`（查找引用）等命令。
+  ```vim
+  if executable('deno')
+    let server_config = {
+      \ 'name': 'deno',
+      \ 'cmd': {server_info->['deno', 'lsp']},
+      \ 'allowlist': ['typescript', 'javascript', 'javascriptreact', 'typescriptreact'],
+      \ }
 
-#### ALE
+    if exists('$DENO_ENABLE')
+      let deno_enabled = $DENO_ENABLE == '1'
+      let server_config['workspace_config'] = { 'deno': { 'enable': deno_enabled ? v:true : v:false } }
+    endif
 
-ALE 原生支持 Deno 语言服务器，许多情况下无需额外配置。安装
-[ALE](https://github.com/dense-analysis/ale#installation) 后，执行
-[`:help ale-typescript-deno`](https://github.com/dense-analysis/ale/blob/master/doc/ale-typescript.txt)
-以获取可用配置选项信息。
-
-有关如何设置 ALE（如键绑定）的更多信息，请参考
-[官方文档](https://github.com/dense-analysis/ale#usage)。
-
-#### Vim-EasyComplete
-
-Vim-EasyComplete 默认支持 Deno，无需额外配置。安装
-[vim-easycomplete](https://github.com/jayli/vim-easycomplete#installation) 后，若尚未安装 Deno，需通过 `:InstallLspServer deno` 安装。更多信息详见
-[官方文档](https://github.com/jayli/vim-easycomplete)。
-
-#### Vim-Lsp
-
-通过
-[vim-plug](https://github.com/prabirshrestha/vim-lsp?tab=readme-ov-file#installing)
-或 vim 包管理器安装 Vim-Lsp 后，在你的 `.vimrc` 添加以下配置：
-
-```vim
-if executable('deno')
-  let server_config = {
-    \ 'name': 'deno',
-    \ 'cmd': {server_info->['deno', 'lsp']},
-    \ 'allowlist': ['typescript', 'javascript', 'javascriptreact', 'typescriptreact'],
-    \ }
-
-  if exists('$DENO_ENABLE')
-    let deno_enabled = $DENO_ENABLE == '1'
-    let server_config['workspace_config'] = { 'deno': { 'enable': deno_enabled ? v:true : v:false } }
+    au User lsp_setup call lsp#register_server(server_config)
   endif
+  ```
 
-  au User lsp_setup call lsp#register_server(server_config)
-endif
-```
+  通过在工作目录中放置 `deno.json`/`deno.jsonc`，或者设置 `DENO_ENABLE=1` 来激活服务器。若要在 intellisense 提示中高亮语法，还可以添加：
 
-启用 LSP 服务器有两种方式：一种是在当前工作目录下存在 `deno.json` 或 `deno.jsonc` 文件，另一种是通过环境变量 `DENO_ENABLE=1` 强制启用。如果你想让 IntelliSense 中的工具提示高亮语法，也可在 `.vimrc` 中添加：
+  ```vim
+  let g:markdown_fenced_languages = ["ts=typescript"]
+  ```
 
-```vim
-let g:markdown_fenced_languages = ["ts=typescript"]
+### Zed
+
+[Zed 编辑器](https://zed.dev) 可通过
+[Deno 扩展](https://zed.dev/extensions?query=deno&filter=language-servers)集成 Deno 语言服务器。
+
+### Helix
+
+[Helix](https://helix-editor.com) 自带语言服务器支持。
+要连接到 Deno 语言服务器，需要修改
+`languages.toml` 配置文件。
+
+```toml
+[[language]]
+name = "typescript"
+roots = ["deno.json", "deno.jsonc", "package.json"]
+file-types = ["ts", "tsx"]
+auto-format = true
+language-servers = ["deno-lsp"]
+
+[[language]]
+name = "javascript"
+roots = ["deno.json", "deno.jsonc", "package.json"]
+file-types = ["js", "jsx"]
+auto-format = true
+language-servers = ["deno-lsp"]
+
+[language-server.deno-lsp]
+command = "deno"
+args = ["lsp"]
+config.deno.enable = true
 ```
 
 ### Emacs
 
-#### lsp-mode
+**lsp-mode。** Emacs 可通过 Deno 语言服务器使用
+[lsp-mode](https://emacs-lsp.github.io/lsp-mode/) 支持 Deno。
+一旦
+[lsp-mode 安装完成](https://emacs-lsp.github.io/lsp-mode/page/installation/)，
+它应该支持 Deno，并且可以被
+[配置](https://emacs-lsp.github.io/lsp-mode/page/lsp-deno/)为支持
+各种设置。
 
-Emacs 通过 Deno 语言服务器使用
-[lsp-mode](https://emacs-lsp.github.io/lsp-mode/) 支持 Deno。安装
-[lsp-mode](https://emacs-lsp.github.io/lsp-mode/page/installation/) 后，默认支持 Deno，可进行
-[配置](https://emacs-lsp.github.io/lsp-mode/page/lsp-deno/) 来自定义设置。
-
-#### eglot
-
-你也可以使用内置 Deno 语言服务器的 [`eglot`](https://github.com/joaotavora/eglot)。
-
-以下是通过 eglot 配置 Deno 的示例：
+**eglot。** 你也可以通过
+[`eglot`](https://github.com/joaotavora/eglot) 使用内置的 Deno 语言服务器。示例配置：
 
 ```elisp
 (add-to-list 'eglot-server-programs '((js-mode typescript-mode) . (eglot-deno "deno" "lsp")))
@@ -217,19 +210,11 @@ Emacs 通过 Deno 语言服务器使用
 }
 ```
 
-### Pulsar
-
-[Pulsar 编辑器，前身为 Atom](https://pulsar-edit.dev/) 支持通过
-[atom-ide-deno](https://web.pulsar-edit.dev/packages/atom-ide-deno) 包集成 Deno 语言服务器。
-`atom-ide-deno` 需要安装 Deno CLI，并依赖
-[atom-ide-base](https://web.pulsar-edit.dev/packages/atom-ide-base) 包。
-
 ### Sublime Text
 
-[Sublime Text](https://www.sublimetext.com/) 通过 [LSP 插件](https://packagecontrol.io/packages/LSP) 连接到 Deno 语言服务器。你可能还需要安装
-[TypeScript 插件](https://packagecontrol.io/packages/TypeScript) 以获得完整语法高亮。
-
-安装 LSP 插件后，在 `.sublime-project` 文件中添加以下配置：
+[Sublime Text](https://www.sublimetext.com/) 支持通过
+[LSP package](https://packagecontrol.io/packages/LSP) 连接到 Deno
+语言服务器。安装完成后，在你的 `.sublime-project` 中添加一个最小的 Deno 客户端：
 
 ```jsonc
 {
@@ -237,66 +222,23 @@ Emacs 通过 Deno 语言服务器使用
     "LSP": {
       "deno": {
         "command": ["deno", "lsp"],
-        "initializationOptions": {
-          // "config": "", // 设置项目中配置文件路径
-          "enable": true,
-          // "importMap": "", // 设置项目导入映射路径
-          "lint": true,
-          "unstable": false
-        },
         "enabled": true,
-        "languages": [
-          {
-            "languageId": "javascript",
-            "scopes": ["source.js"],
-            "syntaxes": [
-              "Packages/Babel/JavaScript (Babel).sublime-syntax",
-              "Packages/JavaScript/JavaScript.sublime-syntax"
-            ]
-          },
-          {
-            "languageId": "javascriptreact",
-            "scopes": ["source.jsx"],
-            "syntaxes": [
-              "Packages/Babel/JavaScript (Babel).sublime-syntax",
-              "Packages/JavaScript/JavaScript.sublime-syntax"
-            ]
-          },
-          {
-            "languageId": "typescript",
-            "scopes": ["source.ts"],
-            "syntaxes": [
-              "Packages/TypeScript-TmLanguage/TypeScript.tmLanguage",
-              "Packages/TypeScript Syntax/TypeScript.tmLanguage"
-            ]
-          },
-          {
-            "languageId": "typescriptreact",
-            "scopes": ["source.tsx"],
-            "syntaxes": [
-              "Packages/TypeScript-TmLanguage/TypeScriptReact.tmLanguage",
-              "Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"
-            ]
-          }
-        ]
+        "selector": "source.ts | source.tsx | source.js | source.jsx",
+        "initializationOptions": {
+          "enable": true,
+          "lint": true
+        }
       }
     }
   }
 }
 ```
 
-### Nova
-
-[Nova 编辑器](https://nova.app) 可通过
-[Deno 扩展](https://extensions.panic.com/extensions/co.gwil/co.gwil.deno/) 集成 Deno 语言服务器。
-
-### GitHub Codespaces
-
-[GitHub Codespaces](https://github.com/features/codespaces) 允许你完全在线或远程在本地机器上开发，无需额外配置或安装 Deno。目前处于早期访问阶段。
-
-如果项目启用了 Deno，并包含 `.devcontainer` 配置作为库的一部分，则在 Codespaces 中打开项目应可“开箱即用”。若创建新项目或想为现有环境添加 Deno 支持，可通过命令面板选择 `Codespaces: Add Development Container Configuration Files...`，然后选择 `Show All Definitions...` 并搜索 `Deno` 定义。
-
-选中后需要重建容器，容器内会添加 Deno CLI。重建后，代码空间即可支持 Deno。
+关于支持的 `initializationOptions` 键的完整列表（例如 `config`、
+`importMap` 和 `unstable`），请参阅
+[LSP 集成参考中的 Settings 部分](/runtime/reference/lsp_integration/#settings)
+以及
+[LSP package 文档](https://lsp.sublimetext.io/language_servers/)。
 
 ### Kakoune
 
@@ -314,35 +256,31 @@ enable = true
 lint = true
 ```
 
-### Helix
+### Nova
 
-[Helix](https://helix-editor.com) 内建语言服务器支持。启用连接 Deno 语言服务器，需要在 `languages.toml` 配置文件中做如下修改：
+[Nova 编辑器](https://nova.app) 可通过
+[Deno 扩展](https://extensions.panic.com/extensions/co.gwil/co.gwil.deno/)集成 Deno 语言服务器。
 
-```toml
-[[language]]
-name = "typescript"
-roots = ["deno.json", "deno.jsonc", "package.json"]
-file-types = ["ts", "tsx"]
-auto-format = true
-language-servers = ["deno-lsp"]
+### Pulsar
 
-[[language]]
-name = "javascript"
-roots = ["deno.json", "deno.jsonc", "package.json"]
-file-types = ["js", "jsx"]
-auto-format = true
-language-servers = ["deno-lsp"]
+[Pulsar 编辑器，前身为 Atom](https://pulsar-edit.dev/) 支持
+通过 [atom-ide-deno](https://web.pulsar-edit.dev/packages/atom-ide-deno) 包集成 Deno 语言服务器。
+`atom-ide-deno` 要求安装 Deno CLI，并且还需要安装
+[atom-ide-base](https://web.pulsar-edit.dev/packages/atom-ide-base) 包。
 
-[language-server.deno-lsp]
-command = "deno"
-args = ["lsp"]
-config.deno.enable = true
-```
+## 远程开发
 
-### Zed
+### GitHub Codespaces
 
-[Zed 编辑器](https://zed.dev) 可通过
-[Deno 扩展](https://zed.dev/extensions?query=deno&filter=language-servers) 集成 Deno 语言服务器。
+[GitHub Codespaces](https://github.com/features/codespaces) 让你可以在
+一个托管环境中开发，而无需在本地安装 Deno。
+
+如果仓库已经包含带有 Deno 的 `.devcontainer` 配置，那么在 Codespaces 中打开它即可正常工作。要为没有该配置的 Codespace 添加 Deno：
+
+1. 打开命令面板 (`Cmd/Ctrl+Shift+P`)。
+2. 运行 `Codespaces: Add Development Container Configuration Files...`。
+3. 选择 `Show All Definitions...` 并搜索 `Deno`。
+4. 重建容器，使 Deno CLI 可用。
 
 ## Shell 自动补全
 
@@ -429,7 +367,8 @@ antigen bundle deno
 > deno completions fish > ~/.config/fish/completions/deno.fish
 ```
 
-## 其他工具
+## 构建你自己的 LSP 集成
 
-如果你正在开发或支持使用 Deno 语言服务器的社区集成，请参考
-[更多关于与 Deno LSP 集成的信息](/runtime/reference/lsp_integration/)，并欢迎随时加入我们的 [Discord 社区](https://discord.gg/deno) 的 `#dev-lsp` 频道交流。
+如果你正在构建或维护与 Deno 语言
+服务器的社区集成，请参阅 [LSP 集成参考](/runtime/reference/lsp_integration/)
+并加入 [Deno Discord](https://discord.gg/deno) 上的 `#dev-lsp` 频道。

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-04-16
-title: "工作区和单体仓库"
-description: "Deno 中管理工作区和单体仓库的指南。了解工作区配置、包管理、依赖解析，以及如何有效地组织多包项目。"
+last_modified: 2026-05-20
+title: "工作区与单体仓库"
+description: "Deno 工作区与单体仓库管理指南。了解工作区配置、包管理、依赖解析，以及如何有效地组织多包项目。"
 oldUrl: /runtime/manual/basics/workspaces
 ---
 
@@ -268,6 +268,26 @@ cd my-package
 deno publish
 ```
 
+#### 从发布中排除工作区成员
+
+工作区通常包含一些不打算发布的成员，例如内部辅助工具、示例，或仅用于托管共享 `tasks` 的包。默认情况下，`deno publish` 会尝试发布所有具有 `name` 和 `exports` 的工作区成员，并且如果其中任何一个缺少 `version`，就会报错。
+
+要使某个成员不参与 `deno publish`，请在该成员的 `deno.json` 中设置 `"publish": false`：
+
+```jsonc title="internal-helpers/deno.json"
+{
+  "name": "@scope/internal-helpers",
+  "tasks": {
+    "build": "deno run -A scripts/build.ts"
+  },
+  "publish": false
+}
+```
+
+该成员仍然属于工作区。它的 `tasks` 仍会运行，它的 `imports` 仍会被解析，其他成员也可以依赖它，但 `deno publish` 会完全跳过它，并且不会因为缺少 `version` 而报错。
+
+这仅适用于 `deno.json` 成员。仅由 `package.json` 定义的工作区成员是 npm 包，且从不会成为 `deno publish` 的候选对象（`deno publish` 面向 JSR），因此无需为它们设置排除。Deno 不会读取 `package.json` 中的 `"private": true` 字段。
+
 #### 管理相互依赖的包
 
 发布相互依赖的工作区包时，请在相关包之间保持一致的版本策略。先发布被依赖的包，再发布依赖它们的包。发布后，验证发布包是否正常工作：
@@ -395,7 +415,7 @@ Hi, friend!
 | lint.rules.exclude   | ✅        | ✅      | 规则按包合并，包优先于工作区（包 include 的优先级高于工作区 exclude）。                                                                                 |
 | lint.report          | ✅        | ❌      | 同一时间只能启用一个报告器，因此在 lint 跨多个包的文件时，不可能为不同工作区使用不同报告器。                                            |
 | fmt.include          | ✅        | ✅      |                                                                                                                                                                                                                 |
-| fmt.exclude          | ✅        | ✅      |                                                                                                                                                                                                                 |
+| fmt.exclude         | ✅        | ✅      |                                                                                                                                                                                                                 |
 | fmt.files            | ⚠️        | ❌      | 已弃用                                                                                                                                                                                                      |
 | fmt.useTabs          | ✅        | ✅      | 包优先于工作区。                                                                                                                                                                          |
 | fmt.indentWidth      | ✅        | ✅      | 包优先于工作区。                                                                                                                                                                          |
@@ -412,6 +432,7 @@ Hi, friend!
 | test.include         | ✅        | ✅      |                                                                                                                                                                                                                 |
 | test.exclude         | ✅        | ✅      |                                                                                                                                                                                                                 |
 | test.files           | ⚠️        | ❌      | 已弃用                                                                                                                                                                                                      |
+| publish              | ❌        | ✅      | 设置为 `false` 可将某个成员排除在 `deno publish` 之外。另见[从发布中排除工作区成员](#从发布中排除工作区成员)。                                                            |
 | publish.include      | ✅        | ✅      |                                                                                                                                                                                                                 |
 | publish.exclude      | ✅        | ✅      |                                                                                                                                                                                                                 |
 | bench.include        | ✅        | ✅      |                                                                                                                                                                                                                 |
@@ -578,7 +599,103 @@ export function subtract(a: number, b: number): number {
 
 1. 将复杂项目拆分成职责单一的包
 
-2. 在包间共享代码，无需发布到注册表
+## 使用 `catalog:` 集中管理依赖版本
+
+当多个工作区成员依赖同一个 npm 包时，若要保持它们的版本同步，通常意味着每次升级版本都要编辑每个成员的 `package.json`。`catalog:` 协议——在 Deno 2.8 中新增，并与 pnpm、Bun 和 Yarn 中的等效功能兼容——允许工作区根目录声明一个统一的版本要求，而每个成员在其 `package.json` 的依赖中通过名称引用它。（`catalog:` 说明符本身仅从 `package.json` 文件中读取；catalog 定义可以位于工作区根目录的 `deno.json` 或 `package.json` 中。）
+
+在根 `deno.json` 中定义一个 catalog：
+
+```jsonc title="deno.json"
+{
+  "workspace": ["./packages/a", "./packages/b"],
+  "catalog": {
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "chalk": "^5.3.0"
+  }
+}
+```
+
+成员使用 `catalog:`（默认 catalog）引用该条目：
+
+```json title="packages/a/package.json"
+{
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}
+```
+
+若要将所有人升级到新的 React 版本，只需编辑一次 catalog。
+
+### 命名 catalog
+
+当不同成员需要同一包的不同版本时，请使用复数形式的 `catalogs` 字段——例如在不同主版本之间迁移时：
+
+```jsonc title="deno.json"
+{
+  "workspace": ["./packages/a", "./packages/b"],
+  "catalogs": {
+    "react18": {
+      "react": "^18.3.0",
+      "react-dom": "^18.3.0"
+    },
+    "react19": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
+    }
+  }
+}
+```
+
+成员通过名称选择 catalog：
+
+```json title="packages/a/package.json"
+{
+  "dependencies": {
+    "react": "catalog:react18",
+    "react-dom": "catalog:react18"
+  }
+}
+```
+
+```json title="packages/b/package.json"
+{
+  "dependencies": {
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19"
+  }
+}
+```
+
+`catalog:`（不带名称）和 `catalog:default` 是等价的，并会解析到单数形式的 `catalog` 字段。
+
+### package.json 中的 Catalog
+
+Catalog 也可以放在根 `package.json` 中，这样可以让尚未迁移到 `deno.json` 的项目将配置集中管理：
+
+```json title="package.json"
+{
+  "catalog": {
+    "react": "^19.0.0"
+  },
+  "catalogs": {
+    "testing": {
+      "vitest": "^2.0.0"
+    }
+  }
+}
+```
+
+如果工作区根目录同时在 `deno.json` 和 `package.json` 中定义了 catalog，则以 `package.json` 为准——二者不会合并。
+
+### 限制
+
+- Catalog 仅限根目录使用。在工作区成员中定义 `catalog` 或 `catalogs` 会产生诊断信息。
+- 成员必须引用一个存在的 catalog 名称。缺失条目会在安装或运行期间产生解析错误。
+
+## 在 package.json 中使用 workspace 协议
 
 3. 共同开发、测试相互依赖模块
 

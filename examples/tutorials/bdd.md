@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-13
+last_modified: 2026-05-14
 title: "行为驱动开发（BDD）"
-description: "使用 Deno 标准库的 BDD 模块实现行为驱动开发。创建可读性高、组织良好的测试，并使用有效的断言。"
+description: "使用 Deno 标准库的 BDD 模块实现行为驱动开发。创建可读性强、组织良好的测试，并配合有效的断言。"
 url: /examples/bdd_tutorial/
 ---
 
@@ -310,7 +310,65 @@ ok | 1 passed (2 steps) | 0 failed (11ms)
 
 :::
 
-## Gherkin 与 JavaScript 风格 BDD
+### 当前置条件不满足时中止测试套件
+
+有时整个测试套件依赖于某些外部条件——数据库连接、在已知端口上运行的服务、磁盘上的文件。如果该前置条件不满足，通常您不希望其余测试继续运行并产生大量令人困惑的失败。与 `@std/testing/bdd` 配合良好的有两种模式。
+
+**在 `beforeAll` 中抛出错误。** 如果您希望在缺少前置条件时让测试套件明显失败（这样 CI 会将其显示为真实错误），请在钩子中抛出错误。此时，同一 `describe` 中的每个 `it` 都会被报告为失败，因为设置从未完成：
+
+```ts
+describe("数据库操作", () => {
+  let db: Database;
+
+  beforeAll(async () => {
+    db = await Database.connect(TEST_CONNECTION_STRING);
+    if (!(await db.ping())) {
+      throw new Error("数据库无法访问——中止测试套件");
+    }
+  });
+
+  afterAll(async () => {
+    await db?.close();
+  });
+
+  it("应插入一条记录", async () => {
+    const result = await db.insert({ name: "Test" });
+    assertEquals(result.success, true);
+  });
+});
+```
+
+**使用 `ignore` 选项跳过测试套件。** 如果前置条件未满足是预期情况（例如，集成数据库在贡献者的本地环境中不可用），那么干净地跳过测试套件比让它失败更好。`describe` 和 `it` 都接受一个布尔值 `ignore` 选项——在文件顶部计算一次并传入即可：
+
+```ts
+import { describe, it } from "jsr:@std/testing/bdd";
+import { assertEquals } from "jsr:@std/assert";
+
+async function isDatabaseReachable(): Promise<boolean> {
+  try {
+    const db = await Database.connect(TEST_CONNECTION_STRING);
+    await db.close();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const dbReachable = await isDatabaseReachable();
+
+describe("数据库操作", { ignore: !dbReachable }, () => {
+  it("应插入一条记录", async () => {
+    const db = await Database.connect(TEST_CONNECTION_STRING);
+    const result = await db.insert({ name: "Test" });
+    assertEquals(result.success, true);
+    await db.close();
+  });
+});
+```
+
+当 `dbReachable` 为 `false` 时，整个 `describe` 块——以及其中的每个 `it`——都会被报告为已忽略，而您的测试文件其余部分仍会正常运行。如果您只需要跳过套件中的一部分，相同的 `ignore` 选项也可用于单独的 `it` 用例。
+
+## Gherkin 与 JavaScript 风格 BDD 的对比
 
 如果您熟悉 Cucumber 或其他 BDD 框架，您可能会期待使用 "Given-When-Then" 语句的 Gherkin 语法。
 

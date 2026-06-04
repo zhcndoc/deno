@@ -1,10 +1,10 @@
 ---
-last_modified: 2025-04-23
-title: "deno coverage"
+last_modified: 2026-05-20
+title: "deno 覆盖率"
 oldUrl: /runtime/manual/tools/coverage/
 command: coverage
 openGraphLayout: "/open_graph/cli-commands.jsx"
-openGraphTitle: "deno coverage"
+openGraphTitle: "deno 覆盖率"
 description: "为您的代码生成覆盖率报告"
 ---
 
@@ -74,8 +74,8 @@ if (condition) {
 ```ts
 // deno-coverage-ignore-start
 if (condition) {
-  // deno-coverage-ignore-start - A warning will be logged because the previous
-  //                              coverage range is unterminated.
+  // deno-coverage-ignore-start - 由于前一个
+  //                              覆盖范围没有终止，因此会记录警告。
   console.log("this code is ignored");
   // deno-coverage-ignore-stop
 }
@@ -83,8 +83,7 @@ if (condition) {
 
 // ...
 
-// deno-coverage-ignore-start - This comment will be ignored and a warning will
-//                              be logged, because this range is unterminated.
+// deno-coverage-ignore-start - 这条注释会被忽略，并且会记录警告，因为这个范围没有终止。
 console.log("this code is not ignored");
 ```
 
@@ -107,6 +106,23 @@ console.log("This line is ignored");
 /* deno-coverage-ignore */
 console.log("This line is not ignored");
 ```
+
+## 函数覆盖率
+
+摘要表和 HTML 报告都包含一个 **函数覆盖率** 列，与分支和行列并列：
+
+```console
+---------------------------------------------
+File         | Branch % | Line % | Function %
+---------------------------------------------
+main.ts      |   85.7   |  92.3  |    100.0
+util.ts      |   75.0   |  88.5  |     66.7
+---------------------------------------------
+all files    |   80.0   |  90.5  |     83.3
+---------------------------------------------
+```
+
+函数覆盖率衡量的是在测试运行期间至少被调用过一次的已声明函数所占的百分比。同样的数据也可在 `lcov` 输出中获得。
 
 ## 输出格式
 

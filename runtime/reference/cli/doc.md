@@ -37,7 +37,18 @@ function add(x: number, y: number): number
   将 x 和 y 相加。 @param {number} x @param {number} y @returns {number} x 和 y 的和
 ```
 
-## 检查
+### Documenting an npm or JSR package
+
+从 Deno 2.8 开始，`deno doc` 接受 `npm:` 和 `jsr:` 指定符，并会在生成文档之前获取该包已发布的类型。这对于无需克隆仓库即可在终端中探索第三方 API 非常有用：
+
+```sh
+deno doc npm:code-block-writer
+deno doc jsr:@std/path
+```
+
+您可以像其他 Deno 指定符一样锁定到特定版本（`npm:zod@4`），并将指定符与 `--html` 或 `--json` 结合，以渲染与本地文件相同的输出格式。
+
+## Linting
 
 您可以使用 `--lint` 标志在生成文档时检查文档中的问题。`deno doc` 将指出三种类型的问题：
 

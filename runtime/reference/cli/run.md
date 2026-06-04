@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-05-20
 title: "deno run"
 oldUrl: /runtime/manual/tools/run/
 command: run
@@ -58,11 +58,24 @@ _确保在文件名之前放置标志_，例如：
 deno run --allow-net --watch server.ts
 ```
 
-Deno 的监视器会在控制台通知你文件的变化，并在工作时如果出现错误会警告你。
+Deno 的监视器会在控制台通知你文件的变化，并在运行过程中出现错误时警告你。
+
+同样的 `--watch` 标志也适用于
+[`deno test`](/runtime/reference/cli/test/),
+[`deno serve`](/runtime/reference/cli/serve/)，以及
+[`deno bench`](/runtime/reference/cli/bench/)。
+
+:::info Deno 2.8
+
+当监视器重新启动进程时，Deno 会先发送 `SIGTERM`，这样 `unload`
+事件监听器和 `process.exit` 钩子就能运行，然后在强制
+终止之前等待 500 毫秒。这让优雅关闭代码有时间在重启之间刷新资源。
+
+:::
 
 ## 运行 package.json 脚本
 
-`package.json` 脚本可以使用 [`deno task`](/runtime/reference/cli/task/) 命令执行。
+可以使用 [`deno task`](/runtime/reference/cli/task/) 命令执行 `package.json` 脚本。
 
 ## 从 stdin 运行代码
 

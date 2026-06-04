@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-05-09
+last_modified: 2026-05-20
 title: "Web 平台 API"
 description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、worker、存储以及其他 Web 标准 API，包括实现细节和与浏览器规范的偏差。"
 oldUrl:
@@ -75,6 +75,52 @@ const config = await response.json();
 - 响应中没有设置任何头。因此由消费者决定内容类型或内容长度等。
 - 响应体从 Rust 端流式传输，因此大文件是分块可用的，并且可以被取消。
 
+## Structured Clone 和可转移对象
+
+Deno 支持 [`structuredClone()`](/api/web/~/structuredClone) 和
+[`postMessage()`](/api/web/~/Worker)，用于在不同上下文之间（例如主线程和 Web Worker 之间）克隆和传输对象。
+
+### 可序列化类型
+
+这些类型可以通过 `structuredClone()` 克隆，并通过 `postMessage()` 发送：
+
+| 类型                                      | 说明                                                                                   |
+| ----------------------------------------- | -------------------------------------------------------------------------------------- |
+| 基本类型                                | `string`、`number`、`boolean`、`null`、`undefined`、`bigint`                                 |
+| `Array`、`Object`、`Map`、`Set`           | 包括嵌套结构和循环引用                                          |
+| `Date`、`RegExp`                          |                                                                                              |
+| `ArrayBuffer`、`TypedArray`、`DataView`   | 默认复制，或可转移（见下文）                                                |
+| `Error` 类型                             | `Error`、`EvalError`、`RangeError`、`ReferenceError`、`SyntaxError`、`TypeError`、`URIError` |
+| [`Blob`](/api/web/~/Blob)                 | 需要 Deno 2.8+                                                                           |
+| [`File`](/api/web/~/File)                 | 需要 Deno 2.8+                                                                           |
+| [`DOMException`](/api/web/~/DOMException) |                                                                                              |
+| [`CryptoKey`](/api/web/~/CryptoKey)       |                                                                                              |
+
+### 可转移类型
+
+这些类型可以通过 `structuredClone()` 中的 `transfer` 选项或 `postMessage()` 中的 `transfer` 列表进行 _转移_（而非复制）。转移后，原始对象将无法使用：
+
+| 类型                                            | 说明                                    |
+| ----------------------------------------------- | ---------------------------------------- |
+| [`ArrayBuffer`](/api/web/~/ArrayBuffer)         | 将底层内存转移给接收方 |
+| [`MessagePort`](/api/web/~/MessagePort)         | 将端口转移到另一个上下文    |
+| [`ReadableStream`](/api/web/~/ReadableStream)   | 将流转移到另一个上下文  |
+| [`WritableStream`](/api/web/~/WritableStream)   | 将流转移到另一个上下文  |
+| [`TransformStream`](/api/web/~/TransformStream) | 将流转移到另一个上下文  |
+
+```ts
+// 克隆一个 Blob
+const blob = new Blob(["hello"], { type: "text/plain" });
+const cloned = structuredClone(blob);
+console.log(await cloned.text()); // "hello"
+
+// 通过 MessageChannel 转移 ArrayBuffer
+const buffer = new ArrayBuffer(1024);
+const ch = new MessageChannel();
+ch.port1.postMessage(buffer, [buffer]);
+// buffer.byteLength 现在是 0（已转移）
+```
+
 ## CustomEvent 和 EventTarget
 
 [DOM 事件 API](/api/web/~/Event) 可用于在应用程序中分发和监听事件。它的实现符合
@@ -118,7 +164,7 @@ console.log(location.href);
 // deno run main.ts
 
 console.log(location.href);
-// error: Uncaught ReferenceError: Access to "location", run again with --location <href>.
+// error: Uncaught ReferenceError: 访问 "location" 时出错，请使用 --location <href> 重新运行。
 ```
 
 设置 `location` 或其任何字段通常会导致浏览器中的导航。在 Deno 中不适用，因此在这种情况下将抛出错误。
@@ -127,7 +173,7 @@ console.log(location.href);
 // deno run --location https://example.com/path main.ts
 
 location.pathname = "./foo";
-// error: Uncaught NotSupportedError: Cannot set "location.pathname".
+// error: Uncaught NotSupportedError: 无法设置 "location.pathname"。
 ```
 
 ### 扩展用法
@@ -303,7 +349,7 @@ hello world
 
 :::
 
-worker 的权限与 CLI 权限标志类似，这意味着在那里启用的每个权限都可以在 Worker API 级别禁用。你可以在这里找到每个权限选项的更详细描述 [here](/runtime/fundamentals/security/)。
+worker 的权限与 CLI 权限标志类似，这意味着在那里启用的每个权限都可以在 Worker API 级别禁用。你可以在这里找到每个权限选项的更详细描述 [这里](/runtime/fundamentals/security/)。
 
 默认情况下，worker 将继承其创建所在线程的权限，但是为了允许用户限制此 worker 的访问，我们在 worker API 中提供了 `deno.permissions` 选项。
 
@@ -409,7 +455,196 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 });
 ```
 
-## 其他 API 从规范的偏差
+## OffscreenCanvas
+
+从 Deno 2.8 开始，[`OffscreenCanvas`](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) API 可用。`OffscreenCanvas` 是一个存在于任何 DOM 之外的画布，可在任何地方使用（包括 Web Workers），用于线程外渲染和图像生成。
+
+### 支持的渲染上下文
+
+`OffscreenCanvas#getContext` 接受规范定义的两个上下文 id：
+
+- `"bitmaprenderer"`：返回一个 [`ImageBitmapRenderingContext`](https://developer.mozilla.org/en-US/docs/Web/API/ImageBitmapRenderingContext)，用于显示通过 `createImageBitmap` 生成的 `ImageBitmap`。
+- `"webgpu"`：返回一个 [`GPUCanvasContext`](https://developer.mozilla.org/en-US/docs/Web/API/GPUCanvasContext)，用于使用 WebGPU 进行渲染。
+
+使用 `"2d"`、`"webgl"` 或 `"webgl2"` 调用 `getContext` 会返回 `null`；这些上下文尚未在 Deno 中实现。
+
+### 示例：将图像编码为 PNG
+
+将图像解码为 `ImageBitmap`，通过 `bitmaprenderer` 上下文将其放到 `OffscreenCanvas` 上，并将结果写入磁盘：
+
+```ts
+const data = await Deno.readFile("./input.jpg");
+const bitmap = await createImageBitmap(new Blob([data]));
+
+const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+const ctx = canvas.getContext("bitmaprenderer")!;
+ctx.transferFromImageBitmap(bitmap);
+
+const blob = await canvas.convertToBlob({ type: "image/png" });
+await Deno.writeFile(
+  "./output.png",
+  new Uint8Array(await blob.arrayBuffer()),
+);
+```
+
+典型用途：
+
+- 在请求时生成缩略图、格式转换或社交卡片图片，而无需启动无头浏览器，
+- 在 Web Worker 中执行线程外图像处理，
+- 驱动不需要窗口的 WebGPU 渲染目标。
+
+## 几何接口
+
+从 Deno 2.8 开始，[Geometry Interfaces Module Level 1](https://drafts.fxtf.org/geometry/) 类型可作为全局对象使用。这些类型与浏览器中的相同：
+
+- [`DOMMatrix`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrix) /
+  [`DOMMatrixReadOnly`](https://developer.mozilla.org/en-US/docs/Web/API/DOMMatrixReadOnly)：
+  用于 2D 和 3D 操作的 4×4 变换矩阵。
+- [`DOMPoint`](https://developer.mozilla.org/en-US/docs/Web/API/DOMPoint) /
+  [`DOMPointReadOnly`](https://developer.mozilla.org/en-US/docs/Web/API/DOMPointReadOnly)：
+  2D / 3D 空间中的点。
+- [`DOMRect`](https://developer.mozilla.org/en-US/docs/Web/API/DOMRect) /
+  [`DOMRectReadOnly`](https://developer.mozilla.org/en-US/docs/Web/API/DOMRectReadOnly)：
+  轴对齐矩形。
+- [`DOMQuad`](https://developer.mozilla.org/en-US/docs/Web/API/DOMQuad)：由四个点定义的
+  四边形。
+
+```ts
+const m = new DOMMatrix().translateSelf(10, 20).scaleSelf(2);
+const p = new DOMPoint(1, 1).matrixTransform(m);
+console.log(p.x, p.y); // 12 22
+```
+
+这些类型对图形工作很有用；例如将变换应用于 canvas 绘图、计算布局数学，或移植依赖几何类型的浏览器代码。
+
+## navigator
+
+Deno 实现了 [`navigator`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator) 全局对象的一个子集。可用的属性如下：
+
+- `navigator.userAgent` — 始终为 `"Deno/<version>"`
+- `navigator.platform` — 底层操作系统平台（例如 `"Linux x86_64"`、
+  `"MacIntel"`、`"Win32"`）。在 Deno 2.7 中添加。
+- `navigator.hardwareConcurrency` — 逻辑 CPU 核心数
+
+```ts
+console.log(navigator.userAgent); // "Deno/2.7.0"
+console.log(navigator.platform); // 例如 "Linux x86_64", "MacIntel", "Win32"
+console.log(navigator.hardwareConcurrency); // 例如 8
+```
+
+## Temporal
+
+[Temporal API](https://tc39.es/proposal-temporal/docs/) 是一个现代的日期/时间库，在大多数用例中可替代 `Date`。它已在 Deno 2.7 中稳定，并可作为全局对象使用，无需任何标志。
+
+```ts
+// 当前本地时区的日期/时间
+const now = Temporal.Now.plainDateTimeISO();
+console.log(now.toString()); // 例如 "2025-03-12T10:30:00"
+
+// 解析日期
+const date = Temporal.PlainDate.from("2025-03-12");
+console.log(date.month); // 3
+
+// 带时区感知
+const zonedNow = Temporal.Now.zonedDateTimeISO("America/New_York");
+console.log(zonedNow.timeZoneId); // "America/New_York"
+```
+
+在 Deno 2.7 之前，Temporal 需要 `--unstable-temporal` 标志。
+
+## CompressionStream 和 DecompressionStream
+
+Deno 支持用于流式压缩和解压缩的 [`CompressionStream`](https://developer.mozilla.org/en-US/docs/Web/API/CompressionStream) 和 [`DecompressionStream`](https://developer.mozilla.org/en-US/docs/Web/API/DecompressionStream)。
+
+### 支持的格式
+
+| 格式         | 字符串             | 说明               |
+| ------------ | ------------------ | ------------------ |
+| gzip         | `"gzip"`           | RFC 1952           |
+| deflate      | `"deflate"`        | zlib (RFC 1950)    |
+| deflate-raw  | `"deflate-raw"`    | 原始 DEFLATE (1951) |
+| Brotli       | `"brotli"`         | 在 Deno 2.7 中添加  |
+
+```ts
+// 使用 Brotli 压缩
+const input = new TextEncoder().encode("Hello, Deno!");
+const cs = new CompressionStream("brotli");
+const writer = cs.writable.getWriter();
+writer.write(input);
+writer.close();
+const compressed = await new Response(cs.readable).arrayBuffer();
+
+// 解压缩
+const ds = new DecompressionStream("brotli");
+const writer2 = ds.writable.getWriter();
+writer2.write(new Uint8Array(compressed));
+writer2.close();
+const result = await new Response(ds.readable).text();
+console.log(result); // "Hello, Deno!"
+```
+
+## Web Crypto
+
+Deno 通过 `crypto.subtle` 支持 [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)。从 Deno 2.7 开始，支持 SHA-3 哈希算法：
+
+- `SHA3-256`
+- `SHA3-384`
+- `SHA3-512`
+
+```ts
+const data = new TextEncoder().encode("Hello, Deno!");
+const hash = await crypto.subtle.digest("SHA3-256", data);
+console.log(new Uint8Array(hash));
+```
+
+## createImageBitmap
+
+Deno 支持 [`createImageBitmap()`](https://developer.mozilla.org/en-US/docs/Web/API/createImageBitmap)，可将图像解码为可与 [`OffscreenCanvas`](#offscreencanvas) 一起使用的 `ImageBitmap` 对象。
+
+### 支持的输入格式
+
+| 格式 | 说明              |
+| ---- | ----------------- |
+| PNG  |                   |
+| JPEG |                   |
+| BMP  |                   |
+| GIF  | 在 Deno 2.7 中添加 |
+| WebP | 在 Deno 2.7 中添加 |
+
+```ts
+const data = await Deno.readFile("./image.gif");
+const bitmap = await createImageBitmap(new Blob([data]));
+console.log(bitmap.width, bitmap.height);
+```
+
+## 文件锁
+
+[`Deno.FsFile`](/api/deno/~/Deno.FsFile) 支持建议性文件锁，用于协调进程之间的访问：
+
+- [`lock(exclusive?)`](/api/deno/~/Deno.FsFile.prototype.lock) — 获取一个
+  锁。默认是共享（读）锁；传入 `true` 表示独占（写）锁。如果已持有不兼容的锁，则会阻塞。
+- [`lockSync(exclusive?)`](/api/deno/~/Deno.FsFile.prototype.lockSync) —
+  `lock()` 的同步版本。
+- [`tryLock(exclusive?)`](/api/deno/~/Deno.FsFile.prototype.tryLock) —
+  非阻塞。获取到锁时返回 `true`，否则返回 `false`。
+  在 Deno 2.7 中添加。
+- [`tryLockSync(exclusive?)`](/api/deno/~/Deno.FsFile.prototype.tryLockSync) —
+  `tryLock()` 的同步版本。
+
+```ts
+const file = await Deno.open("./data.txt", { read: true, write: true });
+
+const locked = await file.tryLock(true); // 独占
+if (locked) {
+  await file.write(new TextEncoder().encode("hello"));
+  await file.unlock();
+} else {
+  console.log("File is locked by another process, skipping.");
+}
+file.close();
+```
+
+## 与规范不一致的其他 API
 
 ### 缓存 API
 
@@ -418,9 +653,13 @@ const worker = new Worker(import.meta.resolve("./worker.js"), {
 - [CacheStorage::open()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open)
 - [CacheStorage::has()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/has)
 - [CacheStorage::delete()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/delete)
+- [CacheStorage::keys()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/keys)
+  (Deno 2.8+)
 - [Cache::match()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/match)
 - [Cache::put()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/put)
 - [Cache::delete()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/delete)
+- [Cache::keys()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/keys)
+  (Deno 2.8+)
 
 与浏览器相比，几个地方有所不同：
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-12-16
-title: "代码检查与格式化"
-description: "Deno 内置代码质量工具指南。了解如何使用 deno lint 和 deno fmt 命令、配置规则、集成 CI/CD 管道，并在项目中保持一致的代码风格。"
+last_modified: 2026-05-17
+title: "Linting and formatting"
+description: "Deno 内置代码质量工具指南。了解如何使用 deno lint 和 deno fmt 命令、配置规则、集成 CI/CD 管道，以及在项目中保持一致的代码风格。"
 ---
 
 在理想的世界中，您的代码始终是干净、一致且没有令人烦恼的错误。这就是 Deno 内置的代码检查和格式化工具的承诺。通过将这些特性直接整合到运行时中，Deno 消除了对外部依赖和复杂配置的需求。这些内置工具快速且高效，不仅节省了时间，还确保每一行代码都遵循最佳实践。
@@ -138,6 +138,8 @@ jobs:
 
 - **默认值：** `lf`
 - **可选值：** `auto`，`crlf`，`lf`，`system`
+
+使用 `auto` 可在 Deno 能检测到文件现有换行样式时保留该样式。使用 `system` 可采用当前操作系统的默认换行样式，在 Windows 上为 `crlf`，在类 Unix 系统上为 `lf`。
 
 #### `nextControlFlowPosition`
 

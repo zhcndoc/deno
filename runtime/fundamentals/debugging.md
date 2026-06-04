@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-03-19
-title: "调试（Debugging）"
-description: "Deno 应用调试完整指南。学习如何使用 Chrome DevTools、VS Code 调试器以及其他调试技术来调试 Deno 中的 TypeScript/JavaScript 代码。"
+last_modified: 2026-05-20
+title: "调试"
+description: "Deno 应用程序调试完整指南。学习如何在 Deno 中使用 Chrome DevTools、VS Code 调试器以及其他 TypeScript/JavaScript 代码调试技术。"
 oldUrl:
   - /runtime/manual/getting_started/debugging_your_code/
   - /runtime/manual/basics/debugging_your_code/
@@ -23,6 +23,30 @@ Deno 支持 [V8 Inspector Protocol](https://v8.dev/docs/inspector)，这是 Chro
 
 ```sh
 deno run --inspect your_script.ts
+```
+
+您可以选择为 inspector 服务器指定主机和端口。完整地址和纯端口号都可以接受：
+
+```sh
+# 默认：监听 127.0.0.1:9229
+deno run --inspect your_script.ts
+
+# 自定义端口
+deno run --inspect=9230 your_script.ts
+
+# 自定义主机和端口
+deno run --inspect=0.0.0.0:9229 your_script.ts
+```
+
+### --inspect-publish-uid
+
+默认情况下，Deno 在开始监听时会将 inspector WebSocket URL 打印到 stderr。您可以使用 `--inspect-publish-uid` 来控制这一行为：
+
+- `stderr`（默认）— 在启动时将 URL 打印到 stderr
+- `http` — 通过 inspector 端口上的 `/json/list` HTTP 端点公开该 URL，而不是打印它；这对以编程方式轮询可用目标的工具很有用
+
+```sh
+deno run --inspect --inspect-publish-uid=http your_script.ts
 ```
 
 :::note
@@ -98,6 +122,113 @@ curl http://0.0.0.0:4507/
 
 此时我们可以检查请求的内容，并逐步调试代码。
 
+## 检查网络流量
+
+从 Deno 2.8 开始，Chrome DevTools 可以像检查浏览器标签页中的流量一样检查您的程序发出的网络流量。使用 `--inspect-wait`（或 `--inspect` / `--inspect-brk`）运行程序，在 Chromium 衍生浏览器中打开 `chrome://inspect`，点击 Deno 目标上的 **Inspect**，然后切换到 **Network** 选项卡。
+
+以下内置 API 已接入 Network 选项卡：
+
+- `fetch()` — 请求会以 `Type: fetch` 显示
+- `node:http` 和 `node:https` 客户端请求（`http.request`、`http.get`、`https.request`、`https.get`）— **Type** 列会反映响应内容类型（例如 `json`、`document`），因此任何通过 `node:http` 发出 HTTP 请求的 npm 库也会与 `fetch()` 流量一起显示
+- `WebSocket` — 客户端连接会与 HTTP 请求一起显示，并带有握手状态和升级响应中的头信息、消息帧，以及套接字关闭时的关闭事件
+- [`Deno.upgradeWebSocket()`](/api/deno/~/Deno.upgradeWebSocket) — 服务端 WebSocket 升级也会被记录，因此您可以从 Deno 到 Deno 的握手中检查连接双方
+
+对于每个请求，您都可以查看 URL、方法、状态码、请求和响应头、请求和响应正文，以及耗时信息。
+
+让我们用一个使用 `fetch()` 的小程序来试试：
+
+```ts title="net.ts"
+const res = await fetch("https://api.github.com/repos/denoland/deno");
+console.log(res.status, (await res.json()).stargazers_count);
+```
+
+使用 `--inspect-wait` 运行它，这样程序会暂停直到 DevTools 连接：
+
+```sh
+$ deno run --inspect-wait --allow-net net.ts
+Debugger listening on ws://127.0.0.1:9229/...
+Visit chrome://inspect to connect to the debugger.
+Deno is waiting for debugger to connect.
+```
+
+打开 `chrome://inspect`，在 Deno 目标上点击 **Inspect**，然后切换到 **Network** 选项卡。`fetch()` 请求会作为常规网络条目显示，并且请求和响应面板会填充内容：
+
+![Network 选项卡中的 fetch() 请求](./images/debugger-network-fetch.png)
+
+点击某个请求可以查看其头信息、负载、响应正文和耗时分布：
+
+![检查响应头和正文](./images/debugger-network-response.png)
+
+`node:http` 和 `node:https` 也同样适用，因此通过 Node 内置客户端（而不是 `fetch()`）发出 HTTP 请求的 npm 库也会显示在 Network 选项卡中。例如：
+
+```ts title="node-http.ts"
+import https from "node:https";
+
+const options = {
+  hostname: "api.github.com",
+  path: "/repos/denoland/deno",
+  headers: { "User-Agent": "deno-docs-example" },
+};
+
+https.get(options, (res) => {
+  let body = "";
+  res.on("data", (chunk) => body += chunk);
+  res.on(
+    "end",
+    () => console.log(res.statusCode, JSON.parse(body).stargazers_count),
+  );
+});
+```
+
+```sh
+$ deno run --inspect-wait --allow-net node-http.ts
+```
+
+该请求会像 `fetch()` 请求一样在 Network 选项卡中显示相同的头信息、正文和耗时信息——**Type** 列会反映响应内容类型（此示例中为 `json`）：
+
+![Network 选项卡中的 node:https 请求](./images/debugger-network-node-http.png)
+
+`WebSocket` 连接也会出现在同一个 Network 选项卡中，并随着连接进展显示消息和关闭事件：
+
+![Network 选项卡中的 WebSocket 连接](./images/debugger-network-websocket.png)
+
+使用 [`Deno.upgradeWebSocket()`](/api/deno/~/Deno.upgradeWebSocket) 创建的服务端 WebSocket 也会被记录，因此您可以检查连接的双方——发出的客户端 `WebSocket` 和接受它的服务端升级。例如，一个小型回显服务器：
+
+```ts title="ws-server.ts"
+Deno.serve({ port: 8000 }, (req) => {
+  if (req.headers.get("upgrade") !== "websocket") {
+    return new Response("send a WebSocket request", { status: 426 });
+  }
+  const { socket, response } = Deno.upgradeWebSocket(req);
+  socket.onmessage = (e) => socket.send(`echo: ${e.data}`);
+  return response;
+});
+```
+
+```sh
+$ deno run --inspect-wait --allow-net ws-server.ts
+```
+
+连接 DevTools 并继续执行后，从另一个终端连接到服务器（例如使用 `deno eval`）：
+
+```sh
+deno eval 'const ws = new WebSocket("ws://localhost:8000");
+  ws.onopen = () => ws.send("hello");
+  ws.onmessage = (e) => { console.log(e.data); ws.close(); };'
+```
+
+升级和消息帧会显示在服务器 DevTools 会话的 Network 选项卡中：
+
+![Network 选项卡中的 Deno.upgradeWebSocket()](./images/debugger-network-upgrade-websocket.png)
+
+这些相同的事件也通过 `node:inspector` 暴露给程序化客户端，因此已经针对 Node 使用 Chrome DevTools Protocol 的工具可以连接到 Deno，并在不做任何更改的情况下观察相同的网络流量。
+
+:::note
+
+当没有调试器连接时，网络监控实际上没有任何开销——这些事件仅在会话通过 `Network.enable` 显式启用后才会发出。
+
+:::
+
 ## VSCode
 
 可以使用 VSCode 调试 Deno。最好的方法是借助官方的 `vscode_deno` 扩展。有关此扩展的文档可以在 [这里](/runtime/reference/vscode#using-the-debugger) 找到。
@@ -159,7 +290,24 @@ CPU 采样报告的是转译后的 JavaScript 代码的行号，而非原始的 
 
 :::
 
-### 在 Chrome DevTools 中分析采样
+### 自定义分析文件输出
+
+默认情况下，分析文件会写入当前目录，并使用自动生成的文件名。您可以控制分析文件的保存位置和方式：
+
+```sh
+# 将分析文件保存到指定目录
+deno run --cpu-prof --cpu-prof-dir=./profiles your_script.ts
+
+# 使用自定义文件名
+deno run --cpu-prof --cpu-prof-name=my-profile.cpuprofile your_script.ts
+
+# 提高采样频率以获得更多细节（默认：1000μs）
+deno run --cpu-prof --cpu-prof-interval=100 your_script.ts
+```
+
+较低的 `--cpu-prof-interval` 会每秒捕获更多样本，从而提供更精细的粒度，但代价是生成更大的分析文件。默认的 `1000` 微秒（1ms）对于大多数用例来说是一个很好的平衡。对于您想要详细捕获的短生命周期函数，可以尝试 `100`（0.1ms）。
+
+### 在 Chrome DevTools 中分析分析文件
 
 分析 `.cpuprofile` 文件步骤：
 
@@ -244,6 +392,19 @@ deno run --cpu-prof --cpu-prof-flamegraph your_script.ts
 deno eval --cpu-prof --cpu-prof-flamegraph "for (let i = 0; i < 1e8; i++) {}"
 ```
 
+### 轮廓分析技巧
+
+- **Profile representative workloads**：对于 HTTP 服务器，在停止之前向服务器发送真实流量——分析文件只能捕获程序运行期间发生的内容。
+- **Use self time vs. total time**：在分析报告中，_self time_ 是函数自身代码中花费的时间，而 _total time_ 包括它调用的函数所花费的时间。较高的自用时间指向真正的瓶颈；较高的总时间但较低的自用时间意味着该函数把工作委托给了某个昂贵的操作。
+- **Compare before and after**：使用具有描述性的 `--cpu-prof-name` 值保存分析文件（例如 `before-optimization.cpuprofile`），这样您就可以在做出修改后在 DevTools 中并排比较分析文件。
+- **Combine output formats**：您可以将 `--cpu-prof-md` 和
+  `--cpu-prof-flamegraph` 一起使用，以在一次运行中获得全部三种输出（`.cpuprofile`、
+  `.md` 和 `.svg`）：
+  ```sh
+  deno run --cpu-prof --cpu-prof-md --cpu-prof-flamegraph your_script.ts
+  ```
+- **Filter out noise**：短生命周期程序可能会显示启动开销（模块加载、JIT 编译）在分析中占主导。为了获得更准确的结果，请确保您要分析的代码运行足够长，以收集到有意义的样本。
+
 ## OpenTelemetry 集成
 
 对于生产环境应用或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方案。Deno 内置支持 OpenTelemetry，允许您：
@@ -265,6 +426,32 @@ OTEL_DENO=true deno run your_script.ts
 
 有关 Deno 的 OpenTelemetry 集成的完整详情，包括自定义指标、跟踪和配置选项，请参见
 [OpenTelemetry 文档](/runtime/fundamentals/open_telemetry)。
+
+## 调试 Web Workers
+
+从 Deno 2.7 开始，可以通过 Chrome DevTools 和 VS Code 调试 Web Workers。运行程序时使用任何 `--inspect` 标志，每个创建的 worker 都会与主线程一起作为单独的目标显示在 `chrome://inspect` 中。
+
+```ts title="main.ts"
+const worker = new Worker(import.meta.resolve("./worker.ts"), {
+  type: "module",
+});
+worker.postMessage("start");
+```
+
+```ts title="worker.ts"
+self.onmessage = (e) => {
+  console.log("Worker received:", e.data);
+  // 在 DevTools 中于此处设置断点
+};
+```
+
+```sh
+deno run --inspect-brk --allow-read main.ts
+```
+
+打开 `chrome://inspect`，您会看到 `main.ts` 和 `worker.ts` 都作为可单独检查的目标列出。点击 worker 目标上的 **Inspect**，即可为该 worker 打开一个专用的 DevTools 面板，您可以在其中设置断点、逐步执行代码，并独立于主线程检查变量。
+
+在安装了 Deno 扩展的 VS Code 中，worker 会作为调试器 **Call Stack** 面板中的单独线程显示。
 
 ## TLS 会话调试
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-10
-title: "编写一个 HTTP 服务器"
-description: "在 Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流式传输，以及如何构建具备自动压缩能力、可用于生产的 HTTP/HTTPS 服务器。"
+last_modified: 2026-05-13
+title: "编写 HTTP 服务器"
+description: "Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流，以及如何使用自动压缩构建可用于生产环境的 HTTP/HTTPS 服务器。"
 oldUrl:
   - /runtime/manual/runtime/http_server_apis/
   - /runtime/manual/examples/http_server/
@@ -138,19 +138,41 @@ Deno.serve((req) => {
 
 ### HTTPS 支持
 
-要使用 HTTPS，请在选项中传递两个额外的参数：`cert` 和 `key`。这些分别是证书和密钥文件的内容。
+要提供 HTTPS 服务，请在选项中传入 `cert` 和 `key`。这两个值都应是证书和私钥的 PEM 编码内容，而不是文件路径。
 
-```js
+```ts title="server.ts"
 Deno.serve({
-  port: 443,
+  port: 8443,
   cert: Deno.readTextFileSync("./cert.pem"),
   key: Deno.readTextFileSync("./key.pem"),
-}, handler);
+}, (_req) => new Response("Hello over HTTPS!"));
+```
+
+使用网络访问权限以及这两个文件的读取权限来运行它：
+
+```sh
+deno run --allow-net --allow-read=cert.pem,key.pem server.ts
+```
+
+对于本地开发，您可以使用 [OpenSSL](https://www.openssl.org/) 生成一个短期自签名证书：
+
+```sh
+openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+  -keyout key.pem -out cert.pem \
+  -subj "/CN=localhost" \
+  -addext "subjectAltName=DNS:localhost"
+```
+
+然后检查服务器是否有响应。`-k` 标志告诉 curl 接受自签名证书——仅在本地测试时使用：
+
+```console
+$ curl -k https://localhost:8443/
+Hello over HTTPS!
 ```
 
 :::note
 
-要使用 HTTPS，您需要为服务器提供有效的 TLS 证书和私钥。
+在生产环境中，请使用由受信任机构签发的证书，例如 [Let's Encrypt](https://letsencrypt.org/)，而不是自签名证书。运行时 API 是相同的；变化的只是 `cert` 和 `key` 的来源。
 
 :::
 
@@ -158,7 +180,7 @@ Deno.serve({
 
 在使用 Deno 的 HTTP 服务器 API 时，HTTP/2 支持是“自动”的。您只需创建服务器，它将无缝处理 HTTP/1 或 HTTP/2 请求。
 
-HTTP/2 在明文下也支持预先知识。
+HTTP/2 在明文下也支持 prior knowledge（预先知识）。
 
 ### 自动主体压缩
 

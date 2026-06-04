@@ -291,7 +291,14 @@ Deno 推荐使用默认的 TypeScript 配置。这将有助于分享代码。
 
 :::
 
-另请参见 [在 Deno 中配置 TypeScript](/runtime/reference/ts_config_migration/)。
+If you’re migrating from Node.js, your existing `tsconfig.json` files work out
+of the box with Deno. See
+[Using tsconfig.json with Deno](/runtime/fundamentals/typescript/#using-tsconfigjson-with-deno)
+for details.
+
+For the full list of supported compiler options, library configuration, and
+advanced settings, see
+[Configuring TypeScript](/runtime/reference/ts_config_migration/).
 
 ## 不稳定特性
 
@@ -642,6 +649,23 @@ error: Test permissions were found in the config file. Did you mean to run with 
 
 如果您能接受这一风险，那么此功能将对您有所帮助。
 
+## 编译配置
+
+`"compile"` 块用于配置
+[`deno compile`](/runtime/reference/cli/compile/)，而无需在每次调用时重复传入标志。你可以声明哪些额外文件或目录应被打包进可执行文件，以及哪些路径应被排除：
+
+```jsonc title="deno.json"
+{
+  "compile": {
+    "include": ["names.csv", "data", "worker.ts"],
+    "exclude": ["data/secrets", "**/*.test.ts"]
+  }
+}
+```
+
+命令行上的 `--include` 和 `--exclude` 标志会与这些列表合并，而不是替换它们。`"compile"` 块还可以包含 `permissions`（请参见
+[测试、基准测试和编译权限](#test-bench-and-compile-permissions)）。
+
 ## 一个 `deno.json` 文件示例
 
 ```json
@@ -701,15 +725,15 @@ error: Test permissions were found in the config file. Did you mean to run with 
 }
 ```
 
-这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、node_modules 目录等的 `deno.json` 文件示例。有关可用字段和配置的完整列表，请参阅
+这是一个配置了 TypeScript 编译器选项、代码检查器、格式化器、`node_modules` 目录等的 `deno.json` 文件示例。有关可用字段和配置的完整列表，请参阅
 [Deno 配置文件模式](#json-schema)。
 
 ## JSON 模式
 
-可用于编辑器提供自动完成的 JSON Schema 文件可在以下位置获得： [https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json](https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json)
+可用于编辑器提供自动完成的 JSON Schema 文件可在以下位置获得：[https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json](https://github.com/denoland/deno/blob/main/cli/schemas/config-file.v1.json)
 
 ## 代理
 
-Deno 支持用于模块下载和 fetch API 的代理。代理配置从 [环境变量](https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables) 中读取：HTTP_PROXY，HTTPS_PROXY 和 NO_PROXY。
+Deno 支持用于模块下载和 fetch API 的代理。代理配置从 [环境变量](https://docs.deno.com/runtime/reference/env_variables/#special-environment-variables) 中读取：HTTP_PROXY、HTTPS_PROXY 和 NO_PROXY。
 
-如果您使用的是 Windows - 如果未找到环境变量，Deno 将退回到从注册表读取代理。
+如果您使用的是 Windows——如果未找到环境变量，Deno 将回退到从注册表读取代理。
