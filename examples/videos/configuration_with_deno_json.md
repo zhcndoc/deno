@@ -1,5 +1,6 @@
 ---
 title: "使用 Deno JSON 进行配置"
+description: "了解如何使用 deno.json 管理依赖项、配置任务、自定义格式化和代码检查，并使用导入映射。"
 url: /examples/configuration_with_deno_json/
 videoUrl: https://www.youtube.com/watch?v=bTmO5Tfgke4
 layout: video.tsx
@@ -76,7 +77,7 @@ deno task format
 
 ### 格式化和代码检查配置
 
-你也可以使用这个文件为这些命令设置配置项。比如说 `"fmt"` ，然后使用一些不同的规则，文档中关于格式化的部分[这里](/runtime/fundamentals/configuration/#formatting)有详细说明。你可以使用多种选项，比如我们设置 `"useTabs"` 为 `true` ，然后设置 `"lineWidth": 80`。
+您也可以使用此文件为这些类型的命令设置配置。所以我们可以说 `"fmt"`，然后使用几个不同的规则，文档中关于格式化的部分[这里](/runtime/reference/deno_json/#formatting)会带您了解整个过程。这里有几个不同的选项可供利用，我们先来说 `"useTabs"`，这里设置为 `true`，然后我们再使用 `”lineWidth”: 80`。
 
 ```json title="deno.json"
 {
@@ -102,7 +103,7 @@ deno task format
 
 这会带着这些规则运行全部格式化和代码检查。
 
-代码检查你也可以设置。我们添加 `"lint"` 配置。这同样在文档中，紧接着格式化规则的文档[这里](/runtime/fundamentals/configuration/#linting)可以看到各种配置选项，根据你的项目需求进行配置。在这里，我们增加一个 `"rules"` 键，里面可以包含想要包含或排除的规则。
+代码检查也可以这样设置。所以我们说 `"lint"`。这也在上面的文档中，代码检查[这里](/runtime/reference/deno_json/#linting)会引导您了解根据项目需求可用的各种配置选项，不过在这种情况下，我们为 `"rules"` 添加一个键，您可以包含它们，也可以排除它们。
 
 ```json title="deno.json"
 {
@@ -132,22 +133,15 @@ import { sing } from "jsr:@eveporcello/sing";
 console.log(sing("sun", 3));
 ```
 
-What this rule does is prevent you from silencing TypeScript errors by dropping
-a // @ts-ignore or similar comment at the top of a file. In other words, you
-can’t just tell TypeScript to ignore type checking in a file without explicitly
-justifying it. That’s the intended behavior: if you’re bypassing the type
-system, you should have to explain why.
+这个规则的作用是防止您通过在文件顶部添加 `// @ts-ignore` 或类似注释来屏蔽 TypeScript 错误。换句话说，您不能在没有明确说明原因的情况下，仅仅告诉 TypeScript 忽略某个文件中的类型检查。这才是预期的行为：如果您要绕过类型系统，就应该解释原因。
 
-However, when you run
+不过，当您运行
 
 ```sh
 deno task format
 ```
 
-Deno will enforce this rule and complain if it finds ignored TypeScript checks
-without an accompanying comment. If you really do want to allow this behavior
-anyway, you can opt out of the rule entirely by disabling it in your
-configuration. We’ll say `”exclude”: [“ban-ts-comment”]`.
+时，Deno 会强制执行这条规则，如果发现被忽略的 TypeScript 检查却没有附带注释，就会报错。如果您确实想允许这种行为，可以通过在配置中禁用该规则来完全取消它。我们说 `”exclude”: [“ban-ts-comment”]`。
 
 ```json title="deno.json"
 {

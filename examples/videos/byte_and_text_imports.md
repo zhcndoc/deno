@@ -1,5 +1,6 @@
 ---
 title: "字节和文本导入"
+description: "了解如何将字节和文本文件直接导入到你的模块图中，以便实现自动摇树优化等更多功能。"
 url: /examples/byte_and_text_imports/
 videoUrl: https://www.youtube.com/watch?v=PAEI6mdlXwc
 layout: video.tsx

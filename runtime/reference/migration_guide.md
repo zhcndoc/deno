@@ -7,11 +7,14 @@ oldUrl:
   - /runtime/reference/migrate_deprecations/
 ---
 
-尽管我们在 Deno 1.x 中取得了大量成就，下一个主要版本旨在
-支持 Deno **大规模应用**。这意味着与 Node.js 和
-npm JavaScript 基础设施的无缝互操作性，并支持更广泛的项目和
-开发团队，所有这些都在不牺牲开发者所喜爱的简单性、安全性和
-“内置电池”特性的情况下实现。
+:::note Historical document
+
+本指南涵盖从 Deno 1.x 到 Deno 2.x 的一次性迁移，并且已不再积极更新。如果你是从 Node.js 迁移到 Deno，请改为查看
+[Migrate from Node.js](/runtime/migrate/)。
+
+:::
+
+虽然我们在 Deno 1.x 中已经取得了大量成果，但下一个主要版本的重点是让 Deno **大规模** 使用。这意味着与 Node.js 和 npm JavaScript 基础设施实现无缝互操作，并支持更广泛的项目和开发团队，同时不牺牲开发者喜爱的简洁性、安全性以及“开箱即用”的特性。
 
 ## 与 Node.js 和 npm 的向后兼容性
 
@@ -59,15 +62,8 @@ Deno 2 大大改善了对 npm 和 JSR 包的依赖管理，提供了以下工具
 
 Deno 2 是针对在重要项目上工作的开发团队而构建的。这些团队处理复杂的代码库，共享内部代码，通常使用私有注册表。
 
-使用 Deno 2，你的团队可以像使用 Node.js 和 npm 一样利用私有 npm 注册表，使用 `.npmrc` 文件：
-
-```js title=".npmrc"
-@mycompany:registry=http://mycompany.com:8111/
-mycompany.com:8111/:_authToken=token
-```
-
-了解更多关于私有注册表配置
-[在 `npm 包` 页面上](/runtime/fundamentals/node/#private-registries)。
+使用 Deno 2，你的团队可以像在 Node.js 和 npm 中那样，使用 `.npmrc` 文件来利用私有 npm 注册表。有关配置详情，请参见
+[私有注册表](/runtime/fundamentals/node/#private-registries)。
 
 Deno 2 具有工作区支持，允许你在同一个 monorepo 中混合 Deno 首先和 Node 首先的包，使增量采用变得快速且易于实现。
 
@@ -118,9 +114,9 @@ Deno 将提供有用的错误消息，附带建议，以引导你走向工作解
 
 如果你的项目中包含 `package.json` 文件且未指定 `nodeModulesDir` 选项，则必须将其设置为 `auto` 以保持 Deno 1.x 中的自动安装行为。Deno 2 中的新默认值为 `manual`，这意味着用户必须手动保持该目录的最新状态。
 
-参见
-[Node 模块目录](https://docs.deno.com/runtime/fundamentals/configuration/#node-modules-directory)
-以供参考。
+See
+[Node modules directory](https://docs.deno.com/runtime/reference/deno_json/#node-modules-directory)
+for reference.
 
 ## CLI 更改
 
@@ -175,9 +171,9 @@ esbuild.stop();
 
 - `--jobs`
 
-请使用
-[`DENO_JOBS`](https://docs.deno.com/runtime/manual/basics/env_variables/#special-environment-variables)
-环境变量来替代。
+请改用
+[`DENO_JOBS`](/runtime/reference/env_variables/#special-environment-variables)
+环境变量。
 
 ```diff
 - deno test --jobs=4 --parallel
@@ -283,8 +279,6 @@ const kv = await Deno.openKv();
 - `Deno.close()`
 
 请改用资源的 `.close()` 方法。
-
-<a href="#" id="rid">测试</a>
 
 ```diff
   const conn = await Deno.connect({ port: 80 });

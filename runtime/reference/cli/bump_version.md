@@ -75,8 +75,10 @@ deno bump-version
 `deno bump-version` 会一次性作用于每个成员包，而不是只处理根配置：
 
 - 相同的增量会应用到每个成员的 `version` 字段。
-- 工作区根配置以及任何 [import map](/runtime/fundamentals/configuration/#imports) 中的 `jsr:` 版本约束会原地重写，以便跨包引用继续匹配提升后的版本。
-- 没有 `version` 字段的成员会保持不变。
+- 工作区根配置以及任何
+  [导入映射](/runtime/reference/deno_json/#dependencies) 中的 `jsr:` 版本约束会原地重写，
+  以便跨包引用保持与提升后的版本匹配。
+- 没有 `version` 字段的成员将保持不变。
 
 ```sh
 # 在工作区根目录：将每个成员从 1.4.6 提升到 1.4.7

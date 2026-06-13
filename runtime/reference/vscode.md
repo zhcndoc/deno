@@ -176,7 +176,7 @@ denoTest({
 
 ## 任务
 
-尽管扩展与语言服务器直接通信，但有时您可能更希望通过 CLI 运行 Deno 命令。您可以在工作区根目录中的 `deno.json` 文件中定义任务，位于 [`tasks` 字段](/runtime/fundamentals/configuration/#tasks).
+虽然扩展直接与语言服务器通信，但有时您可能更愿意通过 CLI 运行 Deno 命令。您可以在工作区根目录的 `deno.json` 文件中通过 [`tasks` 字段](/runtime/reference/deno_json/#tasks) 定义任务。
 
 ## 使用开发容器
 

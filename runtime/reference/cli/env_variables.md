@@ -7,14 +7,14 @@ title: "配置 Deno 行为"
 
 ### DENO_AUDIT_PERMISSIONS
 
-审计每次权限访问（允许或拒绝）。将其设置为文件路径以写入
-JSONL 审计日志，或将其设置为字面值 `otel`，以通过已配置的导出器将每次访问
-作为 OpenTelemetry 日志记录发出。有关字段集和 OTel 属性名称，请参阅
-[permissions](/runtime/fundamentals/security/#permission-flags)。
+审计每次权限访问（允许或拒绝）。设置为文件路径可写入
+JSONL 审计日志，或设置为字面值 `otel` 以通过已配置的导出器将每次访问作为
+OpenTelemetry 日志记录发出。有关字段集和 OTel
+属性名称，请参阅 [权限](/runtime/reference/permissions/)。
 
 ### DENO_AUTH_TOKENS
 
-一个授权令牌的列表，可以用来允许 Deno 访问远程私有代码。有关更多详细信息，请参阅
+一个授权令牌列表，可用于允许 Deno 访问远程私有代码。有关更多详细信息，请参阅
 [私有模块和仓库](/runtime/reference/private_repositories) 部分。
 
 ### DENO_TLS_CA_STORE

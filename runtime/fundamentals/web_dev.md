@@ -38,14 +38,15 @@ deno task dev
 
 ## Fresh
 
-[Fresh](https://fresh.deno.dev/) 是 Deno 中最流行的 Web 框架。它采用默认不向客户端发送任何 JavaScript 的模型。
+[Fresh](https://usefresh.dev/) 是 Deno 最受欢迎的 web 框架。它
+默认采用不向客户端发送任何 JavaScript 的模式。
 
 要开始使用 Fresh 应用，你可以使用以下命令并按照 CLI 提示创建你的应用：
 
 ```sh
-deno run -A -r https://fresh.deno.dev
+deno run -Ar jsr:@fresh/init
 cd my-fresh-app
-deno task start
+deno task dev
 ```
 
 这将创建一个新的 Fresh 应用并使用 Deno 运行它。你可以打开浏览器访问 `http://localhost:8000` 以查看你的新应用。编辑 `/routes/index.tsx` 以实时查看你的更改。
@@ -160,4 +161,5 @@ deno run --allow-net server.ts
 
 ## Node 项目
 
-Deno 可以直接运行你的 Node.js 项目。请查看我们关于[将你的 Node.js 项目迁移到 Deno](/runtime/fundamentals/node/#migrating-from-node.js-to-deno)的指南。
+Deno 将直接运行你的 Node.js 项目，无需额外配置。请查看我们的指南：
+[将你的 Node.js 项目迁移到 Deno](/runtime/migrate/)。

@@ -1,5 +1,6 @@
 ---
 title: "什么是 Deno？"
+description: "对 Deno 的简短介绍：这是一个基于 Web 标准构建的安全 JavaScript、TypeScript 和 WebAssembly 运行时，以及它的历史。"
 url: /examples/what_is_deno/
 videoUrl: https://www.youtube.com/watch?v=KPTOo4k8-GE&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe
 layout: video.tsx

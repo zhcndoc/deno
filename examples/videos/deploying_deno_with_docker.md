@@ -1,31 +1,26 @@
 ---
-title: "Deploying Deno with Docker"
+title: "使用 Docker 部署 Deno"
+description: "了解如何使用 Docker 将 Deno 应用容器化，并将其部署到兼容的云环境中。"
 url: /examples/deploying_deno_with_docker/
 videoUrl: https://www.youtube.com/watch?v=VRryNeYm6yw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=16
 layout: video.tsx
 ---
 
-## Video description
+## 视频描述
 
-See how to deploy Deno applications with Docker to a compatible cloud
-environment.
+看看如何使用 Docker 将 Deno 应用部署到兼容的云环境中。
 
-## Resources
+## 资源
 
 - https://github.com/denoland/deno_docker
 - https://fly.io/
 - https://docs.deno.com/runtime/reference/docker/
 
-## Transcript and code
+## 转录和代码
 
-Deno has made a lot of things seem easy: linting, formatting, interoperability
-with the Node ecosystem, testing, TypeScript, but how about deployment? How easy
-is it to get Deno running in production? Pretty easy!
+Deno 让很多事情看起来都很简单：lint、格式化、与 Node 生态系统的互操作、测试、TypeScript，但部署呢？让 Deno 在生产环境中运行有多容易？相当容易！
 
-Let’s start with a look at our app. It’s an app that provides us with some
-information about trees. On the homepage we get some text At the trees route, we
-get some JSON At the dynamic route based on the tree’s id, we get information
-about that single tree.
+让我们先看看我们的应用。它是一个为我们提供树木相关信息的应用。在首页我们会看到一些文本；在 trees 路由上，我们会得到一些 JSON；在基于树木 id 的动态路由上，我们会得到那棵树的相关信息。
 
 ```ts
 import { Hono } from "jsr:@hono/hono";
@@ -73,101 +68,88 @@ app.get("/trees/:id", (c) => {
 Deno.serve(app.fetch);
 ```
 
-## Run Locally with Docker
+## 使用 Docker 在本地运行
 
-Make sure that Docker is installed on your machine. In your terminal or command
-prompt, you can run docker and if you get a big list of commands, you have it.
-If not, head over to https://www.docker.com/ and download it based on your
-operating system.
+请确保你的机器上已安装 Docker。在终端或命令提示符中，你可以运行 docker，如果你看到了很长的命令列表，就说明它已经安装好了。如果没有，请前往 https://www.docker.com/ 并根据你的操作系统下载。
 
-### Test run docker:
+### 测试运行 docker：
 
 ```shell
 docker
 ```
 
-Then run the command to get running on `localhost:8000` with Docker
+然后运行命令，使用 Docker 在 `localhost:8000` 上启动
 
 ```shell
 docker run -it -p 8000:8000 -v $PWD:/my-deno-project denoland/deno:2.0.2 run
 --allow-net /my-deno-project/main.ts
 ```
 
-Visit the app running at `localhost:8000`
+访问运行在 `localhost:8000` 的应用
 
-It’s also possible to run this with a docker config file.
+也可以通过 docker 配置文件来运行它。
 
 ```dockerfile
 FROM
 denoland/deno:2.0.2
 
-# The port that your application listens to.
+# 应用监听的端口。
 
 EXPOSE 8000
 
 WORKDIR /app
 
-# Prefer not to run as root.
+# 尽量不要以 root 身份运行。
 USER deno
 
-# These steps will be re-run upon each file change in your working directory:
+# 每当工作目录中的文件发生变更时，这些步骤都会重新执行：
 COPY . .
 
-# Compile the main app so that it doesn't need to be compiled each startup/entry.
+# 预编译主应用，这样每次启动/入口时都不需要重新编译。
 RUN deno cache main.ts
 
-# Warmup caches
+# 预热缓存
 RUN timeout 10s deno -A main.ts || [ $? -eq 124 ] || exit 1
 
 CMD ["run", "--allow-net", "main.ts"]
 ```
 
-Then build it
+然后构建它
 
 ```shell
 docker build -t my-deno-project .
 ```
 
-From there, you can deploy the app to your hosting provider of choice. I’m going
-to use fly.io today.
+从这里开始，你就可以将应用部署到你选择的托管服务提供商。我今天要使用 fly.io。
 
-## Deploy to fly.io
+## 部署到 fly.io
 
-If you haven’t worked with fly before, it’s a cloud platform that allows you to
-deploy and run fullstack apps. They run in multiple regions throughout the world
-which makes them a pretty nice option. https://fly.io/
+如果你以前没有使用过 Fly，那么它是一个云平台，允许你部署和运行全栈应用。它们在全球多个地区运行，这使它成为一个相当不错的选择。https://fly.io/
 
-### Install Fly
+### 安装 Fly
 
-Install with curl
+使用 curl 安装
 
 ```shell
 curl -L https://fly.io/install.sh | sh
 ```
 
-### Log in with Fly via CLI
+### 通过 CLI 使用 Fly 登录
 
 ```shell
 fly auth login
 ```
 
-This will open the browser for you to log into your account (or create one if
-you haven’t already). Then we’ll launch the app with fly using:
+这将为你打开浏览器，以便登录你的账户（或者如果你还没有账户，可以创建一个）。然后我们将使用 fly 启动应用：
 
 ```shell
 flyctl launch
 ```
 
-This will generate a fly.toml file for the app, and you can choose different
-settings if you’d like to. And more importantly it will launch it! We’ll just
-wait for the process to complete, and we should be able to view our app running
-at that location.
+这将为应用生成一个 fly.toml 文件，你可以根据需要选择不同的设置。更重要的是，它会把它启动起来！我们只需等待过程完成，应该就能在那个地址查看我们的应用运行情况。
 
-So with Deno, we can use Docker to containerize the app and with Fly we can get
-the app hosted in production in just a few minutes.
+因此，借助 Deno，我们可以使用 Docker 将应用容器化；借助 Fly，我们可以在几分钟内将应用托管到生产环境中。
 
-## More information on working with Docker
+## 关于使用 Docker 的更多信息
 
-For a closer look at Deno's support of Docker, including best practices, running
-tests with Docker, using workspaces, and more, please take a look at our
-[Deno and Docker reference documentation](https://docs.deno.com/runtime/reference/docker/).
+如果你想更深入地了解 Deno 对 Docker 的支持，包括最佳实践、使用 Docker 运行测试、使用工作区等，请查看我们的 [Deno 和 Docker 参考文档](https://docs.deno.com/runtime/reference/docker/)。

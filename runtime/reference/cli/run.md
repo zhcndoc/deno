@@ -22,9 +22,8 @@ deno run main.ts
 deno main.ts
 ```
 
-默认情况下，Deno 在一个沙箱中运行程序，没有访问磁盘、网络或生成子进程的能力。这是因为 Deno 运行时是 
-[默认安全](/runtime/fundamentals/security/)。你可以使用
-[`--allow-* 和 --deny-* 标志](/runtime/fundamentals/security/#permissions-list) 来授予或拒绝所需的权限。
+默认情况下，Deno 会在沙箱中运行程序，无法访问磁盘、网络，也不能生成子进程。这是因为 Deno 运行时具有[默认安全](/runtime/fundamentals/security/)。你可以使用
+[`--allow-*` 和 `--deny-*` 标志](/runtime/reference/permissions/)授予或拒绝所需的权限。
 
 ### 权限示例
 

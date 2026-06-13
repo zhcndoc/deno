@@ -1,6 +1,7 @@
 ---
 last_modified: 2025-09-24
-title: "Simple API server"
+title: "简单 API 服务器"
+description: "使用 Deno KV 和 Web 标准原语构建一个简单的链接缩短器 API，然后将其部署到 Deno Deploy。"
 url: /examples/simple_api_tutorial/
 oldUrl:
   - /deploy/tutorials/simple-api/

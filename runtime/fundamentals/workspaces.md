@@ -214,7 +214,7 @@ COPY project-b/ /app/project-b/
 
 这样确保了 Deno 用于查找和导入工作区依赖的解析机制得以保留。
 
-### 多个包条目
+## 多个包入口
 
 `exports` 属性详述入口点，并指示包用户应导入哪些模块。
 
@@ -240,7 +240,7 @@ COPY project-b/ /app/project-b/
 
 - `@scope/my-package/other`
 
-### 发布工作区包到注册表
+## 将工作区包发布到注册表
 
 工作区简化了向如 JSR 或 NPM 等注册表发布包的流程。您可以发布单个工作区成员，同时保持它们在单体仓库中的开发联系。
 
@@ -300,7 +300,7 @@ deno test integration-test.ts
 
 发布依赖其他工作区成员的包时，Deno 会自动将工作区引用替换为发布代码中的正确注册表引用。
 
-### 从 npm 工作区迁移
+## 从 `npm` workspaces 迁移
 
 Deno 工作区支持从现有 npm 包中使用 Deno 优先的包。在此示例中，我们混用名为 `@deno/hi` 的 Deno 库和几年前开发的 Node.js 库 `@deno/log`。
 
@@ -557,7 +557,9 @@ deno task --cwd=add build
 
 ## 共享和管理依赖
 
-工作区提供强大的方法来共享和管理跨项目依赖：
+工作区成员可以共享依赖、相互依赖，并逐个成员地解决版本冲突。若要为整个工作区固定某个依赖版本，请参见下方的 [`catalog:`](#centralized-dependency-versions-with-catalog)。
+
+工作区为跨项目共享和管理依赖提供了强大的方式：
 
 ### 共享开发依赖
 
@@ -598,6 +600,25 @@ export function subtract(a: number, b: number): number {
 此方法允许您：
 
 1. 将复杂项目拆分成职责单一的包
+
+### 在 package.json 中使用工作区协议
+
+Deno 支持 `package.json` 文件中的工作区协议说明符。当您的 npm 包依赖于工作区内的其他包时，这些说明符很有用：
+
+```json title="package.json"
+{
+  "name": "my-npm-package",
+  "dependencies": {
+    "another-workspace-package": "workspace:*"
+  }
+}
+```
+
+支持以下工作区协议说明符：
+
+- `workspace:*` - 使用工作区中可用的最新版本
+- `workspace:~` - 使用仅包含补丁级变更的工作区版本
+- `workspace:^` - 使用与语义版本兼容变更的工作区版本
 
 ## 使用 `catalog:` 集中管理依赖版本
 
@@ -695,30 +716,7 @@ Catalog 也可以放在根 `package.json` 中，这样可以让尚未迁移到 `
 - Catalog 仅限根目录使用。在工作区成员中定义 `catalog` 或 `catalogs` 会产生诊断信息。
 - 成员必须引用一个存在的 catalog 名称。缺失条目会在安装或运行期间产生解析错误。
 
-## 在 package.json 中使用 workspace 协议
-
-3. 共同开发、测试相互依赖模块
-
-4. 逐步将单体代码库迁移为模块化架构
-
-## 在 package.json 中使用工作区协议
-
-Deno 支持在 `package.json` 中使用工作区协议说明符，非常适合依赖工作区内其他包的 npm 包：
-
-```json title="package.json"
-{
-  "name": "my-npm-package",
-  "dependencies": {
-    "another-workspace-package": "workspace:*"
-  }
-}
-```
-
-支持的工作区协议说明符包括：
-
-- `workspace:*` —— 使用工作区中可用的最新版
-
-- `workspace:~` —— 使用工作区版本，且仅允许补丁级变更
+## npm 和 pnpm 工作区兼容性
 
 - `workspace:^` —— 使用与语义版本兼容的工作区版本
 

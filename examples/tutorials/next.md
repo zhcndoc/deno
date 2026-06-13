@@ -19,7 +19,7 @@ oldUrl:
 
 想跳过教程，立即部署完成后的应用吗？点击下面的按钮，即可立刻将完整的 Next.js 恐龙应用副本部署到 Deno Deploy。你将获得一个实时可用的应用，并且可以在学习过程中自由定制和修改！
 
-[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-next)
+[![在 Deno 上部署](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/denoland/tutorial-with-next)
 
 :::
 
@@ -268,6 +268,4 @@ git push -u origin main
 想了解部署详情，请查看 
 [Deno Deploy 教程](/examples/deno_deploy_tutorial/)。
 
-🦕 现在你可以使用 Deno 构建并运行一个 Next.js 应用了！如果想进一步扩展，你可以考虑
-[添加数据库](/runtime/tutorials/connecting_to_databases/) 来替代 `data.json` 文件，或尝试
-[编写测试](/runtime/fundamentals/testing/) 以确保应用稳定，为生产环境做好准备。
+🦕 现在你可以使用 Deno 构建和运行 Next.js 应用了！如果你想在此基础上继续扩展应用，可以考虑[添加数据库](/runtime/tutorials/connecting_to_databases/)来替换你的 `data.json` 文件，或者考虑[编写一些测试](/runtime/test/)来让你的应用更可靠，并为生产环境做好准备。

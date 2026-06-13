@@ -8,7 +8,7 @@ description: "通过显示其依赖链来解释为什么某个包会被安装"
 ---
 
 `deno why` 命令通过打印从项目的直接依赖到所查询包的每一条路径，来解释为什么某个特定包会出现在你的依赖树中。它读取
-[lockfile](/runtime/fundamentals/modules/#integrity-checking-and-lock-files)，因此无论你使用哪种 node_modules / npm 解析器模式，都可以正常工作，而且不会触碰网络。
+[锁文件](/runtime/packages/#lockfile-and-reproducible-installs)，因此无论你使用哪种 node_modules / npm 解析器模式，都可以工作，而且不会接触网络。
 
 它与 [`deno add`](/runtime/reference/cli/add/) 和
 [`deno remove`](/runtime/reference/cli/remove/) 配合使用：一旦你知道某个传递依赖为什么会出现在你的树中，就可以决定是否移除那个把它引入进来的直接依赖。

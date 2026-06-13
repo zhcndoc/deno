@@ -26,8 +26,8 @@ Deno 的 FFI 实现基于
 ## 安全注意事项
 
 FFI 需要使用
-[`--allow-ffi`](/runtime/fundamentals/security#ffi-foreign-function-interface)
-标志显式授予权限，因为本地代码运行在 Deno 安全沙箱之外：
+[`--allow-ffi`](/runtime/reference/permissions/#ffi-(foreign-function-interface))
+标志显式授权，因为本地代码运行在 Deno 的安全沙箱之外：
 
 ```sh
 deno run --allow-ffi my_ffi_script.ts

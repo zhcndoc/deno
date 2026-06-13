@@ -87,7 +87,8 @@ Listening on:
 
 ### 在 Deno 项目中使用 @std/http 文件服务器
 
-要在 [Deno 项目](/runtime/getting_started/first_project) 中使用文件服务器，你可以在 `deno.json` 文件中添加它：
+To use the file-server in a [Deno project](/runtime/), you can add it to your
+`deno.json` file with:
 
 ```sh
 deno add jsr:@std/http

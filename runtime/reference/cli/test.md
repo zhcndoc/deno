@@ -8,9 +8,9 @@ openGraphTitle: "deno test"
 description: "使用 Deno 内置的测试运行器运行你项目的测试"
 ---
 
-Deno 附带了一个内置的测试运行器，使用
-[`Deno.test()`](/api/deno/~/Deno.test) API。要了解如何编写测试，请参见
-[测试基础](/runtime/fundamentals/testing/)指南。有关断言，请参见
+Deno 自带一个内置测试运行器，使用
+[`Deno.test()`](/api/deno/~/Deno.test) API。要了解如何编写测试，请参阅
+[测试基础](/runtime/test/)指南。有关断言，请参阅
 [`@std/assert`](/runtime/reference/std/assert/) 和
 [`@std/expect`](/runtime/reference/std/expect/)。
 
@@ -34,18 +34,28 @@ deno test src/fetch_test.ts src/signal_test.ts
 deno test src/*.test.ts
 ```
 
-运行名称匹配字符串或模式的测试：
-
-```sh
-deno test --filter "database"
-deno test --filter "/^connect.*/"
-```
-
 跳过类型检查：
 
 ```sh
 deno test --no-check
 ```
+
+## 过滤
+
+仅运行名称与字符串或使用 `--filter` 的模式匹配的测试：
+
+```sh
+# 运行名称包含 "database" 的测试
+deno test --filter "database"
+
+# 运行名称匹配正则表达式的测试
+deno test --filter "/^connect.*/"
+```
+
+用正斜杠 (`/`) 将过滤值括起来，以将其视为正则表达式，类似于 JavaScript 的正则字面量语法。过滤不会影响测试步骤：当某个测试名称与过滤条件匹配时，它的所有步骤都会运行。
+
+若要控制最初收集哪些测试文件，可在配置文件中设置 `test.include` 和 `test.exclude`。请参阅
+[包含与排除](/runtime/reference/deno_json/#include-and-exclude)。
 
 ## 权限
 
@@ -103,14 +113,19 @@ deno coverage --lcov coverage/ > coverage.lcov
 
 ## 报告器
 
-使用 `--reporter` 选择输出格式：
+使用 `--reporter` 选择输出格式。内置了四种报告器：
+
+- `pretty`（默认）：详细、易读的输出
+- `dot`：每个测试显示一个字符，便于快速概览
+- `junit`：JUnit XML 格式，供 CI 系统使用
+- `tap`：[Test Anything Protocol](https://testanything.org/) 输出
 
 ```sh
 deno test --reporter=dot
 deno test --reporter=tap
 ```
 
-为 CI 系统写入 JUnit XML 报告：
+在终端中保留人类可读的 `pretty` 输出的同时，将 JUnit XML 报告写入文件：
 
 ```sh
 deno test --junit-path=report.xml
@@ -140,4 +155,4 @@ deno test --trace-leaks
 deno test --doc
 ```
 
-有关详细信息，请参见[文档中的代码测试](/runtime/reference/documentation/)。
+有关详情，请参阅[文档测试](/runtime/test/doc_tests/)。

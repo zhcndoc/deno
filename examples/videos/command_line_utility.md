@@ -1,38 +1,26 @@
 ---
-title: "Build a Command Line Utility"
+title: "构建一个命令行实用工具"
+description: "学习使用 Deno 的标准库构建一个命令行工具，解析标志，处理错误，并编译跨平台可执行文件。"
 url: /examples/command_line_utility/
 videoUrl: https://www.youtube.com/watch?v=TUxj2TS5pNo&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=14
 layout: video.tsx
 ---
 
-## Video description
+## 视频描述
 
-Learn to build a command line tool using Deno's standard library. You'll explore
-how to parse arguments, handle flags, and provide helpful messages using utility
-functions. Follow along as we build a ski resort information app, handle errors
-gracefully, and compile the script into an executable for multiple platforms,
-including Windows, MacOS, and Linux. By the end of this video, you'll understand
-how to take full advantage of Deno's features to develop and distribute your own
-CLI tools.
+学习使用 Deno 的标准库构建一个命令行工具。你将了解如何解析参数、处理标志，以及如何使用实用函数提供有帮助的信息。跟着我们一起构建一个滑雪胜地信息应用，优雅地处理错误，并将脚本编译为可在多个平台上运行的可执行文件，包括 Windows、MacOS 和 Linux。到本视频结束时，你将了解如何充分利用 Deno 的特性来开发和分发你自己的 CLI 工具。
 
-## Transcript and code
+## 文字稿和代码
 
-### An introduction to Deno's Standard Library
+### Deno 标准库简介
 
-If you want to create a command line tool you can do so with
-[Deno's standard Library](https://docs.deno.com/runtime/reference/std/). It
-contains dozens of stable libraries with helpful utility functions that can
-cover a lot of the basics when working with JavaScript in the web. The standard
-Library also works in multiple runtimes and environments like Node.js and the
-browser.
+如果你想创建一个命令行工具，你可以使用 [Deno 的标准库](https://docs.deno.com/runtime/reference/std/)。它包含数十个稳定的库以及有用的实用函数，可以覆盖在 Web 中使用 JavaScript 时许多基础内容。标准库也可以在多种运行时和环境中使用，比如 Node.js 和浏览器。
 
-### Setting up a command line tool
+### 设置命令行工具
 
-We're going to create a commandline tool, and then we're going to compile it so
-it can be used on a number of different platforms as an executable.
+我们要创建一个命令行工具，然后将其编译，这样它就可以作为可执行文件在多种不同平台上使用。
 
-Create a new file called `main.ts` and parse these arguments (remember we can
-always grab them from `Deno.args`), and then we'll console log them:
+创建一个名为 `main.ts` 的新文件，并解析这些参数（记住我们总是可以从 `Deno.args` 中获取它们），然后我们将把它们打印到控制台：
 
 ```typescript title="main.ts"
 const location = Deno.args[0];
@@ -40,35 +28,30 @@ const location = Deno.args[0];
 console.log(`Welcome to ${location}`);
 ```
 
-Now if I run `deno main.ts` and then I provide the name of a ski resort like
-Aspen that's going to plug that into the string, eg:
+现在如果我运行 `deno main.ts`，然后提供一个滑雪胜地的名称，比如 Aspen，它就会把它填入字符串中，例如：
 
 ```sh
 deno main.ts Aspen
 ## Welcome to Aspen
 ```
 
-### Installing and Using Standard Libraries
+### 安装和使用标准库
 
-Now lets install one of those standard libraries. In the terminal run:
+现在让我们安装其中一个标准库。在终端中运行：
 
 ```sh
 deno add jsr:@std/cli
 ```
 
-This is going to install the [cli library](https://jsr.io/@std/cli), from the
-Deno standard library, into our project so we could make use of some of their
-helpful functions.
+这会把 [cli 库](https://jsr.io/@std/cli) 从 Deno 标准库安装到我们的项目中，这样我们就可以使用其中一些有用的函数。
 
-The Helpful function that we'll use here is called `parseArgs`. We can import
-that with:
+我们要使用的这个实用函数叫做 `parseArgs`。我们可以通过以下方式导入它：
 
 ```typescript
 import { parseArgs } from "jsr:@std/cli/parse-args";
 ```
 
-Then we can update our code to use this function, passing the argument and
-removing the zero. Our `main.ts` file now looks like this:
+然后我们可以更新代码来使用这个函数，传入参数并去掉索引 0。此时我们的 `main.ts` 文件如下所示：
 
 ```typescript title="main.ts"
 import { parseArgs } from "jsr:@std/cli/parse-args";
@@ -78,24 +61,17 @@ const args = parseArgs(Deno.args);
 console.log(args);
 ```
 
-Let's go ahead and try this out, in your terminal run:
+让我们来试试，在终端中运行：
 
 ```sh
 deno main.ts -h Hello
 ```
 
-We can see that `Hello` has been added to our args object. All right, so that's
-working as expected.
+我们可以看到 `Hello` 已经被添加到我们的 args 对象中。好的，这一切都按预期工作。
 
-### Building the Ski Resort Information App
+### 构建滑雪胜地信息应用
 
-Now our app is going to be a ski resort information app, so we want to populate
-our app with a little bit of data to start. We're going to create a value called
-`resorts`. This is an object with a few different keys so we'll say `elevation`,
-`snow` and `expectedSnowfall`. Then let's just copy and paste these so that we
-can move a little more quickly we'll set `Aspen` to `7945` `snow` to
-`packed powder`, `expectedSnowfall` to `15`. Then let's add one more of these
-we'll set `Vail` to `8120` and then we'll say `expectedSnowfall` is `25`.
+现在我们的应用将是一个滑雪胜地信息应用，所以我们想先填充一些数据。我们将创建一个名为 `resorts` 的值。这是一个包含几个不同键的对象，所以我们会说 `elevation`、`snow` 和 `expectedSnowfall`。然后让我们直接复制粘贴这些，这样可以更快一些；我们将 `Aspen` 设置为 `7945`，`snow` 设置为 `packed powder`，`expectedSnowfall` 设置为 `15`。然后再添加一个，我们将 `Vail` 设置为 `8120`，然后将 `expectedSnowfall` 设为 `25`。
 
 ```typescript title="main.ts"
 const resorts = {
@@ -107,27 +83,22 @@ const resorts = {
 
   Aspen: {
     elevation: 7945,
-    snow: "packed powder",
+    snow: "压实粉雪",
     expectedSnowfall: 15,
   },
   Vail: {
     elevation: 8120,
-    snow: "packed powder",
+    snow: "压实粉雪",
     expectedSnowfall: 25,
   },
 };
 ```
 
-We have a few different resorts here. Ultimately we want to be able to run our
-app with a command line argument that's going to provide the resort name and
-then have that CLI tool return the information about that resort.
+这里我们有几个不同的滑雪胜地。最终我们希望能够通过一个命令行参数运行应用，这个参数会提供滑雪胜地名称，然后让这个 CLI 工具返回该滑雪胜地的信息。
 
-### Handling Command Line Arguments
+### 处理命令行参数
 
-So let's go ahead and pass another object to parse args, here we're going to
-define an alias - so we're going to say "if I pass the `r` flag we want to have
-it assume it means `resort`. Then let's also use the default here, we'll set the
-`default` `resort` to `Whistler`:
+那么让我们继续，给 parse args 传入另一个对象，这里我们要定义一个别名——也就是说，如果我传入 `r` 标志，我们希望把它理解为 `resort`。然后我们也在这里使用默认值，把 `resort` 的默认值设为 `Whistler`：
 
 ```typescript title="main.ts"
 const args = parseArgs(Deno.args, {
@@ -140,9 +111,7 @@ const args = parseArgs(Deno.args, {
 });
 ```
 
-From here we can set up a const called `resortName` and set it to `args.resort`.
-Then get the resort, with `resorts[resortName]` (we'll fix that type error in a
-second), and update the console log:
+接下来我们可以设置一个名为 `resortName` 的常量，并将其设为 `args.resort`。然后通过 `resorts[resortName]` 获取对应的滑雪胜地（我们一会儿会修复这个类型错误），并更新 console log：
 
 ```typescript title="main.ts"
 const resortName = args.resort;
@@ -153,38 +122,32 @@ console.log(
 );
 ```
 
-To test this out we can use:
+要测试这一点，我们可以使用：
 
 ```sh
 deno main.ts -r Aspen
 ```
 
-Which will give us a printout of all of Aspen's details.
+这会输出 Aspen 的所有详细信息。
 
-We can also run this without any arguments which should give the details for
-Whistler, because that was set as default:
+我们也可以不带任何参数运行，这样应该会得到 Whistler 的详情，因为它被设置为默认值：
 
 ```sh
 deno main.ts
 ```
 
-Same goes for our full name, so we could say:
+完整名称同样适用，所以我们可以这样说：
 
 ```sh
 deno main.ts --resort Veil
 ```
 
-And that should give us those details as well.
+那样也应该能显示这些详情。
 
-### Improving Error Handling
+### 改进错误处理
 
-Now if I tried to run this with a resort that's not there, let's say `Bachelor`;
-there's an error so that's kind of an ugly one. It's hitting this moment where
-it's trying to parse that out and it can't find it. So we could make this a
-little nicer by saying if there's no `resort` in our data set that matches the
-input, let's run a console error saying
-`resort name not found, try Whistler Aspen or Veil` and then we'll hop out of
-that process with a `Deno.exit`:
+如果我尝试用一个不存在的滑雪胜地运行，比如说 `Bachelor`；会出现一个错误，而且看起来不太友好。它会在试图解析时卡在这里，却找不到对应项。所以我们可以让它更友好一些：如果我们的数据集中没有与输入匹配的 `resort`，就运行一个 console error，提示
+`resort name not found, try Whistler Aspen or Veil`，然后使用 `Deno.exit` 退出该进程：
 
 ```typescript title="main.ts"
 if (!resort) {
@@ -195,28 +158,19 @@ if (!resort) {
 }
 ```
 
-### Fixing the types
+### 修复类型
 
-Okay so this here isn't looking so good we can look at the problems here in
-typescript - it's telling us that this implicitly has an `any` type, you can
-look up more about this error but I'll show you how to fix this one. Update the
-type of `resortName` to be a key of `resorts`:
+好吧，这里看起来不太对，我们可以看看 TypeScript 中的问题——它告诉我们这里隐式具有 `any` 类型，你可以查阅更多关于这个错误的信息，但我会向你展示如何修复它。将 `resortName` 的类型更新为 `resorts` 的一个键：
 
 ```typescript title="main.ts"
 const resortName = args.resort as keyof typeof resorts;
 ```
 
-What this has done is extract the value of `args.resort` and it's going to
-assert that there is a valid key inside of the data.
+这一步做的是提取 `args.resort` 的值，并断言它是数据中的一个有效键。
 
-### Adding Help and Color Output
+### 添加帮助信息和颜色输出
 
-Let's take this one more step, we're going to say if `args.help`, we will
-console log and then we're going to give our users a little message to say "hey
-this is actually how you use this" if they do happen to ask for help at any
-moment, and we'll update the alias here to say `help` is `H`, finally we'll make
-sure to call `Deno.exit` so that we jump out of the process as soon as we're
-done with that:
+让我们再进一步：我们要说如果 `args.help`，我们就 console log，然后给用户一个小提示，告诉他们“嘿，这其实就是用法”，以便在任何时候他们请求帮助时都能看到；然后我们还要把这里的别名更新为 `help` 对应 `H`，最后我们要确保调用 `Deno.exit`，这样在完成后就会立即退出进程：
 
 ```typescript title="main.ts"
 const args = parseArgs(Deno.args, {
@@ -234,25 +188,22 @@ const args = parseArgs(Deno.args, {
 if (args.help) {
   console.log(`
     usage: ski-cli --resort <resort name>
-    -h, --help    Show Help
-    -r, --resort  Name of the ski resort (default: Whistler)
+    -h, --help    显示帮助
+    -r, --resort  滑雪胜地名称（默认值：Whistler）
   `);
   Deno.exit();
 }
 ```
 
-You can test your help setup by running the following:
+你可以通过运行以下命令来测试帮助设置：
 
 ```sh
 deno main.ts -h
 ```
 
-Next let's log our results here in color. Deno has support for CSS using the
-`%C` syntax.
+接下来让我们用颜色输出结果。Deno 支持使用 `%C` 语法的 CSS。
 
-This will take the text and apply the style that we pass in as the second
-argument to the `console.log()`. Here we could set `color:blue` as the second
-argument, eg:
+这会将文本应用为我们传递给 `console.log()` 的第二个参数中的样式。例如，我们可以把第二个参数设为 `color:blue`：
 
 ````typescript title="main.ts"
 console.log(`
@@ -269,58 +220,42 @@ Then run the program again:
 ```sh
 deno main.ts -r Veil
 ````
+你应该会看到所有内容都以蓝色输出。这有多酷啊？！
 
-You should see everything logged in a blue color. How cool is that?!
+### 为不同平台编译工具
 
-### Compiling the Tool for Different Platforms
-
-I want other people to be able to enjoy the app too. Compiling this tool into an
-executable is pretty easy with Deno. As you might imagine, the command for
-running this is `deno compile` and then the name of our script. This is going to
-compile the code to the project as an executable:
+我也希望其他人能享受这个应用。使用 Deno 把这个工具编译成可执行文件非常简单。正如你可能想象的那样，这个命令就是 `deno compile`，后面跟上我们脚本的名称。这会将代码编译到项目中，作为一个可执行文件：
 
 ```sh
 deno compile main.ts
 ```
 
-You should see the executable in your project folder called MyDenoProject. Now
-you can run this as an executable with `./`, eg:
+你应该会在项目文件夹中看到名为 MyDenoProject 的可执行文件。现在你可以使用 `./` 来运行它，例如：
 
 ```sh
 ./MyDenoProject --resort Aspen
 ```
 
-So this is really great for me, but what happens if I want to share this to
-other platforms? All you would need to do is run `deno compile` again, this time
-passing in a `--target` flag for where you want to compile to.
+这对我来说真的很棒，但如果我想把它分享给其他平台呢？你只需要再次运行 `deno compile`，这一次传入一个 `--target` 标志，指定你想要编译到哪里。
 
-Let's say we wanted to compile it for Windows we'd use:
+假设我们想为 Windows 编译，我们会使用：
 
 ```sh
 deno compile --target x86_64-pc-windows-msvc --output ski-cli-windows main.ts
 ```
 
-or for a Mac:
+或者为 Mac：
 
 ```sh
 deno compile --target x86_64-apple-darwin --output ski-cli-macos main.ts
 ```
 
-or for Linux:
+或者为 Linux：
 
 ```sh
 deno compile --target x86_64-unknown-linux-gnu --output ski-cli-linux main.ts
 ```
 
-You can see all of the
-[options for compiling your apps](/runtime/reference/cli/compile/) in the Deno
-documentation. There are a lot of different flags that you can use for your own
-specific use cases.
+你可以在 Deno 文档中查看所有[编译应用的选项](/runtime/reference/cli/compile/)。你可以为自己的特定用例使用很多不同的标志。
 
-To recap we always have access to the Deno Standard Library that we can take
-advantage of with all these different helpful functions. If we wanted to create
-a command line utility, like we've done here, we always have access to the
-[`Deno` global namespace](/api/deno/~/Deno) for these arguments. We can parse
-the arguments using the parse args function from the standard Library CLI
-package and we can run a compile for all platforms so that our app can be
-consumed anywhere.
+总结一下，我们始终可以访问 Deno 标准库，并利用其中各种有用的函数。如果我们想创建一个命令行实用工具，就像这里做的那样，我们始终可以使用这些参数访问 [`Deno` 全局命名空间](/api/deno/~/Deno)。我们可以使用标准库 CLI 包中的 parse args 函数来解析这些参数，并且可以为所有平台进行编译，这样我们的应用就能在任何地方被使用。

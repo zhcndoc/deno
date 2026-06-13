@@ -297,8 +297,8 @@ Deno CLI 内置支持为自身生成 shell 补全脚本。使用 `deno completio
 输出补全脚本并加载到环境中：
 
 ```shell
-> deno completions bash > /usr/local/etc/bash_completion.d/deno.bash
-> source /usr/local/etc/bash_completion.d/deno.bash
+deno completions bash > /usr/local/etc/bash_completion.d/deno.bash
+source /usr/local/etc/bash_completion.d/deno.bash
 ```
 
 ### PowerShell 示例
@@ -306,8 +306,8 @@ Deno CLI 内置支持为自身生成 shell 补全脚本。使用 `deno completio
 输出补全脚本：
 
 ```shell
-> deno completions powershell >> $profile
-> .$profile
+deno completions powershell >> $profile
+.$profile
 ```
 
 这会在 `$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1` 创建 PowerShell 配置文件，并在每次启动 PowerShell 时自动运行。
@@ -317,13 +317,13 @@ Deno CLI 内置支持为自身生成 shell 补全脚本。使用 `deno completio
 你应有一个目录用来存放补全脚本：
 
 ```shell
-> mkdir ~/.zsh
+mkdir ~/.zsh
 ```
 
 然后输出补全：
 
 ```shell
-> deno completions zsh > ~/.zsh/_deno
+deno completions zsh > ~/.zsh/_deno
 ```
 
 确保你的 `~/.zshrc` 中加载补全：
@@ -344,8 +344,8 @@ compinit -u
 创建目录并输出补全：
 
 ```shell
-> mkdir ~/.oh-my-zsh/custom/plugins/deno
-> deno completions zsh > ~/.oh-my-zsh/custom/plugins/deno/_deno
+mkdir ~/.oh-my-zsh/custom/plugins/deno
+deno completions zsh > ~/.oh-my-zsh/custom/plugins/deno/_deno
 ```
 
 你的 `.zshrc` 可能如下：
@@ -364,7 +364,7 @@ antigen bundle deno
 将补全脚本输出至 fish 配置目录中的文件：
 
 ```shell
-> deno completions fish > ~/.config/fish/completions/deno.fish
+deno completions fish > ~/.config/fish/completions/deno.fish
 ```
 
 ## 构建你自己的 LSP 集成

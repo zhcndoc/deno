@@ -45,9 +45,7 @@ deno check "src/**/*.ts"
 }
 ```
 
-请参阅配置参考中的
-[include and exclude](/runtime/fundamentals/configuration/#include-and-exclude)，
-了解完整的 glob 语法，包括如何取消排除某个子路径。
+请参阅配置参考中的 [include and exclude](/runtime/reference/deno_json/#include-and-exclude)，了解完整的 glob 语法，包括如何取消排除子路径。
 
 ## 对远程模块进行类型检查
 

@@ -1,30 +1,29 @@
 ---
-title: "Compatibility with Node & npm"
+title: "与 Node 和 npm 的兼容性"
+description: "了解如何使用 npm 模块和 Node 标准库将 Deno 集成到现有的 Node.js 项目中，而无需进行大规模重写。"
 url: /examples/backward_compat_with_node_npm/
 videoUrl: https://www.youtube.com/watch?v=QPLchkJ7eas&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=12
 layout: video.tsx
 ---
 
-## Video description
+## 视频描述
 
-Explore how to integrate Deno into your existing Node.js projects seamlessly. In
-this video, we'll use Node.js standard libraries and npm modules with simple
-prefixes, maintain compatibility with CommonJS projects, and make use of Deno's
-features like dependency installation, formatting, and linting. Make the
-transition of your Node.js projects effortlessly without the need for major
-rewrites.
+了解如何将 Deno 无缝集成到你现有的 Node.js 项目中。在
+这段视频中，我们将通过简单的前缀来使用 Node.js 标准库和 npm 模块，保持与 CommonJS 项目的兼容性，并利用 Deno 的
+功能，如依赖安装、格式化和代码检查。让你的
+Node.js 项目轻松过渡，而无需进行大规模重写。
 
-## Transcript and code
+## 文字稿和代码
 
-Making the choice to use Deno does not mean that we can't take advantage of the
-Node.js ecosystem. It also doesn't mean that we have to rebuild all of our
-Node.js projects from scratch.
+选择使用 Deno 并不意味着我们不能利用
+Node.js 生态系统。它也不意味着我们必须从头开始重建所有的
+Node.js 项目。
 
-Using the features of the standard library, or the npm ecosystem, is as simple
-as adding a prefix. If you want to learn more about the Node apis you can check
-out [the Node API documentation](/api/node/).
+使用标准库或 npm 生态系统的功能，只需添加一个前缀
+即可。如果你想了解更多关于 Node API 的信息，可以查看
+[Node API 文档](/api/node/)。
 
-Here's an example of Using Node's file system module with the promises API:
+下面是一个使用 Node 文件系统模块和 promises API 的示例：
 
 ```typescript title="main.ts"
 async function readFile() {
@@ -32,42 +31,42 @@ async function readFile() {
     const data = await fs.readFile("example.txt", "utf8");
     console.log(data);
   } catch (error) {
-    console.error("Error reading file", error);
+    console.error("读取文件时出错", error);
   }
 }
 
 readFile();
 ```
 
-We read the file and we console log the data.
+我们读取文件，然后把数据输出到控制台。
 
-In node, we would import `fs` from `fs/promises` eg:
+在 Node 中，我们会从 `fs/promises` 导入 `fs`，例如：
 
 ```typescript
 import fs from "fs/promises";
 ```
 
-In Deno, we just put the Node prefix in front of the import, eg:
+在 Deno 中，我们只需在导入前加上 Node 前缀，例如：
 
 ```typescript
 import fs from "node:fs/promises";
 ```
 
-Then we run `deno main.ts` and opt into the "Running Deno with Node.js Built-in
-read access".
+然后我们运行 `deno main.ts`，并选择启用“使用 Node.js 内置
+读取权限运行 Deno”。
 
-If we run `deno main.ts` and allow
-[read access](/runtime/fundamentals/security/) its going to read from the file.
+如果我们运行 `deno main.ts` 并允许
+[读取权限](/runtime/fundamentals/security/)，它就会从文件中读取内容。
 
-Updating any imports in our apps to use this Node specifier will enable any code
-using node.js built-ins.
+将应用中的任何导入更新为使用这个 Node 标识符，将使任何使用
+node.js 内置模块的代码都能工作。
 
-Deno even supports CommonJS projects, which feels above and beyond I think
-that's pretty cool!
+Deno 甚至支持 CommonJS 项目，这感觉已经超出预期了，我觉得
+这相当酷！
 
-What if we wanted to use an npm module, from say, Sentry, in our application.
+如果我们想在应用中使用一个 npm 模块，比如来自 Sentry 的模块，该怎么办呢。
 
-We're going to use the **npm colon specifier** this time:
+这次我们要使用 **npm 冒号标识符**：
 
 ```typescript title="main.ts"
 import * as Sentry from "npm:@sentry/node";
@@ -79,32 +78,30 @@ function main() {
     throw new Error("This is an error");
   } catch (error) {
     Sentry.captureException(error);
-    console.error("Error caught", error);
+    console.error("捕获到错误", error);
   }
 }
 ```
 
-We'll run the command:
+我们将运行命令：
 
 ```sh
 deno run main.ts
 ```
 
-Which will ask for access to our home directory, and other places, and there we
-go! We are capturing this error as well! This backwards compatibility is pretty
-amazing.
+这会请求访问我们的主目录以及其他位置，然后就完成了！我们也在捕获这个错误了！这种向后兼容性非常惊人。
 
-Are you working on an existing Node.js project? Well with Deno 2 you can do that
-too. You can use `deno install` to install dependencies you can `deno fmt` for
-formatting you can `deno lint` for linting we can even run `deno lint --fix` to
-fix any linting problems automatically.
+你正在维护现有的 Node.js 项目吗？有了 Deno 2，你也可以这样做。
+你可以使用 `deno install` 来安装依赖，使用 `deno fmt` 进行
+格式化，使用 `deno lint` 进行代码检查，我们甚至可以运行 `deno lint --fix` 来
+自动修复任何代码检查问题。
 
-And yes you can also run Deno directly, so for any of the scripts that are part
-of a `package.json` just run `deno task` with the name of the script, eg:
+是的，你也可以直接运行 Deno，因此对于 `package.json` 中包含的任何脚本，
+只需使用 `deno task` 加上脚本名称即可，例如：
 
 ```sh
 deno task dev
 ```
 
-We can use all of the code that we've written before without having to change it
-or stretch it too much, Deno just makes it work!
+我们可以使用之前编写的所有代码，而无需改变它
+或过度调整，Deno 只是让它能够正常工作！

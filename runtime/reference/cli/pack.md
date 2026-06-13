@@ -201,8 +201,6 @@ deno pack --no-source-maps
 ## 另请参阅
 
 - [`deno publish`](/runtime/reference/cli/publish/) — 发布到 JSR
-- [`deno transpile`](/runtime/reference/cli/transpile/) — `deno pack` 在内部使用的
-  输出步骤
-- [`deno bump-version`](/runtime/reference/cli/bump_version/) — 在打包前提升 `deno.json` / `package.json` 中的 `version`
-- [发布模块](/runtime/fundamentals/modules/#publishing-modules) —
-  Deno 编写的库可以发布到何处的概览
+- [`deno transpile`](/runtime/reference/cli/transpile/) — `deno pack` 在内部使用的发射步骤
+- [`deno bump-version`](/runtime/reference/cli/bump_version/) — 打包前提升 `deno.json` / `package.json` 中的 `version`
+- [Publishing modules](/runtime/packages/publishing/) — Deno 编写的库可以发布到哪里的概览

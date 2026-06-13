@@ -1,7 +1,7 @@
 ---
 last_modified: 2026-05-28
 title: 命令行界面
-description: "Deno 命令行界面（CLI）的全面使用指南。了解如何运行脚本、管理权限、使用监视模式，以及如何通过命令行标志和选项配置 Deno 的运行时行为。"
+description: "面向 Deno 命令行界面的实用模式：传递脚本参数、运行时标志顺序、监视模式及其排除项，以及热模块替换。"
 oldUrl:
   - /manual/getting_started/command_line_interface
   - /runtime/manual/getting_started/command_line_interface/
@@ -15,28 +15,10 @@ Deno CLI 是面向 JavaScript 和 TypeScript 项目的全能工具链：
 `compile` 等）都有自己的标志；运行 `deno help` 或
 `deno <subcommand> --help` 查看它们。
 
-有关子命令和标志的完整列表，请参阅
-[CLI reference](/runtime/reference/cli/)。本页涵盖你会很快接触到的模式：如何运行代码、如何传递参数，以及如何使用监视模式。
-
-## 运行脚本
-
-你可以通过指定其相对于当前工作目录的路径来运行本地 TypeScript 或 JavaScript 文件：
-
-```shell
-deno run main.ts
-```
-
-Deno 支持直接从 URL 运行脚本。这在快速测试或运行代码而无需先下载它时特别有用：
-
-```shell
-deno run https://docs.deno.com/examples/scripts/hello_world.ts
-```
-
-你还可以通过标准输入将脚本通过管道传递。这对于与其他命令行工具集成或动态生成脚本很有用：
-
-```shell
-cat main.ts | deno run -
-```
+完整的子命令和标志列表，请参阅
+[CLI reference](/runtime/reference/cli/)。有关运行代码的基础知识（文件、
+URL、stdin、任务、权限标志），请参阅
+[Running code guide](/runtime/run/)。本页介绍那些容易让人一开始就困惑的模式：传递参数、标志顺序，以及监视模式的细节。
 
 ## 传递脚本参数
 
@@ -108,6 +90,30 @@ deno run --watch --watch-exclude=file1.ts,file2.ts main.ts
 ```shell
 deno run --watch --watch-exclude='*.js' main.ts
 ```
+
+### 热模块替换
+
+`deno run` 也支持 `--watch-hmr` 标志，它会在运行中的进程中热替换已更改的
+模块，而不是重启它。这会在编辑期间保留你的应用程序状态。如果热替换失败，
+进程会回退到完全重启。
+
+```shell
+deno run --watch-hmr main.ts
+```
+
+#### 带原子保存的编辑器
+
+某些编辑器使用“原子保存”（也称为安全写入），即编辑器会先将
+你的更改写入临时文件，然后在每次保存时将其重命名覆盖原文件。在 Linux 上，
+这会将文件替换为磁盘上的新文件，从而在第一次更改后断开 `--watch-hmr`
+使用的文件监视器。其症状是热替换可以工作一次，然后就停止检测到该模块的进一步编辑。
+
+如果遇到这种情况，请在你的编辑器中禁用原子保存：
+
+- **Helix**: 设置 `[editor] atomic-save = false`（默认已启用）。
+- **Neovim/Vim**: 设置 `:set backupcopy=yes`。
+
+普通的 `--watch` 不受影响，因为每次更改都会触发一次完整重启，从而重新建立监视器。
 
 ## 接下来去哪里
 

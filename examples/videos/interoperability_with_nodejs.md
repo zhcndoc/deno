@@ -1,5 +1,6 @@
 ---
 title: "与 Node.js 的互操作性"
+description: "了解如何在您的 Deno 项目中使用 Node.js 内置 API、npm 模块和 JSR 包。"
 url: /examples/interoperability_with_nodejs/
 videoUrl: https://www.youtube.com/watch?v=mgX1ymfqPSQ&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=2
 layout: video.tsx

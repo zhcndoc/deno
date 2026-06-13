@@ -1,5 +1,6 @@
 ---
 title: "使用 Deno fmt 进行格式化"
+description: "了解在任何工作流中使用 deno fmt（Deno 快速、可定制的内置代码格式化工具）的技巧与窍门。"
 url: /examples/deno_fmt/
 videoUrl: https://www.youtube.com/watch?v=Ouzso9gQqnc
 layout: video.tsx
@@ -7,12 +8,12 @@ layout: video.tsx
 
 ## 视频描述
 
-一个快速的提示和技巧集，关于
-[Deno 内置格式化工具 `deno fmt`](/runtime/reference/cli/fmt/)。
+一个关于
+[Deno 内置格式化工具 `deno fmt`](/runtime/reference/cli/fmt/) 的快速提示和技巧集。
 
-大家好，我是来自 Deno 的 Andy，回到 **Deno 工具链系列** 的另一集，在这里我们深入探讨 Deno 的子命令。
+大家好，我是来自 Deno 的 Andy，欢迎回到 **Deno 工具链系列** 的另一集，在这里我们会深入探讨 Deno 的子命令。
 
-今天我们将看看 `deno fmt`，我们的内置格式化工具，它是可定制的、性能优越并且灵活到适应任何工作流。让我们直接开始吧。
+今天我们将看看 `deno fmt`，我们的内置格式化工具，它可定制、性能出色，并且足够灵活，能够适应任何工作流。让我们直接开始吧。
 
 ### 什么是 `deno fmt`？
 
@@ -33,18 +34,18 @@ layout: video.tsx
 deno fmt
 ```
 
-你甚至可以将字符串或文件输入到它：
+你甚至可以将字符串或文件输入给它：
 
 ```sh
 echo ' console.log(    5  );' | deno fmt -
 ## console.log(5);
 ```
 
-你还可以使用 `--check` 标志，它将检查你的代码是否被 `deno fmt` 格式化。如果没有格式化，它将返回一个非零的退出代码：
+你还可以使用 `--check` 标志，它将检查你的代码是否已被 `deno fmt` 格式化。如果没有格式化，它将返回一个非零退出代码：
 
 ```sh
 echo ' console.log(    5  );' | deno fmt --check -
-## Not formatted stdin
+## 未格式化的 stdin
 ```
 
 这在 CI 中非常有用，当你想检查代码是否正确格式化时。
@@ -60,11 +61,11 @@ echo ' console.log(    5  );' | deno fmt --check -
 }
 ```
 
-你也可以设置保存时自动格式化为 true。
+你也可以将“保存时自动格式化”设置为 true。
 
 ### 多种格式化方式
 
-在某些情况下，有多种格式化方式，并且 Deno 允许你决定想要如何格式化。例如，一个对象可以水平或垂直格式化，这取决于你将第一个项放置在哪里。例如：
+在某些情况下，会存在多种格式化方式，而 Deno 允许你决定想要如何格式化。例如，一个对象可以水平或垂直格式化，这取决于你把第一个项放在哪里。例如：
 
 ```typescript
 const foo = { bar: "baz", qux: "quux" };
@@ -93,7 +94,7 @@ const foo = [
 
 ### 移除转义引号
 
-`deno fmt` 还可以减少字符串中的转义字符。例如， 如果你有一个包含转义引号的字符串，`deno fmt` 将移除它们：
+`deno fmt` 还可以减少字符串中的转义字符。例如，如果你有一个包含转义引号的字符串，`deno fmt` 将移除它们：
 
 <!-- deno-fmt-ignore-start -->
 ```typescript
@@ -150,7 +151,7 @@ console.log("This   line  will  not be    formatted");
 1. Fifth
 ```
 
-格式化工具将自动将列表格式化为所有的 `1`，但当你渲染它时，它会正确显示编号列表！
+格式化工具将自动把列表格式化为全部使用 `1`，但当你渲染它时，它会正确显示编号列表！
 
 如果这样做很奇怪，你也可以先写下 `1` 然后写下 `2`，运行 `deno fmt`，这样将会为你正确编号其余的列表。
 
@@ -186,4 +187,4 @@ console.log("This   line  will  not be    formatted");
 
 ### `deno fmt` 的性能
 
-`deno fmt` 非常快，尤其是在随后的运行中由于缓存，默认启用缓存。下面是我们对 Deno 标准库进行的第一次运行。让我们再运行一次！系统时间显示第二次运行快了三分之一。如果我们更新文件并再次运行，依然很快，因为 `deno fmt` 只检查更改的文件。让我们将其与 `Prettier`（一款流行的 Node 格式化工具）进行比较，我们将启用缓存标志运行 Prettier。即便是在第二次运行时，`deno fmt` 的速度几乎快了 20 倍！
+`deno fmt` 非常快，尤其是在后续运行中由于缓存，默认启用缓存。下面是我们对 Deno 标准库进行的第一次运行。让我们再运行一次！系统时间显示第二次运行快了三分之一。如果我们更新文件并再次运行，它依然很快，因为 `deno fmt` 只检查更改的文件。让我们将其与 `Prettier`（一款流行的 Node 格式化工具）进行比较，我们将启用缓存标志运行 Prettier。即便是在第二次运行时，`deno fmt` 的速度几乎快了 20 倍！

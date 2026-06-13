@@ -39,7 +39,7 @@ function createUserCard(user: { name: string; email: string }): Element {
 
 Deno.test("DOM 操作测试", () => {
   // 创建测试用户
-  const testUser = { name: "Test User", email: "test@example.com" };
+  const testUser = { name: "测试用户", email: "test@example.com" };
 
   // 调用函数
   const card = createUserCard(testUser);
@@ -47,7 +47,7 @@ Deno.test("DOM 操作测试", () => {
   // 断言 DOM 结构正确
   assertEquals(card.className, "user-card");
   assertEquals(card.children.length, 2);
-  assertEquals(card.querySelector("h2")?.textContent, "Test User");
+  assertEquals(card.querySelector("h2")?.textContent, "测试用户");
   assertEquals(card.querySelector(".email")?.textContent, "test@example.com");
 });
 ```
@@ -79,7 +79,7 @@ function createToggleButton(text: string) {
 
 Deno.test("事件处理测试", () => {
   // 创建按钮
-  const button = createToggleButton("Toggle Me");
+  const button = createToggleButton("切换我");
 
   // 初始状态
   assertEquals(button.dataset.active, "false");
@@ -105,7 +105,7 @@ Deno.test("事件处理测试", () => {
 
 测试会发起网络请求的组件需要对 fetch API 进行模拟（mock）。
 
-在下面的示例中，我们将 [mock](/examples/mocking_tutorial/) `fetch` API，以测试一个从外部 API 获取用户数据的函数。该测试会创建一个间谍函数（spy），根据请求的 URL 返回预定义的响应，从而让你无需发起真实网络请求，就能同时测试成功请求和错误处理：
+下面的示例将 [mock](/runtime/test/mocking/) `fetch` API，以测试一个从外部 API 获取用户数据的函数。该测试创建了一个 spy 函数，它会根据请求的 URL 返回预定义的响应，使你无需发起真实网络调用，就能测试成功请求和错误处理：
 
 ```ts
 import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
@@ -151,7 +151,7 @@ Deno.test("fetch 请求测试", async () => {
     // 测试错误处理（可选）
     try {
       await fetchUserData("invalid");
-      throw new Error("Should have thrown an error for invalid ID");
+      throw new Error("对于无效 ID 应该抛出错误");
     } catch (error) {
       assertEquals((error as Error).message, "Failed to fetch user: 404");
     }
@@ -194,7 +194,7 @@ Deno.test("复杂的 Web 组件测试", async (t) => {
     assertExists(app);
 
     const header = doc.createElement("header");
-    header.textContent = "My App";
+    header.textContent = "我的应用";
     app.appendChild(header);
 
     assertEquals(app.children.length, 1);
@@ -206,7 +206,7 @@ Deno.test("复杂的 Web 组件测试", async (t) => {
     assertExists(app);
 
     const button = doc.createElement("button");
-    button.textContent = "Click me";
+    button.textContent = "点击我";
     button.id = "test-button";
     app.appendChild(button);
 

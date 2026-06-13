@@ -35,13 +35,13 @@ deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
 
 - Next.js
 - Astro
-- Fresh (1.x and 2.x)
+- Fresh (1.x 和 2.x)
 - Remix
 - SvelteKit
 - Nuxt
 - SolidStart
 - TanStack Start
-- Vite (SSR mode)
+- Vite（SSR 模式）
 
 ```sh
 # 在 Next.js / Astro / Fresh / 等项目中
@@ -78,6 +78,14 @@ Deno 支持针对所有目标的交叉编译，而不管主机平台。
 | macOS    | ARM64     | `aarch64-apple-darwin`        |
 | Linux    | x86_64    | `x86_64-unknown-linux-gnu`    |
 | Linux    | ARM64     | `aarch64-unknown-linux-gnu`   |
+
+## The denort binary
+
+`deno compile` 将您的程序嵌入到 `denort`（“Deno runtime”）中：这是一个精简版的 Deno 构建，仅包含运行已编译程序所需的内容，不包含任何工具子命令。使用 `denort` 作为基础而不是完整的 `deno` 二进制文件，是编译后的可执行文件更小的原因。
+
+第一次为某个给定的 Deno 版本和目标进行编译时，Deno 会从 `dl.deno.land` 下载匹配的 `denort-<target>.zip` 并将其缓存到 `DENO_DIR` 中。这也是交叉编译的工作方式：使用 `--target` 编译会获取该平台的 `denort`。后续的编译会复用缓存的二进制文件，并且可以离线运行。
+
+要使用自定义的或本地构建的运行时作为基础，请将 `DENORT_BIN` 环境变量设置为其路径。Deno 也会自动识别放在 `deno` 可执行文件旁边的 `denort` 二进制文件。
 
 ## 图标
 
@@ -145,7 +153,7 @@ const dataFiles = Deno.readDirSync(import.meta.dirname + "/data");
 }
 ```
 
-CLI 标志会与配置合并：`--include` 和 `--exclude` 会添加到 `deno.json` 中的列表，而不是替换它们。更多细节请参阅配置指南中的 [编译配置](/runtime/fundamentals/configuration/#compile-config) 部分，其中还包括如何在同一块中声明 `permissions`。
+CLI 标志会与配置合并：`--include` 和 `--exclude` 会追加到 `deno.json` 中的列表，而不是替换它们。更多详情请参阅配置指南中的 [Compile config](/runtime/reference/deno_json/#compile-config) 部分，包括如何在同一块中声明 `permissions`。
 
 ## Workers
 

@@ -9,12 +9,11 @@ JavaScript 或 TypeScript 代码按重复计划运行，计划使用
 [cron 语法](https://en.wikipedia.org/wiki/Cron#UNIX-like) 表示。它随 Deno
 本身一起发布，因此在本地运行的相同代码无需修改即可部署。
 
-[`Deno.cron`](/api/deno/~/Deno.cron) 目前是一个不稳定的 API。要在本地使用
-`deno run`，请启用
+[`Deno.cron`](/api/deno/~/Deno.cron) 目前是一个不稳定 API。要在本地使用 `deno run`
+运行它，请启用
 [`--unstable-cron`](/runtime/reference/cli/unstable_flags/#--unstable-cron) 标志
-（或将 `"cron"` 添加到
-[`unstable`](/runtime/fundamentals/configuration/#unstable-features) 数组中，
-位于 `deno.json`）。
+（或将 `"cron"` 添加到 `deno.json` 中的
+[`unstable`](/runtime/reference/deno_json/#unstable-features) 数组里）。
 
 ```sh
 deno run --unstable-cron main.ts

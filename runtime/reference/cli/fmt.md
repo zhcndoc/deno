@@ -12,9 +12,7 @@ openGraphTitle: "deno fmt"
 description: "使用 Deno 内置的格式化工具格式化你的代码"
 ---
 
-Deno 自带一个基于 [dprint](https://dprint.dev/) 的内置代码格式化工具，
-它会自动将你的代码格式化为一致的风格。有关更广泛的概述，请参见
-[Linting and Formatting](/runtime/fundamentals/linting_and_formatting/)。
+Deno 附带一个基于 [dprint](https://dprint.dev/) 的内置代码格式化器，能够自动将你的代码格式化为一致的风格。有关更全面的概述，请参阅 [Linting and Formatting](/runtime/lint_and_format/)。
 
 ## 基本用法
 
@@ -79,8 +77,7 @@ cat main.ts | deno fmt -
 }
 ```
 
-查看 [Configuration](/runtime/fundamentals/configuration/#formatting) 页面
-了解所有可用选项。
+有关所有可用选项，请参阅 [Configuration](/runtime/reference/deno_json/#formatting) 页面。
 
 ## 包含和排除文件
 
@@ -103,30 +100,32 @@ deno fmt --ignore=dist/,build/
 
 ## 支持的文件类型
 
-<!-- This list needs to be updated along with https://github.com/denoland/deno/blob/main/cli/tools/fmt.rs -->
+<!-- 此列表需要与 https://github.com/denoland/deno/blob/main/cli/tools/fmt.rs 一起更新 -->
 
-| 文件类型            | 扩展名                                              | 备注                                                                                          |
-| -------------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| JavaScript           | `.js`, `.cjs`, `.mjs`                              |                                                                                                |
-| TypeScript           | `.ts`, `.mts`, `.cts`                              |                                                                                                |
-| JSX                  | `.jsx`                                             |                                                                                                |
-| TSX                  | `.tsx`                                             |                                                                                                |
-| Markdown             | `.md`, `.mkd`, `.mkdn`, `.mdwn`, `.mdown`, `.markdown` |                                                                                                |
-| JSON                 | `.json`                                            |                                                                                                |
-| JSONC                | `.jsonc`                                           |                                                                                                |
-| CSS                  | `.css`                                             |                                                                                                |
-| HTML                 | `.html`                                            |                                                                                                |
-| [Nunjucks][Nunjucks] | `.njk`                                             |                                                                                                |
-| [Vento][Vento]       | `.vto`                                             |                                                                                                |
-| YAML                 | `.yml`, `.yaml`                                    |                                                                                                |
-| Sass                 | `.sass`                                            |                                                                                                |
-| SCSS                 | `.scss`                                            |                                                                                                |
-| LESS                 | `.less`                                            |                                                                                                |
-| Jupyter Notebook     | `.ipynb`                                           |                                                                                                |
-| Astro                | `.astro`                                           | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置选项。                  |
-| Svelte               | `.svelte`                                          | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置选项。                  |
-| Vue                  | `.vue`                                             | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置选项。                  |
-| SQL                  | `.sql`                                            | 需要 `--unstable-sql` 标志或 `"unstable": ["fmt-sql"]` 配置选项。                            |
+| 文件类型             | 扩展名                                                 | 备注                                                                                   |
+| -------------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| JavaScript           | `.js`, `.cjs`, `.mjs`                                  |                                                                                        |
+| TypeScript           | `.ts`, `.mts`, `.cts`                                  |                                                                                        |
+| JSX                  | `.jsx`                                                 |                                                                                        |
+| TSX                  | `.tsx`                                                 |                                                                                        |
+| Markdown             | `.md`, `.mkd`, `.mkdn`, `.mdwn`, `.mdown`, `.markdown` |                                                                                        |
+| JSON                 | `.json`                                                |                                                                                        |
+| JSONC                | `.jsonc`                                               |                                                                                        |
+| CSS                  | `.css`                                                 |                                                                                        |
+| HTML                 | `.html`                                                |                                                                                        |
+| XML                  | `.xml`                                                 |                                                                                        |
+| SVG                  | `.svg`                                                 |                                                                                        |
+| [Nunjucks][Nunjucks] | `.njk`                                                 |                                                                                        |
+| [Vento][Vento]       | `.vto`                                                 |                                                                                        |
+| YAML                 | `.yml`, `.yaml`                                        |                                                                                        |
+| Sass                 | `.sass`                                                |                                                                                        |
+| SCSS                 | `.scss`                                                |                                                                                        |
+| LESS                 | `.less`                                                |                                                                                        |
+| Jupyter Notebook     | `.ipynb`                                               |                                                                                        |
+| Astro                | `.astro`                                               | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置项。 |
+| Svelte               | `.svelte`                                              | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置项。 |
+| Vue                  | `.vue`                                                 | 需要 `--unstable-component` 标志或 `"unstable": ["fmt-component"]` 配置项。 |
+| SQL                  | `.sql`                                                 | 需要 `--unstable-sql` 标志或 `"unstable": ["fmt-sql"]` 配置项。             |
 
 [Nunjucks]: https://mozilla.github.io/nunjucks/
 [Vento]: https://github.com/ventojs/vento

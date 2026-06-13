@@ -257,10 +257,9 @@ Deno 可以将权限审计日志路由到 OpenTelemetry 导出器中，
 OTEL_DENO=true DENO_AUDIT_PERMISSIONS=otel deno run -A main.ts
 ```
 
-当您已经收集 OpenTelemetry 数据时，这很有用：审计记录会落在与请求追踪相同的后端中，因此您可以关联是哪次请求触发了哪次权限访问。有关完整属性集和 JSONL 文件路径模式，请参见
-[permission audit](/runtime/fundamentals/security/#permission-flags)。
+这在您已经收集 OpenTelemetry 数据时非常有用：审计会落到与请求追踪相同的后端，因此您可以关联是哪一次请求触发了哪一次权限访问。有关完整属性集以及 JSONL 文件路径模式，请参见[权限审计](/runtime/reference/permissions/)。
 
-## User metrics
+## 用户指标
 
 除自动收集的遥测数据外，您还可以使用 `npm:@opentelemetry/api` 包创建自己的指标和追踪。
 

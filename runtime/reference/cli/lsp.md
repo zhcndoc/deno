@@ -2,6 +2,10 @@
 last_modified: 2024-10-07
 title: "deno lsp"
 oldUrl: /runtime/manual/tools/lsp/
+command: lsp
+openGraphLayout: "/open_graph/cli-commands.jsx"
+openGraphTitle: "deno lsp"
+description: "启动 Deno 语言服务器，供编辑器用于 IntelliSense、格式化和诊断"
 ---
 
 :::info

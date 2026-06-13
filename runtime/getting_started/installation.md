@@ -152,9 +152,21 @@ cargo install deno --locked
 ## 手动下载
 
 Deno 二进制文件也可以手动安装，只需从
-[github.com/denoland/deno/releases](https://github.com/denoland/deno/releases) 下载一个 zip 文件。
-这些包只包含一个可执行文件。您需要在 macOS 和 Linux 上设置
-可执行位。
+[github.com/denoland/deno/releases](https://github.com/denoland/deno/releases) 下载 zip 文件。
+每个发布版本都会为每个平台提供一个归档文件，其中包含一个可执行文件：
+
+| 平台                    | 资源                                |
+| --------------------------- | ------------------------------------ |
+| Windows x86_64              | `deno-x86_64-pc-windows-msvc.zip`    |
+| Windows ARM64               | `deno-aarch64-pc-windows-msvc.zip`   |
+| macOS ARM64 (Apple Silicon) | `deno-aarch64-apple-darwin.zip`      |
+| macOS x86_64 (Intel)        | `deno-x86_64-apple-darwin.zip`       |
+| Linux x86_64                | `deno-x86_64-unknown-linux-gnu.zip`  |
+| Linux ARM64                 | `deno-aarch64-unknown-linux-gnu.zip` |
+
+解压归档文件，并将 `deno` 可执行文件放到 `PATH` 中的某个位置。你
+需要在 macOS 和 Linux 上设置可执行位。每个资源都有一个
+匹配的 `.sha256sum` 文件用于验证下载。
 
 ## Docker
 

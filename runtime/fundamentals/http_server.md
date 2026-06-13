@@ -8,15 +8,9 @@ oldUrl:
   - /runtime/tutorials/http_server/
 ---
 
-HTTP 服务器是网络的支柱，使您能够访问网站、下载文件和与网络服务交互。它们监听来自客户端（例如网页浏览器）的传入请求并发送响应。
+Deno 内置了一个 HTTP 服务器 API：[`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve) 函数，它支持 HTTP/1.1 和 HTTP/2，并且可以与 web 标准的 `Request` 和 `Response` 对象配合使用。本文将介绍如何使用它编写服务器，从第一个处理程序开始，直到路由、静态文件、TLS、WebSocket 和关闭服务器。
 
-当您构建自己的 HTTP 服务器时，您可以完全控制它的行为，并根据您的特定需求进行调整。您可能会将其用于本地开发，以提供 HTML、CSS 和 JS 文件，或者构建 REST API —— 拥有自己的服务器使您能够定义端点、处理请求和管理数据。
-
-## Deno 的内置 HTTP 服务器
-
-Deno 内置了一个 HTTP 服务器 API，使您能够编写 HTTP 服务器。 [`Deno.serve`](https://docs.deno.com/api/deno/~/Deno.serve) API 支持 HTTP/1.1 和 HTTP/2。
-
-### 一个 “Hello World” 服务器
+## 一个“Hello World”服务器
 
 [`Deno.serve`](/api/deno/~/Deno.serve) 函数接受一个处理函数，
 该函数会在每个传入请求到达时被调用，并且预期返回一个
@@ -40,7 +34,7 @@ deno run --allow-net server.ts
 
 在[示例集](https://docs.deno.com/api/deno/~/Deno.serve)中还有更多使用 [`Deno.serve`](/api/deno/~/Deno.serve) 的示例。
 
-### 监听特定端口
+## 监听特定端口
 
 默认情况下，[`Deno.serve`](/api/deno/~/Deno.serve) 会监听端口 `8000`，
 但您可以通过在选项对象中将端口号作为第一个
@@ -54,7 +48,7 @@ Deno.serve({ port: 4242 }, handler);
 Deno.serve({ port: 4242, hostname: "0.0.0.0" }, handler);
 ```
 
-### 检查传入请求
+## 检查传入请求
 
 大多数服务器不会对每个请求都返回相同的响应。相反，它们会根据请求的各个方面（HTTP 方法、头部、路径或主体内容）来更改其回答。
 
@@ -85,7 +79,7 @@ Deno.serve(async (req) => {
 
 :::
 
-### 用真实数据响应
+## 使用真实数据进行响应
 
 大多数服务器不会对每个请求都响应“Hello, World！”相反，它们可能会返回不同的头部、状态码和主体内容（甚至主体流）。
 
@@ -103,7 +97,7 @@ Deno.serve((req) => {
 });
 ```
 
-### 用流响应
+## 以流的形式响应
 
 响应主体也可以是流。以下是一个返回每秒重复一次“Hello, World！”的响应示例：
 
@@ -136,7 +130,71 @@ Deno.serve((req) => {
 
 当客户端挂断连接时，响应主体流会被“取消”。请确保处理此情况。这可能会在附加到响应主体 [`ReadableStream`](/api/web/~/ReadableStream) 对象的 [`WritableStream`](/api/web/~/WritableStream) 对象上的 `write()` 调用中表现为错误（例如通过 [`TransformStream`](/api/web/~/TransformStream)）。
 
-### HTTPS 支持
+## 路由请求
+
+对于具有多个端点的服务器，请使用内置的
+[`URLPattern`](https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API)
+web API 来匹配 URL：
+
+```ts
+const userPattern = new URLPattern({ pathname: "/users/:id" });
+
+Deno.serve((req) => {
+  const match = userPattern.exec(req.url);
+  if (match) {
+    const id = match.pathname.groups.id;
+    return new Response(`用户 ${id}`);
+  }
+  if (new URL(req.url).pathname === "/") {
+    return new Response("首页");
+  }
+  return new Response("未找到", { status: 404 });
+});
+```
+
+标准库还提供了一个小型路由器，用于将模式和方法
+对映射到处理程序：
+[`@std/http` 中的 `route`](https://jsr.io/@std/http/doc/unstable-route)。对于
+中间件、更大的路由树或框架便利功能，请使用
+[Oak 或 Hono](/runtime/fundamentals/web_dev/)。
+
+## 提供静态文件
+
+要从目录中提供文件，请使用
+[`@std/http` 中的 `serveDir`](https://jsr.io/@std/http/doc/file-server)：
+
+```ts
+import { serveDir } from "jsr:@std/http/file-server";
+
+Deno.serve((req) => serveDir(req, { fsRoot: "./public" }));
+```
+
+`serveDir` 会处理内容类型、范围请求和目录遍历
+保护。使用对该目录的读取权限运行它：
+`deno run -N -R server.ts`。若要仅用一次命令启动一个不需要编写任何代码的文件服务器，
+同一模块也可作为 CLI 使用：
+`deno run -RN jsr:@std/http/file-server ./public`。
+
+## 优雅关闭
+
+[`Deno.serve`](/api/deno/~/Deno.serve) 会返回一个
+[`HttpServer`](/api/deno/~/Deno.HttpServer)，其 `shutdown()` 方法会停止
+接受新连接，同时让正在处理中的请求完成。将它与
+信号监听器结合使用，以便在生产环境中实现干净退出：
+
+```ts
+const server = Deno.serve((_req) => new Response("Hello"));
+
+Deno.addSignalListener("SIGINT", async () => {
+  console.log("正在关闭");
+  await server.shutdown();
+});
+```
+
+您还可以通过 `signal`
+选项传入一个 [`AbortSignal`](/api/web/~/AbortSignal)，以将服务器的生命周期与其他逻辑绑定。
+
+## HTTPS 支持
 
 要提供 HTTPS 服务，请在选项中传入 `cert` 和 `key`。这两个值都应是证书和私钥的 PEM 编码内容，而不是文件路径。
 
@@ -145,7 +203,7 @@ Deno.serve({
   port: 8443,
   cert: Deno.readTextFileSync("./cert.pem"),
   key: Deno.readTextFileSync("./key.pem"),
-}, (_req) => new Response("Hello over HTTPS!"));
+}, (_req) => new Response("通过 HTTPS 的 Hello！"));
 ```
 
 使用网络访问权限以及这两个文件的读取权限来运行它：
@@ -167,7 +225,7 @@ openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
 
 ```console
 $ curl -k https://localhost:8443/
-Hello over HTTPS!
+通过 HTTPS 的 Hello！
 ```
 
 :::note
@@ -176,21 +234,29 @@ Hello over HTTPS!
 
 :::
 
-### HTTP/2 支持
+## HTTP/2 支持
 
 在使用 Deno 的 HTTP 服务器 API 时，HTTP/2 支持是“自动”的。您只需创建服务器，它将无缝处理 HTTP/1 或 HTTP/2 请求。
 
 HTTP/2 在明文下也支持 prior knowledge（预先知识）。
 
-### 自动主体压缩
+## 自动主体压缩
 
 HTTP 服务器具备自动压缩响应主体的功能。当响应发送到客户端时，Deno 会确定响应主体是否可以安全地进行压缩。此压缩在 Deno 的内部发生，因此速度快且高效。
 
 目前 Deno 支持 gzip 和 brotli 压缩。如果满足以下条件，主体会自动压缩：
 
-- 请求具有一个 [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding) 头，表明请求者支持 `br`（Brotli 压缩）或 `gzip`。Deno 会遵循头部中的 [质量值](https://developer.mozilla.org/en-US/docs/Glossary/Quality_values) 的优先级。
-- 响应包含一个 [`Content-Type`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type)，被认为是可压缩的。 （该列表源自 [`jshttp/mime-db`](https://github.com/jshttp/mime-db/blob/master/db.json)，并在
-  [代码中](https://github.com/denoland/deno/blob/v1.21.0/ext/http/compressible.rs)）。
+- 请求具有一个
+  [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding)
+  头，表明请求方支持 Brotli 的 `br` 或 `gzip`。Deno
+  会尊重头中的
+  [质量值](https://developer.mozilla.org/en-US/docs/Glossary/Quality_values)
+  偏好。
+- 响应包含一个
+  [`Content-Type`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type)
+  且该类型被认为可压缩。（列表来源于
+  [`jshttp/mime-db`](https://github.com/jshttp/mime-db/blob/master/db.json)，实际列表
+  位于[代码中](https://github.com/denoland/deno/blob/main/ext/http/compressible.rs)。）
 - 响应主体大于 64 字节。
 
 当响应主体被压缩时，Deno 会设置 `Content-Encoding` 头以反映编码，并确保 `Vary` 头被调整或添加，以指示哪些请求头影响了响应。
@@ -201,7 +267,7 @@ HTTP 服务器具备自动压缩响应主体的功能。当响应发送到客户
 - 响应包含一个 [`Content-Range`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range) 头。这表明您的服务器正在响应范围请求，其中字节和范围是在 Deno 内部的控制之外进行协商的。
 - 响应具有一个 [`Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) 头，其中包含一个 [`no-transform`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#other) 值。这表明您的服务器不希望 Deno 或任何下游代理修改响应。
 
-### 提供 WebSocket 服务
+## 提供 WebSocket
 
 Deno 可以将传入的 HTTP 请求升级为 WebSocket。这使您能够在 HTTP 服务器上处理 WebSocket 端点。
 
@@ -267,4 +333,4 @@ deno serve server.ts
 
 ## 在这些示例基础上构建
 
-您可能希望在这些示例的基础上扩展，创建更复杂的服务器。Deno 推荐使用 [Oak](https://jsr.io/@oak/oak) 来构建 web 服务器。Oak 是一个用于 Deno HTTP 服务器的中间件框架，旨在表达和易于使用。它提供了一个简单的方法来创建支持中间件的 web 服务器。查看 [Oak 文档](https://oakserver.github.io/oak/) 以获取有关如何定义路由的示例。
+您很可能希望在这些示例基础上进行扩展，以创建更复杂的服务器。这里的一切都建立在 web 标准的 `Request`/`Response` 之上，因此它可以与生态系统中的路由库和框架组合使用——例如用于中间件和路由的 [Oak](https://jsr.io/@oak/oak) 或 [Hono](https://hono.dev)，或者一个完整的框架。有关使用 Deno 构建 web 应用的概览，请参见[Web 开发](/runtime/fundamentals/web_dev/)。

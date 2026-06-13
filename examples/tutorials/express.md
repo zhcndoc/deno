@@ -61,7 +61,9 @@ console.log(`服务器正在运行在 http://localhost:8000`);
 
 ## 运行服务器
 
-当你初始化项目时，Deno 设置了一个任务来运行 `main.ts` 文件，你可以在 `deno.json` 文件中看到它。更新 `dev` 任务以包含 [`--allow-net`](/runtime/fundamentals/security/#network-access) 标志：
+当你初始化项目时，Deno 已设置了一个任务来运行 main.ts
+文件，你可以在 `deno.json` 文件中看到它。请更新 `dev` 任务以包含
+[`--allow-net`](/runtime/reference/permissions/#network-access) 标志：
 
 ```jsonc
 {

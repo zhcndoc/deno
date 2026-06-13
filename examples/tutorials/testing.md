@@ -5,13 +5,13 @@ description: "学习测试设置与结构、断言、异步测试、模拟、测
 url: /examples/testing_tutorial/
 ---
 
-在软件开发中，测试至关重要：用来确保你的代码按预期工作，并在你进行修改后持续保持正确性。测试会验证你的函数、模块和应用程序行为是否正确，能否恰当地处理边界情况，并维持预期的性能特征。
+在软件开发中，测试至关重要：用于确保你的代码按预期工作，并在你进行修改后持续保持正确性。测试会验证你的函数、模块和应用程序行为是否正确，能否恰当地处理边界情况，并维持预期的性能特征。
 
 ## 为什么测试很重要
 
 在代码进入生产环境之前，对代码进行测试可以帮助你在其到达生产前发现漏洞、问题或回归，从而节省时间和资源。测试也能用来帮助你规划应用程序的逻辑：它们可以作为一种人类可读的说明，描述你的代码应该如何被使用。
 
-Deno 提供了[内置的测试能力](/runtime/fundamentals/testing/)，使你能够在项目中轻松实现健壮的测试实践。
+Deno 提供了[内置测试能力](/runtime/test/)，使你能够轻松地在项目中实施稳健的测试实践。
 
 ## 使用 `Deno.test` 编写测试
 
@@ -415,17 +415,16 @@ ok | 2 passed | 0 failed (5ms)
 
 :::
 
-关于 spy、fake timer 以及更高级的模拟，请参阅
-[测试数据模拟](/examples/mocking_tutorial/)。
+For spies, fake timers, and more advanced mocking, see
+[Mocking data for tests](/runtime/test/mocking/).
 
-## Mocking in tests
+## 测试中的 Mock
 
 Mock 是一种用于将被测代码与其依赖隔离开来的关键技术。Deno 提供内置工具以及第三方库来创建 mock。
 
 ### 基础 Mock
 
-你可以通过
-[将函数或对象替换为你自己的实现](/examples/mocking_tutorial/)，来创建简单的 mock。这使你能够控制依赖的行为，并测试你的代码如何与它们交互。
+你可以通过[用你自己的实现替换函数或对象](/runtime/test/mocking/)来创建简单的 mock。这使你能够控制依赖的行为，并测试你的代码如何与它们交互。
 
 ```ts
 // 一个包含我们想要 mock 的函数的模块示例
@@ -482,8 +481,7 @@ Deno.test("spy 示例", () => {
 });
 ```
 
-如需更高级的 mock 技术，请查看我们
-[关于 Deno 中 mocking 的专门指南](/examples/mocking_tutorial/)。
+有关更高级的 mocking 技术，请查看我们在 Deno 中的[专门 mock 指南](/runtime/test/mocking/)。
 
 ## 测试 Hook（钩子）
 
@@ -509,9 +507,8 @@ Deno.test("第二个测试", () => {
 });
 ```
 
-有关所有可用 Hook（`beforeAll`、`beforeEach`、
-`afterEach`、`afterAll`）的完整信息，请参阅
-[测试文档](/runtime/fundamentals/testing/#test-hooks)。
+关于所有可用 Hook（`beforeAll`、`beforeEach`、`afterEach`、`afterAll`）的完整信息，请参阅
+[测试文档](/runtime/test/#test-hooks)。
 
 ## 覆盖率（Coverage）
 
@@ -581,14 +578,14 @@ deno coverage --exclude="test_,vendor/,_build/,node_modules/" coverage_dir
 
 ```yaml
 # 在你的 GitHub Actions 工作流中
-- name: Run tests with coverage
+- name: 运行带覆盖率的测试
   run: deno test --coverage=coverage_dir
 
-- name: Check coverage meets threshold
+- name: 检查覆盖率是否达到阈值
   run: |
     COVERAGE=$(deno coverage coverage_dir | grep "total:" | grep -o '[0-9]\+\.[0-9]\+')
     if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-      echo "Test coverage is below 80%: $COVERAGE%"
+      echo "测试覆盖率低于 80%：$COVERAGE%"
       exit 1
     fi
 ```
@@ -657,6 +654,6 @@ describe("math", () => {
 
 如需更多关于 Deno 测试的信息，请查看：
 
-- [测试文档](/runtime/fundamentals/testing)
-- [用于测试的 mock 数据](/examples/mocking_tutorial/)
+- [测试文档](/runtime/test/)
+- [为测试模拟数据](/runtime/test/mocking/)
 - [编写基准测试](/examples/benchmarking/)

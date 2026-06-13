@@ -60,6 +60,24 @@ Deno 致力于基于以下设计原则简化 TypeScript 配置：
 
 您可能在某些情况下被迫使用 `tsconfig.json`，例如当 [`include`](https://www.typescriptlang.org/tsconfig/#include) 所需的粒度无法通过 `deno.json` 工作区和目录作用域表示时。
 
+## 从 Node.js 迁移 compilerOptions
+
+典型的 Node.js `tsconfig.json` 中的大部分内容都是用于配置编译输出和模块互操作。Deno 直接运行 TypeScript，且从不生成 JavaScript，因此这些选项大多不起作用，可以删除。Deno 会在 `tsconfig.json` 中出现被忽略的选项时发出警告；将剩余选项移动到 `deno.json` 的 `compilerOptions` 中可消除该警告。
+
+| 您在 `tsconfig.json` 中的选项                         | 在 Deno 中                                                                                                                                    |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `target`, `outDir`, `outFile`, `rootDir`                | 删除。Deno 不会生成输出：代码直接在最新的 V8 上运行，而 `deno check` 只进行类型检查，不产生输出。                                                   |
+| `declaration`, `declarationMap`, `emitDeclarationOnly`  | 删除。不会生成输出。使用 [`deno doc`](/runtime/reference/cli/doc/) 生成 API 文档。                                                                |
+| `sourceMap`, `inlineSourceMap`, `inlineSources`         | 删除。堆栈跟踪会自动映射到您的 TypeScript 源代码。                                                                                              |
+| `esModuleInterop`, `allowSyntheticDefaultImports`       | 删除。Deno 原生支持 ESM，并在运行时处理 CommonJS 互操作。                                                                                        |
+| `importHelpers`, `noEmitHelpers`, `downlevelIteration`  | 删除。不会发生降级，因此不会生成辅助代码。                                                                                                      |
+| `resolveJsonModule`                                     | 删除。改为使用属性导入 JSON：`import data from "./data.json" with { type: "json" }`.                                                           |
+| `skipLibCheck`                                          | 删除。Deno 默认不会对依赖进行类型检查（`deno check --all` 可显式启用）。                                                                           |
+| `module`, `moduleResolution`                            | 通常删除。Deno 的默认值为 `nodenext`；支持的值列在下表中。                                                                                          |
+| `lib`, `types`                                          | 通常删除。Deno 的默认值已覆盖其运行时；仅在跨运行时代码中保留 `lib`（参见[“lib” 属性](#using-the-lib-property)）。                                   |
+| `strict`, `noImplicit*`, `noUnused*`, other check flags | 保留您需要的选项，放在 `deno.json` 的 `compilerOptions` 中。注意 Deno 的默认值已经是严格模式（见下表）。                                          |
+| `paths`, `baseUrl`                                      | 如有需要，可保留用于类型时路径映射，或者替换为 [导入映射](/runtime/fundamentals/modules/)，后者在运行时也有效。                                     |
+
 ## TS 编译器选项
 
 以下是可更改的编译器选项列表，包括它们在 Deno 中的默认值和相关说明：
@@ -136,7 +154,8 @@ Deno 致力于基于以下设计原则简化 TypeScript 配置：
 
 这应允许大多数代码在 Deno 中被正确类型检查。
 
-如果您预计会在启用 `--unstable` 标志的 Deno 中运行代码，还应将该库添加：
+如果您的代码使用了受 `--unstable-*` 标志之一保护的 API，
+也将 `deno.unstable` 库一并加入：
 
 ```json title="deno.json"
 {

@@ -93,9 +93,10 @@ console.log(greet("world"));
 
 对于应测试的代码块：
 
-- 确保文档示例正确且可运行
-- 使用带语言标识的三重反引号启用可测试代码块
-- 遵循[文档测试](/runtime/reference/documentation/)中的指南
+- 确保文档中的示例正确且可运行
+- 使用带语言标识符的三引号反引号以启用可测试代码块
+- 遵循
+  [文档测试](/runtime/test/#documentation-tests)
 
 ## 格式元素
 
@@ -124,13 +125,13 @@ console.log(greet("world"));
 ```markdown
 :::note 重要补充信息。:::
 
-:::info Informational content (styled like note). :::
+:::info 信息性内容（样式类似 note）。:::
 
-:::tip Helpful advice for better usage. :::
+:::tip 有助于更好使用的实用建议。:::
 
-:::caution Warn about potential issues or gotchas. :::
+:::caution 警告潜在问题或陷阱。:::
 
-:::warning Critical warnings that require immediate attention. :::
+:::warning 需要立即注意的严重警告。:::
 ```
 
 ### 表格

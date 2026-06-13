@@ -1,12 +1,14 @@
 ---
 last_modified: 2026-03-13
-title: "Contributing and support"
-description: "Guide to contributing to the Deno project and ecosystem. Learn about different Deno repositories, contribution guidelines, and how to submit effective pull requests."
+title: "贡献与支持"
+description: "Deno 项目及生态系统的贡献指南。了解不同的 Deno 代码库、贡献规范，以及如何提交高质量的拉取请求。"
 oldUrl:
   - /runtime/manual/contributing/
   - /runtime/manual/contributing/contribute
   - /runtime/manual/references/contributing/
   - /runtime/contributing/contribute/
+  - /runtime/contributing/docs/
+  - /runtime/contributing/examples/
 ---
 
 我们欢迎并感谢所有对 Deno 的贡献。
@@ -89,15 +91,15 @@ Deno 的官方 Docker 镜像。
 
 良好的 PR 标题示例：
 
-- fix(std/http): fix race condition in server
-- docs(console): update docstrings
-- feat(doc): handle nested re-exports
+- fix(std/http): 修复服务器中的竞争条件
+- docs(console): 更新文档字符串
+- feat(doc): 处理嵌套的重新导出
 
 不佳的 PR 标题示例：
 
 - fix #7123
-- update docs
-- fix bugs
+- 更新文档
+- 修复 bug
 
 2. 确保关联了相关问题，并在 PR 内容中引用。
 

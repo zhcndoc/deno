@@ -1,28 +1,22 @@
 ---
-title: "Introduction to Deno APIs"
+title: "Deno API 简介"
+description: "探索 Deno 内置的 API，用于文件系统操作、命令行参数、环境变量以及提供 HTTP 请求服务。"
 url: /examples/intro_to_deno_apis/
 videoUrl: https://www.youtube.com/watch?v=p28ujFMrdA0&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=7
 layout: video.tsx
 ---
 
-## Video description
+## 视频描述
 
-In this video, we explore the powerful APIs provided by Deno in the global
-namespace. We demonstrate file system operations like creating, reading,
-writing, and appending to files using Deno's built-in methods. Then, examine how
-to handle command line arguments, environment variables, and set up a basic
-server. We can reduce the need for external APIs with these Deno built-in APIs.
+在本视频中，我们将探索 Deno 在全局命名空间中提供的强大 API。我们演示了使用 Deno 内置方法进行文件系统操作，例如创建、读取、写入以及向文件追加内容。然后，介绍如何处理命令行参数、环境变量，并搭建一个基础服务器。有了这些 Deno 内置 API，我们可以减少对外部 API 的需求。
 
-## Transcript and examples
+## 文本记录与示例
 
-In the global name space, Deno has a ton of APIs that you can take advantage of.
-Let's take a look at a few of them.
+在全局命名空间中，Deno 提供了大量你可以利用的 API。让我们看几个示例。
 
-### Creating and writing to files
+### 创建并向文件写入内容
 
-In order to write a file, first we will await Deno.open and we'll pass in the
-name of the file that we want to create. The second argument is going to be an
-object where we'll set `read`, `write` and `create` to `true`:
+为了写入一个文件，我们首先会 `await Deno.open`，并传入我们想要创建的文件名。第二个参数将是一个对象，我们会把 `read`、`write` 和 `create` 都设置为 `true`：
 
 ```ts title="main.ts"
 await Deno.open("thoughts.txt", {
@@ -32,22 +26,19 @@ await Deno.open("thoughts.txt", {
 });
 ```
 
-To run this, we will use:
+要运行这个，我们将使用：
 
 ```sh
 deno main.ts
 ```
 
-When run, the console will prompt us to allow read access, so we'll say yes (or
-`y`). Then it's going to ask us for write access, which is pretty cool (and
-we'll allow that too with `y`), so we've granted both and now we have created a
-file called `thoughts.txt`.
+运行时，控制台会提示我们允许读取权限，所以我们会选择允许（或
+`y`）。然后它会请求写入权限，这也很不错（我们也会用 `y`
+允许它），这样我们就同时授予了两种权限，现在我们已经创建了一个
+名为 `thoughts.txt` 的文件。
 
-If we wanted to write some data to this file we could make some adjustments to
-our `main.ts` file. Let's create a variable for our file (called file), then
-we're going to add `append:true` to the object we pass to the `Deno.open` method
-(we can also get rid of create I suppose, since the file has already been
-created):
+如果我们想向这个文件写入一些数据，可以对 `main.ts` 文件做一些调整。让我们为文件创建一个变量（称为 file），然后在传给 `Deno.open` 方法的对象中添加 `append:true`
+（我想我们也可以去掉 create，因为文件已经被创建了）：
 
 ```ts title="main.ts"
 const file = await Deno.open("thoughts.txt", {
@@ -57,57 +48,47 @@ const file = await Deno.open("thoughts.txt", {
 });
 ```
 
-Next, below this, we'll make a constant called `encoder`, and make it equal a
-new text encoder. Then we'll make a second constant called `data`, which will
-call `encode`. Finally we'll add a string with a newline and some text to
-`data`:
+接下来，在下面我们会创建一个名为 `encoder` 的常量，并让它等于一个新的文本编码器。然后我们会创建第二个名为 `data` 的常量，它将调用 `encode`。最后我们会给 `data` 添加一个带有换行符和一些文本的字符串：
 
 ```ts title="main.ts"
 const encoder = new TextEncoder();
 const data = encoder.encode("\nI think basil is underrated.");
 ```
 
-Then we'll `await file.Write(data)`, which will take that data and write it to
-the thoughts file, and finally we'll close the file.
+然后我们会 `await file.Write(data)`，这会把这些数据写入 thoughts 文件，最后我们会关闭文件。
 
 ```ts title=main.ts"
 await file.write(data);
 file.close();
 ```
 
-This time we will run the file with the required permissions:
+这次我们将使用所需权限来运行文件：
 
 ```sh
 deno --allow-read --allow-write main.ts
 ```
 
-If we take a look back at our `thoughts.txt` file it will say "I think basil is
-underrated". The text has been appended to our file.
+如果我们回头看看 `thoughts.txt` 文件，它会显示 "I think basil is
+underrated"。文本已经被追加到我们的文件中了。
 
-### Reading and appending to files
+### 读取并追加到文件
 
-There are some other options as well, so let's go back to the top of our file
-this time instead of using `Deno.open` we'll use `Deno.readFile`. Which means we
-can remove the second argument object, because we're being very specific about
-what we actually want to do here. Then we'll console log the file.
+还有一些其他选项，所以让我们回到文件顶部。这次不使用 `Deno.open`，而是使用 `Deno.readFile`。这意味着我们可以移除第二个参数对象，因为这里我们已经非常明确地知道自己要做什么了。然后我们会把文件输出到控制台。
 
 ```ts title="main.ts"
 const file = await Deno.readFile("thoughts.txt");
 console.log(file);
 ```
 
-If we run this with:
+如果我们使用以下命令运行：
 
 ```sh
 deno --allow-read main.ts
 ```
 
-The encoded file will be logged to the console, which isn't quite what I want. I
-actually want the human readable text. So what I can do here is I can use
-`Deno.readTextFile` instead of `Deno.readFile`, which will write the text from
-the file directly to the console.
+编码后的文件会被记录到控制台，这并不是我想要的。我实际上想要人类可读的文本。所以我在这里可以使用 `Deno.readTextFile` 而不是 `Deno.readFile`，这样就会把文件中的文本直接输出到控制台。
 
-We can also write to the file with `Deno.writeTextFile`. For example:
+我们也可以使用 `Deno.writeTextFile` 向文件写入内容。例如：
 
 ```ts title="main.ts"
 await Deno.writeTextFile(
@@ -116,10 +97,9 @@ await Deno.writeTextFile(
 );
 ```
 
-Which, if we run with `deno --allow-write main.ts`, will overwrite the contents
-of the `thoughts.txt` file with the string about fall.
+如果我们使用 `deno --allow-write main.ts` 运行，它会用关于秋天的字符串覆盖 `thoughts.txt` 文件中的内容。
 
-We can update that code to use `append: true`:
+我们可以把那段代码更新为使用 `append: true`：
 
 ```ts title="main.ts"
 await Deno.writeTextFile(
@@ -129,53 +109,46 @@ await Deno.writeTextFile(
 );
 ```
 
-If we run it again, with `deno --allow-write main.ts`, it's going to append the
-second sentence to the end of the file.
+如果我们再次运行它，使用 `deno --allow-write main.ts`，它就会把第二个句子追加到文件末尾。
 
-### Exploring command line arguments
+### 探索命令行参数
 
-We also have the option to explore command line arguments, so we could say:
+我们也可以探索命令行参数，所以我们可以这样写：
 
 ```ts title="main.ts"
 const name = Deno.args[0];
 console.log(name);
 ```
 
-We can run this with our usual deno command, but this time pass in a commandline
-argument, lets say `Eve`:
+我们可以使用平常的 deno 命令来运行它，不过这次要传入一个命令行参数，就比如 `Eve`：
 
 ```sh
 deno main.ts Eve
 ```
 
-The name `Eve` will be logged to the console.
+名字 `Eve` 将会被输出到控制台。
 
-If we want to get fancy, we can update the logged template string to pass out a
-message:
+如果我们想更进一步，可以更新输出的模板字符串来传递一条消息：
 
 ```ts title="main.ts"
 const name = Deno.args[0];
 console.log(`How are you today, ${name}?`);
 ```
 
-## Using env variables
+## 使用环境变量
 
-On the Deno global, we also have environment variables. Let's create one called
-`home`, and log our home directory to the console:
+在 Deno 全局对象上，我们还有环境变量。让我们创建一个名为 `home` 的变量，并把我们的 home 目录输出到控制台：
 
 ```ts title="main.ts"
 const home = Deno.env.get("HOME");
 console.log(`Home directory: ${home}`);
 ```
 
-When run with `deno main.ts`, Deno will request environment access, which we can
-allow with `y`. Or we can run the command with the `--allow-env` flag, and our
-home directory will be logged to the console.
+当使用 `deno main.ts` 运行时，Deno 会请求环境访问权限，我们可以用 `y` 允许它。或者我们也可以使用 `--allow-env` 标志来运行命令，这样我们的 home 目录就会被输出到控制台。
 
-### Setting up a simple HTTP server
+### 搭建一个简单的 HTTP 服务器
 
-Finally, lets look at our trusty `server` constructor. We can create a handler
-that returns a response, and then pass that handler to the `Deno.serve` method.
+最后，让我们看看我们可靠的 `server` 构造器。我们可以创建一个返回响应的处理函数，然后把这个处理函数传给 `Deno.serve` 方法。
 
 ```ts title="main.ts"
 function handler(): Response {
@@ -185,16 +158,12 @@ function handler(): Response {
 Deno.serve(handler);
 ```
 
-When run with
+当使用以下命令运行时
 
 ```sh
 deno --allow-net main.ts
 ```
 
-We'll see that a server is running and listening on port 8000. We can visit
-`localhost:8000` in the browser and we should see the text "It's happening!".
+我们会看到有一个服务器正在运行并监听 8000 端口。我们可以在浏览器中访问 `localhost:8000`，应该会看到文本 "It's happening!"。
 
-So there are a ton of these that you can take advantage of but it's very nice to
-know that we don't have to include an external library for everything, Deno has
-us covered when it comes to managing errors handling servers and working with
-the file system.
+所以，这些 API 还有很多，你都可以加以利用。不过，知道我们并不需要为所有事情都包含一个外部库是很不错的；在处理错误、管理服务器以及使用文件系统时，Deno 已经为我们准备好了。

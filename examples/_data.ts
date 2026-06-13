@@ -1,1108 +1,2051 @@
-export const sidebar = [
+// The examples catalog. Items are declared flat; rendering order is
+// controlled by categoryOrder below, and items inside each category are
+// sorted alphabetically at build time. To add an item, append it
+// anywhere in this list with the right category.
+export const items = [
+  // Basics
   {
-    title: "基础",
-    items: [
-      {
-        title: "什么是 Deno？",
-        href: "/examples/what_is_deno/",
-        externalURL:
-          "https://www.youtube.com/watch?v=KPTOo4k8-GE&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe",
-        type: "video",
-      },
-      {
-        title: "运行脚本",
-        href: "/examples/run_script_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "你好，世界",
-        href: "/examples/hello_world/",
-        type: "example",
-      },
-      {
-        title: "内置 TypeScript 支持",
-        href: "/examples/typescript_support/",
-        type: "example",
-      },
-      {
-        title: "你的 Deno 开发环境",
-        href: "/examples/deno_dev_environment/",
-        externalURL:
-          "https://www.youtube.com/watch?v=BFfrGrLm2tw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=3",
-        type: "video",
-      },
-      {
-        title: "初始化项目",
-        href: "/examples/initialize_project_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "可执行脚本",
-        href: "/examples/hashbang_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "一体化工具",
-        href: "/examples/all-in-one_tooling/",
-        externalURL:
-          "https://www.youtube.com/watch?v=-4e9DkUrCr4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=5",
-        type: "video",
-      },
-      {
-        title: "使用 deno.json 进行任务和配置",
-        href: "/examples/configuration_with_deno_json/",
-        externalURL:
-          "https://www.youtube.com/watch?v=bTmO5Tfgke4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=10",
-        type: "video",
-      },
-      {
-        title: "顶级 await",
-        href: "/examples/top_level_await/",
-        type: "example",
-      },
-      {
-        title: "从 CommonJS 更新到 ESM",
-        href: "/examples/cjs_to_esm_tutorial/",
-        type: "tutorial",
-      },
-
-      {
-        title: "导入和导出函数",
-        href: "/examples/import_export/",
-        type: "example",
-      },
-      {
-        title: "与 Node.js 的互操作性",
-        href: "/examples/interoperability_with_nodejs/",
-        externalURL:
-          "https://www.youtube.com/watch?v=mgX1ymfqPSQ&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=2",
-        type: "video",
-      },
-      {
-        title: "Deno API 简介",
-        href: "/examples/intro_to_deno_apis/",
-        externalURL:
-          "https://www.youtube.com/watch?v=p28ujFMrdA0&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=7",
-        type: "video",
-      },
-      {
-        title: "简单 API 服务器",
-        href: "/examples/simple_api_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "编写文件服务器",
-        href: "/examples/file_server_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 Deno fmt 格式化",
-        href: "/examples/deno_fmt/",
-        externalURL: "https://www.youtube.com/watch?v=Ouzso9gQqnc",
-        type: "video",
-      },
-      {
-        title: "使用 Deno bench 进行基准测试",
-        href: "/examples/deno_bench/",
-        externalURL: "https://www.youtube.com/watch?v=IVde_GTN6TM",
-        type: "video",
-      },
-      {
-        title: "使用隧道共享你的本地服务器",
-        href: "/examples/tunnel_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 deno doc 生成文档",
-        href: "/examples/deno_doc_tutorial/",
-        type: "tutorial",
-      },
-    ],
+    title: "What is Deno?",
+    href: "/examples/what_is_deno/",
+    externalURL:
+      "https://www.youtube.com/watch?v=KPTOo4k8-GE&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe",
+    type: "video",
+    category: "Basics",
   },
   {
-    title: "模块和包管理",
-    items: [
-      {
-        title: "使用 Node.js 内置模块",
-        href: "/examples/node_built_in/",
-        type: "example",
-      },
-      {
-        title: "从 npm 导入模块",
-        href: "/examples/npm/",
-        type: "example",
-      },
-      {
-        title: "与 Node & npm 的兼容性",
-        href: "/examples/backward_compat_with_node_npm/",
-        externalURL:
-          "https://www.youtube.com/watch?v=QPLchkJ7eas&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=12",
-        type: "video",
-      },
-      {
-        title: "ECMAScript 模块",
-        href: "/examples/esmodules/",
-        externalURL:
-          "https://www.youtube.com/watch?v=cTFBiwYY3vs&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=9",
-        type: "video",
-      },
-      {
-        title: "发布模块与 JSR",
-        href: "/examples/publishing_modules_with_jsr/",
-        externalURL:
-          "https://www.youtube.com/watch?v=7uiL4WYvZVs&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=8",
-        type: "video",
-      },
-    ],
+    title: "Run a script",
+    href: "/examples/run_script_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "Hello World",
+    href: "/examples/hello_world/",
+    type: "example",
+    category: "Basics",
+  },
+  {
+    title: "Built in TypeScript support",
+    href: "/examples/typescript_support/",
+    type: "example",
+    category: "Basics",
+  },
+  {
+    title: "Your Deno Dev Environment",
+    href: "/examples/deno_dev_environment/",
+    externalURL:
+      "https://www.youtube.com/watch?v=BFfrGrLm2tw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=3",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Initialize a project",
+    href: "/examples/initialize_project_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "Executable scripts",
+    href: "/examples/hashbang_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "All-in-one tooling",
+    href: "/examples/all-in-one_tooling/",
+    externalURL:
+      "https://www.youtube.com/watch?v=-4e9DkUrCr4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=5",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Tasks and configuration with deno.json",
+    href: "/examples/configuration_with_deno_json/",
+    externalURL:
+      "https://www.youtube.com/watch?v=bTmO5Tfgke4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=10",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Top level await",
+    href: "/examples/top_level_await/",
+    type: "example",
+    category: "Basics",
+  },
+  {
+    title: "Sleep and delay execution",
+    href: "/examples/sleep_delay/",
+    type: "example",
+    category: "Basics",
+  },
+  {
+    title: "Check if two values are deeply equal",
+    href: "/examples/deep_equal/",
+    type: "example",
+    category: "Basics",
+  },
+  {
+    title: "Update from CommonJS to ESM",
+    href: "/examples/cjs_to_esm_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "Import and export functions",
+    href: "/examples/import_export/",
+    type: "example",
+    category: "Basics",
+  },
+  {
+    title: "Interoperability with Node.js",
+    href: "/examples/interoperability_with_nodejs/",
+    externalURL:
+      "https://www.youtube.com/watch?v=mgX1ymfqPSQ&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=2",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Introduction to Deno APIs",
+    href: "/examples/intro_to_deno_apis/",
+    externalURL:
+      "https://www.youtube.com/watch?v=p28ujFMrdA0&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=7",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Simple API server",
+    href: "/examples/simple_api_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "Simple file server",
+    href: "/examples/file_server_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "Formatting with Deno fmt",
+    href: "/examples/deno_fmt/",
+    externalURL: "https://www.youtube.com/watch?v=Ouzso9gQqnc",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Benchmarking with Deno bench",
+    href: "/examples/deno_bench/",
+    externalURL: "https://www.youtube.com/watch?v=IVde_GTN6TM",
+    type: "video",
+    category: "Basics",
+  },
+  {
+    title: "Sharing your local server with tunnel",
+    href: "/examples/tunnel_tutorial/",
+    type: "tutorial",
+    category: "Basics",
+  },
+  {
+    title: "Generating documentation with deno doc",
+    href: "/examples/deno_doc_tutorial/",
+    type: "tutorial",
+    category: "Basics",
   },
 
+  // Modules and package management
   {
-    title: "Web 标准 API",
-    items: [
-      {
-        title: "Deno 中的浏览器 API",
-        href: "/examples/browser_apis_in_deno/",
-        externalURL:
-          "https://www.youtube.com/watch?v=oxVwTT-rZRo&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=6",
-        type: "video",
-      },
-      {
-        title: "Temporal API",
-        href: "/examples/temporal/",
-        type: "example",
-      },
-      {
-        title: "使用控制台 API 进行更好的调试",
-        href: "/examples/debugging_with_console_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "操作和解析 URL",
-        href: "/examples/url_parsing/",
-        type: "example",
-      },
-      {
-        title: "获取和流式数据",
-        href: "/examples/fetch_data_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "设置超时和间隔",
-        href: "/examples/timers/",
-        type: "example",
-      },
-      {
-        title: "带颜色的日志记录",
-        href: "/examples/color_logging/",
-        type: "example",
-      },
-      {
-        title: "Web Workers",
-        href: "/examples/web_workers/",
-        type: "example",
-      },
-      {
-        title: "Web Assembly",
-        href: "/examples/webassembly/",
-        type: "example",
-      },
-    ],
+    title: "Use Node.js built-in modules",
+    href: "/examples/node_built_in/",
+    type: "example",
+    category: "Modules and package management",
+  },
+  {
+    title: "Import modules from npm",
+    href: "/examples/npm/",
+    type: "example",
+    category: "Modules and package management",
+  },
+  {
+    title: "Compatibility with Node & npm",
+    href: "/examples/backward_compat_with_node_npm/",
+    externalURL:
+      "https://www.youtube.com/watch?v=QPLchkJ7eas&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=12",
+    type: "video",
+    category: "Modules and package management",
+  },
+  {
+    title: "ECMAScript Modules",
+    href: "/examples/esmodules/",
+    externalURL:
+      "https://www.youtube.com/watch?v=cTFBiwYY3vs&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=9",
+    type: "video",
+    category: "Modules and package management",
+  },
+  {
+    title: "Publishing Modules with JSR",
+    href: "/examples/publishing_modules_with_jsr/",
+    externalURL:
+      "https://www.youtube.com/watch?v=7uiL4WYvZVs&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=8",
+    type: "video",
+    category: "Modules and package management",
+  },
+  {
+    title: "Add and remove dependencies",
+    href: "/examples/add_remove_dependencies_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Lock dependencies with deno.lock",
+    href: "/examples/dependency_lockfile_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Use private npm registries",
+    href: "/examples/private_registries_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Run npm lifecycle scripts",
+    href: "/examples/npm_lifecycle_scripts_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Use local and unpublished packages",
+    href: "/examples/local_unpublished_packages_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Configure a monorepo with workspaces",
+    href: "/examples/workspaces_monorepo_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Run Deno in GitHub Actions",
+    href: "/examples/deno_github_actions_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Use Deno in an existing Node.js project",
+    href: "/examples/migrate_node_project_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+  {
+    title: "Module Metadata",
+    href: "/examples/module_metadata_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
+  },
+
+  // Network
+  {
+    title: "HTTP requests",
+    href: "/examples/http_requests/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP Server: Hello world",
+    href: "/examples/http_server/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Routing",
+    href: "/examples/http_server_routing/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Serving files",
+    href: "/examples/http_server_files/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Streaming",
+    href: "/examples/http_server_streaming/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Server-sent events",
+    href: "/examples/http_server_sse/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: TLS",
+    href: "/examples/http_server_tls/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Hot reload",
+    href: "/examples/http_server_hot_reload/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Scaling across CPU cores",
+    href: "/examples/http_server_parallel/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Node.js streams",
+    href: "/examples/http_server_node_streams/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Proxy HTTP requests",
+    href: "/examples/http_proxy/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Fetch over a Unix socket",
+    href: "/examples/fetch_unix_socket/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: CRUD with SQLite3",
+    href: "/examples/http_server_oak_crud_middleware_with_sqlite3_db/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Hono HTTP server",
+    href: "/examples/hono/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: WebSockets",
+    href: "/examples/http_server_websocket/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Piping streams",
+    href: "/examples/piping_streams/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Outbound WebSockets",
+    href: "/examples/websocket/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "TCP Echo Server",
+    href: "/examples/tcp_echo_server/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "TCP connector: Ping",
+    href: "/examples/tcp_connector/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "TCP listener: Ping",
+    href: "/examples/tcp_listener/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "TCP/TLS connector: Ping",
+    href: "/examples/tls_connector/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "TCP/TLS listener: Ping",
+    href: "/examples/tls_listener/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Running DNS queries",
+    href: "/examples/dns_queries/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "File Based Routing",
+    href: "/examples/file_based_routing_tutorial/",
+    type: "tutorial",
+    category: "Network",
+  },
+  {
+    title: "Build a chat app with WebSockets",
+    href: "/examples/chat_app_tutorial/",
+    type: "tutorial",
+    category: "Network",
+  },
+  {
+    title: "Build a Realtime WebSocket Application",
+    href: "/examples/realtime_websocket_app/",
+    externalURL:
+      "https://www.youtube.com/watch?v=FC4IrkHEg4A&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=15",
+    type: "video",
+    category: "Network",
+  },
+  {
+    title: "UDP listener: Ping",
+    href: "/examples/udp_listener/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "UDP connector: Ping",
+    href: "/examples/udp_connector/",
+    type: "example",
+    category: "Network",
+  },
+
+  // File system
+  {
+    title: "Path operations",
+    href: "/examples/path_operations/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Convert between file URLs and paths",
+    href: "/examples/file_url_path/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Get the MIME type of a file",
+    href: "/examples/mime_type/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Copy a file",
+    href: "/examples/copy_file/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Write a file incrementally",
+    href: "/examples/write_file_incremental/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Reading files",
+    href: "/examples/reading_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Writing files",
+    href: "/examples/writing_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Deleting files",
+    href: "/examples/deleting_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Checking for file existence",
+    href: "/examples/checking_file_existence/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Moving/Renaming files",
+    href: "/examples/moving_renaming_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Creating & removing directories",
+    href: "/examples/create_remove_directories/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Watching the filesystem",
+    href: "/examples/watching_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Walking directories",
+    href: "/examples/walking_directories/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Unix cat",
+    href: "/examples/unix_cat/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Creating & resolving symlinks",
+    href: "/examples/symlinks/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Temporary files & directories",
+    href: "/examples/temporary_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Streaming file operations",
+    href: "/examples/streaming_files/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "File system events",
+    href: "/examples/file_system_events_tutorial/",
+    type: "tutorial",
+    category: "File system",
+  },
+
+  // System
+  {
+    title: "Handling OS signals",
+    href: "/examples/os_signals/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Benchmarking",
+    href: "/examples/benchmarking/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Create a subprocess",
+    href: "/examples/subprocess_tutorial/",
+    type: "tutorial",
+    category: "System",
+  },
+  {
+    title: "Subprocess Spawning",
+    href: "/examples/subprocess_running_files/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Collecting output from subprocesses",
+    href: "/examples/subprocesses_output/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Reading system metrics",
+    href: "/examples/reading_system_metrics/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Process information",
+    href: "/examples/pid/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Read from stdin",
+    href: "/examples/reading_stdin/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Write to stdout",
+    href: "/examples/write_stdout/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Communicate with a child process over IPC",
+    href: "/examples/child_process_ipc/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Environment variables",
+    href: "/examples/environment_variables/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Subprocesses: Spawning",
+    href: "/examples/subprocesses_spawn/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Handle OS signals",
+    href: "/examples/os_signals_tutorial/",
+    type: "tutorial",
+    category: "System",
+  },
+
+  // Web standard APIs
+  {
+    title: "Browser APIs in Deno",
+    href: "/examples/browser_apis_in_deno/",
+    externalURL:
+      "https://www.youtube.com/watch?v=oxVwTT-rZRo&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=6",
+    type: "video",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Temporal API",
+    href: "/examples/temporal/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Better debugging with the console API",
+    href: "/examples/debugging_with_console_tutorial/",
+    type: "tutorial",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Manipulating & parsing URLs",
+    href: "/examples/url_parsing/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Escape an HTML string",
+    href: "/examples/escape_html/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Fetch and stream data",
+    href: "/examples/fetch_data_tutorial/",
+    type: "tutorial",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Set timeout and intervals",
+    href: "/examples/timers/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Logging with colors",
+    href: "/examples/color_logging/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Web workers",
+    href: "/examples/web_workers/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Web assembly",
+    href: "/examples/webassembly/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+
+  // Standard library
+  {
+    title: "User Data Processing with Deno Collections",
+    href: "/examples/data_processing/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Exponential backoff",
+    href: "/examples/exponential_backoff/",
+    type: "example",
+    category: "Standard library",
+  },
+
+  // Encoding
+  {
+    title: "Hex and base64 encoding",
+    href: "/examples/hex_base64_encoding/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Parsing and serializing TOML",
+    href: "/examples/parsing_serializing_toml/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Importing JSON",
+    href: "/examples/importing_json/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Byte and text imports",
+    href: "/examples/byte_and_text_imports/",
+    externalURL: "https://www.youtube.com/watch?v=PAEI6mdlXwc",
+    type: "video",
+    category: "Encoding",
+  },
+  {
+    title: "Image bundling with deno compile",
+    href: "/examples/image_bundling_deno_compile/",
+    externalURL: "https://www.youtube.com/watch?v=qg_M0deBlfQ",
+    type: "video",
+    category: "Encoding",
+  },
+  {
+    title: "Parsing and serializing CSV",
+    href: "/examples/parsing_serializing_csv/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Parsing and serializing JSON",
+    href: "/examples/parsing_serializing_json/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Parsing and serializing YAML",
+    href: "/examples/parsing_serializing_yaml/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Manipulating byte arrays",
+    href: "/examples/byte_manipulation/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert an ArrayBuffer",
+    href: "/examples/convert_arraybuffer/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert a Uint8Array",
+    href: "/examples/convert_uint8array/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert a Blob",
+    href: "/examples/convert_blob/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert a Buffer (node:buffer)",
+    href: "/examples/convert_buffer/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert a ReadableStream",
+    href: "/examples/convert_readablestream/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert a string to bytes and back",
+    href: "/examples/convert_string/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Convert a Node.js Readable",
+    href: "/examples/convert_node_readable/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Compress and decompress data",
+    href: "/examples/compress_decompress/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Importing text",
+    href: "/examples/importing_text/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Importing bytes",
+    href: "/examples/importing_bytes/",
+    type: "example",
+    category: "Encoding",
+  },
+
+  // CLI
+  {
+    title: "Build a Command Line Utility",
+    href: "/examples/command_line_utility/",
+    externalURL:
+      "https://www.youtube.com/watch?v=TUxj2TS5pNo&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=14",
+    type: "video",
+    category: "CLI",
+  },
+  {
+    title: "Input prompts",
+    href: "/examples/prompts/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Permission management",
+    href: "/examples/permissions/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Command line arguments",
+    href: "/examples/command_line_arguments/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Getting the Deno version",
+    href: "/examples/deno_version/",
+    type: "example",
+    category: "CLI",
+  },
+
+  // Cryptography
+  {
+    title: "Generating & validating UUIDs",
+    href: "/examples/uuids/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "ULID",
+    href: "/examples/ulid/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Hashing",
+    href: "/examples/hashing/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Hashing and verifying passwords",
+    href: "/examples/hash_password/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "RSASSA-PKCS1-v1_5 Signature and Verification",
+    href: "/examples/rsa_signature/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "HMAC Generation and Verification",
+    href: "/examples/hmac_generate_verify/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "AES Encryption and Decryption",
+    href: "/examples/aes_encryption/",
+    type: "example",
+    category: "Cryptography",
+  },
+
+  // Testing
+  {
+    title: "Writing tests",
+    href: "/examples/writing_tests/",
+    type: "example",
+    category: "Testing",
+  },
+  {
+    title: "Basics of testing",
+    href: "/examples/testing_tutorial/",
+    type: "tutorial",
+    category: "Testing",
+  },
+  {
+    title: "Mocking and test doubles",
+    href: "/runtime/test/mocking/",
+    type: "tutorial",
+    category: "Testing",
+  },
+  {
+    title: "Snapshot testing",
+    href: "/runtime/test/snapshots/",
+    type: "tutorial",
+    category: "Testing",
+  },
+  {
+    title: "Spy functions",
+    href: "/examples/spy_functions/",
+    type: "example",
+    category: "Testing",
+  },
+  {
+    title: "Getting started with Deno test",
+    href: "/examples/deno_test/",
+    externalURL: "https://www.youtube.com/watch?v=gDtDVfsgHgs",
+    type: "video",
+    category: "Testing",
+  },
+  {
+    title: "Better testing with Deno coverage",
+    href: "/examples/deno_coverage/",
+    externalURL: "https://www.youtube.com/watch?v=P2BBYNPpgW8",
+    type: "video",
+    category: "Testing",
+  },
+  {
+    title: "Testing web applications",
+    href: "/examples/web_testing_tutorial/",
+    type: "tutorial",
+    category: "Testing",
+  },
+  {
+    title: "BDD testing",
+    href: "/examples/bdd_tutorial/",
+    type: "tutorial",
+    category: "Testing",
+  },
+  {
+    title: "Skipping and focusing tests",
+    href: "/examples/tests_skip_focus/",
+    type: "example",
+    category: "Testing",
+  },
+  {
+    title: "Filtering and controlling test runs",
+    href: "/examples/tests_run_control/",
+    type: "example",
+    category: "Testing",
+  },
+  {
+    title: "Use Testing Library with Deno",
+    href: "/examples/testing_library_tutorial/",
+    type: "tutorial",
+    category: "Testing",
+  },
+
+  // Web frameworks and libraries
+  {
+    title: "TypeScript and JSX",
+    href: "/examples/ts_jsx/",
+    externalURL:
+      "https://www.youtube.com/watch?v=KoM8ahe8O74&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=11",
+    type: "video",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a React App",
+    href: "/examples/react_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Next.js app",
+    href: "/examples/next_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Fresh app",
+    href: "/examples/fresh_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Svelte app",
+    href: "/examples/svelte_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Vue app",
+    href: "/examples/vue_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Use Express with Deno",
+    href: "/examples/express_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "How to use Apollo with Deno",
+    href: "/examples/apollo_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build an Astro site with Deno",
+    href: "/examples/astro_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Qwik app with Deno",
+    href: "/examples/qwik_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Nuxt app with Deno",
+    href: "/examples/nuxt_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Typesafe API with tRPC and Deno",
+    href: "/examples/trpc_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build an API server with TypeScript",
+    href: "/examples/build_api_server_ts/",
+    externalURL:
+      "https://www.youtube.com/watch?v=J8kZ-s-5-ms&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=13",
+    type: "video",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Vue app",
+    href: "/examples/vue_app_video/",
+    externalURL: "https://www.youtube.com/watch?v=MDPauM8fZDE",
+    type: "video",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a SolidJS app",
+    href: "/examples/solidjs_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a React app",
+    href: "/examples/react_app_video/",
+    externalURL: "https://www.youtube.com/watch?v=eStwt_2THd8",
+    type: "video",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a Tanstack app",
+    href: "/examples/tanstack_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "HTTP server file upload",
+    href: "/examples/http_server_file_upload/",
+    type: "example",
+    category: "Web frameworks and libraries",
+  },
+  {
+    title: "Build a word finder app",
+    href: "/examples/word_finder_tutorial/",
+    type: "tutorial",
+    category: "Web frameworks and libraries",
+  },
+
+  // Databases
+  {
+    title: "Overview",
+    href: "/examples/connecting_to_databases_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "MySQL",
+    href: "/examples/mysql2_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "PlanetScale",
+    href: "/examples/planetscale_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "Redis",
+    href: "/examples/redis_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "Prisma",
+    href: "/examples/prisma_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "Drizzle",
+    href: "/examples/drizzle_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "Mongoose",
+    href: "/examples/mongoose_tutorial/",
+    type: "tutorial",
+    category: "Databases",
+  },
+  {
+    title: "Redis quick start",
+    href: "/examples/redis/",
+    type: "example",
+    category: "Databases",
+  },
+  {
+    title: "Postgres",
+    href: "/examples/postgres/",
+    type: "example",
+    category: "Databases",
+  },
+  {
+    title: "Supabase",
+    href: "/examples/supabase/",
+    type: "example",
+    category: "Databases",
+  },
+  {
+    title: "MongoDB",
+    href: "/examples/mongo/",
+    type: "example",
+    category: "Databases",
+  },
+  {
+    title: "SQLite",
+    href: "/examples/sqlite/",
+    type: "example",
+    category: "Databases",
+  },
+  {
+    title: "Mongoose (video)",
+    href: "/examples/mongoose/",
+    externalURL: "https://www.youtube.com/watch?v=dmZ9Ih0CR9g",
+    type: "video",
+    category: "Databases",
+  },
+  {
+    title: "Prisma (video)",
+    href: "/examples/prisma/",
+    externalURL: "https://www.youtube.com/watch?v=P8VzA_XSF8w",
+    type: "video",
+    category: "Databases",
+  },
+  {
+    title: "DuckDB",
+    href: "/examples/duckdb/",
+    type: "example",
+    category: "Databases",
+  },
+
+  // Deno KV and scheduling
+  {
+    title: "Deno KV: Key/Value database",
+    href: "/examples/kv/",
+    type: "example",
+    category: "Deno KV and scheduling",
+  },
+  {
+    title: "Deno KV watch",
+    href: "/examples/kv_watch/",
+    type: "example",
+    category: "Deno KV and scheduling",
+  },
+  {
+    title: "Deno queues",
+    href: "/examples/queues/",
+    type: "example",
+    category: "Deno KV and scheduling",
+  },
+  {
+    title: "Deno Cron",
+    href: "/examples/cron/",
+    type: "example",
+    category: "Deno KV and scheduling",
+  },
+
+  // AI
+  {
+    title: "LLM Chat app",
+    href: "/examples/llm_tutorial/",
+    type: "tutorial",
+    category: "AI",
+  },
+  {
+    title: "Connect to OpenAI - Chat completion",
+    href: "/examples/openai_chat_completion/",
+    type: "example",
+    category: "AI",
+  },
+
+  // Deploying Deno projects
+  {
+    title: "Deploy with Deno Deploy",
+    href: "/examples/deno_deploy_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Deploy with the deploy command",
+    href: "/examples/deploy_command_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Migrating a custom domain to Deno Deploy",
+    href: "/examples/migrate_custom_domain_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Connecting to a database both locally and on Deno Deploy",
+    href: "/examples/tunnel_database_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "AWS Lambda",
+    href: "/examples/aws_lambda_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Deploy Deno to AWS Lambda",
+    href: "/examples/deploy_deno_to_aws_lambda/",
+    externalURL:
+      "https://www.youtube.com/watch?v=_xLOrT3cWK4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=17",
+    type: "video",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "AWS Lightsail",
+    href: "/examples/aws_lightsail_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Cloudflare workers",
+    href: "/examples/cloudflare_workers_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Cloudflare workers with wrangler",
+    href: "/examples/cloudflare_workers_wrangler_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Digital Ocean",
+    href: "/examples/digital_ocean_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Google Cloud Run",
+    href: "/examples/google_cloud_run_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Kinsta",
+    href: "/examples/kinsta_tutorial/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+  {
+    title: "Deploying Deno with Docker",
+    href: "/examples/deploying_deno_with_docker/",
+    externalURL:
+      "https://www.youtube.com/watch?v=VRryNeYm6yw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=16",
+    type: "video",
+    category: "Deploying Deno projects",
+  },
+
+  // OpenTelemetry
+  {
+    title: "Basic OpenTelemetry setup",
+    href: "/examples/basic_opentelemetry_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+  {
+    title: "Export telemetry to Grafana",
+    href: "/examples/grafana_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+  {
+    title: "Export telemetry to Hyperdx",
+    href: "/examples/hyperdx_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+  {
+    title: "View telemetry data for your local application",
+    href: "/examples/tunnel_telemetry_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+  {
+    title: "Export telemetry to Honeycomb",
+    href: "/examples/honeycomb_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+  {
+    title: "Span propagation",
+    href: "/examples/otel_span_propagation_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+  {
+    title: "OpenTelemetry with Deno Deploy",
+    href: "/examples/deploy_otel_tutorial/",
+    type: "tutorial",
+    category: "OpenTelemetry",
+  },
+
+  // Deno Sandbox
+  {
+    title: "Evaluating JavaScript",
+    href: "/examples/sandbox_evaluating_javascript/",
+    type: "example",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Spawn a subprocess",
+    href: "/examples/sandbox_spawn_subprocess/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Serve a web framework",
+    href: "/examples/sandbox_web_framework/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Provide SSH access to a sandbox",
+    href: "/examples/sandbox_ssh_access/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Interactive JavaScript REPL",
+    href: "/examples/sandbox_javascript_repl/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Provide a VSCode instance in a sandbox",
+    href: "/examples/sandbox_vscode_instance/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Use template literals with variable interpolation",
+    href: "/examples/sandbox_template_literals/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Error handling",
+    href: "/examples/sandbox_error_handling/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Command cancellation",
+    href: "/examples/sandbox_command_cancellation/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Streaming access string and binary output",
+    href: "/examples/sandbox_access_output/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Set and get environment variables",
+    href: "/examples/sandbox_environment_variables/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Stream output to a local file",
+    href: "/examples/sandbox_stream_output/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Upload files and directories to a sandbox",
+    href: "/examples/sandbox_upload_files/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Control sandbox timeout",
+    href: "/examples/sandbox_timeout_control/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Configure sandbox memory",
+    href: "/examples/sandbox_memory/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Add read-write volumes to your Sandbox",
+    href: "/examples/volumes_tutorial/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Boot instantly with snapshots",
+    href: "/examples/snapshots_tutorial/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Boot a Python environment with snapshots",
+    href: "/examples/snapshot_python_video/",
+    type: "video",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Boot a Python environment with snapshots",
+    href: "/examples/snapshot_python_tutorial/",
+    type: "tutorial",
+    category: "Deno Sandbox",
+  },
+  {
+    title: "Run AI generated code",
+    href: "/examples/sandbox_for_untrusted_code/",
+    type: "example",
+    category: "Deno Sandbox",
   },
 
   {
-    title: "Web 框架和库",
-    items: [
-      {
-        title: "TypeScript 和 JSX",
-        href: "/examples/ts_jsx/",
-        externalURL:
-          "https://www.youtube.com/watch?v=KoM8ahe8O74&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=11",
-        type: "video",
-      },
-      {
-        title: "构建一个 React 应用",
-        href: "/examples/react_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "构建一个 Next.js 应用",
-        href: "/examples/next_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "构建一个 Fresh 应用",
-        href: "/examples/fresh_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "构建一个 Svelte 应用",
-        href: "/examples/svelte_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "构建一个 Vue 应用",
-        href: "/examples/vue_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中使用 Express",
-        href: "/examples/express_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "如何在 Deno 中使用 Apollo",
-        href: "/examples/apollo_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 Deno 构建 Astro 网站",
-        href: "/examples/astro_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "用 Deno 构建 Qwik 应用",
-        href: "/examples/qwik_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "用 Deno 构建 Nuxt 应用",
-        href: "/examples/nuxt_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "用 tRPC 和 Deno 构建类型安全 API",
-        href: "/examples/trpc_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "用 TypeScript 构建 API 服务器",
-        href: "/examples/build_api_server_ts/",
-        externalURL:
-          "https://www.youtube.com/watch?v=J8kZ-s-5-ms&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=13",
-        type: "video",
-      },
-      {
-        title: "构建一个 Vue 应用",
-        href: "/examples/vue_app_video/",
-        externalURL: "https://www.youtube.com/watch?v=MDPauM8fZDE",
-        type: "video",
-      },
-      {
-        title: "构建一个 SolidJS 应用",
-        href: "/examples/solidjs_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "构建一个 React 应用",
-        href: "/examples/react_app_video/",
-        externalURL: "https://www.youtube.com/watch?v=eStwt_2THd8",
-        type: "video",
-      },
-      {
-        title: "使用 Tanstack 和 Deno 构建应用",
-        href: "/examples/tanstack_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "HTTP 服务器：文件上传",
-        href: "/examples/http_server_file_upload/",
-        type: "example",
-      },
-    ],
+    title: "Re-map import paths",
+    href: "/examples/import_maps_tutorial/",
+    type: "tutorial",
+    category: "Modules and package management",
   },
   {
-    title: "Deno 沙箱",
-    items: [
-      {
-        title: "执行 JavaScript",
-        href: "/examples/sandbox_evaluating_javascript/",
-        type: "example",
-      },
-      {
-        title: "生成子进程并获取缓冲输出",
-        href: "/examples/sandbox_spawn_subprocess/",
-        type: "tutorial",
-      },
-      {
-        title: "运行一个 Web 框架",
-        href: "/examples/sandbox_web_framework/",
-        type: "tutorial",
-      },
-      {
-        title: "为沙箱提供 SSH 访问权限",
-        href: "/examples/sandbox_ssh_access/",
-        type: "tutorial",
-      },
-      {
-        title: "交互式 JavaScript REPL",
-        href: "/examples/sandbox_javascript_repl/",
-        type: "tutorial",
-      },
-      {
-        title: "在沙箱中提供一个 VSCode 实例",
-        href: "/examples/sandbox_vscode_instance/",
-        type: "tutorial",
-      },
-      {
-        title: "带变量插值的模板字面量命令",
-        href: "/examples/sandbox_template_literals/",
-        type: "tutorial",
-      },
-      {
-        title: "错误处理",
-        href: "/examples/sandbox_error_handling/",
-        type: "tutorial",
-      },
-      {
-        title: "命令取消",
-        href: "/examples/sandbox_command_cancellation/",
-        type: "tutorial",
-      },
-      {
-        title: "访问字符串和二进制输出",
-        href: "/examples/sandbox_access_output/",
-        type: "tutorial",
-      },
-      {
-        title: "设置和获取环境变量",
-        href: "/examples/sandbox_environment_variables/",
-        type: "tutorial",
-      },
-      {
-        title: "将输出流传输到本地文件",
-        href: "/examples/sandbox_stream_output/",
-        type: "tutorial",
-      },
-      {
-        title: "上传文件和目录",
-        href: "/examples/sandbox_upload_files/",
-        type: "tutorial",
-      },
-      {
-        title: "控制沙箱超时",
-        href: "/examples/sandbox_timeout_control/",
-        type: "tutorial",
-      },
-      {
-        title: "配置沙箱内存",
-        href: "/examples/sandbox_memory/",
-        type: "tutorial",
-      },
-      {
-        title: "为沙箱添加读写卷",
-        href: "/examples/volumes_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用快照即时启动",
-        href: "/examples/snapshots_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用快照安全执行云端代码",
-        href: "/examples/snapshot_python_video/",
-        type: "video",
-      },
-      {
-        title: "使用快照启动 Python 环境",
-        href: "/examples/snapshot_python_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "运行 AI 生成的代码",
-        href: "/examples/sandbox_for_untrusted_code/",
-        type: "example",
-      },
-    ],
+    title: "Debugging with Chrome DevTools",
+    href: "/runtime/fundamentals/debugging/",
+    type: "tutorial",
+    category: "CLI",
+  },
+
+  {
+    title: "WebSocket server: Broadcasting messages",
+    href: "/examples/websocket_pubsub/",
+    type: "example",
+    category: "Network",
   },
   {
-    title: "测试",
-    items: [
-      {
-        title: "编写测试",
-        href: "/examples/writing_tests/",
-        type: "example",
-      },
-      {
-        title: "测试基础",
-        href: "/examples/testing_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在测试中模拟数据",
-        href: "/examples/mocking_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在测试中使用桩（Stubbing）",
-        href: "/examples/stubbing_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "快照测试",
-        href: "/examples/snapshot_test_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "监视函数",
-        href: "/examples/spy_functions/",
-        type: "example",
-      },
-      {
-        title: "开始使用 Deno test",
-        href: "/examples/deno_test/",
-        externalURL: "https://www.youtube.com/watch?v=gDtDVfsgHgs",
-        type: "video",
-      },
-      {
-        title: "使用 Deno coverage 改进测试",
-        href: "/examples/deno_coverage/",
-        externalURL: "https://www.youtube.com/watch?v=P2BBYNPpgW8",
-        type: "video",
-      },
-      {
-        title: "测试 Web 应用",
-        href: "/examples/web_testing_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "行为驱动开发（BDD）",
-        href: "/examples/bdd_tutorial/",
-        type: "tutorial",
-      },
-    ],
+    title: "WebSocket server: Per-socket state",
+    href: "/examples/websocket_context/",
+    type: "example",
+    category: "Network",
   },
   {
-    title: "OpenTelemetry",
-    items: [
-      {
-        title: "Deno 中开始使用 OpenTelemetry",
-        href: "/examples/basic_opentelemetry_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将遥测数据导出到 Grafana",
-        href: "/examples/grafana_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将遥测数据导出到 HyperDX",
-        href: "/examples/hyperdx_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用隧道进行本地遥测",
-        href: "/examples/tunnel_telemetry_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将遥测数据导出到 Honeycomb",
-        href: "/examples/honeycomb_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中实现带上下文传播的分布式追踪",
-        href: "/examples/otel_span_propagation_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 OpenTelemetry 和 Deno Deploy 监控应用",
-        href: "/examples/deploy_otel_tutorial/",
-        type: "tutorial",
-      },
-    ],
+    title: "Extract links and metadata from HTML",
+    href: "/examples/extract_html_data/",
+    type: "example",
+    category: "Web standard APIs",
   },
   {
-    title: "部署 Deno 项目",
-    items: [
-      {
-        title: "使用 Deno Deploy 部署应用",
-        href: "/examples/deno_deploy_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 deno deploy 命令部署应用",
-        href: "/examples/deploy_command_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将自定义域从 Deploy Classic 迁移到 Deno Deploy",
-        href: "/examples/migrate_custom_domain_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在本地和 Deno Deploy 中连接数据库",
-        href: "/examples/tunnel_database_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将 Deno 部署到 AWS Lambda",
-        href: "/examples/aws_lambda_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将 Deno 部署到 AWS Lambda",
-        href: "/examples/deploy_deno_to_aws_lambda/",
-        externalURL:
-          "https://www.youtube.com/watch?v=_xLOrT3cWK4&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=17",
-        type: "video",
-      },
-      {
-        title: "将 Deno 部署到 Amazon Lightsail",
-        href: "/examples/aws_lightsail_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "将 Deno 部署到 Cloudflare Workers",
-        href: "/examples/cloudflare_workers_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 wrangler 的 Cloudflare Workers",
-        href: "/examples/cloudflare_workers_wrangler_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "Digital Ocean",
-        href: "/examples/digital_ocean_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "如何部署到 Google Cloud Run",
-        href: "/examples/google_cloud_run_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "如何在 Kinsta 上部署 Deno",
-        href: "/examples/kinsta_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 Docker 部署 Deno",
-        href: "/examples/deploying_deno_with_docker/",
-        externalURL:
-          "https://www.youtube.com/watch?v=VRryNeYm6yw&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=16",
-        type: "video",
-      },
-    ],
+    title: "Set the time zone",
+    href: "/examples/set_timezone/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "连接到数据库",
-    items: [
-      {
-        title: "连接到数据库",
-        href: "/examples/connecting_to_databases_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中使用 MySQL2",
-        href: "/examples/mysql2_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中使用 PlanetScale",
-        href: "/examples/planetscale_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中使用 Redis",
-        href: "/examples/redis_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中使用 Prisma",
-        href: "/examples/prisma_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "在 Deno 中使用 Drizzle",
-        href: "/examples/drizzle_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 Mongoose 和 MongoDB",
-        href: "/examples/mongoose_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "连接到 Redis",
-        href: "/examples/redis/",
-        type: "example",
-      },
-      {
-        title: "连接到 Postgres",
-        href: "/examples/postgres/",
-        type: "example",
-      },
-      {
-        title: "连接到 Supabase",
-        href: "/examples/supabase/",
-        type: "example",
-      },
-      {
-        title: "连接到 MongoDB",
-        href: "/examples/mongo/",
-        type: "example",
-      },
-      {
-        title: "连接到 SQLite",
-        href: "/examples/sqlite/",
-        type: "example",
-      },
-      {
-        title: "连接到 Mongoose 和 MongoDB",
-        href: "/examples/mongoose/",
-        externalURL: "https://www.youtube.com/watch?v=dmZ9Ih0CR9g",
-        type: "video",
-      },
-      {
-        title: "连接到 Prisma",
-        href: "/examples/prisma/",
-        externalURL: "https://www.youtube.com/watch?v=P8VzA_XSF8w",
-        type: "video",
-      },
-      {
-        title: "连接到 DuckDB",
-        href: "/examples/duckdb/",
-        type: "example",
-      },
-    ],
+    title: "Inspect memory with heap snapshots",
+    href: "/examples/heap_snapshot/",
+    type: "example",
+    category: "CLI",
   },
   {
-    title: "编码",
-    items: [
-      {
-        title: "十六进制和 base64 编码",
-        href: "/examples/hex_base64_encoding/",
-        type: "example",
-      },
-      {
-        title: "解析和序列化 TOML",
-        href: "/examples/parsing_serializing_toml/",
-        type: "example",
-      },
-      {
-        title: "导入 JSON",
-        href: "/examples/importing_json/",
-        type: "example",
-      },
-      {
-        title: "字节和文本导入",
-        href: "/examples/byte_and_text_imports/",
-        externalURL: "https://www.youtube.com/watch?v=PAEI6mdlXwc",
-        type: "video",
-      },
-      {
-        title: "使用 deno compile 进行图像打包",
-        href: "/examples/image_bundling_deno_compile/",
-        externalURL: "https://www.youtube.com/watch?v=qg_M0deBlfQ",
-        type: "video",
-      },
-      {
-        title: "解析和序列化 CSV",
-        href: "/examples/parsing_serializing_csv/",
-        type: "example",
-      },
-      {
-        title: "解析和序列化 JSON",
-        href: "/examples/parsing_serializing_json/",
-        type: "example",
-      },
-      {
-        title: "解析和序列化 YAML",
-        href: "/examples/parsing_serializing_yaml/",
-        type: "example",
-      },
-      {
-        title: "操作字节数组",
-        href: "/examples/byte_manipulation/",
-        type: "example",
-      },
-    ],
+    title: "Find an executable on the PATH",
+    href: "/examples/find_executable/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "命令行接口",
-    items: [
-      {
-        title: "构建一个命令行工具",
-        href: "/examples/command_line_utility/",
-        externalURL:
-          "https://www.youtube.com/watch?v=TUxj2TS5pNo&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=14",
-        type: "video",
-      },
-      {
-        title: "输入提示",
-        href: "/examples/prompts/",
-        type: "example",
-      },
-      {
-        title: "权限管理",
-        href: "/examples/permissions/",
-        type: "example",
-      },
-      {
-        title: "命令行参数",
-        href: "/examples/command_line_arguments/",
-        type: "example",
-      },
-      {
-        title: "获取 Deno 版本",
-        href: "/examples/deno_version/",
-        type: "example",
-      },
-    ],
+    title: "Use Deno in Docker",
+    href: "/runtime/reference/docker/",
+    type: "tutorial",
+    category: "Deploying Deno projects",
+  },
+
+  {
+    title: "Pipe data into a subprocess",
+    href: "/examples/subprocess_stdin/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "网络",
-    items: [
-      {
-        title: "HTTP 请求",
-        href: "/examples/http_requests/",
-        type: "example",
-      },
-      {
-        title: "HTTP 服务器：你好，世界",
-        href: "/examples/http_server/",
-        type: "example",
-      },
-      {
-        title: "HTTP 服务器：路由",
-        href: "/examples/http_server_routing/",
-        type: "example",
-      },
-      {
-        title: "HTTP 服务器：提供文件",
-        href: "/examples/http_server_files/",
-        type: "example",
-      },
-      {
-        title: "HTTP 服务器：流式传输",
-        href: "/examples/http_server_streaming/",
-        type: "example",
-      },
-      {
-        title: "HTTP 服务器：使用 SQLite3 进行 CRUD",
-        href: "/examples/http_server_oak_crud_middleware_with_sqlite3_db/",
-        type: "example",
-      },
-      {
-        title: "Hono HTTP 服务器",
-        href: "/examples/hono/",
-        type: "example",
-      },
-      {
-        title: "HTTP 服务器：WebSockets",
-        href: "/examples/http_server_websocket/",
-        type: "example",
-      },
-      {
-        title: "管道流",
-        href: "/examples/piping_streams/",
-        type: "example",
-      },
-      {
-        title: "外发 WebSockets",
-        href: "/examples/websocket/",
-        type: "example",
-      },
-      {
-        title: "TCP 回声服务器",
-        href: "/examples/tcp_echo_server/",
-        type: "example",
-      },
-      {
-        title: "TCP 连接器：Ping",
-        href: "/examples/tcp_connector/",
-        type: "example",
-      },
-      {
-        title: "TCP 监听器：Ping",
-        href: "/examples/tcp_listener/",
-        type: "example",
-      },
-      {
-        title: "TCP/TLS 连接器：Ping",
-        href: "/examples/tls_connector/",
-        type: "example",
-      },
-      {
-        title: "TCP/TLS 监听器：Ping",
-        href: "/examples/tls_listener/",
-        type: "example",
-      },
-      {
-        title: "运行 DNS 查询",
-        href: "/examples/dns_queries/",
-        type: "example",
-      },
-    ],
+    title: "Run a subprocess with custom env and cwd",
+    href: "/examples/subprocess_env_cwd/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "系统",
-    items: [
-      {
-        title: "处理操作系统信号",
-        href: "/examples/os_signals/",
-        type: "example",
-      },
-      {
-        title: "基准测试",
-        href: "/examples/benchmarking/",
-        type: "example",
-      },
-      {
-        title: "创建子进程",
-        href: "/examples/subprocess_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "子进程生成",
-        href: "/examples/subprocess_running_files/",
-        type: "example",
-      },
-      {
-        title: "从子进程收集输出",
-        href: "/examples/subprocesses_output/",
-        type: "example",
-      },
-      {
-        title: "读取系统指标",
-        href: "/examples/reading_system_metrics/",
-        type: "example",
-      },
-      {
-        title: "进程信息",
-        href: "/examples/pid/",
-        type: "example",
-      },
-      {
-        title: "环境变量",
-        href: "/examples/environment_variables/",
-        type: "example",
-      },
-      {
-        title: "子进程：生成",
-        href: "/examples/subprocesses_spawn/",
-        type: "example",
-      },
-      {
-        title: "处理操作系统信号",
-        href: "/examples/os_signals_tutorial/",
-        type: "tutorial",
-      },
-    ],
+    title: "Detect a TTY and get terminal size",
+    href: "/examples/terminal_detection/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "文件系统",
-    items: [
-      {
-        title: "路径操作",
-        href: "/examples/path_operations/",
-        type: "example",
-      },
-      {
-        title: "读取文件",
-        href: "/examples/reading_files/",
-        type: "example",
-      },
-      {
-        title: "写入文件",
-        href: "/examples/writing_files/",
-        type: "example",
-      },
-      {
-        title: "删除文件",
-        href: "/examples/deleting_files/",
-        type: "example",
-      },
-      {
-        title: "检查文件是否存在",
-        href: "/examples/checking_file_existence/",
-        type: "example",
-      },
-      {
-        title: "移动/重命名文件",
-        href: "/examples/moving_renaming_files/",
-        type: "example",
-      },
-      {
-        title: "创建和删除目录",
-        href: "/examples/create_remove_directories/",
-        type: "example",
-      },
-      {
-        title: "监视文件系统",
-        href: "/examples/watching_files/",
-        type: "example",
-      },
-      {
-        title: "行走目录",
-        href: "/examples/walking_directories/",
-        type: "example",
-      },
-      {
-        title: "Unix 猫",
-        href: "/examples/unix_cat/",
-        type: "example",
-      },
-      {
-        title: "创建和解析符号链接",
-        href: "/examples/symlinks/",
-        type: "example",
-      },
-      {
-        title: "临时文件和目录",
-        href: "/examples/temporary_files/",
-        type: "example",
-      },
-      {
-        title: "流式文件操作",
-        href: "/examples/streaming_files/",
-        type: "example",
-      },
-      {
-        title: "解压缩 gzip 文件",
-        href: "/examples/unzip_gzipped_file/",
-        type: "example",
-      },
-    ],
+    title: "Get operating system information",
+    href: "/examples/os_info/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "加密",
-    items: [
-      {
-        title: "生成和验证 UUID",
-        href: "/examples/uuids/",
-        type: "example",
-      },
-      {
-        title: "ULID",
-        href: "/examples/ulid/",
-        type: "example",
-      },
-      {
-        title: "哈希",
-        href: "/examples/hashing/",
-        type: "example",
-      },
-      {
-        title: "RSASSA-PKCS1-v1_5 签名和验证",
-        href: "/examples/rsa_signature/",
-        type: "example",
-      },
-      {
-        title: "HMAC 生成和验证",
-        href: "/examples/hmac_generate_verify/",
-        type: "example",
-      },
-      {
-        title: "AES 加密和解密",
-        href: "/examples/aes_encryption/",
-        type: "example",
-      },
-    ],
+    title: "List network interfaces",
+    href: "/examples/network_interfaces/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "高级",
-    items: [
-      {
-        title: "文件系统事件",
-        href: "/examples/file_system_events_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "模块元数据",
-        href: "/examples/module_metadata_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "基于文件的路由",
-        href: "/examples/file_based_routing_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "使用 WebSockets 构建聊天应用",
-        href: "/examples/chat_app_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "LLM 聊天应用",
-        href: "/examples/llm_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "构建实时 WebSocket 应用",
-        href: "/examples/realtime_websocket_app/",
-        externalURL:
-          "https://www.youtube.com/watch?v=FC4IrkHEg4A&list=PLvvLnBDNuTEov9EBIp3MMfHlBxaKGRWTe&index=15",
-        type: "video",
-      },
-      {
-        title: "构建一个单词查找应用",
-        href: "/examples/word_finder_tutorial/",
-        type: "tutorial",
-      },
-      {
-        title: "连接到 OpenAI - 聊天补全",
-        href: "/examples/openai_chat_completion/",
-        type: "example",
-      },
-      {
-        title: "使用 Deno Collections 处理用户数据",
-        href: "/examples/data_processing/",
-        type: "example",
-      },
-      {
-        title: "指数退避",
-        href: "/examples/exponential_backoff/",
-        type: "example",
-      },
-    ],
+    title: "Set and read process exit codes",
+    href: "/examples/exit_codes/",
+    type: "example",
+    category: "System",
   },
   {
-    title: "不稳定的 API",
-    items: [
-      {
-        title: "Deno KV 监视",
-        href: "/examples/kv_watch/",
-        type: "example",
-      },
-      {
-        title: "Deno Cron",
-        href: "/examples/cron/",
-        type: "example",
-      },
-      {
-        title: "Deno 队列",
-        href: "/examples/queues/",
-        type: "example",
-      },
-      {
-        title: "Deno KV：键/值数据库",
-        href: "/examples/kv/",
-        type: "example",
-      },
-      {
-        title: "UDP 监听器：Ping",
-        href: "/examples/udp_listener/",
-        type: "example",
-      },
-      {
-        title: "UDP 连接器：Ping",
-        href: "/examples/udp_connector/",
-        type: "example",
-      },
-      {
-        title: "导入文本",
-        href: "/examples/importing_text/",
-        type: "example",
-      },
-      {
-        title: "导入字节",
-        href: "/examples/importing_bytes/",
-        type: "example",
-      },
-    ],
+    title: "Use worker_threads in Deno",
+    href: "/examples/worker_threads/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Use EventEmitter from node:events",
+    href: "/examples/event_emitter/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Read input line by line with node:readline",
+    href: "/examples/node_readline/",
+    type: "example",
+    category: "System",
+  },
+  {
+    title: "Read and change file metadata",
+    href: "/examples/file_metadata/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Find files with glob patterns",
+    href: "/examples/glob_patterns/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Lock files across processes",
+    href: "/examples/file_locking/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Truncate a file",
+    href: "/examples/truncate_file/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Create hard links",
+    href: "/examples/hard_links/",
+    type: "example",
+    category: "File system",
+  },
+  {
+    title: "Compile a script into an executable",
+    href: "/examples/deno_compile/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Write benchmarks with Deno.bench",
+    href: "/examples/write_benchmarks/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Find and update outdated dependencies",
+    href: "/examples/deno_outdated/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Show progress bars and spinners",
+    href: "/examples/progress_spinners/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Control the terminal with ANSI escape codes",
+    href: "/examples/ansi_terminal/",
+    type: "example",
+    category: "CLI",
+  },
+  {
+    title: "Build a CLI with subcommands",
+    href: "/examples/cli_subcommands/",
+    type: "example",
+    category: "CLI",
+  },
+
+  {
+    title: "Match URLs with URLPattern",
+    href: "/examples/url_pattern/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Cancel async work with AbortController",
+    href: "/examples/abort_controller/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Set a timeout on fetch",
+    href: "/examples/fetch_timeout/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Deep clone objects with structuredClone",
+    href: "/examples/structured_clone/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Build and send forms with FormData",
+    href: "/examples/form_data/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Create and dispatch custom events",
+    href: "/examples/event_target/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Communicate between workers with BroadcastChannel",
+    href: "/examples/broadcast_channel/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Transform data with TransformStream",
+    href: "/examples/transform_stream/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Format numbers and currencies",
+    href: "/examples/intl_number_format/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Format dates for any locale",
+    href: "/examples/intl_date_format/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Format relative time",
+    href: "/examples/intl_relative_time/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Pluralize and format lists",
+    href: "/examples/intl_plural_list/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Split text by words, sentences, and graphemes",
+    href: "/examples/intl_segmenter/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Measure performance with marks and measures",
+    href: "/examples/performance_timing/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Cache HTTP responses with the Web Cache API",
+    href: "/examples/web_cache_api/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Sign and verify data with ECDSA",
+    href: "/examples/ecdsa_signing/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Derive encryption keys from passwords",
+    href: "/examples/derive_aes_key/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Generate secure random values",
+    href: "/examples/secure_random_values/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Compare secrets in constant time",
+    href: "/examples/timing_safe_comparison/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Hash large files with streams",
+    href: "/examples/hash_file_streams/",
+    type: "example",
+    category: "Cryptography",
+  },
+  {
+    title: "Hash and sign with node:crypto",
+    href: "/examples/node_crypto/",
+    type: "example",
+    category: "Cryptography",
+  },
+
+  {
+    title: "Debounce a function",
+    href: "/examples/debounce_function/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Run async tasks with a concurrency limit",
+    href: "/examples/concurrency_limit/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Add a timeout to any promise",
+    href: "/examples/promise_timeout/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Memoize an expensive function",
+    href: "/examples/memoize_function/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Parse and compare semver versions",
+    href: "/examples/semver_versions/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Convert string case",
+    href: "/examples/string_case/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Escape text for regular expressions",
+    href: "/examples/regexp_escape/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Structured logging",
+    href: "/examples/structured_logging/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Format bytes and durations for humans",
+    href: "/examples/format_bytes_duration/",
+    type: "example",
+    category: "Standard library",
+  },
+  {
+    title: "Parse and format dates",
+    href: "/examples/date_format_parse/",
+    type: "example",
+    category: "Web standard APIs",
+  },
+  {
+    title: "Parsing and serializing INI",
+    href: "/examples/parsing_serializing_ini/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Parsing JSONC",
+    href: "/examples/parsing_jsonc/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Parse large CSV files as streams",
+    href: "/examples/csv_streaming/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Stream JSON Lines data",
+    href: "/examples/json_lines/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Encode and decode MessagePack",
+    href: "/examples/msgpack_encoding/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Encode and decode CBOR",
+    href: "/examples/cbor_encoding/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Compress data with node:zlib",
+    href: "/examples/zlib_compression/",
+    type: "example",
+    category: "Encoding",
+  },
+  {
+    title: "Create and extract tar archives",
+    href: "/examples/tar_archives/",
+    type: "example",
+    category: "File system",
+  },
+
+  {
+    title: "HTTP server: CORS",
+    href: "/examples/http_server_cors/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Cookies",
+    href: "/examples/http_server_cookies/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Sessions",
+    href: "/examples/http_server_sessions/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Basic authentication",
+    href: "/examples/http_server_basic_auth/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Rate limiting",
+    href: "/examples/http_server_rate_limit/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Graceful shutdown",
+    href: "/examples/http_server_graceful_shutdown/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Caching headers",
+    href: "/examples/http_server_static_caching/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Request timeouts",
+    href: "/examples/http_server_request_timeouts/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Health checks",
+    href: "/examples/http_server_health_checks/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Paginating results",
+    href: "/examples/http_server_pagination/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "HTTP server: Verifying webhook signatures",
+    href: "/examples/http_server_webhooks/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Generate an RSS feed",
+    href: "/examples/http_server_rss/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Generate sitemap.xml and robots.txt",
+    href: "/examples/http_server_sitemap/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Download a file with progress",
+    href: "/examples/download_progress/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Route fetch through an HTTP proxy",
+    href: "/examples/fetch_http_proxy/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Find a free port",
+    href: "/examples/find_free_port/",
+    type: "example",
+    category: "Network",
+  },
+  {
+    title: "Creating and verifying JWT",
+    href: "/examples/creating_and_verifying_jwt/",
+    type: "example",
+    category: "Network",
+  },
+];
+
+// Section order on the landing page and in the sidebar.
+export const categoryOrder = [
+  "Basics",
+  "Modules and package management",
+  "Network",
+  "File system",
+  "System",
+  "Web standard APIs",
+  "Standard library",
+  "Encoding",
+  "CLI",
+  "Cryptography",
+  "Testing",
+  "Web frameworks and libraries",
+  "Databases",
+  "Deno KV and scheduling",
+  "AI",
+  "Deploying Deno projects",
+  "OpenTelemetry",
+  "Deno Sandbox",
+];
+
+// Grouped, alphabetized view consumed by the landing page and sidebars.
+export const sidebar = categoryOrder.map((title) => ({
+  title,
+  items: items
+    .filter((item) => item.category === title)
+    .toSorted((a, b) =>
+      a.title.localeCompare(b.title, "en", { sensitivity: "base" })
+    ),
+}));
+
+export const featuredItems = [
+  {
+    title: "HTTP Server: Hello world",
+    href: "/examples/http_server/",
+    type: "example",
+    description: "Spin up a web server with Deno.serve in a few lines.",
+  },
+  {
+    title: "Writing tests",
+    href: "/examples/writing_tests/",
+    type: "example",
+    description: "Use the built-in test runner, no dependencies needed.",
+  },
+  {
+    title: "Build a Next.js app",
+    href: "/examples/next_tutorial/",
+    type: "tutorial",
+    description: "Run a full-stack React framework on Deno.",
+  },
+  {
+    title: "Connecting to databases",
+    href: "/examples/connecting_to_databases_tutorial/",
+    type: "tutorial",
+    description: "Postgres, MySQL, MongoDB, SQLite and more.",
+  },
+  {
+    title: "Deploy with Deno Deploy",
+    href: "/examples/deno_deploy_tutorial/",
+    type: "tutorial",
+    description: "Ship your app to the edge in minutes.",
+  },
+  {
+    title: "Built in TypeScript support",
+    href: "/examples/typescript_support/",
+    type: "video",
+    description: "Run TypeScript directly, with zero configuration.",
   },
 ];
 

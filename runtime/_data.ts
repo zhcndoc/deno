@@ -4,7 +4,7 @@ import { Sidebar } from "../types.ts";
 
 export const sidebar = [
   {
-    title: "入门",
+    title: "Get started",
     items: [
       {
         title: "欢迎使用 Deno",
@@ -13,10 +13,6 @@ export const sidebar = [
       {
         title: "安装",
         href: "/runtime/getting_started/installation/",
-      },
-      {
-        title: "第一个项目",
-        href: "/runtime/getting_started/first_project/",
       },
       {
         title: "设置你的环境",
@@ -29,7 +25,97 @@ export const sidebar = [
     ],
   },
   {
-    title: "基础知识",
+    title: "Guides",
+    items: [
+      {
+        title: "Running code",
+        href: "/runtime/run/",
+      },
+      {
+        title: "Dependency management",
+        href: "/runtime/packages/",
+        disclosure: true,
+        items: [
+          {
+            title: "Publishing",
+            href: "/runtime/packages/publishing/",
+          },
+          {
+            title: "Supply chain",
+            href: "/runtime/packages/supply_chain/",
+          },
+          {
+            title: "Private repositories",
+            href: "/runtime/packages/private_repositories/",
+          },
+        ],
+      },
+      {
+        title: "Web development",
+        href: "/runtime/fundamentals/web_dev/",
+      },
+      {
+        title: "HTTP Server",
+        href: "/runtime/fundamentals/http_server/",
+      },
+      {
+        title: "Testing",
+        href: "/runtime/test/",
+        disclosure: true,
+        items: [
+          {
+            title: "Mocking",
+            href: "/runtime/test/mocking/",
+          },
+          {
+            title: "Snapshots",
+            href: "/runtime/test/snapshots/",
+          },
+          {
+            title: "Coverage",
+            href: "/runtime/test/coverage/",
+          },
+          {
+            title: "Documentation tests",
+            href: "/runtime/test/doc_tests/",
+          },
+          {
+            title: "Sanitizers",
+            href: "/runtime/test/sanitizers/",
+          },
+          {
+            title: "Migrating from Jest",
+            href: "/runtime/test/migrate_from_jest/",
+          },
+        ],
+      },
+      {
+        title: "Linting and formatting",
+        href: "/runtime/lint_and_format/",
+      },
+      {
+        title: "Debugging",
+        href: "/runtime/fundamentals/debugging/",
+        disclosure: true,
+        items: [
+          {
+            title: "CPU profiling",
+            href: "/runtime/fundamentals/cpu_profiling/",
+          },
+        ],
+      },
+      {
+        title: "Migrating from Node",
+        href: "/runtime/migrate/",
+      },
+      {
+        title: "Building CLI apps",
+        href: "/runtime/cli_apps/",
+      },
+    ],
+  },
+  {
+    title: "Concepts",
     items: [
       {
         title: "TypeScript",
@@ -44,60 +130,81 @@ export const sidebar = [
         href: "/runtime/fundamentals/security/",
       },
       {
-        title: "模块和依赖",
+        title: "Modules",
         href: "/runtime/fundamentals/modules/",
       },
       {
-        title: "配置",
+        title: "Config files",
         href: "/runtime/fundamentals/configuration/",
-      },
-      {
-        title: "Web 开发",
-        href: "/runtime/fundamentals/web_dev/",
-      },
-      {
-        title: "测试",
-        href: "/runtime/fundamentals/testing/",
-      },
-      {
-        title: "调试",
-        href: "/runtime/fundamentals/debugging/",
       },
       {
         title: "工作空间",
         href: "/runtime/fundamentals/workspaces/",
       },
       {
-        title: "代码检查和格式化",
-        href: "/runtime/fundamentals/linting_and_formatting/",
+        title: "Stability and releases",
+        href: "/runtime/fundamentals/stability_and_releases/",
       },
-      {
-        title: "HTTP 服务器",
-        href: "/runtime/fundamentals/http_server/",
-      },
+    ],
+  },
+  {
+    title: "Advanced",
+    items: [
       {
         title: "FFI",
         href: "/runtime/fundamentals/ffi/",
       },
       {
-        title: "OpenTelemetry",
-        href: "/runtime/fundamentals/open_telemetry/",
+        title: "WebAssembly",
+        href: "/runtime/reference/wasm/",
       },
       {
         title: "Cron",
         href: "/runtime/fundamentals/cron/",
       },
       {
-        title: "稳定性和发布",
-        href: "/runtime/fundamentals/stability_and_releases/",
+        title: "OpenTelemetry",
+        href: "/runtime/fundamentals/open_telemetry/",
+      },
+      {
+        title: "Loader hooks",
+        href: "/runtime/reference/loader_hooks/",
+      },
+      {
+        title: "Lint plugins",
+        href: "/runtime/reference/lint_plugins/",
+      },
+      {
+        title: "Bundling",
+        href: "/runtime/reference/bundling/",
+      },
+      {
+        title: "Docker",
+        href: "/runtime/reference/docker/",
+      },
+      {
+        title: "Continuous integration",
+        href: "/runtime/reference/continuous_integration/",
+      },
+      {
+        title: "JSX and React",
+        href: "/runtime/reference/jsx/",
+      },
+      {
+        title: "Deno & VS Code",
+        href: "/runtime/reference/vscode/",
       },
     ],
   },
   {
-    title: "参考指南",
+    title: "Reference",
     items: [
       {
-        title: "命令行接口",
+        title: "Overview",
+        href: "/runtime/reference/",
+      },
+      {
+        title: "CLI",
         href: "/runtime/reference/cli/",
         items: [
           {
@@ -320,94 +427,45 @@ export const sidebar = [
         ],
       },
       {
-        title: "配置 TypeScript",
-        href: "/runtime/reference/ts_config_migration/",
+        title: "deno.json",
+        href: "/runtime/reference/deno_json/",
       },
       {
-        title: "持续集成",
-        href: "/runtime/reference/continuous_integration/",
+        title: "TypeScript",
+        href: "/runtime/reference/ts_config_migration/",
       },
       {
         title: "环境变量",
         href: "/runtime/reference/env_variables/",
       },
       {
-        title: "Deno 与 VS Code",
-        href: "/runtime/reference/vscode/",
-      },
-      {
-        title: "使用 JSX 和 React",
-        href: "/runtime/reference/jsx/",
-      },
-      {
-        title: "在文档中测试代码",
-        href: "/runtime/reference/documentation/",
-      },
-      {
-        title: "捆绑",
-        href: "/runtime/reference/bundling/",
-      },
-      {
-        title: "Lint 插件",
-        href: "/runtime/reference/lint_plugins/",
-      },
-      {
-        title: "Module customization hooks",
-        href: "/runtime/reference/module_hooks/",
-      },
-      {
-        title: "WebAssembly",
-        href: "/runtime/reference/wasm/",
-      },
-      {
-        title: "迁移指南",
-        href: "/runtime/reference/migration_guide/",
+        title: "Permissions",
+        href: "/runtime/reference/permissions/",
       },
       {
         title: "语言服务器集成",
         href: "/runtime/reference/lsp_integration/",
       },
       {
-        title: "Deno 与 Docker",
-        href: "/runtime/reference/docker/",
+        title: "Lint rules",
+        href: "/lint/",
       },
     ],
   },
   {
-    title: "贡献与支持",
+    title: "Contributing",
     items: [
       {
-        title: "为 Deno 做出贡献",
-        items: [
-          {
-            title: "贡献概述",
-            href: "/runtime/contributing/",
-          },
-          {
-            title: "内部细节",
-            href: "/runtime/contributing/architecture/",
-          },
-          {
-            title: "分析",
-            href: "/runtime/contributing/profiling/",
-          },
-          {
-            title: "发布计划",
-            href: "/runtime/contributing/release_schedule/",
-          },
-          {
-            title: "风格指南",
-            href: "/runtime/contributing/style_guide/",
-          },
-          {
-            title: "文档",
-            href: "/runtime/contributing/docs/",
-          },
-          {
-            title: "示例",
-            href: "/runtime/contributing/examples/",
-          },
-        ],
+        title: "Overview",
+        href: "/runtime/contributing/",
+      },
+      {
+        title: "Architecture",
+        href: "/runtime/contributing/architecture/",
+      },
+      {
+        title: "Style guide",
+        href: "/runtime/contributing/style_guide/",
       },
       {
         title: "帮助",

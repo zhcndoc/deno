@@ -14,8 +14,8 @@ oldUrl:
 deno init my_project
 ```
 
-其中 `my_project` 是你的项目名称。你可以
-[阅读更多关于项目结构的信息](/runtime/getting_started/first_project/)。
+`my_project` 是你的项目名称。你可以
+[进一步了解项目结构](/runtime/)。
 
 ### 运行你的项目
 
@@ -50,7 +50,7 @@ deno test
 ```
 
 这将执行项目中的所有测试。你可以阅读更多关于
-[在 Deno 中测试的信息](/runtime/fundamentals/testing/)，我们将在稍后的教程中更深入地讨论测试。此时你有一个测试文件 `main_test.ts`，它测试 `main.ts` 中的 `add` 函数。
+[Deno 中的测试](/runtime/test/) 的内容，我们会在后面的教程中更深入地讲解测试。目前你有一个测试文件，`main_test.ts`，它测试 `main.ts` 中的 `add` 函数。
 
 ### 向你的项目添加内容
 

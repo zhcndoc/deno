@@ -9,7 +9,7 @@ description: "移除缓存的依赖以便干净地开始"
 
 `deno clean` 会移除 Deno 的全局模块缓存目录。有关 Deno
 如何缓存依赖的更多信息，请参阅
-[Modules](/runtime/fundamentals/modules/)。
+[模块](/runtime/fundamentals/modules/)。
 
 ## 基本用法
 
@@ -25,12 +25,13 @@ deno clean
 deno clean --dry-run
 ```
 
-## 保留特定缓存
+## 保留项目仍需要的内容
 
-使用 `--except` 在清理其余缓存类型时保留某些缓存类型：
+使用一个或多个入口点与 `--except` 一起，移除缓存中的所有内容，
+但保留这些文件所需的数据：
 
 ```sh
-deno clean --except=npm,jsr
+deno clean --except main.ts
 ```
 
 ## 何时使用此命令
