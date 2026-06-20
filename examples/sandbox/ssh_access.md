@@ -1,5 +1,6 @@
 ---
-title: "为沙箱提供 SSH 访问权限"
+last_modified: 2026-02-09
+title: "向沙箱提供 SSH 访问权限"
 description: "了解如何为沙箱提供 SSH 访问权限。"
 url: /examples/sandbox_ssh_access/
 layout: sandbox-example.tsx

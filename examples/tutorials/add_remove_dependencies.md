@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "添加和移除依赖"
-description: "使用 deno add 和 deno remove 管理项目依赖：npm 和 JSR 包、版本锁定、开发依赖，以及在 import map 中为包设置别名。"
+description: "使用 deno add 和 deno remove 管理项目依赖：npm 和 JSR 包、版本固定、开发依赖，以及在 import map 中为包设置别名。"
 url: /examples/add_remove_dependencies_tutorial/
 ---
 

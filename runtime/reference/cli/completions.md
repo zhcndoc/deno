@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-04-24
+last_modified: 2026-06-17
 title: "deno completions"
 oldUrl: /runtime/manual/tools/completions/
 command: completions
@@ -10,7 +10,14 @@ description: "为 Deno 生成 shell 补全"
 
 您可以使用输出脚本来配置 `deno` 命令的自动补全。
 
-例如：`deno un` -> <kbd>Tab</kbd> -> `deno uninstall`。
+:::note
+
+如果你通过 Homebrew 安装了 Deno，只要你的 shell 已配置为从 Homebrew 的补全目录加载补全脚本，shell 补全就会自动安装并保持最新。在这种情况下，你无需手动运行
+`deno completions`。
+
+:::
+
+## Examples
 
 ## 示例
 

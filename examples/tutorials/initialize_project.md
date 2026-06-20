@@ -11,7 +11,21 @@ oldUrl:
 通过运行以下命令初始化一个新项目：
 
 ```sh
-deno init my_project
+$ deno init my_project
+✅ 项目已初始化
+
+运行以下命令以开始使用
+
+  cd my_project
+
+  # 运行服务器
+  deno run --allow-net main.ts
+
+  # 运行服务器并监视文件变化
+  deno task dev
+
+  # 运行测试
+  deno test
 ```
 
 `my_project` 是你的项目名称。你可以
@@ -28,14 +42,17 @@ cd my_project
 然后你可以直接使用 `deno task` 命令运行项目：
 
 ```sh
-deno run dev
+$ deno task dev
+Task dev deno run --watch --allow-net main.ts
+Watcher Process started.
+Listening on http://0.0.0.0:8000/ (http://localhost:8000/)
 ```
 
 查看你新项目中的 `deno.json` 文件。你应该在 "tasks" 字段看到一个 `dev` 任务。
 
 ```json title="deno.json"
 "tasks": {
-  "dev": "deno run --watch main.ts"
+  "dev": "deno run --watch --allow-net main.ts"
 },
 ```
 
@@ -46,15 +63,21 @@ deno run dev
 在项目目录中运行：
 
 ```sh
-deno test
+$ deno test
+Check main_test.ts
+running 2 tests from ./main_test.ts
+returns html on / ... ok (11ms)
+returns json on /api ... ok (0ms)
+
+ok | 2 passed | 0 failed (13ms)
 ```
 
 这将执行项目中的所有测试。你可以阅读更多关于
-[Deno 中的测试](/runtime/test/) 的内容，我们会在后面的教程中更深入地讲解测试。目前你有一个测试文件，`main_test.ts`，它测试 `main.ts` 中的 `add` 函数。
+[Deno 中的测试](/runtime/test/) 的内容，我们会在后续教程中更深入地介绍测试。目前你有一个测试文件 `main_test.ts`，它测试 `main.ts` 中的请求处理程序。
 
 ### 向你的项目添加内容
 
-`main.ts` 文件作为应用程序的入口点。在这里编写主要的程序逻辑。在开发项目时，你将从删除默认的加法程序开始，并将其替换为自己的代码。例如，如果你正在构建一个网络服务器，这里就是你设置路由和处理请求的地方。
+`main.ts` 文件是你应用程序的入口点。你将在这里编写主要的程序逻辑。在开发项目时，你通常会先用自己的代码替换默认的 HTTP 服务器；它的路由和请求处理程序只是一个起点，供你在此基础上继续构建。
 
 除了初始文件外，你还可能会创建其他模块（文件）来组织代码。考虑将相关功能分组成单独的文件。请记住，Deno [支持 ES 模块](/runtime/fundamentals/modules/)，因此你可以使用导入和导出语句来组织代码。
 

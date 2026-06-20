@@ -1,6 +1,7 @@
 ---
-title: "测试清理器"
-description: "Deno 的测试清理器可以捕获测试中的异步操作泄漏、资源泄漏以及意外退出。了解每种清理器检查什么，以及如何启用它们。"
+last_modified: 2026-06-12
+title: "Test sanitizers"
+description: "Deno 的测试清理器会捕获测试中泄漏的异步操作、资源和意外退出。了解每个清理器检查什么，以及如何启用它们。"
 oldUrl:
   - /runtime/manual/basics/testing/sanitizers/
 ---

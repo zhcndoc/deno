@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-13
+last_modified: 2026-06-18
 title: "外部函数接口（FFI）"
-description: "了解如何使用 Deno 的外部函数接口（FFI）直接从 JavaScript 或 TypeScript 调用本地库。内容包括示例、最佳实践和安全注意事项。"
+description: "了解如何使用 Deno 的外部函数接口（FFI）从 JavaScript 或 TypeScript 直接调用本地库。包含示例、最佳实践和安全注意事项。"
 ---
 
 Deno 的外部函数接口（FFI）允许 JavaScript 和 TypeScript 代码
@@ -67,6 +67,67 @@ console.log(dylib.symbols.add(5, 3)); // 8
 dylib.close();
 ```
 
+## 加载库
+
+[`Deno.dlopen()`](/api/deno/~/Deno.dlopen) 的第一个参数是动态库的路径。Deno 会将此路径交给操作系统的动态加载器（Linux 和 macOS 上是 `dlopen`，Windows 上是 `LoadLibrary`），因此文件的定位方式遵循操作系统规则，而不是 Deno 的模块解析规则。
+
+指定库有两种方式：
+
+- **带分隔符的路径**（例如 `"./libexample.so"` 或
+  `"/usr/lib/libexample.so"`）会从该确切位置打开。像 `"./libexample.so"` 这样的 _相对_ 路径是相对于**进程的当前工作目录**解析的，而不是相对于你的 `.ts` 文件位置。这是“无法打开库”错误的常见来源：从不同目录运行同一个脚本会改变 Deno 的查找位置。
+- **裸名称**，即不带分隔符的名称（例如 `"libexample.so"`），则由操作系统在其标准搜索路径中查找。在 Linux 上，这意味着 `LD_LIBRARY_PATH` 和系统缓存（如 `/usr/lib`）；在 macOS 上是 `DYLD_*` 路径；在 Windows 上是可执行文件所在目录、系统目录以及 `PATH`。对于已经系统级安装的库，请使用这种形式。
+
+### 让路径相对于你的模块解析
+
+如果你想加载与源文件放在一起的库，而不受当前工作目录影响，请使用 `import.meta.url` 来解析路径，而不是使用裸相对字符串：
+
+```ts
+// 始终指向位于此模块旁边的 libexample.so。
+const path = new URL("./libexample.so", import.meta.url).pathname;
+
+const dylib = Deno.dlopen(
+  path,
+  {
+    add: { parameters: ["i32", "i32"], result: "i32" },
+  } as const,
+);
+```
+
+这种模式在由 [`deno compile`](/runtime/reference/cli/compile/) 生成的可执行文件中也同样适用（见下文）。
+
+### 使用 `deno compile` 捆绑库
+
+[`Deno.dlopen`](/api/deno/~/Deno.dlopen) 需要磁盘上的真实文件，因此动态库不会自动嵌入到编译后的二进制文件中。请使用 `--include` 标志显式包含它：
+
+```sh
+deno compile --allow-ffi --include libexample.so main.ts
+```
+
+运行时，Deno 会将包含的库解压到临时目录，并将 `import.meta.url` 指向那里，因此使用 `new URL("./libexample.so", import.meta.url).pathname` 解析其路径的模块（如上所示）能够找到打包后的副本，而生成的二进制文件也能在未安装该库的机器上运行。如果你不捆绑该库，可以将其与可执行文件一起分发，并通过相对于二进制文件的路径加载，或者依赖上面描述的系统搜索路径。
+
+### 处理加载失败
+
+当库无法加载或声明的符号缺失时，[`Deno.dlopen`](/api/deno/~/Deno.dlopen) 会同步抛出错误，因此请将调用包裹在 `try`/`catch` 中，以优雅地失败：
+
+```ts
+let dylib;
+try {
+  dylib = Deno.dlopen(
+    "./libexample.so",
+    {
+      add: { parameters: ["i32", "i32"], result: "i32" },
+    } as const,
+  );
+} catch (err) {
+  // 文件缺失或不可读会报告 "Could not open library: ..."。
+  // 缺失函数会报告 "Failed to register symbol <name>: ..."。
+  console.error("加载本地库失败：", err.message);
+  Deno.exit(1);
+}
+```
+
+错误信息会区分这两种常见情况：文件本身无法打开（路径错误、文件缺失或架构不匹配），或者文件已加载但你声明的某个符号在其中未找到。
+
 ## 支持的类型
 
 Deno 的 FFI 支持多种参数和返回值数据类型：
@@ -89,7 +150,7 @@ Deno 的 FFI 支持多种参数和返回值数据类型：
 | `pointer`              | `{} \| null`         | `void *`                 | `*mut c_void`             |
 | `buffer`[2]            | `TypedArray \| null` | `uint8_t *`              | `*mut u8`                 |
 | `function`[3]          | `{} \| null`         | `void (*fun)()`          | `Option<extern "C" fn()>` |
-| `{ struct: [...] }`[4] | `TypedArray`         | `struct MyStruct`        | `MyStruct`                |
+| `{ struct: [...] }[4]` | `TypedArray`         | `struct MyStruct`        | `MyStruct`                |
 
 截至 Deno 1.25，`pointer` 类型已拆分为 `pointer` 和
 `buffer` 类型，以确保用户能够利用 Typed Array 的优化；截至 Deno 1.31，`pointer` 的 JavaScript 表示已变为

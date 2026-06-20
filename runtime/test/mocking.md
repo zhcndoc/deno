@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "模拟与测试替身"
-description: "使用 Deno Standard Library 的 @std/testing 包，通过间谍、存根、模拟对象和虚拟时间隔离被测代码。"
+description: "使用 Deno Standard Library 的 @std/testing 包，通过间谍、存根、模拟对象和虚拟时间来隔离被测代码。"
 oldUrl:
   - /runtime/manual/basics/testing/mocking/
   - /examples/mocking_tutorial/

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-18
 title: "deno x"
 command: x
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -67,6 +67,15 @@ deno x -p typescript@5 tsc
 解析该包的二进制入口点，并执行它。该包不会被添加到你项目的
 [`deno.json`](/runtime/fundamentals/configuration/) 或
 `package.json` 中。
+
+## 使用 `deno x` 编写包
+
+`deno x` 如何找到要执行的内容取决于注册表：
+
+- **npm 包** 通过 `package.json` 中的 `bin` 字段暴露可运行的二进制文件。`deno x npm:<package>` 会运行该包的默认二进制文件，而 `deno x -p <package> <binary>`（或 `deno x npm:<package>/<binary>`）会在一个包提供多个二进制文件时选择其中一个。要让你自己的 npm 包可运行，请像为 `npx` 那样通过 `bin` 条目发布它。
+- **JSR 包** 通过让 `deno x` 指向一个在导入时会执行的导出来运行，例如 `deno x jsr:@std/http/file-server`。要让你自己的 JSR 包可运行，请将入口点作为模块导出，并用 `import.meta.main` 保护顶层副作用（这样该模块仍然可以作为库被导入），然后记录用户应运行的子路径，例如 `deno x jsr:@you/tool/cli`。
+
+如果你希望工具作为一个永久命令可用，而不是按需运行，请使用 [`deno install`](/runtime/reference/cli/install/) 安装它，或者将其编译为独立可执行文件。完整工作流程请参见 [构建 CLI 应用](/runtime/cli_apps/)，发布到 JSR 请参见 [发布模块](/runtime/packages/publishing/)。
 
 ## 权限
 

@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-01-28
 title: 安全性
 description: "了解 Deno Sandbox 背后的纵深防御模型：隔离、密钥、网络控制和审计。"
 ---

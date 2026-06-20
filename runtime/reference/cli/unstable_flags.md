@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-03-05
-title: "不稳定的功能标志"
+last_modified: 2026-06-17
+title: "不稳定功能标志"
 oldUrl:
   - /runtime/tools/unstable_flags/
   - /runtime/manual/tools/unstable_flags/
@@ -160,7 +160,7 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 
 ## `--unstable-cron`
 
-启用此标志后，[`Deno.cron`](/runtime/fundamentals/cron/) API 将可在 `Deno` 命名空间中使用。
+启用此标志后，[`Deno.cron`](/api/deno/~/Deno.cron) API 将可在 `Deno` 命名空间中使用。
 
 ## `--unstable-kv`
 
@@ -176,6 +176,22 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 ## `--unstable-otel`
 
 启用 [OpenTelemetry 集成用于 Deno](/runtime/fundamentals/open_telemetry)。此功能现在已稳定，因此在 [Deno 2.4](https://deno.com/blog/v2.4)+ 中不再需要此标志。
+
+## `--unstable-bundle`
+
+启用不稳定的 [`Deno.bundle`](/api/deno/~/Deno.bundle) 运行时 API，用于以编程方式打包 JavaScript 和 TypeScript。另请参阅 [`deno bundle`](/runtime/reference/cli/bundle/) 命令。
+
+## `--unstable-lazy-dynamic-imports`
+
+在不进行类型检查时，延迟加载可静态分析的动态导入，而不是立即加载它们。请注意，这可能会更改 semver 规范符的解析顺序。
+
+## `--unstable-npm-lazy-caching`
+
+仅在 npm 依赖项实际被导入引用时才下载它们，而不是在启动时安装 `package.json` 中列出的每个 npm 包。
+
+## `--unstable-no-legacy-abort`
+
+在 [`Deno.serve`](/api/deno/~/Deno.serve) 中使用中止信号，而不使用旧版行为。启用此标志后，当请求成功处理时，服务器不会被中止。
 
 ## `--unstable`
 
@@ -223,3 +239,13 @@ console.log(`下一周: ${nextWeek}`);
 const zonedDateTime = Temporal.Now.zonedDateTimeISO("America/New_York");
 console.log(`纽约时间: ${zonedDateTime}`);
 ```
+
+## `--unstable-tsgo`
+
+使用 TypeScript 的原生编译器（用 Go 编写）进行类型检查，这通常比默认的 JavaScript `tsc` 快约 10 倍。Deno 将原生编译器与其自身的模块解析和类型系统集成，因此 Deno 代码可以正常进行类型检查。
+
+```sh
+deno check --unstable-tsgo main.ts
+```
+
+也可以通过 `DENO_UNSTABLE_TSGO=1` 环境变量启用，或在 `deno.json` 中设置 `"unstable": ["tsgo"]`。这是一个预览功能，尚未完全具备所有功能。详情请参阅 [TypeScript](/runtime/fundamentals/typescript/#faster-type-checking-with-the-native-compiler-tsgo)。

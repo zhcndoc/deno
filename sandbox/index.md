@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: "Deno 沙箱"
-description: "Deno Deploy 上 Deno 沙箱微虚拟机平台的概览，包括其功能、安全模型和理想使用场景。"
+description: "Deno Deploy 上 Deno 沙箱 microVM 平台概览，包括其能力、安全模型和理想使用场景。"
 ---
 
 Deno 沙箱为 Deno Deploy 带来了即时的 Linux 微虚拟机。每个沙箱启动时间不到一秒，且通过 `@deno/sandbox` SDK 完全由 API 驱动，并且一旦使用完毕立即销毁。结果是按需计算，感觉就像打开了一个终端，但拥有生产级的隔离和可观察性。

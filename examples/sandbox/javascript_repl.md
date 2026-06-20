@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-01-27
 title: "交互式 JavaScript REPL"
-description: "学习如何在沙箱中提供交互式的 Deno REPL。"
+description: "了解如何在沙箱中提供一个交互式 Deno REPL。"
 url: /examples/sandbox_javascript_repl/
 layout: sandbox-example.tsx
 ---

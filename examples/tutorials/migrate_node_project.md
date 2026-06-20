@@ -1,6 +1,7 @@
 ---
-title: "在现有 Node.js 项目中使用 Deno"
-description: "无需重写即可用 Deno 运行现有的 Node.js 项目：从 package.json 安装，使用 deno task 运行 npm 脚本，使用 node: 内置模块，并逐步采用 Deno 内置工具链。"
+last_modified: 2026-06-11
+title: "在现有的 Node.js 项目中使用 Deno"
+description: "无需重写即可使用 Deno 运行现有的 Node.js 项目：从 package.json 安装依赖，使用 deno task 运行 npm 脚本，使用 node: 内置模块，并逐步采用 Deno 内置工具链。"
 url: /examples/migrate_node_project_tutorial/
 ---
 

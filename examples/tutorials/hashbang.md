@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-21
+last_modified: 2026-06-17
 title: "可执行脚本"
-description: "Deno 可执行脚本创建指南。了解 hashbang、文件权限、跨平台兼容性，以及如何创建可直接从终端运行的命令行工具。"
+description: "使用 Deno 创建可执行脚本的指南。了解 hashbang、文件权限、跨平台兼容性，以及如何创建可直接从终端运行的命令行工具。"
 url: /examples/hashbang_tutorial/
 oldUrl:
   - /runtime/manual/examples/hashbang/
@@ -34,7 +34,13 @@ console.log(`Hello, ${name}!`);
 
 第一行就是哈希 bang。它会告诉系统使用 `/usr/bin/env` 运行该文件，随后由它在您的 `PATH` 中找到 `deno`，并在脚本上调用 `deno run`。`-S` 标志会将 `deno run` 拆分为单独的参数，从而使 `env` 能正确处理；如果没有 `-S`，整个字符串会作为一个参数名传入，`env` 将无法找到名为 `deno run` 的程序。这里没有 `--allow-*` 标志，因为脚本只读取 `Deno.args`，这始终可用。只有当脚本尝试使用受沙箱限制的 API 时，Deno 才会提示权限请求。
 
-`Deno.args` 是命令行中跟在脚本名后面的参数数组。`Deno.args[0]` 是第一个参数；当未提供参数时，`?? "world"` 会替换为 `"world"`。
+:::note
+
+`-S` 标志是 GNU coreutils 和 BSD/macOS `env` 提供的扩展。它不是 POSIX 的一部分，因此在提供更精简 `env` 的系统上（例如某些嵌入式或 BusyBox 环境）hashbang 可能无法工作。在这些系统上，请改为使用 `deno run script.ts` 显式运行脚本。
+
+:::
+
+`Deno.args` 是命令行中脚本名后面的参数数组。`Deno.args[0]` 是第一个参数；当未提供参数时，`?? "world"` 会替换为 `"world"`。
 
 ### 执行脚本
 

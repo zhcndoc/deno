@@ -6,6 +6,7 @@ url: /examples/prisma_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/prisma/
   - /runtime/tutorials/how_to_with_npm/prisma/
+  - /examples/prisma/
 ---
 
 [Prisma](https://prisma.io) 一直以来都是我们在 Deno 中最受欢迎的模块之一。鉴于 Prisma 的开发者体验非常出色，并且与众多持久数据存储技术兼容，需求是可以理解的。
@@ -16,7 +17,7 @@ oldUrl:
 
 让我们开始吧。
 
-[查看源代码](https://github.com/denoland/examples/tree/main/with-prisma) 或者 [查看视频教程](https://youtu.be/P8VzA_XSF8w)。
+[查看源代码](https://github.com/denoland/examples/tree/main/with-prisma).
 
 ## 设置应用程序
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-07-11
+last_modified: 2026-06-15
 title: "如何将遥测数据导出到 HyperDX"
-description: "使用 OpenTelemetry 和 HyperDX 导出遥测数据的完整指南。学习如何配置采集器、可视化追踪、日志、指标，并有效调试分布式应用。"
+description: "使用 OpenTelemetry 和 HyperDX 导出遥测数据的完整指南。了解如何配置采集器，并有效地可视化追踪、日志、指标以及调试分布式应用程序。"
 url: /examples/hyperdx_tutorial/
 ---
 
@@ -34,7 +34,7 @@ url: /examples/hyperdx_tutorial/
 [OpenAI](https://platform.openai.com/signup) 注册账号并创建新的密钥来获得。你可以在
 OpenAI 账号的
 [API keys 部分](https://platform.openai.com/account/api-keys)
-找到你的 API 密钥。拿到 API 密钥后，在你的 `.env` 文件中设置一个 `OPENAI_API-KEY` 环境变量：
+找到你的 API 密钥。拿到 API 密钥后，在你的 `.env` 文件中设置一个 `OPENAI_API_KEY` 环境变量：
 
 ```env title=".env"
 OPENAI_API_KEY=your_openai_api_key
@@ -161,10 +161,10 @@ deno run --allow-net --allow-env --env-file --allow-read main.ts
 
 🦕 现在你的遥测导出已经可以工作了，你可以：
 
-1. 添加自定义 span 和属性，以更好地理解你的应用
-2. 基于延迟或错误条件设置告警
-3. 使用类似以下平台把你的应用和采集器部署到生产环境：
-   - [Fly.io](https://docs.deno.com/examples/deploying_deno_with_docker/)
+1. 添加自定义 span 和属性，以便更好地了解你的应用程序
+2. 根据延迟或错误条件设置告警
+3. 使用以下平台将你的应用程序和采集器部署到生产环境：
+   - [Fly.io](https://docs.deno.com/runtime/reference/docker/)
    - [Digital Ocean](https://docs.deno.com/examples/digital_ocean_tutorial/)
    - [AWS Lightsail](https://docs.deno.com/examples/aws_lightsail_tutorial/)
 

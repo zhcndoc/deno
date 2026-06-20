@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "测试覆盖率"
-description: "使用 deno test --coverage 收集覆盖率数据，并将其转换为终端摘要、HTML 报告以及供 CI 使用的 lcov 文件，可通过 deno coverage 实现。"
+description: "使用 deno test --coverage 收集覆盖率数据，并将其转换为终端摘要、HTML 报告和用于 CI 的 lcov 文件，配合 deno coverage 使用。"
 oldUrl:
   - /runtime/manual/basics/testing/coverage/
 ---

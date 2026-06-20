@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-08
+last_modified: 2026-06-16
 title: "Deno CLI 子命令"
 oldUrl: "/runtime/reference/cli/all_commands"
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -38,18 +38,19 @@ Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运
 ## 工具
 
 - [deno bench](/runtime/reference/cli/bench/) - 基准测试工具
-- [deno check](/runtime/reference/cli/check/) - 在不运行程序的情况下对其进行
-  类型检查
+- [deno check](/runtime/reference/cli/check/) - 在不运行程序的情况下对你的程序进行类型检查
 - [deno compile](/runtime/reference/cli/compile/) - 将程序编译为一个
   独立可执行文件
 - [deno completions](/runtime/reference/cli/completions/) - 生成 shell
   补全
 - [deno coverage](/runtime/reference/cli/coverage/) - 生成测试覆盖率
   报告
-- [deno create](/runtime/reference/cli/create/) - 使用模板搭建一个新的项目
+- [deno create](/runtime/reference/cli/create/) - 使用一个
+  模板搭建新项目
 - [deno doc](/runtime/reference/cli/doc/) - 为一个模块生成文档
 - [deno deploy](/runtime/reference/cli/deploy) - 管理并发布你的
   Web 项目
+- [deno desktop](/runtime/reference/cli/desktop/) - 基于当前 Deno 项目构建桌面应用
 - [deno fmt](/runtime/reference/cli/fmt/) - 格式化你的代码
 - [deno info](/runtime/reference/cli/info/) - 检查一个 ES 模块及其所有
   依赖项
@@ -57,8 +58,7 @@ Deno CLI（命令行接口）允许你通过终端或命令提示符与 Deno 运
 - [deno jupyter](/runtime/reference/cli/jupyter/) - 运行一个 Jupyter 笔记本
 - [deno lint](/runtime/reference/cli/lint/) - 对你的代码进行 lint
 - [deno lsp](/runtime/reference/cli/lsp/) - 语言服务器协议集成
-- [deno pack](/runtime/reference/cli/pack/) - 从当前 Deno 项目创建一个 npm
-  tarball
+- [deno pack](/runtime/reference/cli/pack/) - 从当前 Deno 项目创建一个 npm tar 包
 - [deno publish](/runtime/reference/cli/publish/) - 将一个模块发布到 JSR
 - [deno test](/runtime/reference/cli/test/) - 运行你的测试
 - [deno transpile](/runtime/reference/cli/transpile/) - 将 TypeScript、

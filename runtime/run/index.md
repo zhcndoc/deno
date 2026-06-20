@@ -1,6 +1,13 @@
 ---
+last_modified: 2026-06-15
 title: "运行代码"
-description: "使用 Deno 运行 JavaScript 和 TypeScript：默认安全的权限模型、运行文件、URL 和 stdin、监听模式，以及项目任务。"
+description: "使用 Deno 运行 JavaScript 和 TypeScript：默认安全的权限模型、运行文件、URL 和 stdin、脚本参数、监听模式以及项目任务。"
+oldUrl:
+  - /manual/getting_started/command_line_interface
+  - /runtime/manual/getting_started/command_line_interface/
+  - /runtime/getting_started/command_line_interface/
+  - /runtime/fundamentals/command_line_interface/
+  - /runtime/manual/tools/
 ---
 
 Deno 直接运行 JavaScript 和 TypeScript（无需构建步骤、无需配置），并置于一个安全沙箱之后，只有在你请求时才会授予访问权限。本页将介绍代码实际如何运行：权限、启动方式、监听模式，以及任务。
@@ -33,6 +40,45 @@ deno run -N=api.example.com -E main.ts           # 组合，简写形式
 
 使用 `--deny-*` 来排除例外，或者使用 `-A` / `--allow-all` 完全跳过沙箱。这在受信任的环境中很方便，但也放弃了这些保证。有关每个标志，请参见 [Permissions](/runtime/reference/permissions/)，有关其背后的模型，请参见 [Security](/runtime/fundamentals/security/)。
 
+## Passing script arguments
+
+Arguments for your own script go **after** the script name; Deno passes them
+through in [`Deno.args`](/api/deno/~/Deno.args):
+
+```ts title="main.ts"
+console.log(Deno.args);
+```
+
+```shell
+$ deno run main.ts arg1 arg2 arg3
+[ "arg1", "arg2", "arg3" ]
+```
+
+For anything beyond a flat list, parse the arguments with
+[`parseArgs` from `jsr:@std/cli`](https://jsr.io/@std/cli/doc/parse-args/~/parseArgs)
+or
+[`parseArgs` from `node:util`](https://nodejs.org/api/util.html#utilparseargsconfig).
+
+### Argument and flag ordering
+
+:::caution
+
+Anything passed after the script name is a script argument, not a Deno runtime
+flag. This is a common source of confusion, so make sure runtime flags appear
+**before** the script name.
+
+:::
+
+This leads to the following pitfall:
+
+```shell
+# Good. We grant net permission to net_client.ts.
+deno run --allow-net net_client.ts
+
+# Bad! --allow-net was passed to Deno.args, throws a net permission error.
+deno run net_client.ts --allow-net
+```
+
 ## 从 URL 或 stdin 运行
 
 Deno 可以直接从 URL 运行代码（适合一次性工具和安装器），也可以从 stdin 运行：
@@ -52,7 +98,9 @@ echo 'console.log(1 + 1)' | deno run -
 deno run --watch main.ts
 ```
 
-`deno test`、`deno fmt` 等也支持 `--watch`。关于监听哪些内容、排除路径以及热模块替换，请参见 [CLI patterns page](/runtime/getting_started/command_line_interface/#watch-mode)。
+`deno test`, `deno fmt`, and others accept `--watch` too. For what gets watched,
+excluding paths, and hot module replacement, see
+[Watch mode and HMR](/runtime/run/watch_mode/).
 
 ## 运行项目任务
 

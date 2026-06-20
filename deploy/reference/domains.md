@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-10-15
-title: 域
-description: "Deno Deploy 中域名管理的完整指南，包括组织域、自定义域、DNS 配置、TLS 证书以及域名分配。"
+last_modified: 2026-06-18
+title: 域名
+description: "Deno Deploy 中域名管理的完整指南，包括组织域、自定义域、DNS 配置、TLS 证书和域名分配。"
 ---
 
 :::info
@@ -58,7 +58,30 @@ description: "Deno Deploy 中域名管理的完整指南，包括组织域、自
 - 添加一个 `ANAME`/`ALIAS` 记录
 - 添加一个用于验证的 `CNAME` 记录
 
-#### CNAME 方法
+## 将一个域重定向到另一个域
+
+自定义域会提供您分配给它的应用服务，因此要将一个域重定向到另一个域——例如，将 `example.com` 重定向到 `www.example.com`，使 `www` 主机成为规范主机——请部署一个执行重定向的小型应用，并将需要重定向的域分配给它。
+
+重定向应用是一个单独的 [`Deno.serve()`](/api/deno/~/Deno.serve) 处理器，它会在保留路径和查询字符串的同时重写主机：
+
+```ts title="redirect.ts"
+Deno.serve((req) => {
+  const url = new URL(req.url);
+  const target = new URL(url.pathname + url.search, "https://www.example.com");
+  return Response.redirect(target, 301);
+});
+```
+
+`301` 是永久重定向，这正是规范主机所需要的，因为浏览器和搜索引擎会记住它。如果重定向只是临时的，请使用 `302`。
+
+然后连接这两个域：
+
+1. 按照[将自定义域分配给应用](#将自定义域分配给应用)的说明，将规范域（`www.example.com`）分配给您的主应用。
+2. 将上面的重定向应用作为单独的应用部署，并将另一个域（`example.com`）分配给它。
+
+现在，对非规范域的请求会返回一个指向规范域上相同路径的 `301`。如果要反向重定向（从 `www` 到顶级域），请交换两个域的分配并修改处理器中的目标 URL。
+
+## 从应用中撤销自定义域分配
 
 适合子域，但不适用于根域（顶级域）：
 

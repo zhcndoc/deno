@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-03-09
-title: "配置文件（deno.json）"
-description: "每个 deno.json 字段的参考：依赖和 import map、任务、lint 和 fmt、lockfile、node_modules 目录、TypeScript 编译器选项、unstable 标志、include/exclude、导出、权限、编译以及代理。"
+last_modified: 2026-06-17
+title: "配置文件 (deno.json)"
+description: "每个 deno.json 字段的参考：依赖项和 import map、任务、lint 和 fmt、lockfile、node_modules 目录、TypeScript 编译器选项、unstable 标志、include/exclude、exports、权限、compile 以及 proxies。"
 oldUrl:
   - /runtime/manual/basics/modules/import_maps/
   - /runtime/basics/import_maps/
@@ -95,6 +95,25 @@ import { MyUtil } from "@/util.ts";
 ```
 
 这会使以 `@/` 开头的导入 specifier 相对于 import map 的 URL 或文件路径进行解析。
+
+### 范围映射
+
+`"scopes"` 字段允许你为从特定路径前缀加载的模块覆盖 import 映射，遵循 [import maps 规范](https://github.com/WICG/import-maps#scoping-examples)。每个键都是一个 scope（路径前缀），其值是一个仅适用于该 scope 下模块的 import map。当两个依赖需要同一包的不同版本时，这非常有用。
+
+```json title="deno.json"
+{
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.0"
+  },
+  "scopes": {
+    "./legacy/": {
+      "@std/assert": "jsr:@std/assert@^0.224.0"
+    }
+  }
+}
+```
+
+在此示例中，`./legacy/` 下的模块会将 `@std/assert` 解析为较旧版本，而项目其余部分使用 `"imports"` 中的版本。
 
 ### 覆盖包
 
@@ -224,7 +243,7 @@ deno task build
 | `bracePosition`                       | `sameLine`              | `maintain`, `sameLine`, `nextLine`, `sameLineUnlessHanging` |
 | `indentWidth`                         | `2`                     | 一个数字                                                   |
 | `lineWidth`                           | `80`                    | 一个数字                                                   |
-| `newLineKind`                         | `lf`                    | `auto`, `crlf`, `lf`, `system`                              |
+| `newLineKind`                          | `lf`                    | `auto`, `crlf`, `lf`, `system`                              |
 | `nextControlFlowPosition`             | `sameLine`              | `sameLine`, `nextLine`, `maintain`                          |
 | `operatorPosition`                    | `sameLine`              | `sameLine`, `nextLine`, `maintain`                          |
 | `proseWrap`                           | `always`                | `always`, `never`, `preserve`                               |

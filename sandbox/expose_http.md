@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-13
 title: "暴露 HTTP"
-description: "了解如何从 Deno 沙箱暴露 HTTP 端点，使您能够在边缘运行 Web 服务器、API 以及预览环境。"
+description: "了解如何从 Deno Sandbox 暴露 HTTP 端点，从而在边缘运行 Web 服务器、API 和预览环境。"
 ---
 
 您可以在任意端口运行开发服务器、预览应用、Webhook 接收器或框架 CLI，并即时将它们发布到安全的随机 HTTPS URL。
@@ -23,7 +24,7 @@ await sandbox.fs.writeTextFile(
 
 const p = await sandbox.sh`deno serve --watch main.ts`.spawn();
 
-console.log("deno now listening on", sandbox.url);
+console.log("deno 现在监听于", sandbox.url);
 
 await p.output();
 ```
@@ -46,7 +47,7 @@ with sdk.sandbox.create(port=8000) as sandbox:
 
   p = sandbox.spawn("deno", args=["serve", "--watch", "main.ts"])
 
-  print(f"deno now listening on {sandbox.url}")
+  print(f"deno 现在监听于 {sandbox.url}")
 
   p.wait()
 ```
@@ -69,7 +70,7 @@ async with sdk.sandbox.create(port=8000) as sandbox:
 
   p = await sandbox.spawn("deno", args=["serve", "--watch", "main.ts"])
 
-  print(f"deno now listening on {sandbox.url}")
+  print(f"deno 现在监听于 {sandbox.url}")
 
   await p.wait()
 ```
@@ -125,7 +126,7 @@ console.log(`预览已准备好，访问地址为 ${previewUrl}`);
 
 ```py
 preview_url = sandbox.expose_http(port=8000)
-print(f"Preview ready at {preview_url}")
+print(f"预览已准备好，访问地址为 {preview_url}")
 ```
 
 </deno-tab>
@@ -133,7 +134,7 @@ print(f"Preview ready at {preview_url}")
 
 ```py
 preview_url = await sandbox.expose_http(port=8000)
-print(f"Preview ready at {preview_url}")
+print(f"预览已准备好，访问地址为 {preview_url}")
 ```
 
 </deno-tab>

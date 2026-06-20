@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-09
 title: "错误处理"
-description: "学习如何在沙箱中处理错误。"
+description: "了解如何在沙箱中处理错误。"
 url: /examples/sandbox_error_handling/
 layout: sandbox-example.tsx
 ---

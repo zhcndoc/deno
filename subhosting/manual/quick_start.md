@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-03-19
 title: 子托管快速入门
 oldUrl:
   - /deploy/manual/subhosting/projects_and_deployments/

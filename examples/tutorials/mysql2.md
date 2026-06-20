@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-14
+last_modified: 2026-06-18
 title: "如何在 Deno 中使用 MySQL2"
-description: "在 Deno 中使用 MySQL2 的分步指南。学习如何设置数据库连接、执行查询、处理事务，并使用 MySQL 的 Node.js 驱动构建数据驱动的应用程序。"
+description: "逐步指南：在 Deno 中使用 MySQL2。学习如何设置数据库连接、执行查询、处理事务，以及使用 MySQL 的 Node.js 驱动构建数据驱动应用。"
 url: /examples/mysql2_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/mysql2/
@@ -17,7 +17,7 @@ oldUrl:
 你可以使用 `mysql2` node 包通过 `npm:mysql2` 在 Deno 中操作和查询 MySQL 数据库。这使我们能够使用其 Promise 包装器，并利用顶层 await。
 
 ```tsx
-import mysql from "npm:mysql2@^2.3.3/promise";
+import mysql from "npm:mysql2@^3/promise";
 ```
 
 ## 连接到 MySQL

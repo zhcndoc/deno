@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-03-10
+last_modified: 2026-06-18
 title: "运行脚本"
-description: "使用 Deno 创建和运行基础脚本的指南。学习如何编写并执行 JavaScript 和 TypeScript 代码，理解运行时环境，并开始了解 Deno 的基础概念。"
+description: "使用 Deno 创建和运行基础脚本的指南。学习如何编写和执行 JavaScript 和 TypeScript 代码，理解运行时环境，并开始了解 Deno 的基础概念。"
 url: /examples/run_script_tutorial/
 oldUrl:
   - /runtime/manual/examples/hello_world/
@@ -83,4 +83,16 @@ Hello Sarah
 Hello Kai
 ```
 
-🦕 恭喜你！现在你知道如何用 JavaScript 和 TypeScript 创建一个简单的脚本，并且如何使用 `deno run` 命令在 Deno 中运行它。继续探索教程和示例，以了解更多有关 Deno 的信息！
+🦕 恭喜！现在你已经知道如何在 JS 和 TS 中创建一个简单的脚本，
+以及如何使用 `deno run` 命令在 Deno 中运行它。
+
+## 下一步
+
+继续使用这些资源探索 Deno：
+
+- [初始化项目](/examples/initialize_project_tutorial/) 使用 `deno.json` 配置文件来组织
+  更大型的应用
+- [设置你的环境](/runtime/getting_started/setup_your_environment/)
+  集成编辑器和 IDE
+- [获取数据](/examples/fetch_data_tutorial/) 从脚本通过网络获取数据
+- [浏览所有示例和教程](/examples/) 获取更多可构建的内容

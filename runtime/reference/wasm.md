@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-10-15
+last_modified: 2026-06-18
 title: "WebAssembly"
 description: "在 Deno 中使用 WebAssembly (Wasm) 的指南。了解模块导入、类型检查、流式 API、优化技术以及如何与编译为 Wasm 的各种编程语言进行协作。"
 oldUrl:
@@ -60,7 +60,7 @@ console.log(add(1, ""));
 ```shellsession
 > deno check main.ts   
 Check file:///.../main.ts
-error: TS2345 [ERROR]: Argument of type 'string' is not assignable to parameter of type 'number'.
+error: TS2345 [ERROR]: 参数类型为 'string' 的实参不能赋给参数类型为 'number' 的形参。
 console.log(add(1, ""));
                    ~~
     at file:///.../main.ts:3:20
@@ -136,7 +136,7 @@ console.log(getValue());
 ```shellsession
 > wat2wasm toolkit.wat
 > deno run main.ts
-error: Relative import path "env" not prefixed with / or ./ or ../
+error: 相对导入路径 "env" 未以前缀 /、./ 或 ../ 开头
     at file:///.../toolkit.wasm
 ```
 
@@ -219,7 +219,7 @@ const module = await WebAssembly.compileStreaming(
   fetch("https://wpt.live/wasm/incrementer.wasm"),
 );
 
-/* do some more stuff */
+/* 再做一些其他操作 */
 
 const instance = await WebAssembly.instantiate(module);
 instance.exports.increment as (input: number) => number;
@@ -248,6 +248,85 @@ instance.exports.increment as (input: number) => number;
 [wasmbuild](https://github.com/denoland/wasmbuild) 是一个官方的 Deno 工具，简化了在 Deno 项目中使用 Rust 和 WebAssembly。它自动化了将 Rust 代码编译为 WebAssembly 和生成 TypeScript 绑定的过程，使从 JavaScript 调用 Rust 函数变得简单。
 
 wasmbuild 为您的 Rust 函数生成 TypeScript 定义，提供完整的类型检查。生成的 JavaScript 可以与 esbuild 等打包器一起使用。生成的文件可以直接提交到源代码控制中，以便于部署。
+
+## WebAssembly System Interface (WASI)
+
+上面的示例实例化了仅与 JavaScript 交换数字和内存的 Wasm 模块。
+[WebAssembly System Interface (WASI)](https://wasi.dev/) 是一组标准导入，
+它使 Wasm 模块能够访问类似操作系统的功能，
+例如读取命令行参数和环境变量、时钟，以及
+（在您授予权限时）文件系统。它使得用 Rust、
+C 或其他语言编写并编译为 Wasm 的程序能够在浏览器之外运行，
+就像它作为原生命令行二进制文件运行一样。
+
+Deno 支持两个版本的 WASI：
+
+- **WASI Preview 1** (`wasip1`) 模块通过
+  [`node:wasi`](https://nodejs.org/api/wasi.html) 模块运行。
+- **WASI Preview 2** (`wasip2`) 组件，建立在
+  [component model](https://component-model.bytecodealliance.org/) 之上，通过
+  Bytecode Alliance 的 [`jco`](https://github.com/bytecodealliance/jco) 工具运行，
+  该工具还可以将组件转译为您像导入任何模块一样导入的 JavaScript。
+
+### 运行 WASI Preview 1 模块
+
+将程序编译为 `wasm32-wasip1` 目标。任何面向 WASI 的工具链都可以；以 Rust 为例：
+
+```sh
+rustc --target wasm32-wasip1 -O hello.rs -o hello.wasm
+```
+
+使用 `node:wasi` 模块从 Deno 运行它。使用访客应看到的参数和环境变量构造一个 `WASI` 实例，使用 WASI 导入实例化模块，然后调用 `start`：
+
+```ts title="run.ts"
+import { WASI } from "node:wasi";
+
+const wasi = new WASI({
+  version: "preview1",
+  args: ["hello", "alpha", "beta"],
+  env: { GREETING: "hello-wasi" },
+});
+
+const bytes = await Deno.readFile(new URL("./hello.wasm", import.meta.url));
+const module = await WebAssembly.compile(bytes);
+const instance = await WebAssembly.instantiate(module, wasi.getImportObject());
+
+wasi.start(instance);
+```
+
+```sh
+deno run --allow-read run.ts
+```
+
+WASI 实例在开始时无法访问真实文件系统。要向访客公开目录，请传递一个 `preopens` 映射，将模块看到的路径映射到磁盘上的真实路径，例如 `preopens: { "/data": "./data" }`。然后模块可以在 `./data` 内部读取和写入（并且您的 Deno 进程需要相应的 `--allow-read` 和 `--allow-write` 权限）。
+
+:::note
+
+`node:wasi` 是一个实验性的 Node.js API，因此当您使用它时，Deno 会打印实验性警告。
+
+:::
+
+### 运行 WASI Preview 2 组件
+
+Preview 2 组件编译为 `wasm32-wasip2` 目标：
+
+```sh
+rustc --target wasm32-wasip2 -O hello.rs -o hello.wasm
+```
+
+组件不是普通的 Wasm 模块，因此不能通过 `WebAssembly` API 或 `node:wasi` 加载。请使用 `jco` 直接运行它：
+
+```sh
+deno run -A npm:@bytecodealliance/jco run hello.wasm alpha beta
+```
+
+要从您自己的代码中调用组件，而不是将其作为命令运行，请使用绑定将其转译为 JavaScript：
+
+```sh
+deno run -A npm:@bytecodealliance/jco transpile hello.wasm -o out
+```
+
+这会将一个 ES 模块写入 `out/`，您可以像导入任何其他 JavaScript 模块一样导入它。
 
 ## 优化
 

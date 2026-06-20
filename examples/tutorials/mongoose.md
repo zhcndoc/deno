@@ -6,14 +6,14 @@ url: /examples/mongoose_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/mongoose/
   - /runtime/tutorials/how_to_with_npm/mongoose/
+  - /examples/mongoose/
 ---
 
 [Mongoose](https://mongoosejs.com/) 是一个流行的基于模式（schema-based）的库，用于建模 [MongoDB](https://www.mongodb.com/) 的数据。它简化了编写 MongoDB 验证、类型转换和其他相关业务逻辑的过程。
 
 本教程将向您展示如何在 Deno 项目中设置 Mongoose 和 MongoDB。
 
-[查看源代码](https://github.com/denoland/examples/tree/main/with-mongoose) 或
-[查看视频指南](https://youtu.be/dmZ9Ih0CR9g)。
+[查看源代码](https://github.com/denoland/examples/tree/main/with-mongoose).
 
 ## 创建一个 Mongoose 模型
 

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-01
+last_modified: 2026-06-17
 title: 安装
 description: "在不同操作系统上安装 Deno 的指南。包括使用各种包管理器、手动安装方法以及 Docker 容器在 Windows、macOS 和 Linux 上的安装说明。"
 oldUrl:
@@ -110,7 +110,7 @@ winget install DenoLand.Deno
 
 > <small>如果通过 npm 安装，Deno 命令的启动时间会受到影响。为了获得更好的性能，我们建议使用官方安装脚本（shell 或 PowerShell）。</small>
 
-Deno 不提供官方 apt 仓库。在 Debian 或 Ubuntu 上，请使用上面的 shell 安装程序作为推荐的安装方式。
+Deno 不发布官方 apt 仓库，而 Linux 发行版（如 Debian、Ubuntu、Arch 或 Snap Store）打包的版本由社区维护，通常会落后于最新发布版本。要在任何 Linux 发行版上获得最新版本，请使用上面的 shell 安装程序（或 [手动下载](#manual-download)），它始终会安装当前发布版本。
 
 ### 跨平台包管理器
 
@@ -168,10 +168,26 @@ Deno 二进制文件也可以手动安装，只需从
 需要在 macOS 和 Linux 上设置可执行位。每个资源都有一个
 匹配的 `.sha256sum` 文件用于验证下载。
 
+在 Linux 上，常见的选择是 `~/.local/bin`（按用户）或 `/usr/local/bin`
+（系统范围）。例如：
+
+```sh
+unzip deno-x86_64-unknown-linux-gnu.zip
+mkdir -p ~/.local/bin
+mv deno ~/.local/bin/
+chmod +x ~/.local/bin/deno
+# 确保该目录已加入你的 PATH，然后进行验证
+deno --version
+```
+
 ## Docker
 
-有关官方 Docker 镜像的更多信息和说明：
-[https://github.com/denoland/deno_docker](https://github.com/denoland/deno_docker)
+Deno 会在
+[Docker Hub](https://hub.docker.com/r/denoland/deno) 和
+[GitHub Container Registry](https://github.com/denoland/deno/pkgs/container/deno)
+上发布官方镜像，提供 `debian`、`ubuntu`、`alpine`、`distroless` 和 `bin` 变体。
+
+有关 Dockerfile、多阶段构建、Docker Compose 以及其他最佳实践，请参见 [Deno 和 Docker](/runtime/reference/docker/)。
 
 ## 安装位置
 
@@ -206,8 +222,7 @@ Deno 二进制文件也可以手动安装，只需从
 
 要测试您的安装，运行 `deno --version`。如果在控制台打印 Deno 版本，则表示安装成功。
 
-使用 `deno help` 查看有关 Deno 标志和用法的帮助文本。获取 CLI 的详细指南
-[这里](/runtime/getting_started/command_line_interface/)。
+使用 `deno help` 查看记录 Deno 标志和用法的帮助文本。有关每个子命令的指南，请参见 [CLI 参考](/runtime/reference/cli/)。
 
 ### 如果您看到“command not found”
 

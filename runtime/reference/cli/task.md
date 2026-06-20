@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-18
 title: "deno task"
 oldUrl:
   - /runtime/tools/task_runner/
@@ -515,6 +515,15 @@ echo data[0-9].csv
 
 支持的 glob 字符包括 `*`、`?` 和 `[`/`]`。
 
+:::caution
+
+由于默认启用了 `globstar`（参见[Shell 选项](#shell-options)），`**` 会递归进入**所有**子目录，包括 `node_modules`。
+这与某些交互式 shell 不同，在这些 shell 中，除非显式启用，否则 `**` 不会递归，因此像 `deno check **/*.ts` 这样的任务可能会展开为比在终端中输入相同命令更多得多的文件，并把依赖文件也一起扫描进去。这可能会导致诸如 `Argument list too long` 之类的错误，或者对您并不打算检查的文件进行类型检查。
+
+对于 `deno check` 和 `deno fmt`，建议不要使用 glob 参数运行它们，并在您的 `deno.json` 中使用 [`exclude`](/runtime/reference/deno_json/#include-and-exclude) 选项（`node_modules` 默认已排除），或者使用 `shopt -u globstar` 为该任务禁用递归。
+
+:::
+
 ### Shell 选项
 
 从 Deno 2.6.6 及以上版本，`deno task` 支持 shell 选项以控制 glob 扩展和管道行为。默认情况下启用 `failglob` 和 `globstar`。
@@ -562,26 +571,27 @@ Shell 选项不会传递给 `deno task` 的子进程。每次调用 `deno task` 
     目录。
 - [`mkdir`](https://man7.org/linux/man-pages/man1/mkdir.1.html) - 创建
   目录。
-  - 例如：`mkdir -p DIRECTORY...` - 常用于创建一个目录及其所有
-    父目录，如果目录已存在则不会报错。
-- [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) - 输出当前/工作
-  目录的名称。
-- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - 延迟指定
-  的时间。
+  - 例如：`mkdir -p DIRECTORY...` - 常用于创建目录及其所有
+    父目录；如果目录已存在则不会报错。
+- [`pwd`](https://man7.org/linux/man-pages/man1/pwd.1.html) - 打印
+  当前/工作目录的名称。
+- [`sleep`](https://man7.org/linux/man-pages/man1/sleep.1.html) - 延迟
+  指定的时间。
   - 例如：`sleep 1` 表示睡眠 1 秒，`sleep 0.5` 表示睡眠半秒，
-    或 `sleep 1m` 表示睡眠 1 分钟
+    或 `sleep 1m` 表示睡眠一分钟
 - [`echo`](https://man7.org/linux/man-pages/man1/echo.1.html) - 显示一行
   文本。
-- [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) - 连接文件并
-  将其输出到 stdout。当未提供参数时，它会读取并
+- [`cat`](https://man7.org/linux/man-pages/man1/cat.1.html) - 连接文件并将其输出到 stdout。未提供参数时，它会读取并
   输出 stdin。
 - [`exit`](https://man7.org/linux/man-pages/man1/exit.1p.html) - 使
   shell 退出。
 - [`head`](https://man7.org/linux/man-pages/man1/head.1.html) - 输出文件的
   前半部分。
+- [`export`](https://man7.org/linux/man-pages/man1/export.1p.html) - 设置
+  环境变量并将其导出给启动的命令。
 - [`unset`](https://man7.org/linux/man-pages/man1/unset.1p.html) - 取消设置
   环境变量。
-- [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) - 从 stdin 构建
+- [`xargs`](https://man7.org/linux/man-pages/man1/xargs.1p.html) - 根据 stdin 构建
   参数并执行命令。
 - [`:`](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/colon.html) -
   POSIX 空命令。不执行任何操作，并且总是以状态 `0` 退出（Deno

@@ -2,6 +2,7 @@
 title: "Web 平台 API"
 description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、workers、存储以及其他 Web 标准 API，包括实现细节及与浏览器规范的偏差。"
 layout: doc.tsx
+url: /api/web/about/
 oldUrl:
   - /runtime/manual/runtime/navigator_api/
   - /runtime/manual/runtime/web_platform_apis/
@@ -59,7 +60,7 @@ Deno 支持一个全面的 Web 标准 API 集：
 - **[Performance API](/api/web/~/Performance)** - 高精度计时
 - **[Timers](/api/web/~/setTimeout)** - setTimeout、setInterval 和 setImmediate
 
-### Structured Clone & Transferable Objects
+### 结构化克隆与可传输对象
 
 Deno 支持 [`structuredClone()`](/api/web/~/structuredClone) 和
 [`postMessage()`](/api/web/~/Worker) 用于在不同上下文之间克隆和传输对象
@@ -303,7 +304,7 @@ const worker = new Worker("./workers/hello.ts", { type: "module" });
 
 ```ts
 // 设置 localStorage 中的项
-localStorage.setItem("myDemo", "Deno App");
+localStorage.setItem("myDemo", "Deno 应用");
 
 // 读取 localStorage 中的项
 const cat = localStorage.getItem("myDemo");

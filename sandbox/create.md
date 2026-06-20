@@ -1,6 +1,7 @@
 ---
-title: "创建沙箱"
-description: "了解如何使用静态 Sandbox.create() 方法配置沙箱，并设置运行时、网络和生命周期选项。"
+last_modified: 2026-01-28
+title: "创建 Deno 沙箱"
+description: "了解如何使用静态 Sandbox.create() 方法配置一个沙箱，并设置运行时、网络和生命周期选项。"
 ---
 
 `Sandbox.create()` 静态方法是 Deploy 边缘环境中创建隔离 Linux 微虚拟机的主要入口。它返回一个已连接的 `Sandbox` 实例，您可以使用该实例运行命令、上传文件、暴露 HTTP 端点或请求 SSH 访问。
@@ -23,7 +24,7 @@ from deno_sandbox import DenoDeploy
 sdk = DenoDeploy()
 
 with sdk.sandbox.create() as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -35,7 +36,7 @@ from deno_sandbox import AsyncDenoDeploy
 sdk = AsyncDenoDeploy()
 
 async with sdk.sandbox.create() as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -77,7 +78,7 @@ sdk = DenoDeploy()
 with sdk.sandbox.create(
   allow_net=["api.openai.com", "api.stripe.com"]
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -89,7 +90,7 @@ sdk = AsyncDenoDeploy()
 async with sdk.sandbox.create(
   allow_net=["api.openai.com", "api.stripe.com"]
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -130,7 +131,7 @@ with sdk.sandbox.create(
     }
   }
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -151,7 +152,7 @@ async with sdk.sandbox.create(
     }
   }
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -179,7 +180,7 @@ with sdk.sandbox.create(
   region="ams",
   memory_mb=2048
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -192,7 +193,7 @@ async with sdk.sandbox.create(
   region="ams",
   memory_mb=2048
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -220,11 +221,11 @@ sdk = DenoDeploy()
 
 with sdk.sandbox.create(timeout="10m") as sandbox:
   sandbox_id = sandbox.id
-  sandbox.close()  # disconnect but leave VM running
+  sandbox.close()  # 断开连接但保持虚拟机运行
 
-# ...later...
+# ...稍后...
 with sdk.sandbox.connect(sandbox_id) as reconnected:
-  print(f"Reconnected to {reconnected.id}")
+  print(f"已重新连接到 {reconnected.id}")
 ```
 
 </deno-tab>
@@ -235,11 +236,11 @@ sdk = AsyncDenoDeploy()
 
 async with sdk.sandbox.create(timeout="10m") as sandbox:
   sandbox_id = sandbox.id
-  await sandbox.close()  # disconnect but leave VM running
+  await sandbox.close()  # 断开连接但保持虚拟机运行
 
-# ...later...
+# ...稍后...
 async with sdk.sandbox.connect(sandbox_id) as reconnected:
-  print(f"Reconnected to {reconnected.id}")
+  print(f"已重新连接到 {reconnected.id}")
 ```
 
 </deno-tab>
@@ -271,7 +272,7 @@ with sdk.sandbox.create(
     "FEATURE_FLAG": "agents",
   }
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>
@@ -286,7 +287,7 @@ async with sdk.sandbox.create(
     "FEATURE_FLAG": "agents",
   }
 ) as sandbox:
-  print(f"Sandbox {sandbox.id} is ready.")
+  print(f"沙箱 {sandbox.id} 已就绪。")
 ```
 
 </deno-tab>

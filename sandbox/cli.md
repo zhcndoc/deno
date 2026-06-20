@@ -1,5 +1,6 @@
 ---
-title: "通过 CLI 管理"
+last_modified: 2026-02-02
+title: "通过 CLI 进行管理"
 description: "如何使用 Deno CLI 管理 Deno Sandbox。"
 ---
 

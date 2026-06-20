@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-03-19
+last_modified: 2026-06-18
 title: "从 Deploy Classic 迁移到 Deno Deploy"
-description: "指导将应用从 Deno Deploy Classic（dash.deno.com）迁移到新的 Deno Deploy（console.deno.com），包括子托管 API 迁移。"
+description: "将您的应用程序从 Deno Deploy Classic（dash.deno.com）迁移到新的 Deno Deploy（console.deno.com）的指南，包括 subhosting API 迁移。"
 ---
 
 Deno Deploy Classic（dash.deno.com）和 subhosting v1 API（apidocs.deno.com）
@@ -131,9 +131,10 @@ v2 API 的官方 SDK：
 
 ## 区域
 
-Deploy Classic 在 6 个区域提供服务。新的 Deploy 目前有 2 个区域，
-并且可以在您自己的基础设施上自托管额外区域。如果您的应用对延迟敏感并依赖特定区域，请
-提前做好相应规划。
+Deploy Classic 从 6 个区域提供服务。新的 Deploy 当前有 2 个区域，美国
+（`us`）和欧洲（`eu`），并且可以在您自己的基础设施上自托管其他区域。使用 `global`
+可同时从两个区域提供服务。如果您的应用对延迟敏感并依赖特定区域，请相应规划。有关可用区域值，请参阅
+[`deno deploy` CLI 参考](/runtime/reference/cli/deploy/#create-application)。
 
 ## 新功能
 

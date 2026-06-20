@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "使用本地和未发布的包"
-description: "处理不在注册表中的代码：使用 links 字段将本地包副本链接进来，直接从 HTTPS URL 导入，包括私有 GitHub 仓库，并了解 Deno 不支持哪些 specifier。"
+description: "处理不在注册表中的代码：使用 links 字段链接本地包副本，直接从 HTTPS URL 导入（包括私有 GitHub 仓库），并了解 Deno 不支持哪些 specifier。"
 url: /examples/local_unpublished_packages_tutorial/
 ---
 

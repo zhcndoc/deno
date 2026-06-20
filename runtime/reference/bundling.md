@@ -1,6 +1,6 @@
 ---
 last_modified: 2025-09-11
-title: "Bundling"
+title: "打包"
 description: "`deno bundle` 子命令概览。可用于将多个源文件创建为单个文件应用，以实现优化执行。"
 ---
 
@@ -55,17 +55,30 @@ Hello from `deno bundle`!
 
 ## 选项概览
 
-| 标志                     | 描述                                                  |
-| ----------------------- | ---------------------------------------------------- |
-| `-o`, `--output <file>` | 将打包输出写入文件                                   |
-| `--outdir <dir>`        | 将打包输出写入指定目录                               |
-| `--minify`              | 进行生产环境代码压缩                                 |
-| `--format <format>`     | 输出格式（默认 `esm`）                               |
-| `--code-splitting`      | 启用代码拆分                                        |
-| `--platform <platform>` | 为 `browser` 或 `deno` 打包（默认: `deno`）         |
-| `--sourcemap`           | 包含源码映射（支持 `linked`、`inline`、`external`） |
-| `--watch`               | 文件更改时自动重建                                  |
-| `--inline-imports`      | 内联导入模块（`true` 或 `false`）                    |
+| Flag                    | Description                                              |
+| ----------------------- | -------------------------------------------------------- |
+| `-o`, `--output <file>` | 将打包输出写入文件                                       |
+| `--outdir <dir>`        | 将打包输出写入目录                                       |
+| `--minify`              | 对输出进行压缩以用于生产环境                              |
+| `--format <format>`     | 输出格式（默认 `esm`）                                   |
+| `--code-splitting`      | 启用代码拆分                                             |
+| `--platform <platform>` | 为 `browser` 或 `deno` 打包（默认：`deno`）              |
+| `--sourcemap`           | 包含源码映射（`linked`、`inline`、`external`）          |
+| `--watch`               | 在文件变更时自动重新构建                                  |
+| `--inline-imports`      | 内联导入的模块（`true` 或 `false`）                       |
+| `--packages <how>`      | 如何处理包：`bundle`（默认）或 `external`               |
+| `--external <pkg>`      | 从打包结果中排除某个模块或包                               |
+| `--keep-names`          | 保留原始函数和类名                                         |
+
+完整的标志列表请运行 `deno bundle --help`。
+
+:::tip 单文件可执行程序打包
+
+若要生成独立二进制文件而不是 JavaScript 文件，请使用
+[`deno compile`](/runtime/reference/cli/compile/)，它也可以使用 `--bundle` 和
+`--minify` 标志对输入进行打包和压缩。
+
+:::
 
 ---
 
@@ -155,7 +168,7 @@ render(app, document.body);
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Example</title>
+    <title>示例</title>
     <script src="./index.tsx" type="module"></script>
   </head>
 </html>
@@ -168,7 +181,7 @@ render(app, document.body);
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Example</title>
+    <title>示例</title>
     <script src="./index-2TFDJWLF.js" type="module" crossorigin></script>
     <link rel="stylesheet" crossorigin href="./index-EWSJYQGA.css">
   </head>
@@ -220,7 +233,7 @@ root.render(<App />);
 $ deno bundle --platform=browser app.jsx -o bundle.js
 ⚠️ deno bundle 是实验性功能，可能会发生变化
 Bundled 9 modules in 99ms
-  app.bundle.js 874.67KB
+  bundle.js 874.67KB
 ```
 
 此时，我们已经可以开始提供页面服务了，使用

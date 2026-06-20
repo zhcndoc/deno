@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-18
 title: "deno install"
 oldUrl:
   - /runtime/manual/tools/script_installer/
@@ -106,7 +106,8 @@ Download npm:express
 
 :::tip
 
-如果您想设置本地的 `node_modules` 目录，可以传递 `--node-modules-dir=auto` 选项。
+如果您想设置本地 `node_modules` 目录，可以传递
+`--node-modules-dir=auto` 标志。
 
 某些依赖项可能在没有本地 `node_modules` 目录的情况下无法正确工作。
 
@@ -114,7 +115,7 @@ Download npm:express
 
 ### deno install --global [PACKAGE_OR_URL]
 
-使用此命令安装提供的软件包或脚本，使其作为系统中的全局可用二进制文件。
+使用此命令将提供的软件包或脚本作为系统中全局可用的二进制文件进行安装。
 
 此命令创建一个瘦的可执行 shell 脚本，该脚本使用指定的 CLI 标志和主模块调用 `deno`。它被放置在安装根目录中。
 
@@ -137,8 +138,8 @@ deno install -g -N -R -n serve jsr:@std/http/file-server
 可执行文件名称默认推断：
 
 - 尝试获取 URL 路径的文件名根。这上面的示例将变为 'file-server'。
-- 如果文件名根是 'main'、'mod'、'index' 或 'cli' 这样的通用名称，并且路径没有父级，则采用父路径的文件名。否则，采用通用名称。
-- 如果结果名称有 '@...' 后缀，则去掉它。
+- 如果文件名根是 'main'、`mod`、`index` 或 `cli` 这样的通用名称，并且路径没有父级，则采用父路径的文件名。否则，采用通用名称。
+- 如果结果名称有 `@...` 后缀，则去掉它。
 
 要更改安装根目录，请使用 `--root`：
 

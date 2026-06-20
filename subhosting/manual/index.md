@@ -1,5 +1,6 @@
 ---
-title: 关于子托管
+last_modified: 2026-03-19
+title: 关于 Subhosting
 oldUrl:
   - /subhosting/
   - /deploy/manual/subhosting/

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-14
+last_modified: 2026-06-15
 title: "编写测试"
-description: "学习测试设置与结构、断言、异步测试、模拟、测试夹具以及代码覆盖率等关键概念"
+description: "了解测试设置与结构、断言、异步测试、mock、测试夹具和代码覆盖率等关键概念"
 url: /examples/testing_tutorial/
 ---
 
@@ -415,8 +415,8 @@ ok | 2 passed | 0 failed (5ms)
 
 :::
 
-For spies, fake timers, and more advanced mocking, see
-[Mocking data for tests](/runtime/test/mocking/).
+对于 spy、假计时器以及更多高级 mock 技术，请参阅
+[测试数据的 Mock](/runtime/test/mocking/)。
 
 ## 测试中的 Mock
 
@@ -654,6 +654,6 @@ describe("math", () => {
 
 如需更多关于 Deno 测试的信息，请查看：
 
-- [测试文档](/runtime/test/)
-- [为测试模拟数据](/runtime/test/mocking/)
-- [编写基准测试](/examples/benchmarking/)
+- [Testing documentation](/runtime/test/)
+- [Mocking data for tests](/runtime/test/mocking/)
+- [Writing benchmark tests](/examples/write_benchmarks/)

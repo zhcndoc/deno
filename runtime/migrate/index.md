@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-08
+last_modified: 2026-06-15
 title: "从 Node.js 迁移"
-description: "如何将 Node.js 项目迁移到 Deno：将 Deno 作为即插即用的包管理器，运行现有项目和 package.json 脚本，了解 CommonJS 和 ES 模块如何解析，并将你的 Node 命令映射到 Deno。"
+description: "如何将 Node.js 项目迁移到 Deno：将 Deno 用作即插即用的包管理器，运行现有项目和 package.json 脚本，了解 CommonJS 和 ES 模块的解析方式，并将你的 Node 命令映射到 Deno。"
 oldUrl:
   - /runtime/fundamentals/migrate_from_node/
   - /runtime/manual/node/migrate/
@@ -27,17 +27,10 @@ cd my-node-app
 deno install
 ```
 
-从这里开始，你可以继续使用 Node 运行应用，只把 Deno 作为更快的
-包管理器，或者使用 Deno 内置命令来管理依赖项：
-
-```sh
-deno add    npm:express   # 添加依赖
-deno remove express       # 删除一个依赖
-deno outdated             # 查看哪些依赖有更新版本
-```
-
-Deno 能理解在 `package.json` 和 `deno.json` 中声明的依赖项，单独的 npm 包也可以通过 `npm:` 说明符内联导入。
-完整内容请参见 [依赖管理](/runtime/packages/)。
+从这里开始，你可以继续使用 Node 运行应用，只把 Deno 作为一个更快、更安全的包管理器。Deno 会同时从 `package.json`
+和 `deno.json` 读取依赖项。关于完整的 npm、yarn 和 pnpm 命令映射、Deno
+有何不同（生命周期脚本、审计、锁文件）以及需要注意的事项，请参见
+[将你的包管理器切换到 Deno](/runtime/migrate/switch_package_manager/)。
 
 ## 使用 Deno 运行你的项目
 

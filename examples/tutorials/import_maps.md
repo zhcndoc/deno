@@ -1,6 +1,7 @@
 ---
-title: "重映射导入路径"
-description: "将 deno.json 中的 imports 字段用作导入映射：为 src/ 使用 @/ 之类的路径别名、为本地模块使用裸名称，以及为传递性导入使用作用域覆盖。"
+last_modified: 2026-06-12
+title: "重新映射导入路径"
+description: "将 deno.json 中的 imports 字段用作导入映射：使用像 @/ 这样的路径别名指向 src/，为本地模块使用裸名称，并为传递性导入设置作用域覆盖。"
 url: /examples/import_maps_tutorial/
 ---
 

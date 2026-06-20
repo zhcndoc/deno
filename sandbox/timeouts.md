@@ -1,6 +1,7 @@
 ---
-title: "沙盒生命周期"
-description: "了解沙盒存活的时间，如何延长或重新连接沙盒，以及什么时候将工作提升为 Deploy 应用。"
+last_modified: 2026-02-02
+title: "沙盒超时"
+description: "了解 Deno Sandbox 会存活多长时间，如何延长或重新连接，以及何时将工作提升为 Deno Deploy 应用。"
 ---
 
 沙盒是有意设计为短暂存在的。它们在毫秒内启动，完成任务后立即消失——减少不受信任代码的攻击面，并免去基础设施的维护工作。不过，你可以精确控制沙盒的存活时间，甚至在需要调试时后续重新连接。
@@ -69,9 +70,9 @@ sdk = DenoDeploy()
 
 with sdk.sandbox.create(timeout="5m") as sandbox:
   sandbox_id = sandbox.id
-  sandbox.close()  # process can exit now
+  sandbox.close()  # 进程现在可以退出了
 
-# later
+# 稍后
 with sdk.sandbox.connect(sandbox_id) as reconnected:
   print(f"Reconnected to {reconnected.id}")
 ```
@@ -84,9 +85,9 @@ sdk = AsyncDenoDeploy()
 
 async with sdk.sandbox.create(timeout="5m") as sandbox:
   sandbox_id = sandbox.id
-  await sandbox.close()  # process can exit now
+  await sandbox.close()  # 进程现在可以退出了
 
-# later
+# 稍后
 async with sdk.sandbox.connect(sandbox_id) as reconnected:
   print(f"Reconnected to {reconnected.id}")
 ```

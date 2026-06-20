@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: "从 subhosting API v1 迁移到 v2"
-description: "Deno Deploy subhosting API v1 到 v2 的详细迁移指南，涵盖端点变更、部署模型差异，以及标签和层等新特性。"
+description: "从 Deno Deploy subhosting API v1 迁移到 v2 的详细指南，涵盖端点变更、部署模型差异，以及 labels 和 layers 等新功能。"
 oldUrl:
   - /deploy/api_migration_guide/
 ---

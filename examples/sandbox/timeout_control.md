@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-02-09
 title: "控制沙箱超时"
-description: "了解如何使用 timeout 选项控制沙箱的存活时间。"
+description: "了解如何使用 timeout 选项控制沙箱的存活时长。"
 url: /examples/sandbox_timeout_control/
 layout: sandbox-example.tsx
 ---
@@ -31,7 +32,7 @@ await sandbox.close();
 
 // 之后，使用沙箱 ID 重新连接到同一个沙箱
 const reconnected = await Sandbox.connect({ id });
-await reconnected.sh`echo 'Still alive!'`;
+await reconnected.sh`echo '仍然存活！'`;
 
 // 你仍然可以在超时结束前强制终止它
 await reconnected.kill();

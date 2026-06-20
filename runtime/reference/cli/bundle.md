@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-06-18
 title: "deno bundle"
 oldUrl: /runtime/manual/cli/bundler/
 command: bundle
@@ -8,8 +8,12 @@ openGraphTitle: "deno bundle"
 info: "`deno bundle` 当前是一个实验性子命令，可能会发生变化。"
 ---
 
-`deno bundle` 将你的模块及其所有依赖项合并为一个单独的
-JavaScript 文件，底层使用 [esbuild](https://esbuild.github.io/)。
+`deno bundle` 会将你的模块及其所有依赖合并为一个
+JavaScript 文件，底层使用 [esbuild](https://esbuild.github.io/)。它
+适合将项目作为单个优化后的文件进行部署或分发，
+但目前并不打算替代诸如 [Vite](https://vite.dev/) 或
+[webpack](https://webpack.js.org/) 之类复杂或交互式的
+构建工具。
 
 ## 基本用法
 
@@ -43,5 +47,20 @@ deno bundle --code-splitting --outdir dist/ main.ts worker.ts
 deno bundle --external npm:sharp -o output.js main.ts
 ```
 
-有关使用 Deno 进行打包策略的更多信息，请参阅
-[打包](/runtime/reference/bundling/)指南。
+## 类型检查
+
+`deno bundle` 默认不会对你的代码进行类型检查。使用 `--check` 标志启用类型检查：
+
+```sh
+# bundle 时检查本地模块的类型
+deno bundle --check -o output.js main.ts
+
+# 也检查远程模块的类型
+deno bundle --check=all -o output.js main.ts
+```
+
+你也可以使用 `--no-check` 显式跳过类型检查，而
+`--no-check=remote` 仅忽略来自远程模块的诊断信息。
+
+有关在 Deno 中进行打包策略的更多信息，请参阅
+[Bundling](/runtime/reference/bundling/) 指南。

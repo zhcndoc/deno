@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-01-27
 title: "上传文件和目录"
 description: "了解如何将文件和目录上传到沙箱。"
 url: /examples/sandbox_upload_files/

@@ -367,6 +367,16 @@ antigen bundle deno
 deno completions fish > ~/.config/fish/completions/deno.fish
 ```
 
+### 动态补全
+
+传递 `--dynamic` 标志可生成了解你的项目的补全。目前这会让你的 shell 在输入 `deno task <TAB>` 时建议 `deno.json` 中定义的任务名称：
+
+```shell
+deno completions --dynamic zsh > ~/.zsh/_deno
+```
+
+动态补全是不稳定特性，可能会在未来版本中发生变化。
+
 ## 构建你自己的 LSP 集成
 
 如果你正在构建或维护与 Deno 语言

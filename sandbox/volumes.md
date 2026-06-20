@@ -1,6 +1,7 @@
 ---
-title: "持久卷"
-description: "将块存储挂载到 Deno 沙盒中，以在会话之间保持状态"
+last_modified: 2026-04-20
+title: "卷与快照"
+description: "适用于 Deno Sandbox 的持久化存储和可启动镜像"
 ---
 
 持久卷让你可以将区域块存储附加到沙箱中，从而使数据在进程重启和新连接之间得以保留。它们非常适合包缓存、构建产物、SQLite 数据库，或任何需要少量耐久存储但不需要将代码提升为完整 Deno Deploy 应用的工作流。
@@ -65,7 +66,7 @@ print(volume)
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (异步)">
+<deno-tab value="python-async" label="Python（异步）">
 
 ```py
 from deno_sandbox import AsyncDenoDeploy
@@ -125,7 +126,7 @@ vol = sdk.volumes.get("training-cache")
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (异步)">
+<deno-tab value="python-async" label="Python（异步）">
 
 ```py
 page = await sdk.volumes.list(search="training")
@@ -226,7 +227,7 @@ with sdk.sandbox.create(
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (异步)">
+<deno-tab value="python-async" label="Python（异步）">
 
 ```py
 from deno_sandbox import AsyncDenoDeploy
@@ -282,7 +283,7 @@ sdk.volumes.delete("training-cache")
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (异步)">
+<deno-tab value="python-async" label="Python（异步）">
 
 ```py
 await sdk.volumes.delete("training-cache")

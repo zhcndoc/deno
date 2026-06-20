@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-06-15
 title: "deno compile"
 oldUrl:
   - /runtime/manual/tools/compile/
@@ -19,7 +19,7 @@ description: "将您的代码编译为独立可执行文件"
 deno compile --allow-read --allow-net jsr:@std/http/file-server
 ```
 
-[脚本参数](/runtime/getting_started/command_line_interface/#passing-script-arguments) 可以部分嵌入。
+[脚本参数](/runtime/run/#passing-script-arguments) 可以部分嵌入。
 
 ```sh
 deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
@@ -79,7 +79,7 @@ Deno 支持针对所有目标的交叉编译，而不管主机平台。
 | Linux    | x86_64    | `x86_64-unknown-linux-gnu`    |
 | Linux    | ARM64     | `aarch64-unknown-linux-gnu`   |
 
-## The denort binary
+## denort 二进制文件
 
 `deno compile` 将您的程序嵌入到 `denort`（“Deno runtime”）中：这是一个精简版的 Deno 构建，仅包含运行已编译程序所需的内容，不包含任何工具子命令。使用 `denort` 作为基础而不是完整的 `deno` 二进制文件，是编译后的可执行文件更小的原因。
 
@@ -175,6 +175,51 @@ import "./worker.ts";
 ```sh
 deno compile main.ts
 ```
+
+## 打包依赖
+
+:::caution
+
+`--bundle` 是实验性功能，可能会发生变化。某些动态模式
+尚不受支持（参见下面的 [限制](#limitations)）。
+
+:::
+
+默认情况下，`deno compile` 会将解析后的整个 `node_modules` 树嵌入到
+可执行文件中。对于包含大量 npm 依赖的项目，这可能会使二进制文件变大
+并且启动变慢。`--bundle` 标志会先通过打包器处理您的入口文件，然后再嵌入，
+因此最终进入二进制文件的只会是程序实际用到的代码。
+
+```sh
+deno compile --bundle main.ts
+```
+
+对于纯 ESM 依赖树，树摇会移除所有未使用内容，npm 负载会被完全丢弃，从而生成一个小得多的二进制文件。当命中 CommonJS 包或原生插件（`.node`）时，相关包会被嵌入，以便它们在运行时仍可工作，但未命中的包仍会被排除。
+
+`--bundle` 可以自动识别若干真实世界中的模式：
+
+- **CommonJS 和原生插件** — 会检测 CJS 依赖和 `.node` 原生插件，并嵌入提供它们的包。
+- **Workers** — 会发现 `new Worker(new URL("./worker.ts", import.meta.url), ...)` 调用，每个 worker 都会单独打包并与主包一起嵌入。
+- **`package.json` 读取** — 在运行时读取自身 `package.json` 的包（例如为了报告版本号）会自动包含该文件。
+
+### 压缩打包结果
+
+将 `--bundle` 与 `--minify` 结合使用，可以压缩打包后的输出。这会同时减小嵌入包的大小和运行时内存使用，但代价是堆栈跟踪可读性降低。
+
+```sh
+deno compile --bundle --minify main.ts
+```
+
+`--minify` 只有与 `--bundle` 结合使用时才有意义。
+
+### 限制
+
+由于打包依赖于对代码进行静态分析，无法追踪的模式会从二进制文件中移除：
+
+- 对不是字符串字面量的标识符执行动态 `require()` / `import()`。
+- 使用计算得到的 URL 启动的 workers，或从传递依赖而不是您自己的源代码中启动的 workers。
+
+如果您的程序依赖这些内容，请将其保持为可静态分析，使用 [`--include`](#including-data-files-or-directories) 添加所需文件，或者在不使用 `--bundle` 的情况下编译。
 
 ## 自解压可执行文件
 

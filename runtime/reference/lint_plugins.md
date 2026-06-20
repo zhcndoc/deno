@@ -4,11 +4,10 @@ title: "Lint 插件"
 description: "在 Deno 中创建和使用自定义 lint 插件的指南。学习如何编写自定义 lint 规则、使用选择器进行 AST 匹配、实现修复，并使用 Deno 的 lint 插件 API 测试你的插件。"
 ---
 
-:::caution
+:::note
 
-这是一个实验性功能，要求 Deno 版本为 `2.2.0` 或更高。
-
-插件 API 目前被标记为“不稳定”，因为它在未来可能会发生变化。
+lint 插件 API 可在 Deno `2.2.0` 及更高版本中使用，无需任何 unstable
+标志。该 API 仍在不断演进，未来版本中可能会有所变化。
 
 :::
 

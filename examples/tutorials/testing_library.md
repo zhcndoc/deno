@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-11
 title: "在 Deno 中使用 Testing Library"
-description: "在 deno test 中使用 @testing-library/dom 和 happy-dom 测试 DOM 行为：按 role 和文本查询、模拟事件，以及该设置所需的权限。"
+description: "使用 @testing-library/dom 和 happy-dom 在 deno test 中测试 DOM 行为：通过角色和文本进行查询、模拟事件，以及此设置所需的权限。"
 url: /examples/testing_library_tutorial/
 ---
 

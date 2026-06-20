@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "构建 CLI 应用"
-description: "使用 Deno 构建命令行工具：读取参数和 stdin，提示用户，设置退出码，编译为单个自包含可执行文件，并分发你的工具。"
+description: "使用 Deno 构建命令行工具：读取参数和 stdin，提示用户，设置退出码，将其编译为单个自包含可执行文件，并分发你的工具。"
 ---
 
 Deno 是发布命令行工具的绝佳方式。你的工具只是 TypeScript，因此
@@ -213,7 +214,7 @@ greet --name=Deno
 - **[deno compile](/runtime/reference/cli/compile/)。** 所有目标、标志、资源
   嵌入、图标和代码签名。
 - **[deno install](/runtime/reference/cli/install/)。** 安装工具和
- 依赖项。
+  依赖项。
 - **[@std/cli](https://jsr.io/@std/cli)。** 参数解析、旋转加载器、进度
   条和交互式提示。
 - **[Deno API reference](/api/deno/)。** `Deno` 命名空间上的所有内容，

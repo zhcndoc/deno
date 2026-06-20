@@ -86,7 +86,7 @@ The link checker needs to run against a live server. Here's the workflow:
 2. **Run the link checker** (in another terminal):
 
    ```console
-   deno task check:links:local
+   deno task check:links
    ```
 
 This will check all links on your local site and report any issues.
@@ -108,7 +108,7 @@ git commit --no-verify
 
 **Note for Windows users**: If you're using Git Bash or WSL, the pre-commit hook
 should work normally. If you encounter issues, you can manually run
-`deno task check:links:local` before committing.
+`deno task check:links` before committing.
 
 The link checker also runs automatically in CI for all deployments.
 
@@ -133,6 +133,15 @@ files in their respective content directories.
 
 Static files (like screenshots) can be included directly in the `runtime`,
 `deploy`, or `kv` folders, and referenced by relative URLs in your markdown.
+
+### Keep `last_modified` fresh
+
+Every content page carries a `last_modified: YYYY-MM-DD` field in its
+frontmatter. Whenever you change a page, bump that date to the day of the change
+in the same pull request. CI enforces this: the `frontmatter_test` checks that
+every page has a valid `last_modified`, and the Freshness workflow fails when a
+page is edited without bumping it. Run `deno task check:freshness` locally to
+check your branch.
 
 ### Guides teach, reference enumerates
 

@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: 定价和限制
-description: Deno Subhosting 定价计划、资源限制、部署限制和应用性能约束的概述。
+description: Deno Subhosting 定价方案、资源限制、部署限制以及应用性能约束概览。
 ---
 
 :::warning 2026 年 7 月 20 日停止服务

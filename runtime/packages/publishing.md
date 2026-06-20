@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-06-12
 title: "发布包"
 description: "使用 deno publish 将 Deno 包发布到 JSR，使用 deno pack 构建与 npm 兼容的 tarball，并为你的库选择合适的注册表。"
 oldUrl:

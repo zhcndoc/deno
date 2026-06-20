@@ -11,8 +11,8 @@ tags: [推荐]
 **无效:**
 
 ```typescript
-// 实际上这行是有效的，因为 `export` 意味着“已使用”，
-// 所以这个指令是多余的
+// `export` 也算作一次使用，所以 `foo` 实际上并未未使用，
+// 因此下面的指令并不会抑制任何内容。此规则会将其标记为多余。
 // deno-lint-ignore no-unused-vars
 export const foo = 42;
 ```
@@ -20,5 +20,11 @@ export const foo = 42;
 **有效:**
 
 ```typescript
+// 此处该指令是多余的，因此它只是被移除了。
 export const foo = 42;
+
+// 这里该指令确实在发挥作用：`bar` 确实未被使用，因此
+// `no-unused-vars` 指令是必要的，而 `ban-unused-ignore` 不会干预它。
+// deno-lint-ignore no-unused-vars
+const bar = 42;
 ```

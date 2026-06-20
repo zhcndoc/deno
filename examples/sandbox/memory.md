@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-02-09
 title: "配置沙箱内存"
 description: "了解如何配置分配给沙箱的内存"
 url: /examples/sandbox_memory/

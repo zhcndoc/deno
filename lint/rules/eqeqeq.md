@@ -19,3 +19,12 @@ if ("hello world" != input) {}
 if (a === 5) {}
 if ("hello world" !== input) {}
 ```
+
+此规则没有配置选项。如果你有意针对某个特定比较使用 `==` 或
+`!=`（例如使用 `value != null` 来同时匹配 `null`
+和 `undefined`），可以在该行使用忽略指令来抑制此规则：
+
+```typescript
+// deno-lint-ignore eqeqeq
+if (value != null) {}
+```

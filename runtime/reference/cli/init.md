@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-06-15
 title: "deno init"
 oldUrl: /runtime/manual/tools/init/
 command: init
@@ -127,8 +127,7 @@ deno init --serve
 }
 ```
 
-现在，你可以通过运行 `deno task dev` 启动你的 Web 服务器，该服务器
-[监听变更](/runtime/getting_started/command_line_interface/#watch-mode)。
+现在，你可以通过运行 `deno task dev` 来启动你的 Web 服务器，它会[监视文件变更](/runtime/run/watch_mode/)。
 
 ```sh
 deno task dev
@@ -164,7 +163,7 @@ deno init --empty
 }
 ```
 
-现在，你可以通过运行 `deno task dev` 启动项目，它将[监听变更](/runtime/getting_started/command_line_interface/#watch-mode)。
+现在，你可以通过运行 `deno task dev` 来启动项目，它会[监视文件变更](/runtime/run/watch_mode/)。
 
 ```sh
 deno task dev

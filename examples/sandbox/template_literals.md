@@ -1,7 +1,8 @@
 ---
+last_modified: 2026-01-27
 title: "带变量插值的模板字面量命令"
-description: "学习如何在沙箱中使用带变量插值的模板字面量命令。"
-url: /examples/sandboxes_template_literals/
+description: "了解如何在沙箱中使用带变量插值的模板字面量命令。"
+url: /examples/sandbox_template_literals/
 layout: sandbox-example.tsx
 ---
 

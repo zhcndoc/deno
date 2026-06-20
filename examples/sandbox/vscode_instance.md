@@ -1,4 +1,5 @@
 ---
+last_modified: 2026-01-27
 title: "在沙箱中提供一个 VSCode 实例"
 description: "了解如何在沙箱中提供一个 VSCode 实例。"
 url: /examples/sandbox_vscode_instance/

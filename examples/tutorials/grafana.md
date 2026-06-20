@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-07-11
+last_modified: 2026-06-15
 title: "如何将遥测数据导出到 Grafana"
-description: "使用 OpenTelemetry 和 Grafana 导出遥测数据的完整指南。了解如何配置采集器、可视化追踪，并监控应用性能。"
+description: "使用 OpenTelemetry 和 Grafana 导出遥测数据的完整指南。了解如何配置采集器、可视化追踪数据以及监控应用性能。"
 url: /examples/grafana_tutorial/
 ---
 
@@ -192,10 +192,10 @@ deno run --allow-net --allow-env --env-file --allow-read main.ts
 
 🦕 现在你已经让遥测导出工作了，你可以：
 
-1. 添加自定义 spans 和属性，以更好地理解你的应用
+1. 添加自定义 span 和属性，以更好地理解你的应用
 2. 基于延迟或错误条件设置告警
-3. 使用诸如以下平台将你的应用和采集器部署到生产环境：
-   - [Fly.io](https://docs.deno.com/examples/deploying_deno_with_docker/)
+3. 使用以下平台将你的应用和采集器部署到生产环境：
+   - [Fly.io](https://docs.deno.com/runtime/reference/docker/)
    - [Digital Ocean](https://docs.deno.com/examples/digital_ocean_tutorial/)
    - [AWS Lightsail](https://docs.deno.com/examples/aws_lightsail_tutorial/)
 

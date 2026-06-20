@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-17
 title: "Web 平台 API"
 description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、worker、存储以及其他 Web 标准 API，包括实现细节和与浏览器规范的偏差。"
 oldUrl:
@@ -269,7 +269,35 @@ self.onmessage = (evt) => {
 };
 ```
 
-### 实例权限
+### 向主线程发送消息
+
+通信是双向的。主线程使用 `worker.postMessage()` 向 worker 发送数据，并使用 `worker.onmessage` 监听回复。在 worker 内部，`self.onmessage` 接收消息，而 `self.postMessage()` 将结果发回：
+
+```ts title="main.ts"
+const worker = new Worker(import.meta.resolve("./worker.ts"), {
+  type: "module",
+});
+
+// 从 worker 接收结果
+worker.onmessage = (evt) => {
+  console.log("来自 worker 的结果：", evt.data);
+};
+
+// 向 worker 发送任务
+worker.postMessage(41);
+```
+
+```ts title="worker.ts"
+self.onmessage = (evt) => {
+  const result = evt.data + 1;
+  // 将结果发回主线程
+  self.postMessage(result);
+};
+```
+
+运行 `deno run --allow-read main.ts` 会打印 `来自 worker 的结果: 42`。
+
+### 实例化权限
 
 创建新的 `Worker` 实例类似于动态导入；因此 Deno 对此操作要求适当的权限。
 

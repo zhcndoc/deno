@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-15
 title: "文档测试"
-description: "使用 deno test --doc 将 JSDoc 注释和 markdown 文件中的代码示例作为测试运行，这样你的文档就永远不会过时。"
+description: "使用 deno test --doc 运行你 JSDoc 注释和 markdown 文件中的代码示例作为测试，这样你的文档就永远不会过时。"
 oldUrl:
   - /runtime/manual/testing/documentation/
   - /runtime/manual/basics/testing/documentation/
@@ -105,6 +106,40 @@ Deno.test("example.ts$4-10.ts", async () => {
 });
 ```
 
+## Hashbang 和受限权限
+
+如果代码示例以 [hashbang](/examples/hashbang_tutorial/) 开头，它会针对受支持的 Deno CLI 标志进行验证，并且权限标志会传递给生成的 [`Deno.test`](/api/deno/~/Deno.test)。
+
+````ts
+/**
+ * 打印环境变量的值。
+ *
+ * ```ts
+ * #!/usr/bin/env -S deno run --allow-env=MY_ENV_VAR
+ * console.log(Deno.env.get("MY_ENV_VAR"));
+ * ```
+ */
+````
+
+下面是每个权限标志的解释方式：
+
+| 标志                | 生成的权限                                             |
+| ------------------- | ------------------------------------------------------ |
+| `--allow-all`       | 从 `deno test` 继承所有权限                              |
+| `--allow-*`         | 从 `deno test` 继承指定的权限                           |
+| `--allow-*=…`       | 将指定权限限制为提供的值                               |
+| `--deny-*`          | 明确撤销指定的权限                                       |
+| `--deny-*=…`        | 目前不支持（会导致测试失败）                             |
+| `--permission-set`  | 目前不支持（会被忽略）                                   |
+| `--ignore-*`        | 目前不支持（会被忽略）                                   |
+| 无权限标志           | 无                                                    |
+
+:::note
+
+即使 hashbang 本身指定了更宽松的权限，代码示例运行时获得的权限也不会比 `deno test` 被授予的更宽松。
+
+:::
+
 ## 跳过代码块
 
 你可以通过添加 `ignore` 属性来跳过对代码块的求值。
@@ -120,4 +155,4 @@ Deno.test("example.ts$4-10.ts", async () => {
 export async function sendEmail(to: string) {
   // 向指定地址发送电子邮件...
 }
-````
+```

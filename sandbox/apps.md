@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-03-19
 title: "Deno Deploy 应用的程序化管理"
-description: "使用 @deno/sandbox 客户端程序化地创建、列出、更新和删除 Deno Deploy 应用。"
+description: "使用 @deno/sandbox Client 以编程方式创建、列出、更新和删除 Deno Deploy 应用。"
 ---
 
 除了提供 microVM，SDK 还提供了用于在组织内部创建和管理 Deploy 应用的 API。自动化这些工作流程在以下情况下非常有用：
@@ -39,7 +40,7 @@ const client = new Client();
 ```py
 from deno_sandbox import DenoDeploy
 
-sdk = DenoDeploy()
+sdk = DenoDeploy();
 ```
 
 </deno-tab>
@@ -48,7 +49,7 @@ sdk = DenoDeploy()
 ```py
 from deno_sandbox import AsyncDenoDeploy
 
-sdk = AsyncDenoDeploy()
+sdk = AsyncDenoDeploy();
 ```
 
 </deno-tab>

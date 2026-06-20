@@ -1,6 +1,7 @@
 ---
-title: "访问字符串和二进制输出"
-description: "了解如何访问沙箱中命令的字符串和二进制输出。"
+last_modified: 2026-02-09
+title: "流式访问字符串和二进制输出"
+description: "了解如何从沙箱中的命令流式获取字符串和二进制输出。"
 url: /examples/sandbox_access_output/
 layout: sandbox-example.tsx
 ---

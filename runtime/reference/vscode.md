@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-08-20
+last_modified: 2026-06-18
 title: "Deno & Visual Studio Code"
 description: "使用 Visual Studio Code 和 Deno 的完整指南。了解扩展设置、工作区配置、调试、测试、任务自动化以及面向 Deno 开发的高级 IDE 功能。"
 oldUrl:
@@ -95,11 +95,18 @@ Deno CLI 提供了一个 [内置格式化工具](/runtime/reference/cli/formatte
 
 可以通过编辑 **Deno > Suggest > Imports: Hosts** 设置 - `deno.suggest.imports.hosts` 在适当的 `settings.json` 中启用或禁用单独的主机/源。
 
-## 缓存远程模块
+## 缓存依赖项
 
-Deno 支持远程模块，并将提取远程模块并将其存储在本地缓存中。当您在命令行上执行 `deno run`、`deno test`、`deno info` 或 `deno install` 等操作时，Deno CLI 将获取任何远程模块及其依赖项并填充缓存。
+Deno 会下载您的依赖项（npm 和 JSR 包，以及任何远程 URL
+模块）一次，并将它们存储在本地缓存中。当您运行诸如
+`deno run`、`deno test`、`deno info` 或 `deno install` 之类的命令时，CLI 会获取任何
+尚未缓存的依赖项并填充缓存。
 
-在编辑器中开发代码时，如果模块不在缓存中，您将收到一条诊断信息，例如 `Uncached or missing remote URL: "https://deno.land/example/mod.ts"`，表示任何缺少远程模块。Deno 不会自动尝试缓存模块，除非它是来自注册表导入建议的补全（见上文）。
+在编辑器中开发时，如果某个依赖项尚未缓存，您将会得到一个
+类似于以下的诊断：
+`Uncached or missing remote URL: "https://deno.land/x/example/mod.ts"`，用于
+缺失的依赖项。Deno 不会自动缓存它，除非它是
+注册表导入建议中的补全项（见上文）。
 
 除了在命令行上运行命令外，扩展还提供了在编辑器中缓存依赖项的方法。缺少依赖项将具有一个 _快速修复_，让 Deno 尝试缓存该依赖项。修复可以通过在导入说明符上按 <kbd>CTRL</kbd> <kbd>.</kbd> 或 <kbd>⌘</kbd> <kbd>.</kbd> 来访问，或者悬停在说明符上并选择 **Quick Fix...**。
 
@@ -173,6 +180,48 @@ denoTest({
 ## 使用调试器
 
 该扩展提供与内置的 VS Code 调试器的集成。您可以通过以下方式生成配置：转到 `运行和调试` 面板，点击 `创建一个 launch.json 文件`，并从可用的调试器选项中选择 `Deno` 选项。（生成的配置 `type` 将是 `node`；这没问题。）
+
+### 调试通过开发服务器运行的项目
+
+生成的 `Deno` 配置会直接启动单个入口文件。这不适用于那些 dev 任务通过其他工具启动长时间运行服务器的项目，例如 [Fresh](https://fresh.deno.dev/) 应用，其中 `deno task dev` 运行 Vite。对于这类项目，请先启用检查器启动 dev 服务器，然后改为让 VS Code **附加** 到它。
+
+首先，添加一个在 Deno 检查器下运行 dev 服务器的任务。对于 `dev` 任务为 `vite` 的 Fresh 应用，添加一个调试变体：
+
+```json title="deno.json"
+{
+  "tasks": {
+    "dev": "vite",
+    "dev:debug": "deno run --inspect -A npm:vite"
+  }
+}
+```
+
+`--inspect` 会在 `127.0.0.1:9229` 上启动 V8 检查器，但不会暂停。如果您需要调试在启动期间、首次请求之前运行的代码，请改用
+[`--inspect-wait`](/runtime/fundamentals/debugging/#--inspect-wait)。
+
+然后将一个 `attach` 配置添加到 `.vscode/launch.json`：
+
+```json title=".vscode/launch.json"
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "附加到开发服务器",
+      "type": "node",
+      "request": "attach",
+      "port": 9229
+    }
+  ]
+}
+```
+
+运行 `deno task dev:debug`，然后从 `Run and Debug` 面板启动“附加到开发服务器”配置。在服务器端代码中设置的断点（例如 Fresh 路由处理程序）会在下一个匹配的请求时命中。
+
+:::note
+
+Vite 按需加载并转换路由模块，因此，某个尚未被请求过的路由中的断点可能会显示为“未绑定断点”，并带有“某些断点无法设置”的警告。这是预期行为：断点会在该路由首次加载后绑定，并且在该代码运行时仍会暂停。
+
+:::
 
 ## 任务
 

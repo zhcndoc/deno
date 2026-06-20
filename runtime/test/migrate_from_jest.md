@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "从 Jest 迁移"
-description: "将 Jest 测试套件迁移到 deno test：通过 node:test 实现 describe/it、expect 映射、模拟函数等价物、快照测试、假定时器，以及翻译 Jest 配置。"
+description: "将 Jest 测试套件迁移到 deno test：通过 node:test 实现 describe/it，expect 映射，mock 函数等价物，快照测试，假时间，以及 Jest 配置的转换。"
 ---
 
 大多数 Jest 测试套件都可以迁移到 `deno test`，而无需重写测试逻辑：`node:test` 模块提供了相同的 `describe`/`it` 结构，标准库也提供了带有你已在使用的匹配器的 `expect`。变化之处主要是少量导入方式以及运行器的配置方式。

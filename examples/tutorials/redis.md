@@ -8,7 +8,7 @@ oldUrl:
   - /runtime/tutorials/how_to_with_npm/redis/
 ---
 
-[Redis](https://redis.io/) 是一个内存数据存储，你可以用它来缓存、作为消息代理或用于流数据处理。
+[Redis](https://redis.io/) 是一个内存数据存储，你可以将其用于缓存、作为消息代理，或用于流式传输数据。如果你只需要连接并发送命令，请参阅 [Redis 快速入门](/examples/redis/)；本教程将在此基础上构建更完整的内容。
 
 [在这里查看源代码。](https://github.com/denoland/examples/tree/main/with-redis)
 

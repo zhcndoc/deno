@@ -2,6 +2,7 @@
 title: "Node.js 内置 API"
 description: "Deno 支持的 Node.js 内置模块和全局变量的完整参考。探索包括 fs、http、crypto、process、buffer 等 Node.js API，并附带兼容性信息。"
 layout: doc.tsx
+url: /api/node/about/
 oldUrl:
   - /runtime/manual/node/compatibility/
   - /runtime/manual/npm_nodejs/compatibility_mode/

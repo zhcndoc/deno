@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-11
 title: "参考"
-description: "查找：完整的 deno CLI、配置、标准库和运行时 API。"
+description: "查阅：完整的 deno CLI、配置、标准库和运行时 API。"
 ---
 
 本参考部分用于查找内容：每个 `deno` 子命令、每个配置字段、标准库以及运行时 API。

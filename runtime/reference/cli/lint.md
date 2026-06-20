@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-06-17
 title: "deno lint"
 oldUrl:
   - /runtime/tools/linter/
@@ -79,12 +79,16 @@ deno lint --rules
 - **`include`** — 要启用的额外单条规则
 - **`exclude`** — 即使被标签包含，也要禁用的规则
 
-See the [Configuration](/runtime/reference/deno_json/#linting) page for all
-available options.
+许多规则不属于任何标签（例如 `eqeqeq` 或 `no-console`）。
+这些规则不会通过 `tags` 启用，必须通过在 `include` 中
+逐个列出它们来启用。您可以通过 `deno lint --rules` 或在 [lint rules](/lint/)
+参考中每个规则的页面检查某条规则是否有标签。
+
+有关所有可用选项，请参阅 [Configuration](/runtime/reference/deno_json/#linting) 页面。
 
 ## 包含和排除文件
 
-在 `deno.json` 中指定要检查的文件：
+在您的 `deno.json` 中指定要检查的文件：
 
 ```json title="deno.json"
 {

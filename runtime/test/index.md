@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-18
 title: "测试"
-description: "使用 Deno 内置的测试运行器编写并运行测试：断言、测试步骤、钩子、过滤和报告工具，并提供用于模拟、快照和覆盖率的专门指南。"
+description: "使用 Deno 内置的测试运行器编写并运行测试：断言、测试步骤、钩子、过滤和报告器，并提供用于 mock、快照和覆盖率的专门指南。"
 oldUrl:
   - /runtime/fundamentals/testing/
   - /runtime/manual/basics/testing/
@@ -14,6 +14,17 @@ Deno 提供了一个内置的测试运行器，可以用来编写和运行 JavaS
 
 除了内置的测试运行器之外，您还可以在 Deno 中使用 JS 生态系统中的其他测试运行器，例如 Jest、Mocha 或 AVA。要迁移现有的 Jest 测试套件？请参阅
 [从 Jest 迁移](/runtime/test/migrate_from_jest/)。
+
+## [`Deno.test`](/api/deno/~/Deno.test) vs [`node:test`](/api/node/test/)
+
+Deno 同等支持两种测试 API：它自己的 [`Deno.test`](/api/deno/~/Deno.test) 以及 Node 内置的 [`node:test`](/api/node/test/) 模块。二者都属于一等公民。`deno test` 可以发现、运行并报告使用任一 API 编写的测试，[覆盖率](/runtime/test/coverage/) 和名称过滤等核心功能在两者之间的行为一致，您也可以在同一个项目中混用二者。没有哪一个比另一个更受支持。
+
+区别在于 API，而不是支持级别：
+
+- [`Deno.test`](/api/deno/~/Deno.test) 无需导入，并暴露 Deno 特有的选项，例如每个测试的[权限](#tests-and-permissions)以及 op/resource [消毒器](/runtime/test/sanitizers/)开关。
+- `node:test`（`import { test } from "node:test"`）使用 Node 测试 API，因此用它编写的测试套件也可以原样在 Node.js 上运行。
+
+当您希望测试套件能够跨 Deno 和 Node 移植，或者在迁移 Node 项目时，请使用 `node:test`；当您希望使用 Deno 原生的易用性和选项时，请使用 [`Deno.test`](/api/deno/~/Deno.test)。
 
 ## 编写测试
 
@@ -380,22 +391,22 @@ import { assertEquals } from "jsr:@std/assert";
 import getFileText from "./main.ts";
 
 Deno.test({
-  name: "File reader gets text with permission",
+  name: "文件读取器在有权限时获取文本",
   // 没有 `permissions` 表示“继承”
   fn: async () => {
     const result = await getFileText();
     console.log(result);
-    assertEquals(result, "the content of the file");
+    assertEquals(result, "文件内容");
   },
 });
 
 Deno.test({
-  name: "File reader falls back to error message without permission",
+  name: "文件读取器在没有权限时回退到错误消息",
   permissions: { read: false },
   fn: async () => {
     const result = await getFileText();
     console.log(result);
-    assertEquals(result, "oops don't have permission");
+    assertEquals(result, "糟糕，没有权限");
   },
 });
 ```
@@ -409,7 +420,7 @@ deno test --allow-read
 
 ```ts
 Deno.test({
-  name: "permission configuration example",
+  name: "权限配置示例",
   // permissions: { read: true } // 授予所有读取权限，拒绝其他所有权限
   // 或者
   permissions: {

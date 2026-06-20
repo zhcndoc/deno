@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-21
+last_modified: 2026-06-18
 title: "权限"
 description: "Deno 权限系统参考：运行时沙箱如何工作，以及如何使用 --allow 和 --deny 标志授予或拒绝文件系统、网络、环境、系统、子进程、FFI 和导入访问权限。"
 oldUrl:
@@ -299,6 +299,19 @@ deno run --allow-sys --deny-sys="networkInterfaces" script.ts
 deno run --deny-sys script.ts
 ```
 
+`--allow-sys` 接受的接口名称对应于 `Deno` 命名空间中暴露主机信息的函数，例如 `hostname`、`osRelease`、
+`osUptime`、`loadavg`、`networkInterfaces`、`systemMemoryInfo`、`uid`、`gid`、
+`username`、`cpus` 和 `homedir`。有关可识别名称的完整集合，请参见
+[Deno.SysPermissionDescriptor](/api/deno/~/Deno.SysPermissionDescriptor)。
+
+同一标志也会控制对应的 Node 兼容 API。[`node:os`](/api/node/os/) 和
+[`node:process`](/api/node/process/) 中读取系统信息的函数，例如 `os.hostname()`、`os.cpus()`、
+`os.networkInterfaces()`、`os.freemem()`、`os.totalmem()`、`os.uptime()`、
+`process.getuid()` 和 `process.getgid()`，都需要 `--allow-sys`，并映射到
+相同的接口名称。例如，调用 `os.cpus()` 需要
+`--allow-sys=cpus`，而 `os.networkInterfaces()` 需要
+`--allow-sys=networkInterfaces`。
+
 ## 子进程
 
 默认情况下，在 Deno 运行时中执行的代码不能生成子进程，因为这将构成违反“代码不能在未经用户同意的情况下提升其权限”这一原则。
@@ -324,6 +337,25 @@ deno run --allow-run="curl,whoami" script.ts
 除非父进程具有 `--allow-all`，否则你大概永远不想使用 `--allow-run=deno`，因为能够启动一个 `deno` 进程意味着脚本可以以完全权限再启动另一个 `deno` 进程。
 
 :::
+
+### 带有 `LD_*` 和 `DYLD_*` 环境变量的子进程
+
+使用名称以 `LD_` 开头的环境变量（例如 `LD_LIBRARY_PATH` 或 `LD_PRELOAD`）或以 `DYLD_` 开头的环境变量（例如 `DYLD_LIBRARY_PATH` 或 `DYLD_INSERT_LIBRARIES`）来生成子进程，需要未限定范围的 `--allow-run` 标志。像 `--allow-run=curl` 这样的限定范围允许列表 _不足够_，即使其值与 Deno 启动时使用的值相同也是如此：
+
+```ts
+// 在 `--allow-run=echo` 下失败，在 `--allow-run` 或 `--allow-all` 下成功。
+new Deno.Command("echo", {
+  args: ["hello"],
+  env: { LD_PRELOAD: "/path/to/lib.so" },
+}).outputSync();
+```
+
+```console
+NotCapable: 需要 --allow-run 权限才能使用 LD_PRELOAD
+环境变量生成子进程。或者，在该环境变量未设置的情况下生成。
+```
+
+这些变量会指示动态链接器将任意共享库加载到子进程中，因此无论你允许了哪个可执行文件，它们都可以在子进程中运行代码。将它们限制为未限定范围的 `--allow-run`，可以防止限定范围的允许列表被静默绕过。如果你不需要它们，最简单的修复方式是在生成子进程时不设置该变量。
 
 定义：`--deny-run[=<PROGRAM_NAME>...]`
 

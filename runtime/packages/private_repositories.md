@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "私有仓库"
-description: "使用 DENO_AUTH_TOKENS 从私有仓库加载远程模块：Bearer 令牌、基本身份验证，以及 GitHub 操作指南。"
+description: "使用 DENO_AUTH_TOKENS 从私有仓库加载远程模块：bearer 令牌、基本身份验证以及 GitHub 操作指南。"
 oldUrl:
   - /runtime/manual/advanced/private_repositories/
   - /runtime/reference/private_repositories/

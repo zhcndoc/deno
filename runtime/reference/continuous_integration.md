@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-11-21
+last_modified: 2026-06-14
 title: "持续集成"
-description: "为 Deno 项目设置持续集成（CI）管道的指南。了解如何配置 GitHub Actions 工作流程，在 CI 中运行测试和代码检查，处理跨平台构建，并通过缓存优化管道性能。"
+description: "为 Deno 项目设置持续集成（CI）流水线的指南。学习如何配置 GitHub Actions 工作流、在 CI 中运行测试和代码检查、处理跨平台构建，以及使用缓存优化流水线性能。"
 oldUrl: /runtime/manual/advanced/continuous_integration
 ---
 
@@ -40,9 +40,9 @@ jobs:
 要扩展工作流程，添加您可能需要的任何 `deno` 子命令：
 
 ```yaml
-# 作为单个可复现步骤安装锁定的依赖项
+# 安装锁定的依赖项作为单个可复现的步骤
 # （Deno 2.8+）。等同于 `deno install --frozen` 加上 npm
-# 生命周期脚本处理——请参阅 deno ci 参考页面。
+# 生命周期脚本处理。
 - run: deno ci
 
 # 检查代码是否符合 Deno 的默认
@@ -62,9 +62,11 @@ jobs:
 - run: deno coverage --lcov cov/ > cov.lcov
 ```
 
-## 跨平台工作流程
+请参阅 [`deno ci`](/runtime/reference/cli/ci/) 参考文档，了解它到底会安装什么以及接受哪些标志。
 
-作为 Deno 模块的维护者，您可能希望知道您的代码是否在今天使用的所有主要操作系统上运行正常：Linux、macOS 和 Windows。通过运行一个并行作业的矩阵，可以实现跨平台工作流程，每个作业在不同的操作系统上运行构建：
+## 跨平台工作流
+
+作为 Deno 模块的维护者，您可能希望知道您的代码是否在今天使用的所有主要操作系统上运行正常：Linux、macOS 和 Windows。通过运行一个并行作业的矩阵，可以实现跨平台工作流，每个作业在不同的操作系统上运行构建：
 
 ```yaml
 jobs:
@@ -98,7 +100,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        deno-version: [v1.x]
+        deno-version: [v2.x]
         canary: [false]
         include:
           - deno-version: canary

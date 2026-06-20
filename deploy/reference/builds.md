@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-02-25
-title: 构建（Builds）
-description: "Detailed explanation of the build process in Deno Deploy, covering build triggers, stages, configuration options, caching, and the build environment."
+last_modified: 2026-06-18
+title: 构建
+description: "关于 Deno Deploy 中构建流程的详细说明，涵盖构建触发、阶段、配置选项、缓存以及构建环境。"
 ---
 
 在 Deno Deploy 中，您应用程序代码的每个版本都被表示为一个修订（或构建）。当从 GitHub 部署时，修订通常与您仓库中的 git 提交一一对应。
@@ -73,17 +73,17 @@ description: "Detailed explanation of the build process in Deno Deploy, covering
 
 - **预部署命令**：构建完成但部署前运行的 shell 命令，通常用于数据库迁移等任务。
 
-- **运行时配置**：决定应用如何提供流量：
-  - **动态**：用于通过服务器响应请求的应用（API 服务器、服务器渲染网站等）
+- **运行时配置**：决定应用如何提供流量服务：
+  - **动态**：适用于通过服务器响应请求的应用（API 服务器、服务器端渲染网站等）
     - **入口文件**：要执行的 JavaScript 或 TypeScript 文件
-    - **参数**（可选）：传递给应用的命令行参数
-    - **运行时工作目录**（可选）：应用运行时的工作目录
-    - **运行时内存限制**（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
-  - **静态**：用于提供预渲染静态内容的静态网站
-    - **目录**：包含静态资源的文件夹（如 `dist`、`.output`）
-    - **单页应用模式**（可选）：对不匹配静态文件的路径返回 `index.html`，而不是 404 错误
+    - **参数**（可选）：传递给应用的命令行参数，位于入口文件之后。这些不是 Deno 运行时的标志：无法传递 `--unstable-*` 之类的运行时标志，因为运行时始终使用一组固定的标志运行。详见[运行时参考](/deploy/reference/runtime/)。
+    - **运行时工作目录**（可选）：应用在运行时的工作目录
+    - **运行时内存限制**（可选）：应用在运行时可使用的最大内存量。默认值为 768 MB，在 Pro 计划中可增加至 4 GB。
+  - **静态**：适用于提供预渲染内容的静态网站
+    - **目录**：包含静态资源的文件夹（例如 `dist`、`.output`）
+    - **单页应用模式**（可选）：对于未匹配静态文件的路径，返回 `index.html`，而不是返回 404 错误
   - **自动**：使用框架预设时，运行时配置会自动设置。
-    - **运行时内存限制**（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
+    - **运行时内存限制**（可选）：应用在运行时可使用的最大内存量。默认值为 768 MB，在 Pro 计划中可增加至 4 GB。
 
 - **构建超时**：构建过程允许的最长时间。默认 5 分钟，Pro 计划下可增加至 15 分钟。
 
@@ -95,23 +95,23 @@ description: "Detailed explanation of the build process in Deno Deploy, covering
 
 #### `deno.json` 选项
 
-- `deploy.framework`（必填，除非设置了 `deploy.runtime`）：要使用的框架预设，例如 `nextjs` 或 `fresh`。设置此选项会自动配置框架的默认值。可用预设在[框架集成文档](./frameworks/)中列出。
+- `deploy.framework`（若未设置 `deploy.runtime` 则为必填）：要使用的框架预设，例如 `nextjs` 或 `fresh`。设置此选项会自动为该框架配置默认值。可用预设列在[框架集成文档](./frameworks/)中。
 - `deploy.install`（可选）：安装依赖的 shell 命令。
 - `deploy.build`（可选）：构建项目的 shell 命令。
 - `deploy.predeploy`（可选）：构建完成但部署前运行的 shell 命令，通常用于数据库迁移等任务。
-- `deploy.runtime`（必填，除非设置了 `deploy.framework`）：应用如何提供流量的配置。应用可以是静态的或动态的，具体如下：
+- `deploy.runtime`（若未设置 `deploy.framework` 则为必填）：应用如何提供流量服务的配置。应用可以是静态或动态，如下所定义：
   - 对于动态应用：
-    - `deploy.runtime.type`：必须设置为 `"dynamic"`，或省略（默认动态）。
+    - `deploy.runtime.type`：必须设置为 `"dynamic"`，或省略（dynamic 为默认值）。
     - `deploy.runtime.entrypoint`：要执行的 JavaScript 或 TypeScript 文件。
-    - `deploy.runtime.args`（可选）：传递给应用的命令行参数。
-    - `deploy.runtime.cwd`（可选）：应用运行时的工作目录。
-    - `deploy.runtime.memory_limit`（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
+    - `deploy.runtime.args`（可选）：传递给应用的命令行参数，位于入口文件之后。这些不是 Deno 运行时的标志；无法传递诸如 `--unstable-*` 之类的运行时标志。详见[运行时参考](/deploy/reference/runtime/)。
+    - `deploy.runtime.cwd`（可选）：应用在运行时的工作目录。
+    - `deploy.runtime.memory_limit`（可选）：应用在运行时可使用的最大内存量。默认值为 768 MB，在 Pro 计划中可增加至 4 GB。
   - 对于静态应用：
     - `deploy.runtime.type`：必须设置为 `"static"`。
-    - `deploy.runtime.cwd`：包含静态资源的文件夹（如 `dist`、`.output`）。
-    - `deploy.runtime.spa`（可选）：如果为 `true`，对未匹配静态文件的路径返回 `index.html`，而不是返回 404。
+    - `deploy.runtime.cwd`：包含静态资源的文件夹（例如 `dist`、`.output`）。
+    - `deploy.runtime.spa`（可选）：如果为 `true`，对于未匹配静态文件的路径，返回 `index.html`，而不是返回 404 错误。
   - 对于使用框架预设的应用：
-    - `deploy.runtime.memory_limit`（可选）：应用运行时可使用的最大内存。默认 768 MB，Pro 计划下可增加至 4 GB。
+    - `deploy.runtime.memory_limit`（可选）：应用在运行时可使用的最大内存量。默认值为 768 MB，在 Pro 计划中可增加至 4 GB。
 
 #### 示例
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-29
+last_modified: 2026-06-18
 title: "使用 deno deploy 命令部署应用"
-description: "使用 deno deploy CLI 命令创建并部署你的第一个应用到 Deno Deploy 的分步教程。"
+description: "使用 deno deploy CLI 命令创建并将你的第一个应用部署到 Deno Deploy 的分步教程。"
 url: /examples/deploy_command_tutorial/
 ---
 
@@ -51,7 +51,7 @@ Deno.serve({ port: 8000 }, (req) => {
 
   // 简单路由
   if (url.pathname === "/") {
-    console.log("Serving home page");
+    console.log("正在提供主页");
     return new Response(
       `
       <html>
@@ -74,7 +74,7 @@ Deno.serve({ port: 8000 }, (req) => {
   }
 
   if (url.pathname === "/about") {
-    console.log("Serving about page");
+    console.log("正在提供关于页面");
     return new Response(
       `
       <html>
@@ -166,7 +166,16 @@ deno deploy
 
 根据终端提示选择合适的选项。
 
-部署过程将：
+默认情况下，CLI 会提示你输入应用名称。你也可以改用 `--app` 标志自行设置（这相当于 Deno Deploy Classic 中的项目名称）：
+
+```bash
+deno deploy --app my-app-name
+```
+
+应用名称会用于应用的默认 URL。有关所有可用标志，包括 `--org` 和 `--prod`，请参阅
+[`deno deploy` 参考](/runtime/reference/cli/deploy/)。
+
+部署过程将会：
 
 1. 打包你的应用代码为 tarball
 2. 上传 tarball 到 Deno Deploy

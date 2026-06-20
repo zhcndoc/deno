@@ -1,6 +1,7 @@
 ---
-title: "AI 入门"
-description: "使用 Deno 文档的 LLM 和 AI 代理的概述及关键资源"
+last_modified: 2026-02-19
+title: "AI 入口"
+description: "使用 Deno 文档的 LLM 和 AI 代理的概览与关键资源"
 url: /ai/
 ---
 

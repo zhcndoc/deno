@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-08-11
+last_modified: 2026-06-18
 title: "获取并流式传输数据"
-description: "关于在 Deno 中使用网络请求的教程。学习如何使用 fetch API 进行 HTTP 请求、处理响应、实现数据流式传输，以及管理文件上传和下载。"
+description: "关于在 Deno 中处理网络请求的教程。了解如何使用 fetch API 进行 HTTP 请求、处理响应、实现数据流式传输，以及管理文件上传和下载。"
 url: /examples/fetch_data_tutorial/
 oldUrl:
   - /runtime/manual/examples/fetch_data/
@@ -44,6 +44,12 @@ deno run --allow-net fetch.js
 ```
 
 您应该在控制台看到 JSON 数据、作为文本的 HTML 数据以及一条错误信息。
+
+### HTTP/2
+
+使用 HTTP/2 不需要做任何特别的事情。当您 `fetch()` 一个 `https://` URL 时，Deno 会通过 TLS（借助 ALPN）与服务器协商协议，并在服务器支持时自动使用 HTTP/2，否则回退到 HTTP/1.1。无论哪种方式，`fetch` API 都是一样的，因此相同的代码无需改动即可与 HTTP/1.1 和 HTTP/2 服务器通信。
+
+在服务器端，[`Deno.serve()`](/api/deno/~/Deno.serve) 在通过 TLS 提供服务时也会自动支持 HTTP/2。
 
 ## 流式传输数据
 

@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-11
 title: "使用 workspaces 配置 monorepo"
-description: "设置一个包含多个包的 Deno workspace：成员名称和导出、glob 模式、仅根目录可用的选项、共享导入，以及使用 catalogs 集中管理依赖版本。"
+description: "使用多个包搭建一个 Deno workspace：成员名称与导出、glob 模式、仅根目录选项、共享导入，以及通过 catalogs 集中管理依赖版本。"
 url: /examples/workspaces_monorepo_tutorial/
 ---
 

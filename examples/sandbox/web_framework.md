@@ -1,6 +1,7 @@
 ---
-title: "服务一个网页框架"
-description: "创建 package.json，安装依赖，运行一个网页框架（Express），并从沙箱公开它"
+last_modified: 2026-01-27
+title: "提供一个 Web 框架"
+description: "创建一个 package.json，安装依赖，运行一个 Web 框架（Express），并从沙箱中将其公开到外部"
 url: /examples/sandbox_web_framework/
 layout: sandbox-example.tsx
 ---

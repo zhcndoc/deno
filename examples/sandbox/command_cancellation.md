@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-01-27
 title: "命令取消"
-description: "了解如何在沙盒中取消命令。"
+description: "了解如何在沙箱中取消命令。"
 url: /examples/sandbox_command_cancellation/
 layout: sandbox-example.tsx
 ---

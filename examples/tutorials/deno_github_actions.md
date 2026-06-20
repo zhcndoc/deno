@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-11
 title: "在 GitHub Actions 中运行 Deno"
-description: "为 Deno 项目搭建 GitHub Actions 工作流：使用 setup-deno 安装 Deno，缓存依赖，运行 fmt、lint 和 test，使用冻结的锁文件进行安装，并在不同 Deno 版本上进行测试。"
+description: "为 Deno 项目设置 GitHub Actions 工作流：使用 setup-deno 安装 Deno、缓存依赖、运行 fmt、lint 和 test、使用冻结的 lockfile 进行安装，并在多个 Deno 版本之间进行测试。"
 url: /examples/deno_github_actions_tutorial/
 ---
 

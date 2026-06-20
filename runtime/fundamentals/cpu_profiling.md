@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-12
 title: "CPU 性能分析"
-description: "使用内置 CPU 分析器对 Deno 程序进行性能分析：收集分析文件、Markdown 和 flamegraph 报告、Chrome DevTools 分析以及分析技巧。"
+description: "使用内置 CPU 分析器为 Deno 程序做性能分析：收集分析文件、Markdown 和 flamegraph 报告、Chrome DevTools 分析，以及性能分析技巧。"
 ---
 
 Deno 内置支持 V8 CPU 性能分析，可帮助你识别代码中的性能瓶颈。使用 `--cpu-prof` 标志在程序执行期间捕获 CPU 分析文件：
@@ -69,7 +70,7 @@ deno run -A --cpu-prof --cpu-prof-md server.js
 这会同时创建一个 `.cpuprofile` 文件和一个 `.md` 文件，报告如下：
 
 ```md
-# CPU Profile
+# CPU 分析
 
 | Duration | Samples | Interval | Functions |
 | -------- | ------- | -------- | --------- |
@@ -78,7 +79,7 @@ deno run -A --cpu-prof --cpu-prof-md server.js
 **Top 10:** `op_crypto_get_random_values` 98.5%, `(garbage collector)` 0.7%,
 `getRandomValues` 0.6%, `assertBranded` 0.2%
 
-## Hot Functions (Self Time)
+## 热函数（自身耗时）
 
 | Self% |     Self | Total% |    Total | Function                      | Location          |
 | ----: | -------: | -----: | -------: | ----------------------------- | ----------------- |
@@ -87,7 +88,7 @@ deno run -A --cpu-prof --cpu-prof-md server.js
 |  0.6% |   3.00ms |   0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
 |  0.2% |   1.00ms |   0.2% |   1.00ms | `assertBranded`               | 00_webidl.js:1149 |
 
-## Call Tree (Total Time)
+## 调用树（总耗时）
 
 | Total% |    Total | Self% |     Self | Function                      | Location          |
 | -----: | -------: | ----: | -------: | ----------------------------- | ----------------- |
@@ -95,7 +96,7 @@ deno run -A --cpu-prof --cpu-prof-md server.js
 |   0.6% |   3.00ms |  0.6% |   3.00ms | `getRandomValues`             | 00_crypto.js:5274 |
 |  98.5% | 533.00ms | 98.5% | 533.00ms | `op_crypto_get_random_values` | [native code]     |
 
-## Function Details
+## 函数详情
 
 ## `op_crypto_get_random_values`
 

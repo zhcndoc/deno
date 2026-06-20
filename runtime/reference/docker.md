@@ -1,10 +1,12 @@
 ---
-last_modified: 2025-12-16
+last_modified: 2026-06-14
 title: Deno 和 Docker
-description: "使用 Docker 容器搭配 Deno 的完整指南。了解官方 Deno 镜像、编写 Dockerfile、多阶段构建、工作区容器化，以及 Deno 应用的 Docker 最佳实践。"
+description: "在 Docker 容器中使用 Deno 的完整指南。了解官方 Deno 镜像、编写 Dockerfile、多阶段构建、工作区容器化，以及 Deno 应用的 Docker 最佳实践。"
 ---
 
-## 使用 Docker 搭配 Deno
+Docker 是打包和分发 Deno 应用的一种常见方式：你只需构建一次可复现的镜像，然后在任何地方以相同方式运行它。Deno 提供官方基础镜像，因此 Dockerfile 通常很简短。本页涵盖编写该 Dockerfile、通过多阶段构建保持镜像精简，以及在生产环境中常用的 Compose、工作区、安全性和健康检查配置。
+
+## 在 Docker 中使用 Deno
 
 Deno 提供了[官方 Docker 文件](https://github.com/denoland/deno_docker)
 和[镜像](https://hub.docker.com/r/denoland/deno)。
@@ -26,10 +28,7 @@ COPY . .
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
 
-[`deno ci`](/runtime/reference/cli/ci/) 会根据
-`deno.lock` 执行可复现安装。`--prod` 会跳过 `devDependencies`，而 `--skip-types` 会移除
-`@types/*` 包——两者都能在不影响运行时
-行为的前提下减小最终镜像体积。
+[`deno ci`](/runtime/reference/cli/ci/) 会从 `deno.lock` 执行可复现安装。`--prod` 会跳过 `devDependencies`，`--skip-types` 会移除 `@types/*` 包。这两者都能在不影响运行时行为的前提下减小最终镜像体积。
 
 ### 最佳实践
 
@@ -61,8 +60,7 @@ COPY --from=builder /deno-dir /deno-dir
 CMD ["deno", "run", "--allow-net", "main.ts"]
 ```
 
-如果不复制 `$DENO_DIR`，`deno ci` 只会将内容写入构建阶段中的 Deno 全局缓存——这些文件不会随着 `COPY --from=builder /app .`
-一起传递，因此容器会在首次运行时重新下载依赖。
+如果不复制 `$DENO_DIR`，`deno ci` 只会写入构建阶段内 Deno 的全局缓存。这些文件不会随着 `COPY --from=builder /app .` 一起传到后续阶段，因此容器会在首次运行时重新下载依赖。
 
 #### 权限标志
 
@@ -85,7 +83,7 @@ COPY . .
 CMD ["deno", "run", "--watch", "--allow-net", "main.ts"]
 ```
 
-### 常见问题和解决方案
+### 常见问题与解决方案
 
 1. **权限被拒绝（Permission Denied）错误**
    - 使用 `--allow-*` 标志
@@ -116,11 +114,12 @@ node_modules/
 
 Deno 提供了多个官方标签：
 
-- `denoland/deno:latest` - 最新稳定版本
+- `denoland/deno:latest` - 最新稳定版
 - `denoland/deno:alpine` - 基于 Alpine 的更小镜像
 - `denoland/deno:distroless` - 基于 Google distroless 的镜像
 - `denoland/deno:ubuntu` - 基于 Ubuntu 的镜像
-- `denoland/deno:1.x` - 特定版本标签
+- `denoland/deno:2.x` - 锁定到特定发布线（使用你
+  目标版本）
 
 ### 环境变量
 
@@ -234,7 +233,7 @@ docker run -it --rm \
   my-deno-app
 ```
 
-### 安全性考虑
+### 安全注意事项
 
 - 以非 root 用户运行：
 
@@ -257,7 +256,7 @@ CMD ["deno", "run", "--allow-net=api.example.com", "--allow-read=/app", "main.ts
 
 - 考虑使用 `--deny-*` 标志以增强安全性
 
-## 在 Docker 中使用工作区（Workspaces）
+## 在 Docker 中使用工作区
 
 当在 Docker 中处理 Deno 的工作区（monorepos，单仓多包）时，主要有两种方案：
 
@@ -279,7 +278,7 @@ WORKDIR /app/project-a
 CMD ["deno", "run", "-A", "mod.ts"]
 ```
 
-### 2. 最小工作区容器化
+### 2. 最小化工作区容器化
 
 对于更小的镜像，只包含所需的工作区成员：
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-20
-title: "工作区与单体仓库"
-description: "Deno 工作区与单体仓库管理指南。了解工作区配置、包管理、依赖解析，以及如何有效地组织多包项目。"
+last_modified: 2026-06-16
+title: "工作区和单体仓库"
+description: "Deno 中管理工作区和单体仓库的指南。了解工作区配置、包管理、依赖解析，以及如何有效地组织多包项目。"
 oldUrl: /runtime/manual/basics/workspaces
 ---
 
@@ -145,13 +145,45 @@ Deno 支持工作区成员文件夹的模式匹配，这让管理包含大量成
 }
 ```
 
-模式匹配语法遵循关于文件夹深度的特定规则：
+:::info
+
+模式支持是在 Deno 2.1 中添加的。
+
+:::
+
+模式匹配语法遵循有关文件夹深度的特定规则：
 
 `some-path/*` 匹配位于 `some-path` 目录下的文件和文件夹（仅第一层级）。例如，使用 `packages/*` 时，包括 `packages/foo` 和 `packages/bar`，但不包括 `packages/foo/subpackage`。
 
 `some-path/*/*` 匹配位于 `some-path` 子目录中的文件和文件夹（第二层级）。它不匹配直接位于 `some-path` 里的项目。例如，使用 `examples/*/*`，包括 `examples/basic/demo` 和 `examples/advanced/sample`，但不包括 `examples/basic`。
 
 模式中的每个 `/*` 段对应相对于基础路径的特定文件夹深度。这允许您精确指定目录结构中不同层级的工作区成员。
+
+### 递归匹配
+
+使用 `**` 可以匹配基础路径下任意深度的目录，而不是固定在单一层级。例如，`packages/**` 会匹配 `packages/foo`、`packages/foo/subpackage` 以及任何更深层且包含配置文件的目录：
+
+```json title="deno.json"
+{
+  "workspace": ["packages/**"]
+}
+```
+
+### 排除成员
+
+在模式前加上 `!`，可以排除那些本会被前一个模式包含的目录。当通配符扫到了您不想作为工作区成员的目录时，这很有用。`!` 后面既可以使用字面路径，也可以使用 glob：
+
+```json title="deno.json"
+{
+  "workspace": [
+    "packages/*",
+    "!packages/internal",
+    "!packages/*/fixtures"
+  ]
+}
+```
+
+这里 `packages/*` 包含 `packages` 下的每个目录，然后这两个排除项移除了 `packages/internal` 以及向下一层的任何 `fixtures` 目录。
 
 ## Deno 如何解析工作区依赖
 
@@ -747,4 +779,5 @@ packages:
 
 这样，在迁移或混合项目中，Deno 与 npm／pnpm 生态系统能实现顺畅集成。
 
-有关配置项目的更多信息，请查看 [使用 deno.json 进行配置](/examples/configuration_with_deno_json/) 教程。
+有关如何配置项目的更多信息，请查看
+[使用 deno.json 进行配置](/runtime/fundamentals/configuration/) 教程。

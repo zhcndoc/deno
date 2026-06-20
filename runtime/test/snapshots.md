@@ -1,13 +1,14 @@
 ---
+last_modified: 2026-06-12
 title: "快照测试"
-description: "使用 @std/testing 捕获程序输出作为参考快照，在每次运行时进行比较，并通过 deno test -- --update 进行更新。"
+description: "使用 @std/testing 捕获程序输出作为参考快照，在每次运行时与其比较，并使用 deno test -- --update 进行更新。"
 oldUrl:
   - /runtime/manual/basics/testing/snapshot_testing/
   - /examples/snapshot_test_tutorial/
   - /examples/snapshot_tutorial/
 ---
 
-快照测试会捕获你的代码输出，并在每次测试运行时将其与存储的参考版本进行比较。你不必为每个属性手写断言，而是让测试运行器一次性记录整个序列化输出，然后在输出发生变化时立即失败。这非常适合用于验证那些很大或很难手工表达的值（渲染后的 HTML、CLI 输出、API 响应结构、错误对象），或者当期望输出变化足够频繁、以至于维护手动断言变成一件麻烦事时。[Deno Standard Library](/runtime/reference/std/) 将其作为 [`@std/testing/snapshot`](https://jsr.io/@std/testing/doc/snapshot) 模块提供。
+快照测试会捕获你的代码输出，并在每次测试运行时将其与存储的参考版本进行比较。你不必为每个属性手写断言，而是让测试运行器一次性记录整个序列化输出，然后在输出发生变化时立即失败。这非常适合用于验证那些很大或很难手工表达的值（渲染后的 HTML、CLI 输出、API 响应结构、错误对象），或者当期望输出变化足够频繁、以至于维护手动断言变成一件麻烦事时。[Deno 标准库](/runtime/reference/std/) 将其作为 [`@std/testing/snapshot`](https://jsr.io/@std/testing/doc/snapshot) 模块提供。
 
 ## 编写你的第一个快照测试
 

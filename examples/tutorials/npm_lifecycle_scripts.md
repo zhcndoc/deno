@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-11
 title: "运行 npm 生命周期脚本"
-description: "通过 deno approve-scripts 允许 Deno 中的 npm postinstall 和其他生命周期脚本，并使用 deno.json 中的 allowScripts 字段持久化批准结果。"
+description: "使用 deno approve-scripts 允许 Deno 中的 npm postinstall 和其他生命周期脚本，并使用 deno.json 中的 allowScripts 字段持久化这些批准。"
 url: /examples/npm_lifecycle_scripts_tutorial/
 ---
 

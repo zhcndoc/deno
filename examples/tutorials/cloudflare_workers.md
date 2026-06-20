@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-11-04
+last_modified: 2026-06-17
 title: "将 Deno 部署到 Cloudflare Workers"
-description: "关于将 Deno 函数部署到 Cloudflare Workers 的分步教程。了解如何配置 denoflare、创建 worker 模块、在本地测试，并将代码部署到 Cloudflare 的全球边缘网络。"
+description: "逐步教程：将 Deno 函数部署到 Cloudflare Workers。了解如何配置 denoflare、创建 worker 模块、进行本地测试，并将代码部署到 Cloudflare 的全球边缘网络。"
 url: /examples/cloudflare_workers_tutorial/
 oldUrl:
   - /runtime/manual/advanced/deploying_deno/cloudflare_workers/
@@ -93,4 +93,11 @@ denoflare push main
 
 ![Cloudflare Workers 上的新函数](./images/how-to/cloudflare-workers/main-on-cloudflare.png)
 
-太好了！
+太棒了！
+
+## 部署一个 Fresh 应用
+
+如果您正在使用 [Fresh](https://fresh.deno.dev/) 构建，框架有其
+自己的部署指南。有关如何将 Fresh
+应用部署到 Cloudflare Workers 和其他平台，请参阅
+[Fresh 文档](https://fresh.deno.dev/docs/)。

@@ -2,6 +2,7 @@
 title: "Deno 命名空间 API"
 description: "Deno 内置运行时 API 指南。了解通过全局 Deno 命名空间可用的文件系统操作、网络功能、权限管理以及其他核心功能。"
 layout: doc.tsx
+url: /api/deno/about/
 oldUrl:
   - /runtime/manual/runtime/
   - /runtime/manual/runtime/builtin_apis/
@@ -502,7 +503,6 @@ switch (Deno.build.os) {
     break;
 }
 
-const libName = `./libadd.${libSuffix}`;
 // 打开库并定义导出符号
 const dylib = Deno.dlopen(
   libName,
@@ -652,7 +652,7 @@ callback.close();
 | `i8`                   | `number`             | `char` / `signed char`     | `i8`                      |
 | `u8`                   | `number`             | `unsigned char`            | `u8`                      |
 | `i16`                  | `number`             | `short int`                | `i16`                     |
-| `u16`                  | `number`             | `unsigned short int`       | `u16`                     |
+| `u16`                 | `number`             | `unsigned short int`       | `u16`                     |
 | `i32`                  | `number`             | `int` / `signed int`       | `i32`                     |
 | `u32`                  | `number`             | `unsigned int`             | `u32`                     |
 | `i64`                  | `bigint`             | `long long int`            | `i64`                     |

@@ -1,6 +1,7 @@
 ---
-title: "将输出流传输到本地文件"
-description: "了解如何在沙箱中将输出流传输到本地文件。"
+last_modified: 2026-01-27
+title: "流式输出到本地文件"
+description: "了解如何在沙箱中将输出流式传输到本地文件。"
 url: /examples/sandbox_stream_output/
 layout: sandbox-example.tsx
 ---

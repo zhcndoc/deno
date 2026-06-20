@@ -1,6 +1,7 @@
 ---
+last_modified: 2026-06-11
 title: "使用私有 npm 注册表"
-description: "配置 Deno 以从私有注册表安装 npm 包：.npmrc 的作用域注册表和认证令牌、NPM_CONFIG_REGISTRY 覆盖、DENO_AUTH_TOKENS，以及 Azure Artifacts 和 JFrog Artifactory 的实战配置。"
+description: "将 Deno 配置为从私有注册表安装 npm 包：.npmrc 作用域注册表和认证令牌、NPM_CONFIG_REGISTRY 覆盖、DENO_AUTH_TOKENS，以及 Azure Artifacts 和 JFrog Artifactory 的实战配置。"
 url: /examples/private_registries_tutorial/
 ---
 

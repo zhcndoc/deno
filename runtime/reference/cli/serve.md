@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-05-01
+last_modified: 2026-06-17
 title: "deno serve"
 oldUrl: /runtime/manual/tools/serve/
 command: serve
@@ -29,6 +29,16 @@ deno serve server.ts
 ```sh
 deno serve --port=3000 server.ts
 ```
+
+## `deno serve` 与 `deno run`
+
+这两种方式都会启动一个 HTTP 服务器，区别在于由谁来调用
+[`Deno.serve()`](/api/deno/~/Deno.serve)：
+
+- 使用 `deno serve` 时，由 Deno 为你调用 [`Deno.serve()`](/api/deno/~/Deno.serve)。你的文件只需导出一个带有 `fetch` 处理器的默认对象。监听器由 Deno 管理，因此它可以添加诸如使用 [`--parallel`](#horizontal-scaling) 在多个线程之间运行多个实例之类的功能。
+- 使用 `deno run` 时，你需要在程序内部自己调用 [`Deno.serve()`](/api/deno/~/Deno.serve)。这样你就可以完全控制监听选项以及周边代码；当服务器只是更大程序的一部分时，这是正确的选择。
+
+当程序主要是一个 HTTP 服务器，并且你希望由 Deno 来管理它时，请使用 `deno serve`；当你需要控制服务器如何以及何时启动时，请使用带有 [`Deno.serve()`](/api/deno/~/Deno.serve) 的 `deno run`。
 
 ## 默认导出结构
 

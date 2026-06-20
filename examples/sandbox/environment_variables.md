@@ -1,7 +1,8 @@
 ---
+last_modified: 2026-01-27
 title: "设置和获取环境变量"
 description: "了解如何在沙箱中设置和获取环境变量。"
-url: /examples/sandboxes_environment_variables/
+url: /examples/sandbox_environment_variables/
 layout: sandbox-example.tsx
 ---
 
