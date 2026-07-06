@@ -1,13 +1,12 @@
 ---
-last_modified: 2026-06-19
+last_modified: 2026-06-25
 title: "DevTools"
 description: "将 Chrome DevTools 连接到一个 deno desktop 应用：单个会话即可同时显示 Deno 运行时 V8 和渲染器 V8，二者都可作为可检查目标。"
 ---
 
-:::info Deno 2.9 即将推出
+:::info Deno 2.9 中可用
 
-`deno desktop` 将随 Deno v2.9.0 一起发布，目前还不在稳定版本中。若要立即体验，请运行 `deno upgrade canary` 以安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。在该功能稳定之前，命令、配置键以及 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -67,13 +66,13 @@ win.openDevtools({ renderer: false }); // 仅 Deno 运行时
 
 ```
              ┌──────────────────────────────────┐
-DevTools     │  CDP Multiplexer (Deno CLI)      │
-(one ws)  ◄─►│  /json/version  /json/list       │
+DevTools     │  CDP 多路复用器（Deno CLI）      │
+（一条 ws）  ◄─►│  /json/version  /json/list       │
              │  /unified  /deno  /cef           │
              └─────┬─────────────────┬──────────┘
                    │                 │
-           Deno V8 inspector   Renderer V8 inspector
-           (deno_core CDP)     (CEF remote-debugging)
+           Deno V8 检查器      渲染器 V8 检查器
+           (deno_core CDP)     (CEF 远程调试)
 ```
 
 这个 mux 将自己呈现为一个带有两个子项的 CDP“浏览器目标”：一个给渲染器的“page”目标，以及一个给 Deno 运行时的“worker”目标。DevTools 内置的多目标支持负责处理其余部分，这与它在开放网络上用于 `iframe` 和 `worker` 调试的机制相同。

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-12
+last_modified: 2026-06-30
 title: "发布包"
-description: "使用 deno publish 将 Deno 包发布到 JSR，使用 deno pack 构建与 npm 兼容的 tarball，并为你的库选择合适的注册表。"
+description: "使用 deno publish 将 Deno 包发布到 JSR，使用 deno pack 构建兼容 npm 的 tarball，并为你的库选择合适的注册表。"
 oldUrl:
   - /runtime/manual/basics/modules/publishing_modules/
   - /runtime/manual/advanced/publishing/dnt/
@@ -73,7 +73,27 @@ npm publish ./package.tgz
 [将工作区包发布到注册表](/runtime/fundamentals/workspaces/#publishing-workspace-packages-to-registries)
 。
 
-## 继续阅读
+### 自动化工作区发布
+
+`deno bump-version` 可以驱动整个工作区的发布流程。在工作区
+根目录下运行且不指定递增时，它会根据自上次
+发布以来所做的 [Conventional Commits](https://www.conventionalcommits.org/) 推断每个成员的版本变更，重写根导入映射中的 `jsr:` 约束以保持跨包
+引用同步，并在 `Releases.md` 前追加一条变更日志条目。有关规则以及用于固定提交范围的标志，请参阅
+[根据 Conventional Commits 推断版本变更](/runtime/reference/cli/bump_version/#deriving-bumps-from-conventional-commits)
+。
+
+[Deno 标准库](https://github.com/denoland/std) 将此功能接入 CI
+作为可供你适配的参考。其
+[`version_bump` 工作流](https://github.com/denoland/std/blob/main/.github/workflows/version_bump.yml)
+运行 `deno bump-version --import-map import_map.json`，使用 `deno fmt` 格式化生成的
+说明，然后提交结果并打开一个发布 PR，其中包含
+各包的版本变更以及新的
+[`Releases.md`](https://github.com/denoland/std/blob/main/Releases.md) 条目。
+合并该 PR 并发布 GitHub release 会触发第二个工作流，该工作流
+为每个成员运行 `deno publish`，因此带标签的发布会直接流向 JSR，
+无需手动编辑版本。
+
+## 继续
 
 - [依赖管理](/runtime/packages/)：本页所源自的日常工作流程
 - [`deno publish`](/runtime/reference/cli/publish/) 和

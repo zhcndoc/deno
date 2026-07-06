@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-15
+last_modified: 2026-06-25
 title: "Node 和 npm 兼容性"
-description: "Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性特性、导入 npm 包以及 Node.js 与 Deno 环境之间的差异。"
+description: "在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包，以及 Node.js 与 Deno 环境之间的差异。"
 oldUrl:
   - /runtime/reference/node/
   - /runtime/manual/npm_nodejs/std_node/
@@ -107,11 +107,7 @@ console.log(os.cpus());
 `node:module` 内置模块包含
 [`registerHooks()`](/runtime/reference/loader_hooks/) API，你可以用它在程序内部自定义模块解析和加载。
 
-**裸导入也可以工作。** 自 Deno 2.9 起，匹配 Node
-内置模块的标识符即使没有前缀也会解析到它，因此 `import * as os from "os"`
-无需前缀和标志即可运行。在 2.9 之前，裸形式会报错，除非你传入
-`--unstable-bare-node-builtins`。不过仍然建议使用明确的 `node:`
-形式：它更明确，也是 Deno LSP 快速修复会插入的形式，而且在 Node.js 中也能工作。`deno.json` 的 `imports` 条目或同名的 `package.json` 依赖仍然会优先于内置模块，而 `node_modules` 中的包不再会遮蔽它，这与 Node.js 一致。
+**裸导入也可以工作。** 自 Deno 2.9 起，任何与 Node 内置模块匹配的标识符即使没有前缀也会解析到它，因此 `import * as os from "os"` 可以在没有前缀和标志的情况下运行。在 2.9 之前，除非你通过不稳定标志显式启用，否则这种裸形式会报错。不过，仍然建议优先使用显式的 `node:` 形式：它更明确，Deno LSP 的快速修复会插入这种形式，而且它在 Node.js 中也能工作。`deno.json` 中的 `imports` 条目或同名 `package.json` 依赖项仍然会优先于内置模块，而 `node_modules` 包也不再会遮蔽它，这与 Node.js 的行为一致。
 
 <a href="/api/node/" class="docs-cta runtime-cta">探索 Node 内置 API</a>
 
@@ -142,12 +138,12 @@ Node.js 定义了许多
   $ deno run process.js
   2.8.3
   $ deno lint process.js
-  error[no-process-global]: NodeJS process global is discouraged in Deno
+  error[no-process-global]: Deno 中不建议使用 NodeJS 的 process 全局对象
    --> /process.js:1:13
     |
   1 | console.log(process.versions.deno);
     |             ^^^^^^^
-    = hint: Add `import process from "node:process";`
+    = hint: 添加 `import process from "node:process";`
 
     docs: https://docs.deno.com/lint/rules/no-process-global
 
@@ -157,7 +153,11 @@ Node.js 定义了许多
   Checked 1 file
   ```
 
-- `Buffer` 需要从 `node:buffer` 模块中显式导入：
+  Deno reports a current Node-compatible version: `process.version` is `v26.3.0`
+  and `process.versions.napi` is `10` (Node-API version 10), so packages that
+  gate on the Node or Node-API version see a modern runtime.
+
+- `Buffer` 需要显式从 `node:buffer` 模块导入：
 
   ```js title="buffer.js"
   import { Buffer } from "node:buffer";
@@ -226,10 +226,10 @@ ready
 
 `package.json` 中哪些内容会被沿用：
 
-- **依赖项**：其中声明的依赖会由 `deno install` 安装，并且可以通过裸标识符导入。
-- **脚本**：通过 `deno task` 运行，类似 `npm run`：`deno task start` 会执行 `start` 脚本。脚本在 Deno 内置的跨平台 shell 中执行，而 `node_modules/.bin` 中安装的 CLI 工具（测试运行器、打包器、linter）会自动解析。命令本身仍然会运行它们所指定的可执行文件，因此调用 `node` 的脚本会运行 Node。
-- **字段**：像 `"type"` 这样的字段在解析模块时会被尊重（参见
-  [CommonJS 支持](#commonjs-support)）。
+- **依赖项** 会由 `deno install` 安装，并可通过裸 specifier 导入。
+- **脚本** 通过 `deno task` 运行，就像 `npm run` 一样：`deno task start` 会运行 `start` 脚本。脚本在 Deno 内置的跨平台 shell 中执行，且 `node_modules/.bin` 中安装的 CLI 工具（测试运行器、打包器、代码检查器）会自动解析。命令本身仍会运行它们所指定的可执行文件，因此调用 `node` 的脚本会运行 Node。
+- **字段** 例如 `"type"`，在解析模块时会被遵守（见 [CommonJS 支持](#commonjs-support)）。
+- **`engines`** 约束会被检查：`deno install` 会针对每个其 `node` 或 `deno` 版本要求未被当前运行时满足的 `package.json` 打印警告，行为与 npm 和 Yarn 相同。其他 engine 键（`npm`、`yarn`、`pnpm`）会被忽略。
 
 带有 `package.json` 的项目默认使用手动 `node_modules` 模式，这就是为什么需要显式执行 `deno install` 步骤。[控制 node_modules](#control-node_modules) 这一节介绍了其他方案。
 
@@ -245,6 +245,14 @@ error: Could not resolve "chalk", but found it in a package.json. Deno expects t
 
 如需完整检查清单、可选工具链改进，以及 Node 到 Deno 的命令速查表，请参阅
 [从 Node.js 迁移到 Deno 指南](/runtime/migrate/)。
+
+### 会启动 `node` 的工具
+
+一些原生构建工具会通过操作系统直接解析并运行 `node` 二进制文件，这会绕过 Deno 通常在脚本和 `child_process` 中进行的 `node` 拦截。Next.js 16 就是一个典型案例：Turbopack 的原生插件会启动一组 `node` worker 来运行 CSS 和字体加载器，因此只要没有安装 `node` 二进制文件，`deno task dev` 在这些步骤上就会失败。
+
+为了不需要单独安装 Node，Deno 会代替 `node`。当你的 `PATH` 中没有找到真正的 `node` 时，Deno 会在其缓存目录中放置一个 `node` 可执行文件，并将该目录添加到它启动的进程的 `PATH` 前面。随后，启动 `node` 的工具会调用到 Deno，Deno 会转换 Node 参数并像你执行了 `deno node ...` 一样运行。
+
+这只是尽力而为，并且只会在 `PATH` 中尚未存在真实的 `node` 时启用，因此不会遮蔽已有的 Node 安装。设置 `DENO_DISABLE_NODE_SHIM=1` 可以关闭这一行为。
 
 ## 运行 npm CLI 工具
 
@@ -608,7 +616,7 @@ $ deno run -R -E --allow-ffi main.mjs
 
 ## 控制包导出条件
 
-包导出可以基于[解析模式](https://nodejs.org/api/packages.html#conditional-exports)进行条件化。来自 Deno ESM 模块的导入所满足的条件如下：
+包导出可以基于[条件导出](https://nodejs.org/api/packages.html#conditional-exports)进行条件化。来自 Deno ESM 模块的导入所满足的条件如下：
 
 ```json
 ["deno", "node", "import", "module-sync", "default"]
@@ -861,13 +869,32 @@ deno run main.ts
   //registry.mycompany.com/:email=ci@mycompany.com
   ```
 
-- **`min-release-age`**（Deno 2.8+）：拒绝安装早于配置年龄阈值的包版本。对所有安装来说，这是一种有用的默认供应链防护。同样的控制也可以通过 CLI 标志 `--minimum-dependency-age` 以及 `deno.json` 中的 `minimumDependencyAge` 字段使用。完整说明请参见 [Minimum dependency age](/runtime/packages/supply_chain/#minimum-dependency-age)。
+- **`min-release-age`**：拒绝安装早于
+  配置时间的包版本，作为供应链防护。自 Deno 2.9 起，即使未设置任何内容，也会默认应用 24 小时的最小值，因此新发布的版本会
+  自动跳过；如需更改时间窗口，请设置显式值，或设置为 `0` 以
+  关闭它。同样的控制也可通过 CLI 标志
+  `--minimum-dependency-age`、`deno.json` 中的 `minimumDependencyAge` 字段，
+  以及 `NPM_CONFIG_MIN_RELEASE_AGE` 环境变量来使用。详见
+  [最小依赖年龄](/runtime/packages/supply_chain/#minimum-dependency-age)
+  获取完整说明。
 
   ```ini title=".npmrc"
   min-release-age=3
   ```
 
-- **`NPM_CONFIG_REGISTRY` 环境变量**：覆盖 `.npmrc` 中设置的 registry，与 npm 的优先级规则一致（在 CI 中很方便，当您想在不编辑已提交的 `.npmrc` 的情况下重定向安装时）。
+- **`trust-policy`**：使用 `no-downgrade` 时，拒绝解析其发布信任级别
+  （受信任发布、来源证明或分阶段发布）弱于锁文件中已记录级别的包
+  版本。默认关闭。详见
+  [发布信任策略](/runtime/packages/supply_chain/#publishing-trust-policy)
+  获取完整说明。
+
+  ```ini title=".npmrc"
+  trust-policy=no-downgrade
+  ```
+
+- **`NPM_CONFIG_REGISTRY` 环境变量**：覆盖 `.npmrc` 中设置的 registry，
+  行为与 npm 的优先级一致（在 CI 中很方便，当您希望重定向安装
+  而无需编辑已提交的 `.npmrc` 时）。
 
 ### 发布包中的 `file:` 和 `link:` 依赖
 

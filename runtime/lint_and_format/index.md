@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-05-17
-title: "Linting and formatting"
+last_modified: 2026-06-25
+title: "代码检查与格式化"
 description: "Deno 内置代码质量工具指南。了解如何使用 deno lint 和 deno fmt 命令，配置规则，与 CI/CD 流水线集成，并在项目中保持一致的代码风格。"
 oldUrl:
   - /runtime/fundamentals/linting_and_formatting/
@@ -15,7 +15,7 @@ deno fmt     # 格式化代码、markdown 和 JSON
 
 这两者都很快，在本地和 CI 中的运行方式相同，并且（当你确实需要配置时）与项目其余部分一样，都在同一个 `deno.json` 中配置。
 
-## Linting
+## 代码检查
 
 <a href="/lint/" type="docs-cta runtime-cta">探索所有 lint 规则</a>
 
@@ -68,13 +68,13 @@ async function fetchData() {
 
 可以在 [`deno.json`](/runtime/reference/deno_json/#linting) 文件中配置 linter。你可以指定自定义规则、插件和设置，以便根据需要调整 lint 流程。
 
-### Linting rules
+### 代码检查规则
 
 你可以在 [规则列表](/lint/) 文档页面中查看和搜索可用规则及其用法。
 
-## Formatting
+## 格式化
 
-Formatting 是自动调整代码布局以遵循一致风格的过程。Deno 内置的 formatter `deno fmt` 使用强大的 [dprint](https://dprint.dev/) 引擎，确保你的代码始终干净、易读且一致。
+格式化是自动调整代码布局以遵循一致风格的过程。Deno 内置的 formatter `deno fmt` 使用强大的 [dprint](https://dprint.dev/) 引擎，确保你的代码始终干净、易读且一致。
 
 要格式化你的代码，只需在终端中执行以下命令：
 
@@ -133,7 +133,9 @@ jobs:
 
 formatter 通过你的 [`deno.json`](/runtime/reference/deno_json/#formatting) 文件中的 `fmt` 字段进行配置。有关完整设置列表及其默认值，请参阅 [所有格式化选项](/runtime/reference/deno_json/#formatting)。
 
-## 使用其他 linter 和 formatter
+`deno fmt` 也会读取 [`.editorconfig`](https://editorconfig.org/) 文件，并使用它们来填充任何你未通过 CLI 标志或 `deno.json` 的 `fmt` 块设置的选项。优先级依次为 CLI 标志、`deno.json`、`.editorconfig`，然后是内置默认值，因此 `.editorconfig` 中的值只会在更高优先级未设置时生效。有关属性映射，请参阅 [从 .editorconfig 继承设置](/runtime/reference/cli/fmt/#inheriting-settings-from-.editorconfig)。
+
+## 使用其他 lint 工具和格式化工具
 
 Deno 内置的 [`deno lint`](#linting) 和 [`deno fmt`](#formatting) 已覆盖大多数项目，但你也可以运行流行的第三方工具，而无需全局安装它们。由于 Deno 可直接运行 npm 包，`deno run -A npm:<tool>` 可以直接运行其中任何工具，而无需单独执行 `npm install`。为了减少输入量，可以将该命令添加为 `deno.json` 中的一个 [task](/runtime/reference/deno_json/#tasks)，然后使用 `deno task` 运行它。
 

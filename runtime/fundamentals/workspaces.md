@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-29
 title: "工作区和单体仓库"
 description: "Deno 中管理工作区和单体仓库的指南。了解工作区配置、包管理、依赖解析，以及如何有效地组织多包项目。"
 oldUrl: /runtime/manual/basics/workspaces
@@ -35,7 +35,7 @@ Deno 使用 `workspace` 而不是 npm 的 `workspaces` 来表示一个包含多�
 
 ## 示例
 
-让我们扩展 `deno.json` 工作区示例，看看它的功能。文件层次结构如下所示：
+让我们扩展示例 `deno.json` 工作区，看看它的功能。文件层次结构如下所示：
 
 ```sh
 /
@@ -432,7 +432,7 @@ Hi, friend!
 
 下面是工作区根及其成员中各种 `deno.json` 选项的完整矩阵：
 
-| Option               | Workspace | Package | Notes                                                                                                                                                                                                           |
+| 选项                 | 工作区      | 包      | 说明                                                                                                                                                                                                           |
 | -------------------- | --------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | compilerOptions      | ✅        | ✅      |                                                                                                                                                                                                                 |
 | importMap            | ✅        | ❌      | 每个配置文件中与 imports 和 scopes 互斥。此外，不支持在工作区配置中使用 importMap，而在包配置中使用 imports。                                              |
@@ -654,7 +654,15 @@ Deno 支持 `package.json` 文件中的工作区协议说明符。当您的 npm 
 
 ## 使用 `catalog:` 集中管理依赖版本
 
-当多个工作区成员依赖同一个 npm 包时，若要保持它们的版本同步，通常意味着每次升级版本都要编辑每个成员的 `package.json`。`catalog:` 协议——在 Deno 2.8 中新增，并与 pnpm、Bun 和 Yarn 中的等效功能兼容——允许工作区根目录声明一个统一的版本要求，而每个成员在其 `package.json` 的依赖中通过名称引用它。（`catalog:` 说明符本身仅从 `package.json` 文件中读取；catalog 定义可以位于工作区根目录的 `deno.json` 或 `package.json` 中。）
+当多个工作区成员依赖同一个 npm 包时，要保持它们的版本一致，通常意味着每次升级版本都要编辑每个成员的 `package.json`。`catalog:` 协议——在 Deno 2.8 中加入，并兼容 pnpm、Bun 和 Yarn 中的等价功能——允许工作区根目录声明一个统一的版本要求，然后各成员通过名称引用它。
+
+`catalog:` 引用可以出现在成员的 `package.json` 依赖中，或者从 Deno 2.9 起，出现在成员 `deno.json` 的 `imports` 中。catalog 定义本身位于工作区根目录的 `deno.json` 或 `package.json` 中。
+
+:::info Catalog 仅适用于 npm
+
+Catalog 只能管理 **npm** 依赖。catalog 条目是一个映射到某个版本要求的裸包名，而 `catalog:` 引用始终会解析为 `npm:` 说明符——无法将 catalog 条目指向 `jsr:` 包。请改为直接通过 `imports` 管理 `jsr:` 依赖。由于 catalog 条目会被视为 npm 包，`deno update` 和 `deno outdated` 会通过 npm 注册表来解析它们。
+
+:::
 
 在根 `deno.json` 中定义一个 catalog：
 
@@ -745,8 +753,9 @@ Catalog 也可以放在根 `package.json` 中，这样可以让尚未迁移到 `
 
 ### 限制
 
-- Catalog 仅限根目录使用。在工作区成员中定义 `catalog` 或 `catalogs` 会产生诊断信息。
-- 成员必须引用一个存在的 catalog 名称。缺失条目会在安装或运行期间产生解析错误。
+- Catalog 仅适用于 npm。每个条目都会解析为一个 `npm:` 包，因此无法通过 catalog 管理 `jsr:`（以及其他非 npm）依赖。
+- Catalog 仅能定义在根目录。将 `catalog` 或 `catalogs` 定义在工作区成员中会产生诊断信息。
+- 成员必须引用已存在的 catalog 名称。缺失条目会在安装或运行期间产生解析错误。
 
 ## npm 和 pnpm 工作区兼容性
 

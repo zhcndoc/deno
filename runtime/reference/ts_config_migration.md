@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-19
+last_modified: 2026-06-25
 title: "配置 TypeScript"
 description: "Deno 中 TypeScript 配置指南。了解编译器选项、JavaScript 类型检查、JSDoc 支持、类型声明，以及用于跨平台兼容性的 TypeScript 配置。"
 oldUrl:
@@ -125,11 +125,21 @@ Deno 致力于基于以下设计原则简化 TypeScript 配置：
 
 常用内置库说明：
 
-- `"deno.ns"` — 包含所有自定义的 `Deno` 全局命名空间 API 以及 Deno 对 `import.meta` 的扩展。通常不会与其他库或全局类型冲突。
-- `"deno.unstable"` — 包含额外的不稳定 `Deno` 全局命名空间 API。
-- `"deno.window"` — 这是检查 Deno 主运行时脚本时使用的“默认”库，包含 `"deno.ns"` 以及内置扩展的其他类型库。此库会与标准 TypeScript 库（如 `"dom"` 和 `"dom.iterable"`）冲突。
-- `"deno.worker"` — 检查 Deno 网络工作者脚本时使用的库。更多信息见[Web 工作者的类型检查](/runtime/reference/ts_config_migration/#type-checking-web-workers)。
-- `"dom.asynciterable"` — TypeScript 当前不包含 Deno 实现的 DOM 异步可迭代对象（以及多个浏览器均支持），因此我们自行实现，直至 TypeScript 支持该特性。
+- `"deno.ns"` - 这包括所有自定义的 `Deno` 全局命名空间 API，以及
+  `import.meta` 的 Deno 扩展。通常这不会与
+  其他库或全局类型冲突。
+- `"deno.window"` - 这是在检查 Deno 主
+  运行时脚本时使用的“默认”库。它包括 `"deno.ns"`，以及
+  Deno 内置扩展的其他类型库。此库会与
+  `"dom"` 和 `"dom.iterable"` 这类标准 TypeScript
+  库发生冲突。
+- `"deno.worker"` - 这是在检查 Deno Web Worker 脚本时使用的库。更多关于 Web Worker 的信息，请查看
+  [检查 Web Worker 的类型](/runtime/reference/ts_config_migration/#type-checking-web-workers)。
+- `"dom.asynciterable"` - TypeScript 目前不包括 Deno 实现的 DOM 异步
+  可迭代对象（以及若干浏览器也实现了的内容），因此我们在 TypeScript
+  将其纳入之前自行实现了它。
+- `"deno.desktop"` - 这是在检查使用
+  `deno desktop` 创建的应用时使用的库。请查看 [桌面应用](/runtime/desktop/)。
 
 以下公共库默认不启用，但当编写计划在多种运行时正常工作的代码时非常有用：
 
@@ -229,9 +239,9 @@ Deno 在加载 Web 工作者中的 TypeScript 模块时，会自动对模块及�
 
 ### 类型声明语义
 
-类型声明文件（`.d.ts`）遵循与 Deno 其他文件相同的语义，即默认为模块声明（_UMD 声明_），非环境或全局声明。Deno 对环境/全局声明的处理不可预测。
+类型声明文件（`.d.ts`）遵循与 Deno 其他文件相同的语义，即默认情况下为模块声明（_UMD 声明_），而不是环境或全局声明。Deno 对环境/全局声明的处理不可预测。
 
-此外，若类型声明文件导入其他模块（例如另一个 `.d.ts` 文件），其解析遵循 Deno 的正常导入规则。许多生成的并在线可得的 `.d.ts` 文件可能与 Deno 不兼容。
+此外，若类型声明文件导入其他模块（例如另一个 `.d.ts` 文件），其解析遵循 Deno 的正常导入规则。许多自动生成且可在线获取的 `.d.ts` 文件可能与 Deno 不兼容。
 
 使用来自 [esm.sh](https://esm.sh) 等 CDN 的 HTTPS 导入时，默认会提供类型声明（通过 `X-TypeScript-Types` 头部）。可在导入 URL 后追加 `?no-dts` 来禁用。请注意，对于大多数使用场景，推荐使用 `npm:` 标识符来导入 npm 包。
 

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-17
+last_modified: 2026-07-02
 title: "不稳定功能标志"
 oldUrl:
   - /runtime/tools/unstable_flags/
@@ -26,7 +26,7 @@ deno run --unstable-node-globals main.ts
 
 ```json title="deno.json"
 {
-  "unstable": ["bare-node-builtins", "webgpu"]
+  "unstable": ["sloppy-imports", "webgpu"]
 }
 ```
 
@@ -36,24 +36,10 @@ deno run --unstable-node-globals main.ts
 
 某些标志可以通过为指定名称的环境变量设置一个值（任意值）来启用，而不是作为标志或 [`deno.json`](/runtime/fundamentals/configuration/) 配置选项传递。可通过环境变量设置的标志将在下方注明。
 
-以下是通过环境变量设置 `--unstable-bare-node-builtins` 标志的示例：
+下面是通过环境变量设置 `--unstable-sloppy-imports` 标志的示例：
 
 ```sh
-export DENO_UNSTABLE_BARE_NODE_BUILTINS=true
-```
-
-## `--unstable-bare-node-builtins`
-
-**环境变量：** `DENO_UNSTABLE_BARE_NODE_BUILTINS`
-
-此标志允许您
-[导入 Node.js 内置模块](/runtime/fundamentals/node/#node-built-in-modules)
-而不使用 `node:` 说明符，如下面的示例所示。您还可以使用此标志在手动管理 Node.js 依赖项时启用 npm 包，而不使用 `npm:` 说明符。
-
-```ts title="example.ts"
-import { readFileSync } from "fs";
-
-console.log(readFileSync("deno.json", { encoding: "utf8" }));
+export DENO_UNSTABLE_SLOPPY_IMPORTS=true
 ```
 
 ## `--unstable-detect-cjs`
@@ -113,6 +99,11 @@ Deno 出于安全原因做出了不支持 `Object.prototype.__proto__` 的明确
 
 此标志启用此属性。请注意，不建议使用此选项，但如果您确实需要使用依赖于它的包，现在可以使用解除限制的功能。
 
+从 Deno 2.9 开始，`--unsafe-proto` 是实现相同行为的稳定简写。
+它被写作普通标志，而不是不稳定标志，因此
+`deno run --unsafe-proto main.ts` 和 `deno run --unstable-unsafe-proto main.ts`
+是等效的。
+
 ## `--unstable-webgpu`
 
 在全局作用域中启用 [`WebGPU` API](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API)，类似于浏览器。以下是使用此 API 获取 GPU 基本信息的简单示例：
@@ -168,14 +159,14 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 
 ## `--unstable-net`
 
-在 `Deno` 命名空间中启用不稳定网络 API。这些 API 包括：
+在 `Deno` 命名空间中启用不稳定的网络 API。这些 API 包括：
 
 - [`WebSocketStream`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream)
 - [`Deno.DatagramConn`](https://docs.deno.com/api/deno/~/Deno.DatagramConn)
 
 ## `--unstable-otel`
 
-启用 [OpenTelemetry 集成用于 Deno](/runtime/fundamentals/open_telemetry)。此功能现在已稳定，因此在 [Deno 2.4](https://deno.com/blog/v2.4)+ 中不再需要此标志。
+启用 [用于 Deno 的 OpenTelemetry 集成](/runtime/fundamentals/open_telemetry)。此功能现在已稳定，因此在 [Deno 2.4](https://deno.com/blog/v2.4)+ 中不再需要此标志。
 
 ## `--unstable-bundle`
 
@@ -191,7 +182,14 @@ new Worker(`data:application/javascript;base64,${btoa(`postMessage("ok");`)}`, {
 
 ## `--unstable-no-legacy-abort`
 
-在 [`Deno.serve`](/api/deno/~/Deno.serve) 中使用中止信号，而不使用旧版行为。启用此标志后，当请求成功处理时，服务器不会被中止。
+在 [`Deno.serve`](/api/deno/~/Deno.serve) 中使用中止信号，而不使用
+旧版行为。启用此标志后，`request.signal` 只有在客户端
+实际断开连接时才会中止，而不是在每次成功响应时都中止。
+
+请参阅
+[Deno.serve 请求中止行为](/runtime/reference/deno_serve_legacy_abort/)
+了解这一变更的原因，以及如何检测请求何时已完全
+传递。
 
 ## `--unstable`
 

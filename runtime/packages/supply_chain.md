@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-19
+last_modified: 2026-06-25
 title: "供应链管理"
-description: "保持 Deno 依赖的确定性和安全性：锁文件纪律、最低依赖年龄、deno audit、有意的更新，以及推荐的 CI 基线。"
+description: "保持 Deno 依赖项的确定性和安全性：锁文件规范、最小依赖年龄、发布信任策略、deno audit、有意更新，以及推荐的 CI 基线。"
 ---
 
 现代 JavaScript 项目从许多来源拉取代码（JSR、npm、本地
@@ -20,30 +20,35 @@ description: "保持 Deno 依赖的确定性和安全性：锁文件纪律、最
 ## 核心实践
 
 1. 有意地固定版本
-   - 对于应用程序，优先使用精确版本（例如
+   - 对于应用，优先使用精确版本（例如
      `jsr:@luca/cases@1.2.3`）。
-   - 对于库，使用插入符号范围（`^1.2.3`）可让使用者获得
+   - 对于库，使用插入符范围（`^1.2.3`）可让使用者获得
      向后兼容的修复。
-   - 在生产应用中，避免使用无界（`*`）或过于宽泛的范围。
+   - 在生产应用中避免使用无限制（`*`）或过于宽泛的范围。
 2. 提交你的 `deno.lock` 文件。
-3. 在 CI / 生产环境中启用冻结锁文件（`--frozen` 或
-   `"lock": { "frozen": true }`），这样新的、未知的依赖会使构建失败，
-   而不是悄悄出现。
-4. 当你需要密封/离线构建（`"vendor": true`）或必须在本地修补第三方代码时，
-   使用 vendor。Vendoring 不会取消锁文件的需求——它与之互补。
-5. 将 `jsr:` 和 `npm:` 说明符与导入映射（`imports`）条目一起使用，以
-   集中管理版本。
+3. 在 CI / 生产环境中启用冻结的锁文件（`--frozen` 或
+   `"lock": { "frozen": true }`），这样新的、未见过的依赖会使构建失败，
+   而不是悄无声息地出现。
+4. 当你需要密封/离线构建（`"vendor": true`）时，或者当你
+   必须在本地修补第三方代码时，使用 vendor。vendoring 并不会取消对
+   锁文件的需求——它只是对其的补充。
+5. 使用带有 import map（`imports`）条目的 `jsr:` 和 `npm:` 说明符，
+   以集中管理版本。
 6. 定期解除冻结并有意识地更新（例如按周或
-   按迭代节奏），而不是在功能开发期间临时更新。
-7. 设置一个[最低依赖年龄](#minimum-dependency-age)，这样新发布的
-   版本就不能在生态系统有时间发现被破坏的发布之前进入安装流程。
+   按 sprint 节奏），而不是在特性开发期间临时更新。
+7. 设置一个[最低依赖年龄](#minimum-dependency-age)，以便刚发布的
+   版本在生态系统有时间发现受损发布之前，不能进入安装流程。
+8. 开启一个[发布信任策略](#publishing-trust-policy)，这样以比你
+   已锁定版本更弱的方法发布的某个版本会被拒绝，
+   而不是被静默接受。
 
 ## 最低依赖年龄
 
-Deno 可以拒绝安装任何年龄低于配置值的包版本。
-这是一种低成本、广覆盖的防御 npm 供应链攻击的方法：恶意版本通常会在几天内被发现并撤回，因此把安装延迟到类似的时间窗口可以捕获其中大部分。
+Deno 拒绝安装早于所配置年龄的包版本。这是一种低成本、覆盖面广的防护，用于抵御 npm 供应链攻击：恶意版本通常会在几天内被发现并撤回，因此将安装延迟同样一段时间，能拦截其中大部分。
 
-你可以在三个地方配置相同的控制；选择最适合项目的方式：
+自 Deno 2.9 起，此功能默认开启，窗口为 24 小时，因此即使不做任何配置，最近一天发布的版本也会被跳过。下面的设置可以更改该窗口或将其关闭（将年龄设为 `0`）。
+
+你可以在多个位置配置同样的控制项；选择最适合项目的方式即可：
 
 - **`deno.json`**，应用于整个项目：
 
@@ -73,7 +78,44 @@ Deno 可以拒绝安装任何年龄低于配置值的包版本。
 而有关 Deno 读取的其他 npm 注册表选项，请参见
 [`.npmrc` 配置](/runtime/fundamentals/node/#.npmrc-configuration)。
 
-## 典型 CI 模式
+## 发布信任策略
+
+当最小依赖年龄延迟新版本时，发布信任策略会查看一个版本是**如何**被发布的，并拒绝悄悄接受比你已经锁定的更弱的发布方式。
+
+npm 的完整包元数据记录了每个版本的发布方式。Deno 从中读取三种信号：
+
+- **受信任发布（OIDC）** - 该版本是通过 npm 的 OIDC 受信任发布者流程从 CI 发布的，没有使用长期有效的 token。
+- **来源证明（Provenance attestation）** - 该版本附带了签名的 SLSA 来源证明，将其关联到源代码提交和构建（使用 `--provenance` 发布）。
+- **分阶段发布（Staged publishing）** - 在版本变为可安装之前，维护者通过实时 2FA 挑战批准了该版本。
+
+Deno 将这些信号归并为单一信任级别，从低到高如下：
+
+| 信任级别                         | 信号                                              |
+| ------------------------------- | ------------------------------------------------- |
+| 纯净                           | 没有发布信任信号                                   |
+| 来源证明                       | 仅有来源证明                                        |
+| 受信任发布                     | 仅有 OIDC 受信任发布者                               |
+| 受信任发布 + 来源证明          | 以上两者都有                                         |
+| 分阶段                         | 人工批准的分阶段发布（排名高于所有其他级别）         |
+
+分阶段发布排名最高，因为有人通过实时 2FA 挑战批准了它。这个顺序与 pnpm 的 `trustPolicy: no-downgrade` 相对应。
+
+这样做的动机是供应链安全：如果维护者的 token 被盗，攻击者就可以使用比你一直信任的发布版本更弱的发布方式来发布新版本。`no-downgrade` 策略会把这种静默降级变成硬错误。
+
+在 `.npmrc` 中启用它：
+
+```ini title=".npmrc"
+trust-policy=no-downgrade
+```
+
+其行为如下：
+
+- Deno 会在 `deno.lock` 中为每个 npm 条目记录解析得到的信任级别（一个 `trust` 字段，若版本为纯净则省略）。该记录的级别会成为下一次解析的基线。
+- 启用 `no-downgrade` 后，Deno 会拒绝解析任何候选版本中信任级别低于该包锁定基线的版本，并会获取完整的 packument，以便这些信号可用。
+- 基线是锁文件中为某个包记录的最高信任级别，因此随着你锁定更高信任级别的版本，保护也会增强。第一次锁定某个包时，没有先前的基线可供比较。
+- 该策略默认关闭。现有锁文件在你开启它之前不会受影响，并且除 `no-downgrade` 之外的任何值都会让它保持关闭。
+
+## 常见的 CI 模式
 
 在 Deno 2.8+ 中，单个命令 [`deno ci`](/runtime/reference/cli/ci/)
 封装了推荐的 CI 安装流程（冻结锁文件 + 生命周期脚本）：
@@ -142,42 +184,43 @@ error: Module not found in frozen lockfile: https://example.com/dependency/mod.t
 4. 运行 `deno install --entrypoint main.ts` 以重新创建。
 5. 检查新旧之间的差异，以捕获意外新增内容。
 
-## Vendor 与锁文件
+## Vendor and lock files
 
-它们是互补的：
+They are complementary:
 
-- 锁文件：记录远程以及 npm/JSR 依赖的精确解析版本 + 完整性哈希。
-- Vendor 目录：将实际源代码存储在本地，以实现密封、离线且可打补丁的构建。
+- Lock file: records the exact resolved versions of remote and npm/JSR dependencies + integrity hashes.
+- Vendor directory: stores the actual source code locally to enable sealed, offline, and patchable builds.
 
-为了获得最大的可复现性，请同时使用两者。即使锁文件被冻结，如果远程源消失，构建也不会完全密封；vendoring 填补了这一缺口。
+For maximum reproducibility, use both together. Even if the lock file is frozen, the build is not fully sealed if a remote source disappears; vendoring fills that gap.
 
 ## 快速决策指南
 
-| 需求                       | 使用                                           |
-| -------------------------- | ---------------------------------------------- |
-| 检测上游篡改               | 锁文件（提交并冻结）                           |
-| 离线 / 断网构建            | `vendor: true` + 锁文件                        |
-| 修补第三方代码             | Vendoring 或 `scopes` 覆盖（短期）             |
-| 具有完整性保证的快速 CI    | `deno install --frozen`                        |
-| 有意升级                   | 临时解除冻结，运行安装，审查差异               |
+| 需要                               | 使用                                            |
+| ---------------------------------- | ---------------------------------------------- |
+| 检测上游篡改                      | 锁文件（提交并冻结）                             |
+| 离线 / 气隙构建                   | `vendor: true` + 锁文件                         |
+| 修补第三方代码                    | 供货或 `scopes` 覆盖（短期）                    |
+| 具有完整性的快速 CI               | `deno install --frozen`                        |
+| 有意升级                          | 临时解冻，运行安装，审查差异                    |
+| 阻止发布信任降级                  | 在 `.npmrc` 中设置 `trust-policy=no-downgrade` |
 
-## 最低供应链基线（推荐）
+## Minimum supply chain baseline (recommended)
 
 ```json title="deno.json"
 {
-  "imports": {/* 集中管理版本 */},
+  "imports": {/* centralized version management */},
   "vendor": true,
   "lock": { "frozen": true }
 }
 ```
 
-提交 `deno.json`、`deno.lock`，以及（如果使用 vendor）整个 `vendor/`
-目录。
+Commit `deno.json`, `deno.lock`, and, if using vendor, the entire `vendor/`
+directory.
 
-:::tip 自动化每周依赖刷新
+:::tip Automate weekly dependency refreshes
 
-一个计划执行的 CI 作业：解除冻结，运行 `deno add --latest`（或手动提升
-关键包版本），执行测试，并打开一个包含更新后 `deno.lock`（以及 `vendor/`）
-的拉取请求，可以在保持日常构建确定性的同时，让安全补丁持续流入。
+A scheduled CI job: unfreeze, run `deno add --latest` (or manually bump
+critical package versions), run tests, and open a pull request containing the updated `deno.lock` (and `vendor/`),
+which can keep daily builds deterministic while allowing security patches to flow in continuously.
 
 :::

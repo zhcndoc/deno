@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-03-10
+last_modified: 2026-06-20
 title: "使用 Drizzle ORM 和 Deno 构建数据库应用"
-description: "使用 Drizzle ORM 和 Deno 构建数据库应用的循序渐进指南。了解模式管理、类型安全的查询、PostgreSQL 集成、迁移，以及如何实现 CRUD 操作。"
+description: "使用 Drizzle ORM 和 Deno 构建数据库应用的分步指南。了解模式管理、类型安全查询、PostgreSQL 集成、迁移，以及如何实现 CRUD 操作。"
 url: /examples/drizzle_tutorial/
 oldUrl:
   - /runtime/tutorials/drizzle
@@ -19,13 +19,13 @@ oldUrl:
 
 ## 安装 Drizzle
 
-首先，我们将使用 Deno 的 npm 兼容性安装所需的依赖项。我们将与 [Postgres](https://orm.drizzle.team/docs/get-started-postgresql) 一起使用 Drizzle，但您也可以使用 [MySQL](https://orm.drizzle.team/docs/get-started-mysql) 或 [SQLite](https://orm.drizzle.team/docs/get-started-sqlite) 。（如果您没有 PostgreSQL，可以在 [这里安装](https://www.postgresql.org/download/)。）
+首先，我们将使用 Deno 的 npm 兼容性安装所需的依赖项。我们将与 [Postgres](https://orm.drizzle.team/docs/get-started-postgresql) 一起使用 Drizzle，但您也可以使用 [MySQL](https://orm.drizzle.team/docs/get-started-mysql) 或 [SQLite](https://orm.drizzle.team/docs/get-started-sqlite)。（如果您没有 PostgreSQL，可以在 [这里安装](https://www.postgresql.org/download/)。）
 
 ```bash
 deno install npm:drizzle-orm npm:drizzle-kit npm:pg npm:@types/pg
 ```
 
-这将安装 Drizzle ORM 及其相关工具——用于模式迁移的 [drizzle-kit](https://orm.drizzle.team/docs/kit-overview)，用于 PostgreSQL 连接的 [pg](https://www.npmjs.com/package/pg)，以及 PostgreSQL 的 [TypeScript 类型](https://www.npmjs.com/package/@types/pg)。这些包将允许我们以类型安全的方式与数据库交互，同时保持与 Deno 的运行环境的兼容性。
+这将安装 Drizzle ORM 及其相关工具——用于模式迁移的 [drizzle-kit](https://orm.drizzle.team/docs/kit-overview)，用于 PostgreSQL 连接的 [pg](https://www.npmjs.com/package/pg)，以及 PostgreSQL 的 [TypeScript 类型](https://www.npmjs.com/package/@types/pg)。这些包将允许我们以类型安全的方式与数据库交互，同时保持与 Deno 的运行环境兼容。
 
 它还将在您的项目根目录中创建一个 `deno.json` 文件以管理 npm 依赖项：
 
@@ -88,7 +88,7 @@ DATABASE_URL=postgresql://[user[:password]@][host][:port]/[dbname]
 
 ![Postgres 中表模式的图示](./images/how-to/drizzle/table-diagram.png)
 
-我们将运行以下命令以 introspect 数据库并在 `./drizzle` 目录下填充多个文件：
+我们将运行以下命令来 introspect 数据库，并在 `./drizzle` 目录下生成若干文件：
 
 <figure>
 

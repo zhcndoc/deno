@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-30
 title: "配置"
-description: "在 deno.json 中配置 deno desktop：应用元数据、图标、后端选择、输出路径、错误报告以及自动更新服务器。"
+description: "在 deno.json 中配置 deno desktop：应用元数据、图标、深度链接 URL 协议、后端选择、输出路径、错误报告，以及自动更新服务器。"
 ---
 
-:::info 即将于 Deno 2.9 提供
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 一同发布，但尚未进入稳定版。要立即试用它，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。随着功能趋于稳定，命令、配置键和 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -19,6 +19,7 @@ description: "在 deno.json 中配置 deno desktop：应用元数据、图标、
 {
   "name": "my-app",
   "version": "1.4.0",
+  "exports": "./main.ts",
   "desktop": {
     "app": {
       "name": "我的应用",
@@ -27,7 +28,8 @@ description: "在 deno.json 中配置 deno desktop：应用元数据、图标、
         "macos": "./icons/app.icns",
         "windows": "./icons/app.ico",
         "linux": "./icons/app.png"
-      }
+      },
+      "deepLinks": ["myapp"]
     },
     "backend": "cef",
     "output": {
@@ -91,6 +93,48 @@ description: "在 deno.json 中配置 deno desktop：应用元数据、图标、
 
 如果某个平台没有设置 `icons` 条目，则会使用默认的 Deno 图标。
 
+### `app.deepLinks`
+
+应用向操作系统注册的自定义 URL scheme（深度链接），这样打开一个
+`<scheme>://...` 链接时就会路由到你的应用。每个条目都是一个不含
+`://` 的纯 scheme 名称。
+
+```jsonc
+"deepLinks": ["myapp"]
+```
+
+使用上面的配置后，操作系统会将 `myapp://open/document/42` 视为属于你的
+应用。如果你的应用处理多个 scheme，可以列出多个：
+
+```jsonc
+"deepLinks": ["myapp", "myapp-beta"]
+```
+
+scheme 名称遵循
+[RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986#section-3.1) 语法：
+必须以 ASCII 字母开头，且其余部分可以包含字母、数字、
+`+`、`-` 和 `.`。注册时名称会转换为小写。保留的
+scheme `http`、`https`、`file`、`ftp`、`ws` 和 `wss` 会被拒绝，因为
+将它们注册为应用处理程序会劫持正常浏览。无效或保留的 scheme 会导致
+构建失败。
+
+注册会在打包时按平台进行：
+
+- **macOS** 会在 bundle 的 `Info.plist` 中添加一个 `CFBundleURLTypes` 条目（将你的 scheme 放在
+  `CFBundleURLSchemes` 下）。这会在代码签名之前写入，因此签名仍然有效。
+- **Linux** 会在 `.desktop` 条目中添加一个 `x-scheme-handler/<scheme>` MIME 类型，并确保
+  `Exec=` 通过 `%u` 字段代码转发打开的 URL。
+- **Windows** 对协议处理程序没有包内注册，因此
+  打包器会在启动器旁边放置一个 `register-deep-links.bat`。它会写入
+  指向启动器的 `HKCU\Software\Classes\<scheme>` 键。安装程序（或用户）会在安装后运行一次。
+
+:::info 仅注册
+
+这会将这些 scheme 注册到操作系统，以便链接被路由到你的应用。
+在运行中的应用内处理打开的 URL（将 URL 传递给你的代码）会在后续版本中提供；请先声明你的 scheme，以便完成打包和操作系统注册。
+
+:::
+
 ## `backend`
 
 要嵌入的 Web 渲染引擎。可选 `"cef"`、`"webview"` 或 `"raw"`。默认值：`"webview"`。
@@ -100,7 +144,7 @@ description: "在 deno.json 中配置 deno desktop：应用元数据、图标、
 ```
 
 CLI 标志 `--backend` 会在单次构建中覆盖此设置，但只接受 `cef` 和 `webview`；如果要使用 `raw`，请在 `deno.json` 中设置。有关权衡和支持的目标平台，请参见
-[Backends](/runtime/desktop/backends/)。
+[后端](/runtime/desktop/backends/)。
 
 ## `output`
 
@@ -122,13 +166,16 @@ CLI 标志 `--backend` 会在单次构建中覆盖此设置，但只接受 `cef`
 | `.dmg`           | DMG 磁盘映像（通过 `hdiutil` 构建） |
 
 | Windows 上的扩展名 | 输出                                        |
-| ------------------ | --------------------------------------------- |
-| （无）/ 目录       | 带有 `.bat` 启动器和 DLL 的应用目录           |
+| ------------------- | --------------------------------------------- |
+| (无) / 目录         | 带有 `.bat` 启动器和 DLL 的应用目录         |
+| `.msi`              | Windows Installer 安装包                    |
 
 | Linux 上的扩展名 | 输出                             |
 | ---------------- | ---------------------------------- |
-| （无）/ 目录     | 带有启动脚本的应用目录            |
-| `.AppImage`      | 单文件 `.AppImage` 打包           |
+| (无) / 目录       | 带有启动脚本的应用目录             |
+| `.AppImage`        | `.AppImage` 单文件捆绑包          |
+| `.deb`             | Debian/Ubuntu 软件包              |
+| `.rpm`             | Fedora/RHEL 软件包               |
 
 CLI 标志 `--output` 会在单次构建中覆盖此设置。
 
@@ -150,7 +197,7 @@ adhoc 签名。未设置时，`deno desktop` 仍会对 bundle 进行 adhoc 签�
 ### `release.baseUrl`
 
 发布服务器的基础 URL。运行时会获取 `<baseUrl>/latest.json`，并根据此 URL 下载补丁文件。有关完整的清单格式和补丁流程，请参见
-[Auto-update](/runtime/desktop/auto_update/)。
+[自动更新](/runtime/desktop/auto_update/)。
 
 ```jsonc
 "release": {
@@ -175,7 +222,7 @@ adhoc 签名。未设置时，`deno desktop` 仍会对 bundle 进行 adhoc 签�
 
 如果未设置，错误报告将处于“仅提示”模式：未捕获的错误仍会显示原生提示，但不会发送报告。
 
-有关报告模式，请参见 [Error reporting](/runtime/desktop/error_reporting/)。
+有关报告模式，请参见 [错误报告](/runtime/desktop/error_reporting/)。
 
 ## 工作目录与资源
 
@@ -189,8 +236,9 @@ adhoc 签名。未设置时，`deno desktop` 仍会对 bundle 进行 adhoc 签�
 `deno desktop` 会在开始时对配置进行校验：
 
 - `backend` 必须是列出的值之一。
-- 图标路径必须解析到已存在的文件。
+- 图标路径必须解析到存在的文件。
 - 输出路径必须可写。
 - `release.baseUrl` 必须能够解析为 URL。
+- `app.deepLinks` 条目必须是有效的、未保留的 URL scheme。
 
 错误会连同出错的 `deno.json` 位置一起报告。

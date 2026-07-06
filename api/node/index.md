@@ -79,26 +79,26 @@ Node.js 全局对象在 npm 包作用域内可用，并可从相关的 `node:` �
 - **`__dirname`** / **`__filename`** - 模块路径信息
 - **Web 标准** - `fetch`、`URL`、`TextEncoder`、`crypto` 等
 
-## 使用示例
+## Usage Examples
 
-### 基础模块导入
+### Basic Module Imports
 
 ```javascript
 import fs from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-// 同步读取文件
+// Read file synchronously
 const data = fs.readFileSync("file.txt", "utf8");
 
-// 异步读取文件
+// Read file asynchronously
 const content = await readFile("file.txt", "utf8");
 
-// 路径操作
+// Path operations
 const fullPath = path.join("/users", "documents", "file.txt");
 ```
 
-### HTTP 服务器
+### HTTP Server
 
 ```javascript
 import http from "node:http";
@@ -113,17 +113,17 @@ server.listen(3000, () => {
 });
 ```
 
-### 加密操作
+### Cryptographic Operations
 
 ```javascript
 import crypto from "node:crypto";
 
-// 生成哈希
+// Generate hash
 const hash = crypto.createHash("sha256");
 hash.update("Hello World");
 const digest = hash.digest("hex");
 
-// 生成随机字节
+// Generate random bytes
 const randomBytes = crypto.randomBytes(16);
 ```
 
@@ -137,12 +137,5 @@ Node 兼容性是一个持续进行的项目。大多数核心 Node.js API 都�
 
 ## 从 Node.js 迁移
 
-从 Node.js 迁移到 Deno 时：
-
-1. **更新导入**：内置模块使用 `node:` 前缀
-2. **检查兼容性**：确认依赖项能在 Deno 下运行
-3. **使用 npm 指定符**：导入 npm 包时使用 `npm:` 前缀
-4. **审查权限**：根据需要配置 Deno 的权限系统
-
-更多指导，请参阅我们的
+有关将 Node.js 项目迁移到 Deno 的分步指南，请参阅
 [迁移指南](/runtime/reference/migration_guide/)。

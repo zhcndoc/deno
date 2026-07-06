@@ -1,12 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "热模块替换"
-description: "deno desktop --hmr 在编辑过程中保持运行时和渲染后端持续运行：在框架项目中使用框架开发服务器，在其他所有场景中使用 V8 热切换。"
+description: "deno desktop --hmr 会在编辑之间保持运行时和渲染后端持续运行：框架项目中使用框架开发服务器，其他情况使用 V8 热切换。"
 ---
 
-:::info 将于 Deno 2.9 中推出
+:::info 适用于 Deno 2.9
 
-`deno desktop` 随 Deno v2.9.0 发布，目前尚未进入稳定版本。要立即试用，请运行 `deno upgrade canary` 来安装 [`canary`](/runtime/reference/cli/upgrade/) 构建。该命令、配置键以及 TypeScript API 在功能稳定之前仍可能发生变化。
+`deno desktop` 自 Deno v2.9.0 起可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 

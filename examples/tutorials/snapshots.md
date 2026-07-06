@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-02-24
-title: "Deno Sandbox 快照教程"
-description: "使用只读镜像来创建隔离且可复现的环境。"
+last_modified: 2026-06-20
+title: "Deno 沙箱快照教程"
+description: "使用只读镜像来创建隔离且可重复的环境。"
 url: "/examples/snapshots_tutorial/"
 ---
 
@@ -11,16 +11,16 @@ url: "/examples/snapshots_tutorial/"
 
 我们的步骤是：
 
-1. 从 `builtin:debian-13` 基础镜像开始。
-2. 只安装一次 Node.js 和一些全局工具。
+1. 开始一个快照
+2. 仅安装一次 Node.js 和一些全局工具。
 3. 将准备好的卷快照为 `my-toolchain-snapshot`。
-4. 从该快照启动新的沙箱，验证工具在沙箱启动时即可使用。
+4. 基于该快照启动新的沙箱，并验证在沙箱启动的那一刻工具就已经可用。
 
 ## 认证并初始化客户端
 
 为了使用 Deno 沙箱 API，我们首先需要设置一个 Deno 沙箱访问令牌。
 
-1. 在你的 Deno Deploy 控制台，导航至 **Sandboxes** 部分。
+1. 在你的 Deno Deploy 控制台，导航至 **沙箱** 部分。
 2. 创建一个新令牌，复制令牌值。
 3. 将该令牌设置为本地环境变量 `DENO_DEPLOY_TOKEN`。
 

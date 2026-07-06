@@ -1,13 +1,12 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-30
 title: "托盘和 Dock"
-description: "向操作系统状态区域和 macOS Dock 添加图标：工具提示、深色模式变体、点击事件以及右键上下文菜单。"
+description: "将图标添加到操作系统状态区域和 macOS Dock：工具提示、深色模式变体、点击事件以及右键上下文菜单。"
 ---
 
-:::info 即将推出于 Deno 2.9
+:::info 可在 Deno 2.9 中使用
 
-`deno desktop` 随 Deno v2.9.0 发布，但尚未进入稳定版。若要立即试用，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。命令、配置键和 TypeScript API 在该功能稳定之前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -18,7 +17,7 @@ description: "向操作系统状态区域和 macOS Dock 添加图标：工具提
 
 两者的菜单都使用 [`Deno.MenuItem`](/runtime/desktop/menus/) 类型。
 
-## [`Deno.Tray`](/api/deno/~/Deno.Tray)
+## `Deno.Tray`
 
 ```ts
 const icon = await Deno.readFile("./icons/tray.png");
@@ -186,7 +185,7 @@ if (bounds) {
 
 如果后端无法创建托盘图标，则构造器底层的 `trayId` 为 `0`，后续调用都会成为无操作（静默）。如果你需要优雅降级，请检查 `tray.trayId !== 0`。
 
-## [`Deno.dock`](/api/deno/~/Deno.dock)
+## `Deno.dock`
 
 [`Deno.dock`](/api/deno/~/Deno.dock) 是一个单例，提供应用的 Dock /
 任务栏控制。其方法是跨平台的，但效果不同：仅 macOS 的操作在 Windows 和 Linux 上是无操作（会优雅失败，而不是抛出错误）。

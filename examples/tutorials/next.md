@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-10-02
-title: "使用 Next.js 构建应用"
-description: "使用 Deno 构建 Next.js 应用的循序渐进指南。学习如何搭建项目、创建 API 路由、实现服务端渲染，以及构建完整的全栈 TypeScript 应用。"
+last_modified: 2026-06-16
+title: "构建一个 Next.js 应用"
+description: "使用 Deno 构建 Next.js 应用的分步指南。学习如何设置项目、创建 API 路由、实现服务器端渲染，并构建一个全栈 TypeScript 应用。"
 url: /examples/next_tutorial/
 oldUrl:
   - /runtime/tutorials/how_to_with_npm/next/
@@ -10,7 +10,7 @@ oldUrl:
 [Next.js](https://nextjs.org/) 是一个用于构建服务器端渲染应用的流行框架。它基于 React 构建，并开箱即用提供了许多功能。
 
 在本教程中，我们将使用 Deno 运行一个
-[简单的 Next.js 应用](https://tutorial-with-next.deno.deno.net/)。该应用会展示一个恐龙列表。当你点击其中一个时，会跳转到对应恐龙的详情页面。
+[简单的 Next.js 应用](https://tutorial-with-next.deno.deno.net/)。该应用会展示一个恐龙列表。当你点击其中一个时，它会跳转到对应恐龙的详情页面。
 
 你可以查看
 [GitHub 上的完整应用代码](https://github.com/denoland/tutorial-with-next/tree/main)。
@@ -38,7 +38,6 @@ Next.js 的一些依赖仍然依赖 `Object.prototype.__proto__`，并且需要 
 ```json deno.json
 {
   "unstable": [
-    "bare-node-builtins",
     "detect-cjs",
     "node-globals",
     "unsafe-proto",

@@ -1,5 +1,5 @@
 ---
-last_modified: 2025-03-10
+last_modified: 2026-06-25
 title: "deno test"
 oldUrl: /runtime/manual/tools/test/
 command: test
@@ -57,6 +57,36 @@ deno test --filter "/^connect.*/"
 若要控制最初收集哪些测试文件，可在配置文件中设置 `test.include` 和 `test.exclude`。请参阅
 [包含与排除](/runtime/reference/deno_json/#include-and-exclude)。
 
+## 运行受影响的测试
+
+在迭代修改时，你可以只运行受其影响的测试，而不是
+整个测试套件。这些都是一次性运行，不是 watch 模式。
+
+`--changed` 会运行受 git 中已更改文件影响的测试模块。若不提供
+值，它会使用工作区（已暂存、未暂存和未跟踪的文件）；传入一个
+引用也可以包含自该引用与当前分支 merge-base 以来的提交：
+
+```sh
+# 受未提交更改影响的测试
+deno test --changed
+
+# 自从从 main 分支切出以来受影响的测试
+deno test --changed=origin/main
+```
+
+`--related` 会运行依赖于特定源文件的测试模块，而不
+查询 git：
+
+```sh
+# 导入 src/util.ts 的测试
+deno test --related=src/util.ts
+```
+
+这两个标志都会将收集到的测试文件筛选为那些通过模块图
+到达已更改文件或命名文件的测试文件。有关工作流以及选择如何
+生效，请参阅测试指南中的
+[运行受影响的测试](/runtime/test/#running-affected-tests)。
+
 ## 权限
 
 测试会以与 `deno run` 相同的[权限模型](/runtime/fundamentals/security/)运行。
@@ -111,6 +141,19 @@ deno coverage coverage/
 deno coverage --lcov coverage/ > coverage.lcov
 ```
 
+要在覆盖率低于目标值时使运行失败，请设置阈值（例如
+`deno coverage --threshold=90`）。有关按指标配置，请参见
+[coverage thresholds](/runtime/reference/cli/coverage/#coverage-thresholds)。
+
+## 参数化测试
+
+使用 [`Deno.test.each`](/api/deno/~/Deno.test.each) 在一组用例表上运行相同的测试主体，它会为每个用例分别注册一个独立报告的测试。有关名称模板和用例形式，请参见[参数化测试](/runtime/test/#parameterized-tests)。
+
+## 快照测试
+
+捕获一个值，并在每次运行时将其与存储的参考值进行比较，使用内置的 `t.assertSnapshot`，并通过 `--update-snapshots`（`-u`）进行更新。参见
+[快照测试](/runtime/test/snapshots/)。
+
 ## 报告器
 
 使用 `--reporter` 选择输出格式。内置了四种报告器：
@@ -138,6 +181,37 @@ deno test --junit-path=report.xml
 ```sh
 deno test --shuffle
 ```
+
+## 分片
+
+使用 `--shard=<index>/<count>` 将测试套件拆分到多台机器上，其中
+`index` 从 1 开始。已发现的测试文件会按稳定顺序排序，并
+划分为 `<count>` 个平衡分组；运行时只执行第 `<index>` 组中的文件：
+
+```sh
+# 在 3 台机器中的第 1 台上
+deno test --shard=1/3
+
+# 在 3 台机器中的第 2 台上
+deno test --shard=2/3
+```
+
+分片会在 `--shuffle` 之前应用，因此无论随机种子如何，同一个分片在
+每台机器上都会运行相同的文件。
+
+## 重试和重复
+
+使用 `--retry` 和 `--repeats` 为整个运行设置默认的重试和重复次数：
+
+```sh
+# 每个失败的测试在报告失败前最多重新运行两次
+deno test --retry=2
+
+# 每个测试运行三次，如果任何一次运行失败则判定失败
+deno test --repeats=3
+```
+
+设置了自己的 `retry` 或 `repeats` 选项的测试会覆盖该标志。有关每个测试的选项，请参见[重试和重复测试](/runtime/test/#retrying-and-repeating-tests)。
 
 ## 泄漏检测
 

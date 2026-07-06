@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-13
+last_modified: 2026-06-25
 title: "编写 HTTP 服务器"
-description: "Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流，以及如何使用自动压缩构建可用于生产环境的 HTTP/HTTPS 服务器。"
+description: "在 Deno 中创建 HTTP 服务器的指南。了解 Deno.serve API、请求处理、WebSocket 支持、响应流，以及如何构建带有自动压缩的生产就绪 HTTP/HTTPS 服务器。"
 oldUrl:
   - /runtime/manual/runtime/http_server_apis/
   - /runtime/manual/examples/http_server/
@@ -97,7 +97,7 @@ Deno.serve((req) => {
 });
 ```
 
-## 以流的形式响应
+## 流式响应
 
 响应主体也可以是流。以下是一个返回每秒重复一次“Hello, World！”的响应示例：
 
@@ -242,9 +242,13 @@ HTTP/2 在明文下也支持 prior knowledge（预先知识）。
 
 ## 自动主体压缩
 
-HTTP 服务器具备自动压缩响应主体的功能。当响应发送到客户端时，Deno 会确定响应主体是否可以安全地进行压缩。此压缩在 Deno 的内部发生，因此速度快且高效。
+HTTP 服务器可以自动压缩响应主体，但默认情况下这是关闭的。您可以通过 `automaticCompression: true` 为单个服务器启用它，或通过设置 `DENO_SERVE_AUTOMATIC_COMPRESSION=1` 为整个进程启用它：
 
-目前 Deno 支持 gzip 和 brotli 压缩。如果满足以下条件，主体会自动压缩：
+```ts
+Deno.serve({ automaticCompression: true }, () => new Response("hello"));
+```
+
+压缩在 Deno 的内部实现中完成，因此它快速且高效。Deno 支持 gzip 和 brotli。一旦启用，满足以下条件时，主体将被压缩：
 
 - 请求具有一个
   [`Accept-Encoding`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Encoding)
@@ -267,7 +271,15 @@ HTTP 服务器具备自动压缩响应主体的功能。当响应发送到客户
 - 响应包含一个 [`Content-Range`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range) 头。这表明您的服务器正在响应范围请求，其中字节和范围是在 Deno 内部的控制之外进行协商的。
 - 响应具有一个 [`Cache-Control`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) 头，其中包含一个 [`no-transform`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#other) 值。这表明您的服务器不希望 Deno 或任何下游代理修改响应。
 
-## 提供 WebSocket
+## 请求中止信号
+
+由于历史原因，[`Deno.serve`](/api/deno/~/Deno.serve) 会在请求的 [`signal`](/api/web/~/Request/signal) 上触发 `abort`
+事件，即使处理程序成功返回也是如此。这会让一些 Node 代理库（例如
+`http-proxy`）出问题，因为它们会将中止视为真实的上游故障。传入
+`--unstable-no-legacy-abort` 以启用修正后的行为，在该行为下，只有当客户端实际断开连接时，`signal`
+才会中止。现在依赖旧行为会打印一条弃用警告，因为修正后的行为将成为默认行为。
+
+## 提供 WebSockets 服务
 
 Deno 可以将传入的 HTTP 请求升级为 WebSocket。这使您能够在 HTTP 服务器上处理 WebSocket 端点。
 

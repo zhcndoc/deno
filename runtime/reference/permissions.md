@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-18
+last_modified: 2026-06-29
 title: "权限"
 description: "Deno 权限系统参考：运行时沙箱如何工作，以及如何使用 --allow 和 --deny 标志授予或拒绝文件系统、网络、环境、系统、子进程、FFI 和导入访问权限。"
 oldUrl:
@@ -332,6 +332,8 @@ deno run --allow-run script.ts
 deno run --allow-run="curl,whoami" script.ts
 ```
 
+向你自己的进程发送信号不需要 `--allow-run`，因为这等同于终止你自己（就像 [`Deno.exit`](/api/deno/~/Deno.exit)）。`Deno.kill(Deno.pid, ...)` 和 `process.kill(process.pid, ...)` 在没有该标志的情况下也能工作，因此那些会在自身 PID 上重新发送信号的工具（例如 `signal-exit`，Vite 使用了它）不再会强制你授予宽泛的运行访问权限。
+
 :::caution
 
 除非父进程具有 `--allow-all`，否则你大概永远不想使用 `--allow-run=deno`，因为能够启动一个 `deno` 进程意味着脚本可以以完全权限再启动另一个 `deno` 进程。
@@ -374,7 +376,8 @@ deno run --deny-run script.ts
 
 Deno 提供了一种[在 Deno 运行时中执行其他语言编写的代码的 FFI 机制](/runtime/fundamentals/ffi/)，例如 Rust、C 或 C++。这通过 [`Deno.dlopen`](/api/deno/~/Deno.dlopen) API 实现，它可以加载共享库并调用其中的函数。
 
-默认情况下，执行的代码不能使用 [`Deno.dlopen`](/api/deno/~/Deno.dlopen) API，因为这将构成违反“代码不能在未经用户同意的情况下提升其权限”这一原则。
+默认情况下，执行的代码不能使用
+[`Deno.dlopen`](/api/deno/~/Deno.dlopen) API，因为这将构成对“代码不能在未获得用户同意的情况下提升其权限”这一原则的违反。
 
 除了 [`Deno.dlopen`](/api/deno/~/Deno.dlopen) 之外，FFI 还可以通过 Node-API（NAPI）原生插件使用。这些默认情况下也不允许。
 

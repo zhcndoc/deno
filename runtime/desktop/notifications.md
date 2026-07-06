@@ -1,13 +1,12 @@
 ---
-last_modified: 2026-06-17
+last_modified: 2026-06-25
 title: "通知"
 description: "使用标准 Web Notifications API 从 deno desktop 应用中显示原生操作系统通知：权限流程、选项和事件。"
 ---
 
-:::info 即将随 Deno 2.9 发布
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 一同发布，但尚未进入稳定版。要立即试用，请运行 `deno upgrade canary` 安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。在该功能稳定之前，命令、配置键和 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -67,8 +66,8 @@ macOS 只会向具有稳定代码身份的应用授予通知权限。`deno deskt
 构造函数接受标准的 `NotificationOptions`：
 
 ```ts
-new Notification("New message", {
-  body: "Alice: are we still on for 3pm?",
+new Notification("新消息", {
+  body: "Alice：我们还是约在 3 点吗？",
   icon: "data:image/png;base64,iVBORw0KGgo…",
   tag: "chat-alice",
   requireInteraction: true,
@@ -97,7 +96,7 @@ import { encodeBase64 } from "jsr:@std/encoding/base64";
 
 const bytes = await Deno.readFile("./icons/alert.png");
 const dataUrl = "data:image/png;base64," + encodeBase64(bytes);
-new Notification("Heads up", { icon: dataUrl });
+new Notification("警报", { icon: dataUrl });
 ```
 
 ## 事件
@@ -105,7 +104,7 @@ new Notification("Heads up", { icon: dataUrl });
 `Notification` 是一个 `EventTarget`。可使用 `addEventListener` 或 `on<event>` 属性监听：
 
 ```ts
-const n = new Notification("Download finished");
+const n = new Notification("下载完成");
 
 n.onshow = () => console.log("已显示");
 n.onclick = () => openDownloadsFolder();

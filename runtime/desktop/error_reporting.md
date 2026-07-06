@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "错误报告"
-description: "捕获未被捕获的错误、未处理的拒绝以及 Rust panic，显示原生警报并向你的服务器 POST 一个 JSON 报告。"
+description: "捕获未捕获的错误、未处理的拒绝以及 Rust panic，显示原生警报并将 JSON 报告 POST 到你的服务器。"
 ---
 
-:::info 即将登陆 Deno 2.9
+:::info 可在 Deno 2.9 中使用
 
-`deno desktop` 随 Deno v2.9.0 一并发布，但目前尚未进入稳定版。要立即试用，请运行 `deno upgrade canary` 以安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建版本。在该功能稳定之前，命令、配置键以及 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -42,7 +42,7 @@ description: "捕获未被捕获的错误、未处理的拒绝以及 Rust panic�
 ```json
 {
   "version": 1,
-  "message": "TypeError: Cannot read properties of null",
+  "message": "TypeError: 无法读取 null 的属性",
   "stack": "TypeError: Cannot read properties of null (reading 'foo')\n    at handler (file:///main.ts:12:14)\n    at …",
   "appVersion": "1.4.0",
   "timestamp": "2026-04-08T12:00:00.000Z",
@@ -77,11 +77,11 @@ description: "捕获未被捕获的错误、未处理的拒绝以及 Rust panic�
 
 在 [binding](/runtime/desktop/bindings/) 处理器中抛出的错误会传播到 webview 端，并使调用它的 promise 被拒绝。它们**不会**作为未捕获错误被报告；webview 会捕获它们。若仍想报告它们，请在 binding 处理器中自行记录。
 
-## 抑制警报
+## Suppression alerts
 
-该警报旨在在出错时让用户知情。它会针对每一个未捕获错误、未处理拒绝和 panic 触发，目前没有办法从用户代码中将其抑制：运行时会在你的代码运行之前注册其 `error` 和 `unhandledrejection` 处理器，因此你稍后添加的监听器中的 `preventDefault()` 不会停止警报或报告。
+This alert is intended to inform users when errors occur. It will trigger for every uncaught error, unhandled rejection, and panic, and there is currently no way to suppress it from user code: the runtime registers its `error` and `unhandledrejection` handlers before your code runs, so `preventDefault()` in listeners you add later will not stop the alert or reporting.
 
-要避免某个错误触发警报，就要阻止它成为未捕获错误：在你的代码和 binding 实现中使用 `try`/`catch`（或本地错误处理）来处理它：
+To avoid an error triggering an alert, prevent it from becoming an uncaught error: handle it in your code and binding implementations using `try`/`catch` (or local error handling):
 
 ```ts
 win.bind("readFile", async (path) => {
@@ -89,12 +89,12 @@ win.bind("readFile", async (path) => {
     return await Deno.readTextFile(path);
   } catch (e) {
     reportToOwnTelemetry(e);
-    return null; // 已处理，不会警报
+    return null; // handled, no alert
   }
 });
 ```
 
-你仍然可以添加自己的 `error` / `unhandledrejection` 监听器来获取额外遥测；它们会在内置处理器之后运行，并与警报和报告并行：
+You can still add your own `error` / `unhandledrejection` listeners to collect additional telemetry; they run after the built-in handlers and in parallel with alerts and reporting:
 
 ```ts
 addEventListener("error", (e) => reportToOwnTelemetry(e.error));
@@ -132,4 +132,4 @@ Deno.serve({ port: 8080 }, async (req) => {
 - 对 [`Deno.readTextFile`](/api/deno/~/Deno.readTextFile) 调用及类似内容的 URL 进行脱敏。
 - 在发送第一份报告前先询问用户（一次性的同意提示）。
 
-这些都是应用层面的决定；内置报告器会发送它所拥有的内容，其负载无法从用户代码中被过滤。若要完全控制离开机器的数据，请不要设置 `errorReporting.url`，而是改为在 `error` / `unhandledrejection` 处理器中发送你自己的报告。
+这些都是应用层面的决定；内置报告器会发送其所拥有的内容，其负载无法从用户代码中被过滤。若要完全控制离开机器的数据，请不要设置 `errorReporting.url`，而是改为在 `error` / `unhandledrejection` 处理器中发送你自己的报告。

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-07-02
 title: "配置 Deno 行为"
 ---
 
@@ -32,7 +32,7 @@ OpenTelemetry 日志记录发出。有关字段集和 OTel
 
 ### DENO_INSTALL_ROOT
 
-当使用 `deno install` 时，已安装的脚本存储的位置。默认值为 `$HOME/.deno/bin`。
+`deno install` 在安装可执行文件时使用的根目录。可执行文件会放置在此根目录的 `bin` 子目录中，除非该路径本身已经以 `bin` 结尾，此时将直接使用该路径。默认值为 `$HOME/.deno`，因此可执行文件默认会安装到 `$HOME/.deno/bin`。
 
 ### DENO_NO_PACKAGE_JSON
 

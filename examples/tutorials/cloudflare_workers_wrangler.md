@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-04-18
+last_modified: 2026-07-01
 title: "使用 Wrangler 将 Deno 部署到 Cloudflare Workers"
-description: "了解如何使用 Wrangler 将 Deno 应用程序构建并部署到 Cloudflare Workers"
+description: "了解如何使用 Wrangler 构建并将 Deno 应用部署到 Cloudflare Workers"
 url: /examples/cloudflare_workers_wrangler_tutorial/
 ---
 
@@ -53,6 +53,34 @@ deno add npm:wrangler
 ```shell
 deno task cf-typegen
 ```
+
+## 配置类型检查
+
+生成的 `worker-configuration.d.ts` 提供了 `Env` 接口以及 Cloudflare Workers 运行时类型（`ExportedHandler`、`Request`、`Response`，以及 [workerd](https://github.com/cloudflare/workerd) 全局作用域中的其余内容）。由于 Deno 默认会自带其 Web API 全局对象，因此你需要告诉 Deno 使用 Workers 运行时类型作为唯一可信来源。否则，类型检查要么找不到 `Env`/`ExportedHandler`，要么会报告许多冲突的全局声明。
+
+向你的 `deno.json` 中添加一个 `compilerOptions` 块：
+
+```json
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "types": ["./worker-configuration.d.ts"],
+    "skipLibCheck": true
+  },
+  "tasks": {
+    "deploy": "deno --allow-env --allow-run npm:wrangler deploy",
+    "dev": "deno npm:wrangler dev",
+    "start": "deno npm:wrangler dev",
+    "cf-typegen": "deno npm:wrangler types"
+  }
+}
+```
+
+- `"lib": ["esnext"]` 会移除 Deno 默认的 Web/DOM 全局对象，因此会使用来自 `worker-configuration.d.ts` 的 workerd 类型，而不是与它们发生冲突。 如果你的项目也使用 Deno 运行时 API（`Deno.*`），请改用 `["esnext", "deno.ns"]`。
+- `"types": ["./worker-configuration.d.ts"]` 会在整个项目范围内加载生成的 Workers 类型，因此你的 worker 中 `Env` 和 `ExportedHandler` 可以正常解析。
+- `"skipLibCheck": true` 会跳过声明文件内部的类型检查，而生成文件正是依赖这一点。
+
+完成以上设置后，`deno check` 和你的编辑器就会使用 Cloudflare Workers 运行时类型来检查 worker。
 
 ## 创建你的函数
 

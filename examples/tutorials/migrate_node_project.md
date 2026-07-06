@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-11
-title: "在现有的 Node.js 项目中使用 Deno"
-description: "无需重写即可使用 Deno 运行现有的 Node.js 项目：从 package.json 安装依赖，使用 deno task 运行 npm 脚本，使用 node: 内置模块，并逐步采用 Deno 内置工具链。"
+last_modified: 2026-06-25
+title: "在现有 Node.js 项目中使用 Deno"
+description: "无需重写即可使用 Deno 运行现有的 Node.js 项目：从 package.json 安装，使用 deno task 运行 npm 脚本，使用 node: 内置模块，并逐步采用 Deno 的内置工具链。"
 url: /examples/migrate_node_project_tutorial/
 ---
 
@@ -77,6 +77,15 @@ Deno 默认是安全的：如果你的代码会读取文件、打开套接字或
 - **CommonJS 和 ES 模块都能工作**：`.cjs` 和 `.mjs` 是明确无歧义的，而
   `.js` 则遵循最近的 `package.json` 中的 `"type"` 字段。基于
   `require()` 且 `"type": "commonjs"` 的项目可以原样运行。
+
+:::info
+
+从 Deno 2.9 起，`node:` 前缀变为可选：像
+`import os from "os"` 这样的裸标识符会解析到内置模块，因此
+来自 Node 项目的未加前缀导入也能直接运行，无需修改。虽然如此，仍然推荐显式使用
+`node:` 形式，因为它更明确，而且在 Node.js 中同样可用。
+
+:::
 
 :::note
 

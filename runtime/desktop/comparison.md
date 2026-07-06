@@ -1,15 +1,13 @@
 ---
-last_modified: 2026-06-18
+last_modified: 2026-06-25
 title: "与其他工具的比较"
-description: "deno desktop 在语言、引擎、进程模型、应用体积、生态，以及内置能力方面，与 Electron、Electrobun、Tauri 和 Dioxus 的对比。"
+description: "deno desktop 在语言、引擎、进程模型、应用大小、生态系统以及内置功能方面与 Electron、Electrobun、Tauri 和 Dioxus 的比较。"
 ---
 
-:::info 即将在 Deno 2.9 中推出
+:::info 可在 Deno 2.9 中使用
 
-`deno desktop` 将随 Deno v2.9.0 发布，目前仍未进入稳定版本。要立即试用，
-请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建版本。该命令、配置键以及
-TypeScript API 在该功能稳定之前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请先[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -17,28 +15,32 @@ TypeScript API 在该功能稳定之前仍可能发生变化。
 
 ## 一览
 
-|                             | Electron               | Electrobun      | Tauri                | Dioxus           | `deno desktop`                               |
-| --------------------------- | ---------------------- | --------------- | -------------------- | ---------------- | -------------------------------------------- |
-| **语言**                   | JS/TS (Node.js)        | JS/TS (Bun)     | Rust + Web 前端      | Rust             | JS/TS (Deno)                                 |
-| **Web 引擎**               | 内置 Chromium          | 系统 WebView    | 系统 WebView         | 系统 WebView    | 内置 CEF 或 WebView                          |
-| **一致的渲染**             | 是                     | 否              | 否                   | 否               | 是（CEF）                                    |
-| **进程模型**              | 多进程                 | 多进程          | 多进程               | 单进程           | 多线程（CEF）/ 进程组（WebView）             |
-| **后端 ↔ UI**             | IPC                    | IPC             | IPC                  | 原生 Rust        | 进程内通道                                   |
-| **应用体积**               | ~100 MB+               | ~14 MB          | ~2–10 MB             | ~5 MB            | ~40 MB / ~150 MB（CEF）                      |
-| **npm / Node 兼容性**     | 是                     | 是              | 否                   | 否               | 是                                           |
-| **框架自动检测**          | 否                     | 否              | 否                   | 否               | 是                                           |
-| **HMR**                    | 否                     | 是              | 是（基于 Vite）      | 是（`dx serve`） | 是                                           |
-| **内置自动更新**          | 完整二进制             | bsdiff          | 插件                 | 无               | bsdiff                                       |
-| **内置安装器**            | 是                     | 否              | 是                   | 否               | 部分支持（DMG，AppImage）                    |
-| **交叉编译**              | 是（electron-builder） | 否（仅 macOS）  | 否（需要目标 OS）    | 否               | 是（`--target`）                             |
-| **macOS / Windows / Linux** | 三者都支持            | 仅 macOS        | 三者都支持           | 三者都支持       | 三者都支持                                   |
-| **iOS / Android**         | 否                     | 否              | 是                   | 是               | 尚未支持                                     |
+|                             | Electron               | Electrobun           | Tauri                | Dioxus           | `deno desktop`                               |
+| --------------------------- | ---------------------- | -------------------- | -------------------- | ---------------- | -------------------------------------------- |
+| **语言**                   | JS/TS (Node.js)        | JS/TS (Bun)          | Rust + web 前端      | Rust             | JS/TS (Deno)                                 |
+| **Web 引擎**              | 捆绑的 Chromium        | 系统 WebView         | 系统 WebView         | 系统 WebView     | 捆绑的 CEF 或 WebView                       |
+| **渲染一致性**            | 是                     | 否                   | 否                   | 否               | 是 (CEF)                                     |
+| **进程模型**              | 多进程                 | 多进程               | 多进程               | 单进程           | 多线程 (CEF) / 进程组 (WebView)             |
+| **后端 ↔ UI**             | IPC                    | IPC                  | IPC                  | 原生 Rust        | 进程内通道                                   |
+| **应用大小**              | ~100 MB+               | ~61 MB               | ~2–10 MB             | ~5 MB            | ~40 MB / ~150 MB (CEF)                       |
+| **npm / Node 兼容性**      | 是                     | 是                   | 否                   | 否               | 是                                           |
+| **框架自动检测**          | 否                     | 否                   | 否                   | 否               | 是                                           |
+| **HMR**                    | 否                     | 是                   | 是 (基于 Vite)       | 是 (`dx serve`)  | 是                                           |
+| **内置自动更新**          | 整个二进制文件         | bsdiff               | 插件                 | 无               | bsdiff                                       |
+| **内置安装包**            | 是                     | 否                   | 是                   | 否               | 部分支持 (DMG, AppImage)                      |
+| **跨编译**                | 是 (electron-builder)  | 否（需要目标操作系统） | 否（需要目标操作系统） | 否               | 是 (`--target`)                             |
+| **macOS / Windows / Linux** | 三者都支持            | 三者都支持            | 三者都支持            | 三者都支持        | 三者都支持                                    |
+| **iOS / Android**         | 否                     | 否                   | 是                   | 是               | 还不支持                                     |
 
 ## `deno desktop` 的优势
 
 **零配置框架支持。** 在 Next.js、Astro 或 Fresh 项目上运行 `deno desktop .` 无需适配器也无需配置：生产服务器以 release 模式运行，开发服务器则在 `--hmr` 下运行。其他工具都没有在这个层级上自动检测框架。
 
-**可从一台机器交叉编译。** 与 `deno compile --target` 类似。Tauri 和 Dioxus 需要在本地具备目标平台才能构建（它们的工具链包含 Rust，而 Rust 必须针对目标平台编译）。Electrobun 仅在 macOS 上发布。Electron 通过 electron-builder 支持跨平台构建，但每个目标平台都需要 Node 和平台特定的签名工具。
+**从一台机器进行跨平台编译。** 与 `deno compile --target` 相同。Tauri 和
+Dioxus 需要在本地具备目标平台才能构建（它们的工具链包含 Rust，
+而 Rust 必须为目标平台编译）。Electrobun 可在 macOS、Windows 和
+Linux 上运行，但会在各自的目标平台上构建每个应用。Electron 通过 electron-builder 支持
+跨平台构建，但每个目标都需要 Node 以及平台特定的签名工具。
 
 **完整的 Node 兼容性，并且可选择后端。** Electron 同时捆绑了 Chromium 和 Node，但体积非常大。Tauri 和 Dioxus 体积小，但没有 JS 生态。`deno desktop` 默认使用操作系统的 webview（体积小，类似 Tauri），同时仍通过 Deno 提供完整的 Node 兼容层，包括处理器中的 `npm:` 导入和 `bindings`，并且在你需要一致渲染时还能打包 Chromium（CEF）。
 
@@ -52,7 +54,9 @@ TypeScript API 在该功能稳定之前仍可能发生变化。
 
 **Tauri：体积小和移动端。** Tauri 的二进制体积比 `deno desktop`（或 Electron）小一个数量级，而且 Tauri 2 支持 iOS 和 Android。如果体积或移动端优先，Tauri 更胜一筹。
 
-**Electrobun：在 macOS 上快速迭代。** Electrobun 在 macOS 上有不错的启动速度和 HMR。如果你只发布 Mac 应用，并且使用 Bun 生态，它值得一看。
+**Electrobun：在 Bun 生态中的快速迭代。** Electrobun 具有良好的
+启动速度和 HMR，并且官方支持 macOS、Windows 和 Linux
+（Ubuntu）。如果你在 Bun 生态中工作，值得一看。
 
 **Dioxus：纯 Rust。** 完全没有 JS 运行时。如果你从头到尾都用 Rust 编写，并且希望统一代码库，Dioxus 是不错的选择。
 
@@ -84,7 +88,9 @@ TypeScript API 在该功能稳定之前仍可能发生变化。
 
 ## 何时选择其他方案
 
-- **Tauri**：如果二进制体积是硬性要求、你不需要 npm，而且你还需要移动端支持。
-- **Electron**：如果你团队现有的工具、签名和 CI 已经围绕 Electron 构建。
-- **Dioxus**：如果你从头到尾都使用 Rust 编写。
-- **Electrobun**：如果你只发布 macOS，并且想留在 Bun 生态中。
+- **Tauri** 如果二进制大小是不可妥协的、你不需要 npm，并且你想要
+  移动端。
+- **Electron** 如果你团队现有的工具链、签名和 CI 已经面向
+  Electron。
+- **Dioxus** 如果你从头到尾都在编写 Rust。
+- **Electrobun** 如果你想站在 Bun 这一边。

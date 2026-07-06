@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-14
+last_modified: 2026-06-25
 title: "通过 Tunnel 共享你的本地服务器"
-description: "使用 --tunnel 选项即时暴露一个公共 URL"
+description: "使用 --tunnel 选项立即暴露一个公共 URL"
 url: /examples/tunnel_tutorial/
 ---
 
@@ -13,7 +13,7 @@ Deno 中的 `--tunnel` 标志允许你即时将本地服务器暴露到互联网
 
 ## 搭建应用
 
-你可以使用任何运行本地服务器的应用。在本教程中，我们将使用一个简单的 Svelte 应用。
+你可以使用任何能够运行本地服务器的应用。在本教程中，我们将使用一个简单的 Svelte 应用。
 
 首先，创建一个新的 Svelte 项目：
 
@@ -30,9 +30,9 @@ deno run dev
 
 现在你应该可以在 `http://localhost:5173`（如果 5173 端口被占用则是其他端口）上本地运行一个 Svelte 应用。
 
-## 配置 Vite 允许隧道访问
+## Configure Vite to Allow Tunnel Access
 
-Svelte 使用的 Vite 服务器默认仅限于 localhost，因此为了让它更广泛可访问，我们需要对 `vite.config.js` 文件做一点修改。打开 `vite.config.js`，添加一个 `server` 配置，设定 `allowedHosts: true`：
+The Vite server used by Svelte is limited to localhost by default, so in order to make it more broadly accessible, we need to make a small change to the `vite.config.js` file. Open `vite.config.js` and add a `server` configuration, setting `allowedHosts: true`:
 
 ```js title="vite.config.js"
 import { sveltekit } from "@sveltejs/kit/vite";
@@ -73,9 +73,9 @@ deno run --tunnel dev
 第一次运行时，浏览器会打开，以便你使用 Deno Deploy 账户进行身份验证；后续运行会复用缓存的凭据。几分钟后，你应该会看到类似如下的输出：
 
 ```console
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
-  ➜  press h + enter to show help
+  ➜  本地：   http://localhost:5173/
+  ➜  网络：使用 --host 公开
+  ➜  按 h + 回车 显示帮助
 You are connected to https://my-app-name.myusername.deno.net
 ```
 
@@ -115,13 +115,13 @@ export const load: PageServerLoad = async () => {
 
 ```svelte title="src/routes/+page.svelte"
 <script lang="ts">
-  export let data: {
-    message: string;
-    username: string;
-    accent: string;
-  };
+export let data: {
+  message: string;
+  username: string;
+  accent: string;
+};
 
-  const { message, username, accent } = data;
+const { message, username, accent } = data;
 </script>
 
 <h1>环境变量示例</h1>

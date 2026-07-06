@@ -1,12 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "对话框"
 description: "prompt()、alert() 和 confirm() 会在 deno desktop 应用中显示原生弹窗对话框，而不是终端提示。"
 ---
 
-:::info 即将随 Deno 2.9 提供
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 发布，目前还不在稳定版中。要立即试用它，请运行 `deno upgrade canary` 来安装 [`canary`](/runtime/reference/cli/upgrade/) 构建版本。在该功能稳定之前，命令、配置键和 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -36,7 +37,7 @@ if (confirm("放弃未保存的更改？")) {
 
 ## `prompt(message, defaultValue?)`
 
-显示一个带有文本输入框以及 OK 和 Cancel 的模态对话框。返回输入的字符串；如果用户取消，则返回 `null`。
+Displays a modal dialog with a text input field and OK and Cancel buttons. Returns the string entered; if the user cancels, returns `null`.
 
 ```ts
 const name = prompt("新文档名称：", "Untitled");
@@ -74,10 +75,10 @@ win.addEventListener("menuclick", (e) => {
    ```html
    <input id="f" type="file" accept=".json">
    <script>
-     document.getElementById("f").addEventListener("change", async (e) => {
-       const file = e.target.files[0];
-       await bindings.handleFile(file.name, await file.arrayBuffer());
-     });
+   document.getElementById("f").addEventListener("change", async (e) => {
+     const file = e.target.files[0];
+     await bindings.handleFile(file.name, await file.arrayBuffer());
+   });
    </script>
    ```
 

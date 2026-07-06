@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-30
 title: "调试"
-description: "使用 V8 inspector 调试 Deno 程序：Chrome DevTools、VS Code 和 JetBrains 设置、网络检查、worker 调试以及 --inspect 标志系列。"
+description: "使用 V8 inspector 调试 Deno 程序：Chrome DevTools、VS Code 和 JetBrains 配置、网络检查、worker 调试，以及 --inspect 标志系列。"
 oldUrl:
   - /runtime/manual/getting_started/debugging_your_code/
   - /runtime/manual/basics/debugging_your_code/
@@ -75,7 +75,48 @@ deno run --inspect-wait your_script.ts
 deno run --inspect-brk your_script.ts
 ```
 
-## 使用 Chrome DevTools 的示例
+## 运行时激活检查器
+
+`--inspect` 标志会在进程启动时启动检查器服务器。如果你想要在运行中的程序内部按需打开它，请使用
+[`node:inspector`](https://nodejs.org/api/inspector.html) 模块。这对于长时间运行的进程（例如服务器）很方便，因为你只希望在满足某个条件后才监听调试器，而不是在进程的整个生命周期中都开启。
+
+`inspector.open([port][, host][, wait])` 会启动检查器服务器。端口默认是 `9229`，主机默认是 `127.0.0.1`。由于它会绑定网络套接字，程序需要 `--allow-net` 权限（或者使用 `-A` 运行）。
+
+```ts title="server.ts"
+import inspector from "node:inspector";
+
+Deno.serve((req) => {
+  if (new URL(req.url).pathname === "/debug" && !inspector.url()) {
+    inspector.open(9229, "127.0.0.1");
+    console.log("Inspector listening on", inspector.url());
+  }
+  return new Response("hello");
+});
+```
+
+```sh
+deno run --allow-net server.ts
+```
+
+向 `/debug` 发送请求后，检查器服务器就会启动；在基于 Chromium 的浏览器中打开
+`chrome://inspect` 即可连接。该模块还提供了一些相关函数：
+
+- `inspector.open(port, host, true)` — 将第三个参数传入 `true`
+  会阻塞，直到客户端连接；这与 `inspector.waitForDebugger()` 的效果相同。
+- `inspector.url()` — 返回检查器的 WebSocket URL；如果检查器未激活，则返回 `undefined`。
+- `inspector.close()` — 停止检查器服务器。
+
+还提供了一个 `Session`，可用于以编程方式发出
+[Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
+命令，而无需外部客户端。
+
+:::caution
+
+将检查器绑定到开放端口的公共 IP 上是不安全的：任何能够访问该端口的主机都可以连接到检查器并执行任意代码。除非你完全控制网络，否则请将 host 保持为 `127.0.0.1`。
+
+:::
+
+## Chrome DevTools 示例
 
 让我们尝试使用 Chrome DevTools 调试一个程序。为此，我们将使用
 [`@std/http/file-server`](/runtime/reference/std/http/)，一个静态文件服务器。
@@ -197,7 +238,7 @@ $ deno run --inspect-wait --allow-net node-http.ts
 ```ts title="ws-server.ts"
 Deno.serve({ port: 8000 }, (req) => {
   if (req.headers.get("upgrade") !== "websocket") {
-    return new Response("send a WebSocket request", { status: 426 });
+    return new Response("发送一个 WebSocket 请求", { status: 426 });
   }
   const { socket, response } = Deno.upgradeWebSocket(req);
   socket.onmessage = (e) => socket.send(`echo: ${e.data}`);
@@ -211,7 +252,7 @@ $ deno run --inspect-wait --allow-net ws-server.ts
 
 连接 DevTools 并继续执行后，从另一个终端连接到服务器（例如使用 `deno eval`）：
 
-```sh
+```ts
 deno eval 'const ws = new WebSocket("ws://localhost:8000");
   ws.onopen = () => ws.send("hello");
   ws.onmessage = (e) => { console.log(e.data); ws.close(); };'
@@ -261,31 +302,31 @@ deno run --strace-ops your_script.ts
 
 每个 op 都应包含一个 `Dispatch` 和一个 `Complete` 事件。这两个事件之间的时间即为执行该 op 所花费的时间。此标志对于性能分析、调试挂起的程序或了解 Deno 的底层工作原理非常有用。
 
-## CPU profiling
+## CPU 性能分析
 
 Deno 内置了 CPU 分析器：在程序运行时收集 profile，然后将其作为 Markdown 报告、交互式 flamegraph 或在 Chrome DevTools 中读取。有关标志、报告格式和分析提示，请参见 [CPU profiling](/runtime/fundamentals/cpu_profiling/)。
 
-## OpenTelemetry 集成
+## OpenTelemetry Integration
 
-对于生产环境应用或复杂系统，OpenTelemetry 提供了更全面的可观察性和调试方案。Deno 内置支持 OpenTelemetry，允许您：
+For production applications or complex systems, OpenTelemetry provides a more comprehensive observability and debugging solution. Deno has built-in OpenTelemetry support, allowing you to:
 
-- 跟踪应用中的请求
-- 监测应用性能指标
-- 收集结构化日志
-- 将遥测数据导出到监控系统
+- Trace requests in your application
+- Monitor application performance metrics
+- Collect structured logs
+- Export telemetry data to monitoring systems
 
 ```sh
 OTEL_DENO=true deno run your_script.ts
 ```
 
-这将自动收集和导出运行时可观察性数据，包括：
+This will automatically collect and export runtime observability data, including:
 
-- HTTP 请求跟踪
-- 运行时指标
-- 控制台日志和错误
+- HTTP request tracing
+- Runtime metrics
+- Console logs and errors
 
-有关 Deno 的 OpenTelemetry 集成的完整详情，包括自定义指标、跟踪和配置选项，请参见
-[OpenTelemetry 文档](/runtime/fundamentals/open_telemetry)。
+For complete details on Deno's OpenTelemetry integration, including custom metrics, tracing, and configuration options, see
+[OpenTelemetry Documentation](/runtime/fundamentals/open_telemetry).
 
 ## 调试 Web Workers
 
@@ -322,5 +363,5 @@ deno run --inspect-brk --allow-read main.ts
 SSLKEYLOGFILE=./keys.log deno run -N main.ts
 ```
 
-然后在 Wireshark 中加载 `keys.log`（Edit > Preferences > Protocols > TLS >
+然后在 Wireshark 中加载 `keys.log`（编辑 > 首选项 > 协议 > TLS >
 (Pre)-Master-Secret log filename）以解密捕获的 TLS 流量。

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-17
+last_modified: 2026-06-25
 title: "构建一个 SvelteKit 应用"
-description: "使用 Deno 构建 SvelteKit 应用的教程。学习如何设置 SvelteKit 项目、实现基于文件的路由、使用 load 函数管理状态，以及创建一个全栈 TypeScript 应用。"
+description: "一个使用 Deno 构建 SvelteKit 应用程序的教程。学习如何设置 SvelteKit 项目、实现基于文件的路由、使用 load 函数管理状态，以及创建一个全栈 TypeScript 应用程序。"
 url: /examples/svelte_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/svelte/
@@ -145,10 +145,10 @@ export const load: PageLoad = async ({ fetch }) => {
 
 ```html title="src/routes/+page.svelte"
 <script lang="ts">
-  import type { PageProps } from "./$types";
+import type { PageProps } from "./$types";
 
-  let { data }: PageProps = $props();
-  let dinosaurs = data.dinosaurs;
+let { data }: PageProps = $props();
+let dinosaurs = data.dinosaurs;
 </script>
 
 <main>
@@ -192,10 +192,10 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
 ```html title="src/routes/[dinosaur]/+page.svelte"
 <script lang="ts">
-  import type { PageProps } from "./$types";
+import type { PageProps } from "./$types";
 
-  let { data }: PageProps = $props();
-  let dinosaur = data.dinosaur;
+let { data }: PageProps = $props();
+let dinosaur = data.dinosaur;
 </script>
 
 <div>

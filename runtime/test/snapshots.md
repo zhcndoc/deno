@@ -1,49 +1,45 @@
 ---
-last_modified: 2026-06-12
+last_modified: 2026-06-25
 title: "快照测试"
-description: "使用 @std/testing 捕获程序输出作为参考快照，在每次运行时与其比较，并使用 deno test -- --update 进行更新。"
+description: "使用 Deno 内置的测试运行器将程序输出捕获为参考快照，在每次运行时与其进行比较，并使用 deno test --update-snapshots 进行更新。"
 oldUrl:
   - /runtime/manual/basics/testing/snapshot_testing/
   - /examples/snapshot_test_tutorial/
   - /examples/snapshot_tutorial/
 ---
 
-快照测试会捕获你的代码输出，并在每次测试运行时将其与存储的参考版本进行比较。你不必为每个属性手写断言，而是让测试运行器一次性记录整个序列化输出，然后在输出发生变化时立即失败。这非常适合用于验证那些很大或很难手工表达的值（渲染后的 HTML、CLI 输出、API 响应结构、错误对象），或者当期望输出变化足够频繁、以至于维护手动断言变成一件麻烦事时。[Deno 标准库](/runtime/reference/std/) 将其作为 [`@std/testing/snapshot`](https://jsr.io/@std/testing/doc/snapshot) 模块提供。
+快照测试会捕获你的代码输出，并在每次测试运行时将其与存储的参考版本进行比较。你无需为每个属性手动编写断言，而是让测试运行器一次记录整个序列化后的输出，然后在该输出发生变化时立即显式失败。当你想要验证的值很大，或很难手动表达时（例如渲染后的 HTML、CLI 输出、API 响应结构、错误对象），或者当期望输出变化得足够频繁，以至于维护手动断言变成一件麻烦事时，这种方式非常理想。Deno 内置的测试运行器通过测试上下文上的 `t.assertSnapshot` 方法提供快照测试，无需导入或依赖。
 
 ## 编写你的第一个快照测试
 
-`assertSnapshot` 函数会序列化一个值，并将其与存储在测试文件旁边的参考快照进行比较。它接收 Deno 传递给测试函数的测试上下文 `t`，并使用它来命名快照和定位快照文件。
+Deno 传递给每个测试的测试上下文 `t` 都有一个 `assertSnapshot`
+方法。它会序列化一个值，并将其与存储在测试文件旁边的参考快照进行比较，
+使用测试名称作为快照的键：
 
 ```ts title="example_test.ts"
-import { assertSnapshot } from "jsr:@std/testing/snapshot";
-
 Deno.test("isSnapshotMatch", async (t) => {
   const a = {
     hello: "world!",
     example: 123,
   };
-  await assertSnapshot(t, a);
+  await t.assertSnapshot(a);
 });
 ```
 
-目前还没有快照存在，因此第一次运行必须创建一个。只有在以更新模式运行测试时才会写入新的快照：
+目前还没有快照，所以第一次运行必须创建一个。快照使用
+`--update-snapshots` 标志（简写 `-u`）创建和更新：
 
 ```bash
-deno test --allow-read --allow-write -- --update
+deno test --update-snapshots
 ```
 
-关于这个命令，有两点需要注意：
-
-- 需要 `--allow-read` 和 `--allow-write`，因为 `assertSnapshot` 会读取和写入磁盘上的快照文件。如果没有 `--allow-read`，每次调用 `assertSnapshot` 都会因权限错误而失败。如果你愿意，也可以将这两个权限范围限制到仅快照目录。
-- 裸 `--` 用于分隔 `deno test` 的标志和传递给测试文件本身的参数。`--update` 标志（或其简写 `-u`）必须放在 `--` 之后，因为它是由快照模块读取的，而不是由 Deno CLI 读取的。
-
-一旦快照存在，就可以正常运行测试。此时只需要读取权限：
+运行器会自行管理快照文件，因此默认位置的快照不需要读取或写入权限。
+一旦快照存在，就正常运行测试；如果序列化后的值仍然匹配，测试就会通过，
+如果不匹配，则会失败并显示带有差异的 `AssertionError`：
 
 ```bash
-deno test --allow-read
+deno test
 ```
-
-如果序列化后的值与存储的快照匹配，测试现在会通过；如果不匹配，则会以包含 diff 的 `AssertionError` 失败。
 
 ## 读取快照文件
 
@@ -69,18 +65,19 @@ snapshot[`isSnapshotMatch 1`] = `
 这是你最常使用的工作流部分。当你有意更改行为并且快照测试开始失败时，或者当你添加新的 `assertSnapshot` 调用时，请以更新模式重新运行测试：
 
 ```bash
-deno test --allow-read --allow-write -- --update
+deno test --update-snapshots
 ```
 
-在更新模式下，任何与当前输出不匹配的快照都会被重写，任何缺失的快照都会被创建。已经匹配的快照不会被改动。你也可以用 `-u` 代替 `--update`。
+任何与当前输出不匹配的快照都会被重写，任何缺失的快照都会被创建，而已经匹配的快照则保持不变。运行摘要会报告已更新或已移除的快照数量。
 
 更新后，在提交之前使用 `git diff` 检查 `.snap` 文件的差异。更新命令会乐于将 bug 记录为新的期望输出，因此对该 diff 进行人工审查，才是快照测试价值所在。
 
-要通过上面的示例体验完整流程：将 `hello: "world!"` 改为 `hello: "everyone!"`，运行 `deno test --allow-read`，然后观察测试因 diff 而失败。接着运行更新命令，快照文件就会被重写以保持一致。
+要通过上面的示例尝试完整流程：将 `hello: "world!"` 改为 `hello: "everyone!"`，运行 `deno test`，然后观察测试因 diff 而失败。接着运行 `deno test --update-snapshots`，快照文件就会被重写以保持一致。
 
-## 在 CI 中审查快照 diff
+## 在 CI 中验证快照
 
-在 CI 中你希望验证快照，而不是更新它们，因此请在不使用 `--update` 标志且不授予写权限的情况下运行测试：
+在 CI 中，你希望验证快照，而不是更新它们，所以请在不使用
+`--update-snapshots` 的情况下运行测试：
 
 ```yaml title=".github/workflows/test.yml"
 name: Test
@@ -94,39 +91,52 @@ jobs:
         with:
           deno-version: v2.x
       - name: Run tests
-        run: deno test --allow-read
+        run: deno test
 ```
 
 如果拉取请求更改了输出，CI 运行会失败，作者必须在本地更新快照并提交新的 `.snap` 文件。这样审查者就能在拉取请求 diff 中看到变更前后的确切输出，并确认这项变更是有意为之。
 
 ## 控制序列化和快照位置
 
-对于默认行为不适用的情况，`assertSnapshot` 作为第三个参数接受一个选项对象：
+`t.assertSnapshot` 在默认设置不适用时，可以接受一个选项对象作为第二个参数：
 
 ```ts title="serializer_test.ts"
-import { assertSnapshot, serialize } from "jsr:@std/testing/snapshot";
 import { stripAnsiCode } from "jsr:@std/fmt/colors";
 
-function customSerializer(actual: string) {
-  return serialize(stripAnsiCode(actual));
-}
-
-Deno.test("Custom Serializer", async (t) => {
+Deno.test("自定义序列化器", async (t) => {
   const output = "\x1b[34mHello World!\x1b[39m";
-  await assertSnapshot(t, output, {
-    serializer: customSerializer,
+  await t.assertSnapshot(output, {
+    serializer: (actual) => stripAnsiCode(actual),
   });
 });
 ```
 
 最有用的选项：
 
-- `serializer`：一个将值转换为字符串的函数。它必须是确定性的。可用于去除 ANSI 颜色代码、用占位符替换时间戳或 UUID，或者在敏感数据写入已提交文件之前将其脱敏。
-- `name`：覆盖快照键，否则默认使用测试名称。
-- `dir` 和 `path`：控制快照文件写入的位置，相对于测试文件解析。
-- `mode`：强制单次调用使用 `"assert"` 或 `"update"` 行为，而不受 `--update` 标志影响。
+- `serializer`：一个将值转换为字符串的函数。它必须是确定性的。可用于去除 ANSI 颜色代码、用占位符替换时间戳或 UUID，或者在敏感数据写入提交文件之前将其脱敏。
+- `name`：覆盖快照键名，否则默认为测试名称。
+- `dir` 和 `path`：控制快照文件的写入位置，按相对于测试文件的路径解析。自定义位置需要读写权限。
+- `mode`：对单次调用强制使用 `"assert"` 或 `"update"` 行为，不受 `--update-snapshots` 标志影响。
 
-类也可以通过实现 `Symbol.for("Deno.customInspect")` 来自定义自己的序列化，因为默认序列化器是基于 [`Deno.inspect`](/api/deno/~/Deno.inspect) 构建的。有关完整选项参考和 `createAssertSnapshot` 工厂，请参阅 [`@std/testing/snapshot` API 文档](https://jsr.io/@std/testing/doc/snapshot)。
+类可以通过实现 `Symbol.for("Deno.customInspect")` 来自定义自身的序列化，因为默认序列化器是基于 [`Deno.inspect`](/api/deno/~/Deno.inspect) 构建的。
+
+## 使用 node:test 的快照
+
+如果你使用 [`node:test`](/runtime/reference/cli/test/) 而不是
+[`Deno.test`](/api/deno/~/Deno.test) 编写测试，也可以使用它自己的快照断言。
+`t.assert.fileSnapshot` 会序列化一个值，第一次运行时将其写入一个命名文件，
+并在后续运行时与该文件进行比较：
+
+```ts title="node_snapshot_test.ts"
+import { test } from "node:test";
+
+test("matches the saved output", (t) => {
+  t.assert.fileSnapshot({ id: 1, name: "ada" }, "./__snapshots__/user.json");
+});
+```
+
+有关完整的快照 API，请参阅
+[Node.js test runner 文档](https://nodejs.org/api/test.html#snapshot-testing)。
 
 ## 何时不使用快照
 
@@ -141,6 +151,6 @@ Deno.test("Custom Serializer", async (t) => {
 
 ## 继续了解
 
-- [测试概览](/runtime/test/)：内置测试运行器、断言、步骤和权限。
-- [Mocking](/runtime/test/mocking/)：用于你的快照所依赖输入的 spy、stub 和伪造时间。
-- [`@std/testing/snapshot` API 文档](https://jsr.io/@std/testing/doc/snapshot)：每个选项，以及用于共享默认值的 `createAssertSnapshot`。
+- [测试概览](/runtime/test/): 内置测试运行器、断言、
+  步骤和权限。
+- [模拟](/runtime/test/mocking/): 针对你的快照所依赖输入的间谍、存根和伪造时间。

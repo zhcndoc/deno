@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-18
+last_modified: 2026-07-02
 title: "deno install"
 oldUrl:
   - /runtime/manual/tools/script_installer/
@@ -14,7 +14,7 @@ description: "为您的项目安装并缓存依赖项"
 ---
 
 `deno install` 会为您的项目安装依赖项并缓存它们。有关 Deno 如何处理模块的更多信息，请参阅
-[模块和依赖项](/runtime/fundamentals/modules/ )。
+[模块和依赖项](/runtime/fundamentals/modules/ )】【。
 
 ## 示例
 
@@ -87,6 +87,9 @@ deno install --package-json npm:express jsr:@std/path
 形式（`npm:@jsr/...`）写入。相同的标志也适用于 `deno add`、`deno remove` 和
 `deno uninstall`。
 
+要在不每次都传递该标志的情况下将此行为设为默认值，请在 `deno.json` 中设置
+[`"preferPackageJson": true`](/runtime/reference/deno_json/#prefer-package-json-for-dependencies)。
+
 ### deno install --entrypoint [FILES]
 
 使用此命令安装提供文件及其依赖项中使用的所有依赖项。
@@ -151,9 +154,10 @@ deno install -g -N -R --root /usr/local/bin jsr:@std/http/file-server
 
 - `--root` 选项
 - `DENO_INSTALL_ROOT` 环境变量
-- `$HOME/.deno/bin`
+- `$HOME/.deno`
 
-如果需要，必须手动将这些添加到路径中。
+可执行文件会放置在安装根目录的 `bin` 子目录中，除非根路径本身已经以 `bin` 结尾，在这种情况下将直接使用该路径。
+如果需要，生成的目录必须手动添加到 path 中。
 
 ```sh
 echo 'export PATH="$HOME/.deno/bin:$PATH"' >> ~/.bashrc
@@ -248,19 +252,24 @@ deno install --prod --entrypoint main.ts
 这提供了最精确的生产安装——只有指定入口点（以及其传递导入）在运行时实际导入的
 依赖项才会被安装。
 
-## 原生 Node.js 插件
+## Native Node.js Add-ons
 
-许多流行的 npm 软件包，如 [`npm:sqlite3`](https://www.npmjs.com/package/sqlite3) 或 [`npm:duckdb`](https://www.npmjs.com/package/duckdb)，依赖于 ["生命周期脚本"](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts)，例如 `preinstall` 或 `postinstall` 脚本。通常，运行这些脚本是软件包正常工作的必要条件。
+A lot of popular npm packages like
+[`npm:sqlite3`](https://www.npmjs.com/package/sqlite3) or
+[`npm:duckdb`](https://www.npmjs.com/package/duckdb) depend on
+["lifecycle scripts"](https://docs.npmjs.com/cli/v10/using-npm/scripts#life-cycle-scripts),
+eg. `preinstall` or `postinstall` scripts. Most often running these scripts is
+required for a package to work correctly.
 
-与 npm 不同，Deno 默认不运行这些脚本，因为它们可能会带来安全漏洞。
+Unlike npm, Deno does not run these scripts by default, because they may introduce security vulnerabilities.
 
-您仍然可以通过在运行 `deno install` 时传递 `--allow-scripts=<packages>` 选项来运行这些脚本：
+You can still run these scripts by passing the `--allow-scripts=<packages>` option when running `deno install`:
 
 ```sh
 deno install --allow-scripts=npm:sqlite3
 ```
 
-_安装所有依赖项，并允许 `npm:sqlite3` 软件包运行其生命周期脚本_。
+_Install all dependencies and allow the `npm:sqlite3` package to run its lifecycle scripts_.
 
 ## --quiet 标志
 

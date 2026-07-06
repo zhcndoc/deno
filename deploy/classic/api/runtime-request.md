@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-19
+last_modified: 2026-06-20
 title: "HTTP 请求"
 oldUrl:
   - /deploy/docs/runtime-request/
@@ -41,35 +41,35 @@ let request = new Request(resource, init);
 
 ##### `RequestInit`
 
-| 名称                         | 类型                                                                                    | 默认值          | 描述                                                        |
-| ---------------------------- | --------------------------------------------------------------------------------------- | -------------- | ----------------------------------------------------------- |
-| [`method`][method]           | `string`                                                                                | `GET`          | 请求的方法。                                              |
-| [`headers`][headers]         | `Headers` 或 `{ [key: string]: string }`                                                | 无             | 请求的头部。                                              |
-| [`body`][body]               | `Blob`、`BufferSource`、`FormData`、`URLSearchParams`、`USVString` 或 `ReadableStream` | 无             | 请求的主体。                                              |
-| [`cache`][cache]             | `string`                                                                                | 无             | 请求的缓存模式。                                        |
-| [`credentials`][credentials] | `string`                                                                                | `same-origin`  | 请求的凭据模式。                                        |
-| [`integrity`][integrity]     | `string`                                                                                | 无             | 请求主体的加密哈希。                                      |
-| [`mode`][mode]               | `string`                                                                                | `cors`         | 您想使用的请求模式。                                      |
-| [`redirect`][redirect]       | `string`                                                                                | `follow`       | 处理重定向的模式。                                        |
-| [`referrer`][referrer]     | `string`                                                                                | `about:client` | 一个 `USVString`，指定 `no-referrer`、`client` 或一个 URL。 |
+| name                         | type                                                                                    | default        | description                                                |
+| ---------------------------- | --------------------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------- |
+| [`method`][method]           | `string`                                                                                | `GET`          | 请求的方法。                                                |
+| [`headers`][headers]         | `Headers` 或 `{ [key: string]: string }`                                                | 无             | 请求的头信息。                                              |
+| [`body`][body]               | `Blob`、`BufferSource`、`FormData`、`URLSearchParams`、`USVString` 或 `ReadableStream` | 无             | 请求的主体。                                                |
+| [`cache`][cache]             | `string`                                                                                | 无             | 请求的缓存模式。                                            |
+| [`credentials`][credentials] | `string`                                                                                | `same-origin`  | 请求的凭据模式。                                            |
+| [`integrity`][integrity]     | `string`                                                                                | 无             | 请求主体的加密哈希。                                        |
+| [`mode`][mode]               | `string`                                                                                | `cors`         | 您要使用的请求模式。                                        |
+| [`redirect`][redirect]       | `string`                                                                                | `follow`       | 处理重定向的方式。                                          |
+| [`referrer`][referrer]       | `string`                                                                                | `about:client` | 指定 `no-referrer`、`client` 或 URL 的 `USVString`。        |
 
 ## 属性
 
 | 名称                               | 类型                                       | 描述                                                                                                                        |
 | ---------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| [`cache`][cache]                   | `string`                                   | 缓存模式指示浏览器如何缓存请求（`default`、`no-cache` 等）。                                                              |
-| [`credentials`][credentials]       | `string`                                   | 凭据（`omit`、`same-origin` 等）指示用户代理是否在请求的 CORs 情况下发送 cookies。                                         |
-| [`destination`][destination]       | [`RequestDestination`][requestdestination] | 字符串指示所请求内容的类型。                                                                                                |
-| [`body`][body]                     | [`ReadableStream`][readablestream]         | getter 提供请求主体内容的 `ReadableStream`。                                                                                |
-| [`bodyUsed`][bodyused]             | `boolean`                                  | 指示主体内容是否已被读取。                                                                                                  |
-| [`url`][url]                       | `USVString`                                | 请求的 URL。                                                                                                                |
-| [`headers`][headers]               | [`Headers`](runtime-headers)               | 与请求相关联的头部。                                                                                                        |
-| [`integrity`][integrity]           | `string`                                   | 请求主体的加密哈希。                                                                                                        |
+| [`cache`][cache]                   | `string`                                   | 缓存模式指示浏览器应如何缓存该请求（`default`、`no-cache` 等）。                                                              |
+| [`credentials`][credentials]       | `string`                                   | 凭据（`omit`、`same-origin` 等）指示在请求发生 CORS 时，用户代理是否应发送 cookie。                                          |
+| [`destination`][destination]       | [`RequestDestination`][requestdestination] | 该字符串指示所请求内容的类型。                                                                                               |
+| [`body`][body]                     | [`ReadableStream`][readablestream]         | 该 getter 暴露了请求体内容的 `ReadableStream`。                                                                               |
+| [`bodyUsed`][bodyused]             | `boolean`                                  | 指示请求体内容是否已被读取。                                                                                                 |
+| [`url`][url]                       | `USVString`                                | 请求的 URL。                                                                                                                 |
+| [`headers`][headers]               | [`Headers`](runtime-headers)               | 与该请求关联的标头。                                                                                                         |
+| [`integrity`][integrity]           | `string`                                   | 请求体的加密哈希值。                                                                                                         |
 | [`method`][method]                 | `string`                                   | 请求的方法（`POST`、`GET` 等）。                                                                                             |
-| [`mode`][mode]                     | `string`                                   | 指示请求的模式（例如 `cors`）。                                                                                            |
-| [`redirect`][redirect]             | `string`                                   | 处理重定向的模式。                                                                                                          |
-| [`referrer`][referrer]             | `string`                                   | 请求的引荐来源。                                                                                                            |
-| [`referrerPolicy`][referrerpolicy] | `string`                                   | 请求的引荐政策。                                                                                                            |
+| [`mode`][mode]                     | `string`                                   | 指示请求的模式（例如 `cors`）。                                                                                              |
+| [`redirect`][redirect]             | `string`                                   | 指示如何处理重定向的模式。                                                                                                   |
+| [`referrer`][referrer]             | `string`                                   | 请求的 referrer。                                                                                                            |
+| [`referrerPolicy`][referrerpolicy] | `string`                                   | 请求的 referrer policy。                                                                                                     |
 
 上述所有属性都是只读的。
 

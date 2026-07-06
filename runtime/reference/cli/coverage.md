@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-05-20
-title: "deno 覆盖率"
+last_modified: 2026-06-24
+title: "deno coverage"
 oldUrl: /runtime/manual/tools/coverage/
 command: coverage
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -52,7 +52,7 @@ deno coverage --exclude="test\.(js|mjs|ts|jsx|tsx)$"
 
 ```ts
 // deno-coverage-ignore
-console.log("this line is ignored");
+console.log("这一行被忽略");
 ```
 
 要忽略多行，请在要忽略的代码上方添加 `// deno-coverage-ignore-start` 注释，并在下方添加 `// deno-coverage-ignore-stop` 注释。
@@ -113,16 +113,50 @@ console.log("This line is not ignored");
 
 ```console
 ---------------------------------------------
-File         | Branch % | Line % | Function %
+文件         | 分支 % | 行 % | 函数 %
 ---------------------------------------------
 main.ts      |   85.7   |  92.3  |    100.0
 util.ts      |   75.0   |  88.5  |     66.7
 ---------------------------------------------
-all files    |   80.0   |  90.5  |     83.3
+所有文件    |   80.0   |  90.5  |     83.3
 ---------------------------------------------
 ```
 
 函数覆盖率衡量的是在测试运行期间至少被调用过一次的已声明函数所占的百分比。同样的数据也可在 `lcov` 输出中获得。
+
+## 覆盖率阈值
+
+默认情况下，`deno coverage` 和 `deno test --coverage` 无论数值有多低，都会以零退出。要在 CI 中以覆盖率作为门槛，请设置一个最低阈值；当覆盖率低于该值时，命令将以非零状态退出。
+
+将 `--threshold` 传给 `deno coverage`，并使用整数百分比。该值适用于摘要表中显示的全部三个指标：行覆盖率、分支覆盖率和函数覆盖率。
+
+```sh
+deno coverage --threshold=90
+```
+
+当你在一个步骤中同时收集并检查时，将 `--coverage-threshold` 传给 `deno test`：
+
+```sh
+deno test --coverage --coverage-threshold=90
+```
+
+要为每个指标设置不同的目标，请在 `deno.json` 中添加一个 `coverage` 部分。`thresholds` 下的每个键都是可选的，并接受小数百分比：
+
+```json
+{
+  "coverage": {
+    "thresholds": {
+      "lines": 90,
+      "branches": 80,
+      "functions": 90
+    }
+  }
+}
+```
+
+未配置阈值的指标不会被检查，因此对于没有分支的文件，`branches: 80` 也会通过。该检查会针对所有已报告文件的聚合结果运行，使用与摘要表打印的相同数值。
+
+当你传递 CLI 标志时，它的单个值会同时应用于行、分支和函数覆盖率，并覆盖配置中为各个指标设置的任何值。若没有该标志，则使用 `deno.json` 中按指标设置的值。
 
 ## 输出格式
 
@@ -163,7 +197,7 @@ deno coverage custom_profile_name
 > deno coverage custom_profile_name
 > ```
 
-仅包括匹配特定模式的覆盖率 - 在这种情况下，仅包括 main.ts 的测试。
+仅包含匹配特定模式的覆盖率 - 在这种情况下，仅包含 main.ts 的测试。
 
 ```sh
 deno coverage --include="main.ts"

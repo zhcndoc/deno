@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-15
-title: "监视模式与 HMR"
-description: "Deno 内置文件监视器：使用 --watch 在更改时重新运行代码，控制监视内容，并通过 --watch-hmr 热替换模块。"
+last_modified: 2026-06-25
+title: "监视模式和 HMR"
+description: "Deno 内置的文件监视器：使用 --watch 在文件变化时重新运行代码，控制监视内容，并通过 --watch-hmr 热替换模块。"
 ---
 
 Deno 内置了文件监视器，因此在编辑时你不需要 `nodemon` 或任何其他外部工具来重新加载程序。本页将介绍会被监视的内容、如何排除路径，以及热模块替换。
@@ -43,7 +43,14 @@ deno run --watch --watch-exclude='*.js' main.ts
 deno run --watch-hmr main.ts
 ```
 
-### 带原子保存的编辑器
+因为这是一种非常常见的开发工作流，
+[`deno watch`](/runtime/reference/cli/watch/) 是 `deno run --watch-hmr` 的简写：
+
+```shell
+deno watch main.ts
+```
+
+### 支持原子保存的编辑器
 
 某些编辑器使用“原子保存”（也称为安全写入），即编辑器会将你的更改写入临时文件，然后在每次保存时将其重命名覆盖原文件。在 Linux 上，这会把磁盘上的文件替换为一个新文件，这可能会在第一次更改后使 `--watch-hmr` 使用的文件监视器失去连接。其表现是热替换只会生效一次，然后就停止检测该模块后续的编辑。
 

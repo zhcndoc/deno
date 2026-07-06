@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "分发"
-description: "从一台机器交叉编译 macOS、Windows 和 Linux 的 deno 桌面应用，并为每个平台生成对应的输出格式：.app、.dmg、.exe 目录、AppImage。"
+description: "从一台机器为 macOS、Windows 和 Linux 交叉编译 Deno 桌面应用，并生成各平台输出格式：.app、.dmg、.exe 目录、AppImage。"
 ---
 
-:::info 即将于 Deno 2.9 提供
+:::info 可在 Deno 2.9 中使用
 
-`deno desktop` 随 Deno v2.9.0 一起发布，目前尚未进入稳定版本。要立即试用，请运行 `deno upgrade canary` 以安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。该命令、配置键以及 TypeScript API 在功能稳定前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -72,9 +72,10 @@ MyApp.app/
 
 ### Windows
 
-| 输出     | 生成方式                                           |
-| -------- | ----------------------------------------------------- |
-| `MyApp/` | 默认；包含启动器和支持文件的目录。 |
+| Output      | Produced by                                           |
+| ----------- | ----------------------------------------------------- |
+| `MyApp/`    | 默认；带有启动器和支持文件的目录。 |
+| `MyApp.msi` | Windows Installer 包（按机器安装）。      |
 
 `MyApp/` 目录包含：
 
@@ -87,16 +88,16 @@ MyApp/
   AppIcon.ico             # 图标（可选）
 ```
 
-将该目录压缩为 zip，或将其交给安装程序工具链。Windows MSI 输出
-目前尚未实现；目前请使用第三方安装包生成器，例如 Inno
-Setup、NSIS 或 WiX，并将该目录作为输入。
+设置 `.msi` 输出扩展名可直接构建 Windows Installer 包。它会将应用按机器安装到 `%ProgramFiles%\<AppName>\` 下，并注册卸载程序。MSI 使用纯 Rust 编写，因此可从任何宿主机进行交叉编译（只要求目标系统是 Windows）。若要用其他方式打包该目录，可将其压缩为 zip，或交给第三方安装程序生成器，例如 Inno Setup、NSIS 或 WiX。
 
 ### Linux
 
 | 输出              | 生成方式                                  |
 | ----------------- | -------------------------------------------- |
-| `my-app/`         | 默认；带启动器脚本的应用目录。 |
-| `my-app.AppImage` | 单文件便携式 bundle。                 |
+| `my-app/`         | 默认；带有启动器脚本的应用目录。 |
+| `my-app.AppImage` | 单文件便携式包。                 |
+| `my-app.deb`      | Debian/Ubuntu 软件包。                       |
+| `my-app.rpm`      | Fedora/RHEL 软件包。                         |
 
 应用目录布局：
 
@@ -116,8 +117,25 @@ my-app/
 并且它可从任何构建宿主机运行，因此你可以在从 macOS 或 Windows 交叉编译时
 生成 Linux `.AppImage`。
 
-目前尚未实现 `.deb` / `.rpm` 打包。现在请使用 `fpm` 或
-`dpkg-deb` 针对应用目录进行打包。
+设置 `.deb` 或 `.rpm` 输出扩展名可直接构建 Linux 软件包。两者都会
+将应用安装到 `/usr/lib/<pkg>/` 下，将启动器符号链接到 `/usr/bin/`，
+并注册 `.desktop` 条目和图标。与 `.AppImage` 一样，它们使用纯 Rust
+组装，并可从任何宿主机进行交叉编译（只要求目标系统是 Linux）。
+
+## 压缩捆绑包
+
+传入 `--compress` 以生成自解压捆绑包。较大的负载（运行时和 UI 后端）会在分发的应用中被压缩，并在首次启动时解压到按用户划分的数据目录中，之后再次运行时会复用。这会显著缩小分发产物的体积，一个 webview hello-world 示例会从大约 66 MB 降到 19 MB，代价是首次启动时需要进行一次解压。
+
+```sh
+# 自解压的压缩捆绑包
+deno desktop --compress main.ts
+
+# 显式选择编解码器
+deno desktop --compress=xz main.ts
+deno desktop --compress=zstd main.ts
+```
+
+`xz` 生成的产物更小；`zstd` 则以稍大的体积换取更快的首次启动解压速度。
 
 ## 选择输出路径
 

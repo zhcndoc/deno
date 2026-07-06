@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-18
+last_modified: 2026-06-25
 title: "deno task"
 oldUrl:
   - /runtime/tools/task_runner/
@@ -34,13 +34,23 @@ description: "Deno 的可配置任务运行器"
 }
 ```
 
+## 仅在任务存在时运行任务
+
+当指定的任务未定义时，`deno task <name>` 会以非零退出码退出。要让任务变为可选，请传入 `--if-present`。这样，如果任务缺失，Deno 会以退出码 0 退出且不输出任何内容，这对于会调用某个任务但只有部分包定义了该任务的共享 CI 脚本很有用：
+
+```sh
+deno task --if-present build
+```
+
+该标志只会抑制指定任务未找到的情况。使用不带参数的 `deno task` 列出任务、运行一个确实存在的任务，以及诸如缺少任务依赖之类的真实错误，都不受影响。
+
 ## 指定当前工作目录
 
-默认情况下，`deno task` 使用 Deno 配置文件（例如 _deno.json_）的目录作为当前工作目录来执行命令。这允许任务使用相对路径，并继续工作，无论您从目录树的何处执行 deno task。在某些情况下，这可能不是所期望的，这种行为可以使用 `INIT_CWD` 环境变量覆盖。
+默认情况下，`deno task` 使用 Deno 配置文件（例如 _deno.json_）所在目录作为执行命令时的当前工作目录。这使任务可以使用相对路径，并且无论您从目录树的哪个位置执行 `deno task`，都能继续正常工作。在某些情况下，这可能不是预期行为，此时可以使用 `INIT_CWD` 环境变量覆盖这种行为。
 
-如果没有设置，`INIT_CWD` 将被设为任务运行所在目录的完整路径。这与 `npm run` 的行为一致。
+如果未设置，`INIT_CWD` 将被设为任务运行所在目录的完整路径。这与 `npm run` 的行为一致。
 
-例如，以下任务将更改任务的当前工作目录，使之位于用户运行任务的相同目录，然后输出当前工作目录，现在就是该目录（请记住，这在 Windows 上也有效，因为 `deno task` 是跨平台的）。
+例如，以下任务将把任务的当前工作目录更改为用户运行任务时所在的目录，然后输出当前工作目录，此时它就是该目录（请记住，这在 Windows 上也同样适用，因为 `deno task` 是跨平台的）。
 
 ```json title="deno.json"
 {
@@ -87,6 +97,30 @@ description: "Deno 的可配置任务运行器"
 
 :::
 
+通过在模式末尾添加排除组 `(!a|b|c)`，可以将任务从通配符匹配中排除。列表中的每个值都会与 `*` 捕获的内容进行匹配。例如，给定 `test:unit`、`test:integration`、`test:e2e` 和 `test:interactive` 任务：
+
+```sh
+deno task "test:*(!e2e|interactive)"
+```
+
+会运行 `test:unit` 和 `test:integration`，但会跳过 `test:e2e` 和 `test:interactive`。带有排除组但没有 `*` 的模式会被拒绝，因为没有可供排除的内容。
+
+## 从文件中加载环境变量
+
+传递 `--env-file` 可将 dotenv 文件中的变量加载到任务的 shell
+环境中，因此任务正文中的每个命令都会继承它们：
+
+```sh
+# 加载 .env
+deno task --env-file start
+
+# 加载特定文件
+deno task --env-file=.env.production start
+```
+
+该标志可以重复使用以加载多个文件，后面的文件
+优先级更高。若不指定值，则默认为 `.env`。
+
 ## 任务依赖
 
 您可以为任务指定依赖项：
@@ -118,7 +152,12 @@ Task serve deno run -RN server.ts
 Listening on http://localhost:8000/
 ```
 
-依赖任务是并行执行的，默认的并行限制等于您机器上的核心数量。要更改此限制，请使用 `DENO_JOBS` 环境变量。
+依赖任务会并行执行，默认并行上限等于您机器上的 CPU 核心数。要为单次调用更改此限制，请传递 `--jobs`（简称 `-j`，也可写作 `--concurrency`）；要为环境设置它，请使用 `DENO_JOBS` 环境变量。该标志具有优先级：
+
+```sh
+# 以完全顺序方式运行工作区任务
+deno task --recursive --jobs 1 build
+```
 
 :::info Deno 2.8
 
@@ -156,13 +195,13 @@ Listening on http://localhost:8000/
 ```sh
 deno task a
 Task d deno run d.js
-Running d
+正在运行 d
 Task c deno run c.js
-Running c
+正在运行 c
 Task b deno run b.js
-Running b
+正在运行 b
 Task a deno run a.js
-Running a
+正在运行 a
 ```
 
 如果发现依赖之间存在循环，将返回错误：
@@ -202,6 +241,29 @@ deno task a
 ```
 
 运行 `deno task dev` 将并行运行 `dev:client` 和 `dev:server`。
+
+## 缓存任务结果
+
+当任务的输入都没有变化时，它可以跳过工作。添加一个 `files` 字段，列出任务读取的输入 glob，Deno 会为命令、其附加参数、匹配文件的内容以及所列环境变量的值生成指纹，然后在下次运行时，如果这些内容都没有变化，就跳过该任务。缓存是按需启用的：没有 `files` 字段的任务总是会运行。
+
+```jsonc title="deno.json"
+{
+  "tasks": {
+    "build": {
+      "command": "deno run -RW build.ts",
+      "files": ["src/**/*.ts", "deno.json"],
+      "output": ["dist/"],
+      "env": ["NODE_ENV"]
+    }
+  }
+}
+```
+
+- `files` 列出构成缓存键的输入 glob。声明它们才会为该任务开启缓存。
+- `output` 列出任务生成的 glob。命中缓存时，这些内容会从缓存中恢复，因此删除 `dist/` 后重新运行会重新生成它。
+- `env` 列出其值作为缓存键一部分的环境变量名，因此当其中一个发生变化时，任务会重新运行。
+
+任务的 [依赖项](#task-dependencies) 指纹会合并到其自身的缓存键中，因此只要上游任务发生变化，该任务也会重新运行。
 
 ## Node 和 npx 二进制支持
 
@@ -610,6 +672,15 @@ Shell 选项不会传递给 `deno task` 的子进程。每次调用 `deno task` 
 生命周期事件，例如 `preinstall` 或 `postinstall`——您必须显式运行
 您想要运行的脚本条目（例如
 `deno install --entrypoint main.ts && deno task postinstall`）。
+
+当 `deno task` 运行 `package.json` 脚本时，它会设置 npm 暴露的 `npm_*` 环境
+变量，因此读取这些变量的脚本仍可正常工作。这些变量
+包括 `npm_package_name`、`npm_package_version`、`npm_lifecycle_event`（
+脚本名称）、`npm_lifecycle_script`（其命令字符串）以及
+`npm_config_user_agent`，还有 `npm_execpath` 和 `npm_node_execpath`（二者都
+设置为正在运行的 `deno` 可执行文件的路径），以及 `npm_command`（设置为
+`run-script`）。这些变量仅对 `package.json` 脚本设置。`deno.json` 中定义的
+任务不会接收它们。
 
 ## 命令解析
 

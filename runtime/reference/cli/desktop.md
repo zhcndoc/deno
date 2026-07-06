@@ -1,15 +1,15 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "deno desktop"
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno desktop"
 description: "从 Deno 项目构建独立的桌面应用程序"
 ---
 
-:::info 即将随 Deno 2.9 发布
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 一同发布，目前尚未进入稳定版本。若要立即试用，请运行 `deno upgrade canary` 以安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建版本。该命令、配置键以及 TypeScript API 在该功能稳定之前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 

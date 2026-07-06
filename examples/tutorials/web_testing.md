@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-04-03
+last_modified: 2026-06-20
 title: "测试 Web 应用"
-description: "使用 Deno 对 Web 应用进行测试的全面指南"
+description: "使用 Deno 测试 Web 应用程序的综合指南"
 url: "/examples/web_testing_tutorial/"
 ---
 
@@ -13,7 +13,10 @@ Deno 是一个在浏览器之外运行的 JavaScript 运行时，因此，你
 
 ## 测试 UI 组件和 DOM 操作
 
-假设你有一个显示用户个人资料的网站，你可以设置一个测试函数来验证 DOM 元素的创建是否正常工作。该代码会先设置一个基础的卡片元素，然后测试所创建的 DOM 结构是否与预期一致。
+假设你有一个展示用户资料的网站，你可以设置一个测试
+函数来验证 DOM 元素创建是否正常工作。这段代码
+先设置一个基础的卡片元素，然后测试创建出来的 DOM 结构是否与
+预期一致。
 
 ```ts
 import { assertEquals } from "jsr:@std/assert";
@@ -111,13 +114,13 @@ Deno.test("事件处理测试", () => {
 import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
 import { assertEquals } from "jsr:@std/assert";
 
-// 会获取数据的组件
+// 获取数据的组件
 async function fetchUserData(
   userId: string,
 ): Promise<{ name: string; email: string }> {
   const response = await fetch(`https://api.example.com/users/${userId}`);
   if (!response.ok) {
-    throw new Error(`Failed to fetch user: ${response.status}`);
+    throw new Error(`获取用户失败：${response.status}`);
   }
   return await response.json();
 }
@@ -134,7 +137,7 @@ Deno.test("fetch 请求测试", async () => {
         { status: 200, headers: { "Content-Type": "application/json" } },
       );
     }
-    return new Response("Not found", { status: 404 });
+    return new Response("未找到", { status: 404 });
   });
 
   // 用 mock 替换全局 fetch
@@ -153,7 +156,7 @@ Deno.test("fetch 请求测试", async () => {
       await fetchUserData("invalid");
       throw new Error("对于无效 ID 应该抛出错误");
     } catch (error) {
-      assertEquals((error as Error).message, "Failed to fetch user: 404");
+      assertEquals((error as Error).message, "获取用户失败：404");
     }
 
     assertSpyCalls(mockFetch, 2);
@@ -164,16 +167,16 @@ Deno.test("fetch 请求测试", async () => {
 });
 ```
 
-## 使用测试步骤进行搭建与清理
+## Using test steps for setup and teardown
 
-对于复杂的测试，你可以使用步骤（steps）将测试逻辑组织成离散的
-代码段，使测试更易读、也更易维护。步骤还能让测试中不同部分之间更好地隔离。通过为步骤命名，你可以实现对测试条件的初始化和清理。
+For complex tests, you can use steps to organize test logic into discrete
+code blocks, making tests easier to read and maintain. Steps also provide better isolation between different parts of a test. By naming steps, you can initialize and clean up test conditions.
 
 ```ts
 import { DOMParser } from "jsr:@b-fuze/deno-dom";
 import { assertEquals, assertExists } from "jsr:@std/assert";
 
-Deno.test("复杂的 Web 组件测试", async (t) => {
+Deno.test("Complex Web Component Test", async (t) => {
   const doc = new DOMParser().parseFromString(
     "<!DOCTYPE html><html></html>",
     "text/html",
@@ -182,31 +185,31 @@ Deno.test("复杂的 Web 组件测试", async (t) => {
   const container = doc.createElement("div");
   body.appendChild(container);
 
-  await t.step("初始渲染", () => {
+  await t.step("Initial render", () => {
     container.innerHTML = `<div id="app"></div>`;
     const app = container.querySelector("#app");
     assertExists(app);
     assertEquals(app.children.length, 0);
   });
 
-  await t.step("添加内容", () => {
+  await t.step("Add content", () => {
     const app = container.querySelector("#app");
     assertExists(app);
 
     const header = doc.createElement("header");
-    header.textContent = "我的应用";
+    header.textContent = "My App";
     app.appendChild(header);
 
     assertEquals(app.children.length, 1);
     assertEquals(app.firstElementChild?.tagName.toLowerCase(), "header");
   });
 
-  await t.step("响应用户输入", () => {
+  await t.step("Respond to user input", () => {
     const app = container.querySelector("#app");
     assertExists(app);
 
     const button = doc.createElement("button");
-    button.textContent = "点击我";
+    button.textContent = "Click me";
     button.id = "test-button";
     app.appendChild(button);
 
@@ -219,7 +222,7 @@ Deno.test("复杂的 Web 组件测试", async (t) => {
     assertEquals(clickCount, 2);
   });
 
-  await t.step("移除内容", () => {
+  await t.step("Remove content", () => {
     const app = container.querySelector("#app");
     assertExists(app);
 
@@ -227,22 +230,22 @@ Deno.test("复杂的 Web 组件测试", async (t) => {
     assertExists(header);
 
     header.remove();
-    assertEquals(app.children.length, 1); // 只应剩下按钮
+    assertEquals(app.children.length, 1); // Only the button should remain
   });
 });
 ```
 
-## 在 Deno 中进行 Web 测试的最佳实践
+## Best Practices for Web Testing in Deno
 
-1. 保持隔离——每个测试都应是自包含的，且不依赖其他测试。
+1. Keep tests isolated — each test should be self-contained and not depend on other tests.
 
-2. 使用名称体现意图——给测试起描述性名称，可以清楚说明在测试什么，并让控制台输出更易读。
+2. Use names that reflect intent — give tests descriptive names that clearly indicate what is being tested and make console output easier to read.
 
-3. 在测试后进行清理——移除测试过程中创建的任何 DOM 元素，以防止测试污染。
+3. Clean up after tests — remove any DOM elements created during testing to prevent test pollution.
 
-4. 模拟外部服务（如 API）以加快测试并提高可靠性。
+4. Mock external services (such as APIs) to speed up tests and improve reliability.
 
-5. 对于复杂组件，使用 `t.step()` 将测试组织成逻辑步骤。
+5. For complex components, use `t.step()` to organize tests into logical steps.
 
 ## 运行你的测试
 

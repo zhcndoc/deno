@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-17
+last_modified: 2026-06-25
 title: "Web 平台 API"
-description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、worker、存储以及其他 Web 标准 API，包括实现细节和与浏览器规范的偏差。"
+description: "Deno 中可用的 Web 平台 API 指南。了解 fetch、事件、工作线程、存储以及其他 Web 标准 API，包括实现细节和与浏览器规范的差异。"
 oldUrl:
   - /runtime/manual/runtime/navigator_api/
   - /runtime/manual/runtime/web_platform_apis/
@@ -28,31 +28,41 @@ Deno 简化网络和云开发的一种方式是使用标准的 Web 平台 API（
 
 ### 规范偏差
 
-- Deno 用户代理没有 cookie jar。因此，响应中的 `set-cookie`
-  头不会被处理，也不会从可见的响应头中过滤掉。
+- Deno 用户代理没有 cookie jar。因此，响应上的 `set-cookie`
+  头不会被处理，也不会从可见的响应
+  头中被过滤掉。
 - Deno 不遵循同源策略，因为 Deno 用户代理
-  目前没有“源”的概念，也没有 cookie jar。这意味着 Deno 不需要防止已认证数据跨源泄漏。正因为如此，Deno 没有实现 WHATWG `fetch` 规范中的以下部分：
+  目前没有 origin 的概念，也没有 cookie
+  jar。这意味着 Deno 不需要防止经过身份验证的数据跨源泄漏。
+  因此，Deno 未实现 WHATWG `fetch` 规范中的以下
+  部分：
   - 第 `3.1. 'Origin' header` 节。
   - 第 `3.2. CORS protocol` 节。
   - 第 `3.5. CORB` 节。
   - 第 `3.6. 'Cross-Origin-Resource-Policy' header` 节。
   - `Atomic HTTP redirect handling`。
   - `opaqueredirect` 响应类型。
-- 当 `redirect` 模式为 `manual` 时，`fetch` 返回的是 `basic` 响应
+- `redirect` 模式为 `manual` 的 `fetch` 将返回 `basic` 响应，
   而不是 `opaqueredirect` 响应。
-- 规范对于如何处理
-  [`file:` URLs 的方式很模糊](https://fetch.spec.whatwg.org/#scheme-fetch)。
+- 该规范对
+  [如何处理 `file:` URLs](https://fetch.spec.whatwg.org/#scheme-fetch) 表述得并不明确。
   Firefox 是唯一实现了获取 `file:` URLs 的主流浏览器，
-  即便如此默认情况下也无法工作。截至 Deno 1.16，Deno 支持
-  获取本地文件。详情见下一节。
-- `request` 和 `response` 的 header guard 已实现，但与浏览器不同，
-  对允许的 header 名称没有任何限制。
-- `RequestInit` 中的 `referrer`、`referrerPolicy`、`mode`、`credentials`、`cache`、`integrity`、
-  `keepalive` 和 `window` 属性及其相关行为未实现。相关字段不会出现在
+  而且即便如此，默认情况下也无法工作。截至 Deno 1.16，Deno 支持
+  获取本地文件。详见下一节。
+- `request` 和 `response` 头守卫已实现，但与
+  浏览器不同，它们对允许哪些头名称没有任何限制。
+- `referrer`、`referrerPolicy`、`mode`、`credentials`、`cache`、`integrity`、
+  `keepalive` 和 `window` 属性及其在
+  `RequestInit` 中的相关行为均未实现。相关字段不存在于
   [`Request`](/api/web/~/Request) 对象上。
-- 支持请求体上传流式传输（在 HTTP/1.1 和 HTTP/2 上）。与当前的 fetch 提案不同，实现支持 duplex 流式传输。
-- 在 `headers` 迭代器中遍历时，`set-cookie` 头不会被拼接。此行为正在
-  [被规范化的过程中](https://github.com/whatwg/fetch/pull/1346)。
+- `RequestInit` 的 `priority` 成员（`"auto"`、`"high"` 或 `"low"`）会被
+  接受并校验。按照 Fetch 标准，它是只写的，因此不会作为属性暴露回
+  `Request` 对象上。
+- 支持请求体上传流式传输（在 HTTP/1.1 和 HTTP/2 上）。不同于
+  当前的 fetch 提案，实现支持双工流式传输。
+- 在 `headers` 迭代器中迭代时，`set-cookie` 头不会被合并连接。
+  这一行为正在
+  [被规范化](https://github.com/whatwg/fetch/pull/1346)。
 
 ### 获取本地文件
 
@@ -133,7 +143,7 @@ ch.port1.postMessage(buffer, [buffer]);
 
 ## 类型定义
 
-实现的 Web API 的 TypeScript 定义可以在
+已实现的 Web API 的 TypeScript 定义可以在
 [`lib.deno.shared_globals.d.ts`](https://github.com/denoland/deno/blob/main/cli/tsc/dts/lib.deno.shared_globals.d.ts)
 和
 [`lib.deno.window.d.ts`](https://github.com/denoland/deno/blob/main/cli/tsc/dts/lib.deno.window.d.ts)
@@ -143,7 +153,7 @@ ch.port1.postMessage(buffer, [buffer]);
 [`lib.deno.worker.d.ts`](https://github.com/denoland/deno/blob/main/cli/tsc/dts/lib.deno.worker.d.ts)
 文件中找到。
 
-## Location
+## 位置
 
 Deno 支持来自 Web 的 [`location`](/api/web/~/Location) 全局。
 
@@ -223,7 +233,7 @@ const worker = new Worker("./workers/hello.ts", { type: "module" });
 
 ```ts
 // 在 localStorage 中设置一个项
-localStorage.setItem("myDemo", "Deno App");
+localStorage.setItem("myDemo", "Deno 应用");
 
 // 从 localStorage 中读取一个项
 const cat = localStorage.getItem("myDemo");
@@ -551,34 +561,47 @@ Deno 实现了 [`navigator`](https://developer.mozilla.org/en-US/docs/Web/API/Na
 
 - `navigator.userAgent` — 始终为 `"Deno/<version>"`
 - `navigator.platform` — 底层操作系统平台（例如 `"Linux x86_64"`、
-  `"MacIntel"`、`"Win32"`）。在 Deno 2.7 中添加。
+  `"MacIntel"`、`"Win32"`）。已在 Deno 2.7 中添加。
 - `navigator.hardwareConcurrency` — 逻辑 CPU 核心数
+- `navigator.userAgentData` — 一个
+  [`NavigatorUAData`](https://developer.mozilla.org/en-US/docs/Web/API/NavigatorUAData)
+  对象，实现了 User-Agent Client Hints API。低熵属性
+  `brands`、`mobile` 和 `platform` 可同步读取，而
+  `getHighEntropyValues(hints)` 会解析并返回额外细节，例如
+  `architecture`、`model` 和 `platformVersion`。
+- `navigator.locks` — 一个
+  [`LockManager`](https://developer.mozilla.org/en-US/docs/Web/API/LockManager)
+  实现了
+  [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API)，
+  用于通过 `navigator.locks.request()` 和 `navigator.locks.query()`
+  协调对命名资源的访问。
 
 ```ts
 console.log(navigator.userAgent); // "Deno/2.7.0"
 console.log(navigator.platform); // 例如 "Linux x86_64", "MacIntel", "Win32"
 console.log(navigator.hardwareConcurrency); // 例如 8
+console.log(navigator.userAgentData.brands); // 例如 [{ brand: "Deno", version: "2" }]
 ```
 
 ## Temporal
 
-[Temporal API](https://tc39.es/proposal-temporal/docs/) 是一个现代的日期/时间库，在大多数用例中可替代 `Date`。它已在 Deno 2.7 中稳定，并可作为全局对象使用，无需任何标志。
+[Temporal API](https://tc39.es/proposal-temporal/docs/) is a modern date/time library that can replace `Date` in most use cases. It is stable in Deno 2.7 and available as a global object without any flags.
 
 ```ts
-// 当前本地时区的日期/时间
+// Date/time in the current local time zone
 const now = Temporal.Now.plainDateTimeISO();
-console.log(now.toString()); // 例如 "2025-03-12T10:30:00"
+console.log(now.toString()); // e.g. "2025-03-12T10:30:00"
 
-// 解析日期
+// Parse date
 const date = Temporal.PlainDate.from("2025-03-12");
 console.log(date.month); // 3
 
-// 带时区感知
+// Time zone aware
 const zonedNow = Temporal.Now.zonedDateTimeISO("America/New_York");
 console.log(zonedNow.timeZoneId); // "America/New_York"
 ```
 
-在 Deno 2.7 之前，Temporal 需要 `--unstable-temporal` 标志。
+Before Deno 2.7, Temporal required the `--unstable-temporal` flag.
 
 ## CompressionStream 和 DecompressionStream
 
@@ -613,7 +636,40 @@ console.log(result); // "Hello, Deno!"
 
 ## Web Crypto
 
-Deno 通过 `crypto.subtle` 支持 [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)。从 Deno 2.7 开始，支持 SHA-3 哈希算法：
+Deno 通过 `crypto.subtle` 支持
+[Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API)。
+
+### 特性检测
+
+`SubtleCrypto.supports()` 是一个静态方法，用于同步检查某个给定的算法与操作组合是否可用，而无需实际运行该操作或捕获错误。它接受操作名称、算法，以及一个可选的第三个参数，并返回一个布尔值。此功能于 Deno 2.9 中添加。
+
+```ts
+SubtleCrypto.supports("digest", "SHA3-256"); // true
+SubtleCrypto.supports("generateKey", "ChaCha20-Poly1305"); // true
+SubtleCrypto.supports("sign", "ML-DSA-65"); // true
+```
+
+操作可以是 `"encrypt"`、`"decrypt"`、`"sign"`、`"verify"`、
+`"digest"`、`"generateKey"`、`"deriveKey"`、`"deriveBits"`、`"importKey"`、
+`"exportKey"`、`"wrapKey"`、`"unwrapKey"`、`"encapsulateKey"`、
+`"encapsulateBits"`、`"decapsulateKey"`、`"decapsulateBits"`，或
+`"getPublicKey"`。
+
+可选的第三个参数会根据操作进行解释：对于 `"deriveBits"`，它是以位为单位的长度；否则它是一个相关算法，例如 `"deriveKey"` 的派生密钥算法，或 `"encapsulateKey"`
+和 `"decapsulateKey"` 的共享密钥算法。
+
+```ts
+// deriveKey 会从 HKDF 生成一个 AES-GCM 密钥吗？
+SubtleCrypto.supports("deriveKey", "HKDF", { name: "AES-GCM", length: 256 });
+```
+
+`SubtleCrypto.supports()` 是 WICG 的
+[Web Cryptography API 中现代算法](https://wicg.github.io/webcrypto-modern-algos/)
+草案的一部分。
+
+### SHA-3 哈希算法
+
+从 Deno 2.7 开始，SHA-3 系列哈希算法已被 `crypto.subtle.digest` 支持：
 
 - `SHA3-256`
 - `SHA3-384`
@@ -624,6 +680,280 @@ const data = new TextEncoder().encode("Hello, Deno!");
 const hash = await crypto.subtle.digest("SHA3-256", data);
 console.log(new Uint8Array(hash));
 ```
+
+`HMAC` 密钥也可以使用 SHA-3 哈希。生成或导入密钥时，将算法名称作为 `hash` 传入：
+
+```ts
+const key = await crypto.subtle.generateKey(
+  { name: "HMAC", hash: "SHA3-256" },
+  true,
+  ["sign", "verify"],
+);
+const signature = await crypto.subtle.sign("HMAC", key, data);
+```
+
+### 可扩展输出函数
+
+Deno 2.9 添加了 SHAKE、cSHAKE、TurboSHAKE 和 KangarooTwelve
+可扩展输出函数（XOF）。与固定长度哈希不同，XOF 可以生成任意长度的摘要，因此 `crypto.subtle.digest` 需要提供一个 `outputLength`
+选项，以位为单位指定输出大小。`outputLength` 必须是 8 的正整数倍。支持的名称有：
+
+- `SHAKE128`, `SHAKE256`
+- `cSHAKE128`, `cSHAKE256`
+- `TurboSHAKE128`, `TurboSHAKE256`
+- `KT128`（也接受 `KangarooTwelve`）和 `KT256`
+
+```ts
+const data = new TextEncoder().encode("Hello, Deno!");
+
+// 256 位（32 字节）的 SHAKE256 摘要。
+const digest = await crypto.subtle.digest(
+  { name: "SHAKE256", outputLength: 256 },
+  data,
+);
+console.log(new Uint8Array(digest).length); // 32
+```
+
+`cSHAKE128` 和 `cSHAKE256` 接受两个可选的 `BufferSource` 参数来定制函数：`functionName`，一个由 NIST 定义的函数名，以及 `customization`，一个由调用方定义的域分离字符串。
+
+```ts
+const digest = await crypto.subtle.digest(
+  {
+    name: "cSHAKE128",
+    outputLength: 256,
+    customization: new TextEncoder().encode("my-app"),
+  },
+  data,
+);
+```
+
+`TurboSHAKE128` 和 `TurboSHAKE256` 接受一个可选的 `domainSeparation` 字节，其取值必须在 `0x01` 到 `0x7F` 范围内：
+
+```ts
+const digest = await crypto.subtle.digest(
+  { name: "TurboSHAKE256", outputLength: 512, domainSeparation: 0x1f },
+  data,
+);
+```
+
+`KT128` 和 `KT256` 是 KangarooTwelve XOF。它们接受一个可选的
+`customization` `BufferSource`：
+
+```ts
+const digest = await crypto.subtle.digest(
+  { name: "KT128", outputLength: 256 },
+  data,
+);
+```
+
+### KMAC
+
+`KMAC128` 和 `KMAC256` 是基于 cSHAKE 构建的带密钥消息认证码。
+此功能于 Deno 2.9 中添加。先生成一个以位为单位的 `length` 密钥，然后使用以位为单位的 `outputLength` 和一个可选的 `customization` `BufferSource`
+进行签名和验证：
+
+```ts
+const key = await crypto.subtle.generateKey(
+  { name: "KMAC128", length: 128 },
+  true,
+  ["sign", "verify"],
+);
+
+const data = new TextEncoder().encode("Hello, Deno!");
+const params = {
+  name: "KMAC128",
+  outputLength: 256,
+  customization: new TextEncoder().encode("Deno"),
+};
+const mac = await crypto.subtle.sign(params, key, data);
+const valid = await crypto.subtle.verify(params, key, mac, data);
+```
+
+KMAC 密钥可以使用 `"raw"`、`"raw-secret"` 和
+`"jwk"` 格式导入和导出。
+
+### Argon2
+
+`Argon2d`、`Argon2i` 和 `Argon2id` 是密码哈希密钥派生函数。
+此功能于 Deno 2.9 中添加。使用 `"raw-secret"`
+格式并带有 `deriveBits` 用途将密码导入为密钥，然后调用 `deriveBits`。参数包括
+`memory`（以 kibibytes 为单位的内存成本）、`passes`（迭代次数）、`parallelism`
+（并行度）以及一个 `nonce` `BufferSource`（盐）。`secretValue`
+和 `associatedData` 是可选的 `BufferSource` 值：
+
+```ts
+const password = new TextEncoder().encode("correct horse battery staple");
+const key = await crypto.subtle.importKey(
+  "raw-secret",
+  password,
+  "Argon2id",
+  false,
+  ["deriveBits"],
+);
+
+const derived = await crypto.subtle.deriveBits(
+  {
+    name: "Argon2id",
+    memory: 65536,
+    passes: 3,
+    parallelism: 4,
+    nonce: crypto.getRandomValues(new Uint8Array(16)),
+  },
+  key,
+  256, // 输出长度（位）
+);
+```
+
+### ChaCha20-Poly1305
+
+Deno 2.9 通过 `generateKey`、`encrypt` 和 `decrypt`
+支持 `ChaCha20-Poly1305` 认证加密算法。密钥始终为 256 位：
+
+```ts
+const key = await crypto.subtle.generateKey(
+  { name: "ChaCha20-Poly1305" },
+  true,
+  ["encrypt", "decrypt"],
+);
+```
+
+每次 `encrypt` 和 `decrypt` 调用都需要一个 12 字节的 `nonce`，以及一个可选的
+`additionalData`，它会被认证但不会被加密。对于同一密钥下加密的每条消息，都应使用一个新的 nonce：
+
+```ts
+const nonce = crypto.getRandomValues(new Uint8Array(12));
+const data = new TextEncoder().encode("Hello, Deno!");
+
+const ciphertext = await crypto.subtle.encrypt(
+  { name: "ChaCha20-Poly1305", nonce },
+  key,
+  data,
+);
+
+const plaintext = await crypto.subtle.decrypt(
+  { name: "ChaCha20-Poly1305", nonce },
+  key,
+  ciphertext,
+);
+console.log(new TextDecoder().decode(plaintext)); // "Hello, Deno!"
+```
+
+返回的密文包含 16 字节的 Poly1305 认证标签。
+
+### 后量子密码学
+
+Deno 2.9 实现了来自 WICG
+[Web Cryptography API 中现代算法](https://wicg.github.io/webcrypto-modern-algos/)
+草案的 NIST 后量子算法：ML-DSA 和 SLH-DSA 签名，以及 ML-KEM 密钥封装。
+
+#### ML-DSA 签名
+
+`ML-DSA`（FIPS 204）是一种基于格的数字签名方案。有三个参数集可用，安全级别依次递增：`ML-DSA-44`、`ML-DSA-65` 和
+`ML-DSA-87`。先生成密钥对，然后使用私钥签名并用公钥验证：
+
+```ts
+const { publicKey, privateKey } = await crypto.subtle.generateKey(
+  { name: "ML-DSA-65" },
+  true,
+  ["sign", "verify"],
+);
+
+const data = new TextEncoder().encode("Hello, Deno!");
+const signature = await crypto.subtle.sign(
+  { name: "ML-DSA-65" },
+  privateKey,
+  data,
+);
+const valid = await crypto.subtle.verify(
+  { name: "ML-DSA-65" },
+  publicKey,
+  signature,
+  data,
+);
+console.log(valid); // true
+```
+
+`sign` 和 `verify` 接受一个可选的 `context`，它是一个将签名绑定到应用特定值的 `BufferSource`。两次调用必须提供相同的 `context`：
+
+```ts
+const context = new TextEncoder().encode("v1");
+const signature = await crypto.subtle.sign(
+  { name: "ML-DSA-65", context },
+  privateKey,
+  data,
+);
+```
+
+ML-DSA 密钥可以使用 `"pkcs8"`、`"spki"`、`"jwk"`、
+`"raw-public"`、`"raw-private"` 和 `"raw-seed"` 格式导入和导出。
+
+#### SLH-DSA 签名
+
+`SLH-DSA`（FIPS 205）是一种无状态基于哈希的签名方案。共有十二种参数集可用，结合了哈希族（`SHA2` 或 `SHAKE`）、安全级别（`128`、`192` 或 `256`）以及 `s`（小签名）或 `f`
+（快速）权衡：
+
+- `SLH-DSA-SHA2-128s`, `SLH-DSA-SHA2-128f`, `SLH-DSA-SHA2-192s`,
+  `SLH-DSA-SHA2-192f`, `SLH-DSA-SHA2-256s`, `SLH-DSA-SHA2-256f`
+- `SLH-DSA-SHAKE-128s`, `SLH-DSA-SHAKE-128f`, `SLH-DSA-SHAKE-192s`,
+  `SLH-DSA-SHAKE-192f`, `SLH-DSA-SHAKE-256s`, `SLH-DSA-SHAKE-256f`
+
+SLH-DSA 使用与 ML-DSA 相同的 `generateKey`、`sign` 和 `verify` 流程，
+包括可选的 `context`：
+
+```ts
+const { publicKey, privateKey } = await crypto.subtle.generateKey(
+  { name: "SLH-DSA-SHAKE-128f" },
+  true,
+  ["sign", "verify"],
+);
+
+const data = new TextEncoder().encode("Hello, Deno!");
+const signature = await crypto.subtle.sign(
+  { name: "SLH-DSA-SHAKE-128f" },
+  privateKey,
+  data,
+);
+```
+
+SLH-DSA 密钥可以使用 `"pkcs8"`、`"spki"`、`"jwk"`、
+`"raw-public"` 和 `"raw-private"` 格式导入和导出。
+
+#### ML-KEM 密钥封装
+
+`ML-KEM`（FIPS 203）是一种密钥封装机制：一方将新的共享密钥封装到接收方的公钥中，接收方再对生成的密文进行解封装，以恢复相同的密钥。参数集为
+`ML-KEM-512`、`ML-KEM-768` 和 `ML-KEM-1024`。
+
+接收方生成密钥对并发布公钥（封装）密钥。发送方调用 `encapsulateKey`，它会同时返回要发送回去的 `ciphertext` 和一个用于其第三个参数所命名算法的 `sharedKey` `CryptoKey`。接收方将密文传递给 `decapsulateKey` 以派生出相同的密钥：
+
+```ts
+const { publicKey, privateKey } = await crypto.subtle.generateKey(
+  { name: "ML-KEM-768" },
+  true,
+  ["encapsulateKey", "decapsulateKey"],
+);
+
+// 发送方：将共享 AES-GCM 密钥封装到接收方的公钥中。
+const { ciphertext, sharedKey } = await crypto.subtle.encapsulateKey(
+  { name: "ML-KEM-768" },
+  publicKey,
+  { name: "AES-GCM", length: 256 },
+  false,
+  ["encrypt", "decrypt"],
+);
+
+// 接收方：解封装密文以恢复相同的密钥。
+const recovered = await crypto.subtle.decapsulateKey(
+  { name: "ML-KEM-768" },
+  privateKey,
+  ciphertext,
+  { name: "AES-GCM", length: 256 },
+  false,
+  ["encrypt", "decrypt"],
+);
+```
+
+`encapsulateBits` 和 `decapsulateBits` 是更低层级的变体：它们返回原始共享密钥作为 `ArrayBuffer`，而不是将其导入为
+`CryptoKey`。解封装（私有）密钥还会暴露 `getPublicKey()`，它返回与其匹配的封装（公钥）密钥。
 
 ## createImageBitmap
 
@@ -667,16 +997,16 @@ if (locked) {
   await file.write(new TextEncoder().encode("hello"));
   await file.unlock();
 } else {
-  console.log("File is locked by another process, skipping.");
+  console.log("文件已被另一个进程锁定，跳过。");
 }
 file.close();
 ```
 
-## 与规范不一致的其他 API
+## Other APIs that do not match the specification
 
-### 缓存 API
+### Cache APIs
 
-仅实现以下 API：
+Only the following APIs are implemented:
 
 - [CacheStorage::open()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/open)
 - [CacheStorage::has()](https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/has)
@@ -689,7 +1019,7 @@ file.close();
 - [Cache::keys()](https://developer.mozilla.org/en-US/docs/Web/API/Cache/keys)
   (Deno 2.8+)
 
-与浏览器相比，几个地方有所不同：
+Compared with browsers, there are a few differences:
 
-1. 你不能将相对路径传递给 API。请求可以是 Request、URL 的实例或 URL 字符串。
-2. `match()` 和 `delete()` 尚不支持查询选项。
+1. You cannot pass relative paths to the API. Requests can be Request, URL instances, or URL strings.
+2. `match()` and `delete()` do not yet support query options.

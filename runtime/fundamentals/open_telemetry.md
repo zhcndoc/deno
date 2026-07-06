@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-17
 title: OpenTelemetry
 description: "学习如何在 Deno 应用程序中使用 OpenTelemetry 实现可观察性。涵盖追踪、指标收集和与监控系统的集成。"
 ---
@@ -88,9 +88,10 @@ Deno 会自动收集并将部分可观察性数据导出到 OTLP 端点。
 
 Deno 会自动为多种操作创建跨度，例如：
 
-- 由 [`Deno.serve`](/api/deno/~/Deno.serve) 提供服务的传入 HTTP 请求。
+- 使用 [`Deno.serve`](/api/deno/~/Deno.serve) 提供的传入 HTTP 请求。
 - 使用 [`fetch`](/api/web/~/fetch) 发起的传出 HTTP 请求。
-- [`Deno.cron()`](/api/deno/~/Deno.cron) 作业调用（Deno 2.7 中新增）。
+- 通过 `node:http2` 进行的 HTTP/2 流量，包括客户端请求和传入的服务器请求，并在服务之间传播 trace context（已在 Deno 2.9 中添加）。
+- [`Deno.cron()`](/api/deno/~/Deno.cron) 作业调用（已在 Deno 2.7 中添加）。
 
 #### [`Deno.serve`](/api/deno/~/Deno.serve)
 
@@ -243,7 +244,7 @@ Deno.serve(async (req) => {
 - `replace`：日志不输出到 stdout/stderr，只有导出到 OpenTelemetry。
 - `ignore`：日志只输出到 stdout/stderr，不导出到 OpenTelemetry。
 
-### Permission audit
+### 权限审计
 
 Deno 可以将权限审计日志路由到 OpenTelemetry 导出器中，
 与其余追踪、指标和日志一起导出。设置
@@ -564,7 +565,25 @@ OTLP 导出器的端点和协议可通过
 - `tracecontext`：W3C Trace Context 格式。
 - `baggage`：W3C Baggage 格式。
 
-指标收集频率使用 `OTEL_METRIC_EXPORT_INTERVAL` 配置，默认 60000 毫秒（60 秒）。
+可使用 `OTEL_TRACES_SAMPLER` 环境变量配置追踪采样。支持的值为：
+
+- `always_on` (默认): 采样每一条追踪。
+- `always_off`: 不采样任何追踪。
+- `traceidratio`: 根据 trace ID 采样一定比例的追踪。
+- `parentbased_always_on`、`parentbased_always_off`、`parentbased_traceidratio`：
+  在存在父跨度时遵循父跨度的采样决策，否则回退
+  到对应的根采样器。
+
+对于基于比例的采样器，`OTEL_TRACES_SAMPLER_ARG` 用于设置采样
+概率，取值为 `0` 到 `1` 之间的数字。默认值为 `1.0`：
+
+```sh
+OTEL_DENO=true OTEL_TRACES_SAMPLER=traceidratio OTEL_TRACES_SAMPLER_ARG=0.1 deno run -A main.ts
+```
+
+指标收集频率可使用
+`OTEL_METRIC_EXPORT_INTERVAL` 环境变量配置。默认值为 `60000`
+毫秒（60 秒）。
 
 跨度导出批处理配置参考
 [OpenTelemetry 规范](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/#batch-span-processor)。
@@ -580,7 +599,7 @@ Deno 支持上下文传播器，用以自动跨进程边界传播追踪上下文
 
 默认支持以下传播器：
 
-- `tracecontext`：W3C Trace Context 传播格式，是 HTTP 头传播追踪上下文的标准方式。
+- `tracecontext`：W3C Trace Context 传播格式，是通过 HTTP 头传播追踪上下文的标准方式。
 - `baggage`：W3C Baggage 格式，允许跨服务传递键值对。
 
 :::note
@@ -622,24 +641,13 @@ async function tracedFetch(url: string) {
 
 Deno 的 OpenTelemetry 集成仍在开发中，存在以下限制：
 
-- 始终对追踪进行采样（即 `OTEL_TRACE_SAMPLER=parentbased_always_on`）。
-- 追踪仅支持不带属性的链接。
-- 不支持指标示例值。
-- 不支持自定义日志流（例如除 `console.log` 和 `console.error`
-  之外的日志）。
-- 仅支持 OTLP 导出器（`http/protobuf`、`http/json`、`grpc`）和
-  `console`。不支持其他导出格式。
-- 在进程退出/崩溃时，不会收集可观测（异步）仪表的指标，因此
-  可能不会导出指标的最后一个值。同步指标会在进程退出/崩溃时导出。
-- 环境变量 `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、
-  `OTEL_ATTRIBUTE_COUNT_LIMIT`、`OTEL_SPAN_EVENT_COUNT_LIMIT`、
-  `OTEL_SPAN_LINK_COUNT_LIMIT`、`OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和
-  `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 中指定的限制不会对追踪跨度生效。
-- 不会遵守环境变量 `OTEL_METRIC_EXPORT_TIMEOUT`。
-- 未知的 HTTP 方法不会按照 OpenTelemetry 语义约定规范化为
-  `http.request.method` 跨度属性中的 `_OTHER`。
-- [`Deno.serve`](/api/deno/~/Deno.serve) 的 HTTP 服务端跨度不会设置
-  OpenTelemetry 状态；如果处理程序抛出异常（即调用 `onError`），该跨度
-  不会设置错误状态，且错误不会通过事件附加到跨度上。
-- 没有机制可为 [`fetch`](/api/web/~/fetch) 的 HTTP 客户端跨度添加
-  `http.route` 属性，或更新跨度名称以包含该路由。
+- Traces 目前仅支持不带属性的 links。
+- 不支持 metric exemplars。
+- 不支持自定义日志流（例如，除了 `console.log` 和 `console.error` 之外的日志）。
+- 支持的导出器为 OTLP（`http/protobuf`、`http/json`、`grpc`）和 `console`。不支持其他导出格式。
+- 来自 observable（异步）meters 的 metrics 在进程退出/崩溃时不会被收集，因此 metrics 的最后一个值可能不会被导出。同步 metrics 会在进程退出/崩溃时导出。
+- `OTEL_ATTRIBUTE_VALUE_LENGTH_LIMIT`、`OTEL_SPAN_LINK_COUNT_LIMIT`、`OTEL_EVENT_ATTRIBUTE_COUNT_LIMIT` 和 `OTEL_LINK_ATTRIBUTE_COUNT_LIMIT` 环境变量中指定的限制不适用于 trace spans。每个 span 的属性限制（`OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT`，若未设置则回退到 `OTEL_ATTRIBUTE_COUNT_LIMIT`）以及每个 span 的 event 限制（`OTEL_SPAN_EVENT_COUNT_LIMIT`）会被遵守，默认值均为 128。
+- `OTEL_METRIC_EXPORT_TIMEOUT` 环境变量不生效。
+- 对于未知的 HTTP methods，不会按照 OpenTelemetry 语义约定在 `http.request.method` span 属性中归一化为 `_OTHER`。
+- [`Deno.serve`](/api/deno/~/Deno.serve) 的 HTTP server span 没有设置 OpenTelemetry status；如果 handler 抛出错误（即调用了 `onError`），该 span 不会设置 error status，错误也不会通过 event 附加到该 span 上。
+- 没有机制可以为 [`fetch`](/api/web/~/fetch) 的 HTTP client span 添加 `http.route` 属性，或更新 span 名称以包含 route。

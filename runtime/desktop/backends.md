@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "后端"
-description: "为你的桌面应用选择一个渲染引擎：打包的 Chromium、操作系统的 webview，或原始窗口系统。了解权衡以及如何切换。"
+description: "为你的桌面应用选择一个渲染引擎：捆绑的 Chromium、操作系统的 webview，或原始窗口系统。了解取舍以及如何切换。"
 ---
 
-:::info Deno 2.9 即将推出
+:::info 在 Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 一起发布，目前尚未进入稳定版。要立即试用，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建版本。在功能稳定之前，命令、配置键以及 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 

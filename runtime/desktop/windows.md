@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "Windows"
 description: "使用 Deno.BrowserWindow 创建和管理原生窗口：生命周期、多个窗口、大小调整、导航、键盘 / 鼠标 / 聚焦事件，以及原生窗口句柄。"
 ---
 
-:::info 即将随 Deno 2.9 提供
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 发布，目前尚未进入稳定版。要立即试用，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建版本。在该功能稳定之前，命令、配置键和 TypeScript API 仍可能发生变化。
+`deno desktop` 自 Deno v2.9.0 起可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -93,6 +93,40 @@ win.setAlwaysOnTop(true);
 ```
 
 大小以逻辑像素为单位。操作系统负责 HiDPI 缩放。
+
+### 持久化大小和位置
+
+Deno 不会记住窗口在不同运行之间的大小或位置，你也不应依赖操作系统来恢复它们——有些窗口管理器会这么做，但很多不会（例如在 Linux/KDE 上，每次启动都会以构造函数中的默认值打开）。如果你希望窗口在用户离开时的位置重新打开，请将其几何信息保存到应用拥有的配置中，并在下次启动时恢复。
+
+先用保存的值初始化构造函数，然后在几何信息发生变化时将其写回：
+
+```ts
+const file = `${Deno.env.get("HOME")}/.myapp-window.json`;
+
+let saved: { width?: number; height?: number; x?: number; y?: number } = {};
+try {
+  saved = JSON.parse(await Deno.readTextFile(file));
+} catch {
+  // 首次运行，或者尚未有保存的状态——回退到默认值。
+}
+
+const win = new Deno.BrowserWindow({
+  title: "My App",
+  width: saved.width ?? 800,
+  height: saved.height ?? 600,
+  x: saved.x,
+  y: saved.y,
+});
+
+async function save() {
+  const [width, height] = win.getSize();
+  const [x, y] = win.getPosition();
+  await Deno.writeTextFile(file, JSON.stringify({ width, height, x, y }));
+}
+
+win.addEventListener("resize", save);
+win.addEventListener("move", save);
+```
 
 ## 标题
 

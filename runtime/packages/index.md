@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-25
 title: "依赖管理"
-description: "将 Deno 用作 npm 和 JSR 的包管理器：安装、添加、更新、审计和检查依赖，管理锁文件和生命周期脚本，并覆盖包。"
+description: "将 Deno 作为你的 npm 和 JSR 包管理器：安装、添加、更新、审计和检查依赖，管理锁文件和生命周期脚本，以及覆盖包。"
 oldUrl:
   - /runtime/fundamentals/dependency_management/
   - /runtime/manual/basics/modules/integrity_checking/
@@ -320,6 +320,8 @@ Deno 还允许通过 `deno.json` 中的 `scopes` 字段覆盖 HTTPS 导入。此
   }
 }
 ```
+
+如果你主要使用 `package.json`，可以在 `deno.json` 中设置 `"preferPackageJson": true`，这样 `deno add`、`deno install` 和 `deno remove` 默认会写入那里，而不是 `deno.json`，无需每次都传入 `--package-json`。参见 [preferPackageJson](/runtime/reference/deno_json/#prefer-package-json-for-dependencies)。
 
 ### package.json 中的 JSR 包
 

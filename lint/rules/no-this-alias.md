@@ -12,7 +12,7 @@ tags: [recommended]
 const obj = {
   count: 0,
   doSomethingLater() {
-    setTimeout(function () { // 这个函数在全局作用域中执行；`this` 评估为 `globalThis`
+    setTimeout(function () { // 这个函数在全局作用域中执行；`this` 计算为 `globalThis`
       this.count++;
       console.log(this.count);
     }, 300);

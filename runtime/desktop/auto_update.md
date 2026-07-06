@@ -1,13 +1,12 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "自动更新"
-description: "使用 Deno.autoUpdate() 将二进制差异更新推送到 deno 桌面应用：bsdiff 补丁、清单轮询、在启动失败时自动回滚。"
+description: "通过 Deno.autoUpdate() 为 deno desktop 应用推送二进制差异更新：bsdiff 补丁、清单轮询、启动失败时自动回滚。"
 ---
 
-:::info 即将登陆 Deno 2.9
+:::info Deno 2.9 中可用
 
-`deno desktop` 将随 Deno v2.9.0 发布，但目前尚未进入稳定版。要立即试用，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。该命令、配置键以及 TypeScript API 在功能稳定之前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -57,10 +56,10 @@ Deno.autoUpdate({
   url: "https://releases.example.com/my-app",
   interval: 60 * 60 * 1000, // 每小时
   onUpdateReady(version) {
-    console.log("Update", version, "ready; will apply on next launch");
+    console.log("更新", version, "已准备好；将在下次启动时应用");
   },
   onRollback(reason) {
-    console.warn("Previous launch failed; rolled back:", reason);
+    console.warn("上次启动失败；已回滚：", reason);
   },
 });
 ```

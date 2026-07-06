@@ -1,15 +1,14 @@
 ---
-last_modified: 2026-06-17
+last_modified: 2026-06-25
 title: "桌面应用"
-description: "从 Deno 项目构建自包含的桌面应用，具备框架自动检测、热重载、原生窗口、自动更新以及跨平台分发能力。"
+description: "从一个 Deno 项目构建自包含的桌面应用，支持框架自动检测、热重载、原生窗口、自动更新以及跨平台分发。"
 ---
 
 `deno desktop` 会将一个 Deno 项目（从单个 TypeScript 文件到 Next.js 应用都可以）转换为一个自包含的桌面应用。输出结果是一个可重新分发的二进制文件，它将你的代码、Deno 运行时以及一个 Web 渲染引擎打包到每个平台的一个 bundle 中。
 
-:::info 即将于 Deno 2.9 提供
+:::info 在 Deno 2.9 中可用
 
-`deno desktop` 将随 Deno v2.9.0 一同发布，但目前尚未进入稳定版。若想现在就试用，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。该命令、配置键以及 TypeScript API 在该功能稳定之前仍可能发生变化。
+`deno desktop` 自 Deno v2.9.0 起可用。如果你使用的是更早的版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -25,7 +24,7 @@ Web 技术是全世界最广为人知的 UI 工具包。基于 Web 技术栈构�
 - **单机跨编译。** 同一台机器可以构建 macOS、Windows 和 Linux 版本。后端会按需下载，而不是在本地构建。
 - **内置基于二进制差分的自动更新。** 只需发布一个 `latest.json` 清单和 bsdiff 补丁；运行时会自动轮询、应用更新，并在启动失败时回滚。
 
-## Hello, desktop
+## 你好，桌面
 
 创建一个单文件桌面应用：
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-28
+last_modified: 2026-07-02
 title: "设置你的环境"
-description: "一份用于为 Deno 设置开发环境的指南。了解如何配置 VS Code 等流行编辑器、设置语言服务器支持，并启用 shell 补全以提高生产力。"
+description: "一份用于设置 Deno 开发环境的指南。了解如何配置 VS Code 等流行编辑器、设置语言服务器支持，并启用 shell 补全以提高生产力。"
 oldUrl: /runtime/manual/getting_started/setup_your_environment/
 ---
 
@@ -56,28 +56,36 @@ Runtime** 切换为 **Deno**。在 **Deno** 下面，指定 Deno 可执行文件
 
 ### Vim/Neovim
 
-Neovim 0.6+ 的推荐设置是使用内置语言服务器客户端
-并配合 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)，它自带一个
+Neovim 0.11+ 的推荐设置是使用内置语言服务器客户端
+配合 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)，它自带
 [现成的 Deno 配置](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#denols)。
 
-如果你还配置了 `ts_ls`，两个服务器都可能附加到同一个缓冲区。
-为避免这种情况，请给每个服务器设置不同的 `root_dir`（或 `root_markers`），并在 `ts_ls` 上设置
-`single_file_support = false`：
+如果你还配置了 `ts_ls`（TypeScript 语言服务器），两个
+服务器都可以附加到同一个缓冲区。nvim-lspconfig 的新版本默认会阻止
+这种情况：它们的 `ts_ls` 配置会跳过包含
+`deno.json`、`deno.jsonc` 或 `deno.lock` 的项目。如果你使用的是较旧版本的
+插件，或者你自己配置了这些服务器，请为每个服务器设置不同的
+`root_markers`，并在 `ts_ls` 上设置 `workspace_required = true`，这样它只有在找到
+`package.json` 时才会附加：
 
 ```lua
 vim.lsp.config('denols', {
-    on_attach = on_attach,
-    root_markers = {"deno.json", "deno.jsonc"},
+    root_markers = { "deno.json", "deno.jsonc" },
 })
 
 vim.lsp.config('ts_ls', {
-    on_attach = on_attach,
-    root_markers = {"package.json"},
-    single_file_support = false,
+    root_markers = { "package.json" },
+    workspace_required = true,
 })
+
+vim.lsp.enable({ 'denols', 'ts_ls' })
 ```
 
-这假定你的 Deno 项目根目录下存在 `deno.json` 或 `deno.jsonc`。
+这假定你的 Deno
+项目根目录下存在 `deno.json` 或 `deno.jsonc`。请注意，`workspace_required` 需要 Neovim 0.11.1 或更高版本。较旧的
+`single_file_support` 选项在这里不起作用：它只会被已弃用的
+`require('lspconfig').setup()` API 读取，并且会被
+`vim.lsp.config()` 静默忽略。
 
 **Kickstart.nvim 和 Mason LSP。** 如果你使用
 [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)，请将等效配置添加到 `init.lua` 中的 `servers` 表：
@@ -86,13 +94,12 @@ vim.lsp.config('ts_ls', {
 local servers = {
         -- ... 一些配置
         ts_ls = {
-            root_dir = require("lspconfig").util.root_pattern({ "package.json", "tsconfig.json" }),
-            single_file_support = false,
+            root_markers = { "package.json" },
+            workspace_required = true,
             settings = {},
         },
         denols = {
-            root_dir = require("lspconfig").util.root_pattern({"deno.json", "deno.jsonc"}),
-            single_file_support = false,
+            root_markers = { "deno.json", "deno.jsonc" },
             settings = {},
         },
     }

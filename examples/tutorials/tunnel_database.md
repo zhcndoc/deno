@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-03-24
-title: "将数据库连接到您的本地开发环境"
-description: "使用 Deno Deploy 和 Deno 的隧道功能，将 Postgres 数据库连接到本地开发服务器"
+last_modified: 2026-06-25
+title: "将数据库连接到你的本地开发"
+description: "使用 Deno Deploy 和 Deno 的隧道功能将 Postgres 数据库连接到你的本地开发服务器"
 url: /examples/tunnel_database_tutorial/
 ---
 
@@ -9,13 +9,13 @@ url: /examples/tunnel_database_tutorial/
 
 ## 设置应用程序
 
-如果您还没有本地服务器应用，可以使用 Svelte 创建一个简单的应用。在本教程中，我们将用 Svelte 创建一个基础的笔记应用：
+If you don't already have a local server application, you can use Svelte to create a simple app. In this tutorial, we'll create a basic note-taking app with Svelte:
 
 ```sh
 npx sv create svelte-app
 ```
 
-选择默认选项完成提示，然后进入新项目目录：
+Choose the default options to complete the prompts, then enter the new project directory:
 
 ```sh
 cd svelte-app
@@ -121,7 +121,7 @@ import {Client} from "pg"; export const load = async () => {
 
 ```svelte title="src/routes/+page.svelte"
 <script>
-  let { data } = $props();
+let { data } = $props();
 </script>
 <h1>欢迎来到 SvelteKit</h1>
 <ul>

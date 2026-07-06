@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-06-19
-title: "Modules"
+last_modified: 2026-06-30
+title: "模块"
 description: "了解 Deno 的 ECMAScript 模块系统如何工作：导入本地和第三方模块、导入属性、导入映射，以及支持的导入类型，例如 Wasm 和 data URL。"
 oldUrl:
   - /runtime/manual/basics/modules/
@@ -91,10 +91,10 @@ if (Deno.args.includes("--greet")) {
 
 ```ts title="main.ts"
 console.log(import.meta.url); // file:///path/to/main.ts
-console.log(import.meta.main); // true if this is the entry module
-console.log(import.meta.filename); // /path/to/main.ts (local modules only)
-console.log(import.meta.dirname); // /path/to (local modules only)
-console.log(import.meta.resolve("./data.json")); // resolves a specifier to a URL
+console.log(import.meta.main); // 如果这是入口模块，则为 true
+console.log(import.meta.filename); // /path/to/main.ts（仅限本地模块）
+console.log(import.meta.dirname); // /path/to（仅限本地模块）
+console.log(import.meta.resolve("./data.json")); // 将一个标识符解析为 URL
 ```
 
 `import.meta.main` 是一种常见做法，可让文件既能作为入口点运行，
@@ -161,6 +161,61 @@ console.log(bytes);
 
 :::
 
+样式表可以使用 `with { type: "css" }` 导入。该导入会求值为一个
+[`CSSStyleSheet`](https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleSheet)，
+与浏览器提供的行为一致。这主要适用于在 Deno 中运行未修改的
+浏览器模块图，例如服务端渲染或测试 Web 组件，在这些场景下，
+CSS 导入否则会阻止模块图继续加载：
+
+```ts
+import sheet from "./styles.css" with { type: "css" };
+
+console.log(sheet instanceof CSSStyleSheet);
+// true
+```
+
+动态导入的工作方式相同：
+
+```ts
+const { default: sheet } = await import("./styles.css", {
+  with: { type: "css" },
+});
+```
+
+静态导入和带有可静态分析 specifier 的动态导入会作为模块图的一部分加载，
+因此不需要权限。只有无法被分析的动态导入，例如 `import(base + "styles.css")`，
+才会在运行时读取文件，因此需要读取权限（`--allow-read`）。
+
+Deno 实现了浏览器模块图所依赖的 `CSSStyleSheet` 接口的一小部分：
+
+- `cssRules` 返回样式表的顶层规则。与浏览器不同，这里是一个
+  **冻结数组** 类型的 `CSSRule`（而不是实时的 `CSSRuleList`），并且每次访问都会创建一个新的数组。
+- `CSSRule.cssText` 是某个顶层规则的原样文本。
+- `replace(text)` 和 `replaceSync(text)` 会替换样式表内容。与浏览器中的构造样式表一样，顶层的 `@import` 规则会被丢弃。
+- `new CSSStyleSheet()` 构造函数可用，但其 `options` 参数
+  （`media`、`disabled`、`baseURL`）不受支持。
+
+```ts
+import sheet from "./styles.css" with { type: "css" };
+
+for (const rule of sheet.cssRules) {
+  console.log(rule.cssText);
+}
+
+sheet.replaceSync("body { color: red; }");
+```
+
+由于 Deno 没有 DOM，样式表无法被 adopt 到任何地方；其实现基于原始 CSS 文本，而不是完整的 CSS 对象模型。`cssRules`
+使用的是一种简单的顶层规则切分方式，因此不会实现可变更的方法 `insertRule` 和 `deleteRule`。
+
+:::info `css` 导入
+
+仍处于实验阶段。可使用 `--unstable-raw-imports` CLI 标志或
+[`deno.json`](/runtime/fundamentals/configuration/) 中的
+`unstable.raw-import` 选项启用。
+
+:::
+
 ## 延迟模块求值
 
 从 Deno 2.8 开始，支持
@@ -191,7 +246,10 @@ import { add } from "./add.wasm";
 console.log(add(1, 2));
 ```
 
-要了解更多信息，请访问 [WebAssembly 部分](/runtime/reference/wasm/#wasm-modules)
+命名导出会映射 Wasm 模块的导出：函数、内存和表会以它们的 JavaScript 对象形式传入，而 `global` 导出会解析为其持有的值，而不是 `WebAssembly.Global` 包装器，这与 WebAssembly ES 模块集成保持一致。
+
+了解更多，请访问
+[WebAssembly 部分](/runtime/reference/wasm/#wasm-modules)
 
 ## 数据 URL 导入
 

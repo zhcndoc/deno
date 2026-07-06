@@ -1,15 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "框架"
-description: "无需任何代码更改，即可将 Next.js、Astro、Fresh、Remix、Nuxt、SvelteKit、SolidStart、TanStack Start 和 Vite SSR 项目作为桌面应用运行。"
+description: "无需代码更改，即可将 Next.js、Astro、Fresh、Remix、Nuxt、SvelteKit、SolidStart、TanStack Start 和 Vite 项目作为桌面应用运行。"
 ---
 
-:::info 将在 Deno 2.9 中提供
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 发布，目前尚未进入稳定版。要立即试用，
-请运行 `deno upgrade canary` 以安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建版本。该命令、配置键以及
-TypeScript API 在该功能稳定之前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请先[更新 Deno](/runtime/reference/cli/upgrade/)后再使用它。
 
 :::
 
@@ -26,17 +24,17 @@ deno desktop .
 
 检测基于配置文件和 `package.json` 依赖项。匹配到的第一个结果生效。
 
-| 框架            | 通过以下内容检测                                             |
-| --------------- | ------------------------------------------------------------ |
-| Next.js         | `next.config.{js,mjs,ts}`                                    |
-| Astro           | `astro.config.{mjs,ts,js}`                                   |
-| Fresh           | `fresh.gen.ts` 或 `_fresh/` 目录                             |
-| Remix           | `package.json` 中的 `@remix-run/react` 或 `@remix-run/dev` |
-| Nuxt            | `nuxt.config.{ts,js,mjs}`                                    |
-| SvelteKit       | `svelte.config.{js,ts}`                                      |
-| SolidStart      | `package.json` 中的 `@solidjs/start`                         |
-| TanStack Start  | `package.json` 中的 `@tanstack/{react,solid}-start`         |
-| Vite（SSR 模式） | `vite.config.*` 加上一个 `server.{js,ts,mjs}` 入口           |
+| Framework      | Detected by                                              |
+| -------------- | -------------------------------------------------------- |
+| Next.js        | `next.config.{js,mjs,ts}`                                |
+| Astro          | `astro.config.{mjs,ts,js}`                               |
+| Fresh          | `fresh.gen.ts` 或 `_fresh/` 目录                    |
+| Remix          | `package.json` 中的 `@remix-run/react` 或 `@remix-run/dev` |
+| Nuxt           | `nuxt.config.{ts,js,mjs}`                                |
+| SvelteKit      | `svelte.config.{js,ts}`                                  |
+| SolidStart     | `package.json` 中的 `@solidjs/start`                       |
+| TanStack Start | `package.json` 中的 `@tanstack/{react,solid}-start`        |
+| Vite           | `vite.config.*` 或 `package.json` 中的 `vite` 依赖项 |
 
 如果都不匹配，`deno desktop` 会回退为将该路径视作脚本，这与 `deno desktop main.ts` 相同。你可以编写一个
 [`Deno.serve()`](/api/deno/~/Deno.serve) 处理程序并自行提供 UI。
@@ -122,9 +120,19 @@ deno desktop .
 
 二者底层都使用 Nitro 框架；检测会通过 `.output/server/index.*` 入口处理它们。运行 `deno desktop` 前请先构建（`npm run build`）。
 
-### Vite SSR
+### Vite
 
-带有自定义 SSR 入口（`server.ts`、`server.js`、`server.mjs`）的普通 Vite 项目，只要同时存在 `vite.config.*`，就可以配合 `deno desktop` 使用。生产环境会直接运行 SSR 入口；开发环境（在 `--hmr` 下）会以 middleware 模式运行 Vite 开发服务器。
+Vite 项目通过 `vite.config.*` 文件或 `vite` 依赖来检测。
+这位于打包器优先级的最低层，因此基于 Vite 构建的元框架
+（Astro、SvelteKit、Nuxt、Remix、SolidStart、TanStack Start）会优先通过它们
+自己的配置或依赖进行匹配。
+
+- **SSR**（在 `vite.config.*` 旁边有一个 `server.{ts,js,mjs}` 入口）：SSR
+  入口会在生产环境中直接运行，而开发环境（在 `--hmr` 下）会以中间件模式运行 Vite 开发服务器。
+
+- **SPA 或 MPA**（没有 server 入口）：Deno 会通过 HTTP 提供 `dist/` 中的
+  `vite build` 静态输出服务，并带有 `index.html` 回退，因此客户端路由器
+  在硬刷新后仍可正常工作。请先运行 `vite build`。
 
 ## 强制指定框架或选择退出
 

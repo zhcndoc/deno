@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-17
-title: "配置文件 (deno.json)"
-description: "每个 deno.json 字段的参考：依赖项和 import map、任务、lint 和 fmt、lockfile、node_modules 目录、TypeScript 编译器选项、unstable 标志、include/exclude、exports、权限、compile 以及 proxies。"
+last_modified: 2026-06-25
+title: "配置文件（deno.json）"
+description: "deno.json 每个字段的参考：依赖项和导入映射、任务、lint 和 fmt、锁文件、node_modules 目录、TypeScript 编译器选项、unstable 标志、include/exclude、exports、权限、compile 和代理。"
 oldUrl:
   - /runtime/manual/basics/modules/import_maps/
   - /runtime/basics/import_maps/
@@ -135,6 +135,34 @@ import { MyUtil } from "@/util.ts";
 
 被引用的包不一定需要发布。它只需要在 `deno.json` 或 `package.json` 中具有正确的包名和元数据，以便 Deno 知道它正在处理哪个包。这提供了更大的灵活性和模块化，同时保持主代码与外部包之间的清晰分离。
 
+### 依赖优先使用 package.json
+
+将 `preferPackageJson` 设置为 `true`，使依赖命令目标指向 `package.json` 而不是 `deno.json`：
+
+```jsonc title="deno.json"
+{
+  "preferPackageJson": true
+}
+```
+
+启用后，`deno add`、`deno install <pkg>` 和 `deno remove` 会写入
+`package.json`，如果该文件不存在则会创建一个。这等同于在每次调用时都传入
+`--package-json`。当 `deno.json` 中仍然存在 `imports` 或 `scopes`
+时，Deno 也会给出警告，因为这些依赖应该迁移到
+`package.json`。
+
+条目也可以是 glob，这样就可以一次性链接某个目录中的每个包。
+支持相对路径 glob 和 `file://` URL glob，并且可以使用以 `!` 开头的模式排除匹配项：
+
+```json title="deno.json"
+{
+  "links": [
+    "../packages/*",
+    "!../packages/internal-only"
+  ]
+}
+```
+
 ## 任务
 
 `deno.json` 文件中的 `tasks` 字段用于定义可通过 `deno task` 命令执行的自定义命令，并允许你根据项目的具体需求定制命令和权限。
@@ -251,12 +279,15 @@ deno task build
 | `semiColons`                          | `true`                  | `true`, `false`                                             |
 | `singleBodyPosition`                  | `sameLineUnlessHanging` | `sameLine`, `nextLine`, `maintain`, `sameLineUnlessHanging` |
 | `singleQuote`                         | `false`                 | `true`, `false`                                             |
+| `sortNamedExports`                    | `caseInsensitive`       | `caseInsensitive`, `caseSensitive`, `maintain`              |
+| `sortNamedImports`                    | `caseInsensitive`       | `caseInsensitive`, `caseSensitive`, `maintain`              |
 | `spaceAround`                         | `false`                 | `true`, `false`                                             |
 | `spaceSurroundingProperties`          | `true`                  | `true`, `false`                                             |
 | `trailingCommas`                      | `always`                | `always`, `never`                                           |
 | `typeLiteral.separatorKind`           | `semiColon`             | `comma`, `semiColon`                                        |
 | `useBraces`                           | `whenNotSingleLine`     | `maintain`, `whenNotSingleLine`, `always`, `preferNone`     |
 | `useTabs`                             | `false`                 | `true`, `false`                                             |
+| `json.trailingCommas`                 | `never`                 | `never`, `always`, `maintain`, `jsonc`                      |
 | `jsx.bracketPosition`                 | `nextLine`              | `maintain`, `sameLine`, `nextLine`                          |
 | `jsx.forceNewLinesSurroundingContent` | `false`                 | `true`, `false`                                             |
 | `jsx.multiLineParens`                 | `prefer`                | `never`, `prefer`, `always`                                 |
@@ -265,9 +296,11 @@ deno task build
 
 </div>
 
-了解更多关于 [使用 Deno 格式化代码](/runtime/lint_and_format/) 的内容。
+`json.trailingCommas` 单独控制 JSON 和 JSONC 文件中的尾随逗号，不同于适用于 JavaScript 和 TypeScript 的 `trailingCommas` 选项。`maintain` 值会保留原写法中的尾随逗号，而 `jsonc` 值会在 `.jsonc` 文件中添加尾随逗号，同时在 `.json` 文件中省略它们。
 
-## Lockfile
+阅读更多关于[使用 Deno 格式化代码](/runtime/lint_and_format/)。
+
+## 锁文件
 
 `deno.json` 文件中的 `lock` 字段用于指定 Deno 用来 [确保依赖完整性](/runtime/packages/#lockfile-and-reproducible-installs) 的锁文件配置。锁文件会记录项目所依赖模块的确切版本和完整性哈希，确保每次运行项目时都使用相同版本，即使这些依赖在远程已更新或更改。
 
@@ -293,7 +326,11 @@ Deno 默认使用锁文件，你可以使用以下配置将其禁用：
 }
 ```
 
-## 最小依赖年龄
+### 合并冲突
+
+在合并分支后，`deno.lock` 可能会残留 git 冲突标记。这些标记会使文件变成无效的 JSON，以前这会导致 Deno 报错：`Lockfile may be corrupt`。现在 Deno 会帮你解决这些冲突：下一个读取锁文件的命令会合并冲突的条目并重写一个干净的文件。锁文件的大部分内容是一组以身份键控的条目，其中一个键无论由哪个分支写入，都会始终映射到相同的值，因此这种合并是并集，你不需要手动编辑这些标记。
+
+## Minimum dependency age
 
 `minimumDependencyAge` 字段会阻止 Deno 安装发布时间晚于所配置时长的 npm 或 JSR 包版本。刚发布的恶意版本通常会在几天内被检测并撤下，因此设置一个较小的延迟窗口可以捕获大部分供应链攻击。关于如何选择窗口，请参阅 [供应链管理](/runtime/packages/supply_chain/)。
 
@@ -306,7 +343,9 @@ Deno 默认使用锁文件，你可以使用以下配置将其禁用：
 
 该值可接受 [ISO-8601 持续时间](https://en.wikipedia.org/wiki/ISO_8601#Durations)，例如 `P3D` 或 `PT72H`，也可以是分钟数（`120`）、绝对截止日期（`2025-09-16`）或 RFC3339 时间戳，或者使用 `0` 来禁用。
 
-如需排除特定包，请使用带有 `exclude` 列表的对象形式：
+自 Deno 2.9 起，即使此字段未设置，也默认应用 24 小时的最小限制；如需扩大或缩小该窗口，请设置一个明确的值，或使用 `0` 将其关闭。
+
+要排除特定包，请使用带有 `exclude` 列表的对象形式：
 
 ```jsonc title="deno.json"
 {
@@ -345,6 +384,16 @@ Deno 默认使用锁文件，你可以使用以下配置将其禁用：
 - 如果项目目录中有 `package.json` 文件，则为 `"manual"`
 
 在使用工作区时，此设置只能在工作区根目录中使用。在任何成员中指定它都会产生警告。只有当工作区根目录中存在 `package.json` 文件时，`"manual"` 设置才会自动应用。
+
+### `node_modules` 中的 JSR 依赖
+
+当使用 `node_modules` 目录时，将 `jsrDepsInNodeModules` 设置为 `true`，即可通过 JSR 的 npm 兼容注册表来安装 `jsr:` 依赖，其方式与 npm 和 pnpm 处理它们的方式相同。每个 `jsr:` 标识符都会被重写为其 npm 形式（`jsr:@david/dax` 会变为 `npm:@jsr/david__dax`，由 `https://npm.jsr.io` 提供），并与其他 npm 包一起安装到 `node_modules` 中。该选项默认关闭。
+
+```jsonc title="deno.json"
+{
+  "jsrDepsInNodeModules": true
+}
+```
 
 ## TypeScript 编译器选项
 
@@ -483,7 +532,6 @@ dist/
     ]
   }
 }
-```
 
 ## 导出
 

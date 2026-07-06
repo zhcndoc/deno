@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-15
+last_modified: 2026-06-25
 title: "deno compile"
 oldUrl:
   - /runtime/manual/tools/compile/
@@ -41,7 +41,7 @@ deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
 - Nuxt
 - SolidStart
 - TanStack Start
-- Vite（SSR 模式）
+- Vite (SSR, plus SPA/MPA projects served as static output)
 
 ```sh
 # 在 Next.js / Astro / Fresh / 等项目中
@@ -54,6 +54,21 @@ deno compile ./apps/web
 生成的入口点使用 `import.meta.dirname`，因此框架资源路径可以在编译后的二进制文件内部，正确地相对于 [虚拟文件系统](#including-data-files-or-directories) 解析。
 
 如果项目不匹配任何受支持的框架，`deno compile` 将报错退出。
+
+## 监听模式
+
+传递 `--watch` 可在编译图中的文件发生变化时重新构建可执行文件：
+
+```sh
+deno compile --watch main.ts
+```
+
+使用 `--watch-exclude` 可防止特定路径触发重建，并使用
+`--no-clear-screen` 可在两次重建之间保留终端输出：
+
+```sh
+deno compile --watch --watch-exclude=./dist --no-clear-screen main.ts
+```
 
 ## 交叉编译
 
@@ -81,7 +96,7 @@ Deno 支持针对所有目标的交叉编译，而不管主机平台。
 
 ## denort 二进制文件
 
-`deno compile` 将您的程序嵌入到 `denort`（“Deno runtime”）中：这是一个精简版的 Deno 构建，仅包含运行已编译程序所需的内容，不包含任何工具子命令。使用 `denort` 作为基础而不是完整的 `deno` 二进制文件，是编译后的可执行文件更小的原因。
+`deno compile` 将您的程序嵌入到 `denort`（“Deno 运行时”）中：这是一个精简版的 Deno 构建，仅包含运行已编译程序所需的内容，不包含任何工具子命令。使用 `denort` 作为基础而不是完整的 `deno` 二进制文件，是编译后的可执行文件更小的原因。
 
 第一次为某个给定的 Deno 版本和目标进行编译时，Deno 会从 `dl.deno.land` 下载匹配的 `denort-<target>.zip` 并将其缓存到 `DENO_DIR` 中。这也是交叉编译的工作方式：使用 `--target` 编译会获取该平台的 `denort`。后续的编译会复用缓存的二进制文件，并且可以离线运行。
 
@@ -140,6 +155,12 @@ const dataFiles = Deno.readDirSync(import.meta.dirname + "/data");
 
 请注意，这目前仅适用于文件系统上的文件，不适用于远程文件。
 
+`--include` 会将嵌入的 `.js` 和 `.ts` 文件视为模块图的根，因此会解析并转译它们。若要按原样嵌入文件，而不进行任何模块解析，请改用 `--include-as-is`。对于已处理过、并且作为 Deno 模块会解析失败的预构建前端打包产物（例如 Vite 或 webpack 输出），这是正确的选择：
+
+```sh
+deno compile --include-as-is ./dist main.ts
+```
+
 ### 在 `deno.json` 中配置 `include` / `exclude`
 
 可以在 `deno.json` 中以声明式方式设置 `--include` 和 `--exclude` 路径，这样您就不必在每次调用 `deno compile` 时重复指定它们：
@@ -155,17 +176,17 @@ const dataFiles = Deno.readDirSync(import.meta.dirname + "/data");
 
 CLI 标志会与配置合并：`--include` 和 `--exclude` 会追加到 `deno.json` 中的列表，而不是替换它们。更多详情请参阅配置指南中的 [Compile config](/runtime/reference/deno_json/#compile-config) 部分，包括如何在同一块中声明 `permissions`。
 
-## Workers
+## Worker
 
-与不可静态分析的动态导入类似，默认情况下，`[workers](../web_platform_apis/#web-workers)` 的代码不会包含在编译后的可执行文件中。有两种方法可以包含 workers：
+与不可静态分析的动态导入类似，默认情况下，`[worker](../web_platform_apis/#web-workers)` 的代码不会包含在编译后的可执行文件中。有两种方法可以包含 worker：
 
-1. 使用 `--include <path>` 标志包含工作代码。
+1. 使用 `--include <path>` 标志包含 worker 代码。
 
 ```sh
 deno compile --include worker.ts main.ts
 ```
 
-2. 使用可静态分析的导入导入工作模块。
+2. 使用可静态分析的导入导入 worker 模块。
 
 ```ts
 // main.ts
@@ -221,41 +242,41 @@ deno compile --bundle --minify main.ts
 
 如果您的程序依赖这些内容，请将其保持为可静态分析，使用 [`--include`](#including-data-files-or-directories) 添加所需文件，或者在不使用 `--bundle` 的情况下编译。
 
-## 自解压可执行文件
+## Self-Extracting Executables
 
-默认情况下，编译后的可执行文件通过内存中的虚拟文件系统提供嵌入的文件。`--self-extracting` 标志改变此行为，使得二进制文件在首次运行时将所有嵌入文件解压到磁盘，并在运行时使用真实的文件系统操作。
+By default, compiled executables serve embedded files through a virtual file system in memory. The `--self-extracting` flag changes this behavior so that the binary extracts all embedded files to disk on first run and uses real file system operations at runtime.
 
 ```sh
 deno compile --self-extracting main.ts
 ```
 
-这在代码需要磁盘上的真实文件的场景中非常有用，比如本机插件或读取相对文件的本机代码。
+This is very useful in scenarios where code needs real files on disk, such as native plugins or native code that reads relative files.
 
-解压目录按照优先顺序选择：
+The extraction directory is chosen in order of priority:
 
-1. `<exe_dir>/.<exe_name>/<hash>/`（与编译的二进制文件相邻）
-2. 平台数据目录备选：
-   - Linux: `$XDG_DATA_HOME/<exe_name>/<hash>` 或
+1. `<exe_dir>/.<exe_name>/<hash>/` (adjacent to the compiled binary)
+2. Platform data directory fallback:
+   - Linux: `$XDG_DATA_HOME/<exe_name>/<hash>` or
      `~/.local/share/<exe_name>/<hash>`
    - macOS: `~/Library/Application Support/<exe_name>/<hash>`
    - Windows: `%LOCALAPPDATA%\<exe_name>\<hash>`
 
-文件只解压一次 —— 后续运行如果已存在解压目录且哈希匹配，则复用该目录。
+Files are extracted only once — subsequent runs reuse the directory if it already exists and the hash matches.
 
-### 权衡
+### Trade-offs
 
-自解压模式带来了更广的兼容性，但有一些权衡：
+Self-extracting mode provides broader compatibility, but there are some trade-offs:
 
-- **初始启动成本**：首次运行由于文件解压耗时更长。
-- **磁盘使用**：解压文件占用额外磁盘空间。
-- **内存使用**：内存占用更高，因为嵌入内容不能再作为静态数据引用。
-- **篡改风险**：用户或其他代码可能修改磁盘上的解压文件。
+- **Initial startup cost**: The first run takes longer because files must be extracted.
+- **Disk usage**: Extracted files take up additional disk space.
+- **Memory usage**: Memory usage is higher because embedded contents can no longer be referenced as static data.
+- **Tampering risk**: Users or other code may modify the extracted files on disk.
 
 ## 代码签名
 
 ### macOS
 
-默认情况下，在 macOS 上，编译后的可执行文件将使用临时签名签名，等同于运行 `codesign -s -`：
+默认情况下，在 macOS 上，编译后的可执行文件将使用临时签名进行签名，等同于运行 `codesign -s -`：
 
 ```sh
 deno compile -o main main.ts
@@ -282,7 +303,25 @@ deno compile -o main.exe main.ts
 signtool sign /fd SHA256 main.exe
 ```
 
-## 在可执行文件中不可用
+## 可执行文件中的持久化存储
 
-- [Web 存储 API](/runtime/reference/web_platform_apis/#web-storage)
-- [Web 缓存](/api/web/~/Cache)
+编译后的二进制文件会被视为一个独立应用，因此基于源的
+存储会在平台的应用数据目录中跨运行持久化
+（Windows 上为 `%LOCALAPPDATA%`，macOS 上为 `~/Library/Application Support`，
+Linux 上为 `$XDG_DATA_HOME`）：
+
+- [`localStorage`](/runtime/reference/web_platform_apis/#web-storage) 和
+  [Web Cache API](/api/deno/~/Cache) 会在该目录中读写。
+- 不带路径调用的 [`Deno.openKv()`](/api/deno/~/Deno.openKv) 会在此处打开一个
+  持久化数据库，而不是回退到内存数据库。
+
+每个编译后的应用都会根据其标识获得自己的位置，因此不同应用不会共享存储。
+这个标识来自 `--app-name` 标志，它会在编译时被写入，并在未指定时回退到输出文件名：
+
+```sh
+deno compile --app-name my-app main.ts
+```
+
+由于决定目录的是名称（而不是模块路径），因此即使你重命名二进制文件，存储也会
+在多次运行之间保持稳定；使用相同 `--app-name` 构建的两个二进制文件会共享同一个存储，
+而不同名称的应用则彼此隔离。使用不同的 `--app-name` 重新编译会启动一个全新的存储。

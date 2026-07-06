@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-12
+last_modified: 2026-06-25
 title: "deno fmt"
 oldUrl:
   - /runtime/tools/formatter/
@@ -79,6 +79,19 @@ cat main.ts | deno fmt -
 
 有关所有可用选项，请参阅 [Configuration](/runtime/reference/deno_json/#formatting) 页面。
 
+## 从 .editorconfig 继承设置
+
+`deno fmt` 还会读取 [`.editorconfig`](https://editorconfig.org/) 文件，并
+用它们来填充你尚未在其他地方设置的任何格式化选项。其优先级从高到低依次为：
+
+1. CLI 标志（`--indent-width`、`--use-tabs` 等）
+2. `deno.json` 中的 `fmt` 块
+3. `.editorconfig`
+4. 内置默认值
+
+因此，`.editorconfig` 只会提供你尚未通过标志或 `deno.json` 配置过的值。
+诸如 `indent_style`、`indent_size` 和 `max_line_length` 之类的属性会映射到相应的 `deno fmt` 选项。
+
 ## 包含和排除文件
 
 在 `deno.json` 中指定要格式化的文件：
@@ -118,7 +131,6 @@ deno fmt --ignore=dist/,build/
 | [Nunjucks][Nunjucks] | `.njk`                                                 |                                                                                        |
 | [Vento][Vento]       | `.vto`                                                 |                                                                                        |
 | YAML                 | `.yml`, `.yaml`                                        |                                                                                        |
-| Sass                 | `.sass`                                                |                                                                                        |
 | SCSS                 | `.scss`                                                |                                                                                        |
 | LESS                 | `.less`                                                |                                                                                        |
 | Jupyter Notebook     | `.ipynb`                                               |                                                                                        |
@@ -135,6 +147,13 @@ deno fmt --ignore=dist/,build/
 **`deno fmt` 可以格式化 Markdown 文件中的代码块。** 代码块必须用三重反引号括起来，并具有语言属性。
 
 :::
+
+标记格式化器（HTML、XML、SVG 和 `--unstable-component` 格式）
+以及样式格式化器（CSS、SCSS 和 Less）已重写为仅调整
+空白字符。它们不会重新排序或重写标记，而是将未知语法
+（厂商扩展、未来的 at-rule、模板表达式，甚至损坏的标记）
+原样透传而不是报错，因此在
+真实世界的文件上格式化更加稳健。
 
 ## 忽略代码
 

@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-11
+last_modified: 2026-06-25
 title: "打包"
-description: "`deno bundle` 子命令概览。可用于将多个源文件创建为单个文件应用，以实现优化执行。"
+description: "对 `deno bundle` 子命令的概述，它可用于生成一个由多个源文件创建的单文件应用，以实现优化执行。"
 ---
 
 :::caution
@@ -82,7 +82,20 @@ Hello from `deno bundle`!
 
 ---
 
-## 运行时 API
+## 类型声明
+
+传入 `--declaration` 来在打包后的 JavaScript 旁边生成 TypeScript 声明文件。Deno 会将每个入口点的类型汇总到一个独立的、自包含的 `.d.ts` 文件中，因此 bundle 的使用者无需原始源码也能获得完整的类型信息：
+
+```sh
+deno bundle main.ts --outdir dist --declaration
+# 生成 dist/main.js 和 dist/main.d.ts
+```
+
+当你将 bundle 作为库发布时，这一点很重要：`.d.ts` 允许下游的 TypeScript 项目针对你的 bundle 的公共 API 进行类型检查。每个入口点都会在其 JavaScript 输出旁边生成各自的声明文件。
+
+---
+
+## Runtime API
 
 除了 CLI 之外，你还可以使用 [`Deno.bundle()`](/api/deno/~/Deno.bundle)
 以编程方式打包你的 JavaScript 或 TypeScript 文件。这使你能够将打包集成到
@@ -154,7 +167,7 @@ import "./styles.css";
 
 const app = (
   <div>
-    <p>Hello World!</p>
+    <p>你好，世界！</p>
   </div>
 );
 

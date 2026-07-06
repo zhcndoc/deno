@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-02-10
-title: "使用 sv 和 Deno 构建一个 SvelteKit 应用"
+last_modified: 2026-06-25
+title: "使用 sv 和 Deno 构建 SvelteKit 应用"
 url: /examples/sveltekit_tutorial/
 ---
 
@@ -146,7 +146,8 @@ export { dinosaurs };
 
 ### 加载用于渲染的数据
 
-现在我们需要创建一个位于 routes 根目录的新文件 `+page.server.ts`，此目录下应已有对应的 `+page.svelte`。
+We now need to create a `+page.server.ts` file which will be at the root of our
+routes directory. There should already be a `+page.svelte` there.
 
 ```
 src/routes/+page.server.ts
@@ -167,8 +168,8 @@ export const load = async ({ url }) => {
 
 ```html
 <script lang="ts">
-  /// src/routes/+page.svelte
-  let { data } = $props();
+/// src/routes/+page.svelte
+let { data } = $props();
 </script>
 
 <section class="mb-4 grid max-h-96 grid-cols-2 gap-4 overflow-y-auto">
@@ -202,7 +203,7 @@ export const load = async ({ params: { name } }) => {
   const dino = dinosaurs.get(name.toLowerCase());
 
   if (!dino) {
-    throw error(404, { message: "Dino not found" });
+    throw error(404, { message: "未找到恐龙" });
   }
 
   return { name: dino.name, description: dino.description };
@@ -219,7 +220,7 @@ src/routes/+error.svelte
 
 ```html
 <script lang="ts">
-  import { page } from "$app/state";
+import { page } from "$app/state";
 </script>
 
 <h1>{page.status}: {page.error?.message}</h1>
@@ -231,8 +232,8 @@ src/routes/+error.svelte
 
 ```html
 <script lang="ts">
-  /// src/routes/[name]/+page.svelte
-  let { data } = $props();
+/// src/routes/[name]/+page.svelte
+let { data } = $props();
 </script>
 
 <h1>{data.name}</h1>
@@ -256,8 +257,8 @@ src/routes/+error.svelte
 
 ```html
 <script lang="ts">
-  import "../app.css";
-  let { children } = $props();
+import "../app.css";
+let { children } = $props();
 </script>
 
 <header class="flex flex-row place-content-between items-center p-4">

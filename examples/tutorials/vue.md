@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-10-08
-title: "使用 Vue.js 构建应用"
-description: "使用 Deno 构建 Vue.js 应用的教程。了解如何搭建 Vite 项目、实现组件架构、添加路由、管理状态，并创建一个完整的全栈 TypeScript 应用。"
+last_modified: 2026-06-25
+title: "构建一个 Vue.js 应用"
+description: "使用 Deno 构建 Vue.js 应用程序的教程。学习如何设置 Vite 项目、实现组件架构、添加路由、管理状态以及创建一个全栈 TypeScript 应用程序。"
 url: /examples/vue_tutorial/
 oldUrl:
   - /runtime/manual/examples/how_to_with_npm/vue/
@@ -289,15 +289,15 @@ Vue.js 会将前端 UI 分解为多个组件。每个组件都是一段可复用
 
 ```html title="Dinosaurs.vue"
 <script lang="ts">
-  import { defineComponent } from "vue";
+import { defineComponent } from "vue";
 
-  export default defineComponent({
-    async setup() {
-      const res = await fetch("/api/dinosaurs");
-      const dinosaurs = await res.json() as Dinosaur[];
-      return { dinosaurs };
-    },
-  });
+export default defineComponent({
+  async setup() {
+    const res = await fetch("/api/dinosaurs");
+    const dinosaurs = await res.json() as Dinosaur[];
+    return { dinosaurs };
+  },
+});
 </script>
 
 <template>
@@ -320,7 +320,7 @@ Vue.js 会将前端 UI 分解为多个组件。每个组件都是一段可复用
 
 ```html title="HomePage.vue"
 <script setup lang="ts">
-  import Dinosaurs from "./Dinosaurs.vue";
+import Dinosaurs from "./Dinosaurs.vue";
 </script>
 <template>
   <h1>欢迎来到恐龙应用！🦕</h1>
@@ -360,22 +360,22 @@ type ComponentData = {
 
 ```html title="Dinosaur.vue"
 <script lang="ts">
-  import { defineComponent } from "vue";
+import { defineComponent } from "vue";
 
-  export default defineComponent({
-    props: { dinosaur: String },
-    data(): ComponentData {
-      return {
-        dinosaurDetails: null,
-      };
-    },
-    async mounted() {
-      const res = await fetch(
-        `/api/dinosaurs/${this.dinosaur}`,
-      );
-      this.dinosaurDetails = await res.json();
-    },
-  });
+export default defineComponent({
+  props: { dinosaur: String },
+  data(): ComponentData {
+    return {
+      dinosaurDetails: null,
+    };
+  },
+  async mounted() {
+    const res = await fetch(
+      `/api/dinosaurs/${this.dinosaur}`,
+    );
+    this.dinosaurDetails = await res.json();
+  },
+});
 </script>
 
 <template>

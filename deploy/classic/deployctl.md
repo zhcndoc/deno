@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-03-19
+last_modified: 2026-06-20
 title: "在命令行中使用 deployctl"
 ---
 
@@ -96,7 +96,7 @@ deployctl deploy --env-file --env-file=.other-env --env=DEPLOYMENT_TS=$(date +%s
 
 ### 生产部署
 
-你创建的每个部署都有一个唯一的 URL。此外，项目有一个“生产 URL”和指向其“生产”部署的自定义域名。部署可以随时晋升为生产，或者使用 `--prod` 标志直接创建为生产：
+每个你创建的部署都有一个唯一的 URL。此外，一个项目还有一个“生产 URL”，以及将流量路由到其“生产”部署的自定义域名。部署可以随时提升为生产环境，或者使用 `--prod` 标志直接作为生产部署创建：
 
 ```shell
 deployctl deploy --prod
@@ -262,7 +262,7 @@ deployctl deployments redeploy --env-file --env-file=.other-env --env=DEPLOYMENT
 
 :::note
 
-请注意，在更改环境变量时，仅在重新部署命令中设置的环境变量将被新部署使用。项目环境变量和正在重新部署的部署的环境变量将被忽略。如果这不符合你的需求，请在 https://github.com/denoland/deploy_feedback/issues/ 报告你的反馈。
+请注意，当更改环境变量时，仅在重新部署命令中设置的环境变量将被新部署使用。项目环境变量和正在重新部署的部署的环境变量将被忽略。如果这不符合你的需求，请在 https://github.com/denoland/deploy_feedback/issues/ 报告你的反馈。
 
 :::
 

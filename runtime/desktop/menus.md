@@ -1,12 +1,13 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-06-25
 title: "菜单"
-description: "构建原生应用程序菜单栏和右键上下文菜单，支持子菜单、快捷键、分隔线、复选框和点击事件。"
+description: "构建原生应用菜单栏和右键上下文菜单，支持子菜单、快捷键、分隔符、复选框和点击事件。"
 ---
 
-:::info 即将于 Deno 2.9 中推出
+:::info 适用于 Deno 2.9
 
-`deno desktop` 随 Deno v2.9.0 发布，目前尚未进入稳定版。若要立即试用，请运行 `deno upgrade canary` 来安装 [`canary`](/runtime/reference/cli/upgrade/) 构建版本。在该功能稳定之前，命令、配置键和 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请[更新 Deno](/runtime/reference/cli/upgrade/)以使用它。
 
 :::
 
@@ -55,11 +56,11 @@ type MenuItem =
 win.setApplicationMenu([
   {
     submenu: {
-      label: "File",
+      label: "文件",
       items: [
         {
           item: {
-            label: "New",
+            label: "新建",
             id: "new",
             accelerator: "CmdOrCtrl+N",
             enabled: true,
@@ -67,7 +68,7 @@ win.setApplicationMenu([
         },
         {
           item: {
-            label: "Open…",
+            label: "打开…",
             id: "open",
             accelerator: "CmdOrCtrl+O",
             enabled: true,
@@ -76,7 +77,7 @@ win.setApplicationMenu([
         "separator",
         {
           item: {
-            label: "Save",
+            label: "保存",
             id: "save",
             accelerator: "CmdOrCtrl+S",
             enabled: true,
@@ -88,7 +89,7 @@ win.setApplicationMenu([
   },
   {
     submenu: {
-      label: "Edit",
+      label: "编辑",
       items: [
         { role: { role: "undo" } },
         { role: { role: "redo" } },
@@ -204,11 +205,11 @@ function rebuildEditMenu(canUndo: boolean) {
   win.setApplicationMenu([
     {
       submenu: {
-        label: "Edit",
+        label: "编辑",
         items: [
           {
             item: {
-              label: "Undo",
+              label: "撤销",
               id: "undo",
               accelerator: "CmdOrCtrl+Z",
               enabled: canUndo,
@@ -229,7 +230,7 @@ function rebuildEditMenu(canUndo: boolean) {
 
 ```ts
 const save: Deno.MenuItem = {
-  item: { label: "Save", id: "save", enabled: false },
+  item: { label: "保存", id: "save", enabled: false },
 };
 ```
 

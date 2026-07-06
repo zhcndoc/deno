@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-16
+last_modified: 2026-06-24
 title: "deno info"
 oldUrl:
   - /runtime/manual/tools/dependency_inspector/
@@ -118,6 +118,10 @@ https://jsr.io/@std/http/1.0.0-rc.5/file_server.ts (24.74KB)
 ```sh
 deno info --json main.ts
 ```
+
+对于 npm 依赖，`npmPackages` 映射中的每个条目都包含一个 `localPath`
+字段，表示该包在磁盘上 Deno 缓存中的位置，工具可以
+使用它来定位已缓存的 npm 包。
 
 ## 缓存位置
 

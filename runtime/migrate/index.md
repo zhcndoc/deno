@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-15
+last_modified: 2026-06-25
 title: "从 Node.js 迁移"
-description: "如何将 Node.js 项目迁移到 Deno：将 Deno 用作即插即用的包管理器，运行现有项目和 package.json 脚本，了解 CommonJS 和 ES 模块的解析方式，并将你的 Node 命令映射到 Deno。"
+description: "如何将 Node.js 项目迁移到 Deno：将 Deno 作为即插即用的包管理器，运行你现有的项目和 package.json 脚本，理解 CommonJS 和 ES 模块的解析方式，并将你的 Node 命令映射到 Deno。"
 oldUrl:
   - /runtime/fundamentals/migrate_from_node/
   - /runtime/manual/node/migrate/
@@ -27,10 +27,14 @@ cd my-node-app
 deno install
 ```
 
-从这里开始，你可以继续使用 Node 运行应用，只把 Deno 作为一个更快、更安全的包管理器。Deno 会同时从 `package.json`
-和 `deno.json` 读取依赖项。关于完整的 npm、yarn 和 pnpm 命令映射、Deno
-有何不同（生命周期脚本、审计、锁文件）以及需要注意的事项，请参见
-[将你的包管理器切换到 Deno](/runtime/migrate/switch_package_manager/)。
+从这里开始，你可以继续使用 Node 运行应用，只把 Deno 当作一个更快、
+更安全的包管理器来使用。Deno 会从 `package.json`
+和 `deno.json` 两者中读取依赖项。关于完整的命令映射、Deno 的不同之处
+（生命周期脚本、审计、锁文件），以及需要注意的限制，请参阅你原先使用的包管理器对应指南：
+[npm](/runtime/migrate/migrate_from_npm/),
+[Yarn](/runtime/migrate/migrate_from_yarn/),
+[pnpm](/runtime/migrate/migrate_from_pnpm/)，或
+[Bun](/runtime/migrate/migrate_from_bun/)。
 
 ## 使用 Deno 运行你的项目
 

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-06-25
 title: "deno add"
 command: add
 openGraphLayout: "/open_graph/cli-commands.jsx"
@@ -52,8 +52,11 @@ deno add --save-exact @std/path
 deno add --package-json npm:express jsr:@std/path
 ```
 
-使用 `--package-json` 添加的 JSR 包会以其与 npm 兼容的形式写入
-（`npm:@jsr/...`）。同样的标志也适用于
-[`deno install`](/runtime/reference/cli/install/)，
-[`deno remove`](/runtime/reference/cli/remove/)，以及
+使用 `--package-json` 添加的 JSR 包会以其兼容 npm 的
+形式（`npm:@jsr/...`）写入。这个标志同样适用于
+[`deno install`](/runtime/reference/cli/install/),
+[`deno remove`](/runtime/reference/cli/remove/), 以及
 [`deno uninstall`](/runtime/reference/cli/uninstall/)。
+
+要在不每次传递该标志的情况下将其设为默认值，请在 `deno.json` 中设置
+[`"preferPackageJson": true`](/runtime/reference/deno_json/#prefer-package-json-for-dependencies)。

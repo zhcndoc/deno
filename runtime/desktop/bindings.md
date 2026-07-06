@@ -1,13 +1,12 @@
 ---
-last_modified: 2026-06-18
-title: "Bindings"
+last_modified: 2026-06-25
+title: "绑定"
 description: "通过 win.bind() 从 webview JavaScript 调用 Deno 侧函数：在进程内通道上进行类型安全的 RPC，在边界处编码且无需跨进程往返。"
 ---
 
-:::info 即将随 Deno 2.9 提供
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 一起发布，目前尚未进入稳定版。若要立即试用，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。该命令、配置键以及 TypeScript API 在功能稳定之前仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的版本，请[更新 Deno](/runtime/reference/cli/upgrade/) 以使用它。
 
 :::
 
@@ -43,7 +42,7 @@ Bindings **不是** IPC。Deno 运行时和渲染后端作为线程/进程运行
 webview 侧的 `bindings` 是一个 `Proxy`。任何属性访问都会按需创建一个函数：
 
 ```js
-bindings.foo; // function
+bindings.foo; // 函数
 bindings.foo("a", 1); // Promise<unknown>
 ```
 
@@ -59,7 +58,7 @@ bindings.foo("a", 1); // Promise<unknown>
 - `Date`、`Map`、`Set`、`RegExp`、除 `Uint8Array` 之外的类型数组、`ArrayBuffer`：**不会**被保留。发送前请将其转换为 JSON 兼容的结构（例如 `Date` 变为字符串，`Map` 变为 `{}`）。
 - 函数、DOM 节点、原型以及循环引用：不可传输。
 - handler 抛出的错误：会以 `{ name, message,
-  stack }` 的形式传递给 webview（见下方 [Errors](#errors)），而不是作为 `Error`
+  stack }` 的形式传递给 webview（见下方 [错误](#errors)），而不是作为 `Error`
   实例。
 
 请在双方都只使用普通数据和 `Uint8Array`。
@@ -165,6 +164,6 @@ export interface Settings {
 | --------------------------------------------------- | --------------------------------------------- |
 | `ipcMain.handle('channel', (e, ...args) => result)` | `win.bind('channel', (...args) => result)`    |
 | `ipcRenderer.invoke('channel', ...args)`            | `bindings.channel(...args)`                   |
-| `contextBridge.exposeInMainWorld('api', {...})`     | 不需要；`bindings` 默认已暴露。 |
+| `contextBridge.exposeInMainWorld('api', {...})`     | 不需要；`bindings` 默认已暴露。               |
 
 Electron 传入的第一个参数 `event` 对象没有对应物，因为没有独立的进程可用于归属该调用。每个窗口的上下文存在于你注册该 binding 的 `win` 上。

@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-17
+last_modified: 2026-06-25
 title: "HTTP 服务"
-description: "Deno.serve() 在桌面应用中如何工作：自动端口绑定、DENO_SERVE_ADDRESS 环境变量，以及向嵌入式 webview 提供本地 UI。"
+description: "Deno.serve() 在桌面应用内部如何工作：自动端口绑定、DENO_SERVE_ADDRESS 环境变量，以及向嵌入式 webview 提供本地 UI。"
 ---
 
-:::info 即将登陆 Deno 2.9
+:::info Deno 2.9 中可用
 
-`deno desktop` 随 Deno v2.9.0 一起发布，但尚未进入稳定版。要现在试用它，请运行 `deno upgrade canary` 来安装
-[`canary`](/runtime/reference/cli/upgrade/) 构建。在该功能稳定之前，命令、配置键和 TypeScript API 仍可能发生变化。
+`deno desktop` 从 Deno v2.9.0 开始可用。如果你使用的是更早的
+版本，请 [更新 Deno](/runtime/reference/cli/upgrade/) 以使用它。
 
 :::
 
@@ -70,13 +70,13 @@ export default {
 - **没有特殊的模块系统。** 导入、静态资源和模块级代码都会像在 Web 服务器上一样运行。
 - **框架可无缝运行。** Next.js、Astro、Fresh 以及其他框架本就附带了一个
   生产级 HTTP 服务器。`deno desktop` 会运行该服务器，并将 webview
-  指向它。参见 [Frameworks](/runtime/desktop/frameworks/)。
+  指向它。参见 [框架](/runtime/desktop/frameworks/)。
 
 代价是每次请求都要在 `127.0.0.1` 内多一次网络跳转。对于 UI 服务
 （HTML、CSS、打包后的 JS、JSON API 响应）来说，这点开销可以忽略不计。
 
 对于 Deno → webview 的高吞吐通信，如果开销很重要，请使用
-[bindings](/runtime/desktop/bindings/)，它会完全绕过 HTTP，并通过进程内通道进行路由。
+[绑定](/runtime/desktop/bindings/)，它会完全绕过 HTTP，并通过进程内通道进行路由。
 
 ## 网络暴露
 
@@ -103,7 +103,7 @@ console.log("正在监听：", `http://127.0.0.1:${port}`);
 
 ## 提供多个窗口
 
-当你创建额外的 [windows](/runtime/desktop/windows/) 时，默认情况下它们都会从同一个本地 HTTP 服务器加载。可为不同窗口使用不同路径来区分：
+当你创建额外的 [窗口](/runtime/desktop/windows/) 时，默认情况下它们都会从同一个本地 HTTP 服务器加载。可为不同窗口使用不同路径来区分：
 
 ```ts
 const port = Deno.env.get("DENO_SERVE_ADDRESS")!.split(":").pop();

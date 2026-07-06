@@ -19,15 +19,13 @@ tags: []
 let first_name = "Ichigo";
 const obj1 = { last_name: "Hoshimiya" };
 const obj2 = { first_name };
-const { last_name } = obj1;
 
 function do_something() {}
-function foo({ snake_case = "default value" }) {}
+function foo({ snake_case = "默认值" }) {}
 
 class snake_case_class {}
 class Also_Not_Valid_Class {}
 
-import { not_camelCased } from "external-module.js";
 export * as not_camelCased from "mod.ts";
 
 enum snake_case_enum {
@@ -50,14 +48,16 @@ const __myPrivateVariable = "Hoshimiya";
 const myPrivateVariable_ = "Hoshimiya";
 const obj1 = { "last_name": "Hoshimiya" }; // 如果对象键被引号括起来，则有效
 const obj2 = { "first_name": first_name };
+const { last_name } = obj1; // 有效，因为对此标识符无法控制
 const { last_name: lastName } = obj;
 
-function doSomething() {} // 函数声明必须是 camelCase 但是...
+function doSomething() {} // 函数声明必须是 camelCase，但是...
 do_something(); // ...允许 snake_case 的函数调用
-function foo({ snake_case: camelCase = "default value" }) {}
+function foo({ snake_case: camelCase = "默认值" }) {}
 
 class PascalCaseClass {}
 
+import { not_camelCased } from "external-module.js"; // 有效，因为对此标识符无法控制
 import { not_camelCased as camelCased } from "external-module.js";
 export * as camelCased from "mod.ts";
 

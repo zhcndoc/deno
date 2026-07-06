@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-18
+last_modified: 2026-07-02
 title: "测试"
-description: "使用 Deno 内置的测试运行器编写并运行测试：断言、测试步骤、钩子、过滤和报告器，并提供用于 mock、快照和覆盖率的专门指南。"
+description: "使用 Deno 内置的测试运行器编写并运行测试：断言、测试步骤、钩子、过滤和报告器，并提供有关 mocking、快照和覆盖率的专门指南。"
 oldUrl:
   - /runtime/fundamentals/testing/
   - /runtime/manual/basics/testing/
@@ -26,6 +26,8 @@ Deno 同等支持两种测试 API：它自己的 [`Deno.test`](/api/deno/~/Deno.
 
 当您希望测试套件能够跨 Deno 和 Node 移植，或者在迁移 Node 项目时，请使用 `node:test`；当您希望使用 Deno 原生的易用性和选项时，请使用 [`Deno.test`](/api/deno/~/Deno.test)。
 
+`node:test` 的模拟工具也可用：`mock.timers`（用于 `setTimeout`、`setInterval`、`Date` 以及 `node:timers` 模块的伪造定时器）和 `mock.module`（在测试期间替换某个模块的导出）都已实现，因此依赖它们的测试套件可以不做改动地运行。
+
 ## 编写测试
 
 要在 Deno 中定义测试，请使用 [`Deno.test()`](/api/deno/~/Deno.test)
@@ -40,7 +42,7 @@ Deno.test("简单测试", () => {
   assertEquals(x, 3);
 });
 
-Deno.test("async test", async () => {
+Deno.test("异步测试", async () => {
   const x = 1 + 2;
   await delay(100);
   assertEquals(x, 3);
@@ -71,7 +73,7 @@ Deno.test("add 函数正确相加两个数字", () => {
 
 要运行测试，请使用 [`deno test`](/runtime/reference/cli/test/) 子命令。
 
-如果没有传入文件名或目录名，该子命令将自动查找并执行当前目录中（递归地）所有匹配 glob `{*_,*.,}test.{ts, tsx, mts, js, mjs, jsx}` 的测试。
+如果在不提供文件名或目录名的情况下运行此子命令，它将自动查找并执行当前目录中（递归地）所有匹配 glob `{*_,*.,}test.{ts, tsx, mts, js, mjs, jsx}` 的测试。此外，`__tests__` 目录中的任何脚本文件都会被视为测试文件，而不管其文件名是什么。
 
 ```sh
 # 运行当前目录及所有子目录中的所有测试
@@ -130,6 +132,67 @@ Deno.test({
 如果某个测试超时，同一文件中的下一个测试仍会正常运行。
 
 将 `timeout` 设为 `0` 或省略它，表示测试将在没有截止时间的情况下运行。
+
+## 重试和重复测试
+
+两个按测试配置的选项控制测试运行的次数。`retry` 会重新运行一个失败的测试，并且如果任何一次尝试通过就算通过，这对于容忍已知的不稳定测试很有用。`repeats` 会将测试运行多次，并要求每次运行都通过，这对于发现不稳定性很有用：
+
+```ts
+Deno.test({
+  name: "flaky network call",
+  retry: 3, // 最多重试 3 次；如果任何一次尝试通过则算通过
+  async fn() {
+    const response = await fetch("https://example.com");
+    await response.body?.cancel();
+  },
+});
+
+Deno.test({
+  name: "must be deterministic",
+  repeats: 5, // 运行 5 次；如果任一次运行失败则算失败
+  fn() {
+    // ...
+  },
+});
+```
+
+这两个选项可以组合使用，因此每次重复运行本身也可以被重试。每次尝试都会重新执行 `beforeEach` 和 `afterEach` 钩子，并捕获一个新的泄漏检查基线，因此资源泄漏会像其他任何失败一样被重试。
+
+`--retry` 和 `--repeats` 标志会为整个运行设置默认值。测试若设置了自己的选项，则优先级更高，包括显式设置为 `0`，这会让测试不使用由标志提供的默认值：
+
+```sh
+deno test --retry=2
+```
+
+## 参数化测试
+
+[`Deno.test.each`](/api/deno/~/Deno.test.each) 会对一组用例运行相同的测试主体。它会为每个用例注册一个真实的测试，因此每个用例都会独立报告，并且可以单独筛选或运行。
+
+数组用例会作为位置参数展开传入。名称模板会使用 `printf` 风格的标记（`%s`、`%d`/`%i`、`%f`、`%j`、`%o`/`%O`）按顺序插值用例值，另外还支持 `%#` 表示从 0 开始的用例索引：
+
+```ts
+import { assertEquals } from "jsr:@std/assert";
+
+Deno.test.each([
+  [1, 1, 2],
+  [2, 3, 5],
+])("add(%i, %i) = %i", (a, b, expected) => {
+  assertEquals(a + b, expected);
+});
+```
+
+对象或原始值用例会作为单个参数传入。对于对象用例，模板中的 `$key`（以及 `$key.nested`）会插值匹配的属性：
+
+```ts
+Deno.test.each([
+  { a: 1, b: 1, sum: 2 },
+  { a: 2, b: 3, sum: 5 },
+])("$a + $b = $sum", ({ a, b, sum }) => {
+  assertEquals(a + b, sum);
+});
+```
+
+[`Deno.test.each`](/api/deno/~/Deno.test.each) 接受常规的每个测试的选项对象，并且 `only` 和 `ignore` 简写可以与之组合，形成 `.only.each` 和 `.ignore.each`。
 
 ## 测试钩子
 
@@ -243,6 +306,41 @@ deno test --filter "/test-*\d/" tests/
 [配置文件](/runtime/reference/deno_json/#include-and-exclude) 中设置 `test.include`
 和 `test.exclude`。有关完整的
 过滤语义，请参阅 [`deno test` 参考](/runtime/reference/cli/test/#filtering)。
+
+## 运行受影响的测试
+
+在迭代修改时，每次保存都运行整个测试套件是很浪费的。  
+`deno test` 可以将运行范围缩小到仅运行你的修改所影响的测试，依据 git 历史或依赖关系来选择它们。下面这两个标志都会执行一次性的运行，而不是持续监视。
+
+### 受你的 git 更改影响的测试
+
+`--changed` 只运行那些受你在 git 中修改的文件影响的测试模块。不传值时，它会查看工作区，包括已暂存、未暂存以及未跟踪的文件：
+
+```sh
+deno test --changed
+```
+
+传入一个 git ref 还会包含自你从该 ref 分支出去以来提交的所有内容。Deno 会与 merge-base 进行比较（即 Vitest 和 Jest 使用的 `<ref>...HEAD` 三点形式），因此它捕获的是你分支上的全部变更，而不只是最新一次提交：
+
+```sh
+# 自从从 main 分支出来以来，受影响的每个测试
+deno test --changed=origin/main
+```
+
+### 依赖特定文件的测试
+
+`--related` 运行依赖你指定源文件的测试模块，完全不查看 git。当你已经知道自己改动了哪些模块时，可以使用它：
+
+```sh
+# 运行直接或间接导入 src/util.ts 的测试
+deno test --related=src/util.ts
+```
+
+### 选择如何工作
+
+对于这两个标志，Deno 都会构建所收集测试文件的模块图，只保留那些通过 import 关系触达了某个已变更文件或指定文件的测试。`cart_test.ts` 中的一个测试如果导入了 `cart.ts`，且 `cart.ts` 发生了变化，那么这个测试就会运行，即使该 import 经过了多个模块；如果一个测试没有导入任何受影响的文件，则会被跳过。这些标志会与其他测试选择方式组合使用，因此你仍然可以将它们与目录参数、`--filter`，或 `test.include`/`test.exclude` 一起使用，以进一步缩小运行范围。
+
+这非常适合用于 pre-commit hook 或快速的本地开发循环。必须验证全部内容的 CI 应该继续运行完整测试套件，必要时可以通过 [`--shard`](/runtime/reference/cli/test/#sharding) 在多台机器之间拆分。
 
 ## 测试定义选择
 
