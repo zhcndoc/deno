@@ -1,6 +1,6 @@
 ---
-last_modified: 2026-06-17
-title: Node APIs
+last_modified: 2026-07-30
+title: Node API
 description: "Deno 中 Node.js 兼容性指南。了解受支持的 Node.js 内置模块、全局对象，以及如何在 Deno 项目中使用 Node.js 包。"
 templateEngine: [vto, md]
 oldUrl:
@@ -22,7 +22,7 @@ Node 兼容性是一个正在进行的项目——帮助我们识别缺口，并
 
 这是 Deno 支持的 Node 全局变量列表。这些全局变量仅在 `npm` 包范围内可用。在您自己的代码中，您可以通过从相关的 `node:` 模块导入它们来使用它们。
 
-| Global name                                                                                                      | Status                               |
+| 全局名称                                                                                                      | 状态                               |
 | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | [`AbortController`](https://nodejs.org/api/globals.html#class-abortcontroller)                                   | ✅                                   |
 | [`AbortSignal`](https://nodejs.org/api/globals.html#class-abortsignal)                                           | ✅                                   |
@@ -169,4 +169,4 @@ db.setAuthorizer((_action, _table) => {
 
 ## Node 测试结果
 
-如果您对逐个测试用例的兼容性有更详细的了解，您可以在 [此页面](https://node-test-viewer.deno.dev/) 上找到通过和未通过的 Node.js 测试用例列表。
+如果你想更详细地了解每个测试用例的兼容性，可以在[此页面](https://node-test-viewer.deno.deno.net/)查看通过和失败的 Node.js 测试用例列表。

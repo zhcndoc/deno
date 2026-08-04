@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-06-30
+last_modified: 2026-07-08
 title: "调试"
-description: "使用 V8 inspector 调试 Deno 程序：Chrome DevTools、VS Code 和 JetBrains 配置、网络检查、worker 调试，以及 --inspect 标志系列。"
+description: "使用 V8 检查器调试 Deno 程序：Chrome DevTools、VS Code 和 JetBrains 设置、网络检查、工作线程调试以及 --inspect 标志系列。"
 oldUrl:
   - /runtime/manual/getting_started/debugging_your_code/
   - /runtime/manual/basics/debugging_your_code/
 ---
 
-Deno 支持 [V8 Inspector Protocol](https://v8.dev/docs/inspector)，这是 Chrome、Edge 和 Node.js 使用的协议。这使得可以使用 Chrome DevTools 或其他支持该协议的客户端（例如 VSCode）调试 Deno 程序。
+Deno 支持 [V8 检查器协议](https://v8.dev/docs/inspector)，这是 Chrome、Edge 和 Node.js 使用的协议。这使得可以使用 Chrome DevTools 或其他支持该协议的客户端（例如 VSCode）调试 Deno 程序。
 
 要激活调试功能，请使用以下标志之一运行 Deno：
 
@@ -77,8 +77,9 @@ deno run --inspect-brk your_script.ts
 
 ## 运行时激活检查器
 
-`--inspect` 标志会在进程启动时启动检查器服务器。如果你想要在运行中的程序内部按需打开它，请使用
-[`node:inspector`](https://nodejs.org/api/inspector.html) 模块。这对于长时间运行的进程（例如服务器）很方便，因为你只希望在满足某个条件后才监听调试器，而不是在进程的整个生命周期中都开启。
+`--inspect` 标志会在进程启动时启动检查器服务器。如果你希望在已经运行的程序中按需打开检查器，则可以在程序内部使用
+[`node:inspector`](https://nodejs.org/api/inspector.html) 模块，或者从程序外部向进程发送
+[`SIGUSR1` 信号](#starting-inspector-with-a-signal)。这对于服务器等长时间运行的进程非常有用：你可能只希望在满足某个条件后让调试器开始监听，而不是让它在整个进程生命周期内都处于监听状态。
 
 `inspector.open([port][, host][, wait])` 会启动检查器服务器。端口默认是 `9229`，主机默认是 `127.0.0.1`。由于它会绑定网络套接字，程序需要 `--allow-net` 权限（或者使用 `-A` 运行）。
 
@@ -116,7 +117,27 @@ deno run --allow-net server.ts
 
 :::
 
-## Chrome DevTools 示例
+### 使用信号启动检查器
+
+从 Deno 2.9.2 开始，在 Linux 和 macOS 上，你还可以通过向进程发送 `SIGUSR1` 信号，从进程外部激活检查器，其工作方式与 Node.js 中相同。检查器服务器会在默认地址 `127.0.0.1:9229` 上启动，不会暂停执行，并将常规提示信息输出到 stderr：
+
+```sh
+$ deno run server.ts &
+$ kill -USR1 <pid>
+Debugger listening on ws://127.0.0.1:9229/ws/...
+Visit chrome://inspect to connect to the debugger.
+```
+
+这对于调试长时间运行的进程（例如服务器）很有用，尤其是该进程在启动时未使用 `--inspect` 标志，且无法轻易重启时。与 `inspector.open()` 不同，它不需要任何权限，也不需要程序代码的配合。
+
+以下是一些需要注意的细节：
+
+- 如果检查器服务器已经在运行（通过 `--inspect*` 标志、`inspector.open()` 或之前的 `SIGUSR1` 启动），则该信号不会产生任何效果。
+- 信号处理程序会在启动后不久安装，因此此功能适用于运行时间超过约半秒的程序。
+- 使用 `Deno.addSignalListener("SIGUSR1")` 添加的信号监听器会与此处理程序同时正常工作。
+- Windows 上不存在 `SIGUSR1`，因此无法使用此功能。
+
+## 使用 Chrome DevTools 的示例
 
 让我们尝试使用 Chrome DevTools 调试一个程序。为此，我们将使用
 [`@std/http/file-server`](/runtime/reference/std/http/)，一个静态文件服务器。
@@ -129,7 +150,7 @@ Debugger listening on ws://127.0.0.1:9229/ws/1e82c406-85a9-44ab-86b6-7341583480b
 ...
 ```
 
-在像 Google Chrome 或 Microsoft Edge 这样的 Chromium 兼容浏览器中，打开 `chrome://inspect` 并点击目标旁边的 `Inspect`：
+在像 Google Chrome 或 Microsoft Edge 这样的 Chromium 兼容浏览器中，打开 `chrome://inspect` 并点击目标旁边的“检查”：
 
 ![chrome://inspect](./images/debugger1.png)
 
@@ -139,7 +160,7 @@ Debugger listening on ws://127.0.0.1:9229/ws/1e82c406-85a9-44ab-86b6-7341583480b
 
 您可能会注意到 DevTools 在 `_constants.ts` 的第一行暂停执行，而不是在 `file_server.ts`。这是由于 JavaScript 中 ES 模块的评估方式造成的预期行为（`_constants.ts` 是 `file_server.ts` 的最左侧、最底部依赖项，因此它首先被评估）。
 
-此时，所有源代码在 DevTools 中均可用，所以让我们打开 `file_server.ts` 并在此添加断点；转到 "Sources" 面板并展开树形结构：
+此时，所有源代码在 DevTools 中均可用，所以让我们打开 `file_server.ts` 并在此添加断点；转到“源代码”面板并展开树形结构：
 
 ![打开 file_server.ts](./images/debugger3.jpg)
 
@@ -151,7 +172,7 @@ _仔细查看您会发现每个文件都有重复条目；一个是常规写法�
 
 一旦添加了断点，DevTools 将自动打开源映射文件，这让我们可以逐步查看包含类型的实际源代码。
 
-现在我们已经设置了断点，可以继续执行脚本，以便检查传入的请求。点击 "Resume script execution" 按钮来完成。您可能需要点击两次！
+现在我们已经设置了断点，可以继续执行脚本，以便检查传入的请求。点击“恢复脚本执行”按钮来完成。您可能需要点击两次！
 
 一旦我们的脚本在运行，尝试发送请求并在 DevTools 中检查它：
 
@@ -274,7 +295,7 @@ deno eval 'const ws = new WebSocket("ws://localhost:8000");
 
 可以使用 VSCode 调试 Deno。最好的方法是借助官方的 `vscode_deno` 扩展。有关此扩展的文档可以在 [这里](/runtime/reference/vscode#using-the-debugger) 找到。
 
-## JetBrains IDEs
+## JetBrains IDE
 
 _**注意**：确保您已安装并在首选项/设置 | 插件中启用 [此 Deno 插件](https://plugins.jetbrains.com/plugin/14382-deno)。有关更多信息，请参见 [此博客文章](https://blog.jetbrains.com/webstorm/2020/06/deno-support-in-jetbrains-ides/)。_
 
@@ -286,7 +307,7 @@ _**注意**：确保您已安装并在首选项/设置 | 插件中启用 [此 De
 
 ## --log-level=debug
 
-如果您在连接 inspector 时遇到问题，可以使用 `--log-level=debug` 标志以获取有关发生情况的更多信息。这将显示例如模块解析、网络请求和其他权限检查等信息。
+如果您在连接检查器时遇到问题，可以使用 `--log-level=debug` 标志，以获取有关发生情况的更多信息。这将显示模块解析、网络请求和其他权限检查等信息。
 
 ```sh
 deno run --inspect-brk --log-level=debug your_script.ts
@@ -294,7 +315,7 @@ deno run --inspect-brk --log-level=debug your_script.ts
 
 ## --strace-ops
 
-Deno ops 是一个 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 机制，用于在 JavaScript 和 Rust 之间提供功能，例如文件 I/O、网络和定时器。`--strace-ops` 标志将在程序运行时打印所有正在执行的 Deno ops 及其时序。
+Deno ops 是一种 [RPC](https://en.wikipedia.org/wiki/Remote_procedure_call) 机制，用于在 JavaScript 和 Rust 之间提供文件 I/O、网络和定时器等功能。`--strace-ops` 标志将在程序运行时打印所有正在执行的 Deno ops 及其时序。
 
 ```sh
 deno run --strace-ops your_script.ts
@@ -306,27 +327,27 @@ deno run --strace-ops your_script.ts
 
 Deno 内置了 CPU 分析器：在程序运行时收集 profile，然后将其作为 Markdown 报告、交互式 flamegraph 或在 Chrome DevTools 中读取。有关标志、报告格式和分析提示，请参见 [CPU profiling](/runtime/fundamentals/cpu_profiling/)。
 
-## OpenTelemetry Integration
+## OpenTelemetry 集成
 
-For production applications or complex systems, OpenTelemetry provides a more comprehensive observability and debugging solution. Deno has built-in OpenTelemetry support, allowing you to:
+对于生产应用或复杂系统，OpenTelemetry 提供了更全面的可观测性和调试解决方案。Deno 内置了 OpenTelemetry 支持，允许你：
 
-- Trace requests in your application
-- Monitor application performance metrics
-- Collect structured logs
-- Export telemetry data to monitoring systems
+- 跟踪应用中的请求
+- 监控应用性能指标
+- 收集结构化日志
+- 将遥测数据导出到监控系统
 
 ```sh
 OTEL_DENO=true deno run your_script.ts
 ```
 
-This will automatically collect and export runtime observability data, including:
+这将自动收集并导出运行时可观测性数据，包括：
 
-- HTTP request tracing
-- Runtime metrics
-- Console logs and errors
+- HTTP 请求跟踪
+- 运行时指标
+- 控制台日志和错误
 
-For complete details on Deno's OpenTelemetry integration, including custom metrics, tracing, and configuration options, see
-[OpenTelemetry Documentation](/runtime/fundamentals/open_telemetry).
+有关 Deno OpenTelemetry 集成的完整详细信息，包括自定义指标、跟踪和配置选项，请参阅
+[OpenTelemetry 文档](/runtime/fundamentals/open_telemetry)。
 
 ## 调试 Web Workers
 

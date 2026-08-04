@@ -1,7 +1,7 @@
 ---
-last_modified: 2025-09-29
-title: "安全性与负责任披露"
-description: "如何在 Deno Deploy 中报告安全漏洞。"
+last_modified: 2026-07-08
+title: "安全与负责任的披露"
+description: "如何报告 Deno Deploy 中的安全漏洞。"
 oldUrl: /deploy/classic/security/
 ---
 
@@ -9,7 +9,7 @@ oldUrl: /deploy/classic/security/
 
 ## 报告漏洞
 
-请将您的发现通过电子邮件发送至 security@deno.com。我们努力尽快解决所有问题，并非常乐意在问题解决后积极参与撰写报告的发布。
+请将您发现的问题发送至 security@deno.com。我们致力于尽快解决所有问题，并且非常乐意在问题解决后积极参与相关分析报告的发布。
 
 ## 请遵循以下事项：
 

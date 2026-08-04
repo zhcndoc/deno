@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-07-29
 title: "从 Node.js 迁移"
-description: "如何将 Node.js 项目迁移到 Deno：将 Deno 作为即插即用的包管理器，运行你现有的项目和 package.json 脚本，理解 CommonJS 和 ES 模块的解析方式，并将你的 Node 命令映射到 Deno。"
+description: "如何将 Node.js 项目迁移到 Deno：将 Deno 用作即插即用的包管理器，运行现有项目和 package.json 脚本，了解 CommonJS 和 ES 模块的解析方式，以及将 Node 命令映射到 Deno。"
 oldUrl:
   - /runtime/fundamentals/migrate_from_node/
   - /runtime/manual/node/migrate/
@@ -16,7 +16,14 @@ oldUrl:
 你也可以逐步采用 Deno：把它纯粹用作更快的、即插即用的包管理器，来管理仍然使用 Node 运行的应用；用 `deno task` 运行现有的
 `package.json` 脚本；或者切换到 Deno 作为运行时，并使用它内置的工具链。本指南将逐步介绍每个步骤。
 
-## 将 Deno 用作你的包管理器
+:::tip 正在使用 AI 编程代理？
+
+请将其指向 [deno.com/agents.md](https://deno.com/agents.md)。该页面会帮助代理了解相关信息并安装 Deno 的
+`migrate-to-deno` 技能，其中涵盖以下每个步骤、你可能遇到的错误，以及各工具对应的命令。
+
+:::
+
+## 使用 Deno 作为包管理器
 
 Deno 与 npm 和 `package.json` 完全兼容，因此最容易上手的地方是依赖管理，而且完全无需改变你运行代码的方式。
 `deno install` 会读取你现有的 `package.json`，解析相同的 npm
@@ -154,7 +161,7 @@ CommonJS 代码需要其依赖项存在于 `node_modules` 中（在 `deno.json` 
 | `prettier`                       | `deno fmt`      |
 | `jest` / `mocha` / `ava` / `tap` | `deno test`     |
 | `nyc` / `c8` / `istanbul`        | `deno coverage` |
-| benchmark libraries              | `deno bench`    |
+| 基准测试库                       | `deno bench`    |
 
 ### TypeScript、文档和构建
 

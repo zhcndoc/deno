@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-07-30
 title: "Node 和 npm 兼容性"
-description: "在 Deno 中使用 Node.js 模块和 npm 包的指南。了解兼容性功能、导入 npm 包，以及 Node.js 与 Deno 环境之间的差异。"
+description: "介绍如何在 Deno 中使用 Node.js 模块和 npm 包。了解兼容性功能、导入 npm 包，以及 Node.js 与 Deno 环境之间的差异。"
 oldUrl:
   - /runtime/reference/node/
   - /runtime/manual/npm_nodejs/std_node/
@@ -53,7 +53,7 @@ Listening on http://localhost:3000/
 截至 Deno 2.8，**Node 自身测试套件中超过 75% 已通过** Deno 测试，覆盖了几乎所有 `node:` 模块。大多数纯 JavaScript 的 npm 包无需修改即可工作。需要诚实说明的是：某些 API 只是部分实现，带原生插件的包需要本地 `node_modules` 目录，而且少数工具假定 npm 精确的磁盘布局。下面各节会逐一介绍这些情况。
 
 你可以在
-[node-test-viewer.deno.dev](https://node-test-viewer.deno.dev/) 跟踪当前状态，并浏览
+[node-test-viewer.deno.deno.net](https://node-test-viewer.deno.deno.net/) 跟踪当前状态，并浏览
 [受支持的 Node.js API 列表](/runtime/reference/node_apis/)。
 
 ## 使用 npm 包
@@ -153,9 +153,8 @@ Node.js 定义了许多
   Checked 1 file
   ```
 
-  Deno reports a current Node-compatible version: `process.version` is `v26.3.0`
-  and `process.versions.napi` is `10` (Node-API version 10), so packages that
-  gate on the Node or Node-API version see a modern runtime.
+  Deno 报告了一个当前兼容 Node 的版本：`process.version` 是 `v26.3.0`，
+  而 `process.versions.napi` 是 `10`（Node-API 版本 10），因此依赖 Node 或 Node-API 版本进行判断的包会认为当前运行时是现代版本。
 
 - `Buffer` 需要显式从 `node:buffer` 模块导入：
 
@@ -422,7 +421,7 @@ const os = require("node:os");
 - 将代码重写为 ESM
 - 将文件扩展名改为 `.cjs`
 - 添加一个附近的 `package.json`，内容为 `{ "type": "commonjs" }`
-- 使用 `--unstable-detect-cjs` 运行
+- 使用 `--unstable-detect-cjs` 运行。
 
 ## 控制 node_modules
 
@@ -793,7 +792,7 @@ deno test
 
 :::caution
 
-请勿与 [private repositories and modules](/runtime/packages/private_repositories/) 混淆。
+请勿与 [私有仓库和模块](/runtime/packages/private_repositories/) 混淆。
 
 :::
 
@@ -812,7 +811,7 @@ Deno 支持私有仓库，这允许您托管和共享自己的模块。这对于
 //mycompany.com:8111/:_authToken=secretToken
 ```
 
-请将 `http://mycompany.com:8111/` 替换为您的私有 registry 的实际 URL，并将 `secretToken` 替换为您的身份验证令牌。`_authToken` 是标准的 bearer token 形式；也支持使用旧版 `_auth` 凭据的 registry（请参见下方 `.npmrc` 功能列表）。
+请将 `http://mycompany.com:8111/` 替换为您的私有仓库的实际 URL，并将 `secretToken` 替换为您的身份验证令牌。`_authToken` 是标准的 Bearer 令牌形式；也支持使用旧版 `_auth` 凭据的仓库（请参见下方 `.npmrc` 功能列表）。
 
 然后，更新您的 `deno.json` 或 `package.json` 以指定您私有包的导入路径。例如：
 
@@ -850,19 +849,19 @@ deno run main.ts
 
 ### `.npmrc` 配置
 
-除了上面的基本 registry / token 设置之外，Deno 还会读取其他几个 `.npmrc`
+除了上面的基本仓库 / 令牌设置之外，Deno 还会读取其他几个 `.npmrc`
 字段。最可能相关的是：
 
 - **双向 TLS 身份验证**（Deno 2.8+）：`certfile` 和 `keyfile` 指向
-  用于在 registry 需要 mTLS 时对客户端进行身份验证的 PEM 文件。
+  用于在仓库需要 mTLS 时对客户端进行身份验证的 PEM 文件。
 
   ```ini title=".npmrc"
   //registry.mycompany.com/:certfile=/etc/deno/client.crt
   //registry.mycompany.com/:keyfile=/etc/deno/client.key
   ```
 
-- **`_auth` 条目上的 `email`**（Deno 2.8+）：某些传统的本地部署 registry
-  需要在 auth token 之外再提供一个 `email`。
+- **`_auth` 条目上的 `email`**（Deno 2.8+）：某些传统的本地部署仓库
+  需要在身份验证令牌之外再提供一个 `email`。
 
   ```ini title=".npmrc"
   //registry.mycompany.com/:_auth=secretToken
@@ -892,7 +891,7 @@ deno run main.ts
   trust-policy=no-downgrade
   ```
 
-- **`NPM_CONFIG_REGISTRY` 环境变量**：覆盖 `.npmrc` 中设置的 registry，
+- **`NPM_CONFIG_REGISTRY` 环境变量**：覆盖 `.npmrc` 中设置的仓库，
   行为与 npm 的优先级一致（在 CI 中很方便，当您希望重定向安装
   而无需编辑已提交的 `.npmrc` 时）。
 
@@ -910,4 +909,4 @@ deno run main.ts
 }
 ```
 
-从 Deno 2.8 开始，在解析 npm 元数据时会静默跳过这些 `file:` 和 `link:` 条目，因此带有多余本地路径依赖的包可以正常安装，而不会因 “Invalid version requirement” 错误而失败。
+从 Deno 2.8 开始，在解析 npm 元数据时会静默跳过这些 `file:` 和 `link:` 条目，因此带有多余本地路径依赖的包可以正常安装，而不会因“无效的版本要求”错误而失败。

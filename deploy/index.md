@@ -1,13 +1,13 @@
 ---
-last_modified: 2026-03-20
+last_modified: 2026-07-09
 title: "关于 Deno Deploy"
-description: "Deno Deploy 功能指南，与 Deploy Classic 的对比，以及部署入门说明。"
+description: "Deno Deploy 功能介绍、与 Deploy Classic 的比较以及部署入门指南。"
 ---
 
 <div class="sm:flex sm:flex-row md:flex-col lg:flex-row xl:fle sm:gap-6 md:gap-0 lg:gap-8">
-   <img src="/deno-deploy.svg" alt="Deno Deploy 标志" class="max-w-20 md:max-w-32" />
-      <p class="text-lg text-foreground-secondary mt-6">Deno 的云服务为在全球规模上部署和运行 JavaScript 与 TypeScript 应用提供了强大的平台。<br /><a href="https://console.deno.com" class="docs-cta deploy-cta mt-2">Deno
-部署控制台</a></p>
+   <img src="/deno-deploy.svg" alt="Deno Deploy 徽标" class="max-w-20 md:max-w-24 bg-transparent" />
+      <p class="text-lg text-foreground-secondary mt-6">Deno 的云服务提供了强大的平台，用于在全球范围内部署和运行 JavaScript 与 TypeScript 应用。<br /><a href="https://console.deno.com" class="docs-cta deploy-cta mt-2">Deno
+Deploy 控制面板</a></p>
 
 </div>
 

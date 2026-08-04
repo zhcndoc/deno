@@ -1,11 +1,15 @@
 ---
-last_modified: 2026-02-19
+last_modified: 2026-07-29
 title: "AI 入口"
-description: "使用 Deno 文档的 LLM 和 AI 代理的概览与关键资源"
+description: "使用 Deno 文档的 LLM 和 AI 代理概览及关键资源"
 url: /ai/
 ---
 
 此页面是面向使用 Deno 文档的 LLM 和 AI 代理的简短入门。
+
+如果你是在用户项目中工作的编码代理，请改为阅读
+[deno.com/agents.md](https://deno.com/agents.md)。该文档会为你提供指导，并将你引导至
+[Deno 的代理技能](https://github.com/denoland/skills)，其中包含完整的参考资料，并与运行时保持同步。
 
 ## Deno 概览
 
@@ -128,13 +132,13 @@ deno init --serve
 
 ## 关键资源
 
-- [llms.txt](/llms.txt)：精选章节索引，含关键文档链接
-- [llms-full-guide.txt](/llms-full-guide.txt)：面向代理的快速参考，含 CLI 命令、代码示例和使用模式
-- [llms-summary.txt](/llms-summary.txt)：紧凑且高信号索引
-- [llms.json](/llms.json)：结构化索引（Orama 摘要）
-- [llms-full.txt](/llms-full.txt)：完整内容导出（文件较大）
-- [站点搜索](/)：使用站内搜索界面进行人工浏览
-- [Skills](https://github.com/denoland/skills)：用于编程助手的 AI 技能集
+- [agents.md](https://deno.com/agents.md)：面向在项目中工作的编码代理的入口点——了解项目概况，然后学习如何安装 Deno 的代理技能
+- [llms.txt](/llms.txt)：包含关键文档链接的精选章节索引
+- [llms-full-guide.txt](/llms-full-guide.txt)：面向代理的快速参考，包含 CLI 命令、代码示例和使用模式
+- [llms-summary.txt](/llms-summary.txt)：精简而信息密度高的索引
+- [llms-full.txt](/llms-full.txt)：完整内容转储（较大）
+- [站内搜索](/)：使用站内搜索界面进行人工浏览
+- [技能](https://github.com/denoland/skills)：面向编码助手的 AI 技能
 
 ## 使用说明
 

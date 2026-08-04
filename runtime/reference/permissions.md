@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-29
+last_modified: 2026-07-21
 title: "权限"
-description: "Deno 权限系统参考：运行时沙箱如何工作，以及如何使用 --allow 和 --deny 标志授予或拒绝文件系统、网络、环境、系统、子进程、FFI 和导入访问权限。"
+description: "Deno 权限系统参考：运行时沙箱的工作原理，以及如何使用 --allow 和 --deny 标志授予或拒绝文件系统、网络、环境、系统、子进程、FFI 和导入访问权限。"
 oldUrl:
   - /runtime/manual/basics/permissionsDeno/
   - /manual/basics/permissions
@@ -132,8 +132,9 @@ Deno 中的一些 API 在底层通过文件系统操作实现，尽管它们并�
 
 在模块加载期间，Deno 可以从磁盘加载文件。这有时需要显式权限，有时则默认允许：
 
-- 从入口模块以可被静态分析的方式导入的所有文件，默认都允许读取。这包括静态 `import` 语句，以及参数为指向特定文件或文件目录的字符串字面量的动态 `import()` 调用。可以使用 `deno info <entrypoint>` 打印出这份列表中的全部文件。
-- 以无法被静态分析的方式动态导入的文件需要运行时读取权限。
+- 从入口模块导入的、且能够进行静态分析的所有文件，默认都允许读取。这包括静态的 `import` 语句，以及参数为指向特定文件或文件目录的字符串字面量的动态 `import()` 调用。可以使用 `deno info <entrypoint>` 打印此列表中的完整文件列表。
+- 以无法进行静态分析的方式动态导入的文件需要运行时读取权限。
+- Web Worker 的脚本加载方式类似于动态导入，因此脚本为本地文件的 worker（例如 `new Worker(new URL("./worker.ts", import.meta.url).href, { type: "module" })`）需要 `--allow-read`。这适用于 worker 的入口脚本及其整个静态导入图，并且读取访问权限会根据创建该 worker 的线程的权限进行检查。从 `https:` URL 加载的 worker 则需要 [`--allow-import`](#importing-from-the-web)；`data:` 和 `blob:` URL 不需要权限。
 - `node_modules/` 目录中的文件默认允许读取。
 
 当从网络获取模块，或者将代码从 TypeScript 转译为 JavaScript 时，Deno 会使用文件系统作为缓存。这意味着即使用户没有显式授予读/写权限，Deno 也可能消耗文件系统资源，例如存储空间。
@@ -310,7 +311,7 @@ deno run --deny-sys script.ts
 `process.getuid()` 和 `process.getgid()`，都需要 `--allow-sys`，并映射到
 相同的接口名称。例如，调用 `os.cpus()` 需要
 `--allow-sys=cpus`，而 `os.networkInterfaces()` 需要
-`--allow-sys=networkInterfaces`。
+`--allow-sys=networkInterfaces`】【。
 
 ## 子进程
 
@@ -409,7 +410,7 @@ deno run --deny-ffi script.ts
 
 允许从 Web 导入代码。默认情况下，Deno 会限制你可以从哪些主机导入代码。这对静态导入和动态导入都适用。
 
-如果你想动态导入代码，无论是使用 `import()` 还是 `new Worker()` API，都需要授予额外权限。从本地文件系统导入[需要 `--allow-read`](#file-system-access)，但 Deno 也允许从 `http:` 和 `https:` URL 导入。在这种情况下，你需要指定显式的 `--allow-import` 标志：
+如果你想使用 `import()` 或 `new Worker()` API 动态导入代码，则需要授予额外权限。从本地文件系统加载此类代码[需要 `--allow-read`](#file-system-access)。Deno 还允许从 `http:` 和 `https:` URL 导入，但在这种情况下，你需要指定显式的 `--allow-import` 标志：
 
 ```sh
 # 允许从 `https://example.com` 导入代码

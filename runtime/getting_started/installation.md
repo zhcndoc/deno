@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-17
+last_modified: 2026-07-09
 title: 安装
-description: "在不同操作系统上安装 Deno 的指南。包括使用各种包管理器、手动安装方法以及 Docker 容器在 Windows、macOS 和 Linux 上的安装说明。"
+description: "在不同操作系统上安装 Deno 的指南。包括使用各种包管理器在 Windows、macOS 和 Linux 上安装的说明、手动安装方法以及 Docker 容器安装方法。"
 oldUrl:
   - /runtime/manual/fundamentals/installation
   - /runtime/manual/getting_started/installation
@@ -108,7 +108,12 @@ winget install DenoLand.Deno
 </deno-tab>
 </deno-tabs>
 
-> <small>如果通过 npm 安装，Deno 命令的启动时间会受到影响。为了获得更好的性能，我们建议使用官方安装脚本（shell 或 PowerShell）。</small>
+:::note
+
+如果通过 npm 安装，Deno 命令的启动时间会受到影响。为了获得更好的性能，
+我们推荐使用官方安装脚本（Shell 或 PowerShell）。
+
+:::
 
 Deno 不发布官方 apt 仓库，而 Linux 发行版（如 Debian、Ubuntu、Arch 或 Snap Store）打包的版本由社区维护，通常会落后于最新发布版本。要在任何 Linux 发行版上获得最新版本，请使用上面的 shell 安装程序（或 [手动下载](#manual-download)），它始终会安装当前发布版本。
 

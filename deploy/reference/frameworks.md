@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-02-11
-title: Frameworks
-description: "Detailed guide to supported JavaScript and TypeScript frameworks in Deno Deploy, including Next.js, Astro, Nuxt, SvelteKit, and more."
+last_modified: 2026-07-07
+title: 框架
+description: "Deno Deploy 支持的 JavaScript 和 TypeScript 框架详细指南，包括 Next.js、Astro、Nuxt、SvelteKit 等。"
 ---
 
 Deno Deploy 支持多种 JavaScript 和 TypeScript 框架的开箱即用。这意味着您可以在无需额外配置或设置的情况下使用这些框架。
@@ -31,6 +31,32 @@ Next.js 是用于构建全栈 Web 应用的 React 框架。您使用 React 组�
 Deno Deploy<sup>EA</sup> 上的 Next.js 始终在独立模式下构建。
 
 支持开箱即用的追踪功能，Next.js 会自动为传入请求、路由、渲染及其他操作发出一些跨度（spans）。
+
+#### Deno 兼容性说明
+
+Next.js 项目通过 Deno 的 Node 和 npm 兼容层在 Deno Deploy 上运行。大多数 Next.js 应用无需额外修改即可运行，但以下问题可能会出现在由脚手架工具或代码代理生成的项目中：
+
+- 为了获得最广泛的 Next.js 版本兼容性，优先使用带有 `export default` 的 `next.config.mjs`。如果您使用的是 Next.js 15 或更高版本，也支持带有 `export default` 的 `next.config.ts`。Deno 的 `detect-cjs` 选项可以帮助处理 CommonJS 的 `next.config.js` 文件，但某些 Next.js 版本和加载器在配置作为 ESM 加载时仍可能报告 `"module is not defined"` 错误。使用 ESM 配置可以避免这种歧义。
+- 某些 Next.js 版本在 Deno 下的 lint/类型检查阶段可能会因 `Cannot read properties of undefined (reading 'bold')` 而崩溃。在上游修复此问题之前，您可以通过在 Next.js 配置中设置 `typescript.ignoreBuildErrors` 和 `eslint.ignoreDuringBuilds` 来解除构建阻塞。由于这会跳过 Next.js 的构建时检查，请继续在 CI 中单独运行类型检查和 lint。
+- 当 Next.js 判断应用路由页面是静态页面时，页面仍会在构建时预渲染。如果客户端组件调用了仅限浏览器使用的钩子或 API，请将相关代码延迟到组件挂载之后执行，例如放在 `useEffect` 中。如果您需要通过 `next/dynamic` 和 `{ ssr: false }` 禁用 SSR，请将动态导入放在客户端组件包装器中；服务器组件不能直接使用 `{ ssr: false }`。将路由标记为动态并不足够：动态路由仍会在服务器上渲染，而服务器中不存在浏览器全局变量。
+
+`next.config.mjs` 示例：
+
+```js title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  typescript: {
+    // 修复已知的 Next.js 在 Deno 上构建时类型检查崩溃问题。
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    // 在 CI 中保留 lint，同时允许 `next build` 在 Deno 上完成。
+    ignoreDuringBuilds: true,
+  },
+};
+
+export default nextConfig;
+```
 
 ### Astro (`astro`)
 

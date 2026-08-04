@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-06-27
 title: "框架"
-description: "无需代码更改，即可将 Next.js、Astro、Fresh、Remix、Nuxt、SvelteKit、SolidStart、TanStack Start 和 Vite 项目作为桌面应用运行。"
+description: "将 Next.js、Astro、Fresh、Remix、React Router、Nuxt、SvelteKit、SolidStart、TanStack Start 和 Vite 项目作为桌面应用运行。"
 ---
 
 :::info Deno 2.9 中可用
@@ -14,30 +14,31 @@ description: "无需代码更改，即可将 Next.js、Astro、Fresh、Remix、N
 将 `deno desktop` 指向某个目录后，它会自动检测框架，选择正确的入口点，将构建输出嵌入二进制文件，并运行该框架的生产服务器（或在 `--hmr` 下运行开发服务器），同时让 webview 指向它。
 
 ```sh
-# 在 Next.js / Astro / Fresh / 等项目中：
+# 在 Next.js / Astro / Fresh / React Router / 等项目中：
 deno desktop .
 ```
 
-无需代码更改，也无需特殊适配器。能作为 Web 应用运行的同一个项目，也可作为桌面应用发布。
+大多数受支持的框架无需特殊适配器。某些框架具有特定于运行时的入口文件；请在构建前查看下面针对各框架的说明。
 
 ## 检测
 
 检测基于配置文件和 `package.json` 依赖项。匹配到的第一个结果生效。
 
-| Framework      | Detected by                                              |
-| -------------- | -------------------------------------------------------- |
-| Next.js        | `next.config.{js,mjs,ts}`                                |
-| Astro          | `astro.config.{mjs,ts,js}`                               |
-| Fresh          | `fresh.gen.ts` 或 `_fresh/` 目录                    |
-| Remix          | `package.json` 中的 `@remix-run/react` 或 `@remix-run/dev` |
-| Nuxt           | `nuxt.config.{ts,js,mjs}`                                |
-| SvelteKit      | `svelte.config.{js,ts}`                                  |
-| SolidStart     | `package.json` 中的 `@solidjs/start`                       |
-| TanStack Start | `package.json` 中的 `@tanstack/{react,solid}-start`        |
-| Vite           | `vite.config.*` 或 `package.json` 中的 `vite` 依赖项 |
+| 框架          | 检测依据                                               |
+| ------------- | ------------------------------------------------------ |
+| Next.js       | `next.config.{js,mjs,ts}`                              |
+| Astro         | `astro.config.{mjs,ts,js}`                              |
+| Fresh         | `fresh.gen.ts` 或 `_fresh/` 目录                       |
+| Remix         | `package.json` 中的 `@remix-run/react` 或 `@remix-run/dev` |
+| React Router  | `package.json` 中的 `@react-router/dev`                |
+| Nuxt          | `nuxt.config.{ts,js,mjs}`                              |
+| SvelteKit     | `svelte.config.{js,ts}`                                |
+| SolidStart    | `package.json` 中的 `@solidjs/start`                   |
+| TanStack Start | `package.json` 中的 `@tanstack/{react,solid}-start`   |
+| Vite          | `vite.config.*` 或 `package.json` 中的 `vite` 依赖项  |
 
 如果都不匹配，`deno desktop` 会回退为将该路径视作脚本，这与 `deno desktop main.ts` 相同。你可以编写一个
-[`Deno.serve()`](/api/deno/~/Deno.serve) 处理程序并自行提供 UI。
+[`Deno.serve()`](/api/deno/~/Deno.serve) 处理程序并自行提供用户界面。
 
 ## 检测会做什么
 
@@ -96,6 +97,72 @@ deno desktop .
 
 生产环境：针对 `build/` 目录运行 `remix-serve`。开发环境（在 `--hmr` 下）：运行 `@remix-run/dev` CLI。
 
+### React Router
+
+React Router 框架模式通过 `package.json` 中的 `@react-router/dev` 进行检测。SPA 模式（`ssr: false`）和服务器端渲染均受支持，前提是项目能够使用 Deno 成功完成构建。
+
+React Router 的默认服务器入口面向 Node.js，并使用
+`react-dom/server` 中的 `renderToPipeableStream`。Deno 会将
+`react-dom/server` 解析为使用 `renderToReadableStream` 的 Web Streams 构建版本。在运行
+`react-router build` 前，请添加一个兼容 Deno 的 `app/entry.server.tsx`；
+当 `ssr: false` 时，React Router 也会使用此文件预渲染 SPA 回退页面。
+
+```tsx title="app/entry.server.tsx"
+import type { EntryContext } from "react-router";
+import { ServerRouter } from "react-router";
+import { renderToReadableStream } from "react-dom/server";
+import { isbot } from "isbot";
+
+export default async function handleRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  routerContext: EntryContext,
+) {
+  if (request.method.toUpperCase() === "HEAD") {
+    return new Response(null, {
+      status: responseStatusCode,
+      headers: responseHeaders,
+    });
+  }
+
+  let statusCode = responseStatusCode;
+
+  const body = await renderToReadableStream(
+    <ServerRouter context={routerContext} url={request.url} />,
+    {
+      signal: request.signal,
+      onError(error: unknown) {
+        statusCode = 500;
+        console.error(error);
+      },
+    },
+  );
+
+  if (
+    isbot(request.headers.get("user-agent") || "") || routerContext.isSpaMode
+  ) {
+    await body.allReady;
+  }
+
+  responseHeaders.set("Content-Type", "text/html");
+  return new Response(body, {
+    headers: responseHeaders,
+    status: statusCode,
+  });
+}
+```
+
+然后构建并打包应用：
+
+```sh
+deno task build
+deno desktop .
+```
+
+生产环境会从 `build/client` 提供静态客户端资源；对于 SSR
+项目，则会将请求路由到 `build/server/index.js`。
+
 ### Nuxt
 
 ```sh
@@ -122,12 +189,11 @@ deno desktop .
 
 ### Vite
 
-Vite 项目通过 `vite.config.*` 文件或 `vite` 依赖来检测。
-这位于打包器优先级的最低层，因此基于 Vite 构建的元框架
-（Astro、SvelteKit、Nuxt、Remix、SolidStart、TanStack Start）会优先通过它们
-自己的配置或依赖进行匹配。
+Vite 项目通过 `vite.config.*` 文件或 `vite` 依赖进行检测。
+它的打包器优先级最低，因此基于 Vite 构建的元框架
+（Astro、SvelteKit、Nuxt、Remix、React Router、SolidStart、TanStack Start）会优先通过各自的配置或依赖进行匹配。
 
-- **SSR**（在 `vite.config.*` 旁边有一个 `server.{ts,js,mjs}` 入口）：SSR
+- **SSR**（`vite.config.*` 旁边有一个 `server.{ts,js,mjs}` 入口）：SSR
   入口会在生产环境中直接运行，而开发环境（在 `--hmr` 下）会以中间件模式运行 Vite 开发服务器。
 
 - **SPA 或 MPA**（没有 server 入口）：Deno 会通过 HTTP 提供 `dist/` 中的

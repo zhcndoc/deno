@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-06-27
 title: "deno desktop"
 openGraphLayout: "/open_graph/cli-commands.jsx"
 openGraphTitle: "deno desktop"
@@ -21,8 +21,10 @@ deno desktop --hmr main.ts
 deno desktop --output MyApp.app main.ts
 ```
 
-入口文件是可选的。直接运行 `deno desktop`（或 `deno desktop .`）会在当前目录中检测受支持的框架（Next.js、Astro、Fresh 等），并且无需任何代码改动即可构建。参见
-[Frameworks](/runtime/desktop/frameworks/)。
+入口点是可选的。不带参数的 `deno desktop`（或 `deno desktop .`）会检测
+当前目录中是否存在受支持的框架（Next.js、Astro、Fresh、React Router 等），并构建
+相应的桌面入口点。有关受支持的框架及每个框架的要求，请参见
+[框架](/runtime/desktop/frameworks/)。
 
 本页介绍命令行标志。完整指南（后端、[`Deno.BrowserWindow`](/api/deno/~/Deno.BrowserWindow)、绑定、自动更新、DevTools 和分发）请参见 [桌面应用程序部分](/runtime/desktop/)。
 

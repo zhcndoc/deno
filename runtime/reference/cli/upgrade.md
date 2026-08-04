@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-20
+last_modified: 2026-07-15
 title: "deno 升级"
 oldUrl: /runtime/manual/tools/upgrade/
 command: upgrade
@@ -48,6 +48,38 @@ deno upgrade --dry-run
 已找到版本
 将升级到版本 1.38.5
 ```
+
+## 渠道
+
+`deno upgrade` 一次只能使用一个渠道。不带参数时，它会升级到最新的**稳定版**。传入渠道名称，则会改为升级到该渠道的最新构建版本：
+
+```sh
+# 最新稳定版（默认）
+deno upgrade
+
+# 最新长期支持版（LTS）
+deno upgrade lts
+
+# 最新候选发布版
+deno upgrade rc
+
+# 最新 Canary 构建版
+deno upgrade canary
+```
+
+单独的版本号始终表示**稳定版**。`deno upgrade 2.9.3`
+会安装 2.9.3 的稳定构建版，即使同一版本号也在其他渠道发布：
+
+```sh
+deno upgrade 2.9.3
+```
+
+因此，如果你当前处于 LTS 渠道并运行 `deno upgrade 2.9.3`，你下载的是稳定版构建，
+并会从 LTS 切换到稳定版。若要继续使用 LTS，请使用 `deno upgrade lts`。
+
+请注意，`deno upgrade lts` 始终会安装最新的 LTS 版本。没有通过版本号选择特定
+LTS 构建版的形式，因为版本号始终会解析到稳定渠道。有关渠道的完整工作原理，以及同一版本号如何对应两个不同的构建版本，请参阅
+[稳定性与发布](/runtime/fundamentals/stability_and_releases/#choosing-a-channel)。
 
 ## --quiet 标志
 
@@ -102,7 +134,7 @@ deno upgrade --canary
 
 ## 从 pull request 安装构建
 
-从 Deno 2.8 开始，`deno upgrade pr <number>` 会下载由 CI 为特定 deno PR 构建的二进制文件并安装它。当你需要在某个修复正式发布之前进行验证时，这非常有用。
+从 Deno 2.8 开始，`deno upgrade pr <number>` 会下载由 CI 为特定 Deno PR 构建的二进制文件并安装它。当你需要在某个修复正式发布之前进行验证时，这非常有用。
 
 ```sh
 # 安装由 CI 为 PR #12345 构建的二进制文件

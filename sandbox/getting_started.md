@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-01-28
-title: "开始使用"
-description: "启用 Deno Sandbox、创建你的第一个 microVM、运行命令、暴露服务以及管理密钥的分步指南。"
+last_modified: 2026-07-09
+title: "入门"
+description: "逐步了解如何启用 Deno Sandbox、创建你的第一个 microVM、运行命令、公开服务以及管理机密信息。"
 ---
 
 要使用 Deno Sandbox，你需要一个 Deno Deploy 账户。如果你还没有，
@@ -21,7 +21,7 @@ Deno Sandbox 和 Deno Deploy 应用共享相同的组织边界，因此你可以
 ## 创建组织令牌
 
 `@deno/sandbox` SDK 使用 `DENO_DEPLOY_TOKEN` 环境变量进行身份验证。
-从 **Settings → Organization tokens** 生成它，复制其值，
+从 **设置 → 组织令牌** 生成它，复制其值，
 并妥善保存。然后在你的本地 shell 或 CI 任务中导出它：
 
 ```bash
@@ -79,7 +79,8 @@ pip install deno-sandbox
 <deno-tabs group-id="sandbox-sdk">
 <deno-tab value="js" label="JavaScript" default>
 
-```tsx title="main.ts"
+```tsx
+// main.ts
 import { Sandbox } from "@deno/sandbox";
 await using sandbox = await Sandbox.create();
 await sandbox.sh`ls -lh /`;
@@ -88,7 +89,8 @@ await sandbox.sh`ls -lh /`;
 </deno-tab>
 <deno-tab value="python" label="Python">
 
-```py title="main.py"
+```py
+# main.py
 from deno_sandbox import DenoDeploy
 
 def main():
@@ -105,7 +107,8 @@ if __name__ == '__main__':
 </deno-tab>
 <deno-tab value="python-async" label="Python (Async)">
 
-```py title="main.py"
+```py
+# main.py
 import asyncio
 from deno_sandbox import DenoDeploy
 
@@ -148,11 +151,11 @@ uv run main.py
 </deno-tab>
 </deno-tabs>
 
-你创建的任何沙箱都会列在你的 Deno Deploy 组织的 **Sandboxes** 选项卡中。
+你创建的任何沙箱都会列在你的 Deno Deploy 组织的 **沙箱** 选项卡中。
 
 ![Deno Deploy 控制台中创建的沙箱列表。](/sandbox/images/sandbox-list.webp)
 
-沙箱的详细信息会显示在其 **Event log** 中。
+沙箱的详细信息会显示在其 **事件日志** 中。
 
 ![Deno Deploy 控制台中的沙箱事件日志详情。](/sandbox/images/sandbox-event-log.webp)
 
@@ -296,7 +299,7 @@ await proc.wait()
 </deno-tabs>
 
 你可以在命令之间保留状态，流式传输 stdout 和 stderr，或为 agent 风格的工作流打开
-交互式 REPL。
+交互式 REPL】【。
 
 ## 从 Deno Sandbox 部署
 
@@ -314,7 +317,7 @@ const client = new Client();
 const app = await client.apps.create();
 
 await using sandbox = await Sandbox.create({ memoryMb: 4096 });
-console.log("Created sandbox", sandbox);
+console.log("已创建沙箱", sandbox);
 
 await sandbox
   .sh`deno -A npm:create-next-app@latest --yes --skip-install my-app`;
@@ -346,7 +349,7 @@ sdk = DenoDeploy()
 app = sdk.apps.create(slug="my-next-app")
 
 with sdk.sandbox.create(memory_mb=4096) as sandbox:
-  print(f"Created sandbox {sandbox.id}")
+  print(f"已创建沙箱 {sandbox.id}")
 
   sandbox.spawn("deno", args=["-A", "npm:create-next-app@latest", "--yes", "--skip-install", "my-app"]).wait()
   sandbox.spawn("sh", args=["-c", "cd my-app && deno install"]).wait()
@@ -365,7 +368,7 @@ with sdk.sandbox.create(memory_mb=4096) as sandbox:
 ```
 
 </deno-tab>
-<deno-tab value="python-async" label="Python (Async)">
+<deno-tab value="python-async" label="Python（异步）">
 
 ```py
 from deno_sandbox import AsyncDenoDeploy
@@ -375,7 +378,7 @@ sdk = AsyncDenoDeploy()
 app = await sdk.apps.create(slug="my-next-app")
 
 async with sdk.sandbox.create(memory_mb=4096) as sandbox:
-  print(f"Created sandbox {sandbox.id}")
+  print(f"已创建沙箱 {sandbox.id}")
 
   proc = await sandbox.spawn("deno", args=["-A", "npm:create-next-app@latest", "--yes", "--skip-install", "my-app"])
   await proc.wait()

@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-07-08
 title: "后端"
-description: "为你的桌面应用选择一个渲染引擎：捆绑的 Chromium、操作系统的 webview，或原始窗口系统。了解取舍以及如何切换。"
+description: "为你的桌面应用选择渲染引擎：内置 Chromium、操作系统 WebView 或原始窗口管理。了解其中的权衡以及如何切换。"
 ---
 
 :::info 在 Deno 2.9 中可用
@@ -53,7 +53,7 @@ deno desktop --backend webview main.ts
 
 **没有 Web 引擎。** 提供窗口管理、输入事件、剪贴板以及原生 API 表面，但没有 webview，没有 [`Deno.serve()`](/api/deno/~/Deno.serve) 自动绑定，也没有 `bindings.<name>()` 代理。
 
-适用于自行绘制 UI 的应用（WebGPU、Skia、自定义渲染），或作为非 Web 桌面程序的基础。`raw` 后端通过 `deno.json` 中的 `desktop.backend` 字段选择；`--backend` 标志只接受 `cef` 和 `webview`。
+适用于自行绘制 UI（WebGPU、Skia、自定义渲染）的应用，也可作为非 Web 桌面程序的基础。`raw` 后端通过 `deno.json` 中的 `desktop.backend` 字段进行选择；`--backend` 标志仅接受 `cef` 和 `webview`。有关在此后端上向窗口进行绘制的完整示例，请参阅 [WebGPU 渲染](/runtime/desktop/webgpu/)。
 
 ## 选择后端
 

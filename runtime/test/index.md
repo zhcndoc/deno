@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-07-02
+last_modified: 2026-07-06
 title: "测试"
-description: "使用 Deno 内置的测试运行器编写并运行测试：断言、测试步骤、钩子、过滤和报告器，并提供有关 mocking、快照和覆盖率的专门指南。"
+description: "使用 Deno 内置的测试运行器编写和运行测试：断言、测试步骤、钩子、筛选器和报告器，并提供专门介绍模拟、快照和覆盖率的指南。"
 oldUrl:
   - /runtime/fundamentals/testing/
   - /runtime/manual/basics/testing/
@@ -166,7 +166,7 @@ deno test --retry=2
 
 ## 参数化测试
 
-[`Deno.test.each`](/api/deno/~/Deno.test.each) 会对一组用例运行相同的测试主体。它会为每个用例注册一个真实的测试，因此每个用例都会独立报告，并且可以单独筛选或运行。
+[`Deno.test.each`](/api/deno/~/Deno.DenoTest.each) 会针对一组用例运行相同的测试主体。它会为每个用例注册一个真正的测试，因此每个用例都会独立报告，并且可以单独筛选或运行。
 
 数组用例会作为位置参数展开传入。名称模板会使用 `printf` 风格的标记（`%s`、`%d`/`%i`、`%f`、`%j`、`%o`/`%O`）按顺序插值用例值，另外还支持 `%#` 表示从 0 开始的用例索引：
 
@@ -192,7 +192,7 @@ Deno.test.each([
 });
 ```
 
-[`Deno.test.each`](/api/deno/~/Deno.test.each) 接受常规的每个测试的选项对象，并且 `only` 和 `ignore` 简写可以与之组合，形成 `.only.each` 和 `.ignore.each`。
+[`Deno.test.each`](/api/deno/~/Deno.DenoTest.each) 接受常规的单测试选项对象，`only` 和 `ignore` 这两个简写也可以与其组合使用，形式为 `.only.each` 和 `.ignore.each`。
 
 ## 测试钩子
 

@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-07-06
 title: "deno test"
 oldUrl: /runtime/manual/tools/test/
 command: test
@@ -147,7 +147,10 @@ deno coverage --lcov coverage/ > coverage.lcov
 
 ## 参数化测试
 
-使用 [`Deno.test.each`](/api/deno/~/Deno.test.each) 在一组用例表上运行相同的测试主体，它会为每个用例分别注册一个独立报告的测试。有关名称模板和用例形式，请参见[参数化测试](/runtime/test/#parameterized-tests)。
+使用
+[`Deno.test.each`](/api/deno/~/Deno.DenoTest.each) 对一组案例运行相同的测试主体，
+该方法会为每个案例注册一个独立报告的测试。有关名称模板和案例形式，请参阅
+[参数化测试](/runtime/test/#parameterized-tests)。
 
 ## 快照测试
 

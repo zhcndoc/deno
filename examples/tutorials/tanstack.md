@@ -1,12 +1,12 @@
 ---
-last_modified: 2025-03-10
-title: "使用 Tanstack 和 Deno 构建应用"
-description: "使用 Tanstack 和 Deno 构建应用的完整指南。学习如何实现 Query 进行数据获取，Router 进行导航，管理服务器状态，并创建类型安全的全栈应用。"
+last_modified: 2026-07-10
+title: "使用 TanStack 和 Deno 构建应用"
+description: "使用 TanStack 和 Deno 构建应用的完整指南。学习如何使用 Query 实现数据获取、使用 Router 进行导航、管理服务器状态，以及创建类型安全的全栈应用。"
 url: /examples/tanstack_tutorial/
 ---
 
-[Tanstack](https://tanstack.com/) 是一套与框架无关的数据管理工具。
-借助 Tanstack，开发者可以使用
+[TanStack](https://tanstack.com/) 是一套与框架无关的数据管理工具。
+借助 TanStack，开发者可以使用
 [Query](https://tanstack.com/query/latest) 高效管理服务器状态，
 使用 [Table](https://tanstack.com/table/latest) 创建强大的表格，
 使用 [Router](https://tanstack.com/router/latest) 处理复杂路由，
@@ -15,13 +15,13 @@ url: /examples/tanstack_tutorial/
 [Solid](/examples/solidjs_tutorial) 和其他框架中无缝协作，同时保持出色的 TypeScript 支持。
 
 在本教程中，我们将使用
-[Tanstack Query](https://tanstack.com/query/latest) 和
-[Tanstack Router](https://tanstack.com/router/latest/docs/framework/react/quick-start)
+[TanStack Query](https://tanstack.com/query/latest) 和
+[TanStack Router](https://tanstack.com/router/latest/docs/framework/react/quick-start)
 构建一个简单的应用。
 该应用将展示一份恐龙列表。你点击其中一只时，会跳转到包含更多细节的恐龙详情页面。
 
 - [从后端 API 开始](#start-with-the-backend-api)
-- [创建一个由 Tanstack 驱动的前端](#create-tanstack-driven-frontend)
+- [创建一个由 TanStack 驱动的前端](#create-tanstack-driven-frontend)
 - [下一步](#next-steps)
 
 你可以直接跳到
@@ -55,7 +55,7 @@ url: /examples/tanstack_tutorial/
 这里就是我们将从中读取数据的地方。在完整应用中，这些数据
 将来自数据库。
 
-> ⚠️️ 在本教程中我们是把数据写死（hard code）的。但你可以连接
+> ⚠️️ 在本教程中我们把数据硬编码了。但你可以连接
 > [多种数据库](https://docs.deno.com/runtime/tutorials/connecting_to_databases/) 并且
 > 甚至可以使用像 [Prisma](https://docs.deno.com/runtime/tutorials/how_to_with_npm/prisma/) 这样的 ORM
 > 来配合 Deno 使用。
@@ -228,12 +228,12 @@ export function DinosaurList() {
 }
 ```
 
-这里使用了
-[`useQuery`](https://tanstack.com/query/v4/docs/framework/react/guides/queries)
-来自 **Tanstack Query**，用于自动获取并缓存恐龙数据，同时提供内置的
-加载与错误状态。然后它使用
-[`Link`](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent)
-来自 **Tanstack Router**，来创建带类型安全路由参数的客户端导航链接。
+这里使用了 **Tanstack Query** 中的
+[`useQuery`](https://tanstack.com/query/latest/docs/framework/react/guides/queries)，
+可以自动获取并缓存恐龙数据，并内置加载和错误状态。然后，它使用来自
+**Tanstack Router** 的
+[`Link`](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent)，
+创建带有类型安全路由参数的客户端导航链接。
 
 接下来，我们在 `./src/components/` 目录下创建 `DinosaurDetail.tsx`
 组件，用于展示单只恐龙的详情：
@@ -290,6 +290,8 @@ export function DinosaurDetail() {
 
 ```ts
 // ./src/components/Layout.tsx
+
+import { Link, Outlet } from "@tanstack/react-router";
 
 export function Layout() {
   return (
@@ -356,22 +358,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 ```ts
 // ./src/routeTree.tsx
 
-import { RootRoute, Route } from "@tanstack/react-router";
+import { createRootRoute, createRoute } from "@tanstack/react-router";
 import { DinosaurList } from "./components/DinosaurList";
 import { DinosaurDetail } from "./components/DinosaurDetail";
 import { Layout } from "./components/Layout";
 
-const rootRoute = new RootRoute({
+const rootRoute = createRootRoute({
   component: Layout,
 });
 
-const indexRoute = new Route({
+const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: DinosaurList,
 });
 
-const dinosaurRoute = new Route({
+const dinosaurRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "dinosaur/$name",
   component: DinosaurDetail,
@@ -380,10 +382,10 @@ const dinosaurRoute = new Route({
 export const routeTree = rootRoute.addChildren([indexRoute, dinosaurRoute]);
 ```
 
-在 `./src/routeTree.tsx` 中，我们创建了一层以 `Layout` 作为根组件的路由层级。
-然后我们再配置两个子路由：它们的路径与组件——一个用于恐龙列表，
-`DinosaurList`；另一个用于单只恐龙详情，并带有动态参数，
-`DinosaurDetail`。
+在 `./src/routeTree.tsx` 中，我们使用 `createRootRoute` 创建路由层级，
+并将 `Layout` 作为根组件。然后，`createRoute` 设置两个子路由、
+它们的路径和组件：一个用于恐龙列表，即 `DinosaurList`；另一个用于
+展示单只恐龙的详情，并使用动态参数 `DinosaurDetail`。
 
 完成这些之后，我们就可以运行这个项目了：
 

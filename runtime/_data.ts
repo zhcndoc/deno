@@ -157,6 +157,10 @@ export const sidebar = [
             href: "/runtime/desktop/windows/",
           },
           {
+            title: "WebGPU rendering",
+            href: "/runtime/desktop/webgpu/",
+          },
+          {
             title: "Bindings",
             href: "/runtime/desktop/bindings/",
           },
@@ -309,6 +313,7 @@ export const sidebar = [
       {
         title: "CLI",
         href: "/runtime/reference/cli/",
+        disclosure: true,
         items: [
           {
             title: "deno add",
@@ -498,8 +503,9 @@ export const sidebar = [
       },
       {
         title: "标准库",
+        href: "/runtime/reference/std/",
+        disclosure: true,
         items: [
-          { title: "概览", href: "/runtime/reference/std/" },
           ...[
             "assert",
             "async",

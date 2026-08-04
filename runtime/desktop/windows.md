@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-07-27
 title: "Windows"
 description: "使用 Deno.BrowserWindow 创建和管理原生窗口：生命周期、多个窗口、大小调整、导航、键盘 / 鼠标 / 聚焦事件，以及原生窗口句柄。"
 ---
@@ -16,6 +16,9 @@ description: "使用 Deno.BrowserWindow 创建和管理原生窗口：生命周�
 [HTTP 服务器](/runtime/desktop/serving/)。你创建的**第一个**
 `new Deno.BrowserWindow()` 会接管这个初始窗口；此后的每次创建都会打开一个新窗口。所有窗口共享同一个 Deno
 运行时：每个进程只有一个异步运行时，无论打开了多少个窗口。
+
+如需查看一个管理窗口、应用菜单和打包的完整应用示例，请参阅
+[denidian 示例](https://github.com/bartlomieju/denidian)。
 
 ## 创建窗口
 
@@ -53,7 +56,7 @@ settings.navigate(`http://127.0.0.1:${port}/settings`);
 
 `frameless`、`noActivate` 和 `transparentTitlebar` 只能在创建时设置。`frameless` + `noActivate` 是托盘 / 菜单栏弹出面板的基础组件；参见 [`Tray.attachPanel`](/runtime/desktop/tray_and_dock/)。
 
-多个窗口彼此独立：每个窗口都有自己的大小、位置、焦点状态和 webview。它们可以导航到不同的路径或不同的源，设置各自的绑定，并触发各自的事件。
+多个窗口彼此独立：每个窗口都有自己的大小、位置、焦点状态和 WebView。它们可以导航到不同的路径或不同的源，设置各自的绑定，并触发各自的事件。
 
 ## 生命周期
 
@@ -180,7 +183,7 @@ win.onblur = () => console.log("失去焦点");
 | `menuclick`        | 点击了应用菜单项。                               |
 | `contextmenuclick` | 点击了上下文菜单项。                             |
 
-指针和键盘事件与浏览器中的对应事件（`KeyboardEvent`、`MouseEvent`、`WheelEvent`）一致。`resize`、`move`、`menuclick` 和 `contextmenuclick` 是携带 `detail` 负载的 `CustomEvent`；菜单事件请参见 [Menus](/runtime/desktop/menus/)。
+指针和键盘事件与浏览器中的对应事件（`KeyboardEvent`、`MouseEvent`、`WheelEvent`）一致。`resize`、`move`、`menuclick` 和 `contextmenuclick` 是携带 `detail` 负载的 `CustomEvent`；菜单事件请参见 [菜单](/runtime/desktop/menus/)。
 
 ```ts
 win.addEventListener("keydown", (e) => {
@@ -221,15 +224,17 @@ const context = surface.getContext("webgpu");
 
 一旦表面已被获取，`close()` 会降级为 `hide()`，这样支撑该表面的原生句柄就不会在 WebGPU 仍在使用时被销毁。
 
-## DevTools
+如需完整的演示——包括配置上下文、绘制几何图形以及运行渲染循环——请参阅 [WebGPU 渲染](/runtime/desktop/webgpu/)。
+
+## 开发者工具
 
 ```ts
-win.openDevtools(); // Deno 和 renderer 两者
-win.openDevtools({ deno: false }); // 仅 renderer
+win.openDevtools(); // Deno 和渲染进程两者
+win.openDevtools({ deno: false }); // 仅渲染进程
 win.openDevtools({ renderer: false }); // 仅 Deno 运行时
 ```
 
-参见 [DevTools](/runtime/desktop/devtools/)。
+参见 [开发者工具](/runtime/desktop/devtools/)。
 
 ## 关闭应用
 

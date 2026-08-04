@@ -18,7 +18,7 @@ Deno 提供对 Node.js 内置模块和全局变量的全面支持，
   （例如，`import fs from "node:fs"`）
 - **全局对象**：Node.js 全局对象可在 npm 包作用域中使用
 - **兼容层**：与现有 Node.js 代码实现无缝互操作
-- **性能**：针对 Deno 运行时优化的原生实现
+- **性能**：针对 Deno 运行时优化的原生实现。
 
 ## 核心模块
 
@@ -67,7 +67,7 @@ Deno 提供对 Node.js 内置模块和全局变量的全面支持，
 
 - **`node:vm`** - 用于代码执行的虚拟机上下文
 - **`node:repl`** - 读-求值-打印循环功能
-- **`node:inspector`** - 用于调试的 V8 inspector 集成
+- **`node:inspector`** - 用于调试的 V8 inspector 集成。
 
 ## 全局对象
 
@@ -77,28 +77,28 @@ Node.js 全局对象在 npm 包作用域内可用，并可从相关的 `node:` �
 - **`process`** - 进程信息与环境
 - **`global`** - 全局命名空间对象
 - **`__dirname`** / **`__filename`** - 模块路径信息
-- **Web 标准** - `fetch`、`URL`、`TextEncoder`、`crypto` 等
+- **Web 标准** - `fetch`、`URL`、`TextEncoder`、`crypto` 等。
 
-## Usage Examples
+## 使用示例
 
-### Basic Module Imports
+### 基本模块导入
 
 ```javascript
 import fs from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-// Read file synchronously
+// 同步读取文件
 const data = fs.readFileSync("file.txt", "utf8");
 
-// Read file asynchronously
+// 异步读取文件
 const content = await readFile("file.txt", "utf8");
 
-// Path operations
+// 路径操作
 const fullPath = path.join("/users", "documents", "file.txt");
 ```
 
-### HTTP Server
+### HTTP 服务器
 
 ```javascript
 import http from "node:http";
@@ -113,17 +113,17 @@ server.listen(3000, () => {
 });
 ```
 
-### Cryptographic Operations
+### 加密操作
 
 ```javascript
 import crypto from "node:crypto";
 
-// Generate hash
+// 生成哈希
 const hash = crypto.createHash("sha256");
 hash.update("Hello World");
 const digest = hash.digest("hex");
 
-// Generate random bytes
+// 生成随机字节
 const randomBytes = crypto.randomBytes(16);
 ```
 
@@ -132,8 +132,9 @@ const randomBytes = crypto.randomBytes(16);
 Node 兼容性是一个持续进行的项目。大多数核心 Node.js API 都得到了高保真支持。详细兼容性信息请参阅：
 
 - 查看我们的 [Node.js 兼容性指南](/runtime/reference/node_apis/)
-- 查阅 [Node.js 测试结果](https://node-test-viewer.deno.dev/) 以获取具体测试覆盖率
-- 在 GitHub 上 [报告兼容性问题](https://github.com/denoland/deno/issues)
+- 查看 [Node.js 测试结果](https://node-test-viewer.deno.deno.net/) 以了解
+  具体的测试覆盖情况
+- 在 GitHub 上[报告兼容性问题](https://github.com/denoland/deno/issues)
 
 ## 从 Node.js 迁移
 

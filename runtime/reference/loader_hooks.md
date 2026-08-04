@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-05-20
-title: "加载器挂钩"
-description: "使用与 Node.js 兼容的 module.registerHooks() API，在 Deno 中自定义模块解析和加载。创建虚拟模块、转译自定义格式，并拦截导入。"
+last_modified: 2026-07-09
+title: "加载器钩子"
+description: "使用与 Node.js 兼容的 module.registerHooks() API 自定义 Deno 中的模块解析和加载。创建虚拟模块、转译自定义格式并拦截导入。"
 oldUrl: /runtime/reference/module_hooks/
 ---
 
@@ -11,7 +11,7 @@ API，它允许你拦截并自定义模块的解析和加载方式。
 这使得你可以在不修改导入代码的情况下，实现虚拟模块、自定义转译、模块别名以及类似
 用例。`node:module` API 是 Deno 更广泛的 [Node.js 兼容性](/runtime/fundamentals/node/) 层的一部分。
 
-这些挂钩是**同步的**，并且在与你的应用程序**同一线程**中运行。它们既适用于 ES 模块（`import`）也适用于 CommonJS
+这些钩子是**同步的**，并且在与你的应用程序**同一线程**中运行。它们既适用于 ES 模块（`import`）也适用于 CommonJS
 （`require()`）。
 
 > Deno 不实现异步的 `module.register()` API。请使用
@@ -200,6 +200,29 @@ const hooks = registerHooks({
 
 hooks.deregister(); // 测试结束后清理
 ```
+
+## 钩子生成的源代码中的外部依赖
+
+:::info
+
+<strong>当 `jsr:`、`npm:` 和 `https:` 说明符仅出现在钩子生成的源代码中时，不会自动解析它们。</strong> 这适用于任何返回 Deno 未自行从磁盘读取的源代码的 `load` 钩子——自定义转译、虚拟模块、模拟模块等。
+
+Deno 会在执行<em>之前</em>通过静态分析模块图来发现并安装外部依赖。`load` 钩子返回的源代码是在加载时生成的，此时分析已经完成，因此任何仅出现在生成源代码中的裸 `jsr:`、`npm:` 或 `https:` 导入都会对依赖解析不可见。你将看到类似
+`Could not find constraint 'lodash-es@latest' in the list of packages.` 的错误。
+
+若要在钩子生成的代码中使用外部依赖，请预先声明它，使其成为已解析软件包集合的一部分。例如，将其添加到 `deno.json` 中的 `imports` 映射：
+
+```json title="deno.json"
+{
+  "imports": {
+    "lodash-es": "npm:lodash-es@latest"
+  }
+}
+```
+
+然后在生成的源代码中通过其映射名称导入它。这是按设计实现的：依赖解析具有确定性，并由锁文件驱动，因此需要在执行前预先知道依赖集合。
+
+:::
 
 ## `resolve` 挂钩
 

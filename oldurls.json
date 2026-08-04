@@ -37,6 +37,7 @@
   "/runtime/reference/tcp_udp_connections/": "/examples/",
   "/runtime/getting_started/": "/runtime/",
   "/api/deno/~/Deno.TlsConn.rid/": "/runtime/reference/migration_guide/#rid",
+  "/api/deno/~/Deno.test.each/": "/api/deno/~/Deno.DenoTest.each",
   "/manual@main/advanced/typescript/faqs": "/runtime/fundamentals/typescript/",
   "/runtime/tutorials/": "/examples/",
   "/runtime/manual/examples/how_to_with_npm/": "/examples/",
@@ -179,5 +180,11 @@
   "/hello_world.ts": "/examples/scripts/hello_world.ts",
   "/services/": "/deploy/",
   "/deploy/cron/": "/deploy/reference/cron/",
-  "/examples/unzip_gzipped_file/": "/examples/compress_decompress/"
+  "/examples/unzip_gzipped_file/": "/examples/compress_decompress/",
+  "/runtime/manual/runtime/": "/api/deno/",
+  "/runtime/manual/runtime/builtin_apis/": "/api/deno/",
+  "/runtime/manual/runtime/permission_apis/": "/api/deno/",
+  "/runtime/manual/runtime/import_meta_api/": "/api/deno/",
+  "/runtime/manual/runtime/ffi_api/": "/api/deno/",
+  "/runtime/manual/runtime/program_lifecycle/": "/api/deno/"
 }

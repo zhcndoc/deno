@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-05-28
+last_modified: 2026-07-29
 title: "开始使用 Deno"
 description: "安装 Deno 并构建你的第一个项目：了解为什么选择 Deno、安装、创建、运行、测试、添加依赖，以及使用内置工具链。无需构建步骤，无需配置。"
 pagination_next: /runtime/getting_started/installation/
@@ -15,7 +15,7 @@ oldUrl:
 ---
 
 [Deno](https://deno.com)
-([/ˈdiːnoʊ/](https://ipa-reader.com/?text=%CB%88di%CB%90no%CA%8A), 发音为
+([/ˈdiːnoʊ/](https://ipa-reader.com/?text=%CB%88di%CB%90no%CA%8A)，发音为
 `dee-no`) 是一个
 [开源](https://github.com/denoland/deno/blob/main/LICENSE.md) 的 JavaScript、
 TypeScript 和 WebAssembly 运行时，具有安全默认设置和出色的开发者
@@ -35,7 +35,22 @@ TypeScript 和 WebAssembly 运行时，具有安全默认设置和出色的开�
 - **完整工具链，无需额外搭建。** 内置
   [格式化器](/runtime/lint_and_format/)、[检查器](/runtime/lint_and_format/)、
   [测试运行器](/runtime/test/)、基准测试，以及
-  [更多功能](/runtime/reference/cli/)。无需配置 `devDependencies`。
+  [更多功能](/runtime/reference/cli/)。无需配置 `devDependencies`】【。
+
+## 正在使用 AI 编程代理？
+
+将以下内容粘贴到 Claude Code、Codex、Gemini CLI、OpenCode、Cursor、Pi 或
+你使用的其他代理中：
+
+```plaintext
+Read deno.com/agents.md and set up Deno in this project
+```
+
+[deno.com/agents.md](https://deno.com/agents.md) 是一个专为编程代理编写的单页文档，介绍了
+Deno 是什么、如果代理已经了解 Node，需要摒弃哪些假设，以及如何安装
+[Deno 的代理技能](https://github.com/denoland/skills)，以便代理在每次会话中都保留这些
+上下文。如果你要求代理将现有的 Node
+项目迁移过来，文档也涵盖了相关内容。
 
 ## 安装 Deno
 
@@ -51,7 +66,8 @@ curl -fsSL https://deno.land/install.sh | sh
 </deno-tab>
 <deno-tab value="windows" label="Windows">
 
-```shell title="pwsh"
+```shell
+# pwsh
 irm https://deno.land/install.ps1 | iex
 ```
 

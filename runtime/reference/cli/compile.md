@@ -1,5 +1,5 @@
 ---
-last_modified: 2026-06-25
+last_modified: 2026-06-27
 title: "deno compile"
 oldUrl:
   - /runtime/manual/tools/compile/
@@ -37,14 +37,15 @@ deno compile --allow-read --allow-net jsr:@std/http/file-server -p 8080
 - Astro
 - Fresh (1.x 和 2.x)
 - Remix
+- React Router
 - SvelteKit
 - Nuxt
 - SolidStart
 - TanStack Start
-- Vite (SSR, plus SPA/MPA projects served as static output)
+- Vite（SSR，以及作为静态输出提供服务的 SPA/MPA 项目）
 
 ```sh
-# 在 Next.js / Astro / Fresh / 等项目中
+# 在 Next.js / Astro / Fresh / React Router / 等项目中
 deno compile .
 
 # 或指向某个特定应用目录
@@ -53,7 +54,10 @@ deno compile ./apps/web
 
 生成的入口点使用 `import.meta.dirname`，因此框架资源路径可以在编译后的二进制文件内部，正确地相对于 [虚拟文件系统](#including-data-files-or-directories) 解析。
 
-如果项目不匹配任何受支持的框架，`deno compile` 将报错退出。
+React Router 项目必须先在 Deno 下成功构建，之后才能进行编译。由于 React Router 的默认服务器入口针对 Node.js，因此使用 Deno 构建时，请添加一个兼容 Web Streams 的 `app/entry.server.tsx`。示例请参阅
+[React Router 桌面框架说明](/runtime/desktop/frameworks/#react-router)。
+
+如果项目与任何受支持的框架都不匹配，`deno compile` 将会报错。
 
 ## 监听模式
 
@@ -242,35 +246,35 @@ deno compile --bundle --minify main.ts
 
 如果您的程序依赖这些内容，请将其保持为可静态分析，使用 [`--include`](#including-data-files-or-directories) 添加所需文件，或者在不使用 `--bundle` 的情况下编译。
 
-## Self-Extracting Executables
+## 自解压可执行文件
 
-By default, compiled executables serve embedded files through a virtual file system in memory. The `--self-extracting` flag changes this behavior so that the binary extracts all embedded files to disk on first run and uses real file system operations at runtime.
+默认情况下，编译后的可执行文件通过内存中的虚拟文件系统提供嵌入式文件。`--self-extracting` 标志会改变此行为，使二进制文件在首次运行时将所有嵌入式文件解压到磁盘，并在运行时使用真实的文件系统操作。
 
 ```sh
 deno compile --self-extracting main.ts
 ```
 
-This is very useful in scenarios where code needs real files on disk, such as native plugins or native code that reads relative files.
+这在代码需要磁盘上的真实文件时非常有用，例如原生插件或读取相对文件的原生代码。
 
-The extraction directory is chosen in order of priority:
+解压目录按以下优先级选择：
 
-1. `<exe_dir>/.<exe_name>/<hash>/` (adjacent to the compiled binary)
-2. Platform data directory fallback:
-   - Linux: `$XDG_DATA_HOME/<exe_name>/<hash>` or
+1. `<exe_dir>/.<exe_name>/<hash>/`（与编译后的二进制文件位于同一目录）
+2. 平台数据目录回退：
+   - Linux：`$XDG_DATA_HOME/<exe_name>/<hash>` 或
      `~/.local/share/<exe_name>/<hash>`
-   - macOS: `~/Library/Application Support/<exe_name>/<hash>`
-   - Windows: `%LOCALAPPDATA%\<exe_name>\<hash>`
+   - macOS：`~/Library/Application Support/<exe_name>/<hash>`
+   - Windows：`%LOCALAPPDATA%\<exe_name>\<hash>`
 
-Files are extracted only once — subsequent runs reuse the directory if it already exists and the hash matches.
+文件只会解压一次——后续运行时，如果目录已存在且哈希匹配，则会复用该目录。
 
-### Trade-offs
+### 权衡
 
-Self-extracting mode provides broader compatibility, but there are some trade-offs:
+自解压模式提供了更广泛的兼容性，但也存在一些权衡：
 
-- **Initial startup cost**: The first run takes longer because files must be extracted.
-- **Disk usage**: Extracted files take up additional disk space.
-- **Memory usage**: Memory usage is higher because embedded contents can no longer be referenced as static data.
-- **Tampering risk**: Users or other code may modify the extracted files on disk.
+- **初始启动开销**：首次运行需要更长时间，因为必须解压文件。
+- **磁盘占用**：解压后的文件会额外占用磁盘空间。
+- **内存占用**：由于嵌入内容无法再作为静态数据引用，因此内存占用更高。
+- **篡改风险**：用户或其他代码可能会修改磁盘上的解压文件。
 
 ## 代码签名
 

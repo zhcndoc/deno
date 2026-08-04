@@ -1,7 +1,7 @@
 ---
-last_modified: 2026-06-16
+last_modified: 2026-07-07
 title: "构建一个 Next.js 应用"
-description: "使用 Deno 构建 Next.js 应用的分步指南。学习如何设置项目、创建 API 路由、实现服务器端渲染，并构建一个全栈 TypeScript 应用。"
+description: "使用 Deno 构建 Next.js 应用的教程。了解如何设置项目、创建 API 路由、实现服务器端渲染，以及构建一个全栈 TypeScript 应用。"
 url: /examples/next_tutorial/
 oldUrl:
   - /runtime/tutorials/how_to_with_npm/next/
@@ -46,7 +46,24 @@ Next.js 的一些依赖仍然依赖 `Object.prototype.__proto__`，并且需要 
 }
 ```
 
-现在你可以运行你的新的 Next.js 应用：
+Next.js 会在本地构建和 Deploy 构建期间读取 `next.config.*`。使用 Deno 时，建议使用名为 `next.config.mjs` 的 ESM 配置文件。当前版本的 Next.js 也支持使用相同 `export default` 结构的 `next.config.ts`：
+
+```js title="next.config.mjs"
+/** @type {import('next').NextConfig} */
+const nextConfig = {};
+
+export default nextConfig;
+```
+
+如果你使用生成了带有 `module.exports` 的 `next.config.js` 的脚手架开始项目，Deno 的 `detect-cjs` 选项通常可以让该 CommonJS 配置正常工作。如果仍然看到 `module is not defined`，或者某个工具将配置作为 ES 模块加载，请将其重命名为 `next.config.mjs`，并按照上面的示例使用 `export default`。
+
+现在安装 package.json 中的依赖：
+
+```sh
+deno install --allow-scripts
+```
+
+现在可以运行新的 Next.js 应用：
 
 ```sh
 deno task dev
@@ -141,7 +158,7 @@ export type Dino = { name: string; description: string };
 
 修改 `app` 目录中的 `page.tsx` 文件，从我们的 API 获取恐龙数据，并以链接列表的形式显示。
 
-在 Next.js 中，如果有客户端代码，需要在文件顶部添加 `"use client"` 指令。然后导入该页面需要的模块，并导出用于渲染页面的默认函数：
+要在 Next.js 中执行客户端代码，我们需要在文件顶部使用 `"use client"` 指令。然后，我们将导入此页面所需的模块，并导出用于渲染页面的默认函数：
 
 ```tsx title="page.tsx"
 "use client";
@@ -249,7 +266,20 @@ return (
 
 既然你的 Next.js 应用已经运行起来，你可以使用 Deno Deploy<sup>EA</sup> 将其部署到线上。
 
-最佳体验是直接从 GitHub 部署，并自动设置持续部署。先创建一个 GitHub 仓库并上传应用。
+:::tip 构建故障排查
+
+如果在 Deno 上运行 `next build` 时出现
+`Cannot read properties of undefined (reading 'bold')`，问题出在
+Next.js 的构建时 lint/类型检查流程中。临时的解决方法是将
+`typescript.ignoreBuildErrors` 和 `eslint.ignoreDuringBuilds` 添加到
+`next.config.mjs` 中，然后在 CI 中分别运行类型检查和 lint。
+
+如果客户端组件使用了仅限浏览器环境的 hooks 或 API，Next.js 仍可能会在预渲染或 SSR 期间尝试在服务器上渲染它。请将这部分代码延迟到组件挂载之后执行，例如放在 `useEffect` 中。如果你需要使用 `next/dynamic` 和 `{ ssr: false }` 禁用 SSR，请将动态导入放在客户端组件包装器中；服务器组件不能直接使用 `{ ssr: false }`。
+仅将路由标记为动态是不够的，因为动态路由仍会在服务器上渲染，而浏览器全局变量在服务器上是未定义的。
+
+:::
+
+为了获得最佳体验，你可以直接从 GitHub 部署应用，这样就能设置自动部署。创建一个 GitHub 仓库并将应用推送到其中。
 
 [创建新的 GitHub 仓库](https://github.com/new)，然后初始化并推送应用：
 
