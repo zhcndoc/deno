@@ -311,7 +311,7 @@ deno run --deny-sys script.ts
 `process.getuid()` 和 `process.getgid()`，都需要 `--allow-sys`，并映射到
 相同的接口名称。例如，调用 `os.cpus()` 需要
 `--allow-sys=cpus`，而 `os.networkInterfaces()` 需要
-`--allow-sys=networkInterfaces`】【。
+`--allow-sys=networkInterfaces`
 
 ## 子进程
 

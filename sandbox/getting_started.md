@@ -299,7 +299,7 @@ await proc.wait()
 </deno-tabs>
 
 你可以在命令之间保留状态，流式传输 stdout 和 stderr，或为 agent 风格的工作流打开
-交互式 REPL】【。
+交互式 REPL
 
 ## 从 Deno Sandbox 部署
 

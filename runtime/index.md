@@ -35,7 +35,7 @@ TypeScript 和 WebAssembly 运行时，具有安全默认设置和出色的开�
 - **完整工具链，无需额外搭建。** 内置
   [格式化器](/runtime/lint_and_format/)、[检查器](/runtime/lint_and_format/)、
   [测试运行器](/runtime/test/)、基准测试，以及
-  [更多功能](/runtime/reference/cli/)。无需配置 `devDependencies`】【。
+  [更多功能](/runtime/reference/cli/)。无需配置 `devDependencies`
 
 ## 正在使用 AI 编程代理？
 

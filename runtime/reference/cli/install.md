@@ -14,7 +14,7 @@ description: "为您的项目安装并缓存依赖项"
 ---
 
 `deno install` 会为您的项目安装依赖项并缓存它们。有关 Deno 如何处理模块的更多信息，请参阅
-[模块和依赖项](/runtime/fundamentals/modules/ )】【。
+[模块和依赖项](/runtime/fundamentals/modules/ )
 
 ## 示例
 
