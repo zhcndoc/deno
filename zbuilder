@@ -1,0 +1,21 @@
+FROM --platform=$BUILDPLATFORM node:24-bookworm AS builder
+
+RUN npm install --global deno@2
+
+WORKDIR /app
+
+COPY . .
+
+RUN deno install
+
+RUN cd reference_gen && deno install
+
+RUN deno task build:split
+
+FROM ikxin/caddy:latest
+
+COPY --from=builder /app/_site /usr/share/caddy
+
+RUN printf '/api/:kind/all_symbols\n  Content-Type: text/html; charset=utf-8\n' >> /usr/share/caddy/_headers
+
+EXPOSE 8080
